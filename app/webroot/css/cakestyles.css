@@ -1,0 +1,51 @@
+.cake-sql-log {
+    background:#2554ab;
+    font-size:14px;
+    font-family:consolas, console;
+    color:#efefef;
+    width:100%;
+}
+.cake-sql-log caption {    
+    background:#2554ab url(../img/bg-debug.png) top left repeat-x;
+    border-bottom:1px solid #666;
+    line-height:40px;
+    vertical-align:bottom;
+    padding:0.5em;
+}
+
+.cake-sql-log thead {
+    background:rgba(0,0,0,.4);
+    font-weight:bold;
+    border-bottom:1px solid #dedede;
+}
+
+.cake-sql-log tbody td {
+    padding:0.5em;
+}
+
+.cake-sql-log tbody tr:nth-child(even) {
+    background:rgba(0,0,0,.2);
+}
+
+.cake-sql-log tbody tr:nth-child(odd) {
+    background:rgba(0,0,0,.3);
+}
+
+.cake-debug-output {
+    background:#2554ab;
+    font-size:14px;
+    font-family:consolas, console;
+    color:#efefef;
+    width:100%;
+}
+
+.cake-debug-output span {
+    display:block;
+    background:#2554ab url(../img/bg-debug.png) top left repeat-x;
+    line-height:40px;
+}
+    
+.cake-debug-output pre {
+    background:rgba(0,0,0,.2);
+    margin:0;
+}

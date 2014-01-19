@@ -1,0 +1,186 @@
+/* use http://fontello.com/ */
+
+body {
+    background:#FFF;
+    color:#666;
+    font-family: 'Raleway', arial, sans-serif;
+    margin:0;
+    padding:0;
+}
+
+h1, h2, h3, h4 { margin:0;}
+
+ul.horizontal li {
+    display:inline-block;
+    margin:0 1em 0
+}
+
+ul.horizontal li:last-child {
+    margin:0;
+}
+
+.dropdown {
+    position:relative;
+}
+
+.dropdown ul {
+    display:none;
+}
+
+.dropdown:hover ul {
+    display:block;
+    position:absolute;
+    padding:0;
+    top:10px;
+    left:10px;
+    background:#fff;
+    border:1px solid #dedede;
+    width:300px;    
+    border: 1px solid rgba(0,0,0,0.17);
+    box-shadow: 0 0 5px rgba(0,0,0,0.1);    
+    border-radius:5px;
+}
+
+.dropdown:hover ul li {
+    display:block;
+    margin:0;
+    border-bottom:1px solid #ddd;
+    min-height:50px;
+    padding:0.5em;
+}
+
+
+.tiled-list li {
+    display:inline-block;
+    margin:auto;
+    padding:1em;
+    vertical-align: top;
+    width:200px;
+}
+
+.cols .col {
+    display:inline-block;
+    vertical-align: top;
+}
+
+.col-1-2 {
+    margin-right:2%;
+    width:46%;
+}
+
+.col-2-2 {
+    margin-left:2%;
+    width:46%;
+}
+
+.col-1-3 {
+    margin-right:2%;
+    width:30%;
+}
+
+.col-2-3 {
+    width:30%;
+}
+
+.col-3-3 {
+    margin-left:2%;
+    width:30%;
+}
+
+.col-23-3 {
+    width:60%;
+}
+
+.expanded .expander .more { 
+    display:none;
+}
+
+.expanded .expander .less { 
+    display:inline-block;    
+}
+
+.expanded.collapsed .wrapper {
+    max-height:200px;
+    overflow:hidden;
+    border-bottom:2px solid #dedede;
+}
+
+.expanded.collapsed .expander .more { 
+    display:inline-block;
+}
+
+.expanded.collapsed .expander .less { 
+    display:none;    
+}
+
+
+.thumbnail {
+    max-height:200px;    
+    max-width:200px;
+}
+
+/* Notifications */
+.notifier > a {
+    background:#dedede;
+    border:#ddd;
+    border-radius:60px;
+    min-width:1em;
+    min-height:1em;
+    text-align:center;
+    display:block;
+}
+
+.notifier .alert > a {    
+    background:red;
+    border:1px solid red;
+    color:#fff;
+    font-weight:bold;    
+}
+
+.notifier .read {
+    background:#dedede;
+}
+
+
+/* Charts */
+.chart {
+    height:400px;
+}
+
+.chart-small {
+    height:80px;
+    width:80px;
+    display:inline-block;
+}
+
+.mask {
+    position:absolute;
+    top:0;
+    left:0;
+    right:0;
+    bottom:0;
+    background-color:#fff;
+    background-color:rgba(255,255,255,.6);    
+    display:none;
+}
+
+.loading-mask .icon {
+    background:transparent url(../img/ico-loading.gif) 50% 50% no-repeat;
+    min-height: 32px;
+    min-width: 32px;
+    display:inline-block;
+    position:absolute;
+    top:50%;
+    left:50%;
+    padding-top:100px;
+}
+
+.loading .loading-mask { display:block; }
+
+.dlg {
+    display:none;
+    background:#fff;
+    border:1px solid #999;
+}
+
+/*.highcharts-container svg text { display:none;}*/

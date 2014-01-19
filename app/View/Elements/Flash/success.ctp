@@ -1,0 +1,1 @@
+<p class="flash success"><?php echo $message ?></p>

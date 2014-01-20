@@ -17,6 +17,11 @@ class UsersController extends AppController {
         )
     );
              
+    
+    public function wheredoesthiscommit() {
+        return "nowhere bro";
+    }
+    
     public function beforeFilter()
     {   
         parent::beforeFilter();   

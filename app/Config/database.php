@@ -55,17 +55,13 @@
  */
 class DATABASE_CONFIG {
 
-    // Live informations
+    // Live information
 	public $default = array(
 		'datasource' => 'Database/Mysql',
 		'persistent' => false,
-		'host' => 'localhost',
-		'login' => 'tmtdb',
-		'password' => '7m7dat4u9ser',
-		'database' => 'themusictank',
 		'prefix' => '',
-		'encoding' => 'utf8',
-	);
+		'encoding' => 'utf8'
+	);  
 
     // .nvi test information
 	public $test = array(
@@ -102,6 +98,13 @@ class DATABASE_CONFIG {
         elseif(preg_match('/themusictank\.nvi/', $_SERVER['SERVER_NAME']))
         {
             $this->default = $this->test;
+        }
+        else {
+            $url = parse_url(getenv('CLEARDB_DATABASE_URL'));
+            $this->default['host'] = $url['host'];
+            $this->default['login'] = $url['user'];
+            $this->default['password'] = $url['pass'];
+            $this->default['database'] = substr($url['path'],1);            
         }
 	}
     

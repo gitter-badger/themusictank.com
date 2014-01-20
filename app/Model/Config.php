@@ -176,7 +176,7 @@ class Config extends AppModel
     {
         $record = $this->_getRecordByKey($key);    
         return $this->save(array(
-            "id"        => is_null($record) ? $record["id"] : null,
+            "id"        => is_null($record) ? $record["Config"]["id"] : null,
             "key"       => $key,
             "value"     => time()
         ));
@@ -184,7 +184,7 @@ class Config extends AppModel
     
     private function _validateDelay($key, $syncDelay)
     {
-        $record = $this->_getRecordByKey($key);        
+        $record = $this->_getRecordByKey($key);     
         if($record)
         {            
             return (int)$record["Config"]["value"] + $syncDelay < time();

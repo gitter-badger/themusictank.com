@@ -58,7 +58,10 @@ class AppController extends Controller {
      */
     public function updateUserSession($user)
     {
-        $this->Session->write('Auth.User', $user);
+        foreach($user as $key => $data)
+        {
+            $this->Session->write('Auth.' . $key, $data);
+        }
     }
     
     /** 
@@ -89,7 +92,7 @@ class AppController extends Controller {
     public function getAuthUserId()
     {
         $user = $this->getAuthUser();
-        return (int)$user["id"];
+        return (int)$user["User"]["id"];
     }    
              
     /** 

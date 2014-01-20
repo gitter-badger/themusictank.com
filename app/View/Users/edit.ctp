@@ -33,7 +33,7 @@
                 <?php echo $this->Html->link("Disconnect your Rdio account", array('controller' => 'users', 'action' => 'disconnectRdio')); ?>
             <?php endif; ?>
         <?php else : ?>
-            <?php echo $this->Html->link("Connect a Rdio account", array('controller' => 'users', 'action' => 'connectRdio', '?' => array("rurl" => "/users/edit"))); ?>
+            <?php echo $this->Html->link("Connect a Rdio account", array('controller' => 'apis', 'action' => 'connectRdio', '?' => array("rurl" => "/users/edit"))); ?>
         <?php endif; ?>
     </li>
     <li>
@@ -44,7 +44,7 @@
                 <?php echo $this->Html->link("Disconnect your Facebook account", array('controller' => 'users', 'action' => 'disconnectFacebook', '?' => array("rurl" => "/users/edit"))); ?>
             <?php endif; ?>
         <?php else : ?>
-            <?php echo $this->Html->link("Connect a Facebook account", array('controller' => 'users', 'action' => 'connectFacebook')); ?>
+            <?php echo $this->Html->link("Connect a Facebook account", array('controller' => 'apis', 'action' => 'connectFacebook')); ?>
         <?php endif; ?>
     </li>
 </ul>

@@ -17,7 +17,6 @@
 
 <div class="feature-unavailable"><?php echo __('Your browser does not support key APIs'); ?></div>
 
-<?php $userSession = $this->Session->read('Auth.User');  ?>
 <script>
     $(function(){
         try {
@@ -37,7 +36,7 @@
                 artistName : "<?php echo $artist["name"]; ?>",                
                 startOnReady : false,
                 fakeFrequency : true,
-                tmtUrl : "<?php echo Router::url(array("controller" => "review_frames", "action" => "save", implode("-", array($artist["id"], $album["id"], $track["id"], $userSession["id"], uniqid() )))); ?>",
+                tmtUrl : "<?php echo Router::url(array("controller" => "review_frames", "action" => "save", implode("-", array($artist["id"], $album["id"], $track["id"], $this->Session->read('Auth.User.User.id'), uniqid() )))); ?>",
                 debug : <?php echo (Configure::read('debug') < 1) ? "false" : "true"; ?>
             });
             p.setupCallback();

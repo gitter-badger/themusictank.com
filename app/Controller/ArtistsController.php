@@ -146,7 +146,7 @@ class ArtistsController extends AppController {
             }
         }
         
-        $user = $this->Session->read('Auth.User'); 
+        $user = $this->Session->read('Auth.User.User'); 
         if($user)
         {
             $this->redirectByRURL(array("controller" => "users", "action" => "dashboard"));

@@ -3,6 +3,21 @@ var tmt = window.tmt || {};
     
 $(function(){
         
+    // Add remove follower
+    var onFollowClick = function(event){        
+        var $el = $(this);
+        event.preventDefault();                
+        $.ajax($el.attr("href")).done(function(data)
+        {
+            var parent = $el.parent();
+            parent.html(data);
+            parent.find("a.follow, a.unfollow").on("click", onFollowClick);
+        });
+    };
+    
+    $("a.follow, a.unfollow").on("click", onFollowClick);
+        
+        
     // Expander util    
     var box = $(".expandable");
     if(box.length > 0)

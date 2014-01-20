@@ -30,7 +30,7 @@ class ApisController extends AppController {
             $facebookUser = $this->FacebookApi->getUser( $this->_getRedirectUrl() );
             if($facebookUser)
             {                
-                $this->Session->write('User.FacebookUser', $facebookUser);      
+                $this->Session->write('Login.User.FacebookUser', $facebookUser);      
                 $this->redirectByRURL(array("controller" => "users", "action" => "checkfacebookuser"), true);
             }
             $this->Session->setFlash(__('We could not connect with Facebook.'), 'Flash'.DS.'failure');
@@ -50,7 +50,7 @@ class ApisController extends AppController {
             
             if($this->RdioApi->isInSession())
             {
-                $this->Session->write('User.RdioUser', $this->RdioApi->getUserData());
+                $this->Session->write('Login.User.RdioUser', $this->RdioApi->getUserData());
                 $this->redirectByRURL(array("controller" => "users", "action" => "checkrdiouser"), true);
             }
 

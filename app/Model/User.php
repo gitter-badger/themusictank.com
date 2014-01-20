@@ -6,7 +6,8 @@ class User extends AppModel
 {	
 	public $name    = 'User';    
 	public $hasOne  = array('RdioUser', 'FacebookUser');
-    public $hasMany = array('UserAchievements', 'Notifications');
+    public $hasMany = array('UserAchievements', 'Notifications', 'UserFollowers');
+    //public $hasAndBelongsToMany = array('UserFollower');
 	public $validate = array(
 		'username' => array(
 			'required' => array(

@@ -29,8 +29,8 @@ class UsersController extends AppController {
     public function whatsup()
     {
         $this->layout = "ajax";        
-        $this->set("notifications", $this->User->Notifications->findByUserId($this->Session->read('Auth.User.id'), 5));                
-        $this->render('/Pages/dropdownnotifications/');
+        $this->set("notifications", $this->User->Notifications->findByUserId($this->Session->read('Auth.User.User.id'), 5));                
+        $this->render('/Ajax/dropdownnotifications/');
     }
     
     /** 
@@ -41,13 +41,45 @@ class UsersController extends AppController {
         $this->User->Notifications->markAsRead(time());   
         $this->redirect(array('controller' => 'users', 'action' => 'whatsup'));
     }
+        
+    public function follow($userSlug)
+    {
+        $this->layout   = "ajax";        
+        $relationExists = false;
+        
+        if($this->userIsLoggedIn())
+        {
+            $sessionId = $this->Session->read('Auth.User.User.id');
+            $relationExists = $this->User->UserFollowers->addRelation($sessionId, $userSlug);
+        }  
+        
+        $this->set("user", array("slug" => $userSlug)); 
+        $this->set("relationExists", $relationExists); 
+        $this->render('/Ajax/followbutton/');
+    }
+           
+    public function unfollow($userSlug)
+    {        
+        $this->layout   = "ajax";        
+        $relationExists = false;
+        
+        if($this->userIsLoggedIn())
+        {
+            $sessionId = $this->Session->read('Auth.User.User.id');
+            $relationExists = !$this->User->UserFollowers->removeRelation($sessionId, $userSlug);
+        }  
+        
+        $this->set("user", array("slug" => $userSlug)); 
+        $this->set("relationExists", $relationExists);        
+        $this->render('/Ajax/followbutton/');
+    }
     
     /** 
      * Lists the complete details of all user notifications. 
      */
     public function notifications()
     {                
-        $notifications = $this->Paginator->paginate('Notifications', array('user_id' => $this->Session->read('Auth.User.id')));        
+        $notifications = $this->Paginator->paginate('Notifications', array('user_id' => $this->Session->read('Auth.User.User.id')));        
         $this->set('notifications', $notifications);        
         $this->setPageTitle(array(__("Recent notifications")));
     }    
@@ -57,7 +89,7 @@ class UsersController extends AppController {
      */
     public function achievements()
     {
-        $achievements = $this->User->UserAchievements->findAllByUserId($this->Session->read('Auth.User.id'));
+        $achievements = $this->User->UserAchievements->findAllByUserId($this->Session->read('Auth.User.User.id'));
         $this->set('achievements', $achievements);        
         $this->setPageTitle(array(__("Unlocked achievements")));
     }  
@@ -67,7 +99,7 @@ class UsersController extends AppController {
      */
     public function dashboard()
     {
-        $userId = (int)$this->Session->read('Auth.User.id');
+        $userId = (int)$this->Session->read('Auth.User.User.id');
         $data = $this->User->findById($userId);
         
         if(!$data)
@@ -98,6 +130,56 @@ class UsersController extends AppController {
         $this->setPageTitle(array(__("TMT dashboard")));
     }
     
+    public function followers($userSlug = null)
+    {   
+        if(!$this->userIsLoggedIn() && is_null($userSlug))
+        {
+            $this->Session->setFlash(__('This user does not exist.'), 'Flash'.DS.'failure');
+            $this->redirect(array('controller' => 'pages', 'action' => 'error'));            
+        }
+        
+        $userId = (int)$this->Session->read('Auth.User.User.id');
+        
+        if(!is_null($userSlug))
+        {  
+            $data = $this->User->findBySlug($userSlug);
+            if(!$data)
+            {
+                $this->Session->setFlash(__('This user does not exist.'), 'Flash'.DS.'failure');
+                $this->redirect(array('controller' => 'pages', 'action' => 'error'));
+            }  
+            $userId = $data["User"]["id"];
+        }
+        
+        $this->set("followers", $this->User->UserFollowers->getFollowers($userId));
+        
+    }
+    
+    public function following($userSlug = null)
+    {
+        if(!$this->userIsLoggedIn() && is_null($userSlug))
+        {
+            $this->Session->setFlash(__('This user does not exist.'), 'Flash'.DS.'failure');
+            $this->redirect(array('controller' => 'pages', 'action' => 'error'));            
+        }
+        
+        $userId = (int)$this->Session->read('Auth.User.User.id');
+        
+        if(!is_null($userSlug))
+        {  
+            $data = $this->User->findBySlug($userSlug);
+            if(!$data)
+            {
+                $this->Session->setFlash(__('This user does not exist.'), 'Flash'.DS.'failure');
+                $this->redirect(array('controller' => 'pages', 'action' => 'error'));
+            }  
+            $userId = $data["User"]["id"];
+        }
+                
+        $this->set("following", $this->User->UserFollowers->getFollowing($userId));
+    }
+    
+    
     /** 
      * Read only view of a user's details
      */
@@ -118,19 +200,28 @@ class UsersController extends AppController {
         {
             $recentReviews[$idx]["appreciation"] = $this->TrackReviewSnapshot->getUserAppreciation($review["Track"]["id"], $data["User"]["id"]);
         }
-                
+            
+        $relationExists = false;
+        if($this->userIsLoggedIn())
+        {
+            $relationExists = $this->User->UserFollowers->relationExists($data["User"]["id"], $this->getAuthUserId());
+        }        
+        
         $this->set("user",          $data['User']);                
         $this->set("recentReviews", $recentReviews);
         $this->set("topAreas",      $topAreas);
+        $this->set("relationExists", $relationExists);
+        
         $this->setPageTitle(array($data["User"]["firstname"]));
     }    
+       
     
     /** 
      * Edit the current user's details
      */
     public function edit()
     {
-        $user = $this->Session->read('Auth.User'); 
+        $user = $this->Session->read('Auth.User.User'); 
         $saved = false;
         
         if(!$user)
@@ -149,7 +240,7 @@ class UsersController extends AppController {
         
         
         $data = $this->User->findById((int)$user["id"], array('User.*', 'RdioUser.*', 'FacebookUser.*'));  
-        if($saved) $this->updateUserSession($data["User"]);
+        if($saved) $this->updateUserSession($data);
         $this->request->data = $data;
         
         $hasRdio = ($data['RdioUser']['id']);
@@ -181,7 +272,7 @@ class UsersController extends AppController {
                 if($this->User->saveAll($this->request->data))   
                 {   
                     $data = $this->User->read(null, $this->User->id);
-                    $this->startUserSession($data['User']);                    
+                    $this->startUserSession($data);                    
                     $this->redirectByRURL(array('controller' => 'users', 'action' => 'dashboard'));
                 }
 				$this->Session->setFlash(__('We could not save this user.'), 'Flash'.DS.'failure');
@@ -219,11 +310,11 @@ class UsersController extends AppController {
      */
     public function checkrdiouser()
     {                  
-        if($this->Session->check('User.RdioUser'))
+        if($this->Session->check('Login.User.RdioUser'))
         {
-            $user = $this->Session->read('User.RdioUser');   
+            $user = $this->Session->read('Login.User.RdioUser');   
             // Destroy the temporary rdio user session values
-            $this->Session->delete('User.RdioUser');
+            $this->Session->delete('Login.User.RdioUser');
             
             $data = $this->User->RdioUser->findByKey($user->key);						
             
@@ -235,7 +326,7 @@ class UsersController extends AppController {
             
             if(!$data) $data = $this->_createUserFromRdio($user);
                         
-            $this->startUserSession($data['User']);	
+            $this->startUserSession($data);	
             
             if($this->User->RdioUser->requiresUpdate($data))
             {   
@@ -254,11 +345,11 @@ class UsersController extends AppController {
      */
     public function checkfacebookuser()
     {           
-        if($this->Session->check('User.FacebookUser'))
+        if($this->Session->check('Login.User.FacebookUser'))
         {
-            $facebookUser = $this->Session->read('User.FacebookUser');   
+            $facebookUser = $this->Session->read('Login.User.FacebookUser');   
             // Destroy the temporary user session values
-            $this->Session->delete('User.FacebookUser');
+            $this->Session->delete('Login.User.FacebookUser');
         
             $data = $this->User->FacebookUser->find('first', array("conditions" => "facebook_id = {$facebookUser->id}"));
            
@@ -270,7 +361,7 @@ class UsersController extends AppController {
             
             if(!$data) $data = $this->_createUserFromFacebook($facebookUser);
             
-            $this->startUserSession($data['User']);            
+            $this->startUserSession($data);            
             $this->redirectByRURL(array('controller' => 'users', 'action' => 'dashboard'));
         }
         

@@ -1,6 +1,10 @@
 
 <p><?php echo $user["firstname"]; ?> <?php echo $user["lastname"]; ?> <?php echo __('has joined The Music Tank on'); ?> <?php echo $user['created']; ?></p>
 
+<?php if($this->Session->read('Auth.User.User.id') != $user["id"]) : ?>
+    <?php echo $this->element('followButton', array("relationExists" => $relationExists)); ?>
+<?php endif;?>
+
 <div class="cols">
     
     <div class="col col-1-2">        
@@ -51,8 +55,7 @@
                 <p><?php echo __("You have not reviewed anything yet."); ?></p>
             <?php endif; ?>
         </div>
-        
-        
+                
     </div>
     
 </div>

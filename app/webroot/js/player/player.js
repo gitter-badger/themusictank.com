@@ -806,7 +806,6 @@
                 error : $.proxy(this.onSyncFail, this)
             });            
         },
-                
                         
         
         // EVENTS

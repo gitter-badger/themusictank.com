@@ -6,7 +6,6 @@
     </div>
 </div>
 
-<?php $userSession = $this->Session->read('Auth.User');  ?>
 <script>
     $(function(){
         try {
@@ -19,7 +18,7 @@
                 trackKey : "<?php echo $rdioTrack["key"]; ?>",
                 trackDuration : <?php echo (int)$track["duration"]; ?>,
                 startOnReady : true,
-                tmtUrl : "<?php echo Router::url(array("controller" => "review_frames", "action" => "save", implode("-", array($artist["id"], $album["id"], $track["id"], $userSession["id"], uniqid() )))); ?>",
+                tmtUrl : "<?php echo Router::url(array("controller" => "review_frames", "action" => "save", implode("-", array($artist["id"], $album["id"], $track["id"], $this->Session->read('Auth.User.User.id'), uniqid() )))); ?>",
                 debug : <?php echo (Configure::read('debug') < 1) ? "false" : "true"; ?>
             });
             p.setupCallback();

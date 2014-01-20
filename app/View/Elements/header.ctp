@@ -8,7 +8,7 @@
          </ul>
     </nav>
     <nav class="col col-2-2">
-         <?php $userSession = $this->Session->read('Auth.User');  ?>
+         <?php $userSession = $this->Session->read('Auth.User.User');  ?>
          <?php if($userSession) : ?>
          <ul class="horizontal">             
             <li>

@@ -33,7 +33,7 @@
  * In production mode, flash messages redirect after a time interval.
  * In development mode, you need to click the flash message to continue.
  */
-if(preg_match('/themusictank\.com/', $_SERVER['SERVER_NAME']))
+if(preg_match('/themusictank\.com/', $_SERVER['SERVER_NAME']) || preg_match('/herokuapp\.com/', $_SERVER['SERVER_NAME']))
 {
 	Configure::write('debug', 0);
 }

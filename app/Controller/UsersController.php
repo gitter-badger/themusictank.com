@@ -16,15 +16,7 @@ class UsersController extends AppController {
             'Notifications.created' => 'desc'
         )
     );
-             
-    
-    public function wheredoesthiscommit() {
-        return "nowhere bro";
-    }
-    public function wheredoesthiscommi2t() {
-        return "nowhere bro";
-    }
-    
+                 
     public function beforeFilter()
     {   
         parent::beforeFilter();   

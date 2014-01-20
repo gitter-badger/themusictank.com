@@ -126,6 +126,15 @@ if(preg_match('/themusictank\.com/', $_SERVER['SERVER_NAME']))
     ));  
 }
 
+elseif(preg_match('/herokuapp\.com/', $_SERVER['SERVER_NAME']))
+{
+    Configure::write('RdioApiConfig', array("ngswvv5thkhzb2skk9v7t6by", "ZFMe9wFz85"));          
+    Configure::write('LastFmApiConfig', array(
+        "key" => "4f52a4028b45a4ea52a86f3b19b5dae8",
+        "secret" => "776aefc97f71fa1c5e52b401fe2ed996"
+    ));  
+}
+
 elseif(preg_match('/themusictank\.local/', $_SERVER['SERVER_NAME']))
 {
     Configure::write('RdioApiConfig', array("9tram6gwz5td4t9hmv8fkqjk", "3yuAttXm2T"));        

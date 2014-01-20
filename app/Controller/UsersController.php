@@ -21,6 +21,9 @@ class UsersController extends AppController {
     public function wheredoesthiscommit() {
         return "nowhere bro";
     }
+    public function wheredoesthiscommi2t() {
+        return "nowhere bro";
+    }
     
     public function beforeFilter()
     {   

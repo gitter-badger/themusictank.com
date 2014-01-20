@@ -10,17 +10,17 @@ AddOutputFilterByType DEFLATE application/javascript
 AddOutputFilterByType DEFLATE application/x-javascript
 
 #Set caching on image files for 11 months
-<filesMatch "\.(ico|gif|jpg|png)$">
-  ExpiresActive On
-  ExpiresDefault "access plus 11 month"
-  Header append Cache-Control "public"
-</filesMatch>
+#<filesMatch "\.(ico|gif|jpg|png)$">
+#  ExpiresActive On
+#  ExpiresDefault "access plus 11 month"
+#  Header append Cache-Control "public"
+#</filesMatch>
 
-<filesMatch "\.(css|js)$">
-  ExpiresActive On
-  ExpiresDefault "access plus 1 week"
-  Header append Cache-Control "public"
-</filesMatch>
+#<filesMatch "\.(css|js)$">
+#  ExpiresActive On
+#  ExpiresDefault "access plus 1 week"
+#  Header append Cache-Control "public"
+#</filesMatch>
 
 <IfModule mod_rewrite.c>
    RewriteEngine on

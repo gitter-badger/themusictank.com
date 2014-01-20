@@ -1,6 +1,6 @@
 <?php
 
-$domainUrl = "http://the-music-tank.herokuapp.com/cron/daily";
+$domainUrl = "http://the-music-tank.herokuapp.com/";
 
 
 # Execute daily cron
@@ -9,7 +9,7 @@ $domainUrl = "http://the-music-tank.herokuapp.com/cron/daily";
 $curl = curl_init();
 curl_setopt_array($curl, array(
     CURLOPT_RETURNTRANSFER => 1,
-    CURLOPT_URL => $domainUrl,
+    CURLOPT_URL => $domainUrl . 'cron/daily',
     CURLOPT_USERAGENT => 'TMT daily cURL Request'
 ));
 $resp = curl_exec($curl);
@@ -26,7 +26,7 @@ if($now > $weekMondayTime && $now < $weekTuesdayTime)
     $curl = curl_init();
     curl_setopt_array($curl, array(
         CURLOPT_RETURNTRANSFER => 1,
-        CURLOPT_URL => 'http://the-music-tank.herokuapp.com/cron/daily',
+        CURLOPT_URL => $domainUrl . '/cron/weekly',
         CURLOPT_USERAGENT => 'TMT weekly cURL Request'
     ));
     $resp = curl_exec($curl);

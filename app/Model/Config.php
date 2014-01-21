@@ -17,8 +17,7 @@ class Config extends AppModel
         return $this->find("all", array(
             "conditions" => array("Config.key" => array(
                 "last_heavyrotation_sync", 
-                "last_trackchallenge_sync",
-               // "last_dailychart_sync"
+                "last_trackchallenge_sync"
             ))
         ));
     }
@@ -33,19 +32,6 @@ class Config extends AppModel
             "conditions" => array("Config.key" => array(
                 "last_newreleases_sync",
                 "last_weeklychart_sync"
-            ))
-        ));
-    }
-    
-        /**
-     * Preloads all the configuration options related to a yearly update
-     * @return array Dataset
-     */
-    public function getYearly()
-    {
-        return $this->find("all", array(
-            "conditions" => array("Config.key" => array(
-             //   "last_yearlychart_sync"
             ))
         ));
     }
@@ -76,26 +62,11 @@ class Config extends AppModel
     {        
         return $this->_setSyncUpdate("last_trackchallenge_sync");
     }
-    /*
-    public function setDailyTrackChartUpdate()
-    {        
-        return $this->_setSyncUpdate("last_dailychart_sync");
-    }*/
     
     public function setWeeklyTrackChartUpdate()
     {        
         return $this->_setSyncUpdate("last_weeklychart_sync");
     }
-    /*
-    public function setMonthlyTrackChartUpdate()
-    {        
-        return $this->_setSyncUpdate("last_monthlychart_sync");
-    }
-    
-    public function setYearlyTrackChartUpdate()
-    {        
-        return $this->_setSyncUpdate("last_yearlychart_sync");
-    }*/
     
     /**
      * Specifies if the popular artists need to be updated.
@@ -129,30 +100,6 @@ class Config extends AppModel
         if(!is_null($data)) $this->data = $data;  
         return $this->_validateDelay("last_trackchallenge_sync", 60*60*24);  
     }
-    /*
-    public function requiresDailyChartsUpdate($data = null)
-    {     
-        if(!is_null($data)) $this->data = $data; 
-        return $this->_validateDelay("last_dailychart_sync", 60*60*24);
-    }*/
-    
-    public function requiresWeeklyChartsUpdate($data = null)
-    {
-        if(!is_null($data)) $this->data = $data;
-        return $this->_validateDelay("last_weeklychart_sync", 60*60*24*7);
-    }
-    /*
-    public function requiresMonthlyChartsUpdate($data = null)
-    {
-        if(!is_null($data)) $this->data = $data;
-        return $this->_validateDelay("last_monthlychart_sync", 60*60*24*30);
-    }
-    
-    public function requiresYearlyChartsUpdate($data = null)
-    {
-        if(!is_null($data)) $this->data = $data;
-        return $this->_validateDelay("last_yearlychart_sync", 60*60*24*365);
-    }*/
     
     /**
      * Based on preloaded values, fetches a unique record. This internally

@@ -65,85 +65,10 @@ class CronController extends AppController {
         {
             $feedback[] = "[SKIP] Do not have to update new releases";
         }
-        /*
-        if($this->Config->requiresWeeklyTrackChartsUpdate($data))
-        {
-            $feedback[] = ($this->_syncWeeklyTrackCharts() !== false) ?
-                "[OK]  Charts (tracks) have been updated successfully" :
-                "[Err] Unsuccessful attempt at updating charts (tracks)";
-        }   
-        else
-        {
-            $feedback[] = "[SKIP] Do not have to update charts (tracks)";
-        }        
-        
-        if($this->Config->requiresWeeklyAlbumChartsUpdate($data))
-        {
-            $feedback[] = ($this->_syncWeeklyAlbumCharts() !== false) ?
-                "[OK]  Charts (albums) have been updated successfully" :
-                "[Err] Unsuccessful attempt at updating charts (albums)";
-        }   
-        else
-        {
-            $feedback[] = "[SKIP] Do not have to update charts (albums)";
-        }  */
         
         $this->_printOut($feedback);        
         $this->render('/Pages/cron/');
     }
-        
-    /*
-    public function monthly()
-    {
-        $this->layout = "blank";
-        $this->loadModel("Config");        
-        $feedback   = array("This is the monthly");
-                
-        
-        $data = $this->Config->getMonthly();
-        
-        /f($this->Config->requiresMonthlyChartsUpdate($data))
-        {
-            $feedback[] = ($this->_syncMonthlyCharts() !== false) ?
-                "[OK]  Charts have been updated successfully" :
-                "[Err] Unsuccessful attempt at updating charts";
-        }   
-        else
-        {
-            $feedback[] = "[SKIP] Do not have to update charts";
-        }
-        
-        
-        $this->_printOut($feedback);        
-        $this->render('/Pages/cron/');
-    }
-    
-    public function yearly()
-    {
-        $this->layout = "blank";
-        $this->loadModel("Config");        
-        $feedback   = array("This is the yearly");
-                
-        
-        $data = $this->Config->getYearly();
-        
-        
-        if($this->Config->requiresYearlyChartsUpdate($data))
-        {
-            $feedback[] = ($this->_syncYearlyCharts() !== false) ?
-                "[OK]  Charts have been updated successfully" :
-                "[Err] Unsuccessful attempt at updating charts";
-        }   
-        else
-        {
-            $feedback[] = "[SKIP] Do not have to update charts";
-        }
-        
-        
-        $this->_printOut($feedback);        
-        $this->render('/Pages/cron/');
-    }
-    */
     
     /** 
      * Populated the review frames with dummy test values. Should never be used in production
@@ -323,62 +248,4 @@ class CronController extends AppController {
         
         return false;
     }
-    /*
-    private function _syncWeeklyTrackCharts()
-    {      
-        $this->loadModel("TrackReviewSnapshot");
-        $this->loadModel("Chart");
-        
-        $year       = date("Y");
-        $weekNumber = date("W");
-        
-        if($weekNumber - 1 > 0)
-        {
-            $previousWeek = $weekNumber - 1;
-            $previousYear = $year;
-        }
-        else
-        {
-            $previousYear = $year - 1;
-            $previousWeek = 52;
-        }        
-        
-        $endTimestamp   = strtotime($year . "W" . $weekNumber);  
-        $startTimestamp = strtotime($previousYear . "W" . $previousWeek);
-                
-        $tracksChart    = $this->Chart->generate($this->TrackReviewSnapshot, $startTimestamp, $endTimestamp, 100);        
-        $this->Chart->saveWeekly($tracksChart);        
-        
-        return $this->Config->setWeeklyChartsUpdate();
-    }
-    
- private function _syncWeeklyAlbumCharts()
-    {      
-        $this->loadModel("AlbumReviewSnapshot");
-        $this->loadModel("Chart");
-        
-        $year       = date("Y");
-        $weekNumber = date("W");
-        
-        if($weekNumber - 1 > 0)
-        {
-            $previousWeek = $weekNumber - 1;
-            $previousYear = $year;
-        }
-        else
-        {
-            $previousYear = $year - 1;
-            $previousWeek = 52;
-        }        
-        
-        $endTimestamp   = strtotime($year . "W" . $weekNumber);  
-        $startTimestamp = strtotime($previousYear . "W" . $previousWeek);
-                
-        $albumsChart    = $this->Chart->generate($this->AlbumReviewSnapshot, $startTimestamp, $endTimestamp, 100);
-        
-        $this->Chart->saveWeekly($albumsChart);        
-        
-        return $this->Config->setWeeklyChartsUpdate();
-    }
-    */
 }

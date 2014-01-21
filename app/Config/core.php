@@ -33,7 +33,7 @@
  * In production mode, flash messages redirect after a time interval.
  * In development mode, you need to click the flash message to continue.
  */
-if(preg_match('/themusictank\.com/', $_SERVER['SERVER_NAME']) || preg_match('/herokuapp\.com/', $_SERVER['SERVER_NAME']))
+if(preg_match('/themusictank\.com/', $_SERVER['SERVER_NAME']))
 {
 	Configure::write('debug', 0);
 }
@@ -320,7 +320,7 @@ else
  *       Please check the comments in bootstrap.php for more info on the cache engines available
  *       and their settings.
  */
-$engine = 'File';
+	$engine = 'File';
 
 // In development mode, caches should expire quickly.
 $duration = '+999 days';
@@ -331,26 +331,28 @@ if (Configure::read('debug') > 0) {
 // Prefix each application on the same server with a different string, to avoid Memcache and APC conflicts.
 $prefix = 'tmt_';
 
-/**
- * Configure the cache used for general framework caching. Path information,
- * object listings, and translation cache files are stored with this configuration.
- */
-Cache::config('_cake_core_', array(
-	'engine' => $engine,
-	'prefix' => $prefix . 'cake_core_',
-	'path' => CACHE . 'persistent' . DS,
-	'serialize' => ($engine === 'File'),
-	'duration' => $duration
-));
+	/**
+	 * Configure the cache used for general framework caching. Path information,
+	 * object listings, and translation cache files are stored with this configuration.
+	 */
+	Cache::config('_cake_core_', array(
+		'engine' => $engine,
+		'prefix' => $prefix . 'cake_core_',
+		'path' => CACHE . 'persistent' . DS,
+		'serialize' => ($engine === 'File'),
+		'duration' => $duration
+	));
 
-/**
- * Configure the cache for model and datasource caches. This cache configuration
- * is used to store schema descriptions, and table listings in connections.
- */
-Cache::config('_cake_model_', array(
-	'engine' => $engine,
-	'prefix' => $prefix . 'cake_model_',
-	'path' => CACHE . 'models' . DS,
-	'serialize' => ($engine === 'File'),
-	'duration' => $duration
-));
+	/**
+	 * Configure the cache for model and datasource caches. This cache configuration
+	 * is used to store schema descriptions, and table listings in connections.
+	 */
+	Cache::config('_cake_model_', array(
+		'engine' => $engine,
+		'prefix' => $prefix . 'cake_model_',
+		'path' => CACHE . 'models' . DS,
+		'serialize' => ($engine === 'File'),
+		'duration' => $duration
+	));
+
+

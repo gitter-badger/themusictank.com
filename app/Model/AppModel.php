@@ -73,7 +73,7 @@ class AppModel extends Model {
     
     
     public function getImageFromUrl($remoteUrl, $previousUrl = null)
-    {
+    {       
         $ds             = DIRECTORY_SEPARATOR;
         $newname        = md5($remoteUrl) . ".jpg";
         $previousname   = md5($previousUrl) . ".jpg";

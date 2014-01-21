@@ -25,7 +25,7 @@ class PagesController extends AppController {
 		}
 
 		// temporarily forward the homepage		
-		if(Configure::read('debug') > 1 && $page == "home") {
+		if(Configure::read('debug') < 1 && $page == "home") {
 			$this->layout = "blank";
 			$this->render("soon");
 			return;

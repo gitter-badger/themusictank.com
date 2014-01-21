@@ -48,14 +48,17 @@ class UserFollowers extends AppModel
             )
         )) > 0;
     }
-    
+
+    /*  User_id = the guy that is clicking on the follow button
+        Follower_id = the person that user_id is subscribing to. */
     public function getFollowers($userId)
     {
-        return $this->find('all', array('conditions' => array('follower_id'  => $userId), 'fields' => array("User.*")));
+        return $this->find("list", array('conditions' => array('follower_id'  => $userId), "fields" => "UserFollowers.user_id"));
+    }
+
+    public function getSubscriptions($userId)
+    {        
+        return $this->find("list", array('conditions' => array('user_id'  => $userId), "fields" => "UserFollowers.follower_id"));
     }
     
-    public function getFollowing($userId)
-    {
-        return $this->find('all', array('conditions' => array('user_id'  => $userId), 'fields' => array("User.*")));
-    }
 }

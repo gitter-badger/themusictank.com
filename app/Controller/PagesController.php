@@ -31,6 +31,12 @@ class PagesController extends AppController {
 			return;
 		}
 
+		// Send users to their dashboard page if they are logged in.
+		if($page == "home" && $this->userIsLoggedIn())
+		{
+            $this->redirect(array('controller' => 'users', 'action' => 'dashboard'));
+		}
+
 		$this->set(compact('page', 'subpage', 'title_for_layout'));
 		$this->render(implode('/', $path));
 	}

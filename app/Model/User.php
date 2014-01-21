@@ -7,7 +7,6 @@ class User extends AppModel
 	public $name    = 'User';    
 	public $hasOne  = array('RdioUser', 'FacebookUser');
     public $hasMany = array('UserAchievements', 'Notifications', 'UserFollowers');
-    //public $hasAndBelongsToMany = array('UserFollower');
 	public $validate = array(
 		'username' => array(
 			'required' => array(
@@ -86,6 +85,23 @@ class User extends AppModel
             "related_model_id" => $id
         ));
     }
-    
-    
+
+    public function getSubscribers($userId)
+    {
+        $idList = array_values($this->UserFollowers->getSubscriptions($userId));
+        return $this->find('all', array(
+            'conditions' => array("User.id" => $idList),
+            'fields' => array("User.*")
+        ));
+    }
+
+    public function getFollowers($userId)
+    {
+        $idList = array_values($this->UserFollowers->getFollowers($userId)); 
+        return $this->find('all', array(
+            'conditions' => array("User.id" => $idList),
+            'fields' => array("User.*")
+        ));
+    }
+
 }

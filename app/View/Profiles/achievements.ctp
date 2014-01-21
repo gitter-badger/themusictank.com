@@ -1,4 +1,4 @@
-<?php echo $this->element('dashboardmenu'); ?>
+<?php echo $this->element('profilesmenu'); ?>
 
 <h2><?php echo __("Unlocked achievements"); ?></h2>
 

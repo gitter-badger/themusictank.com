@@ -1,1 +1,1 @@
-<?php echo $this->element('followButton', array("relationExists" => $relationExists)); ?>
+<?php echo $this->element('followButton', array("user" => $user)); ?>

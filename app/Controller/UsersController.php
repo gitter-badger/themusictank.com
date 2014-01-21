@@ -53,8 +53,7 @@ class UsersController extends AppController {
             $relationExists = $this->User->UserFollowers->addRelation($sessionId, $userSlug);
         }  
         
-        $this->set("user", array("slug" => $userSlug)); 
-        $this->set("relationExists", $relationExists); 
+        $this->set("user", array("slug" => $userSlug, "currently_followed" => $relationExists)); 
         $this->render('/Ajax/followbutton/');
     }
            
@@ -62,15 +61,14 @@ class UsersController extends AppController {
     {        
         $this->layout   = "ajax";        
         $relationExists = false;
-        
+
         if($this->userIsLoggedIn())
         {
             $sessionId = $this->Session->read('Auth.User.User.id');
             $relationExists = !$this->User->UserFollowers->removeRelation($sessionId, $userSlug);
         }  
-        
-        $this->set("user", array("slug" => $userSlug)); 
-        $this->set("relationExists", $relationExists);        
+
+        $this->set("user", array("slug" => $userSlug, "currently_followed" => $relationExists)); 
         $this->render('/Ajax/followbutton/');
     }
     
@@ -83,138 +81,17 @@ class UsersController extends AppController {
         $this->set('notifications', $notifications);        
         $this->setPageTitle(array(__("Recent notifications")));
     }    
-    
-    /** 
-     * Lists the complete details of all user notifications. 
-     */
-    public function achievements()
-    {
-        $achievements = $this->User->UserAchievements->findAllByUserId($this->Session->read('Auth.User.User.id'));
-        $this->set('achievements', $achievements);        
-        $this->setPageTitle(array(__("Unlocked achievements")));
-    }  
+       
         
     /** 
      * Builds the default user dashboard
      */
     public function dashboard()
     {
-        $userId = (int)$this->Session->read('Auth.User.User.id');
-        $data = $this->User->findById($userId);
-        
-        if(!$data)
-        {
-            $this->Session->setFlash(__('This user does not exist.'), 'Flash'.DS.'failure');
-            $this->redirect(array('controller' => 'pages', 'action' => 'error'));
-        }                
-        
-        $this->loadModel("Track");
-        $dailyChallenge = $this->Track->findDailyChallenge();        
-        $topAreas       = $this->Track->TrackReviewSnapshot->getTopAreasByUserId($userId);
-        $recentReviews  = $this->Track->TrackReviewSnapshot->getRecentReviewsByUserId($userId, 5);
-                
-        foreach($recentReviews as $idx => $review)
-        {
-            $recentReviews[$idx]["appreciation"] = $this->Track->TrackReviewSnapshot->getUserAppreciation($review["Track"]["id"], $userId);
-        }
-        
-        $this->loadModel("Album");
-        $weekDate = mktime(0, 0, 0, date("n"), date("j") - date("N"));
-        $this->set("newReleases", $this->Album->getNewReleases(3));
-        $this->set("forTheWeekOf", $weekDate);
-        $this->set("dailyChallenge", $dailyChallenge);
-        $this->set("user",          $data['User']);                
-        $this->set("recentReviews", $recentReviews);
-        $this->set("topAreas",      $topAreas);
         
         $this->setPageTitle(array(__("TMT dashboard")));
-    }
-    
-    public function followers($userSlug = null)
-    {   
-        if(!$this->userIsLoggedIn() && is_null($userSlug))
-        {
-            $this->Session->setFlash(__('This user does not exist.'), 'Flash'.DS.'failure');
-            $this->redirect(array('controller' => 'pages', 'action' => 'error'));            
-        }
-        
-        $userId = (int)$this->Session->read('Auth.User.User.id');
-        
-        if(!is_null($userSlug))
-        {  
-            $data = $this->User->findBySlug($userSlug);
-            if(!$data)
-            {
-                $this->Session->setFlash(__('This user does not exist.'), 'Flash'.DS.'failure');
-                $this->redirect(array('controller' => 'pages', 'action' => 'error'));
-            }  
-            $userId = $data["User"]["id"];
-        }
-        
-        $this->set("followers", $this->User->UserFollowers->getFollowers($userId));
-        
-    }
-    
-    public function following($userSlug = null)
-    {
-        if(!$this->userIsLoggedIn() && is_null($userSlug))
-        {
-            $this->Session->setFlash(__('This user does not exist.'), 'Flash'.DS.'failure');
-            $this->redirect(array('controller' => 'pages', 'action' => 'error'));            
-        }
-        
-        $userId = (int)$this->Session->read('Auth.User.User.id');
-        
-        if(!is_null($userSlug))
-        {  
-            $data = $this->User->findBySlug($userSlug);
-            if(!$data)
-            {
-                $this->Session->setFlash(__('This user does not exist.'), 'Flash'.DS.'failure');
-                $this->redirect(array('controller' => 'pages', 'action' => 'error'));
-            }  
-            $userId = $data["User"]["id"];
-        }
-                
-        $this->set("following", $this->User->UserFollowers->getFollowing($userId));
-    }
-    
-    
-    /** 
-     * Read only view of a user's details
-     */
-    public function view($userSlug = null)
-    {
-        $data = $this->User->findBySlug($userSlug);
-        if(!$data)
-        {
-            $this->Session->setFlash(__('This user does not exist.'), 'Flash'.DS.'failure');
-            $this->redirect(array('controller' => 'pages', 'action' => 'error'));
-        }
-                
-        $this->loadModel("TrackReviewSnapshot");  
-        $topAreas       = $this->TrackReviewSnapshot->getTopAreasByUserId($data["User"]["id"]);
-        $recentReviews  = $this->TrackReviewSnapshot->getRecentReviewsByUserId($data["User"]["id"], 5);
-                        
-        foreach($recentReviews as $idx => $review)
-        {
-            $recentReviews[$idx]["appreciation"] = $this->TrackReviewSnapshot->getUserAppreciation($review["Track"]["id"], $data["User"]["id"]);
-        }
-            
-        $relationExists = false;
-        if($this->userIsLoggedIn())
-        {
-            $relationExists = $this->User->UserFollowers->relationExists($data["User"]["id"], $this->getAuthUserId());
-        }        
-        
-        $this->set("user",          $data['User']);                
-        $this->set("recentReviews", $recentReviews);
-        $this->set("topAreas",      $topAreas);
-        $this->set("relationExists", $relationExists);
-        
-        $this->setPageTitle(array($data["User"]["firstname"]));
     }    
-       
+             
     
     /** 
      * Edit the current user's details

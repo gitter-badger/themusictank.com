@@ -1,4 +1,6 @@
 
+<?php echo $this->element('profilesmenu'); ?>
+
 <p><?php echo $user["firstname"]; ?> <?php echo $user["lastname"]; ?> <?php echo __('has joined The Music Tank on'); ?> <?php echo $user['created']; ?></p>
 
 <?php if($this->Session->read('Auth.User.User.id') != $user["id"]) : ?>

@@ -1,5 +1,5 @@
-<header class="cols">
-     <nav class="col col-1-2">
+<header>
+     <nav>
          <ul class="horizontal">
              <li><?php echo $this->Html->link(__("The Music Tank"), "/"); ?></li>
              <!--li><?php echo $this->Html->link(__("Charts"),     array('controller' => 'charts',     'action' => 'index')); ?></li -->
@@ -7,7 +7,7 @@
              <li><?php echo $this->Html->link(__("Community"),  array('controller' => 'pages',      'action' => 'community')); ?></li>
          </ul>
     </nav>
-    <nav class="col col-2-2">
+    <nav>
          <?php $userSession = $this->Session->read('Auth.User.User');  ?>
          <?php if($userSession) : ?>
          <ul class="horizontal">             
@@ -20,9 +20,11 @@
                         array('controller' => 'users', 'action' => 'dashboard'),
                         array("escape" => false)
                 ); ?>
-                <?php echo __("Hi"); ?> <?php echo $this->Html->link($userSession['firstname'], array('controller' => 'users', 'action' => 'dashboard')); ?>
-            </li>
+                <?php echo __("Hi"); ?> <?php echo $userSession['firstname']; ?>
+            </li>            
             <li class="dropdown notifier"><?php echo $this->element("dropdownnotifications"); ?></li>
+            <li><?php echo $this->Html->link(__("Profile"), array('controller' => 'profiles', 'action' => 'view', $userSession['username'])); ?></li>
+            <li><?php echo $this->Html->link(__("Settings"), array('controller' => 'users', 'action' => 'edit')); ?></li>
             <li><?php echo $this->Html->link(__("Logout"), array('controller' => 'users', 'action' => 'logout')); ?></li>             
         </ul>
         <?php else : ?>

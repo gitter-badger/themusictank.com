@@ -1,5 +1,3 @@
-<?php echo $this->element('dashboardmenu'); ?>
-
 <h2><?php echo __("Notifications"); ?></h2>
 
 <button name="markAsRead"><?php echo __("Mark all as read"); ?></button>

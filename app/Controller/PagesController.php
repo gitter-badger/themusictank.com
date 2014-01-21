@@ -5,6 +5,7 @@ App::uses('AppController', 'Controller');
 class PagesController extends AppController {
     
 	public function display() {
+
 		$path = func_get_args();
 
 		$count = count($path);
@@ -22,6 +23,14 @@ class PagesController extends AppController {
 		if (!empty($path[$count - 1])) {
 			$title_for_layout = Inflector::humanize($path[$count - 1]);
 		}
+
+		// temporarily forward the homepage		
+		if(Configure::read('debug') > 1 && $page == "home") {
+			$this->layout = "blank";
+			$this->render("soon");
+			return;
+		}
+
 		$this->set(compact('page', 'subpage', 'title_for_layout'));
 		$this->render(implode('/', $path));
 	}

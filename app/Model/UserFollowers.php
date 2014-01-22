@@ -8,15 +8,23 @@ class UserFollowers extends AppModel
     {
         $follower = $this->User->find("first", array(
             "conditions"    => array("User.slug" => $followerSlug),
-            "fields"        => array("User.id")
+            "fields"        => array("User.id", "User.firstname", "User.lastname")
         ));
      
         if(!$this->relationExists($follower["User"]["id"], $userId))
-        {        
-            return $this->save(array(
-                "user_id"       => $userId, 
-                "follower_id"   => $follower["User"]["id"]
-            ));
+        {                    
+            if($this->save(array("user_id" => $userId, "follower_id" => $follower["User"]["id"]))) {
+                
+                // Save the activity.
+                $this->data = array("User" => array("id" => $userId), "UserFollower" => array("id" => $follower["User"]["id"]));
+                $this->dispatchEvent('onSubscription');
+                
+                // Notify the person being followed.
+                $msg = $follower["User"]["firstname"] . " " . $follower["User"]["lastname"] . " " .__("is now following you.");
+                $this->User->notify($follower["User"]["id"], "follower", $msg, $follower["User"]["id"]);
+                return true;
+            }            
+            return false;
         }
         return true;
     }
@@ -51,11 +59,21 @@ class UserFollowers extends AppModel
 
     /*  User_id = the guy that is clicking on the follow button
         Follower_id = the person that user_id is subscribing to. */
-    public function getFollowers($userId)
+    
+    /**
+     * Returns a list of people following $followerId
+     * @param type $followerId
+     * @return type
+     */
+    public function getFollowers($followerId)
     {
-        return $this->find("list", array('conditions' => array('follower_id'  => $userId), "fields" => "UserFollowers.user_id"));
+        return $this->find("list", array('conditions' => array('follower_id'  => $followerId), "fields" => "UserFollowers.user_id"));
     }
-
+    /**
+     * Returns a list of people $userId subscribed to
+     * @param type $followerId
+     * @return type
+     */
     public function getSubscriptions($userId)
     {        
         return $this->find("list", array('conditions' => array('user_id'  => $userId), "fields" => "UserFollowers.follower_id"));

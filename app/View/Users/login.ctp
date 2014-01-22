@@ -7,8 +7,8 @@
 <div class="cols">
     <div class="col col-1-2">    
         <ul>
-            <li><?php echo $this->Html->link(__("Connect with Rdio"), array('controller' => 'apis', 'action' => 'connectRdio', '?' => array("rurl" => $redirectUrl))); ?>
-            <li><?php echo $this->Html->link('Connect with Facebook', array('controller' => 'apis', 'action' => 'connectFacebook', '?' => array("rurl" => $redirectUrl))); ?></p>        
+            <li><?php echo $this->Html->link(__("Loign with Rdio"), array('controller' => 'apis', 'action' => 'connectRdio', '?' => array("rurl" => $redirectUrl))); ?>
+            <li><?php echo $this->Html->link(__("Logo with Facebook"), array('controller' => 'apis', 'action' => 'connectFacebook', '?' => array("rurl" => $redirectUrl))); ?></p>        
         </ul>
     </div>
     <div class="col col-2-2">        

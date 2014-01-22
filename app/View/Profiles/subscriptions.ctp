@@ -12,5 +12,5 @@
     <?php endforeach; ?>    
 </ul>
 <?php else : ?>
-	<p><?php echo __("User has no followers at the moment."); ?></p>
+	<p><?php echo __("User has no subscriptions at the moment."); ?></p>
 <?php endif; ?>

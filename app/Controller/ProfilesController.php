@@ -37,11 +37,11 @@ class ProfilesController extends AppController {
         {
             $relationExists = $this->User->UserFollowers->relationExists($data["User"]["id"], $this->getAuthUserId());
         }        
-        
+        $data["User"]["currently_followed"] = $relationExists;
+                
         $this->set("user",          $data['User']);                
         $this->set("recentReviews", $recentReviews);
         $this->set("topAreas",      $topAreas);
-        $this->set("relationExists", $relationExists);
         
         $this->setPageTitle(array($data["User"]["firstname"]));
     }    
@@ -58,7 +58,7 @@ class ProfilesController extends AppController {
         $this->set("user", $data['User']);            
         $followers = $this->User->getFollowers($data["User"]["id"]);
         $followers = $this->_addSessionFollowStatus($followers, $data["User"]["id"]);
-        $this->set("followers", $followers);        
+        $this->set("followers", $followers);
     }
     
     public function subscriptions($userSlug = null)
@@ -97,7 +97,7 @@ class ProfilesController extends AppController {
 
     public function _addSessionFollowStatus($subscriptions, $profileId)
     {
-         if($this->userIsLoggedIn())
+        if($this->userIsLoggedIn())
         {
             if($this->getAuthUserId() != $profileId)
             {

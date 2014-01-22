@@ -76,7 +76,7 @@ class UsersController extends AppController {
     public function notifications()
     {                
         $notifications = $this->Paginator->paginate('Notifications', array('user_id' => $this->getAuthUserId()));        
-        $this->set('notifications', $notifications);        
+        $this->set('notifications', $this->User->Notifications->associateRelated($notifications));
         $this->setPageTitle(array(__("Recent notifications")));
     }    
        
@@ -86,8 +86,14 @@ class UsersController extends AppController {
      */
     public function dashboard()
     {   
+        $this->loadModel("UserActivity");
+                
+        $list = array_values($this->User->UserFollowers->getSubscriptions($this->getAuthUserId()));
+        $feed = $this->UserActivity->fetchFriendsActivity($list);
+        
+        $this->set("feed", $feed);        
         $this->setPageTitle(array(__("TMT dashboard")));
-    }    
+    }
              
     
     /** 

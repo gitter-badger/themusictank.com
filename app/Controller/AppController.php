@@ -6,6 +6,7 @@
  */
 App::uses('Controller', 'Controller');
 App::uses('AchievementListener', 'Lib');
+App::uses('ActivityListener', 'Lib');
 
 /**
  * Application Controller
@@ -36,7 +37,8 @@ class AppController extends Controller {
         
         // Attach the Achievement listener to the global
         // Cake event manager so it catches everything.
-        CakeEventManager::instance()->attach(new AchievementListener());        
+        CakeEventManager::instance()->attach(new AchievementListener());     
+        CakeEventManager::instance()->attach(new ActivityListener());      
     }
                     
     /** 

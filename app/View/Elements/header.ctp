@@ -23,7 +23,7 @@
                 <?php echo __("Hi"); ?> <?php echo $userSession['firstname']; ?>
             </li>            
             <li class="dropdown notifier"><?php echo $this->element("dropdownnotifications"); ?></li>
-            <li><?php echo $this->Html->link(__("Profile"), array('controller' => 'profiles', 'action' => 'view', $userSession['username'])); ?></li>
+            <li><?php echo $this->Html->link(__("Profile"), array('controller' => 'profiles', 'action' => 'view', $userSession['slug'])); ?></li>
             <li><?php echo $this->Html->link(__("Settings"), array('controller' => 'users', 'action' => 'edit')); ?></li>
             <li><?php echo $this->Html->link(__("Logout"), array('controller' => 'users', 'action' => 'logout')); ?></li>             
         </ul>

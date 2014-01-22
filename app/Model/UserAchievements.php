@@ -23,4 +23,14 @@ class UserAchievements extends AppModel
     {
         return $this->Achievement->findById($id);
     }    
+    
+    
+    public function afterSave($created, $options = array())
+    {
+        if($created)
+        {
+            $this->dispatchEvent('onCreate');
+        }
+    }
+    
 }

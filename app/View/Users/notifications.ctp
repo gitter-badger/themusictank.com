@@ -12,8 +12,14 @@
         
         <?php if(array_key_exists("Achievement", $notification["Notifications"])) : ?>
             <p><?php echo $notification["Notifications"]["Achievement"]["name"]; ?></p>            
-            <p><?php echo $notification["Notifications"]["Achievement"]["description"]; ?></p>
-        <?php endif;?>        
+            <p><?php echo $notification["Notifications"]["Achievement"]["description"]; ?></p>            
+            
+        <?php elseif(array_key_exists("UserFollower", $notification["Notifications"])) : ?>            
+            <p>
+                <?php echo $this->Html->link($notification["Notifications"]["UserFollower"]["firstname"] . " " . $notification["Notifications"]["UserFollower"]["lastname"], array('controller' => 'profiles', 'action' => 'view', $notification["Notifications"]["UserFollower"]["slug"])); ?>
+                <?php echo __("is now following your public activity on the website."); ?>
+            </p>
+        <?php endif; ?>        
     </li>
     <?php endforeach; ?>
     

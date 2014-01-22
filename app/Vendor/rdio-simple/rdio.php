@@ -56,16 +56,20 @@ class Rdio {
   }
 
   function complete_authentication($verifier) {
-    $response = $this->__signed_post('http://api.rdio.com/oauth/access_token',
-      array('oauth_verifier'=>$verifier));
+    $response = $this->__signed_post('http://api.rdio.com/oauth/access_token', array('oauth_verifier'=>$verifier));
     $parsed = array();
-    parse_str($response, $parsed);
-    $this->token = array($parsed['oauth_token'], $parsed['oauth_token_secret']);
+    parse_str($response, $parsed);    
+    
+    $this->token = null;
+    if(array_key_exists("oauth_token", $parsed))
+    {
+        $this->token = array($parsed['oauth_token'], $parsed['oauth_token_secret']);
+    }    
   }
 
   function call($method, $params=array()) {
-    $params['method'] = $method;    
+    $params['method'] = $method;
     return json_decode($this->__signed_post('http://api.rdio.com/1/', $params));
   }
-};
-?>
+  
+}

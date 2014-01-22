@@ -41,7 +41,7 @@
             <?php if(!$hasRdio && !$hasAccount) : ?>
                 <?php echo __("Facebook being your only active authentification method, we cannot revoke it."); ?>
             <?php else : ?>
-                <?php echo $this->Html->link("Disconnect your Facebook account", array('controller' => 'users', 'action' => 'disconnectFacebook', '?' => array("rurl" => "/users/edit"))); ?>
+                <?php echo $this->Html->link("Disconnect your Facebook account", array('controller' => 'users', 'action' => 'disconnectFacebook')); ?>
             <?php endif; ?>
         <?php else : ?>
             <?php echo $this->Html->link("Connect a Facebook account", array('controller' => 'apis', 'action' => 'connectFacebook')); ?>

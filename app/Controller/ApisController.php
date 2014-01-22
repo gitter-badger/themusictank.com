@@ -5,11 +5,11 @@ class ApisController extends AppController {
     
     public function connectRdio()
     {
-        try {       
+        try {
             
             $this->RdioApi->clearSession();
             if($this->RdioApi->authenticate( $this->_getRedirectUrl() ) !== false)
-            {
+            {                              
                 $this->redirectByRURL(array("controller" => "apis", "action" => "rdioLogin"), true);
             }
 
@@ -25,7 +25,7 @@ class ApisController extends AppController {
     
     public function connectFacebook()
 	{	
-        try {        
+        try {    
             
             $facebookUser = $this->FacebookApi->getUser( $this->_getRedirectUrl() );
             if($facebookUser)
@@ -50,7 +50,7 @@ class ApisController extends AppController {
             
             if($this->RdioApi->isInSession())
             {
-                $this->Session->write('Login.User.RdioUser', $this->RdioApi->getUserData());
+                $this->Session->write('Login.User.RdioUser', $this->RdioApi->getUserData());  
                 $this->redirectByRURL(array("controller" => "users", "action" => "checkrdiouser"), true);
             }
 

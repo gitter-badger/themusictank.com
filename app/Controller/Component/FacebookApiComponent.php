@@ -51,7 +51,7 @@ class FacebookApiComponent extends Component {
 	}
 	
 	private function _getToken($fbCode, $currentUrl)
-	{
+	{        
 		$response = file_get_contents($this->_getTokenUrl($currentUrl) . "&code=" . $fbCode);
 		$params = null;
 		parse_str($response, $params);			

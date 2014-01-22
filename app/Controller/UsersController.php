@@ -9,7 +9,7 @@
 class UsersController extends AppController {
     
     var $helpers    = array("Chart");
-    var $components = array("Paginator");
+    var $components = array("Paginator", "FacebookApi", "RdioApi");
     var $paginate = array(
         'limit' => 25,
         'order' => array(
@@ -29,7 +29,7 @@ class UsersController extends AppController {
     public function whatsup()
     {
         $this->layout = "ajax";        
-        $this->set("notifications", $this->User->Notifications->findByUserId($this->Session->read('Auth.User.User.id'), 5));                
+        $this->set("notifications", $this->User->Notifications->findByUserId($this->getAuthUserId(), 5));                
         $this->render('/Ajax/dropdownnotifications/');
     }
     
@@ -49,8 +49,7 @@ class UsersController extends AppController {
         
         if($this->userIsLoggedIn())
         {
-            $sessionId = $this->Session->read('Auth.User.User.id');
-            $relationExists = $this->User->UserFollowers->addRelation($sessionId, $userSlug);
+            $relationExists = $this->User->UserFollowers->addRelation($this->getAuthUserId(), $userSlug);
         }  
         
         $this->set("user", array("slug" => $userSlug, "currently_followed" => $relationExists)); 
@@ -64,8 +63,7 @@ class UsersController extends AppController {
 
         if($this->userIsLoggedIn())
         {
-            $sessionId = $this->Session->read('Auth.User.User.id');
-            $relationExists = !$this->User->UserFollowers->removeRelation($sessionId, $userSlug);
+            $relationExists = !$this->User->UserFollowers->removeRelation($this->getAuthUserId(), $userSlug);
         }  
 
         $this->set("user", array("slug" => $userSlug, "currently_followed" => $relationExists)); 
@@ -77,7 +75,7 @@ class UsersController extends AppController {
      */
     public function notifications()
     {                
-        $notifications = $this->Paginator->paginate('Notifications', array('user_id' => $this->Session->read('Auth.User.User.id')));        
+        $notifications = $this->Paginator->paginate('Notifications', array('user_id' => $this->getAuthUserId()));        
         $this->set('notifications', $notifications);        
         $this->setPageTitle(array(__("Recent notifications")));
     }    
@@ -87,8 +85,7 @@ class UsersController extends AppController {
      * Builds the default user dashboard
      */
     public function dashboard()
-    {
-        
+    {   
         $this->setPageTitle(array(__("TMT dashboard")));
     }    
              
@@ -98,7 +95,7 @@ class UsersController extends AppController {
      */
     public function edit()
     {
-        $user = $this->Session->read('Auth.User.User'); 
+        $user = $this->getAuthUser();
         $saved = false;
         
         if(!$user)
@@ -114,24 +111,22 @@ class UsersController extends AppController {
                 $this->Session->setFlash(__('Your information has been saved!'), 'Flash'.DS.'success') :
                 $this->Session->setFlash(__('We could not save your information'), 'Flash'.DS.'failure');
         }
-        
-        
-        $data = $this->User->findById((int)$user["id"], array('User.*', 'RdioUser.*', 'FacebookUser.*'));  
+                
+        $data = $this->User->findById((int)$user["User"]["id"], array('User.*', 'RdioUser.*', 'FacebookUser.*'));  
         if($saved) $this->updateUserSession($data);
         $this->request->data = $data;
         
-        $hasRdio = ($data['RdioUser']['id']);
-        $hasFacebook = ($data['FacebookUser']['id']);
-        $hasAccount = ($data['User']['username'] && $data['User']['password']);
+        $hasRdio        = ($data['RdioUser']['id']);
+        $hasFacebook    = ($data['FacebookUser']['id']);
+        $hasAccount     = ($data['User']['username'] && $data['User']['password']);
         
-        $apis = array();        
-        $apis[] = __("Mp3");
-        if($hasRdio) $apis[] = __("Rdio");        
-        $this->set("availableApis", $apis);
+        $apis = array(__("Mp3"));
+        if($hasRdio) $apis[] = __("Rdio"); 
         
-        $this->set("hasRdio", $hasRdio);      
-        $this->set("hasFacebook", $hasFacebook);    
-        $this->set("hasAccount", $hasAccount);   
+        $this->set("availableApis", $apis);        
+        $this->set("hasRdio",       $hasRdio);      
+        $this->set("hasFacebook",   $hasFacebook);    
+        $this->set("hasAccount",    $hasAccount);   
         
         $this->setPageTitle(__("Edit profile"));
     }        
@@ -164,7 +159,7 @@ class UsersController extends AppController {
 	}
         
     /** 
-     * Login page
+     * Login page. Uses the TMT form.
      */
 	public function login()
 	{		
@@ -172,7 +167,9 @@ class UsersController extends AppController {
 		if ($this->request->is('post'))
 		{
 			if($this->Auth->login())
-            {                                
+            {   
+                $data = $this->User->findByUsername($this->request->data["User"]["username"]);
+                $this->startUserSession($data); 
                 $this->redirectByRURL(array('controller' => 'users', 'action' => 'dashboard'));
             }
 				
@@ -195,26 +192,39 @@ class UsersController extends AppController {
             
             $data = $this->User->RdioUser->findByKey($user->key);						
             
-            if($this->userIsLoggedIn() && !$this->_idsAreOK($data))
+            if($this->userIsLoggedIn())
             {
-                $this->Session->setFlash(__('This Rdio account is already linked to another TMT profile.'), 'Flash'.DS.'failure');                
-                $this->redirectByRURL(array('controller' => 'users', 'action' => 'edit'));
+                // No rdio user match in the db
+                if(!$data)
+                {
+                    // If user is logged somehow, send in the current session values
+                    // so the api can link the objects
+                    $data = $this->User->RdioUser->createFromAPI($user, $this->userIsLoggedIn() ? $this->getAuthUser() : null);                  
+                }
+                // There is a match and the user is logged somehow, but ids do not match
+                else if(!$this->_idsAreOK($data))
+                {
+                    $this->Session->setFlash(__('This Rdio account is already linked to another TMT profile.'), 'Flash'.DS.'failure');                
+                    $this->redirectByRURL(array('controller' => 'users', 'action' => 'edit'));            
+                }
             }
-            
-            if(!$data) $data = $this->_createUserFromRdio($user);
-                        
-            $this->startUserSession($data);	
-            
-            if($this->User->RdioUser->requiresUpdate($data))
-            {   
-                $this->redirectByRURL(array("controller" => "artists", "action" => "syncUserLibrary"), true);
+                         
+            // Now, data should be up to date.
+            if($data)
+            {        
+                !$this->userIsLoggedIn() ? $this->startUserSession($data) : $this->updateUserSession($data);
+                
+                if($this->User->RdioUser->requiresUpdate($data))
+                {   
+                    $this->redirectByRURL(array("controller" => "artists", "action" => "syncUserLibrary"), true);
+                }
+
+                $this->redirectByRURL(array('controller' => 'users', 'action' => 'dashboard'));
             }
-            
-            $this->redirectByRURL(array('controller' => 'users', 'action' => 'dashboard'));
         }
         
         $this->Session->setFlash(__('We could not parse your Rdio user.'), 'Flash'.DS.'failure');
-        $this->render("index");
+        $this->redirectByRURL(array('controller' => 'users', 'action' => 'login'));
     }
     
     /** 
@@ -224,26 +234,43 @@ class UsersController extends AppController {
     {           
         if($this->Session->check('Login.User.FacebookUser'))
         {
-            $facebookUser = $this->Session->read('Login.User.FacebookUser');   
+            $user = $this->Session->read('Login.User.FacebookUser');   
             // Destroy the temporary user session values
             $this->Session->delete('Login.User.FacebookUser');
         
-            $data = $this->User->FacebookUser->find('first', array("conditions" => "facebook_id = {$facebookUser->id}"));
+            $data = $this->User->FacebookUser->findByFacebookId($user->id);	
            
-            if($this->userIsLoggedIn() && !$this->_idsAreOk($data))
+            // No facebook user match in the db
+            if(!$data)
             {
-                $this->Session->setFlash(__('This Facebook account is already linked to another TMT profile.'), 'Flash'.DS.'failure');
-                $this->redirect(array('controller' => 'users', 'action' => 'edit'));
+                // If user is logged somehow, send in the current session values
+                // so the api can link the objects
+                $data = $this->User->FacebookUser->createFromAPI($user, $this->userIsLoggedIn() ? $this->getAuthUser() : null);                  
             }
-            
-            if(!$data) $data = $this->_createUserFromFacebook($facebookUser);
-            
-            $this->startUserSession($data);            
-            $this->redirectByRURL(array('controller' => 'users', 'action' => 'dashboard'));
+            // There is a match and the user is logged somehow, but ids do not match
+            else if($this->userIsLoggedIn() && !$this->_idsAreOK($data))
+            {
+                $this->Session->setFlash(__('This Facebook account is already linked to another TMT profile.'), 'Flash'.DS.'failure');                
+                $this->redirectByRURL(array('controller' => 'users', 'action' => 'edit'));            
+            }
+                         
+            // Now, data should be up to date.
+            if($data)
+            {        
+                if($this->userIsLoggedIn()) {
+                    $this->updateUserSession($data);
+                    $this->redirect(array('controller' => 'users', 'action' => 'edit'));
+                }
+                else
+                {
+                    $this->startUserSession($data);                
+                    $this->redirect(array('controller' => 'users', 'action' => 'dashboard'));
+                }
+            }
         }
         
         $this->Session->setFlash(__('We could not parse your Facebook user.'), 'Flash'.DS.'failure');
-        $this->render("index");
+        $this->redirectByRURL(array('controller' => 'users', 'action' => 'login'));
     }
         
     /** 
@@ -282,65 +309,10 @@ class UsersController extends AppController {
         
         $this->setPageTitle(__("Logout"));
 	}
-    
-    private function _createUserFromRdio($user)
-    {        
-        // Create a new user from the Rdio profile
-        $formattedData = array(
-            "image_src"      => $user->icon,
-            "image"         => $this->User->getImageFromUrl($user->icon),
-            "prefered_player_api" => 1,
-            "RdioUser"  => array("key" => $user->key)
-        );
         
-        if($this->userIsLoggedIn())
-        {            
-            $user = $this->getAuthUser();
-            $formattedData["id"] = $user["id"];
-            $formattedData["slug"] = $user["slug"];
-        }
-        else
-        {   
-            $formattedData["firstname"] = $user->firstName;
-            $formattedData["lastname"]  = $user->lastName;
-            $this->User->create();
-        }
-        
-        if($this->User->saveAll($formattedData))    
-        {   
-            return $this->User->read(null, $this->User->id);
-        }
-    }
-        
-    private function _createUserFromFacebook($user)
-    {
-        // Create a new user from the Rdio profile
-        $formattedData = array(
-            "FacebookUser"  => array("facebook_id" => $user->id)
-        );
-
-        if($this->userIsLoggedIn())
-        {            
-            $user = $this->getAuthUser();
-            $formattedData["id"] = $user["id"];
-            $formattedData["slug"] = $user["slug"];
-        }
-        else
-        {
-            $formattedData["firstname"] = $user->first_name;
-            $formattedData["lastname"]  = $user->last_name;
-            $this->User->create();
-        }
-        
-        if($this->User->saveAll($formattedData))    
-        {   
-            return $this->User->read(null, $this->User->id);
-        }
-    }
-    
     private function _idsAreOk($data)
     {
-        return (array_key_exists("User", $data) && (int)$data["User"]["id"] === $this->getAuthUserId());
+        return (array_key_exists("User", $data) && (int)$data["User"]["id"] === $this->getAuthUserId());    
     }
     
 }

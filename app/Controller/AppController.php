@@ -60,7 +60,7 @@ class AppController extends Controller {
     {
         foreach($user as $key => $data)
         {
-            $this->Session->write('Auth.' . $key, $data);
+            $this->Session->write('Auth.User.' . $key, $data);
         }
     }
     

@@ -11,11 +11,11 @@ class User extends AppModel
 		'username' => array(
 			'required' => array(
 				'rule' => array('notEmpty'),
-				'message' => 'A username is required'
+				'message' => 'A email is required'
 			),
-			'unique' => array(
-				'rule' => array("checkUnique", array('username')),
-				'message' => "This username has already been registered."
+			'isUnique' => array(
+				'rule' => 'isUnique',
+				'message' => "This email has already been registered."
 			),
 			'isemail' => array(
 				'rule' => 'email',
@@ -42,7 +42,7 @@ class User extends AppModel
             $this->data[$this->alias]['password'] = AuthComponent::password($this->data[$this->alias]['password']);
         }
         
-        $this->checkSlug(array('firstname', 'email'));        
+        $this->checkSlug(array('firstname', 'lastname'));        
         return true;
     }
     
@@ -53,15 +53,7 @@ class User extends AppModel
             $this->dispatchEvent('onCreate');
         }
     }
-    
-    public function getRdioUserFromUserId($userId)
-    {        
-        return $this->RdioUser->find("first", array(
-            "conditions"    => array("RdioUser.user_id" => $userId),
-            "fields"        => array("RdioUser.id", "RdioUser.lastsync")
-        ));        
-    }
-    
+        
     public function reward($userId, $key)
     {       
         $achievement = $this->UserAchievements->Achievement->findByKey($key);

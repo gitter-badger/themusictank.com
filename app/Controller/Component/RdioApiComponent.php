@@ -11,9 +11,8 @@ require_once ($vendor[0] . "rdio-simple/rdio.php");
 class RdioApiComponent extends Component {
 	
 	private $_controller;
-    private $_instance;
-	
-	var $components = array('Session');	
+    private $_instance;	
+	public  $components = array('Session');	
 	
 	public function initialize(Controller $controller)
 	{
@@ -41,13 +40,13 @@ class RdioApiComponent extends Component {
         if($token && $secret)
         {
             # we have a token in our session, let's use it
-            $this->_instance->token = array($token, $secret);                        
-            if (array_key_exists("oauth_verifier", $_GET))
+            $this->_instance->token = array($token, $secret);   
+            if ($this->_controller->request->query['oauth_verifier'])
             {
                 # we've been passed a verifier, that means that we're in the middle of
                 # authentication.
-                $this->_instance->complete_authentication($_GET['oauth_verifier']);                                
-                $this->Session->write('Player.Rdio', $this->_instance);
+                $this->_instance->complete_authentication($this->_controller->request->query['oauth_verifier']);                                
+                $this->Session->write('Player.Rdio', $this->_instance);                         
                 return $this->_instance;
             }
         }

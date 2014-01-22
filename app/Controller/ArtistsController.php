@@ -133,19 +133,21 @@ class ArtistsController extends AppController {
      */
     public function syncUserLibrary()
     {   
-        $rdioUserData = $this->User->getRdioUserFromUserId($this->Auth->user("id"));
-        
-        if($this->User->RdioUser->requiresUpdate($rdioUserData))
-        {         
-            $artists = $this->RdioApi->getArtistLibrary();
-            if($artists)
-            {
-                $filtered = $this->Artist->RdioArtist->filterNew($artists);
-                $this->Artist->saveMany($filtered, array('deep' => true));                
-                $this->User->RdioUser->setSyncTimestamp($rdioUserData);
+        $rdioUserData = $this->User->RdioUser->getFromUserId($this->getAuthUserId());
+        if($rdioUserData)
+        {
+            if($this->User->RdioUser->requiresUpdate($rdioUserData))
+            {         
+                $artists = $this->RdioApi->getArtistLibrary();
+                if($artists)
+                {
+                    $filtered = $this->Artist->RdioArtist->filterNew($artists);
+                    $this->Artist->saveMany($filtered, array('deep' => true));                
+                    $this->User->RdioUser->setSyncTimestamp($rdioUserData);
+                }
             }
         }
-        
+
         $user = $this->Session->read('Auth.User.User'); 
         if($user)
         {

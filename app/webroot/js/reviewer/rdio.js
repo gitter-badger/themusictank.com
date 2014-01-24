@@ -11,14 +11,13 @@
             "listener": "callback_object"
         };
 
-        this.config.container.ref.addClass("loading");        
         swfobject.embedSWF(this.config.swfRoot, this.config.swfId, 1, 1, '9.0.0', null, flashvars, {'allowScriptAccess': 'always'}, {});                
     };
     
     player.onReady = function(user)
     {        
-        this.config.apiswf = $('#' + this.config.swfId).get(0);
-        this.config.container.ref.removeClass("loading");
+        this.config.apiswf = $('#apiswf').get(0);
+        $("body").removeClass("loading");
 
         if(this.config.startOnReady)
         {
@@ -31,9 +30,11 @@
         // the global callback object
         var callback_object = window.callback_object = {},
             scope = this; 
-        
+
         // Called once the API SWF has loaded and is ready to accept method calls
         callback_object.ready = function ready(user) { scope.onUserChange(user); scope.onReady(); };
+
+        //callback_object.freeRemainingChanged = function freeRemainingChanged(remaining) { console.log(remaining); };
 
         // The playback state has changed.
         // The state can be: 0 - paused, 1 - playing, 2 - stopped, 3 - buffering or 4 - paused.
@@ -46,7 +47,7 @@
                 "paused"
             ];     
             
-           scope.onStatusChange(playStates[playState]);
+            scope.onStatusChange(playStates[playState]);
         };     
 
         // The currently playing track has changed.
@@ -105,7 +106,7 @@
 
         // Called with frequency information after apiswf.rdio_startFrequencyAnalyzer(options) is called.
         // arrayAsString is a list of comma separated floats.
-        callback_object.updateFrequencyData = function updateFrequencyData(arrayAsString) {  
+        callback_object.updateFrequencyData = function updateFrequencyData(arrayAsString) {            
             scope.onFrequencyChange(arrayAsString.split(',')); 
         };
     };    

@@ -22,6 +22,7 @@ class RdioApiComponent extends Component {
     public function clearSession()
     {
         $this->Session->delete('Player.Rdio');
+        $this->Session->delete('Player.RdioPlaybackToken');
     }    
     
     public function isInSession()
@@ -46,7 +47,8 @@ class RdioApiComponent extends Component {
                 # we've been passed a verifier, that means that we're in the middle of
                 # authentication.
                 $this->_instance->complete_authentication($this->_controller->request->query['oauth_verifier']);                                
-                $this->Session->write('Player.Rdio', $this->_instance);                         
+                $this->Session->write('Player.Rdio', $this->_instance);
+                $this->Session->write('Player.RdioPlaybackToken', $this->getPlaybackToken());
                 return $this->_instance;
             }
         }
@@ -119,6 +121,13 @@ class RdioApiComponent extends Component {
     {
         $this->getInstance();
         $data = $this->_instance->call('getNewReleases', array("time" => $time, "extras" => "tracks"));  
+        return ($data) ? $data->result : null;
+    }
+    
+    public function getPlaybackToken()
+    {
+        $this->getInstance();
+        $data = $this->_instance->call('getPlaybackToken', array("domain" => $_SERVER['SERVER_NAME']));  
         return ($data) ? $data->result : null;
     }
     

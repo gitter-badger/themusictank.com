@@ -19,15 +19,7 @@ class PlayerController extends AppController {
         parent::beforeFilter();
         $this->Auth->deny(array("rdio", "mp3"));
     }
-    
-    /** 
-     * Default fallback when there is an error. Not really used and should probably be removed.
-     */
-    public function index()
-    {
-        
-    }
-                        
+                            
     /** 
      * Player selection page. Automatically forwards to the prefered api and logs the user in.
      *
@@ -40,8 +32,8 @@ class PlayerController extends AppController {
         if($this->userIsLoggedIn())
         {
             $user = $this->getAuthUser();            
-                                    
-            if((int)$user["prefered_player_api"] === 1 && $this->Session->check('Player.Rdio'))
+                           
+            if(User::getPreferredPlayer($user) == "rdio")
             {
                 $this->redirect(array("controller" => "player", "action" => "rdio", $trackSlug));
             }

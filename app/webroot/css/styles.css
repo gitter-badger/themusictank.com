@@ -141,6 +141,59 @@ ul.horizontal li:last-child {
     background:#dedede;
 }
 
+/* Players */
+.player {
+    border:1px solid #eee;
+    background:#fefefe;
+    margin:1em;
+    position:relative;
+}
+
+.player canvas {
+    background:#efefef;
+    height:250px;
+    width:100%;
+}
+
+.player .cursor {
+    width:1px;
+    position:absolute;
+    top:0;
+    left:0;
+    height:250px;
+    background-color:greenyellow;
+}
+
+.player .seek {
+    border-bottom:1px solid #dedede;
+    border-top:1px solid #333;
+}
+
+.player .seek .bar {
+    height:3px;
+    border:1px solid #333;
+    background:#666;
+}
+
+.player .seek .progress {
+    height:3px;
+    background:greenyellow;
+    width:1px;
+    text-align:right;
+}
+
+.player .knob {
+    display:inline-block;
+    width:20px;
+    height:20px;
+    margin-top:-10px;
+    margin-right:-10px;
+    background:#999;
+    border-radius:20px;
+    border:1px solid #666;
+}
+
+
 
 /* Charts */
 .chart {

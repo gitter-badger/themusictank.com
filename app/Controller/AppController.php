@@ -164,5 +164,20 @@ class AppController extends Controller {
     {        
         $this->set('meta_for_layout', $meta);
     }
+    
+    /** 
+     * Prepares all the flags to load the proper player on a page
+     * @return void
+     */
+    public function usesPlayer()
+    {        
+        $preferredPlayer = "mp3";
+        if($this->userIsLoggedIn())
+        {
+            $user = $this->getAuthUser();
+            $preferredPlayer = User::getPreferredPlayer($user["User"]);
+        }
+        $this->set("preferredPlayer", $preferredPlayer);
+    }
         
 }

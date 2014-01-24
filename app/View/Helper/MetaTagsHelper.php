@@ -10,11 +10,16 @@ class MetaTagsHelper extends AppHelper {
         
     public function init()
     {   
+        $domain = 'http://' . $_SERVER['SERVER_NAME'] . '/';
+        
         $metas = array(
             $this->Html->charset(),
             $this->Html->meta(array("name" => 'viewport', "value" => "width=device-width, initial-scale=1.0")),
-            $this->Html->meta('favicon.ico','/img/favicon.ico', array('type' => 'icon')),            
-            $this->Html->meta('canonical', $this->Html->url( null, true ), array('rel'=>'canonical', 'type'=>null, 'title'=>null)),
+            $this->Html->meta('favicon.ico','/img/favicon.ico', array('type' => 'icon')),  
+            $this->Html->meta(array("name" => 'referrer', "value" => "origin")),
+            $this->Html->meta('canonical', $this->Html->url( null, true ), array('rel'=>'canonical', 'type'=>null, 'title'=>null)),  
+            '<link rel="author" type="text/plain" href="'.$domain.'humans.txt"" />',
+            '<noscript><meta http-equiv="refresh" content="0; URL=/pages/requirements/" /></noscript>',
             $this->Html->css(array("//fonts.googleapis.com/css?family=Raleway", "styles")), 
             $this->Html->script(array("src" => "//code.jquery.com/jquery-2.0.3.min.js", "tmt")),
         );

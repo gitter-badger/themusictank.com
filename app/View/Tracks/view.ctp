@@ -10,7 +10,7 @@
 
 <p><?php echo $lastfmTrack["wiki"]; ?></p>
 
-<p><?php echo $this->Html->link(__("Play"), array('controller' => 'player', 'action' => 'play', $track["slug"])); ?></p>
+<?php echo $this->element("player"); ?>
 
 <section class="statistics">
     <p><?php echo __("Average user score"); ?> <?php echo $this->Chart->formatScore($snapshot["score_snapshot"]); ?></p>
@@ -22,7 +22,10 @@
     <p><?php echo __("Time disliked"); ?> <?php echo $enjoymentTimes["disliking"]; ?></p>
     <p><?php echo __("Total time");?> <?php echo date("i:s", (int)$track["duration"]); ?></p>
 </section>
-    
+
+
+
+<?php /*
 <section class="graphs cols">
     <div class="col col-1-3">
         <h3><?php echo __("Appreciation"); ?></h3>
@@ -32,7 +35,7 @@
         <h3><?php echo __("Track Groove"); ?></h3>        
         <?php echo $this->Chart->getTrackChart($track["slug"], $snapshot); ?>    
     </div>
-</div>
+</div> */ ?>
 
 <p class="credits">
     <?php echo __("Track description courtesy of"); ?> <?php echo $this->Html->link("Last.fm", "http://www.last.fm/", array("target" => "_blank")); ?>. 

@@ -1,4 +1,4 @@
-<?php echo $this->Html->script( array('lib/swf/swfobject', 'player/rdio') ); ?>
+<?php echo $this->Html->script( array('lib/swf/swfobject', 'reviewer/rdio') ); ?>
 
 <div id="cantstream">
     <div class="aid">

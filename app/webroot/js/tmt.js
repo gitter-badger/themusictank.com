@@ -50,7 +50,7 @@ $(function(){
         {
             $.ajax({
                 dataType : "html",
-                url : "/users/okstfu/", 
+                url : "/ajax/okstfu/", 
                 success : function(data) { box.html(data); }
             });
             return false;
@@ -60,7 +60,7 @@ $(function(){
         {
             $.ajax({
                 dataType : "html",
-                url : "/users/whatsup/",
+                url : "/ajax/whatsup/",
                 success : function(data) {
                     box.html(data);        
                     $(".notifier li.mark a").click(markAsRead);   
@@ -121,4 +121,5 @@ $(function(){
         });
     };      
     
+        
 });

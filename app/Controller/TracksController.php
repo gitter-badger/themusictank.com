@@ -13,6 +13,8 @@ class TracksController extends AppController {
      */
     public function view($trackSlug)
     {
+        $this->usesPlayer();
+        
         $data = $this->Track->getBySlugContained($trackSlug);
         $needsRefresh = false;
                 
@@ -32,15 +34,16 @@ class TracksController extends AppController {
         }
         
         $this->set("track", $data["Track"]);    
+        $this->set("rdioTrack", $data["RdioTrack"]);    
         $this->set("lastfmTrack", $data["LastfmTrack"]);    
         $this->set("album", $data["Album"]);     
         $this->set("artist", $data["Album"]["Artist"]);       
-        $this->set("snapshot", $data["TrackReviewSnapshot"]);
+        $this->set("snapshot", $data["TrackReviewSnapshot"]);        
                 
         $this->setPageTitle(array($data["Track"]["title"], $data["Album"]["name"], $data["Album"]["Artist"]["name"]));
         $this->setPageMeta(array(
             "keywords" => array($data["Track"]["title"], $data["Album"]["name"], $data["Album"]["Artist"]["name"]),
-            "description" => __("Listening statistics of ") . $data["Track"]["title"] . __(", a track featured on ") . $data["Album"]["name"] . __(", an album by ") . $data["Album"]["Artist"]["name"] . _(' released ') . $data["Album"]["release_date"] . "."
+            "description" => __("Listening statistics of ") . $data["Track"]["title"] . __(", a track featured on ") . $data["Album"]["name"] . __(", an album by ") . $data["Album"]["Artist"]["name"] . _(' released ') . date("F j Y", $data["Album"]["release_date"]) . "."
         ));
     } 
     

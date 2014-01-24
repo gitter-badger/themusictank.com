@@ -16,12 +16,7 @@ class ProfilesController extends AppController {
      */
     public function view($userSlug = null)
     {
-        $data = $this->User->findBySlug($userSlug);
-        if(!$data)
-        {
-            $this->Session->setFlash(__('This user does not exist.'), 'Flash'.DS.'failure');
-            $this->redirect(array('controller' => 'pages', 'action' => 'error'));
-        }
+        $data = $this->_getUserFromSlug($userSlug);
                 
         $this->loadModel("TrackReviewSnapshot");  
         $topAreas       = $this->TrackReviewSnapshot->getTopAreasByUserId($data["User"]["id"]);
@@ -43,57 +38,67 @@ class ProfilesController extends AppController {
         $this->set("recentReviews", $recentReviews);
         $this->set("topAreas",      $topAreas);
         
-        $this->setPageTitle(array($data["User"]["firstname"]));
-    }    
+        $this->setPageTitle(array(__("Profile"), User::getFullName($data['User'])));  
+        $this->setPageMeta(array(
+            "keywords" => array(__("user profile"), __("review summary")),
+            "description" => sprintf(__("%s's profile page on The Music Tank contains all the recent activity on The Music Tank."), User::getFullName($data['User'])), 
+        ));
+    }
 
 	public function followers($userSlug = null)
-    {
-        $data = $this->User->findBySlug($userSlug);
-        if(!$data)
-        {
-            $this->Session->setFlash(__('This user does not exist.'), 'Flash'.DS.'failure');
-            $this->redirect(array('controller' => 'pages', 'action' => 'error'));
-        }        
+    {       
+        $data = $this->_getUserFromSlug($userSlug); 
         
-        $this->set("user", $data['User']);            
-        $followers = $this->User->getFollowers($data["User"]["id"]);
-        $followers = $this->_addSessionFollowStatus($followers, $data["User"]["id"]);
+        $followers = $this->_addSessionFollowStatus(
+            $this->User->getFollowers($data["User"]["id"]),
+            $data["User"]["id"]
+        );
+        
         $this->set("followers", $followers);
+        $this->set("user", $data['User']);         
+        
+        $this->setPageTitle(array(__("Followers"), User::getFullName($data['User'])));  
+        $this->setPageMeta(array(
+            "keywords" => array(__("user followers")),
+            "description" => sprintf(__("%s's followers on The Music Tank."), User::getFullName($data['User'])), 
+        ));
     }
     
     public function subscriptions($userSlug = null)
-    {
-        $data = $this->User->findBySlug($userSlug);
-        if(!$data)
-        {
-            $this->Session->setFlash(__('This user does not exist.'), 'Flash'.DS.'failure');
-            $this->redirect(array('controller' => 'pages', 'action' => 'error'));
-        }
+    {       
+        $data = $this->_getUserFromSlug($userSlug);
 
-        $this->set("user", $data['User']);
-        $subscriptions = $this->User->getSubscribers($data["User"]["id"]);
-        $subscriptions = $this->_addSessionFollowStatus($subscriptions, $data["User"]["id"]);
+        $subscriptions = $this->_addSessionFollowStatus(
+            $this->User->getSubscribers($data["User"]["id"]),
+            $data["User"]["id"]
+        );
 
         $this->set("subscriptions", $subscriptions);
+        $this->set("user", $data['User']);
+        
+        $this->setPageTitle(array(__("Subscriptions"), User::getFullName($data['User']))); 
+        $this->setPageMeta(array(
+            "keywords" => array(__("user subscriptions")),
+            "description" => sprintf(__("%s's subscriptions on The Music Tank."), User::getFullName($data['User'])), 
+        ));
     }
 
  	/** 
      * Lists the complete details of all user notifications. 
      */
     public function achievements($userSlug = null)
-    {
-		$data = $this->User->findBySlug($userSlug);
-        if(!$data)
-        {
-            $this->Session->setFlash(__('This user does not exist.'), 'Flash'.DS.'failure');
-            $this->redirect(array('controller' => 'pages', 'action' => 'error'));
-        }  
-
-        $achievements = $this->User->UserAchievements->findAllByUserId($data["User"]["id"]);
-        $this->set('achievements', $achievements);    
+    {		
+        $data = $this->_getUserFromSlug($userSlug);
+        
+        $this->set('achievements', $this->User->UserAchievements->findAllByUserId($data["User"]["id"]));    
         $this->set("user", $data['User']);         
-        $this->setPageTitle(array(__("Unlocked achievements")));
-    }  
+        
+        $this->setPageTitle(array(__("Unlocked achievements"), User::getFullName($data['User'])));
+        $this->setPageMeta(array(
+            "keywords" => array(__("user achievements")),
+            "description" => sprintf(__("%s's unlocked achievements on The Music Tank."), User::getFullName($data['User'])), 
+        ));
+    }
 
     public function _addSessionFollowStatus($subscriptions, $profileId)
     {
@@ -118,4 +123,14 @@ class ProfilesController extends AppController {
         return $subscriptions;
     }
 
+    private function _getUserFromSlug($userSlug)
+    {
+        $data = $this->User->findBySlug($userSlug);
+        if(!$data)
+        {
+            throw new NotFoundException('Could not find that user');
+        }    
+        return $data;        
+    }
+    
 }

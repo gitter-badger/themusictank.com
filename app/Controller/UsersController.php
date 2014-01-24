@@ -21,55 +21,8 @@ class UsersController extends AppController {
     {   
         parent::beforeFilter();   
         $this->Auth->deny("edit", "dashboard", "notifications", "whatsup", "okstfu");
-    }
-    
-    /** 
-     * Json call that lists recent Notifications for the current user
-     */
-    public function whatsup()
-    {
-        $this->layout = "ajax";        
-        $this->set("notifications", $this->User->Notifications->findByUserId($this->getAuthUserId(), 5));                
-        $this->render('/Ajax/dropdownnotifications/');
-    }
-    
-    /** 
-     * Json call that changes the status of notifications to 'read'
-     */
-    public function okstfu()
-    {          
-        $this->User->Notifications->markAsRead(time());   
-        $this->redirect(array('controller' => 'users', 'action' => 'whatsup'));
-    }
-        
-    public function follow($userSlug)
-    {
-        $this->layout   = "ajax";        
-        $relationExists = false;
-        
-        if($this->userIsLoggedIn())
-        {
-            $relationExists = $this->User->UserFollowers->addRelation($this->getAuthUserId(), $userSlug);
-        }  
-        
-        $this->set("user", array("slug" => $userSlug, "currently_followed" => $relationExists)); 
-        $this->render('/Ajax/followbutton/');
-    }
-           
-    public function unfollow($userSlug)
-    {        
-        $this->layout   = "ajax";        
-        $relationExists = false;
-
-        if($this->userIsLoggedIn())
-        {
-            $relationExists = !$this->User->UserFollowers->removeRelation($this->getAuthUserId(), $userSlug);
-        }  
-
-        $this->set("user", array("slug" => $userSlug, "currently_followed" => $relationExists)); 
-        $this->render('/Ajax/followbutton/');
-    }
-    
+    }    
+     
     /** 
      * Lists the complete details of all user notifications. 
      */
@@ -106,8 +59,7 @@ class UsersController extends AppController {
         
         if(!$user)
         {
-            $this->Session->setFlash(__('You cannot edit your account if you are not logged in'), 'Flash'.DS.'failure');
-            $this->redirect(array('controller' => 'pages', 'action' => 'error'));
+            throw new NotFoundException('Could not find that user');
         }
         
         if($this->request->is("put"))
@@ -224,7 +176,7 @@ class UsersController extends AppController {
                 {   
                     $this->redirectByRURL(array("controller" => "artists", "action" => "syncUserLibrary"), true);
                 }
-
+                
                 $this->redirectByRURL(array('controller' => 'users', 'action' => 'dashboard'));
             }
         }

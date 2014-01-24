@@ -7,7 +7,7 @@
         echo $this->element('head', array(
             "customMetas" => array(
                 $this->Html->css(array('lib/animations', 'player')),
-                $this->Html->script(array('//code.jquery.com/ui/1.10.3/jquery-ui.js', 'lib/jquery.ui.touch-punch.min', 'lib/animation/RequestAnimationFrame', 'player/player'))
+                $this->Html->script(array('//code.jquery.com/ui/1.10.3/jquery-ui.js', 'lib/jquery.ui.touch-punch.min', 'lib/animation/RequestAnimationFrame', 'reviewer/player'))
             )
         )); 
     ?>    

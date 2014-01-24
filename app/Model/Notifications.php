@@ -7,7 +7,7 @@ class Notifications extends ImplicitRelationModel
     
     public function markAsRead($timestamp)
     {
-        return $this->updateAll(array("is_viewed" => true), array("created < " => $timestamp));  
+        return $this->updateAll(array("Notifications.is_viewed" => true), array("Notifications.created < " => $timestamp));  
     }
     
     public function findByUserId($userId, $limit = 10)

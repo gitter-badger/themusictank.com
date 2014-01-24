@@ -11,7 +11,21 @@
         $this->MetaTags->addLayoutMeta($meta_for_layout);
     }
     
-    if(isset($customMetas))
+    
+    if(!isset($customMetas)) $customMetas = array();
+    
+    if(isset($preferredPlayer))
+    {     
+        switch($preferredPlayer)
+        {
+            case "rdio" : $playerScript = array('lib/swf/swfobject','player/rdio'); break;            
+            case "mp3" : $playerScript = array('player/mp3'); break;
+        }
+        
+        $customMetas[] = $this->Html->script(array_merge(array('//code.jquery.com/ui/1.10.3/jquery-ui.js', 'lib/animation/RequestAnimationFrame', 'player/player', 'player/graph'), $playerScript));
+    }    
+    
+    if(isset($customMetas) && count($customMetas))
     {
         $this->MetaTags->add($customMetas);
     }

@@ -1,12 +1,20 @@
 <?php
 
 class ImplicitRelationModel extends AppModel
-{	        
+{	
+    // Cache objects that have already been
+    // autoloaded to save juice.
     private $_preloadedObjects = array(
         "Achievement" => array(),
         "User" => array()
     );
-        
+    
+    const TYPE_ACHIEVEMENT = "achievement";
+    const TYPE_FOLLOWER = "follower";
+    
+    
+    // In a perfect world, this function should be an afterFind
+    // but loading users starts a recursive loop. 
     public function associateRelated($results)
     {           
         foreach($results as $idx => $row)
@@ -15,14 +23,14 @@ class ImplicitRelationModel extends AppModel
             {
                 switch(strtolower($row[$this->alias]["type"]))
                 {
-                    case "achievement" : 
+                    case self::TYPE_ACHIEVEMENT : 
                         if(!array_key_exists("Achievement", $results[$idx][$this->alias]))
                         {
                             $results[$idx][$this->alias]["Achievement"] = $this->_loadLinkedAchievement((int)$row[$this->alias]["related_model_id"]);
                         }
                         break;
 
-                    case "follower" :
+                    case self::TYPE_FOLLOWER :
                         if(!array_key_exists("UserFollower", $results[$idx][$this->alias]))
                         {
                             $results[$idx][$this->alias]["UserFollower"] = $this->_loadLinkedUser((int)$row[$this->alias]["related_model_id"]);

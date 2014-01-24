@@ -1,4 +1,4 @@
-<?php echo $this->Html->script( array('player/mp3', 'lib/id3/id3-minimized')); ?>
+<?php echo $this->Html->script( array('reviewer/mp3', 'lib/id3/id3-minimized')); ?>
   
 <div id="drop">
     <div class="aid">

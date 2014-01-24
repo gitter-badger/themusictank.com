@@ -1,6 +1,7 @@
 <?php
 
 App::uses('AuthComponent', 'Controller/Component');
+App::uses('CakeSession', 'Model/Datasource');
 
 class User extends AppModel
 {	
@@ -34,7 +35,22 @@ class User extends AppModel
 			)
 		)
 	);
+    
+    public static function getPreferredPlayer($userdata)
+    {                   
+        if((int)$userdata["prefered_player_api"] === 1 && CakeSession::read('Player.Rdio'))
+        {
+            return "rdio";
+        }
         
+        return "mp3";
+    }
+        
+    public static function getFullName($userdata)
+    {
+        return $userdata["firstname"] . " " . $userdata['lastname'];
+    }
+    
     public function beforeSave($options = array())
     {
         if (isset($this->data[$this->alias]['password']))

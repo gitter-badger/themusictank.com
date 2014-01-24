@@ -1,0 +1,16 @@
+/* TEAM */
+    Backend developer,
+    UI developer,
+    Frontend developer: Francois Faubert
+	Twitter: @francoisfaubert
+	From:Montreal, Quebec, Canada
+	
+    Content provider,
+    Support: Julien Guay
+	Twitter: @francoisfaubert
+	From:Montreal, Quebec, Canada
+
+/* SITE */
+	Language: English
+	Doctype:HTML5
+	IDE: Netbeans, Sublime Text, git, aws, Photoshop

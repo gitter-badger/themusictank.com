@@ -1,12 +1,11 @@
 .cake-sql-log {
-    background:#2554ab;
     font-size:14px;
     font-family:consolas, console;
-    color:#efefef;
+    color:#666;
     width:100%;
 }
 .cake-sql-log caption {    
-    background:#2554ab url(../img/bg-debug.png) top left repeat-x;
+    /*background:#2554ab url(../img/bg-debug.png) top left repeat-x;*/
     border-bottom:1px solid #666;
     line-height:40px;
     vertical-align:bottom;

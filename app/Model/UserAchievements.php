@@ -22,8 +22,7 @@ class UserAchievements extends AppModel
     public function getAchievementDetails($id)
     {
         return $this->Achievement->findById($id);
-    }    
-    
+    }
     
     public function afterSave($created, $options = array())
     {

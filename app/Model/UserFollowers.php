@@ -13,15 +13,14 @@ class UserFollowers extends AppModel
      
         if(!$this->relationExists($follower["User"]["id"], $userId))
         {                    
-            if($this->save(array("user_id" => $userId, "follower_id" => $follower["User"]["id"]))) {
-                
-                // Save the activity.
+            if($this->save(array("user_id" => $userId, "follower_id" => $follower["User"]["id"])))
+            {                
+                // Save the activity. Populate the data array because save() erased what we might have had.
                 $this->data = array("User" => array("id" => $userId), "UserFollower" => array("id" => $follower["User"]["id"]));
                 $this->dispatchEvent('onSubscription');
                 
-                // Notify the person being followed.
-                $msg = $follower["User"]["firstname"] . " " . $follower["User"]["lastname"] . " " .__("is now following you.");
-                $this->User->notify($follower["User"]["id"], "follower", $msg, $follower["User"]["id"]);
+                $this->_sendFollowerNotification();
+                
                 return true;
             }            
             return false;
@@ -77,6 +76,13 @@ class UserFollowers extends AppModel
     public function getSubscriptions($userId)
     {        
         return $this->find("list", array('conditions' => array('user_id'  => $userId), "fields" => "UserFollowers.follower_id"));
+    }
+    
+    // Notify the person being followed.
+    private function _sendFollowerNotification($follower)
+    {
+        $msg = $follower["User"]["firstname"] . " " . $follower["User"]["lastname"] . " " .__("is now following you.");
+        return $this->User->notify($follower["User"]["id"], UserActivity::TYPE_FOLLOWER, $msg, $follower["User"]["id"]);
     }
     
 }

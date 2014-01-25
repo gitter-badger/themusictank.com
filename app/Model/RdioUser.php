@@ -36,7 +36,7 @@ class RdioUser extends AppModel
         $formattedData = array(
             "image_src"      => $userInfo->icon,
             "image"         => $this->User->getImageFromUrl($userInfo->icon),
-            "prefered_player_api" => 1,
+            "preferred_player_api" => 1,
             "RdioUser"  => array("key" => $userInfo->key)
         );
         

@@ -31,9 +31,8 @@ class PlayerController extends AppController {
     {       
         if($this->userIsLoggedIn())
         {
-            $user = $this->getAuthUser();            
-                           
-            if(User::getPreferredPlayer($user) == "rdio")
+            $user = $this->getAuthUser();
+            if(User::getPreferredPlayer($user["User"]) == "rdio")
             {
                 $this->redirect(array("controller" => "player", "action" => "rdio", $trackSlug));
             }

@@ -151,7 +151,7 @@ ul.horizontal li:last-child {
 
 .player canvas {
     background:#efefef;
-    height:250px;
+    height:400px;
     width:100%;
 }
 
@@ -160,7 +160,8 @@ ul.horizontal li:last-child {
     position:absolute;
     top:0;
     left:0;
-    height:250px;
+    margin-left:25px;
+    height:400px;
     background-color:greenyellow;
 }
 

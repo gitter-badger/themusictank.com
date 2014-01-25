@@ -50,6 +50,9 @@ class ArtistsController extends AppController {
             $needsRefresh = $this->requestAction(array("controller" => "artists", "action" => "syncArtistDiscography"));
         }
             
+        // There is a bug when sunc artists details creates a row.
+        // it doesn' add the new lasfmartist.id in the array and
+        // primary key fails. something like that.
         if($this->Artist->LastfmArtist->requiresUpdate($data))
         {
             $details            = $this->requestAction(array("controller" => "artists", "action" => "syncArtistDetails"));
@@ -187,7 +190,7 @@ class ArtistsController extends AppController {
     public function syncArtistDetails()
     {           
         $data           = $this->Artist->LastfmArtist->data;
-        $artistName     = $data["Artist"]["name"];   
+        $artistName     = $data["Artist"]["name"];      
         $infos          = $this->LastfmApi->getArtistBiography($artistName);
                 
         if($infos)

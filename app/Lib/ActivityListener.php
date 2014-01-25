@@ -21,7 +21,7 @@ class ActivityListener implements CakeEventListener {
     public static function userAchievements_onCreate($event)
     {
         $activity = new UserActivity();
-        $activity->add($event->data["User"]["id"], UserActivity::TYPE_ACHIEVEMENT, $event->data["Achievement"]["id"]);
+        $activity->add($event->data["UserAchievements"]["user_id"], UserActivity::TYPE_ACHIEVEMENT, $event->data["UserAchievements"]["achievement_id"]);
     }
         
 }

@@ -15,7 +15,7 @@ class LastfmArtist extends AppModel
     {
         $artistId       = $data["Artist"]["id"];
         $lastfmArtistId = $data["LastfmArtist"]["id"];     
-        
+        debug($data);
         $newRow         = array(
             "id" => $lastfmArtistId,
             "artist_id" => $artistId,

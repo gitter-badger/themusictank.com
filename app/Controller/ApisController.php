@@ -47,7 +47,6 @@ class ApisController extends AppController {
     public function rdioLogin()
     {    
         try {        
-            
             if($this->RdioApi->isInSession())
             {
                 $this->Session->write('Login.User.RdioUser', $this->RdioApi->getUserData());  

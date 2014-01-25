@@ -38,7 +38,7 @@ class User extends AppModel
     
     public static function getPreferredPlayer($userdata)
     {                   
-        if((int)$userdata["prefered_player_api"] === 1 && CakeSession::read('Player.Rdio'))
+        if((int)$userdata["preferred_player_api"] === 1 && CakeSession::read('Player.Rdio'))
         {
             return "rdio";
         }

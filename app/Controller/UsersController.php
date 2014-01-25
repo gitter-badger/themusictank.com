@@ -141,7 +141,7 @@ class UsersController extends AppController {
      * Creates, logs-in or associates a rdio user to a user profile
      */
     public function checkrdiouser()
-    {                  
+    {   
         if($this->Session->check('Login.User.RdioUser'))
         {
             $user = $this->Session->read('Login.User.RdioUser');   
@@ -166,7 +166,12 @@ class UsersController extends AppController {
                     $this->redirectByRURL(array('controller' => 'users', 'action' => 'edit'));            
                 }
             }
-                         
+            else if(!$data)
+            {
+                // if user is not logged and there is no match, create the account.
+                $data = $this->User->RdioUser->createFromAPI($user); 
+            }
+                
             // Now, data should be up to date.
             if($data)
             {        

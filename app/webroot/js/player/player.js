@@ -19,6 +19,8 @@
             this.config.seek        = {ref : this.config.container.ref.find(".seek")};               
             this.config.seekCursor      = {ref : this.config.container.ref.find(".cursor")};  
             this.config.progress    = {ref : this.config.seek.ref.find(".progress")};        
+            this.config.playBtn     = {ref : this.config.container.ref.find('button[name=play]')};
+            this.config.timer = {ref : $(this.config.containerSelector + ".timed .time")};
             
             this.config.saveEquilizer = !(this.config.equilizerData);
             
@@ -37,7 +39,10 @@
         addEvents : function()
         {
             // set up the controls
-            this.config.container.ref.find('button[name=play]').click( $.proxy(this.play, this) );
+            if(this.config.playBtn)
+            {
+                this.config.playBtn.ref.click( $.proxy(this.play, this) );
+            }
         },
         
         getNow : function()
@@ -158,14 +163,33 @@
         
         displaySongInfo : function()
         {
-            if(this.config.trackDuration)
+            if(this.config.trackDuration && this.config.progress.position != this.data.position)
             {
                 var pct = ((this.data.position  / this.config.trackDuration) * 100);
                 
                 if(pct > 99)    pct = 100;
-                else if(pct < 1)pct = 1;
                 
                 this.config.progress.ref.css("width", pct + "%");
+                this.config.progress.position = this.data.position;
+            }
+            
+            if(this.config.timer && this.config.timer.position != this.data.position)
+            {
+                var position = this.data.position;
+                var total = this.config.trackDuration;
+                
+                var posMins = Math.floor(position / 60),
+                    posSecs =  Math.floor(position - (posMins * 60)),
+                    totMins = Math.floor(total / 60),
+                    totSecs =  Math.floor(total - (totMins * 60));
+            
+                if(posSecs === 0) posSecs += "0";
+                if(posSecs < 10) posSecs = "0" + posSecs;
+                if(totSecs === 0) totSecs += "0";
+                if(totSecs < 10) totSecs = "0" + totSecs;
+                
+                this.config.timer.ref.html(posMins + ":" + posSecs + " / " + totMins + ":" + totSecs);
+                this.config.timer.position = this.data.position;
             }
         },
         
@@ -190,10 +214,20 @@
             graph.config.container = {ref: this.config.container.ref.find("canvas")};
         },
         
+        updatePlayButtonLabel : function()
+        {
+            if(this.config.playBtn)
+            {
+                this.config.playBtn.ref.html(this.data.status);
+            }
+        },
+        
         onStatusChange : function (status)
         {
             var prevStatus = this.data.status;
             this.data.status = status;
+            
+            this.updatePlayButtonLabel();
             
             // When buffering, do not calculate the curves.
             if(status.match(/buffering/))

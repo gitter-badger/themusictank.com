@@ -39,8 +39,8 @@
                 this.config.sizes = {
                     top     : border,
                     left    : border,
-                    height  : ref.height() - border,
-                    width   : ref.width() - border
+                    height  : ref.height(),
+                    width   : ref.width()
                 };                
                 
                 node.height = ref.height();
@@ -54,66 +54,47 @@
             var height = this.config.sizes.height - MARGIN,
                 context = this.config.context;
             
-
             context.beginPath();
-            context.moveTo(PADDING, height / 2);
+            context.moveTo(10, this.config.sizes.height / 2);
             context.lineTo(this.config.sizes.width, height / 2);
-            context.lineWidth = 1;
-            context.strokeStyle = '#dedede';
+            context.lineWidth = .5;
+            context.strokeStyle = '#aaa';
             context.stroke();
             
             context.beginPath();
-            context.moveTo(PADDING,  PADDING);
-            context.lineTo(this.config.sizes.width, PADDING);
-            context.lineWidth = 1;
-            context.strokeStyle = '#dedede';
+            context.moveTo(0,  0);
+            context.lineTo(this.config.sizes.width, 0);
+            context.lineWidth = .5;
+            context.strokeStyle = '#aaa';
             context.stroke();
             context.beginPath();
             
-            context.moveTo(PADDING, this.config.sizes.height - PADDING);
-            context.lineTo(this.config.sizes.width, this.config.sizes.height - PADDING);
-            context.lineWidth = 1;
-            context.strokeStyle = '#dedede';
+            context.moveTo(0, this.config.sizes.height);
+            context.lineTo(this.config.sizes.width, this.config.sizes.height);
+            context.lineWidth = .5;
+            context.strokeStyle = '#aaa';
             context.stroke();
                 
         },
         
         drawTimeLabels : function()
         {
-            var periods = Math.ceil(this.config.trackDuration / 30),
-                period = 0,
-                context = this.config.context,
-                distanceBetweenPoints = this.config.sizes.width / periods,
-                currentPoint    = PADDING + MARGIN;
-            
-            for( ; period < periods; period++)
-            {
-                var time = period * 30;
-                var mins = Math.floor(time / 60);
-                var secs = time - (mins * 60);
-
-                if(secs === 0) secs = "00";
-                                
-                context.beginPath();
-                context.fillStyle = '#333';
-                context.fillText(mins + ":" + secs, currentPoint, this.config.sizes.height + PADDING);                
-                currentPoint += distanceBetweenPoints;                
-            }
-            
+            var context = this.config.context;
 
             context.beginPath();
-            context.fillStyle = '#333';
-            context.fillText("0", MARGIN, this.config.sizes.height / 2);
+            context.fillStyle = '#aaa';
+            context.textBaseline = 'middle';
+            context.fillText("0", 0, this.config.sizes.height / 2);
 
             context.beginPath();
-            context.fillStyle = '#333';
-            context.fillText("+1", MARGIN, MARGIN + PADDING);
+            context.fillStyle = '#aaa';
+            context.textBaseline = 'top';
+            context.fillText("+1", 0, 5);
 
             context.beginPath();
-            context.fillStyle = '#333';
-            context.fillText("-1", MARGIN, this.config.sizes.height - PADDING);
-                
-            
+            context.fillStyle = '#aaa';
+            context.textBaseline = 'bottom';
+            context.fillText("-1", 0, this.config.sizes.height - 5);
         },        
         
         drawJoints : function()
@@ -121,10 +102,10 @@
             var context = this.config.context,
                 i = 0,
                 len = this.config.curve_snapshot.length,
-                dotSize = 4.5,
-                currentPoint    = (dotSize / 2) + MARGIN + PADDING,
-                distanceBetweenPoints = this.config.sizes.width / len,
-                height = this.config.sizes.height - MARGIN,
+                dotSize = 4,
+                currentPoint    = (dotSize / 2) + 15,
+                distanceBetweenPoints = (this.config.sizes.width -30) / len,
+                height = this.config.sizes.height,
                 yPos, prevYPos = 0;
             
             for( ; i < len; i++, yPos = 0)
@@ -133,14 +114,13 @@
                 if(this.config.curve_snapshot[i])
                 {
                     yPos = height * (1-this.config.curve_snapshot[i][1]);
-                    yPos += MARGIN;
                 }       
                 
                 if(prevYPos > 0 && yPos > 0)
                 {
                     context.beginPath();
-                    context.moveTo(currentPoint - distanceBetweenPoints, prevYPos - (dotSize / 2));
-                    context.lineTo(currentPoint, yPos - (dotSize / 2));
+                    context.moveTo(currentPoint - distanceBetweenPoints- (dotSize / 2), prevYPos);
+                    context.lineTo(currentPoint - (dotSize / 2), yPos);
                     context.lineWidth = 1;
                     context.strokeStyle = '#003300';
                     context.stroke();
@@ -156,11 +136,11 @@
             var context = this.config.context,
                 i = 0,
                 len = this.config.curve_snapshot.length,
-                dotSize = 4.5,
-                currentPoint    = (dotSize / 2) + MARGIN + PADDING,
-                height = this.config.sizes.height - MARGIN,
+                dotSize = 4,
+                currentPoint    = 15,
+                height = this.config.sizes.height,
                 twopi = 2 * Math.PI,
-                distanceBetweenPoints = this.config.sizes.width / len,
+                distanceBetweenPoints = (this.config.sizes.width - 30) / len,
                 yPos;
             
             for( ; i < len; i++)
@@ -168,13 +148,12 @@
                 if(this.config.curve_snapshot[i])
                 {
                     yPos = height * (1-this.config.curve_snapshot[i][1]);  
-                    yPos += MARGIN;   
-                    yPos -= dotSize;
+                    //yPos += dotSize;
                     context.beginPath();
                     context.arc(currentPoint, yPos , dotSize, 0, twopi, false);
                     context.fillStyle = 'green';
                     context.fill();
-                    context.lineWidth = .75;
+                    context.lineWidth = .5;
                     context.strokeStyle = '#003300';
                     context.stroke();                       
                 }   

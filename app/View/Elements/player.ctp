@@ -21,12 +21,11 @@
     $snapshot["curve_snapshot"] = json_decode($snapshot["curve_snapshot"]);;
     $snapshot["trackDuration"] = (int)$track["duration"];
 ?>
-<section class="player play-<?php echo $track["slug"]; ?>">
+<section class="player chart timed play-<?php echo $track["slug"]; ?>">
     <canvas></canvas>        
     <div class="cursor"></div>
     <div class="seek">            
         <div class="bar"><div class="progress"><span class="knob"></span></div></div>
-        <span class="time"></span>
     </div>
     <div class="controls">
         <ul style="float:right;">
@@ -34,6 +33,7 @@
         </ul>
         <ul>
             <li><button type="button" title="<?php echo __("Play"); ?>" name="play"><?php echo __("Play"); ?></button></li>
+            <li class="time">--:-- / --:--</li>
         </ul>
     </div>     
     <script>

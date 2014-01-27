@@ -154,8 +154,8 @@ ul.horizontal li:last-child {
     position:relative;
 }
 
-.player.chart {
-    
+.player .controls {
+    position:relative;
 }
 
 .player canvas {
@@ -199,18 +199,54 @@ ul.horizontal li:last-child {
 .player .knob {
     display:block;
     float:right;
-    margin-top:-7px;
-    
-    /*
-    display:inline-block;
-    margin-top:-10px;
-   */
+    margin-top:-7px;    
     width:20px;
     height:20px;
     margin-right:-10px;
     background:#999;
     border-radius:20px;
     border:1px solid #666;
+}
+
+.player .parsing-mp3,
+.player .drop {
+    display:none;
+    position:absolute;
+    top:0;
+    left:0;
+    width:100%;
+    background:#fff;
+}
+
+.player.not-logged .or-login {
+    display:none;    
+    position:absolute;
+    top:0;
+    left:50%;
+    width:50%;
+    background:#fff;
+}
+
+.player.not-logged .drop {
+    width:50%;
+}
+
+.player .parsing-mp3 .error {
+    display:none;
+}
+
+.player.askingfordrop .drop,
+.player.askingfordrop .or-login {
+    display:block;
+}
+
+.player.parsingmp3 .parsing-mp3 {
+    display:block;
+}
+
+.player .parsing-mp3.error-tag .error.tag,
+.player .parsing-mp3.error-length .error.length {
+    display:block;
 }
 
 

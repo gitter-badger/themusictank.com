@@ -7,6 +7,7 @@
     var player = tmt.player = function(config)
     {
         this.config = config;
+        return this;
     };
 
     player.prototype = {
@@ -33,7 +34,8 @@
             };        
             
             this.addEvents();  
-            this.loadSongStreamer();            
+            this.loadSongStreamer();           
+            return this;
         },
                 
         addEvents : function()
@@ -62,8 +64,8 @@
             }
              
             try {
-                this.apicontrols_play();
                 this.startAnimating();
+                this.apicontrols_play();
             }
             catch(e) { }
         },
@@ -173,6 +175,9 @@
                 this.config.progress.position = this.data.position;
             }
             
+            
+            console.log(this.config.timer.position);
+            console.log(this.data.position);
             if(this.config.timer && this.config.timer.position != this.data.position)
             {
                 var position = this.data.position;
@@ -264,7 +269,7 @@
         
                 
         // These must be overriden :
-        setupCallback       : _notOverriden,
+        setupCallback       : function(){return this;},
         apicontrols_play    : _notOverriden,
         apicontrols_stop    : _notOverriden,
         apicontrols_pause   : _notOverriden,

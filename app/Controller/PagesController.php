@@ -3,6 +3,8 @@
 App::uses('AppController', 'Controller');
 
 class PagesController extends AppController {
+        
+    public $uses = array();
     
 	public function display() {
 
@@ -36,7 +38,7 @@ class PagesController extends AppController {
 		{
             $this->redirect(array('controller' => 'users', 'action' => 'dashboard'));
 		}
-
+        
 		$this->set(compact('page', 'subpage', 'title_for_layout'));
 		$this->render(implode('/', $path));
 	}

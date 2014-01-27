@@ -1,6 +1,5 @@
 (function() {
-
-
+    
     var player = window.tmt.player.prototype,
         TRACK_LENGTH_DIFF = 5;
 
@@ -12,28 +11,26 @@
         }
         else
         {
-            this.config.body.addClass("featureunavailable");
+            this.config.container.ref.addClass("featureunavailable");
         }
     };
     
     player.onReady = function()
     { 
-        this.config.body.ref.removeClass("loading");
-        this.config.body.ref.addClass("askingfordrop");
+        this.config.container.ref.removeClass("loading");
+        this.config.container.ref.addClass("askingfordrop");
                
-        var drop = $("#drop"),
-            inputRef = $("#fileInput").get(0),
-            dropRef = drop.get(0);
+        var drop = this.config.container.ref,
+            inputRef = this.config.container.ref.find("input[type=file]").get(0),
+            dropRef = this.config.container.ref.get(0);
                 
         this.config.upload = { ref : drop };
+        
+        this.config.container.ref.find("button[name=try-again]").click($.proxy(_onErrorDismiss, this));
         
         dropRef.addEventListener('dragover', $.proxy(_handleDragOver, this), false);
         dropRef.addEventListener('drop', $.proxy(_handleFileSelect, this), false);
         inputRef.addEventListener('change', $.proxy(_handleFileInputSelect, this), false);        
-    };
-
-    player.setupCallback = function()
-    {         
     };
 
     player.apicontrols_play = function()
@@ -85,8 +82,8 @@
         evt.stopPropagation();
         evt.preventDefault();   
         
-        this.config.body.ref.removeClass("askingfordrop");
-        this.config.body.ref.addClass("parsingmp3");
+        this.config.container.ref.removeClass("askingfordrop");
+        this.config.container.ref.addClass("parsingmp3");
 
         // Only use the first FileList object
         _parseGivenFile.call(this, evt.dataTransfer.files[0] );
@@ -97,8 +94,8 @@
         evt.stopPropagation();
         evt.preventDefault();   
         
-        this.config.body.ref.removeClass("askingfordrop");
-        this.config.body.ref.addClass("parsingmp3");
+        this.config.container.ref.removeClass("askingfordrop");
+        this.config.container.ref.addClass("parsingmp3");
 
         // Only use the first FileList object
         _parseGivenFile.call(this, evt.target.files[0] );
@@ -109,7 +106,16 @@
         evt.stopPropagation();
         evt.preventDefault();        
         evt.dataTransfer.dropEffect = 'copy'; // Explicitly show this is a copy.
-    }
+    };
+    
+    function _onErrorDismiss()
+    {
+        var parsing = this.config.container.ref.find(".parsing-mp3");
+        parsing.removeClass("error-length");
+        parsing.removeClass("error-tag");
+        this.config.container.ref.removeClass("parsingmp3");
+        this.config.container.ref.addClass("askingfordrop");
+    };
     
     function _onProgress()
     {
@@ -124,10 +130,11 @@
         if( parseInt(ref.duration, 10) < parseInt(this.config.trackDuration, 10) - TRACK_LENGTH_DIFF ||
             parseInt(ref.duration, 10) > parseInt(this.config.trackDuration, 10) + TRACK_LENGTH_DIFF )
         {
-            $("#parsingmp3").addClass("lengtherror");
+            this.config.container.ref.find(".parsing-mp3").addClass("error-length");
             return;
         }        
         
+        /*
         this.onTrackChange({                
             name : this.config.trackTitle,
             duration : ref.duration
@@ -137,22 +144,22 @@
             artist : this.config.artistName,
             name : this.config.albumName,
             bigIcon : this.config.albumIcon
-        });    
+        });    */
         
-        this.config.body.ref.removeClass("parsingmp3");
+        this.config.container.ref.removeClass("parsingmp3");
     };
         
     function _parseID3Tag()
     {
         var url = this.data.file.urn || this.data.file.name,
             file = this.data.file;
-    
-        ID3.loadTags(url, $.proxy(_onID3Loaded, this), { tags: ["title","artist","picture"], dataReader: FileAPIReader(file) });        
+        
+        ID3.loadTags(url, $.proxy(_onID3Loaded, this), { tags: ["title","artist"], dataReader: FileAPIReader(file) });        
     }
     
     function _onFileLoaded(evt)
     {
-        this.data.buffer = evt.target.result;
+       // this.data.buffer = evt.target.result;
         _parseID3Tag.call(this);
     }
     
@@ -160,12 +167,12 @@
     { 
         var url = this.data.file.urn || this.data.file.name,
             tags = ID3.getAllTags(url);
-        
+                
         // Now that we have tags, validate that they are similar to the song we want to
         // play
         // TODO: this test is pretty stupid, it'll need to be a bit brighter in the long run
         // use this parce que Louis Maheu a dit que c'est ca que ca prenait : http://en.wikipedia.org/wiki/Levenshtein_distance
-        if( tags.artist.toLowerCase() == this.config.artistName.toLowerCase() &&
+        if( //tags.artist.toLowerCase() == this.config.artistName.toLowerCase() &&
             tags.title.toLowerCase() == this.config.trackTitle.toLowerCase())
         {            
             
@@ -173,14 +180,16 @@
             var src = (window.URL || window.webkitURL).createObjectURL( this.data.file);
             
             if(!this.config.audio) {
-                this.config.audio = {};
-                this.config.body.ref.append('<audio></audio>');
-                this.config.audio.ref = $("audio");
+                this.config.container.ref.append('<audio></audio>');
+                this.config.audio = {ref: this.config.container.ref.find("audio") };
                 _addEvents.call(this);
             }           
+            
+            
+            this.config.container.ref.removeClass("parsingmp3");                        
                         
             this.config.audio.ref.attr("src", src); 
-            this.config.body.ref.focus();
+            this.config.container.ref.focus();
             this.play();             
             
             /*
@@ -203,7 +212,7 @@
             */
         }
         else {
-            $("#parsingmp3").addClass("error");
+            this.config.container.ref.find(".parsing-mp3").addClass("error-tag");
         }
     }    
     
@@ -213,8 +222,8 @@
         if (!f.type.match('audio.mp3'))
         {
             alert("This is not a valid mp3 file.");
-            this.config.body.ref.addClass("askingfordrop");
-            this.config.body.ref.removeClass("parsingmp3");
+            this.config.container.ref.addClass("askingfordrop");
+            this.config.container.ref.removeClass("parsingmp3");
             return;
         }       
                                 
@@ -226,7 +235,7 @@
         this.data.reader = reader;
     };    
     
-    
+    /*
     function _readFile(start, limit)
     {
         var buffer = this.data.file,
@@ -245,5 +254,5 @@
         
         return binary_string;
     }
-    
+    */
 })();

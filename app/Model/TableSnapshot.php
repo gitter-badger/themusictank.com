@@ -14,6 +14,19 @@ class TableSnapshot extends AppModel
         return (empty($this->data[$this->alias]["id"])) ? $this->_createSnapshot() : $this->_updateSnapshot();   
     }   
     
+    public function snapUsers($userIds)
+    {
+        
+        $belongsToData  = $this->_getBelongsToData();         
+        $belongsToId    = (int)$belongsToData["id"];
+        
+        $appreciation   = $this->getAppreciation($belongsToId);
+        $curve          = $this->getCurve($belongsToId);
+        
+        return $this->_validateAndSave($appreciation, $curve);     
+    }
+    
+    
     /**
      * Returns the whether or not the cached snapshot is still valid
      * @return boolean True if outdated, false if still ok
@@ -29,16 +42,18 @@ class TableSnapshot extends AppModel
      * @param int $timestamp The starting timestamp for all searches. Defaut 0
      * @return array Matching review frames dataset
      */
-    public function getRawCurveData($timestamp = 0)
+    public function getRawCurveData($timestamp = 0, $extraConditions = array())
     {
         $belongsToData  = $this->_getBelongsToData();
         $belongsToLabel = strtolower($this->_getBelongToAlias()) . "_id";
         $belongsToId    = (int)$belongsToData["id"];
         
-        return $this->ReviewFrames->getRawCurve(array(
-                "ReviewFrames.$belongsToLabel"  => $belongsToId, 
-                "ReviewFrames.created >"        => $timestamp
+        $conditions = array_merge($extraConditions, array(
+            "ReviewFrames.$belongsToLabel"  => $belongsToId, 
+            "ReviewFrames.created >"        => $timestamp
         ));
+                
+        return $this->ReviewFrames->getRawCurve($conditions);
     }    
     
     /**
@@ -135,7 +150,7 @@ class TableSnapshot extends AppModel
             "recursive" => false
         ));
     }
-    
+           
     
     /**
      * Creates a model's snapshot

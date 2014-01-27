@@ -92,21 +92,20 @@ class ReviewFrames extends AppModel
     }
     
     public function getRawCurve($conditions)
-    {
+    {        
         return $this->find("all", array(
             "conditions"    => $conditions,
-            "fields"        => array(
-                "ReviewFrames.album_id as album_id", 
-                "ReviewFrames.track_id as track_id", 
-                "AVG(groove) as avg_groove", 
-                "MAX(groove) as max_groove", 
-                "MIN(groove) as min_groove", 
+            "fields" => array( 
+                "AVG(groove) as avg_groove",
+                "(AVG(groove) + AVG(groove) * AVG(multiplier)) as calc_groove",                
                 "AVG(suckpowering) as avg_suckpowering", 
                 "AVG(starpowering) as avg_starpowering", 
-                "(groove + groove * multiplier) as calc_groove", 
-                "position"),
-            "group"         => array("ReviewFrames.album_id", "ReviewFrames.track_id", "position")
-        ));
+               // "ReviewFrames.album_id as album_id", 
+               // "ReviewFrames.track_id as track_id",
+               // "ReviewFrames.position as position"
+            ),
+            "group" => array("ReviewFrames.album_id", "ReviewFrames.track_id", "position")
+        ));           
     }
     
     public function getRawCurveByCreated($conditions)
@@ -123,8 +122,8 @@ class ReviewFrames extends AppModel
                                 "(groove + groove * multiplier) as calc_groove", 
                                 "position"),
             "order"         => array("ReviewFrames.created DESC"),
-            "group"         => array("ReviewFrames.review_id", "ReviewFrames.album_id", "ReviewFrames.track_id", "position")
-        ));
+            "group"         => array("ReviewFrames.user_id", "ReviewFrames.review_id", "ReviewFrames.album_id", "ReviewFrames.track_id", "position")
+        )); 
     }    
     
     public function mergeAppreciationData($previous, $newone)
@@ -176,12 +175,12 @@ class ReviewFrames extends AppModel
             
             while($skippedFrames < $positionsPerFrame && $count > $idx)
             {
-                $max                += $curveData[$idx][0]["max_groove"];
-                $min                += $curveData[$idx][0]["min_groove"];
+                //$max                += $curveData[$idx][0]["max_groove"];
+               // $min                += $curveData[$idx][0]["min_groove"];
                 $avg                += $curveData[$idx][0]["avg_groove"];
                 $calc               += $curveData[$idx][0]["calc_groove"];
-                $avgStarpowering    += $curveData[$idx][0]["avg_starpowering"];
-                $avgSuckpowering    += $curveData[$idx][0]["avg_suckpowering"];
+               // $avgStarpowering    += $curveData[$idx][0]["avg_starpowering"];
+               // $avgSuckpowering    += $curveData[$idx][0]["avg_suckpowering"];
                 $skippedFrames++;
             }
                        
@@ -189,12 +188,12 @@ class ReviewFrames extends AppModel
             if($skippedFrames > 0)
             {
                 $curve[$idx] = array(                    
-                    $min                / $skippedFrames,
-                    $avg                / $skippedFrames,
-                    $max                / $skippedFrames,
-                    $calc               / $skippedFrames,
-                    $avgStarpowering    / $skippedFrames,
-                    $avgSuckpowering    / $skippedFrames
+                   // "min" => $min                / $skippedFrames,
+                    "avg" => $avg                / $skippedFrames,
+                   // "max" => $max                / $skippedFrames,
+                    "calc" => $calc               / $skippedFrames,
+                    //"sp" => $avgStarpowering    / $skippedFrames,
+                    //"ss" => $avgSuckpowering    / $skippedFrames
                 );
             }
         }        

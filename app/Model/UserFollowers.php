@@ -73,9 +73,11 @@ class UserFollowers extends AppModel
      * @param type $followerId
      * @return type
      */
-    public function getSubscriptions($userId)
+    public function getSubscriptions($userId, $flat = false)
     {        
-        return $this->find("list", array('conditions' => array('user_id'  => $userId), "fields" => "UserFollowers.follower_id"));
+        $data = $this->find("list", array('conditions' => array('user_id'  => $userId), "fields" => "UserFollowers.follower_id"));
+        if(!$flat) return $data;
+        return array_values($data);
     }
     
     // Notify the person being followed.

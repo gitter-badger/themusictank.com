@@ -21,6 +21,27 @@ class TrackReviewSnapshot extends TableSnapshot
         );
     }
     
+    public function getSubscribersCurve($trackId, $subscriptionIds, $resolution = 100, $timestamp = 0)
+    {
+        $trackInfo  = $this->Track->find("first", array("fields" => array("duration"), "conditions" => array("Track.id" => $trackId)));        
+        $curveData  = $this->getRawCurveData($timestamp, array("ReviewFrames.user_id" => $subscriptionIds));
+        $ppf        = $this->resolutionToPositionsPerFrames((int)$trackInfo["Track"]["duration"], $resolution);
+        
+                
+        $curve_snapshot = array(
+            "ppf"   => $ppf,
+            "curve" => $this->ReviewFrames->roundReviewFramesSpan($curveData, $ppf, $resolution),
+            "score" => $this->compileScore($curveData)
+        );
+        
+        $subs_appreciation = $this->ReviewFrames->getAppreciation("user_id in (".  implode(",", $subscriptionIds) .") AND track_id = $trackId AND created > $timestamp");
+                        
+        return array(
+            "curve_snapshot" => $curve_snapshot,            
+            "subs_appreciation" => $subs_appreciation
+        );
+    }
+    
     public function getTopAreasByUserId($userId, $range = 15)
     {
         $data = $this->ReviewFrames->getTopPositions("user_id = $userId");        

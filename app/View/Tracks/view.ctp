@@ -13,16 +13,15 @@
 <?php echo $this->element("player"); ?>
 
 <section class="statistics">
-    <p><?php echo __("Average user score"); ?> <?php echo $this->Chart->formatScore($snapshot["score_snapshot"]); ?></p>
+    <p><?php echo __("Average user score"); ?> <?php echo $this->Chart->formatScore($trackReviewSnapshot["score_snapshot"]); ?></p>
         
-    <?php $enjoymentTimes =  $this->Chart->getEnjoymentTime($snapshot, (int)$track["duration"]); ?>
-    <p><?php echo __("Enjoyment"); ?> <?php echo $snapshot["liking_pct"]; ?> %</p>
-    <p><?php echo __("Disliking"); ?> <?php echo $snapshot["disliking_pct"]; ?> %</p>
+    <?php $enjoymentTimes =  $this->Chart->getEnjoymentTime($trackReviewSnapshot, (int)$track["duration"]); ?>
+    <p><?php echo __("Enjoyment"); ?> <?php echo $trackReviewSnapshot["liking_pct"]; ?> %</p>
+    <p><?php echo __("Disliking"); ?> <?php echo $trackReviewSnapshot["disliking_pct"]; ?> %</p>
     <p><?php echo __("Enjoyment time"); ?> <?php echo $enjoymentTimes["liking"]; ?></p>
     <p><?php echo __("Time disliked"); ?> <?php echo $enjoymentTimes["disliking"]; ?></p>
     <p><?php echo __("Total time");?> <?php echo date("i:s", (int)$track["duration"]); ?></p>
 </section>
-
 
 
 <?php /*

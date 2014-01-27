@@ -108,6 +108,8 @@
         callback_object.updateFrequencyData = function updateFrequencyData(arrayAsString) {  
             scope.onFrequencyChange(arrayAsString.split(',')); 
         };
+        
+        return this;
     };    
     
     player.apicontrols_play = function()

@@ -98,14 +98,14 @@ class ReviewFrames extends AppModel
             "fields" => array( 
                 "AVG(groove) as avg_groove",
                 "(AVG(groove) + AVG(groove) * AVG(multiplier)) as calc_groove",                
-                "AVG(suckpowering) as avg_suckpowering", 
-                "AVG(starpowering) as avg_starpowering", 
+               // "AVG(suckpowering) as avg_suckpowering", 
+               // "AVG(starpowering) as avg_starpowering",
                // "ReviewFrames.album_id as album_id", 
                // "ReviewFrames.track_id as track_id",
                // "ReviewFrames.position as position"
             ),
             "group" => array("ReviewFrames.album_id", "ReviewFrames.track_id", "position")
-        ));           
+        ));
     }
     
     public function getRawCurveByCreated($conditions)

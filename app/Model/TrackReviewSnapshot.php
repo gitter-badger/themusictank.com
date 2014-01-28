@@ -4,7 +4,6 @@ class TrackReviewSnapshot extends TableSnapshot
 {	    
 	public $name        = 'TrackReviewSnapshot';
     public $useTable    = 'track_review_snapshots';  
-    public $hasMany     = array('ReviewFrames');
     public $belongsTo   = array('Track');            
     
       
@@ -13,22 +12,28 @@ class TrackReviewSnapshot extends TableSnapshot
         $trackInfo  = $this->Track->find("first", array("fields" => array("duration"), "conditions" => array("Track.id" => $trackId)));        
         $curveData  = $this->getRawCurveData($timestamp);
         $ppf        = $this->resolutionToPositionsPerFrames((int)$trackInfo["Track"]["duration"], $resolution);
+        $score      = $this->compileScore($curveData);      
+        $split      = $this->getRawSplitData($score, $timestamp);
+        $review     = new ReviewFrames();
         
         return array(
             "ppf"   => $ppf,
-            "curve" => $this->ReviewFrames->roundReviewFramesSpan($curveData, $ppf, $resolution),
-            "score" => $this->compileScore($curveData)
+            "curve" => (new ReviewFrames())->roundReviewFramesSpan($curveData, $ppf, $resolution),
+            "score" => $score,
+            "split" => array(
+                "min" => $review->roundReviewFramesSpan($split["min"], $ppf, $resolution),
+                "max" => $review->roundReviewFramesSpan($split["max"], $ppf, $resolution)
+            )
         );
     }
-    
-    public function getSubscribersCurve($trackId, $subscriptionIds, $resolution = 100, $timestamp = 0)
+    /*
+    public function getCurveByUserId($trackId, $subscriptionIds, $resolution = 100, $timestamp = 0)
     {
         $trackInfo  = $this->Track->find("first", array("fields" => array("duration"), "conditions" => array("Track.id" => $trackId)));        
         $curveData  = $this->getRawCurveData($timestamp, array("ReviewFrames.user_id" => $subscriptionIds));
         $ppf        = $this->resolutionToPositionsPerFrames((int)$trackInfo["Track"]["duration"], $resolution);
-        
-                
-        $curve_snapshot = array(
+                        
+        return array(
             "ppf"   => $ppf,
             "curve" => $this->ReviewFrames->roundReviewFramesSpan($curveData, $ppf, $resolution),
             "score" => $this->compileScore($curveData)
@@ -41,9 +46,9 @@ class TrackReviewSnapshot extends TableSnapshot
             "subs_appreciation" => $subs_appreciation
         );
     }
-    
+    /*
     public function getTopAreasByUserId($userId, $range = 15)
-    {
+    {        
         $data = $this->ReviewFrames->getTopPositions("user_id = $userId");        
         $trackData = array();                        
         
@@ -81,5 +86,5 @@ class TrackReviewSnapshot extends TableSnapshot
     public function getRecentReviewsByUserId($userId, $limit)
     {
         return $this->getRecentReviews(array("user_id" => $userId), $limit);        
-    }
+    }*/
 }

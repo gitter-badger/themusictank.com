@@ -175,9 +175,6 @@
                 this.config.progress.position = this.data.position;
             }
             
-            
-            console.log(this.config.timer.position);
-            console.log(this.data.position);
             if(this.config.timer && this.config.timer.position != this.data.position)
             {
                 var position = this.data.position;

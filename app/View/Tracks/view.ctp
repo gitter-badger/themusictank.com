@@ -20,21 +20,22 @@
     <p><?php echo __("Disliking"); ?> <?php echo $trackReviewSnapshot["disliking_pct"]; ?> %</p>
     <p><?php echo __("Enjoyment time"); ?> <?php echo $enjoymentTimes["liking"]; ?></p>
     <p><?php echo __("Time disliked"); ?> <?php echo $enjoymentTimes["disliking"]; ?></p>
-    <p><?php echo __("Total time");?> <?php echo date("i:s", (int)$track["duration"]); ?></p>
+    <?php echo $this->Chart->getBigPie("track", $track["slug"], $trackReviewSnapshot); ?>
 </section>
 
+<?php if(isset($userTrackReviewSnapshot)) : ?>
 
-<?php /*
-<section class="graphs cols">
-    <div class="col col-1-3">
-        <h3><?php echo __("Appreciation"); ?></h3>
-        <?php echo $this->Chart->getBigPie("track", $track["slug"], $snapshot); ?>
-    </div>
-    <div class="col col-23-3">    
-        <h3><?php echo __("Track Groove"); ?></h3>        
-        <?php echo $this->Chart->getTrackChart($track["slug"], $snapshot); ?>    
-    </div>
-</div> */ ?>
+<section class="statistics subscribers">
+    <p><?php echo __("Average subscriber score"); ?> <?php echo $this->Chart->formatScore($userTrackReviewSnapshot["score_snapshot"]); ?></p>        
+    <?php $enjoymentTimes =  $this->Chart->getEnjoymentTime($userTrackReviewSnapshot, (int)$track["duration"]); ?>
+    <p><?php echo __("Enjoyment"); ?> <?php echo $userTrackReviewSnapshot["liking_pct"]; ?> %</p>
+    <p><?php echo __("Disliking"); ?> <?php echo $userTrackReviewSnapshot["disliking_pct"]; ?> %</p>
+    <p><?php echo __("Enjoyment time"); ?> <?php echo $enjoymentTimes["liking"]; ?></p>
+    <p><?php echo __("Time disliked"); ?> <?php echo $enjoymentTimes["disliking"]; ?></p>
+    <?php echo $this->Chart->getBigPie("track", $track["slug"], $userTrackReviewSnapshot); ?>
+</section>
+
+<?php endif; ?>
 
 <p class="credits">
     <?php echo __("Track description courtesy of"); ?> <?php echo $this->Html->link("Last.fm", "http://www.last.fm/", array("target" => "_blank")); ?>. 

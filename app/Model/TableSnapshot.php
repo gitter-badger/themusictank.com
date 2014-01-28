@@ -3,6 +3,9 @@
  * TableSnapshot is a class that handles common functions for models needing 
  * to save ReviewFrames snapshots.
  */
+
+App::uses('ReviewFrames', 'Model');
+
 class TableSnapshot extends AppModel
 {	    
     /**
@@ -13,19 +16,6 @@ class TableSnapshot extends AppModel
     {   
         return (empty($this->data[$this->alias]["id"])) ? $this->_createSnapshot() : $this->_updateSnapshot();   
     }   
-    
-    public function snapUsers($userIds)
-    {
-        
-        $belongsToData  = $this->_getBelongsToData();         
-        $belongsToId    = (int)$belongsToData["id"];
-        
-        $appreciation   = $this->getAppreciation($belongsToId);
-        $curve          = $this->getCurve($belongsToId);
-        
-        return $this->_validateAndSave($appreciation, $curve);     
-    }
-    
     
     /**
      * Returns the whether or not the cached snapshot is still valid
@@ -44,7 +34,7 @@ class TableSnapshot extends AppModel
      */
     public function getRawCurveData($timestamp = 0, $extraConditions = array())
     {
-        $belongsToData  = $this->_getBelongsToData();
+        $belongsToData  = $this->getBelongsToData();
         $belongsToLabel = strtolower($this->_getBelongToAlias()) . "_id";
         $belongsToId    = (int)$belongsToData["id"];
         
@@ -53,8 +43,48 @@ class TableSnapshot extends AppModel
             "ReviewFrames.created >"        => $timestamp
         ));
                 
-        return $this->ReviewFrames->getRawCurve($conditions);
+        return (new ReviewFrames())->getRawCurve($conditions);
     }    
+    
+    public function getRawSplitData($threshold, $timestamp = 0, $extraConditions = array())
+    {
+        $belongsToData  = $this->getBelongsToData();
+        $belongsToLabel = strtolower($this->_getBelongToAlias()) . "_id";
+        $belongsToId    = (int)$belongsToData["id"];
+        $reviews        = new ReviewFrames();
+        
+        $conditions = array_merge($extraConditions, array(
+            "ReviewFrames.$belongsToLabel"  => $belongsToId, 
+            "ReviewFrames.created >"        => $timestamp
+        ));     
+        
+        $return = array();
+        $avgMax = $reviews->getRawCurve(array_merge($conditions, array("ReviewFrames.groove >" => $threshold)));
+        $avgMin = $reviews->getRawCurve(array_merge($conditions, array("ReviewFrames.groove <" => $threshold)));
+        $len = count($avgMax);        
+        $i = 0;
+        
+        return array("min" => $avgMin, "max" => $avgMax);
+        
+        /*
+        while($i < $len)
+        {
+            $return[$i] = array(
+                "min" => array(
+                    "avg"   => $avgMin[$i][0]["avg_groove"],
+                    "calc"  => $avgMin[$i][0]["calc_groove"]
+                ),
+                "max" => array(
+                    "avg"   => $avgMax[$i][0]["avg_groove"],
+                    "calc"  => $avgMax[$i][0]["calc_groove"]
+                )
+            );
+            $i++;
+        }
+        
+        return $return;*/
+    }    
+    
     
     /**
      * Returns all the reviewing data based on a Model query. This function permits user based queries.
@@ -63,7 +93,7 @@ class TableSnapshot extends AppModel
      */
     public function getRawCurveSpan($conditions)
     {        
-        return $this->ReviewFrames->getRawCurveByCreated($conditions);
+        return (new ReviewFrames())->getRawCurveByCreated($conditions);
     }    
     
     /**
@@ -74,7 +104,7 @@ class TableSnapshot extends AppModel
      */
     public function getRecentReviews($conditions, $limit = 5)
     {   
-        return $this->ReviewFrames->getByCreated($conditions, $limit);
+        return (new ReviewFrames())->getByCreated($conditions, $limit);
     }    
     
     /**
@@ -86,7 +116,7 @@ class TableSnapshot extends AppModel
     public function getAppreciation($belongsToId, $timestamp = 0)
     {                
         $belongsToAlias = strtolower($this->_getBelongToAlias() . "_id");
-        return $this->ReviewFrames->getAppreciation("$belongsToAlias = $belongsToId AND created > $timestamp");
+        return (new ReviewFrames())->getAppreciation("$belongsToAlias = $belongsToId AND created > $timestamp");
     }        
     
     /**
@@ -122,7 +152,7 @@ class TableSnapshot extends AppModel
     public function getUserAppreciation($belongsToId, $userId, $timestamp = 0)
     {                
         $belongsToAlias = strtolower($this->_getBelongToAlias() . "_id");
-        return $this->ReviewFrames->getAppreciation("user_id = $userId AND $belongsToAlias = $belongsToId AND created > $timestamp");
+        return (new ReviewFrames())->getAppreciation("user_id = $userId AND $belongsToAlias = $belongsToId AND created > $timestamp");
     }        
         
     /** The final number of frames is the resolution's value.
@@ -150,7 +180,39 @@ class TableSnapshot extends AppModel
             "recursive" => false
         ));
     }
-           
+    
+
+    /**
+     * Returns the current values of Model->data for the belongs to Model.
+     * @return array The preloaded data of the object
+     */
+    public function getBelongsToData()
+    {
+        return $this->data[$this->_getBelongToAlias()];
+    }
+    
+    /**
+     * Returns pre-populated extra fields that need to be saved along
+     * side each snapshots.
+     * @return array Data ready to be saved
+     */
+    public function getExtraSaveFields()
+    {
+        $extras = array();
+                
+        $belongsToAlias = $this->_getBelongToAlias();
+        $belongsToData  = $this->getBelongsToData();        
+        
+        $extras["lastsync"]  = time();
+        $extras[strtolower($belongsToAlias) . "_id"] = (int)$belongsToData["id"];
+        
+        if((int)$this->data[$this->alias]["id"] > 0)
+        {            
+           $extras["id"] = $this->data[$this->alias]["id"];
+        }
+                
+        return $extras;
+    }           
     
     /**
      * Creates a model's snapshot
@@ -159,11 +221,11 @@ class TableSnapshot extends AppModel
      */
     private function _createSnapshot()
     {
-        $belongsToData  = $this->_getBelongsToData();         
+        $belongsToData  = $this->getBelongsToData();         
         $belongsToId    = (int)$belongsToData["id"];
         
         $appreciation   = $this->getAppreciation($belongsToId);
-        $curve          = $this->getCurve($belongsToId);
+        $curve          = $this->getCurve($belongsToId, 150);
         
         return $this->_validateAndSave($appreciation, $curve);        
     }
@@ -175,11 +237,11 @@ class TableSnapshot extends AppModel
      */
     private function _updateSnapshot()
     {        
-        $belongsToData  = $this->_getBelongsToData();      
+        $belongsToData  = $this->getBelongsToData();      
         $belongsToId    = (int)$belongsToData["id"];
         $timestamp      = $this->data[$this->alias]["lastsync"];        
        
-        $appreciation   = $this->ReviewFrames->mergeAppreciationData($this->data[$this->alias], $this->getAppreciation($belongsToId, $timestamp));
+        $appreciation   = (new ReviewFrames())->mergeAppreciationData($this->data[$this->alias], $this->getAppreciation($belongsToId, $timestamp));
         $curve          = $this->getCurve($belongsToId, 150, $timestamp); 
         
         return $this->_validateAndSave($appreciation, $curve);  
@@ -194,59 +256,26 @@ class TableSnapshot extends AppModel
      */
     private function _validateAndSave($appreciation, $curve)
     {
-        $saveArray = array_merge($appreciation, $this->_getExtraSaveFields());
+        $saveArray = array_merge($appreciation, $this->getExtraSaveFields());
         
         $saveArray["snapshot_ppf"]      = $curve["ppf"];
         $saveArray["curve_snapshot"]    = $curve["curve"];
         $saveArray["score_snapshot"]    = $curve["score"];
+        $saveArray["range_snapshot"]    = $curve["split"];
                 
         if(isset($saveArray["curve_snapshot"]) && !is_string($saveArray["curve_snapshot"])) 
         {
             $saveArray["curve_snapshot"] = json_encode($saveArray["curve_snapshot"]);
         }
         
-        if(array_key_exists("metacritic_score", $curve))
+        if(isset($saveArray["range_snapshot"]) && !is_string($saveArray["range_snapshot"])) 
         {
-            $saveArray["metacritic_score"] = $curve["metacritic_score"];
-        }        
+            $saveArray["range_snapshot"] = json_encode($saveArray["range_snapshot"]);
+        }
         
         return $this->save($saveArray) ? $saveArray : null;
     }
-    
-    /**
-     * Returns the current values of Model->data for the belongs to Model.
-     * @private
-     * @return array The preloaded data of the object
-     */
-    private function _getBelongsToData()
-    {
-        return $this->data[$this->_getBelongToAlias()];
-    }
-    
-    /**
-     * Returns pre-populated extra fields that need to be saved along
-     * side each snapshots.
-     * @private
-     * @return array Data ready to be saved
-     */
-    private function _getExtraSaveFields()
-    {
-        $extras = array();
-                
-        $belongsToAlias = $this->_getBelongToAlias();
-        $belongsToData  = $this->_getBelongsToData();        
         
-        $extras["lastsync"]  = time();
-        $extras[strtolower($belongsToAlias) . "_id"] = (int)$belongsToData["id"];
-        
-        if((int)$this->data[$this->alias]["id"] > 0)
-        {            
-           $extras["id"] = $this->data[$this->alias]["id"];
-        }
-                
-        return $extras;
-    }
-    
     /**
      * Gets the model linked to the snapshot through the belongs to association.
      * Expects that the object only belongs to one parent object.

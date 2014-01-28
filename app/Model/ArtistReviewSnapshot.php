@@ -5,7 +5,6 @@ class ArtistReviewSnapshot extends TableSnapshot
 {	    
 	public $name        = 'ArtistReviewSnapshot';
     public $useTable    = 'artist_review_snapshots';  
-    public $hasMany     = array('ReviewFrames');
     public $belongsTo   = array("Artist");     
         
     public function getCurve($artistId, $resolution = 100, $timestamp = 0)
@@ -14,20 +13,27 @@ class ArtistReviewSnapshot extends TableSnapshot
         $curveData = $this->getRawCurveData($timestamp);    
         $totalTime = $this->_getTotalDiscographyLength($discographyInfo);     
         $curve = array();
+        $score      = $this->compileScore($curveData);      
+        $split      = $this->getRawSplitData($score, $timestamp);
+        $review     = new ReviewFrames();
                 
         foreach($discographyInfo as $albumInfo)
         {
             $albumResolution = ceil($resolution * ((int)$albumInfo["Albums"]["duration"] / $totalTime));
             $ppf        = $this->resolutionToPositionsPerFrames((int)$albumInfo["Albums"]["duration"], $albumResolution);
             $albumSpan  = $this->_getAlbumCurveSpan($curveData, $albumInfo["Albums"]["id"]);
-            $albumCurve = $this->ReviewFrames->roundReviewFramesSpan($albumSpan, $ppf, $albumResolution);
+            $albumCurve = (new ReviewFrames())->roundReviewFramesSpan($albumSpan, $ppf, $albumResolution);
             $curve[$albumInfo["Albums"]["name"]] = $albumCurve;
         }
         
         return array(
            "curve"  => json_encode($curve), 
             "ppf"   => $this->resolutionToPositionsPerFrames($totalTime, $resolution),
-            "score" => $this->compileScore($curveData)
+            "score" => $score,
+            "split" => array(
+                "min" => $review->roundReviewFramesSpan($split["min"], $ppf, $resolution),
+                "max" => $review->roundReviewFramesSpan($split["max"], $ppf, $resolution)
+            )
         );
     }    
     

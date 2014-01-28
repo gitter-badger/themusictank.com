@@ -25,7 +25,7 @@ class AppController extends Controller {
 		)        
 	);	
     
-    public $isPreloading = false;
+    public $preferredPlayer = null;
     
     public function beforeFilter()
     {
@@ -177,6 +177,7 @@ class AppController extends Controller {
             $user = $this->getAuthUser();
             $preferredPlayer = User::getPreferredPlayer($user["User"]);
         }
+        $this->preferredPlayer = $preferredPlayer;
         $this->set("preferredPlayer", $preferredPlayer);
     }
         

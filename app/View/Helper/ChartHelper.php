@@ -1,11 +1,13 @@
 <?php
 
+App::uses('CakeSession', 'Model/Datasource');
 class ChartHelper extends AppHelper {
     
     var $helpers = array('Html');
     
     private $_pies = array();
     private $_charts = array();
+    private $_players = array();
     
     const CURVE_MINIMUM_INDEX = 0;
     const CURVE_AVERAGE_INDEX = 1;
@@ -68,6 +70,7 @@ class ChartHelper extends AppHelper {
                     <div style="background:#0b1c38; height:'.$data["disliking_pct"].'%; overflow:hidden;">'.__('Disliking').'</div>
                 </div>';
     }
+       
     
     public function getArtistChart($key, $data)
     {
@@ -110,7 +113,7 @@ class ChartHelper extends AppHelper {
         $this->_charts["album-$key"] = json_encode($formatted);                
         return "<div class=\"chart groove album-groove\" id=\"chart-album-$key\"></div>";
     }
-
+    
     public function getTrackChart($key, $data)
     {
         $formatted = array("range" => array(), "groove" => array());
@@ -126,7 +129,6 @@ class ChartHelper extends AppHelper {
         $this->_charts["track-$key"] = json_encode($formatted);                
         return "<div class=\"chart groove track-groove\" id=\"chart-track-$key\"></div>";
     }
-        
     
     public function getReviewFramesGroove($key, $data)
     {
@@ -145,6 +147,7 @@ class ChartHelper extends AppHelper {
     
     public function getScript()
     {
+
         $str = array();
         foreach($this->_pies as $key => $pie) $str[] = "tmt.pie(\"$key\", $pie);";
         foreach($this->_charts as $key => $chart) $str[] = "tmt.chart(\"$key\", $chart);";
@@ -157,7 +160,7 @@ class ChartHelper extends AppHelper {
     
     public function beingUsed()
     {
-        return count($this->_pies) > 0 || count($this->_charts) > 0;
+        return count($this->_pies) > 0 || count($this->_charts) || count($this->_players) > 0;
     }
     
     private function _formatSnapshot($data)

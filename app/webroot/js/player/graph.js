@@ -16,6 +16,12 @@
         init : function() 
         {
             this.config.container   = {ref : $(this.config.containerSelector)}; 
+            this.config.container.ref.parent(".player").find(".legend input[type=checkbox]").change($.proxy(_onViewToggle, this));
+            
+            this.config.display = {
+                "everyone" : (this.config.curve_snapshot),
+                "subs" : (this.config.subs_curve_snapshot)
+            };
             
             this.getContextSizes();
             this.draw();
@@ -25,18 +31,29 @@
         {
             this.drawGridLines();
             this.drawTimeLabels();
+                
+            if(this.config.display.everyone && this.config.range_snapshot)
+            {
+                _drawRange.call(this, this.config.range_snapshot, "avg", "rgba(66, 66, 66,.4)");
+            }            
             
-            if(this.config.curve_snapshot)
+            if(this.config.display.subs && this.config.subs_range_snapshot)
+            {
+                _drawRange.call(this, this.config.subs_range_snapshot, "avg", "rgba(66, 133, 244,.4)");         
+            }
+            
+            if(this.config.display.everyone && this.config.curve_snapshot)
             {
                 _drawJoints.call(this, this.config.curve_snapshot, "avg", '#999999');
                 _drawCircles.call(this, this.config.curve_snapshot, "avg", '#999999');
             }
-            
-            if(this.config.friends_curve_snapshot)
+                        
+            if(this.config.display.subs && this.config.subs_curve_snapshot)
             {
-                _drawJoints.call(this, this.config.friends_curve_snapshot, "avg", '#4285f4');
-                _drawCircles.call(this, this.config.friends_curve_snapshot, "avg", '#4285f4');                
+                _drawJoints.call(this, this.config.subs_curve_snapshot, "avg", '#4285f4');
+                _drawCircles.call(this, this.config.subs_curve_snapshot, "avg", '#4285f4');                
             }
+            
         },
         
         getContextSizes : function()
@@ -96,20 +113,31 @@
             context.fillStyle = '#aaa';
             context.textBaseline = 'middle';
             context.fillText("0", 0, this.config.sizes.height / 2);
+            context.closePath();
 
             context.beginPath();
             context.fillStyle = '#aaa';
             context.textBaseline = 'top';
             context.fillText("+1", 0, 5);
+                context.closePath();
 
             context.beginPath();
             context.fillStyle = '#aaa';
             context.textBaseline = 'bottom';
             context.fillText("-1", 0, this.config.sizes.height - 5);
+            context.closePath();
         }        
         
     };
     
+    function _onViewToggle(evt)
+    {
+        var el = $(evt.target);        
+        this.config.display[el.val()] = el.is(":checked");
+        this.config.context.clearRect (0, 0, this.config.sizes.width, this.config.sizes.height);
+        this.draw();
+    };
+
 
     function _drawCircles (datasource, which, color)
     {
@@ -123,9 +151,9 @@
             distanceBetweenPoints = (this.config.sizes.width - 30) / len,
             yPos;
 
-        for( ; i < len; i++)
+        for( ; i < len; i++)    
         {  
-            if(this.config.curve_snapshot[i])
+            if(datasource[i])
             {
                 yPos = height * (1-datasource[i][which]);  
                 //yPos += dotSize;
@@ -135,7 +163,8 @@
                 context.fill();
                 context.lineWidth = .5;
                 context.strokeStyle = color;
-                context.stroke();                       
+                context.stroke();   
+                context.closePath();                    
             }   
             currentPoint += distanceBetweenPoints;
         }
@@ -155,9 +184,100 @@
         for( ; i < len; i++, yPos = 0)
         {                   
 
-            if(this.config.curve_snapshot[i])
+            if(datasource[i])
             {
                 yPos = height * (1-datasource[i][which]);
+            }       
+
+            if(prevYPos > 0 && yPos > 0)
+            {
+                context.beginPath();
+                context.moveTo(currentPoint - distanceBetweenPoints- (dotSize / 2), prevYPos);
+                context.lineTo(currentPoint - (dotSize / 2), yPos);
+                context.lineWidth = 1;
+                context.strokeStyle = color;
+                context.stroke();
+                context.closePath();
+            }
+
+            prevYPos = yPos;
+            currentPoint += distanceBetweenPoints;
+        }            
+    };
+    
+    function _drawRange(datasource, which, color)
+    {
+        
+        var context = this.config.context,
+            dotSize = 4, 
+            i = 0, 
+            len = datasource.length,
+            distanceBetweenPoints = (this.config.sizes.width -30) / len,
+            yPos,
+            height = this.config.sizes.height,
+            currentPoint = (dotSize / 2) + 15;
+
+
+        if(datasource[i])
+        {
+            yPos = height * (1-datasource[i]["max"][which]);
+        }     
+            
+        context.beginPath();
+        context.fillStyle = color;
+        context.opacity = .4;
+        context.moveTo(currentPoint - distanceBetweenPoints- (dotSize / 2), yPos);
+                            
+        for( ; i < len; i++, yPos = 0)
+        {
+            if(datasource[i])
+            {
+                yPos = height * (1-datasource[i]["max"][which]);
+            }
+            
+            if(yPos)
+            {
+                context.lineTo(currentPoint - (dotSize / 2), yPos);    
+            }        
+            currentPoint += distanceBetweenPoints;
+        }
+                
+        for( ; i > 0; i--, yPos = 0)
+        {
+            if(datasource[i])
+            {
+                yPos = height * (1-datasource[i]["min"][which]); 
+            }
+                  
+            if(yPos)
+            {
+                context.lineTo(currentPoint - (dotSize / 2), yPos);   
+            }
+                    
+            currentPoint -= distanceBetweenPoints;
+        }
+        
+        context.closePath();
+        context.fill();
+        
+        
+        
+        /*
+        var context = this.config.context,
+            i = 0,
+            len = datasource["min"].length,
+            dotSize = 4,
+            currentPoint    = (dotSize / 2) + 15,
+            distanceBetweenPoints = (this.config.sizes.width -30) / len,
+            height = this.config.sizes.height,
+            yPos, yPosMax, prevYPos = 0, prevYMaxPos = 0;
+
+        for( ; i < len; i++, yPos = 0, yPosMax = 0)
+        {
+            if(datasource[i])
+            {
+                yPos = height * (1-datasource["min"][i][which]);
+                yPosMax = height * (1-datasource["max"][i][which]);
             }       
 
             if(prevYPos > 0 && yPos > 0)
@@ -172,7 +292,7 @@
 
             prevYPos = yPos;
             currentPoint += distanceBetweenPoints;
-        }            
+        }   */
     }
     
     

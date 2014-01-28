@@ -4,8 +4,7 @@ App::uses('TableSnapshot', 'Model');
 class AlbumReviewSnapshot extends TableSnapshot
 {	    
 	public $name        = 'AlbumReviewSnapshot';
-    public $useTable    = 'album_review_snapshots';  
-    public $hasMany     = array('ReviewFrames');
+    public $useTable    = 'album_review_snapshots'; 
     public $belongsTo   = array('Album');
     
     public function getCurve($albumId, $resolution = 100, $timestamp = 0)
@@ -13,22 +12,38 @@ class AlbumReviewSnapshot extends TableSnapshot
         $albumInfo = $this->Album->find("first", array("conditions" => array("Album.id" => $albumId)));
         $curveData = $this->getRawCurveData($timestamp); 
         $curve = array();
+        $score      = $this->compileScore($curveData);      
+        $split      = $this->getRawSplitData($score, $timestamp);
+        $review     = new ReviewFrames();
         
         foreach($albumInfo["Tracks"] as $track)
         {
             $trackResolution    =  ((int)$track["duration"] / (int)$albumInfo["Album"]["duration"]) * $resolution;
             $ppf                = $this->resolutionToPositionsPerFrames((int)$track["duration"], $trackResolution);
-            $curve[$track["title"]] = $this->ReviewFrames->roundReviewFramesSpan( $this->_getTrackCurveSpan($curveData, $track["id"]), $ppf, $trackResolution);
+            $curve[$track["title"]] = (new ReviewFrames())->roundReviewFramesSpan( $this->_getTrackCurveSpan($curveData, $track["id"]), $ppf, $trackResolution);
         }
         
         return array(
             "curve"         => json_encode($curve), 
             "ppf"           => $this->resolutionToPositionsPerFrames((int)$albumInfo["Album"]["duration"], $resolution),
-            "score"         => $this->compileScore($curveData),
-            "metacritic_score" => $this->_getMetacriticScore($this->_toMetacriticLabel($albumInfo["Album"]["name"]), $this->_toMetacriticLabel($albumInfo["Artist"]["name"]))
+            "score"         => $score,
+            "split" => array(
+                "min" => $review->roundReviewFramesSpan($split["min"], $ppf, $resolution),
+                "max" => $review->roundReviewFramesSpan($split["max"], $ppf, $resolution)
+            )
         );
     }
         
+    public function getExtraSaveFields()
+    {   
+        $saveArray = parent::getExtraSaveFields();
+        
+        $albumName = $this->_toMetacriticLabel($this->data["Album"]["name"]);
+        $artistName = $this->_toMetacriticLabel($this->data["Artist"]["name"]);        
+        $saveArray["metacritic_score"] = $this->_getMetacriticScore($albumName, $artistName);
+        
+        return $saveArray; 
+    }
     
     private function _getTrackCurveSpan($reviewFrames, $trackId)
     {

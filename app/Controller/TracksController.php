@@ -31,18 +31,28 @@ class TracksController extends AppController {
         if($this->Track->TrackReviewSnapshot->requiresUpdate($data))
         {            
             $data["TrackReviewSnapshot"] = $this->Track->TrackReviewSnapshot->snap();            
-        }        
+        }
         
         // Todo : handle in model
         if(is_string($data["TrackReviewSnapshot"]["curve_snapshot"]))
         {
             $data["TrackReviewSnapshot"]["curve_snapshot"] = json_decode($data["TrackReviewSnapshot"]["curve_snapshot"]);
+            $data["TrackReviewSnapshot"]["range_snapshot"] = json_decode($data["TrackReviewSnapshot"]["range_snapshot"]);
         }                        
         
         if($this->userIsLoggedIn())
-        {
-            $ids = $this->User->UserFollowers->getSubscriptions($this->getAuthUserId(), true);
-            $this->set("friendsReviewSnapshot", $this->Track->TrackReviewSnapshot->snapUsers($ids));
+        {             
+            $data["UserTrackReviewSnapshot"] = $this->User->UserTrackReviewSnapshot->requiresUpdate($data) ?
+                $this->User->UserTrackReviewSnapshot->snap() :
+                $this->User->UserTrackReviewSnapshot->getByTrackId($data["Track"]["id"]);
+                        
+            // Todo : handle in model
+            if(is_string($data["UserTrackReviewSnapshot"]["curve_snapshot"]))
+            {
+                $data["UserTrackReviewSnapshot"]["curve_snapshot"] = json_decode($data["UserTrackReviewSnapshot"]["curve_snapshot"]);
+                $data["UserTrackReviewSnapshot"]["range_snapshot"] = json_decode($data["UserTrackReviewSnapshot"]["range_snapshot"]);
+            }   
+            $this->set("userTrackReviewSnapshot", $data["UserTrackReviewSnapshot"]);  
         }
         
         $this->set("track", $data["Track"]);    
@@ -51,7 +61,16 @@ class TracksController extends AppController {
         $this->set("album", $data["Album"]);     
         $this->set("artist", $data["Album"]["Artist"]);  
         $this->set("trackReviewSnapshot", $data["TrackReviewSnapshot"]);     
-                        
+                                
+        
+        $this->set("trackChartConfig",  array(
+            "track" => $data["Track"], 
+            "rdioTrack" => $data["RdioTrack"]["id"], 
+            "player" => $this->preferredPlayer, 
+            "userTrackReviewSnapshot" => $data["UserTrackReviewSnapshot"],
+            "trackReviewSnapshot" => $data["TrackReviewSnapshot"]
+        ));
+                
         $this->setPageTitle(array($data["Track"]["title"], $data["Album"]["name"], $data["Album"]["Artist"]["name"]));
         $this->setPageMeta(array(
             "keywords" => array($data["Track"]["title"], $data["Album"]["name"], $data["Album"]["Artist"]["name"]),

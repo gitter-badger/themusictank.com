@@ -11,7 +11,10 @@
     $graphConfig = array(
         "containerSelector" => ".play-" . $track["slug"] . " canvas",
         "trackDuration" => (int)$track["duration"],
-        "curve_snapshot" => $trackReviewSnapshot["curve_snapshot"]
+        "curve_snapshot" => $trackReviewSnapshot["curve_snapshot"],
+        "range_snapshot" => $trackReviewSnapshot["range_snapshot"],
+        "subs_curve_snapshot" => isset($userTrackReviewSnapshot) ? $userTrackReviewSnapshot["curve_snapshot"] : null, 
+        "subs_range_snapshot" => isset($userTrackReviewSnapshot) ? $userTrackReviewSnapshot["range_snapshot"] : null
     );
     
     $isLogged = $this->Session->read("Auth.User.User.id");
@@ -27,22 +30,26 @@
     else {         
         $config["trackTitle"] = $track["title"];
     }    
-    
-    if(isset($friendsReviewSnapshot))
-    {
-        $graphConfig["friends_curve_snapshot"] = $friendsReviewSnapshot["curve_snapshot"]["curve"];
-    }
-    
 ?>
 <section class="player chart timed <?php echo $preferredPlayer; ?> <?php echo $isLogged ? 'logged' : 'not-logged' ?> play-<?php echo $track["slug"]; ?>">
     <canvas></canvas>        
-    <div class="cursor"></div>    
-    
-    <ul>
-        <li><span style="background:#999;">&nbsp;&nbsp;&nbsp;</span><?php echo __("Everyone"); ?></li>
-        <li><span style="background:#4285f4;">&nbsp;&nbsp;&nbsp;</span><?php echo __("People you are subscribed to"); ?></li>
-    </ul>
-    
+    <div class="cursor"></div>        
+    <ul class="legend">
+        <li class="everyone">
+            <label>
+                <input type="checkbox" name="view" value="everyone" checked="checked" />
+                <?php echo __("Everyone"); ?>
+            </label>
+        </li>
+        <?php if($isLogged) : ?>
+        <li class="friends">
+            <label>
+                <input type="checkbox" name="view" value="subs" checked="checked" />
+                <?php echo __("People you are subscribed to"); ?>
+            </label>
+        </li>
+        <?php endif; ?>
+    </ul>    
     <div class="seek">            
         <div class="bar"><div class="progress"><span class="knob"></span></div></div>
     </div>
@@ -53,8 +60,7 @@
         <ul>
             <li><button type="button" title="<?php echo __("Play"); ?>" name="play"><?php echo __("Play"); ?></button></li>
             <li class="time">--:-- / --:--</li>
-        </ul>
-        
+        </ul>        
         <?php  if($preferredPlayer == "mp3") : ?>
             <div class="drop">            
                 <p><?php echo sprintf(__("Drop your mp3 of '%s' here"), $track["title"]); ?></p>
@@ -78,10 +84,8 @@
             </div>        
         <?php endif; ?>        
     </div>     
-    <script>
-        (function(){
-            new tmt.player(<?php echo json_encode($config); ?>).setupCallback().init();
-            new tmt.graph(<?php echo json_encode($graphConfig); ?>).init();
-        })();
-    </script>
+<script>$(function(){
+new tmt.player(<?php echo json_encode($config); ?>).setupCallback().init();
+new tmt.graph(<?php echo json_encode($graphConfig); ?>).init();
+});</script>
 </section>

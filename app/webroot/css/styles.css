@@ -95,25 +95,25 @@ ul.horizontal li:last-child {
     width:60%;
 }
 
-.expanded .expander .more { 
+.expandable .expander .more { 
     display:none;
 }
 
-.expanded .expander .less { 
+.expandable .expander .less { 
     display:inline-block;    
 }
 
-.expanded.collapsed .wrapper {
+.expandable.collapsed .wrapper {
     max-height:200px;
     overflow:hidden;
     border-bottom:2px solid #dedede;
 }
 
-.expanded.collapsed .expander .more { 
+.expandable.collapsed .expander .more { 
     display:inline-block;
 }
 
-.expanded.collapsed .expander .less { 
+.expandable.collapsed .expander .less { 
     display:none;    
 }
 
@@ -152,6 +152,40 @@ ul.horizontal li:last-child {
     margin:15px;
     padding:15px;
     position:relative;
+}
+
+.player .tracks { 
+    position:relative;
+    margin-left:10px;
+    height:50px;
+}
+
+.player .tracks div {
+    display:inline-block;
+    overflow:hidden;
+    font-size:12px;
+    text-align:center;
+    vertical-align:top;
+    height:50px;
+}
+
+.player .tracks div:nth-child(odd) span {
+    position:relative;
+    top:5px;
+}
+.player .tracks div:nth-child(even) span {
+    position:relative;
+    top:20px;
+}
+
+.player .tracks div:nth-child(3n+1)  {
+    border-top:2px solid green;
+}
+.player .tracks div:nth-child(3n+2) {
+    border-top:2px solid orange;
+}
+.player .tracks div:nth-child(3n+3)  {
+    border-top:2px solid yellow;
 }
 
 .player .controls {

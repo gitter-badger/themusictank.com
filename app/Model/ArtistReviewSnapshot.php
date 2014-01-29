@@ -6,10 +6,11 @@ class ArtistReviewSnapshot extends TableSnapshot
 	public $name        = 'ArtistReviewSnapshot';
     public $useTable    = 'artist_review_snapshots';  
     public $belongsTo   = array("Artist");     
-        
+            
     public function getCurve($artistId, $resolution = 100, $timestamp = 0)
     {
-        $discographyInfo = $this->Artist->Albums->find("all", array("conditions" => array("Albums.artist_id" => $artistId)));
+        /*
+        $discographyInfo = $this->Artist->Albums->find("all", array("conditions" => array("Albums.artist_id" => $artistId), "fields" => array("Albums.duration", "Albums.name", "Albums.id")));
         $curveData = $this->getRawCurveData($timestamp);    
         $totalTime = $this->_getTotalDiscographyLength($discographyInfo);     
         $curve = array();
@@ -27,13 +28,20 @@ class ArtistReviewSnapshot extends TableSnapshot
         }
         
         return array(
-           "curve"  => json_encode($curve), 
+           "curve"  => $curve, 
             "ppf"   => $this->resolutionToPositionsPerFrames($totalTime, $resolution),
             "score" => $score,
             "split" => array(
                 "min" => $review->roundReviewFramesSpan($split["min"], $ppf, $resolution),
                 "max" => $review->roundReviewFramesSpan($split["max"], $ppf, $resolution)
             )
+        );*/
+        
+        $curveData  = $this->getRawCurveData($timestamp);
+        $score      = $this->compileScore($curveData);      
+        
+        return array(
+            "score" => $score
         );
     }    
     

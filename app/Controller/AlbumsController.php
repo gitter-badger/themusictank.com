@@ -18,6 +18,8 @@ class AlbumsController extends AppController {
      */
     public function view($albumSlug)
     {   
+        $this->usesPlayer();
+        
         $data = $this->Album->findBySlug($albumSlug);
         $needsRefresh = false;
         
@@ -40,13 +42,36 @@ class AlbumsController extends AppController {
         {
             $data["AlbumReviewSnapshot"] = $this->Album->AlbumReviewSnapshot->snap();   
         }
+        
+        
+        // Todo : handle in model
+        if(is_string($data["AlbumReviewSnapshot"]["curve_snapshot"]))
+        {
+            $data["AlbumReviewSnapshot"]["curve_snapshot"] = json_decode($data["AlbumReviewSnapshot"]["curve_snapshot"]);
+            $data["AlbumReviewSnapshot"]["range_snapshot"] = json_decode($data["AlbumReviewSnapshot"]["range_snapshot"]);
+        }          
+        
+        if($this->userIsLoggedIn())
+        {             
+            $data["UserAlbumReviewSnapshot"] = $this->User->UserAlbumReviewSnapshot->requiresUpdate($data) ?
+                $this->User->UserAlbumReviewSnapshot->snap() :
+                $this->User->UserAlbumReviewSnapshot->getByAlbumId($data["Album"]["id"]);
+                        
+            // Todo : handle in model
+            if(is_string($data["UserAlbumReviewSnapshot"]["curve_snapshot"]))
+            {
+                $data["UserAlbumReviewSnapshot"]["curve_snapshot"] = json_decode($data["UserAlbumReviewSnapshot"]["curve_snapshot"]);
+                $data["UserAlbumReviewSnapshot"]["range_snapshot"] = json_decode($data["UserAlbumReviewSnapshot"]["range_snapshot"]);
+            }   
+            $this->set("userAlbumReviewSnapshot", $data["UserAlbumReviewSnapshot"]);  
+        }
                 
         $this->set("album",     $data["Album"]);
         $this->set("rdioAlbum", $data["RdioAlbum"]);  
         $this->set("lastfmAlbum", $data["LastfmAlbum"]);    
         $this->set("tracks",    $data["Tracks"]);
         $this->set("artist",    $data["Artist"]);
-        $this->set("snapshot",  $data["AlbumReviewSnapshot"]);                
+        $this->set("albumReviewSnapshot",  $data["AlbumReviewSnapshot"]);                
         
         $this->setPageTitle(array($data["Album"]["name"], $data["Artist"]["name"]));
         $this->setPageMeta(array(

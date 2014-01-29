@@ -10,26 +10,27 @@ class AlbumReviewSnapshot extends TableSnapshot
     public function getCurve($albumId, $resolution = 100, $timestamp = 0)
     {
         $albumInfo = $this->Album->find("first", array("conditions" => array("Album.id" => $albumId)));
-        $curveData = $this->getRawCurveData($timestamp); 
         $curve = array();
-        $score      = $this->compileScore($curveData);      
-        $split      = $this->getRawSplitData($score, $timestamp);
+        $curveData = $this->getRawCurveData($timestamp); 
+        $score      = $this->compileScore($curveData); 
+        $splitData  = $this->getRawSplitData($score, $timestamp);
         $review     = new ReviewFrames();
         
         foreach($albumInfo["Tracks"] as $track)
         {
             $trackResolution    =  ((int)$track["duration"] / (int)$albumInfo["Album"]["duration"]) * $resolution;
             $ppf                = $this->resolutionToPositionsPerFrames((int)$track["duration"], $trackResolution);
-            $curve[$track["title"]] = (new ReviewFrames())->roundReviewFramesSpan( $this->_getTrackCurveSpan($curveData, $track["id"]), $ppf, $trackResolution);
+            //$curve[$track["title"]] = (new ReviewFrames())->roundReviewFramesSpan( $this->_getTrackCurveSpan($curveData, $track["id"]), $ppf, $trackResolution);
+            $curve = array_merge($curve, $review->roundReviewFramesSpan( $this->_getTrackCurveSpan($curveData, $track["id"]), $ppf, $trackResolution));
         }
-        
+                
         return array(
-            "curve"         => json_encode($curve), 
+            "curve"         => $curve, 
             "ppf"           => $this->resolutionToPositionsPerFrames((int)$albumInfo["Album"]["duration"], $resolution),
             "score"         => $score,
             "split" => array(
-                "min" => $review->roundReviewFramesSpan($split["min"], $ppf, $resolution),
-                "max" => $review->roundReviewFramesSpan($split["max"], $ppf, $resolution)
+                "min" => $review->roundReviewFramesSpan($splitData["min"], $ppf, $resolution),
+                "max" => $review->roundReviewFramesSpan($splitData["max"], $ppf, $resolution)
             )
         );
     }
@@ -50,8 +51,7 @@ class AlbumReviewSnapshot extends TableSnapshot
         $startIdx = null;
         $count = 0;
         foreach($reviewFrames as $idx => $frame)
-        {
-            
+        {            
             if(is_null($startIdx) && $frame["ReviewFrames"]["track_id"] === $trackId)
             {
                 $startIdx = $idx;

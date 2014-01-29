@@ -35,7 +35,7 @@ class TableSnapshot extends AppModel
     public function getRawCurveData($timestamp = 0, $extraConditions = array())
     {
         $belongsToData  = $this->getBelongsToData();
-        $belongsToLabel = strtolower($this->_getBelongToAlias()) . "_id";
+        $belongsToLabel = strtolower($this->getBelongsToAlias()) . "_id";
         $belongsToId    = (int)$belongsToData["id"];
         
         $conditions = array_merge($extraConditions, array(
@@ -49,7 +49,7 @@ class TableSnapshot extends AppModel
     public function getRawSplitData($threshold, $timestamp = 0, $extraConditions = array())
     {
         $belongsToData  = $this->getBelongsToData();
-        $belongsToLabel = strtolower($this->_getBelongToAlias()) . "_id";
+        $belongsToLabel = strtolower($this->getBelongsToAlias()) . "_id";
         $belongsToId    = (int)$belongsToData["id"];
         $reviews        = new ReviewFrames();
         
@@ -58,11 +58,11 @@ class TableSnapshot extends AppModel
             "ReviewFrames.created >"        => $timestamp
         ));     
         
-        $return = array();
+        //$return = array();
         $avgMax = $reviews->getRawCurve(array_merge($conditions, array("ReviewFrames.groove >" => $threshold)));
         $avgMin = $reviews->getRawCurve(array_merge($conditions, array("ReviewFrames.groove <" => $threshold)));
-        $len = count($avgMax);        
-        $i = 0;
+        //$len = count($avgMax);        
+        //$i = 0;
         
         return array("min" => $avgMin, "max" => $avgMax);
         
@@ -115,7 +115,7 @@ class TableSnapshot extends AppModel
      */
     public function getAppreciation($belongsToId, $timestamp = 0)
     {                
-        $belongsToAlias = strtolower($this->_getBelongToAlias() . "_id");
+        $belongsToAlias = strtolower($this->getBelongsToAlias() . "_id");
         return (new ReviewFrames())->getAppreciation("$belongsToAlias = $belongsToId AND created > $timestamp");
     }        
     
@@ -151,7 +151,7 @@ class TableSnapshot extends AppModel
      */
     public function getUserAppreciation($belongsToId, $userId, $timestamp = 0)
     {                
-        $belongsToAlias = strtolower($this->_getBelongToAlias() . "_id");
+        $belongsToAlias = strtolower($this->getBelongsToAlias() . "_id");
         return (new ReviewFrames())->getAppreciation("user_id = $userId AND $belongsToAlias = $belongsToId AND created > $timestamp");
     }        
         
@@ -188,7 +188,7 @@ class TableSnapshot extends AppModel
      */
     public function getBelongsToData()
     {
-        return $this->data[$this->_getBelongToAlias()];
+        return $this->data[$this->getBelongsToAlias()];
     }
     
     /**
@@ -200,7 +200,7 @@ class TableSnapshot extends AppModel
     {
         $extras = array();
                 
-        $belongsToAlias = $this->_getBelongToAlias();
+        $belongsToAlias = $this->getBelongsToAlias();
         $belongsToData  = $this->getBelongsToData();        
         
         $extras["lastsync"]  = time();
@@ -258,10 +258,25 @@ class TableSnapshot extends AppModel
     {
         $saveArray = array_merge($appreciation, $this->getExtraSaveFields());
         
-        $saveArray["snapshot_ppf"]      = $curve["ppf"];
-        $saveArray["curve_snapshot"]    = $curve["curve"];
-        $saveArray["score_snapshot"]    = $curve["score"];
-        $saveArray["range_snapshot"]    = $curve["split"];
+        if(array_key_exists("ppf", $curve))
+        {
+            $saveArray["snapshot_ppf"]      = $curve["ppf"];
+        }
+        
+        if(array_key_exists("curve", $curve))
+        {
+            $saveArray["curve_snapshot"]    = $curve["curve"];
+        }
+        
+        if(array_key_exists("score", $curve))
+        {
+            $saveArray["score_snapshot"]    = $curve["score"];
+        }
+        
+        if(array_key_exists("split", $curve))
+        {
+            $saveArray["range_snapshot"]    = $curve["split"];
+        }
                 
         if(isset($saveArray["curve_snapshot"]) && !is_string($saveArray["curve_snapshot"])) 
         {
@@ -281,7 +296,7 @@ class TableSnapshot extends AppModel
      * Expects that the object only belongs to one parent object.
      * @return string The name of the object.
      */
-    private function _getBelongToAlias()
+    public function getBelongsToAlias()
     {
         $belongsAliases = array_keys($this->belongsTo);
         return $belongsAliases[0];

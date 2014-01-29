@@ -22,24 +22,27 @@ $(function(){
     var box = $(".expandable");
     if(box.length > 0)
     {
-        var height = box.innerHeight(),
-            maxHeight = 200,
-            tpl = '<ul class="expander">' +
-                '<li class="more">more</li>' +
-                '<li class="less">less</li>' +
-            '</ul>';
+        $(".expandable").each(function(){
+            var parent = $(this),
+                height = box.innerHeight(),
+                maxHeight = 200,
+                tpl = '<ul class="expander">' +
+                    '<li class="more">more</li>' +
+                    '<li class="less">less</li>' +
+                '</ul>';
 
-        if(height > maxHeight)
-        {
-            box.addClass("expanded collapsed");           
-            box.append(tpl);
+            if(height > maxHeight)
+            {
+                parent.addClass("collapsed");           
+                parent.append(tpl);
+                parent.find(".expander li").click(function(event){            
+                    var el = $(event.target);
+                    if(el.hasClass("more")) parent.removeClass("collapsed");
+                    if(el.hasClass("less")) parent.addClass("collapsed");
+                });
 
-            box.click(function(event){            
-                var el = $(event.target);
-                if(el.hasClass("more") || el.hasClass("less")) box.toggleClass("collapsed");
-            });
-
-        }   
+            }   
+        });
     }
     
     // Notifier util

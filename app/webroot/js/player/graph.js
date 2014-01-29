@@ -53,7 +53,6 @@
                 _drawJoints.call(this, this.config.subs_curve_snapshot, "avg", '#4285f4');
                 _drawCircles.call(this, this.config.subs_curve_snapshot, "avg", '#4285f4');                
             }
-            
         },
         
         getContextSizes : function()
@@ -83,25 +82,37 @@
                 context = this.config.context;
             
             context.beginPath();
+            context.lineWidth = .5;
+            context.strokeStyle = '#aaa';
+            context.shadowOffsetX = 0;
+            context.shadowOffsetY = 0;
+            context.shadowBlur = 0;
             context.moveTo(10, this.config.sizes.height / 2);
             context.lineTo(this.config.sizes.width, height / 2);
-            context.lineWidth = .5;
-            context.strokeStyle = '#aaa';
             context.stroke();
+            context.closePath();
             
             context.beginPath();
+            context.lineWidth = .5;
+            context.strokeStyle = '#aaa';
+            context.shadowOffsetX = 0;
+            context.shadowOffsetY = 0;
+            context.shadowBlur = 0;
             context.moveTo(0,  0);
             context.lineTo(this.config.sizes.width, 0);
+            context.stroke();
+            context.closePath();
+            
+            context.beginPath();            
             context.lineWidth = .5;
             context.strokeStyle = '#aaa';
-            context.stroke();
-            context.beginPath();
-            
+            context.shadowOffsetX = 0;
+            context.shadowOffsetY = 0;
+            context.shadowBlur = 0;
             context.moveTo(0, this.config.sizes.height);
             context.lineTo(this.config.sizes.width, this.config.sizes.height);
-            context.lineWidth = .5;
-            context.strokeStyle = '#aaa';
             context.stroke();
+            context.closePath();
                 
         },
         
@@ -112,18 +123,27 @@
             context.beginPath();
             context.fillStyle = '#aaa';
             context.textBaseline = 'middle';
+            context.shadowOffsetX = 0;
+            context.shadowOffsetY = 0;
+            context.shadowBlur = 0;
             context.fillText("0", 0, this.config.sizes.height / 2);
             context.closePath();
 
             context.beginPath();
             context.fillStyle = '#aaa';
             context.textBaseline = 'top';
+            context.shadowOffsetX = 0;
+            context.shadowOffsetY = 0;
+            context.shadowBlur = 0;
             context.fillText("+1", 0, 5);
-                context.closePath();
+            context.closePath();
 
             context.beginPath();
             context.fillStyle = '#aaa';
             context.textBaseline = 'bottom';
+            context.shadowOffsetX = 0;
+            context.shadowOffsetY = 0;
+            context.shadowBlur = 0;
             context.fillText("-1", 0, this.config.sizes.height - 5);
             context.closePath();
         }        
@@ -158,11 +178,15 @@
                 yPos = height * (1-datasource[i][which]);  
                 //yPos += dotSize;
                 context.beginPath();
-                context.arc(currentPoint, yPos , dotSize, 0, twopi, false);
                 context.fillStyle = color;
-                context.fill();
                 context.lineWidth = .5;
                 context.strokeStyle = color;
+                context.shadowColor = "rgba( 0, 0, 0, 0.3 )";
+                context.shadowOffsetX = 1;
+                context.shadowOffsetY = 1;
+                context.shadowBlur = 3;
+                context.arc(currentPoint, yPos , dotSize, 0, twopi, false);
+                context.fill();
                 context.stroke();   
                 context.closePath();                    
             }   
@@ -192,10 +216,15 @@
             if(prevYPos > 0 && yPos > 0)
             {
                 context.beginPath();
-                context.moveTo(currentPoint - distanceBetweenPoints- (dotSize / 2), prevYPos);
-                context.lineTo(currentPoint - (dotSize / 2), yPos);
                 context.lineWidth = 1;
                 context.strokeStyle = color;
+                context.fillStyle = color;
+                context.shadowColor = "rgba( 0, 0, 0, 0.3 )";
+                context.shadowOffsetX = 1;
+                context.shadowOffsetY = 1;
+                context.shadowBlur = 3;
+                context.moveTo(currentPoint - distanceBetweenPoints- (dotSize / 2), prevYPos);
+                context.lineTo(currentPoint - (dotSize / 2), yPos);
                 context.stroke();
                 context.closePath();
             }
@@ -217,7 +246,6 @@
             height = this.config.sizes.height,
             currentPoint = (dotSize / 2) + 15;
 
-
         if(datasource[i])
         {
             yPos = height * (1-datasource[i]["max"][which]);
@@ -226,6 +254,10 @@
         context.beginPath();
         context.fillStyle = color;
         context.opacity = .4;
+        context.shadowColor = "rgba( 0, 0, 0, 0.3 )";
+        context.shadowOffsetX = 1;
+        context.shadowOffsetY = 1;
+        context.shadowBlur = 3;
         context.moveTo(currentPoint - distanceBetweenPoints- (dotSize / 2), yPos);
                             
         for( ; i < len; i++, yPos = 0)
@@ -257,10 +289,9 @@
             currentPoint -= distanceBetweenPoints;
         }
         
-        context.closePath();
+        
         context.fill();
-        
-        
+        context.closePath();
         
         /*
         var context = this.config.context,

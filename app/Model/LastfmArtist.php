@@ -3,8 +3,7 @@
 class LastfmArtist extends AppModel
 {	
 	public $belongsTo = array('Artist');   
-    
-    
+        
     public function requiresUpdate($data = null)
     {
         if(!is_null($data)) $this->data = $data;
@@ -15,7 +14,7 @@ class LastfmArtist extends AppModel
     {
         $artistId       = $data["Artist"]["id"];
         $lastfmArtistId = $data["LastfmArtist"]["id"];     
-        debug($data);
+        
         $newRow         = array(
             "id" => $lastfmArtistId,
             "artist_id" => $artistId,

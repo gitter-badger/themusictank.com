@@ -1,10 +1,5 @@
 <article class="cols">
-    <div class="col col-1-2">        
-        <?php if(!is_null($album["image"])) : ?>
-            <?php echo $this->Html->image($album["image"], array("alt" => $album["name"], "class" => "thumbnail")); ?>
-        <?php endif; ?>
-    </div>
-    <div class="col col-2-2">        
+    <div class="col col-1-2">    
         <header>
             <h2><?php echo $album["name"]; ?></h2>
             <h3>
@@ -12,9 +7,20 @@
                 <?php echo $this->Html->link($artist["name"], array('controller' => 'artists', 'action' => 'view', $artist["slug"])); ?>    
                 <?php echo __("released"); ?> <?php echo date("F j Y", $album["release_date"]); ?>
             </h3>
-        </header>
+        </header>      
+        
+        <?php if(!is_null($album["image"])) : ?>
+            <?php echo $this->Html->image($album["image"], array("alt" => $album["name"], "class" => "thumbnail")); ?>
+        <?php endif; ?>
+        
+        <div class="description expandable">
+            <div class="wrapper">
+                <p><?php echo nl2br($lastfmAlbum["wiki"]); ?></p>
+            </div>
+        </div>
+    </div>
+    <div class="col col-2-2">      
 
-        <p><?php echo nl2br($lastfmAlbum["wiki"]); ?></p>
         
         <?php if(count($tracks) > 0) : ?> 
             <ol class="tracks">            
@@ -32,28 +38,37 @@
     </div>    
 </article>
 
+
+<?php echo $this->element("albumGraph"); ?>
+
+
 <section class="statistics">
-    <p><?php echo __("Average user score"); ?> <?php echo $this->Chart->formatScore($snapshot["score_snapshot"]); ?></p>
-    <p><?php echo __("Metacritic score"); ?> <?php echo $this->Chart->formatScore($snapshot["metacritic_score"]); ?></p>
-    
-    <?php $enjoymentTimes =  $this->Chart->getEnjoymentTime($snapshot, (int)$album["duration"]); ?>
-    <p><?php echo __("Enjoyment"); ?> <?php echo $snapshot["liking_pct"]; ?> %</p>
-    <p><?php echo __("Disliking"); ?> <?php echo $snapshot["disliking_pct"]; ?> %</p>
+    <h3><?php echo __("Everyone"); ?></h3>
+    <p><?php echo __("Average user score"); ?> <?php echo $this->Chart->formatScore($albumReviewSnapshot["score_snapshot"]); ?></p>        
+    <?php $enjoymentTimes =  $this->Chart->getEnjoymentTime($albumReviewSnapshot, (int)$track["duration"]); ?>
+    <p><?php echo __("Metacritic score"); ?> <?php echo $this->Chart->formatScore($albumReviewSnapshot["metacritic_score"]); ?></p>
+    <p><?php echo __("Enjoyment"); ?> <?php echo $albumReviewSnapshot["liking_pct"]; ?> %</p>
+    <p><?php echo __("Disliking"); ?> <?php echo $albumReviewSnapshot["disliking_pct"]; ?> %</p>
     <p><?php echo __("Enjoyment time"); ?> <?php echo $enjoymentTimes["liking"]; ?></p>
     <p><?php echo __("Time disliked"); ?> <?php echo $enjoymentTimes["disliking"]; ?></p>
-    <p><?php echo __("Total time");?> <?php echo date("i:s", (int)$album["duration"]); ?></p>
+    <?php echo $this->Chart->getBigPie("track", $track["slug"], $albumReviewSnapshot); ?>
 </section>
 
-<section class="graphs cols">
-    <div class="col col-1-3">
-        <h3><?php echo __("Appreciation"); ?></h3>
-        <?php echo $this->Chart->getBigPie("album", $album["slug"], $snapshot); ?>
-    </div>
-    <div class="col col-23-3">    
-        <h3><?php echo __("Groove across tracks"); ?></h3>        
-        <?php echo $this->Chart->getAlbumChart($album["slug"], $snapshot); ?>    
-    </div>
+<?php if(isset($userAlbumReviewSnapshot)) : ?>
+
+<section class="statistics subscribers">
+    <h3><?php echo __("People you are subscribed to"); ?></h3>
+    <p><?php echo __("Average subscriber score"); ?> <?php echo $this->Chart->formatScore($userAlbumReviewSnapshot["score_snapshot"]); ?></p>        
+    <?php $enjoymentTimes =  $this->Chart->getEnjoymentTime($userAlbumReviewSnapshot, (int)$track["duration"]); ?>
+    <p><?php echo __("Enjoyment"); ?> <?php echo $userAlbumReviewSnapshot["liking_pct"]; ?> %</p>
+    <p><?php echo __("Disliking"); ?> <?php echo $userAlbumReviewSnapshot["disliking_pct"]; ?> %</p>
+    <p><?php echo __("Enjoyment time"); ?> <?php echo $enjoymentTimes["liking"]; ?></p>
+    <p><?php echo __("Time disliked"); ?> <?php echo $enjoymentTimes["disliking"]; ?></p>
+    <?php echo $this->Chart->getBigPie("track", $track["slug"], $userAlbumReviewSnapshot); ?>
 </section>
+
+<?php endif; ?>
+
 
 <p class="credits">
     <?php echo __("Album description courtesy of"); ?> <?php echo $this->Html->link("Last.fm", "http://www.last.fm/", array("target" => "_blank")); ?>. 

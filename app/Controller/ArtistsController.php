@@ -65,18 +65,28 @@ class ArtistsController extends AppController {
         if($needsRefresh)
         {
             $data = $this->Artist->findBySlug($artistSlug);
-        }          
+        }     
         
         if($this->Artist->ArtistReviewSnapshot->requiresUpdate($data))
         {
             $data["ArtistReviewSnapshot"] = $this->Artist->ArtistReviewSnapshot->snap();
         }
+        
+        if($this->userIsLoggedIn())
+        {             
+            $data["UserArtistReviewSnapshot"] = $this->User->UserArtistReviewSnapshot->requiresUpdate($data) ?
+                $this->User->UserArtistReviewSnapshot->snap() :
+                $this->User->UserArtistReviewSnapshot->getByArtistId($data["Artist"]["id"]);
+                        
+            $this->set("userArtistReviewSnapshot", $data["UserArtistReviewSnapshot"]);  
+        }
+        
 
         $this->set("artist",        $data["Artist"]);
         $this->set("rdioArtist",    $data["RdioArtist"]);
         $this->set("lastfmArtist",  $data["LastfmArtist"]);
         $this->set("albums",        $data["Albums"]);
-        $this->set("snapshot",      $data["ArtistReviewSnapshot"]);
+        $this->set("artistReviewSnapshot",      $data["ArtistReviewSnapshot"]);
                         
         $this->setPageTitle(array($data["Artist"]["name"]));        
         $this->setPageMeta(array(

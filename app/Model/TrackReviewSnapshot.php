@@ -18,7 +18,7 @@ class TrackReviewSnapshot extends TableSnapshot
         
         return array(
             "ppf"   => $ppf,
-            "curve" => (new ReviewFrames())->roundReviewFramesSpan($curveData, $ppf, $resolution),
+            "curve" => $review->roundReviewFramesSpan($curveData, $ppf, $resolution),
             "score" => $score,
             "split" => array(
                 "min" => $review->roundReviewFramesSpan($split["min"], $ppf, $resolution),

@@ -98,11 +98,11 @@ class ReviewFrames extends AppModel
             "fields" => array( 
                 "AVG(groove) as avg_groove",
                 "(AVG(groove) + AVG(groove) * AVG(multiplier)) as calc_groove",                
-               // "AVG(suckpowering) as avg_suckpowering", 
-               // "AVG(starpowering) as avg_starpowering",
-               // "ReviewFrames.album_id as album_id", 
-               // "ReviewFrames.track_id as track_id",
-               // "ReviewFrames.position as position"
+                "AVG(suckpowering) as avg_suckpowering", 
+                "AVG(starpowering) as avg_starpowering",
+                //"ReviewFrames.album_id as album_id", 
+                "ReviewFrames.track_id as track_id"
+                //"ReviewFrames.position as position"
             ),
             "group" => array("ReviewFrames.album_id", "ReviewFrames.track_id", "position")
         ));
@@ -162,16 +162,16 @@ class ReviewFrames extends AppModel
     {
         $curve = array_fill(null, $resolution, null);
         $count = count($curveData);
-                
+               
         foreach($curve as $idx => $point)
         {
             $skippedFrames = 0;
             $avg = 0;
-            $max = 0;
-            $min = 0;
+            //$max = 0;
+           // $min = 0;
             $calc = 0;
-            $avgStarpowering = 0;
-            $avgSuckpowering = 0;
+            //$avgStarpowering = 0;
+           // $avgSuckpowering = 0;
             
             while($skippedFrames < $positionsPerFrame && $count > $idx)
             {
@@ -181,6 +181,7 @@ class ReviewFrames extends AppModel
                 $calc               += $curveData[$idx][0]["calc_groove"];
                // $avgStarpowering    += $curveData[$idx][0]["avg_starpowering"];
                // $avgSuckpowering    += $curveData[$idx][0]["avg_suckpowering"];
+                
                 $skippedFrames++;
             }
                        
@@ -189,14 +190,14 @@ class ReviewFrames extends AppModel
             {
                 $curve[$idx] = array(                    
                    // "min" => $min                / $skippedFrames,
-                    "avg" => $avg                / $skippedFrames,
+                    "avg" => round($avg                / $skippedFrames, 3),
                    // "max" => $max                / $skippedFrames,
-                    "calc" => $calc               / $skippedFrames,
+                    "calc" => round($calc               / $skippedFrames, 3)
                     //"sp" => $avgStarpowering    / $skippedFrames,
                     //"ss" => $avgSuckpowering    / $skippedFrames
                 );
             }
-        }        
+        }       
         
         return $curve;
     }

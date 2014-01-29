@@ -13,6 +13,7 @@ class Album extends AppModel
         return true;
     }
     
+    
     /**
      * Filters Rdio albums not currently saved on TMT found in $albums
      * @param integer $artistId

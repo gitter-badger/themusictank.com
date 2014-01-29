@@ -17,8 +17,9 @@ class TracksController extends AppController {
         
         $data = $this->Track->getBySlugContained($trackSlug);
         $needsRefresh = false;
-                
-        if($this->Track->LastfmTrack->requiresUpdate($data))
+            
+        $this->Track->LastfmTrack->data = $data;
+        if($this->Track->LastfmTrack->requiresUpdate())
         {   
             $needsRefresh = $this->requestAction(array("controller" => "tracks", "action" => "syncTrackDetails"));
         }
@@ -27,32 +28,15 @@ class TracksController extends AppController {
         {
             $data = $this->Track->getBySlugContained($trackSlug);
         }
-        
-        if($this->Track->TrackReviewSnapshot->requiresUpdate($data))
-        {            
-            $data["TrackReviewSnapshot"] = $this->Track->TrackReviewSnapshot->snap();            
-        }
-        
-        // Todo : handle in model
-        if(is_string($data["TrackReviewSnapshot"]["curve_snapshot"]))
-        {
-            $data["TrackReviewSnapshot"]["curve_snapshot"] = json_decode($data["TrackReviewSnapshot"]["curve_snapshot"]);
-            $data["TrackReviewSnapshot"]["range_snapshot"] = json_decode($data["TrackReviewSnapshot"]["range_snapshot"]);
-        }                        
+                
+        $this->Track->TrackReviewSnapshot->data = $data;
+        $data["TrackReviewSnapshot"] = $this->Track->TrackReviewSnapshot->getSnapshot();   
         
         if($this->userIsLoggedIn())
-        {             
-            $data["UserTrackReviewSnapshot"] = $this->User->UserTrackReviewSnapshot->requiresUpdate($data) ?
-                $this->User->UserTrackReviewSnapshot->snap() :
-                $this->User->UserTrackReviewSnapshot->getByTrackId($data["Track"]["id"]);
-                        
-            // Todo : handle in model
-            if(is_string($data["UserTrackReviewSnapshot"]["curve_snapshot"]))
-            {
-                $data["UserTrackReviewSnapshot"]["curve_snapshot"] = json_decode($data["UserTrackReviewSnapshot"]["curve_snapshot"]);
-                $data["UserTrackReviewSnapshot"]["range_snapshot"] = json_decode($data["UserTrackReviewSnapshot"]["range_snapshot"]);
-            }   
-            $this->set("userTrackReviewSnapshot", $data["UserTrackReviewSnapshot"]);  
+        {     
+            $this->User->UserTrackReviewSnapshot->data = $data;
+            $data["UserTrackReviewSnapshot"] = $this->User->UserTrackReviewSnapshot->getSnapshot();
+            $this->set("userTrackReviewSnapshot", $data["UserTrackReviewSnapshot"]); 
         }
         
         $this->set("track", $data["Track"]);    
@@ -60,14 +44,12 @@ class TracksController extends AppController {
         $this->set("lastfmTrack", $data["LastfmTrack"]);    
         $this->set("album", $data["Album"]);     
         $this->set("artist", $data["Album"]["Artist"]);  
-        $this->set("trackReviewSnapshot", $data["TrackReviewSnapshot"]);     
-                                
-        
+        $this->set("trackReviewSnapshot", $data["TrackReviewSnapshot"]);        
         $this->set("trackChartConfig",  array(
             "track" => $data["Track"], 
             "rdioTrack" => $data["RdioTrack"]["id"], 
             "player" => $this->preferredPlayer, 
-            "userTrackReviewSnapshot" => $data["UserTrackReviewSnapshot"],
+            "userTrackReviewSnapshot" => array_key_exists("UserTrackReviewSnapshot", $data) ? $data["UserTrackReviewSnapshot"] : null,
             "trackReviewSnapshot" => $data["TrackReviewSnapshot"]
         ));
                 

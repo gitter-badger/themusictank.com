@@ -4,28 +4,32 @@ App::uses('CakeSession', 'Model/Datasource');
 
 class UserReviewSnapshot extends TableSnapshot
 {	                  
-    public function requiresUpdate($data = null)
+    public function requiresUpdate()
     {        
-        if(!is_null($data)) $this->data = $data;
         $userId = CakeSession::read('Auth.User.User.id');
-        if($userId) return $this->_isExpired($userId, $data[$this->getBelongsToAlias()]["id"]);
+        if($userId) return $this->_isExpired($userId, $this->data[$this->getBelongsToAlias()]["id"]);
         return false;
     }    
-    
-    public function getByBelongsToId($objId)
-    {
-         $data = $this->find("first", array(
-            "conditions" => array(
-                "user_id"   => CakeSession::read('Auth.User.User.id'), 
-                strtolower($this->getBelongsToAlias()) . "_id"  => $objId,
-                "lastsync > " => time() - (HOUR*12)
-            ),
-            "fields" => array($this->alias . ".*")
-        ));
-         
-        return $data[$this->alias];
-    }      
+            
+    /**
+     * Creates or updates a model's snapshot
+     * @return boolean True on success, false on failure
+     */ 
+    public function getSnapshot()
+    {           
+        if(is_null($this->data))
+        {
+            throw new CakeException("Model has no ::data values preset.");
+        }
+                
+        if($this->requiresUpdate())
+        {
+            return $this->snap();   
+        }     
         
+        return $this->_getByBelongsToId($this->data[$this->getBelongsToAlias()]["id"]);
+    }       
+            
     public function getBelongsToData()
     {
         return array(
@@ -53,6 +57,20 @@ class UserReviewSnapshot extends TableSnapshot
         return $extras;
     }
         
+    private function _getByBelongsToId($objId)
+    {
+         $data = $this->find("first", array(
+            "conditions" => array(
+                "user_id"   => CakeSession::read('Auth.User.User.id'), 
+                strtolower($this->getBelongsToAlias()) . "_id"  => $objId,
+                "lastsync > " => time() - (HOUR*12)
+            ),
+            "fields" => array($this->alias . ".*")
+        ));
+         
+        return $data[$this->alias];
+    }      
+    
     protected function _getId($userId, $objId)
     {
         return $this->find("first", array(
@@ -66,11 +84,11 @@ class UserReviewSnapshot extends TableSnapshot
     
     protected function _isExpired($userId, $objId)
     {
-        return !$this->find("count", array(
+        return $this->find("count", array(
             "conditions" => array(
                 "user_id"   => $userId,
                 strtolower($this->getBelongsToAlias()) . "_id"  => $objId,
-                "lastsync > " => time() - (HOUR*12)
+                "lastsync < " => time() - (HOUR*12)
             )
         )) > 0;
     }    

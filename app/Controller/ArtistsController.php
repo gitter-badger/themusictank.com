@@ -45,7 +45,8 @@ class ArtistsController extends AppController {
         $data = $this->Artist->findBySlug($artistSlug);
         $needsRefresh = false;
         
-        if($this->Artist->RdioArtist->requiresUpdate($data))
+        $this->Artist->RdioArtist->data = $data;
+        if($this->Artist->RdioArtist->requiresUpdate())
         {
             $needsRefresh = $this->requestAction(array("controller" => "artists", "action" => "syncArtistDiscography"));
         }
@@ -53,7 +54,8 @@ class ArtistsController extends AppController {
         // There is a bug when sunc artists details creates a row.
         // it doesn' add the new lasfmartist.id in the array and
         // primary key fails. something like that.
-        if($this->Artist->LastfmArtist->requiresUpdate($data))
+        $this->Artist->LastfmArtist->data = $data;
+        if($this->Artist->LastfmArtist->requiresUpdate())
         {
             $details            = $this->requestAction(array("controller" => "artists", "action" => "syncArtistDetails"));
             // Quick reasign the data on the model since the previous request cleared it.
@@ -66,21 +68,18 @@ class ArtistsController extends AppController {
         {
             $data = $this->Artist->findBySlug($artistSlug);
         }     
-        
-        if($this->Artist->ArtistReviewSnapshot->requiresUpdate($data))
-        {
-            $data["ArtistReviewSnapshot"] = $this->Artist->ArtistReviewSnapshot->snap();
-        }
-        
+                
+        $this->Artist->ArtistReviewSnapshot->data = $data;
+        $data["ArtistReviewSnapshot"] = $this->Artist->ArtistReviewSnapshot->getSnapshot();     
+          
+        /*
         if($this->userIsLoggedIn())
-        {             
-            $data["UserArtistReviewSnapshot"] = $this->User->UserArtistReviewSnapshot->requiresUpdate($data) ?
-                $this->User->UserArtistReviewSnapshot->snap() :
-                $this->User->UserArtistReviewSnapshot->getByArtistId($data["Artist"]["id"]);
-                        
-            $this->set("userArtistReviewSnapshot", $data["UserArtistReviewSnapshot"]);  
-        }
-        
+        {
+            $this->User->UserArtistReviewSnapshot->data = $data;
+            $data["UserArtistReviewSnapshot"] = $this->User->UserArtistReviewSnapshot->getSnapshot();
+            $this->set("userArtistReviewSnapshot", $data["UserArtistReviewSnapshot"]);
+        }   
+         */
 
         $this->set("artist",        $data["Artist"]);
         $this->set("rdioArtist",    $data["RdioArtist"]);

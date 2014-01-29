@@ -160,7 +160,7 @@ class ReviewFrames extends AppModel
      */
     public function roundReviewFramesSpan($curveData, $positionsPerFrame, $resolution)
     {
-        $curve = array_fill(null, $resolution, null);
+        $curve = array_fill(0, $resolution, null);
         $count = count($curveData);
                
         foreach($curve as $idx => $point)

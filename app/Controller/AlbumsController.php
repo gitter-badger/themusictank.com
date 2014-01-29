@@ -23,12 +23,14 @@ class AlbumsController extends AppController {
         $data = $this->Album->findBySlug($albumSlug);
         $needsRefresh = false;
         
-        if($this->Album->RdioAlbum->requiresUpdate($data))
+        $this->Album->RdioAlbum->data = $data;
+        if($this->Album->RdioAlbum->requiresUpdate())
         {
             $needsRefresh = $this->requestAction(array("controller" => "albums", "action" => "syncAlbumTracks"));
         }
         
-        if($this->Album->LastfmAlbum->requiresUpdate($data))
+        $this->Album->LastfmAlbum->data = $data;
+        if($this->Album->LastfmAlbum->requiresUpdate())
         {
             $needsRefresh = $this->requestAction(array("controller" => "albums", "action" => "syncAlbumDetails")) && $needsRefresh;
         }
@@ -36,33 +38,15 @@ class AlbumsController extends AppController {
         if($needsRefresh)
         {
             $data = $this->Album->findBySlug($albumSlug);
-        }
+        }        
         
-        if($this->Album->AlbumReviewSnapshot->requiresUpdate($data))
-        {
-            $data["AlbumReviewSnapshot"] = $this->Album->AlbumReviewSnapshot->snap();   
-        }
-        
-        
-        // Todo : handle in model
-        if(is_string($data["AlbumReviewSnapshot"]["curve_snapshot"]))
-        {
-            $data["AlbumReviewSnapshot"]["curve_snapshot"] = json_decode($data["AlbumReviewSnapshot"]["curve_snapshot"]);
-            $data["AlbumReviewSnapshot"]["range_snapshot"] = json_decode($data["AlbumReviewSnapshot"]["range_snapshot"]);
-        }          
+        $this->Album->AlbumReviewSnapshot->data = $data;
+        $data["AlbumReviewSnapshot"] = $this->Album->AlbumReviewSnapshot->getSnapshot();                
         
         if($this->userIsLoggedIn())
-        {             
-            $data["UserAlbumReviewSnapshot"] = $this->User->UserAlbumReviewSnapshot->requiresUpdate($data) ?
-                $this->User->UserAlbumReviewSnapshot->snap() :
-                $this->User->UserAlbumReviewSnapshot->getByAlbumId($data["Album"]["id"]);
-                        
-            // Todo : handle in model
-            if(is_string($data["UserAlbumReviewSnapshot"]["curve_snapshot"]))
-            {
-                $data["UserAlbumReviewSnapshot"]["curve_snapshot"] = json_decode($data["UserAlbumReviewSnapshot"]["curve_snapshot"]);
-                $data["UserAlbumReviewSnapshot"]["range_snapshot"] = json_decode($data["UserAlbumReviewSnapshot"]["range_snapshot"]);
-            }   
+        {   
+            $this->User->UserAlbumReviewSnapshot->data = $data;
+            $data["UserAlbumReviewSnapshot"] = $this->User->UserAlbumReviewSnapshot->getSnapshot();
             $this->set("userAlbumReviewSnapshot", $data["UserAlbumReviewSnapshot"]);  
         }
                 

@@ -20,7 +20,7 @@ class AjaxController extends AppController {
      */
     public function whatsup()
     {       
-        $this->_setSessionNotifications();         
+        $this->set("notifications", $this->User->Notifications->findByUserId($this->getAuthUserId(), 5));    
         $this->render('dropdownnotifications');
     }
     
@@ -30,7 +30,7 @@ class AjaxController extends AppController {
     public function okstfu()
     {          
         $this->User->Notifications->markAsRead(time());     
-        $this->_setSessionNotifications();
+        $this->set("notifications", $this->User->Notifications->findByUserId($this->getAuthUserId(), 5));    
         $this->render('dropdownnotifications');
     }
         
@@ -47,8 +47,7 @@ class AjaxController extends AppController {
     }
            
     public function unfollow($userSlug)
-    {        
-        $this->layout   = "ajax";        
+    {              
         $relationExists = false;
 
         if($this->userIsLoggedIn())
@@ -58,10 +57,5 @@ class AjaxController extends AppController {
 
         $this->set("user", array("slug" => $userSlug, "currently_followed" => $relationExists)); 
     }
-    
-    private function _setSessionNotifications()
-    {
-        $this->set("notifications", $this->User->Notifications->findByUserId($this->getAuthUserId(), 5));            
-    }
-    
+        
 }

@@ -7,15 +7,11 @@ class UserAlbumReviewSnapshot extends UserReviewSnapshot
 	public $name        = 'UserAlbumReviewSnapshot';
     public $useTable    = 'user_album_review_snapshots';  
     public $belongsTo   = array('Album', 'User');
-          
-    public function getByAlbumId($albumId)
-    {
-        return $this->getByBelongsToId($albumId);
-    }
-        
+       
+    
     public function getCurve($albumId, $resolution = 100, $timestamp = 0)
     {
-        $albumInfo = $this->Album->find("first", array("conditions" => array("Album.id" => $albumId), "fields" => array("Album.duration", "Tracks.id", "Tracks.duration")));
+        $albumInfo = $this->Album->find("first", array("conditions" => array("Album.id" => $albumId)));
         $curveData = $this->getRawCurveData($timestamp); 
         $curve = array();
         $splitMin = array();

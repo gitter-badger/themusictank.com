@@ -7,7 +7,50 @@
 App::uses('ReviewFrames', 'Model');
 
 class TableSnapshot extends AppModel
-{	    
+{	   
+    
+    public function afterFind($results, $primary = false)
+    {
+        if(!array_key_exists("id", $results))
+        {
+            foreach($results as $idx => $row)
+            {   
+                if(array_key_exists($this->alias, $row))
+                { 
+                    if(is_string($row[$this->alias]["curve_snapshot"]))
+                    {   
+                        $results[$idx][$this->alias]["curve_snapshot"] = json_decode($row[$this->alias]["curve_snapshot"]);
+                    }                
+                    if(is_string($row[$this->alias]["range_snapshot"]))
+                    {   
+                        $results[$idx][$this->alias]["range_snapshot"] = json_decode($row[$this->alias]["range_snapshot"]);
+                    }
+                }
+            }        
+        }        
+        return $results;        
+    }
+    
+    /**
+     * Creates or updates a model's snapshot
+     * @return boolean True on success, false on failure
+     */ 
+    public function getSnapshot()
+    {           
+        if(is_null($this->data))
+        {
+            throw new CakeException("Model has no ::data values preset.");
+        }
+        
+        if($this->requiresUpdate())
+        {
+            return $this->snap();   
+        }     
+        
+        return $this->data[$this->alias];
+    }   
+    
+    
     /**
      * Creates or updates a model's snapshot
      * @return boolean True on success, false on failure
@@ -21,9 +64,8 @@ class TableSnapshot extends AppModel
      * Returns the whether or not the cached snapshot is still valid
      * @return boolean True if outdated, false if still ok
      */
-    public function requiresUpdate($data = null)
-    {        
-        if(!is_null($data)) $this->data = $data;
+    public function requiresUpdate()
+    {                
         return $this->data[$this->alias]["lastsync"] + 60*60*12 < time();
     }
     
@@ -58,31 +100,10 @@ class TableSnapshot extends AppModel
             "ReviewFrames.created >"        => $timestamp
         ));     
         
-        //$return = array();
         $avgMax = $reviews->getRawCurve(array_merge($conditions, array("ReviewFrames.groove >" => $threshold)));
         $avgMin = $reviews->getRawCurve(array_merge($conditions, array("ReviewFrames.groove <" => $threshold)));
-        //$len = count($avgMax);        
-        //$i = 0;
-        
-        return array("min" => $avgMin, "max" => $avgMax);
-        
-        /*
-        while($i < $len)
-        {
-            $return[$i] = array(
-                "min" => array(
-                    "avg"   => $avgMin[$i][0]["avg_groove"],
-                    "calc"  => $avgMin[$i][0]["calc_groove"]
-                ),
-                "max" => array(
-                    "avg"   => $avgMax[$i][0]["avg_groove"],
-                    "calc"  => $avgMax[$i][0]["calc_groove"]
-                )
-            );
-            $i++;
-        }
-        
-        return $return;*/
+                
+        return array("min" => $avgMin, "max" => $avgMax);        
     }    
     
     

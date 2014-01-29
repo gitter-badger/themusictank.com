@@ -7,6 +7,7 @@ class AlbumReviewSnapshot extends TableSnapshot
     public $useTable    = 'album_review_snapshots'; 
     public $belongsTo   = array('Album');
     
+    
     public function getCurve($albumId, $resolution = 100, $timestamp = 0)
     {
         $albumInfo = $this->Album->find("first", array("conditions" => array("Album.id" => $albumId)));

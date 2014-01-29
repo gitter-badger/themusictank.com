@@ -41,6 +41,7 @@ class ArtistReviewSnapshot extends TableSnapshot
         $score      = $this->compileScore($curveData);      
         
         return array(
+            "curve" => null,
             "score" => $score
         );
     }    

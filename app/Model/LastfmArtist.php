@@ -2,35 +2,50 @@
 
 class LastfmArtist extends AppModel
 {	
-	public $belongsTo = array('Artist');   
-        
-    public function requiresUpdate($data = null)
+	public $belongsTo = array('Artist');    
+    public $actsAs = array('Lastfm'); 
+            
+    public function updateCached()
     {
-        if(!is_null($data)) $this->data = $data;
+        if($this->requiresUpdate())
+        {   
+            $data = $this->data;
+            $infos = $this->getArtistBiography($data["Artist"]["name"]);
+            if($infos)
+            {
+                $this->_saveDetails($infos);
+            } 
+            
+            $ranks = $this->getArtistTopAlbums($data["Artist"]["name"]);
+            if($ranks)
+            {
+                $this->Artist->Albums->LastfmAlbum->data = $data;
+                $this->Artist->Albums->LastfmAlbum->saveNotableAlbums($ranks);
+            } 
+        }
+    }    
+    
+    public function requiresUpdate()
+    {
         return $this->data["LastfmArtist"]["lastsync"] + 60*60*24*5 < time();        
     }
     
-    public function saveDetails($data, $infos)
+    private function _saveDetails($infos)
     {
-        $artistId       = $data["Artist"]["id"];
-        $lastfmArtistId = $data["LastfmArtist"]["id"];     
+        $artistId       = $this->data["Artist"]["id"];
+        $lastfmArtistId = $this->data["LastfmArtist"]["id"];     
         
         $newRow         = array(
             "id" => $lastfmArtistId,
             "artist_id" => $artistId,
             "lastsync"  => time(),
-            "image"     => empty($infos->image[3]->{'#text'}) ? null : $this->getImageFromUrl($infos->image[3]->{'#text'}, $data["LastfmArtist"]["image"]),
+            "image"     => empty($infos->image[3]->{'#text'}) ? null : $this->getImageFromUrl($infos->image[3]->{'#text'}, $this->data["LastfmArtist"]["image"]),
             "image_src" => empty($infos->image[3]->{'#text'}) ? null : $infos->image[3]->{'#text'},
-            "biography" => empty($infos->bio->summary) ? __("Biography is not available at this time.") : $this->_cleanBioText($infos->bio->summary),
+            "biography" => empty($infos->bio->summary) ? __("Biography is not available at this time.") : $this->cleanLastFmWikiText($infos->bio->summary),
             "url"       => $infos->url
         );
             
         return $this->save($newRow);            
     }    
-    
-    private function _cleanBioText($text)
-    {
-        return trim(strip_tags(preg_replace('/Read more about .* on .*/', '', $text)));
-    }
     
 }

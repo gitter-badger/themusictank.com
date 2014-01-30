@@ -17,11 +17,11 @@ class TableSnapshot extends AppModel
             {   
                 if(array_key_exists($this->alias, $row))
                 { 
-                    if(is_string($row[$this->alias]["curve_snapshot"]))
+                    if(array_key_exists("curve_snapshot", $row[$this->alias]) && is_string($row[$this->alias]["curve_snapshot"]))
                     {   
                         $results[$idx][$this->alias]["curve_snapshot"] = json_decode($row[$this->alias]["curve_snapshot"]);
                     }                
-                    if(is_string($row[$this->alias]["range_snapshot"]))
+                    if(array_key_exists("range_snapshot", $row[$this->alias]) && is_string($row[$this->alias]["range_snapshot"]))
                     {   
                         $results[$idx][$this->alias]["range_snapshot"] = json_decode($row[$this->alias]["range_snapshot"]);
                     }
@@ -35,19 +35,17 @@ class TableSnapshot extends AppModel
      * Creates or updates a model's snapshot
      * @return boolean True on success, false on failure
      */ 
-    public function getSnapshot()
+    public function updateCached()
     {           
         if(is_null($this->data))
         {
-            throw new CakeException("Model has no ::data values preset.");
+            throw new CakeException("Model has no \$data values preset.");
         }
         
         if($this->requiresUpdate())
         {
-            return $this->snap();   
-        }     
-        
-        return $this->data[$this->alias];
+            $this->snap();   
+        }
     }   
     
     
@@ -66,7 +64,9 @@ class TableSnapshot extends AppModel
      */
     public function requiresUpdate()
     {                
-        return $this->data[$this->alias]["lastsync"] + 60*60*12 < time();
+        return 
+            (empty($this->data[$this->alias]["lastsync"])) && 
+            $this->data[$this->alias]["lastsync"] + 60*60*12 < time();
     }
     
     /**
@@ -241,7 +241,7 @@ class TableSnapshot extends AppModel
      * @return boolean True on success, false on failure
      */
     private function _createSnapshot()
-    {
+    {        
         $belongsToData  = $this->getBelongsToData();         
         $belongsToId    = (int)$belongsToData["id"];
         

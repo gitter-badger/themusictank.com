@@ -3,8 +3,10 @@
         "containerSelector" => ".graph-" . $album["slug"] . " canvas",
         "curve_snapshot" => $albumReviewSnapshot["curve_snapshot"],
         "range_snapshot" => $albumReviewSnapshot["range_snapshot"],
-        "subs_curve_snapshot" => isset($userAlbumReviewSnapshot) ? $userAlbumReviewSnapshot["curve_snapshot"] : null, 
-        "subs_range_snapshot" => isset($userAlbumReviewSnapshot) ? $userAlbumReviewSnapshot["range_snapshot"] : null
+        "subs_curve_snapshot" => isset($subsAlbumReviewSnapshot) && count($subsAlbumReviewSnapshot) ? $subsAlbumReviewSnapshot["curve_snapshot"] : null, 
+        "subs_range_snapshot" => isset($subsAlbumReviewSnapshot) && count($subsAlbumReviewSnapshot) ? $subsAlbumReviewSnapshot["range_snapshot"] : null,
+        "user_curve_snapshot" => isset($userAlbumReviewSnapshot) && count($userAlbumReviewSnapshot) ? $userAlbumReviewSnapshot["curve_snapshot"] : null, 
+        "user_range_snapshot" => isset($userAlbumReviewSnapshot) && count($userAlbumReviewSnapshot) ? $userAlbumReviewSnapshot["range_snapshot"] : null
     );
     
     $trackLength = 0;
@@ -32,6 +34,12 @@
             <label>
                 <input type="checkbox" name="view" value="subs" checked="checked" />
                 <?php echo __("People you are subscribed to"); ?>
+            </label>
+        </li>
+        <li class="you">
+            <label>
+                <input type="checkbox" name="view" value="user" checked="checked" />
+                <?php echo __("You"); ?>
             </label>
         </li>
         <?php endif; ?>

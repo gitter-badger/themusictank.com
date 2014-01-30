@@ -20,7 +20,8 @@
             
             this.config.display = {
                 "everyone" : (this.config.curve_snapshot),
-                "subs" : (this.config.subs_curve_snapshot)
+                "subs" : (this.config.subs_curve_snapshot),
+                "user" : (this.config.user_curve_snapshot)
             };
             
             this.getContextSizes();
@@ -42,6 +43,11 @@
                 _drawRange.call(this, this.config.subs_range_snapshot, "avg", "rgba(66, 133, 244,.4)");         
             }
             
+            if(this.config.display.user && this.config.user_range_snapshot)
+            {
+                _drawRange.call(this, this.config.user_range_snapshot, "avg", "rgba(90, 20, 244,.4)");         
+            }
+            
             if(this.config.display.everyone && this.config.curve_snapshot)
             {
                 _drawJoints.call(this, this.config.curve_snapshot, "avg", '#999999');
@@ -52,6 +58,12 @@
             {
                 _drawJoints.call(this, this.config.subs_curve_snapshot, "avg", '#4285f4');
                 _drawCircles.call(this, this.config.subs_curve_snapshot, "avg", '#4285f4');                
+            }  
+            
+            if(this.config.display.user && this.config.user_range_snapshot)
+            {
+                _drawJoints.call(this, this.config.user_range_snapshot, "avg", "rgb(90, 20, 244)");
+                _drawCircles.call(this, this.config.user_range_snapshot, "avg", "rgb(90, 20, 244)");                
             }
         },
         

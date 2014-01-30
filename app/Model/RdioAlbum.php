@@ -1,19 +1,35 @@
 <?php
 
+$vendor = App::path('Vendor');        
+require_once ($vendor[0] . "rdio-simple/rdio.php"); 
+
 class RdioAlbum extends AppModel
 {	
 	public $belongsTo = array('Album');    
        
-    public function requiresUpdate($data = null)
+    public function updateCached()
+    {
+        if($this->requiresUpdate())
+        {    
+            $tracks = $this->_getTracksFromRdio();
+            if($tracks)
+            {
+                $this->Album->Tracks->data = $this->data;
+                $this->Album->Tracks->filterNewAndSave($tracks);
+                $this->setSyncTimestamp();
+            }
+        }
+    }    
+    
+    public function requiresUpdate()
     {           
-        if(!is_null($data)) $this->data = $data;
         return !((int)$this->data["RdioAlbum"]["lastsync"] > 1);
     }
     
     // Save the last sync timestamp
-    public function setSyncTimestamp($rdioAlbumData)
+    public function setSyncTimestamp()
     {        
-        $this->id = $rdioAlbumData["RdioAlbum"]["id"];
+        $this->id = $this->data["RdioAlbum"]["id"];
         return $this->saveField("lastsync", time());
     }
         
@@ -60,4 +76,17 @@ class RdioAlbum extends AppModel
         
         return $returnList;
     }
+    
+    public function _getRdioInstance()
+    {
+        return new Rdio(Configure::read('RdioApiConfig'));
+    }
+    
+    public function _getTracksFromRdio()
+    {
+        $key = $this->data["RdioAlbum"]["key"];
+        $data = $this->_getRdioInstance()->call('get', array("keys" => $key, "extras" => "tracks"));           
+        return ($data) ? $data->result->{$key}->tracks : null;
+    }
+    
 }

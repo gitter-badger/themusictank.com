@@ -1,7 +1,6 @@
 <?php
 class TracksController extends AppController {
                     
-	var $components = array("EchonestApi", "LastfmApi");
     var $helpers    = array("Chart");
     
     /** 
@@ -15,48 +14,40 @@ class TracksController extends AppController {
     {
         $this->usesPlayer();
         
-        $data = $this->Track->getBySlugContained($trackSlug);
-        $needsRefresh = false;
-            
-        $this->Track->LastfmTrack->data = $data;
-        if($this->Track->LastfmTrack->requiresUpdate())
-        {   
-            $needsRefresh = $this->requestAction(array("controller" => "tracks", "action" => "syncTrackDetails"));
-        }
+        $isLoggedIn = $this->userIsLoggedIn();
+        $data       = $this->Track->getUpdatedSetBySlug($trackSlug, $isLoggedIn);
         
-        if($needsRefresh)
-        {
-            $data = $this->Track->getBySlugContained($trackSlug);
-        }
+        $chartConfig = array(
+            "track" => $data["Track"], 
+            "rdioTrack" => $data["RdioTrack"]["id"], 
+            "player" => $this->preferredPlayer, 
+            "trackReviewSnapshot" => $data["TrackReviewSnapshot"]
+        );
                 
-        $this->Track->TrackReviewSnapshot->data = $data;
-        $data["TrackReviewSnapshot"] = $this->Track->TrackReviewSnapshot->getSnapshot();   
-        
-        if($this->userIsLoggedIn())
-        {     
-            $this->User->UserTrackReviewSnapshot->data = $data;
-            $data["UserTrackReviewSnapshot"] = $this->User->UserTrackReviewSnapshot->getSnapshot();
-            $this->set("userTrackReviewSnapshot", $data["UserTrackReviewSnapshot"]); 
-        }
-        
         $this->set("track", $data["Track"]);    
         $this->set("rdioTrack", $data["RdioTrack"]);    
         $this->set("lastfmTrack", $data["LastfmTrack"]);    
         $this->set("album", $data["Album"]);     
         $this->set("artist", $data["Album"]["Artist"]);  
         $this->set("trackReviewSnapshot", $data["TrackReviewSnapshot"]);        
-        $this->set("trackChartConfig",  array(
-            "track" => $data["Track"], 
-            "rdioTrack" => $data["RdioTrack"]["id"], 
-            "player" => $this->preferredPlayer, 
-            "userTrackReviewSnapshot" => array_key_exists("UserTrackReviewSnapshot", $data) ? $data["UserTrackReviewSnapshot"] : null,
-            "trackReviewSnapshot" => $data["TrackReviewSnapshot"]
-        ));
+        
+        if($isLoggedIn) {
+            $this->set("userTrackReviewSnapshot", $data["UserTrackReviewSnapshot"]); 
+            $chartConfig["userTrackReviewSnapshot"] = $data["UserTrackReviewSnapshot"];
+            
+            $this->set("subsTrackReviewSnapshot", $data["SubscribersTrackReviewSnapshot"]); 
+            $chartConfig["subsTrackReviewSnapshot"] = $data["SubscribersTrackReviewSnapshot"];
+        }
+                
+        $this->set("trackChartConfig", $chartConfig);
                 
         $this->setPageTitle(array($data["Track"]["title"], $data["Album"]["name"], $data["Album"]["Artist"]["name"]));
         $this->setPageMeta(array(
             "keywords" => array($data["Track"]["title"], $data["Album"]["name"], $data["Album"]["Artist"]["name"]),
-            "description" => __("Listening statistics of ") . $data["Track"]["title"] . __(", a track featured on ") . $data["Album"]["name"] . __(", an album by ") . $data["Album"]["Artist"]["name"] . _(' released ') . date("F j Y", $data["Album"]["release_date"]) . "."
+            "description" => __("Listening statistics of ") . $data["Track"]["title"] . 
+                            __(", a track featured on ") . $data["Album"]["name"] . 
+                            __(", an album by ") . $data["Album"]["Artist"]["name"] . 
+                            __(' released ') . date("F j Y", $data["Album"]["release_date"]) . "."
         ));
     } 
     

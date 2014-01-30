@@ -7,8 +7,8 @@
     </header>
 
     <div class="artist expandable">
-        <div class="wrapper">
-            <p><?php echo $lastfmArtist["biography"] ?></p>         
+        <div class="wrapper">            
+            <?php echo $lastfmArtist["biography"]; ?>
         </div>    
     </div>
 

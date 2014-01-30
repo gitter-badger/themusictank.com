@@ -8,7 +8,7 @@
     </h3>
 </header>
 
-<p><?php echo $lastfmTrack["wiki"]; ?></p>
+<?php echo $lastfmTrack["wiki"]; ?>
 
 <?php echo $this->element("player"); ?>
 
@@ -24,19 +24,39 @@
 </section>
 
 <?php if(isset($userTrackReviewSnapshot)) : ?>
-
 <section class="statistics subscribers">
-    <h3><?php echo __("People you are subscribed to"); ?></h3>
-    <p><?php echo __("Average subscriber score"); ?> <?php echo $this->Chart->formatScore($userTrackReviewSnapshot["score_snapshot"]); ?></p>        
-    <?php $enjoymentTimes =  $this->Chart->getEnjoymentTime($userTrackReviewSnapshot, (int)$track["duration"]); ?>
-    <p><?php echo __("Enjoyment"); ?> <?php echo $userTrackReviewSnapshot["liking_pct"]; ?> %</p>
-    <p><?php echo __("Disliking"); ?> <?php echo $userTrackReviewSnapshot["disliking_pct"]; ?> %</p>
-    <p><?php echo __("Enjoyment time"); ?> <?php echo $enjoymentTimes["liking"]; ?></p>
-    <p><?php echo __("Time disliked"); ?> <?php echo $enjoymentTimes["disliking"]; ?></p>
-    <?php echo $this->Chart->getBigPie("track", $track["slug"], $userTrackReviewSnapshot); ?>
+    <?php if(count($userTrackReviewSnapshot) > 0) : ?>
+        <h3><?php echo __("You"); ?></h3>
+        <p><?php echo __("Average subscriber score"); ?> <?php echo $this->Chart->formatScore($userTrackReviewSnapshot["score_snapshot"]); ?></p>        
+        <?php $enjoymentTimes =  $this->Chart->getEnjoymentTime($userTrackReviewSnapshot, (int)$track["duration"]); ?>
+        <p><?php echo __("Enjoyment"); ?> <?php echo $userTrackReviewSnapshot["liking_pct"]; ?> %</p>
+        <p><?php echo __("Disliking"); ?> <?php echo $userTrackReviewSnapshot["disliking_pct"]; ?> %</p>
+        <p><?php echo __("Enjoyment time"); ?> <?php echo $enjoymentTimes["liking"]; ?></p>
+        <p><?php echo __("Time disliked"); ?> <?php echo $enjoymentTimes["disliking"]; ?></p>
+        <?php echo $this->Chart->getBigPie("track", $track["slug"], $userTrackReviewSnapshot); ?>
+    <?php else : ?>
+        <p><?php echo __("You have not reviewed this track yet."); ?></p>
+    <?php endif; ?>
 </section>
-
 <?php endif; ?>
+
+<?php if(isset($subsTrackReviewSnapshot)) : ?>
+<section class="statistics subscribers">
+    <?php if(count($subsTrackReviewSnapshot) > 0) : ?>
+        <h3><?php echo __("People you are subscribed to"); ?></h3>
+        <p><?php echo __("Average subscriber score"); ?> <?php echo $this->Chart->formatScore($subsTrackReviewSnapshot["score_snapshot"]); ?></p>        
+        <?php $enjoymentTimes =  $this->Chart->getEnjoymentTime($subsTrackReviewSnapshot, (int)$track["duration"]); ?>
+        <p><?php echo __("Enjoyment"); ?> <?php echo $subsTrackReviewSnapshot["liking_pct"]; ?> %</p>
+        <p><?php echo __("Disliking"); ?> <?php echo $subsTrackReviewSnapshot["disliking_pct"]; ?> %</p>
+        <p><?php echo __("Enjoyment time"); ?> <?php echo $enjoymentTimes["liking"]; ?></p>
+        <p><?php echo __("Time disliked"); ?> <?php echo $enjoymentTimes["disliking"]; ?></p>
+        <?php echo $this->Chart->getBigPie("track", $track["slug"], $subsTrackReviewSnapshot); ?>
+    <?php else : ?>
+        <p><?php echo __("None of the people you are subscribed to have reviewed this track yet."); ?></p>
+    <?php endif; ?>
+</section>
+<?php endif; ?>
+
 
 <p class="credits">
     <?php echo __("Track description courtesy of"); ?> <?php echo $this->Html->link("Last.fm", "http://www.last.fm/", array("target" => "_blank")); ?>. 

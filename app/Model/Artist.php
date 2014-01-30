@@ -12,8 +12,37 @@ class Artist extends AppModel
 				'message' => 'A name is required'
 			)
 		)
-	);    
-	    
+	);
+    
+    public function getUpdatedSetBySlug($slug, $addCurrentUser = false)
+    {
+        $syncValues = $this->find("first", array(
+            "conditions" => array("Artist.slug" => $slug),
+            "fields"    => array("RdioArtist.*", "Artist.id", "Artist.name", "LastfmArtist.image", "LastfmArtist.id", "LastfmArtist.lastsync", "ArtistReviewSnapshot.*")
+        ));
+        
+        $this->RdioArtist->data = $syncValues;        
+        $this->RdioArtist->updateCached();
+                      
+        $this->LastfmArtist->data = $syncValues;        
+        $this->LastfmArtist->updateCached();
+                
+        $this->ArtistReviewSnapshot->data = $syncValues;    
+        $this->ArtistReviewSnapshot->updateCached();
+                
+        /* Feature is currently broken. We dont want graphs on the whole discography
+         * we would rather have avg scores
+        if($addCurrentUser)
+        {   
+            $user = new User();
+            $user->UserArtistReviewSnapshot->data = $syncValues;
+            $user->UserArtistReviewSnapshot->updateCached();            
+        }*/
+                
+        // Everything has been sync'd. Fetch every field we have.
+        return $this->findBySlug($slug);
+    }
+    
     public function beforeSave($options = array())
     {
         // Ensure the data has a valid unique slug

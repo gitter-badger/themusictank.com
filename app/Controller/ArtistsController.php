@@ -9,7 +9,7 @@
 class ArtistsController extends AppController {
     
     var $helpers    = array("Chart");
-	var $components = array("RdioApi", "Paginator", /*"EchonestApi",*/ "LastfmApi");
+	var $components = array("RdioApi", "Paginator");
     var $paginate = array(
         'limit' => 25,
         'order' => array(
@@ -22,11 +22,10 @@ class ArtistsController extends AppController {
      */
     public function index()
     {                
-        $this->set("popularArtists",    $this->Artist->findAllPopular());
-        $this->set("artistCategories",  $this->Artist->getCategories());
-        
         $this->loadModel("Album");
-        $this->set("newReleases", $this->Album->getNewReleases(5));
+        $this->set("popularArtists",    $this->Artist->findAllPopular());
+        $this->set("artistCategories",  $this->Artist->getCategories());        
+        $this->set("newReleases",       $this->Album->getNewReleases(5));
                         
         $this->setPageTitle(__("Artist list"));        
         $this->setPageMeta(array(
@@ -42,45 +41,9 @@ class ArtistsController extends AppController {
      */
     public function view($artistSlug)
     {   
-        $data = $this->Artist->findBySlug($artistSlug);
-        $needsRefresh = false;
+        $isLoggedIn = $this->userIsLoggedIn();
+        $data       = $this->Artist->getUpdatedSetBySlug($artistSlug, $isLoggedIn);
         
-        $this->Artist->RdioArtist->data = $data;
-        if($this->Artist->RdioArtist->requiresUpdate())
-        {
-            $needsRefresh = $this->requestAction(array("controller" => "artists", "action" => "syncArtistDiscography"));
-        }
-            
-        // There is a bug when sunc artists details creates a row.
-        // it doesn' add the new lasfmartist.id in the array and
-        // primary key fails. something like that.
-        $this->Artist->LastfmArtist->data = $data;
-        if($this->Artist->LastfmArtist->requiresUpdate())
-        {
-            $details            = $this->requestAction(array("controller" => "artists", "action" => "syncArtistDetails"));
-            // Quick reasign the data on the model since the previous request cleared it.
-            $this->Artist->LastfmArtist->data = $data;
-            $albumPopularity    = $this->requestAction(array("controller" => "artists", "action" => "syncArtistNotableAlbums"));
-            $needsRefresh       = $details && $albumPopularity && $needsRefresh;
-        }
-                
-        if($needsRefresh)
-        {
-            $data = $this->Artist->findBySlug($artistSlug);
-        }     
-                
-        $this->Artist->ArtistReviewSnapshot->data = $data;
-        $data["ArtistReviewSnapshot"] = $this->Artist->ArtistReviewSnapshot->getSnapshot();     
-          
-        /*
-        if($this->userIsLoggedIn())
-        {
-            $this->User->UserArtistReviewSnapshot->data = $data;
-            $data["UserArtistReviewSnapshot"] = $this->User->UserArtistReviewSnapshot->getSnapshot();
-            $this->set("userArtistReviewSnapshot", $data["UserArtistReviewSnapshot"]);
-        }   
-         */
-
         $this->set("artist",        $data["Artist"]);
         $this->set("rdioArtist",    $data["RdioArtist"]);
         $this->set("lastfmArtist",  $data["LastfmArtist"]);
@@ -92,8 +55,7 @@ class ArtistsController extends AppController {
             "keywords" => array($data["Artist"]["name"]),      
             "description" => __("Listening statistics of ") . $data["Artist"]["name"] . _("'s discography.")
         ));
-    }    
-
+    }
     
     /** 
      * Browse artists by letter.
@@ -139,7 +101,7 @@ class ArtistsController extends AppController {
         $this->render("browse");
     }    
     
-    /** 
+    /** @todo : Move to model
      * Loads the artist library of the current user and compares the list with ours.
      * If new matches are found, they are then saved in the DB.
      */
@@ -168,65 +130,6 @@ class ArtistsController extends AppController {
         
         $this->Session->setFlash(__("Your session could not be started."));
         $this->redirect(array("controller" => "pages", "action" => "error"));
-    }       
-    
-    /** 
-     * Inline call that syncs the Rdio discography of the preloaded Artist. 
-     *
-     * @return boolean True on success, false on failure
-     */
-    public function syncArtistDiscography()
-    {           
-        $data           = $this->Artist->RdioArtist->data;
-        $artistId       = $data["Artist"]["id"];
-        $rdioKey        = $data["RdioArtist"]["key"];                
-        $albums         = $this->RdioApi->getAlbumsForArtist($rdioKey);
-        
-        if($albums)
-        {
-            $this->loadModel("Album");
-            $this->Album->saveDiscography($artistId, $rdioKey, $albums);
-            return $this->Artist->RdioArtist->setSyncTimestamp($data) !== false;
-        }        
-        return false;
     }
-    
-    /** 
-     * Inline call that syncs the LastFm information of the preloaded Artist. 
-     *
-     * @return boolean True on success, false on failure
-     */
-    public function syncArtistDetails()
-    {           
-        $data           = $this->Artist->LastfmArtist->data;
-        $artistName     = $data["Artist"]["name"];      
-        $infos          = $this->LastfmApi->getArtistBiography($artistName);
-                
-        if($infos)
-        {
-            return $this->Artist->LastfmArtist->saveDetails($data, $infos) !== false;
-        }        
-        return false;
-    }        
-    
-    /** 
-     * Inline call that syncs the LastFm album popularity of the preloaded Artist. 
-     *
-     * @return boolean True on success, false on failure
-     */
-    public function syncArtistNotableAlbums()
-    {           
-        $data           = $this->Artist->LastfmArtist->data;
-        $artistName     = $data["Artist"]["name"];  
-        $infos          = $this->LastfmApi->getArtistTopAlbums($artistName);
-                
-        if($infos)
-        {
-            $this->loadModel("Album");
-            return $this->Album->LastfmAlbum->saveNotableAlbums($data, $infos) !== false;
-        }        
-        return false;
-    }    
-    
     
 }

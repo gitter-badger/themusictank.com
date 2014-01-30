@@ -102,21 +102,7 @@ class RdioApiComponent extends Component {
         $data = $this->_instance->call('getHeavyRotation', array("type" => $type));   
         return ($data) ? $data->result : null;
     }
-    
-    public function getAlbumsForArtist($key)
-    {
-        $this->getInstance();
-        $data = $this->_instance->call('getAlbumsForArtist', array("artist" => $key));
-        return ($data) ? $data->result : null;
-    }
-    
-    public function getTracksForAlbum($key)
-    {
-        $this->getInstance();
-        $data = $this->_instance->call('get', array("keys" => $key, "extras" => "tracks"));  
-        return ($data) ? $data->result->{$key}->tracks : null;
-    }
-    
+        
     public function getNewReleases($time = "thisweek")
     {
         $this->getInstance();

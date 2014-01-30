@@ -3,37 +3,48 @@
 class LastfmAlbum extends AppModel
 {	
 	public $belongsTo = array('Album');   
+    public $actsAs = array('Lastfm');
     
-    
-    public function requiresUpdate($data = null)
+    public function updateCached()
     {
-        if(!is_null($data)) $this->data = $data;
+        if($this->requiresUpdate())
+        {
+            $infos = $this->getLastFmAlbumDetails($this->data["Artist"]["name"], $this->data["Album"]["name"]);
+            if($infos)
+            {
+                $this->_saveDetails($infos) !== false;
+            } 
+        }
+    }    
+    
+    public function requiresUpdate()
+    {
         return $this->data["LastfmAlbum"]["lastsync"] + 60*60*24*5 < time();        
     }
     
-    public function saveDetails($data, $infos)
+    private function _saveDetails($infos)
     {
-        $albumId       = $data["Album"]["id"];
-        $lastfmAlbumId = $data["LastfmAlbum"]["id"];     
+        $albumId       = $this->data["Album"]["id"];
+        $lastfmAlbumId = $this->data["LastfmAlbum"]["id"];     
         
         $newRow         = array(
             "id" => $lastfmAlbumId,
             "album_id" => $albumId,
             "lastsync"  => time(),
-            "wiki" => empty($infos->wiki->content) ? null : $this->_cleanWikiText($infos->wiki->content)
+            "wiki" => empty($infos->wiki->content) ? null : $this->cleanLastFmWikiText($infos->wiki->content)
         );
             
         return $this->save($newRow);            
-    }
+    }    
     
-    
-    public function saveNotableAlbums($data, $infos)
+    public function saveNotableAlbums($infos)
     {
         $titles = array();
         $ranks = array();
         $worked = true;
+        $artistId = $this->data["Artist"]["id"];
                 
-        $this->Album->resetArtistNotables($data["Artist"]["id"]);
+        $this->Album->resetArtistNotables($artistId);
         
         foreach($infos as $topalbum)
         {
@@ -45,7 +56,7 @@ class LastfmAlbum extends AppModel
         // Look to see if we have matching albums in our db
         $matches = $this->Album->find('list', array(
             "fields" => array('Album.id', 'Album.slug'), 
-            "conditions" => array("or" => $titles, "Album.artist_id" => $data["Artist"]["id"])
+            "conditions" => array("or" => $titles, "Album.artist_id" => $artistId)
         ));
                 
         foreach($matches as $idx => $albumslug)
@@ -61,9 +72,5 @@ class LastfmAlbum extends AppModel
         return $worked;
     }
     
-    private function _cleanWikiText($text)
-    {
-        return trim(strip_tags(preg_replace('/Read more about .* on .*/', '', $text)));
-    }
     
 }

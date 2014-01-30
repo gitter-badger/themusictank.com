@@ -1,5 +1,6 @@
 <?php
 
+App::uses('User', 'Model');
 class Album extends AppModel
 {	    
 	public $hasOne      = array('RdioAlbum', 'AlbumReviewSnapshot', "LastfmAlbum");
@@ -13,19 +14,39 @@ class Album extends AppModel
         return true;
     }
     
-    
-    /**
-     * Filters Rdio albums not currently saved on TMT found in $albums
-     * @param integer $artistId
-     * @param string $rdioKey
-     * @param array $albums A dataset of Albums returned by Rdio
-     * @return array A list containing the new albums
-     */
-    public function filterNewRdioAlbums($artistId, $rdioKey, $albums)
+    public function getUpdatedSetBySlug($slug, $addCurrentUser = false)
     {
-        return $this->RdioAlbum->filterNew($artistId, $rdioKey, $albums);
+        $syncValues = $this->find("first", array(
+            "conditions" => array("Album.slug" => $slug),
+            "fields"    => array("Album.id", "Album.name", "RdioAlbum.*", "Artist.name", "LastfmAlbum.id", "LastfmAlbum.lastsync", "AlbumReviewSnapshot.*")
+        ));
+        
+        $this->RdioAlbum->data = $syncValues;        
+        $this->RdioAlbum->updateCached();
+                      
+        $this->LastfmAlbum->data = $syncValues;        
+        $this->LastfmAlbum->updateCached();
+                
+        $this->AlbumReviewSnapshot->data = $syncValues;    
+        $this->AlbumReviewSnapshot->updateCached();
+                
+        $data = $this->findBySlug($slug);
+        
+        if($addCurrentUser)
+        {   
+            $user = new User();
+            
+            $user->SubscribersAlbumReviewSnapshot->data    = $data;
+            $data["SubscribersAlbumReviewSnapshot"]        = $user->SubscribersAlbumReviewSnapshot->updateCached();        
+            
+            $user->UserAlbumReviewSnapshot->data    = $data;
+            $data["UserAlbumReviewSnapshot"]        = $user->UserAlbumReviewSnapshot->updateCached();            
+        }
+                
+        // Everything has been sync'd. Fetch every field we have.
+        return $data;
     }
-    
+            
     /**
      * Saves a list of RdioAlbums.
      * @param type $artistId
@@ -33,10 +54,17 @@ class Album extends AppModel
      * @param array $albums A dataset of Albums returned by Rdio
      * @return boolean True on success, false on failure
      */
-    public function saveDiscography($artistId, $rdioKey, $albums)
+    public function saveDiscography($albums)
     {
-        $filtered = $this->filterNewRdioAlbums($artistId, $rdioKey, $albums);
-        return $this->saveMany($filtered, array('deep' => true));                       
+        $artistId   = $this->data["Artist"]["id"];
+        $rdioKey    = $this->data["RdioArtist"]["key"];
+        $filtered   = $this->RdioAlbum->filterNew($artistId, $rdioKey, $albums);
+        
+        if(count($filtered))
+        {
+            return $this->saveMany($filtered, array('deep' => true));                       
+        }
+        return true;
     }
             
     public function setNewReleases($newReleasesIds)

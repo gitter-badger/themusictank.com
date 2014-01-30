@@ -3,7 +3,7 @@ App::uses('TableSnapshot', 'Model');
 App::uses('CakeSession', 'Model/Datasource');   
 
 class UserReviewSnapshot extends TableSnapshot
-{	                  
+{	                    
     public function requiresUpdate()
     {        
         $userId = CakeSession::read('Auth.User.User.id');
@@ -15,8 +15,8 @@ class UserReviewSnapshot extends TableSnapshot
      * Creates or updates a model's snapshot
      * @return boolean True on success, false on failure
      */ 
-    public function getSnapshot()
-    {           
+    public function updateCached()
+    {                
         if(is_null($this->data))
         {
             throw new CakeException("Model has no ::data values preset.");
@@ -25,7 +25,7 @@ class UserReviewSnapshot extends TableSnapshot
         if($this->requiresUpdate())
         {
             return $this->snap();   
-        }     
+        }   
         
         return $this->_getByBelongsToId($this->data[$this->getBelongsToAlias()]["id"]);
     }       
@@ -58,7 +58,7 @@ class UserReviewSnapshot extends TableSnapshot
     }
         
     private function _getByBelongsToId($objId)
-    {
+    {        
          $data = $this->find("first", array(
             "conditions" => array(
                 "user_id"   => CakeSession::read('Auth.User.User.id'), 
@@ -68,7 +68,7 @@ class UserReviewSnapshot extends TableSnapshot
             "fields" => array($this->alias . ".*")
         ));
          
-        return $data[$this->alias];
+        return count($data) > 0 ? $data[$this->alias] : array();
     }      
     
     protected function _getId($userId, $objId)
@@ -84,12 +84,18 @@ class UserReviewSnapshot extends TableSnapshot
     
     protected function _isExpired($userId, $objId)
     {
-        return $this->find("count", array(
+        $data = $this->find("first", array(
             "conditions" => array(
                 "user_id"   => $userId,
-                strtolower($this->getBelongsToAlias()) . "_id"  => $objId,
-                "lastsync < " => time() - (HOUR*12)
+                strtolower($this->getBelongsToAlias()) . "_id"  => $objId
             )
-        )) > 0;
+        ));
+        
+        if(count($data) > 0)
+        {
+            return ($data[$this->alias]["lastsync"] + (HOUR*12) < time());
+        }
+        
+        return true;        
     }    
 }

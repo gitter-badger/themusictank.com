@@ -14,6 +14,32 @@ class Track extends AppModel
 			)
 		)
 	);
+      
+    public function getUpdatedSetBySlug($slug, $addCurrentUser = false)
+    {
+        $syncValues = $this->getBySlugContained($slug);
+                
+        $this->LastfmTrack->data = $syncValues;        
+        $this->LastfmTrack->updateCached();
+                
+        $this->TrackReviewSnapshot->data = $syncValues;    
+        $this->TrackReviewSnapshot->updateCached();
+               
+        $data = $this->getBySlugContained($slug);
+        
+        if($addCurrentUser)
+        {   
+            $user = new User();
+            
+            $user->UserTrackReviewSnapshot->data    = $data;
+            $data["UserTrackReviewSnapshot"]        = $user->UserTrackReviewSnapshot->updateCached();      
+            
+            $user->SubscribersTrackReviewSnapshot->data    = $data;
+            $data["SubscribersTrackReviewSnapshot"]        = $user->SubscribersTrackReviewSnapshot->updateCached();   
+        }
+                
+        return $data;
+    }    
 	
     public function beforeSave($options = array())
     {
@@ -111,9 +137,10 @@ class Track extends AppModel
      * @param integer $albumId Album id that receives the tracks
      * @return boolean True on success, False on failure
      */
-    public function filterNewAndSave($tracks, $albumId)
+    public function filterNewAndSave($tracks)
     {
-        $filtered = $this->filterNew($tracks, $albumId);
+        $albumId    = $this->data["Album"]["id"];
+        $filtered   = $this->filterNew($tracks, $albumId);
         return $this->saveMany($filtered, array('deep' => true));
     }
     

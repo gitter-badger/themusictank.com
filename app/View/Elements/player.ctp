@@ -13,8 +13,10 @@
         "trackDuration" => (int)$track["duration"],
         "curve_snapshot" => $trackReviewSnapshot["curve_snapshot"],
         "range_snapshot" => $trackReviewSnapshot["range_snapshot"],
-        "subs_curve_snapshot" => isset($userTrackReviewSnapshot) ? $userTrackReviewSnapshot["curve_snapshot"] : null, 
-        "subs_range_snapshot" => isset($userTrackReviewSnapshot) ? $userTrackReviewSnapshot["range_snapshot"] : null
+        "subs_curve_snapshot" => isset($subsTrackReviewSnapshot) && count($subsTrackReviewSnapshot) ? $subsTrackReviewSnapshot["curve_snapshot"] : null, 
+        "subs_range_snapshot" => isset($subsTrackReviewSnapshot) && count($subsTrackReviewSnapshot) ? $subsTrackReviewSnapshot["range_snapshot"] : null,
+        "user_curve_snapshot" => isset($userAlbumReviewSnapshot) && count($userAlbumReviewSnapshot) ? $userAlbumReviewSnapshot["curve_snapshot"] : null, 
+        "user_range_snapshot" => isset($userAlbumReviewSnapshot) && count($userAlbumReviewSnapshot) ? $userAlbumReviewSnapshot["range_snapshot"] : null
     );
     
     $isLogged = $this->Session->read("Auth.User.User.id");
@@ -46,6 +48,12 @@
             <label>
                 <input type="checkbox" name="view" value="subs" checked="checked" />
                 <?php echo __("People you are subscribed to"); ?>
+            </label>
+        </li>
+        <li class="you">
+            <label>
+                <input type="checkbox" name="view" value="user" checked="checked" />
+                <?php echo __("You"); ?>
             </label>
         </li>
         <?php endif; ?>

@@ -2,32 +2,38 @@
 
 class LastfmTrack extends AppModel
 {	
-	public $belongsTo = array('Track');   
-        
-    public function requiresUpdate($data = null)
+	public $belongsTo = array('Track');  
+    public $actsAs = array('Lastfm'); 
+    
+    public function updateCached()
     {
-        if(!is_null($data)) $this->data = $data;
+        if($this->requiresUpdate())
+        {
+            $infos = $this->getLastFmTrackDetails($this->data["Track"]["title"], $this->data["Artist"]["name"]);
+            if($infos)
+            {
+                $this->_saveDetails($infos) !== false;
+            } 
+        }
+    }        
+    
+    public function requiresUpdate()
+    {
         return $this->data["LastfmTrack"]["lastsync"] + 60*60*24*5 < time();        
     }
     
-    public function saveDetails($data, $infos)
+    private function _saveDetails($infos)
     {
-        $trackId       = $data["Track"]["id"];
-        $lastfmTrackId = $data["LastfmTrack"]["id"];     
+        $trackId       = $this->data["Track"]["id"];
+        $lastfmTrackId = $this->data["LastfmTrack"]["id"];     
         
         $newRow         = array(
             "id" => $lastfmTrackId,
             "track_id" => $trackId,
             "lastsync"  => time(),
-            "wiki" => empty($infos->wiki->content) ? null : $this->_cleanWikiText($infos->wiki->content)
+            "wiki" => empty($infos->wiki->content) ? null : $this->cleanLastFmWikiText($infos->wiki->content)
         );
             
         return $this->save($newRow);            
-    }
-    
-    private function _cleanWikiText($text)
-    {
-        return trim(strip_tags(preg_replace('/Read more about .* on .*/', '', $text)));
-    }
-    
+    }    
 }

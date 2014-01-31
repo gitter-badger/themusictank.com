@@ -23,7 +23,8 @@ class RdioArtist extends AppModel
     
     public function requiresUpdate()
     {   
-        return $this->data["RdioArtist"]["lastsync"] + 60*60*24*5 < time();
+        $timestamp = $this->getData("RdioArtist.lastsync");
+        return $timestamp + WEEK < time();
     }    
     
     public function listCurrentCollection()
@@ -35,29 +36,14 @@ class RdioArtist extends AppModel
     
     public function filterNew($needles)
     {
-        $currentList = $this->listCurrentCollection();
-        $listBeingParsed = array();
-        $returnList = array();
+        $currentList        = $this->listCurrentCollection();
+        $listBeingParsed    = array();
+        $returnList         = array();
         
         foreach($needles as $artist)
         {
-            if(property_exists($artist, "artistKey"))
-            {
-                $artistKey = "artistKey";
-            }
-            else
-            {
-                $artistKey = "key";
-            }
-            
-            if(property_exists($artist, "artist"))
-            {
-                $artistNameKey = "artist";                
-            }
-            else
-            {
-                $artistNameKey = "name";                
-            }
+            $artistKey      = property_exists($artist, "artistKey") ? "artistKey" : "key";            
+            $artistNameKey  = property_exists($artist, "artist") ? "artist" : "name";                
                                     
             // Add the artist to the global collection if   
             // its a new artist
@@ -104,7 +90,7 @@ class RdioArtist extends AppModel
     // Save the last sync timestamp
     public function setSyncTimestamp()
     {
-        $this->id = $this->data["RdioArtist"]["id"];
+        $this->id = $this->getData("RdioArtist.id");
         return $this->saveField("lastsync", time());
     }
     
@@ -115,16 +101,15 @@ class RdioArtist extends AppModel
     
     public function _getTracksFromRdio()
     {
-        $key = $this->data["RdioAlbum"]["key"];
-        $data = $this->_getRdioInstance()->call('get', array("keys" => $key, "extras" => "tracks"));           
+        $key    = $this->getData("RdioAlbum.key");
+        $data   = $this->_getRdioInstance()->call('get', array("keys" => $key, "extras" => "tracks"));           
         return ($data) ? $data->result->{$key}->tracks : null;
     }
     
     private function _getRdioAlbumsForArtists()
     {
-        $rdioKey        = $this->data["RdioArtist"]["key"];
-        $data = $this->_getRdioInstance()->call('getAlbumsForArtist', array("artist" => $rdioKey));
+        $rdioKey    = $this->getData("RdioArtist.key");
+        $data       = $this->_getRdioInstance()->call('getAlbumsForArtist', array("artist" => $rdioKey));
         return ($data) ? $data->result : null;
     }
 }
-

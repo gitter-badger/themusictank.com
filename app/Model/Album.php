@@ -21,15 +21,16 @@ class Album extends AppModel
             "fields"    => array("Album.id", "Album.name", "RdioAlbum.*", "Artist.name", "LastfmAlbum.id", "LastfmAlbum.lastsync", "AlbumReviewSnapshot.*")
         ));
         
+        
         $this->RdioAlbum->data = $syncValues;        
         $this->RdioAlbum->updateCached();
                       
         $this->LastfmAlbum->data = $syncValues;        
         $this->LastfmAlbum->updateCached();
-                
+               
         $this->AlbumReviewSnapshot->data = $syncValues;    
         $this->AlbumReviewSnapshot->updateCached();
-                
+               
         $data = $this->findBySlug($slug);
         
         if($addCurrentUser)
@@ -56,8 +57,8 @@ class Album extends AppModel
      */
     public function saveDiscography($albums)
     {
-        $artistId   = $this->data["Artist"]["id"];
-        $rdioKey    = $this->data["RdioArtist"]["key"];
+        $artistId   = $this->getData("Artist.id");
+        $rdioKey    = $this->getData("RdioArtist.key");
         $filtered   = $this->RdioAlbum->filterNew($artistId, $rdioKey, $albums);
         
         if(count($filtered))

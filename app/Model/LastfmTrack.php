@@ -9,29 +9,33 @@ class LastfmTrack extends AppModel
     {
         if($this->requiresUpdate())
         {
-            $infos = $this->getLastFmTrackDetails($this->data["Track"]["title"], $this->data["Artist"]["name"]);
+            $trackTitle = $this->getData("Track.title");
+            $artistName = $this->getData("Artist.name");
+            $infos = $this->getLastFmTrackDetails($trackTitle, $artistName);
+            
             if($infos)
             {
-                $this->_saveDetails($infos) !== false;
+                $this->_saveDetails($infos);
             } 
         }
     }        
     
     public function requiresUpdate()
     {
-        return $this->data["LastfmTrack"]["lastsync"] + 60*60*24*5 < time();        
+        $timestamp = $this->getData("LastfmTrack.lastsync");
+        return $timestamp + WEEK < time();        
     }
     
     private function _saveDetails($infos)
     {
-        $trackId       = $this->data["Track"]["id"];
-        $lastfmTrackId = $this->data["LastfmTrack"]["id"];     
+        $trackId       = $this->getData("Track.id");
+        $lastfmTrackId = $this->getData("LastfmTrack.id");     
         
         $newRow         = array(
-            "id" => $lastfmTrackId,
-            "track_id" => $trackId,
+            "id"        => $lastfmTrackId,
+            "track_id"  => $trackId,
             "lastsync"  => time(),
-            "wiki" => empty($infos->wiki->content) ? null : $this->cleanLastFmWikiText($infos->wiki->content)
+            "wiki"      => empty($infos->wiki->content) ? null : $this->cleanLastFmWikiText($infos->wiki->content)
         );
             
         return $this->save($newRow);            

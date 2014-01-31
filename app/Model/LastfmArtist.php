@@ -8,15 +8,17 @@ class LastfmArtist extends AppModel
     public function updateCached()
     {
         if($this->requiresUpdate())
-        {   
-            $data = $this->data;
-            $infos = $this->getArtistBiography($data["Artist"]["name"]);
+        {               
+            $artistName = $this->getData("Artist.name");
+            
+            $data = $this->data;            
+            $infos = $this->getArtistBiography($artistName);
             if($infos)
             {
                 $this->_saveDetails($infos);
             } 
             
-            $ranks = $this->getArtistTopAlbums($data["Artist"]["name"]);
+            $ranks = $this->getArtistTopAlbums($artistName);
             if($ranks)
             {
                 $this->Artist->Albums->LastfmAlbum->data = $data;
@@ -27,19 +29,21 @@ class LastfmArtist extends AppModel
     
     public function requiresUpdate()
     {
-        return $this->data["LastfmArtist"]["lastsync"] + 60*60*24*5 < time();        
+        $timestamp = $this->getData("LastfmArtist.lastsync");
+        return $timestamp + WEEK < time();        
     }
     
     private function _saveDetails($infos)
     {
-        $artistId       = $this->data["Artist"]["id"];
-        $lastfmArtistId = $this->data["LastfmArtist"]["id"];     
+        $artistId       = $this->getData("Artist.id");
+        $lastfmArtistId = $this->getData("LastfmArtist.id");
+        $image          = $this->getData("LastfmArtist.image");
         
         $newRow         = array(
-            "id" => $lastfmArtistId,
+            "id"        => $lastfmArtistId,
             "artist_id" => $artistId,
             "lastsync"  => time(),
-            "image"     => empty($infos->image[3]->{'#text'}) ? null : $this->getImageFromUrl($infos->image[3]->{'#text'}, $this->data["LastfmArtist"]["image"]),
+            "image"     => empty($infos->image[3]->{'#text'}) ? null : $this->getImageFromUrl($infos->image[3]->{'#text'}, $image),
             "image_src" => empty($infos->image[3]->{'#text'}) ? null : $infos->image[3]->{'#text'},
             "biography" => empty($infos->bio->summary) ? __("Biography is not available at this time.") : $this->cleanLastFmWikiText($infos->bio->summary),
             "url"       => $infos->url

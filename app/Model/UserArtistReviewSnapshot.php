@@ -15,7 +15,7 @@ class UserArtistReviewSnapshot extends UserReviewSnapshot
         
     public function getCurve($artistId, $resolution = 100, $timestamp = 0)
     {
-        $curveData = $this->getRawCurveData($timestamp); 
+        $curveData  = $this->getRawCurveData($timestamp); 
         $score      = $this->compileScore($curveData);     
         return array(
             "score"         => $score

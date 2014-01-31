@@ -9,64 +9,45 @@ class SubscribersAlbumReviewSnapshot extends UserReviewSnapshot
     public $belongsTo   = array('Album', 'User');
     
     public function getCurve($albumId, $resolution = 100, $timestamp = 0)
-    {
-        $albumInfo = $this->Album->find("first", array("conditions" => array("Album.id" => $albumId)));
+    {        
+        $albumInfo  = $this->Album->findById($albumId);
         $ids        = $this->User->UserFollowers->getSubscriptions(CakeSession::read('Auth.User.User.id'), true);   
         $curveData  = $this->getRawCurveData($timestamp, array("ReviewFrames.user_id" => $ids));
+        $score      = $this->compileScore($curveData); 
+        $splitData  = $this->getRawSplitData($score, $timestamp, array("ReviewFrames.user_id" => $ids));
+        $albumDuration = (int)$albumInfo["Album"]["duration"];
+        
         $curve = array();
-        $splitMin = array();
-        $splitMax = array();
-        $score      = $this->compileScore($curveData);      
-        $splitData      = $this->getRawSplitData($score, $timestamp);
-        $review     = new ReviewFrames();
+        $split = array("min" => array(), "max" => array());
         
         foreach($albumInfo["Tracks"] as $track)
         {
-            $trackResolution    =  ((int)$track["duration"] / (int)$albumInfo["Album"]["duration"]) * $resolution;
-            $ppf                = $this->resolutionToPositionsPerFrames((int)$track["duration"], $trackResolution);
-            $curve = array_merge($curve, $review->roundReviewFramesSpan( $this->_getTrackCurveSpan($curveData, $track["id"]), $ppf, $trackResolution));
-            $splitMin = array_merge($splitMin, $review->roundReviewFramesSpan( $this->_getTrackCurveSpan($splitData["min"], $track["id"]), $ppf, $trackResolution));
-            $splitMax = array_merge($splitMax, $review->roundReviewFramesSpan( $this->_getTrackCurveSpan($splitData["max"], $track["id"]), $ppf, $trackResolution));
+            $trackResolution    = ((int)$track["duration"] / $albumDuration) * $resolution;
+            $ppf                = ReviewFrames::resolutionToPositionsPerFrames((int)$track["duration"], $trackResolution);
+            
+            // Handle curve
+            $trackCurve         = ReviewFrames::getTrackSpan($curveData, $track["id"]);
+            $curve              = array_merge($curve, ReviewFrames::lowerSpanResolution($trackCurve, $ppf, $trackResolution));
+           
+            // Handle ranges
+            $trackSplitMin      = ReviewFrames::getTrackSpan($splitData["min"], $track["id"]);
+            $trackSplitMax      = ReviewFrames::getTrackSpan($splitData["max"], $track["id"]);
+            $split["min"]       = array_merge($split["min"], ReviewFrames::lowerSpanResolution($trackSplitMin, $ppf, $trackResolution));
+            $split["max"]       = array_merge($split["max"], ReviewFrames::lowerSpanResolution($trackSplitMax, $ppf, $trackResolution));
         }
-        
+                
         return array(
-            "curve"         => $curve, 
-            "ppf"           => $this->resolutionToPositionsPerFrames((int)$albumInfo["Album"]["duration"], $resolution),
-            "score"         => $score,
-            "split" => array(
-                "min" => $splitMin,
-                "max" => $splitMax
-            )
+            "curve" => $curve, 
+            "ppf"   => ReviewFrames::resolutionToPositionsPerFrames($albumDuration, $resolution),
+            "score" => $score,
+            "split" => $split
         );
     }    
     
-    public function getAppreciation($belongsToId, $timestamp = 0)
+    
+    public function getAppreciation($belongsToId, $timestamp = 0, $extraConditions = null)
     {                
-        $belongsToAlias = strtolower($this->getBelongsToAlias() . "_id");
-        $ids        = $this->User->UserFollowers->getSubscriptions(CakeSession::read('Auth.User.User.id'), true);   
-        return (new ReviewFrames())->getAppreciation("$belongsToAlias = $belongsToId AND created > $timestamp AND user_id IN (" . implode(",", $ids) . ")");
+        $ids = $this->User->UserFollowers->getSubscriptions(CakeSession::read('Auth.User.User.id'), true);   
+        return parent::getappreciation($belongsToId, $timestamp, "user_id IN (" . implode(",", $ids) . ")");
     }       
-    
-    private function _getTrackCurveSpan($reviewFrames, $trackId)
-    {
-        $startIdx = null;
-        $count = 0;
-        foreach($reviewFrames as $idx => $frame)
-        {            
-            if(is_null($startIdx) && $frame["ReviewFrames"]["track_id"] === $trackId)
-            {
-                $startIdx = $idx;
-            }
-            
-            if($startIdx >= 0 && $frame["ReviewFrames"]["track_id"] === $trackId)
-            {
-                $count++;
-            }
-        }
-        
-        return ($count > 0) ?
-            array_slice($reviewFrames, $startIdx, $count) :
-            array();
-    }
-    
 }

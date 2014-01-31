@@ -6,8 +6,9 @@ class UserReviewSnapshot extends TableSnapshot
 {	                    
     public function requiresUpdate()
     {        
-        $userId = CakeSession::read('Auth.User.User.id');
-        if($userId) return $this->_isExpired($userId, $this->data[$this->getBelongsToAlias()]["id"]);
+        $userId     = CakeSession::read('Auth.User.User.id');        
+        $relationId = $this->getData($this->getBelongsToAlias() . ".id");
+        if($userId) return $this->_isExpired($userId, $relationId);
         return false;
     }    
             
@@ -16,39 +17,36 @@ class UserReviewSnapshot extends TableSnapshot
      * @return boolean True on success, false on failure
      */ 
     public function updateCached()
-    {                
-        if(is_null($this->data))
-        {
-            throw new CakeException("Model has no ::data values preset.");
-        }
-                
+    {                   
         if($this->requiresUpdate())
         {
             return $this->snap();   
         }   
         
-        return $this->_getByBelongsToId($this->data[$this->getBelongsToAlias()]["id"]);
+        $relationId = $this->getData($this->getBelongsToAlias() . ".id");
+        return $this->_getByBelongsToId($relationId);
     }       
             
     public function getBelongsToData()
     {
+        $relationId = $this->getData($this->getBelongsToAlias() . ".id");
         return array(
-            "id"  => $this->data[$this->getBelongsToAlias()]["id"]
+            "id"  => $relationId
         );
     }
     
     public function getExtraSaveFields()
     {
         $userId = CakeSession::read('Auth.User.User.id');
-        $objId = $this->data[$this->getBelongsToAlias()]["id"];
+        $relationId = $this->getData($this->getBelongsToAlias() . ".id");
+        $data   = $this->_getId($userId, $relationId);     
         
         $extras = array(
             "lastsync"  => time(),
             "user_id"   => $userId,
-            strtolower($this->getBelongsToAlias()) . "_id"  => $objId
+            strtolower($this->getBelongsToAlias()) . "_id"  => $relationId
         );
-                
-        $data = $this->_getId($userId, $objId);        
+                   
         if($data)
         {            
            $extras["id"] = $data[$this->alias]["id"];

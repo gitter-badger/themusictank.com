@@ -168,16 +168,16 @@ class CronController extends AppController {
      */
     private function _syncPopular()
     { 
-        $this->loadModel("Artist");    
+        $this->loadModel("RdioArtist");    
 
         // Make sure we have the new artists
         $popularArtists = $this->RdioApi->getHeavyRotation();
         if($popularArtists)
         {
             // Reset popular artists
-            $this->Artist->RdioArtist->resetPopular();    
-            $this->Artist->filterNewAndSave($popularArtists);
-            $this->Artist->RdioArtist->makePopular($popularArtists); 
+            $this->RdioArtist->resetPopular();    
+            $this->filterNewAndSave($popularArtists);
+            $this->RdioArtist->makePopular($popularArtists); 
             
             return $this->Config->setPopularArtistUpdate();
         } 

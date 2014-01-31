@@ -158,7 +158,7 @@ class ReviewFrames extends AppModel
      * @param type $resolution
      * @return type
      */
-    public function roundReviewFramesSpan($curveData, $positionsPerFrame, $resolution)
+    public static function lowerSpanResolution($curveData, $positionsPerFrame, $resolution)
     {
         $curve = array_fill(0, $resolution, null);
         $count = count($curveData);
@@ -200,6 +200,43 @@ class ReviewFrames extends AppModel
         }       
         
         return $curve;
+    }
+    
+    public static function getTrackSpan($reviewFrames, $trackId)
+    {
+        $startIdx = null;
+        $count = 0;
+        foreach($reviewFrames as $idx => $frame)
+        {            
+            if(is_null($startIdx) && $frame["ReviewFrames"]["track_id"] === $trackId)
+            {
+                $startIdx = $idx;
+            }
+            
+            if($startIdx >= 0 && $frame["ReviewFrames"]["track_id"] === $trackId)
+            {
+                $count++;
+            }
+        }
+        
+        return ($count > 0) ?
+            array_slice($reviewFrames, $startIdx, $count) :
+            array();    
+    }
+    
+    
+    
+    
+     /** The final number of frames is the resolution's value.
+     * Compare to the length in order to sum values that
+     * have to be merged to fit the curve's resolution  
+     * @param integer $duration
+     * @param double $resolution
+     * @return integer
+     */
+    public static function resolutionToPositionsPerFrames($duration, $resolution)
+    {
+        return ($duration > $resolution) ? ($duration  / $resolution) : $duration;
     }
     
 }

@@ -23,13 +23,14 @@ class RdioAlbum extends AppModel
     
     public function requiresUpdate()
     {           
-        return !((int)$this->data["RdioAlbum"]["lastsync"] > 1);
+        $timestamp = (int)$this->getData("RdioAlbum.lastsync");        
+        return $timestamp < 1;
     }
     
     // Save the last sync timestamp
     public function setSyncTimestamp()
     {        
-        $this->id = $this->data["RdioAlbum"]["id"];
+        $this->id = $this->getData("RdioAlbum.id");
         return $this->saveField("lastsync", time());
     }
         
@@ -58,17 +59,17 @@ class RdioAlbum extends AppModel
             if(!array_key_exists($album->key, $currentList))
             {                
                 $returnList[] = array(
-                    "name" => $album->name,   
+                    "name"      => $album->name,   
                     "image_src" => $album->icon,
                     "image"     => $this->getImageFromUrl($album->icon),
                     "release_date_text" => $album->releaseDate,
                     "release_date" => strtotime($album->releaseDate),
                     "artist_id" => $artistid,
-                    "duration" => $album->duration,
-                    "RdioAlbum"  => array(   
-                        "key" => $album->key,
+                    "duration"  => $album->duration,
+                    "RdioAlbum" => array(   
+                        "key"   => $album->key,
                         "artist_key" => $album->artistKey,
-                        "url" => $album->url
+                        "url"   => $album->url
                     )
                 );
             }
@@ -84,7 +85,7 @@ class RdioAlbum extends AppModel
     
     public function _getTracksFromRdio()
     {
-        $key = $this->data["RdioAlbum"]["key"];
+        $key = $this->getData("RdioAlbum.key");
         $data = $this->_getRdioInstance()->call('get', array("keys" => $key, "extras" => "tracks"));           
         return ($data) ? $data->result->{$key}->tracks : null;
     }

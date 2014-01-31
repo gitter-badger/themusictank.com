@@ -9,10 +9,9 @@ class ImplicitRelationModel extends AppModel
         "User" => array()
     );
     
-    const TYPE_ACHIEVEMENT = "achievement";
-    const TYPE_FOLLOWER = "follower";
-    
-    
+    const TYPE_ACHIEVEMENT  = "achievement";
+    const TYPE_FOLLOWER     = "follower";
+        
     // In a perfect world, this function should be an afterFind
     // but loading users starts a recursive loop. 
     public function associateRelated($results)
@@ -83,6 +82,7 @@ class ImplicitRelationModel extends AppModel
             
             $this->_saveToCache("User", $userId, $user["User"]);
         }
+        
         return $this->_getCached("User", $userId);
     }
     

@@ -138,8 +138,8 @@ class Track extends AppModel
      * @return boolean True on success, False on failure
      */
     public function filterNewAndSave($tracks)
-    {
-        $albumId    = $this->data["Album"]["id"];
+    {        
+        $albumId    = $this->getData("Album.id");
         $filtered   = $this->filterNew($tracks, $albumId);
         return $this->saveMany($filtered, array('deep' => true));
     }

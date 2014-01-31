@@ -109,7 +109,7 @@ class AppModel extends Model {
     }
     
     
-    public function _makeSlugUnique($slug)
+    private function _makeSlugUnique($slug)
     {    
         $params = array(
             "fields"        => array($this->name.".slug"),
@@ -143,6 +143,33 @@ class AppModel extends Model {
         $this->recursive = $oldRecursive;
         
         return $slug;
+    }
+    
+    public function getData($key)
+    {
+        $path = explode(".", $key);
+        
+        if(isset($this->data))
+        {
+            $currentLevel = $this->data;
+            foreach($path as $idx => $level)
+            {
+                if(array_key_exists($level, $currentLevel))
+                {
+                    if($idx+1 == count($path))
+                    {
+                        return $currentLevel[$level];
+                    }
+                    else
+                    {
+                        $currentLevel = $currentLevel[$level];
+                    }
+                }
+                else break;
+            }            
+        }
+        
+        throw new CakeException(sprintf("%s has no data value matching key '%s'", $this->alias, $key));
     }
     
 }

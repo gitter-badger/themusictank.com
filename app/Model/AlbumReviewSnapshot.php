@@ -5,98 +5,53 @@ class AlbumReviewSnapshot extends TableSnapshot
 {	    
 	public $name        = 'AlbumReviewSnapshot';
     public $useTable    = 'album_review_snapshots'; 
-    public $belongsTo   = array('Album');
-    
-    
+    public $belongsTo   = array('Album');  
+    public $actsAs      = array('Metacritic'); 
+        
     public function getCurve($albumId, $resolution = 100, $timestamp = 0)
-    {
-        $albumInfo = $this->Album->find("first", array("conditions" => array("Album.id" => $albumId)));
-        $curve = array();
-        $curveData = $this->getRawCurveData($timestamp); 
+    {        
+        $albumInfo  = $this->Album->findById($albumId);
+        $curveData  = $this->getRawCurveData($timestamp); 
         $score      = $this->compileScore($curveData); 
         $splitData  = $this->getRawSplitData($score, $timestamp);
-        $review     = new ReviewFrames();
-        
+        $albumDuration = (int)$albumInfo["Album"]["duration"];
+               
+        $curve = array();
+        $range = array("min" => array(), "max" => array());
+         
         foreach($albumInfo["Tracks"] as $track)
         {
-            $trackResolution    =  ((int)$track["duration"] / (int)$albumInfo["Album"]["duration"]) * $resolution;
-            $ppf                = $this->resolutionToPositionsPerFrames((int)$track["duration"], $trackResolution);
-            //$curve[$track["title"]] = (new ReviewFrames())->roundReviewFramesSpan( $this->_getTrackCurveSpan($curveData, $track["id"]), $ppf, $trackResolution);
-            $curve = array_merge($curve, $review->roundReviewFramesSpan( $this->_getTrackCurveSpan($curveData, $track["id"]), $ppf, $trackResolution));
-        }
-                
+            $trackResolution    = ((int)$track["duration"] / $albumDuration) * $resolution;
+            $ppf                = ReviewFrames::resolutionToPositionsPerFrames((int)$track["duration"], $trackResolution);
+            
+            // Handle curve
+            $trackCurve         = ReviewFrames::getTrackSpan($curveData, $track["id"]);
+            $curve              = array_merge($curve, ReviewFrames::lowerSpanResolution($trackCurve, $ppf, $trackResolution));
+           
+            // Handle ranges
+            $trackSplitMin      = ReviewFrames::getTrackSpan($splitData["min"], $track["id"]);
+            $trackSplitMax      = ReviewFrames::getTrackSpan($splitData["max"], $track["id"]);
+            $range["min"]       = array_merge($range["min"], ReviewFrames::lowerSpanResolution($trackSplitMin, $ppf, $trackResolution));
+            $range["max"]       = array_merge($range["max"], ReviewFrames::lowerSpanResolution($trackSplitMax, $ppf, $trackResolution));
+            
+        }                
+        
         return array(
-            "curve"         => $curve, 
-            "ppf"           => $this->resolutionToPositionsPerFrames((int)$albumInfo["Album"]["duration"], $resolution),
-            "score"         => $score,
-            "split" => array(
-                "min" => $review->roundReviewFramesSpan($splitData["min"], $ppf, $resolution),
-                "max" => $review->roundReviewFramesSpan($splitData["max"], $ppf, $resolution)
-            )
+            "curve" => $curve, 
+            "ppf"   => ReviewFrames::resolutionToPositionsPerFrames($albumDuration, $resolution),
+            "score" => $score,
+            "split" => $range
         );
     }
         
     public function getExtraSaveFields()
     {   
-        $saveArray = parent::getExtraSaveFields();
+        $saveArray  = parent::getExtraSaveFields();
         
-        $albumName = $this->_toMetacriticLabel($this->data["Album"]["name"]);
-        $artistName = $this->_toMetacriticLabel($this->data["Artist"]["name"]);        
-        $saveArray["metacritic_score"] = $this->_getMetacriticScore($albumName, $artistName);
+        // Add the metacritic score in the save array.
+        $saveArray["metacritic_score"] = $this->getMetacriticScore($this->getData("Album.name"), $this->getData("Artist.name"));
         
         return $saveArray; 
     }
-    
-    private function _getTrackCurveSpan($reviewFrames, $trackId)
-    {
-        $startIdx = null;
-        $count = 0;
-        foreach($reviewFrames as $idx => $frame)
-        {            
-            if(is_null($startIdx) && $frame["ReviewFrames"]["track_id"] === $trackId)
-            {
-                $startIdx = $idx;
-            }
-            
-            if($startIdx >= 0 && $frame["ReviewFrames"]["track_id"] === $trackId)
-            {
-                $count++;
-            }
-        }
         
-        return ($count > 0) ?
-            array_slice($reviewFrames, $startIdx, $count) :
-            array();
-    }
-    
-    private function _toMetacriticLabel($string)
-    {
-        return strtolower(Inflector::slug($string,'-'));
-    }
-    
-    private function _getMetacriticScore($albumTitle, $artistName)
-    {
-        try
-        {
-            $doc = new DOMDocument();
-            @$doc->loadHTMLFile('http://www.metacritic.com/music/' . $albumTitle . '/' . $artistName);
-
-            foreach($doc->getElementsByTagName("div") as $div)
-            {
-                if(preg_match('/^metascore_w xlarge/', $div->getAttribute("class")))
-                {
-                    foreach($div->getElementsByTagName("span") as $span)
-                    {
-                        // By convention, all TMT percentages are smaller than 1.
-                        return (int)$span->nodeValue / 100;
-                    }
-                }
-            }
-        }
-        catch (Exception $ex)
-        {}
-        
-        return null;
-        
-    }
 }

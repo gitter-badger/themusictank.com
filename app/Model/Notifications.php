@@ -1,5 +1,4 @@
 <?php
-
 App::uses('ImplicitRelationModel', 'Model');
 class Notifications extends ImplicitRelationModel
 {	    
@@ -13,10 +12,9 @@ class Notifications extends ImplicitRelationModel
     public function findByUserId($userId, $limit = 10)
     {    
         return $this->find("all", array(
-                "conditions" => array("user_id" => $userId),
-                "limit" => $limit
+                "conditions"    => array("user_id" => $userId),
+                "limit"         => $limit
             )
         );
-    }
-    
+    }    
 } 

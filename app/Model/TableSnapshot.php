@@ -7,8 +7,7 @@
 App::uses('ReviewFrames', 'Model');
 
 class TableSnapshot extends AppModel
-{	   
-    
+{	    
     public function afterFind($results, $primary = false)
     {
         if(!array_key_exists("id", $results))
@@ -36,12 +35,7 @@ class TableSnapshot extends AppModel
      * @return boolean True on success, false on failure
      */ 
     public function updateCached()
-    {           
-        if(is_null($this->data))
-        {
-            throw new CakeException("Model has no \$data values preset.");
-        }
-        
+    {        
         if($this->requiresUpdate())
         {
             $this->snap();   
@@ -55,7 +49,8 @@ class TableSnapshot extends AppModel
      */
     public function snap()
     {   
-        return (empty($this->data[$this->alias]["id"])) ? $this->_createSnapshot() : $this->_updateSnapshot();   
+        $id = $this->getData($this->alias . ".id");
+        return (empty($id)) ? $this->_createSnapshot() : $this->_updateSnapshot();   
     }   
     
     /**
@@ -64,9 +59,8 @@ class TableSnapshot extends AppModel
      */
     public function requiresUpdate()
     {                
-        return 
-            (empty($this->data[$this->alias]["lastsync"])) && 
-            $this->data[$this->alias]["lastsync"] + 60*60*12 < time();
+        $timestamp = $this->getData($this->alias . ".lastsync");
+        return empty($timestamp) || $timestamp + (HOUR*12) < time();
     }
     
     /**
@@ -134,10 +128,17 @@ class TableSnapshot extends AppModel
      * @param integer $timestamp The earliest timestamp of the span. Defaults to 0.
      * @return boolean True on success, False on failure
      */
-    public function getAppreciation($belongsToId, $timestamp = 0)
+    public function getAppreciation($belongsToId, $timestamp = 0, $extraConditions = null)
     {                
         $belongsToAlias = strtolower($this->getBelongsToAlias() . "_id");
-        return (new ReviewFrames())->getAppreciation("$belongsToAlias = $belongsToId AND created > $timestamp");
+        $conditions = "$belongsToAlias = $belongsToId AND created > $timestamp";
+        
+        if(!is_null($extraConditions))
+        {
+            $conditions .= " AND $extraConditions";
+        }
+        
+        return (new ReviewFrames())->getAppreciation($conditions);
     }        
     
     /**
@@ -175,18 +176,6 @@ class TableSnapshot extends AppModel
         $belongsToAlias = strtolower($this->getBelongsToAlias() . "_id");
         return (new ReviewFrames())->getAppreciation("user_id = $userId AND $belongsToAlias = $belongsToId AND created > $timestamp");
     }        
-        
-    /** The final number of frames is the resolution's value.
-     * Compare to the length in order to sum values that
-     * have to be merged to fit the curve's resolution  
-     * @param integer $duration
-     * @param double $resolution
-     * @return integer
-     */
-    public function resolutionToPositionsPerFrames($duration, $resolution)
-    {
-        return ($duration > $resolution) ? ($duration  / $resolution) : $duration;
-    }
     
     
     public function getSpan($start, $end, $limit = 100)
@@ -218,7 +207,7 @@ class TableSnapshot extends AppModel
      * @return array Data ready to be saved
      */
     public function getExtraSaveFields()
-    {
+    {        
         $extras = array();
                 
         $belongsToAlias = $this->getBelongsToAlias();
@@ -226,10 +215,11 @@ class TableSnapshot extends AppModel
         
         $extras["lastsync"]  = time();
         $extras[strtolower($belongsToAlias) . "_id"] = (int)$belongsToData["id"];
+        $id = (int)$this->getData($this->alias . ".id");
         
-        if((int)$this->data[$this->alias]["id"] > 0)
+        if($id > 0)
         {            
-           $extras["id"] = $this->data[$this->alias]["id"];
+           $extras["id"] = $id;
         }
                 
         return $extras;
@@ -259,8 +249,8 @@ class TableSnapshot extends AppModel
     private function _updateSnapshot()
     {        
         $belongsToData  = $this->getBelongsToData();      
-        $belongsToId    = (int)$belongsToData["id"];
-        $timestamp      = $this->data[$this->alias]["lastsync"];        
+        $belongsToId    = (int)$belongsToData["id"];        
+        $timestamp      = $this->getData($this->alias . ".lastsync");
        
         $appreciation   = (new ReviewFrames())->mergeAppreciationData($this->data[$this->alias], $this->getAppreciation($belongsToId, $timestamp));
         $curve          = $this->getCurve($belongsToId, 150, $timestamp); 
@@ -308,7 +298,7 @@ class TableSnapshot extends AppModel
         {
             $saveArray["range_snapshot"] = json_encode($saveArray["range_snapshot"]);
         }
-        
+                
         return $this->save($saveArray) ? $saveArray : null;
     }
         

@@ -62,13 +62,10 @@ class Artist extends AppModel
     
     public function filterNewAndSave($artistList)
     {
-        return $this->saveMany($this->filterNew($artistList), array('deep' => true));                
+        $list = $this->RdioArtist->filterNew($artistList);
+        return $this->saveMany($list, array('deep' => true));                
     }
     
-    public function filterNew($artistList)
-    {
-        return $this->RdioArtist->filterNew($artistList);
-    }        
         
     /**
      * Finds all artists that have been flagged as popular.

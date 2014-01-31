@@ -29,6 +29,10 @@
 	Router::connect('/', array('controller' => 'pages', 'action' => 'display', 'home'));
     
     
+
+Router::connect('/oembed/*', array('controller' => 'ajax', 'action' => 'oembed'));
+    
+    
     // this potentially work for urls like  
     //  http://www.themusictank.nvi/nine_inch_nails/hesitation_marks_deluxe_edition/the_eater_of_dreams
     // but I am not sure I want to open this can of worms right now.

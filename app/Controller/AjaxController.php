@@ -14,7 +14,7 @@ class AjaxController extends AppController {
         parent::beforeFilter();   
         $this->Auth->deny("whatsup", "okstfu", "follow", "unfollow");
     }
-    
+        
     /** 
      * Json call that lists recent Notifications for the current user
      */
@@ -58,4 +58,33 @@ class AjaxController extends AppController {
         $this->set("user", array("slug" => $userSlug, "currently_followed" => $relationExists)); 
     }
         
+    public function oembed() {    
+        $this->response->type('application/json');
+        
+        if(!array_key_exists("url", $this->request->query))
+            throw new NotFoundException();
+        
+        $url = $this->request->query["url"];
+        $pattern = explode("/", preg_replace('/http:\/\//', "", $url));
+        $model = $pattern[1];
+        $slug = $pattern[3];
+        
+        if(!preg_match('/albums|tracks/', $model))
+            throw new NotFoundException();
+        
+        $modelName = substr(ucfirst($model), 0, -1);
+        $this->loadModel($modelName);        
+        $instance = new $modelName();
+        $instance->getUpdatedSetBySlug($slug);
+                        
+        $defaults = array(
+            "version"   => "1.0",
+            "type"      => "rich",
+            "provider_name" => "The Music Tank",
+            "provider_url"=> sprintf("http://%s/", $_SERVER['SERVER_NAME']),
+        );
+                        
+        $this->set("jsonOutput", array_merge($defaults, $instance->toOEmbed()));
+    }
+    
 }

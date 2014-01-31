@@ -1,12 +1,101 @@
 <?php
 
+App::uses('Track', 'Model');
+App::uses('Album', 'Model');
+App::uses('Artist', 'Model');
+App::uses('RdioArtist', 'Model');
+          
 class Config extends AppModel
-{	
+{	    
+    public $actsAs       = array('Rdio');   
+    
     const TYPE_DAILY    = "daily";
     const TYPE_WEEKLY   = "weekly";
     const TYPE_MONTHLY  = "monthly";
     const TYPE_YEARLY   = "yearly";
+        
+    public function updateCachedDaily()
+    {
+        $data = $this->getDaily();
+        $this->data = $data;
+        
+        if($this->requiresPopularArtistUpdate())
+        {  
+            // Make sure we have the new artists
+            $popularArtists = $this->getRdioHeavyRotation();
+            if($popularArtists)
+            {
+                $rdioArtist = new RdioArtist();
+                // Reset popular artists
+                $rdioArtist->resetPopular();    
+                $rdioArtist->Artist->filterNewAndSave($popularArtists);
+                $rdioArtist->makePopular($popularArtists); 
+
+                $this->setPopularArtistUpdate();
+            } 
+        }
+                            
+        $this->data = $data;
+        if($this->requiresDailyTrackChallengeUpdate())
+        {
+            $track = new Track();
+        
+            // Fetch before resetting to make sure we don't select the same one.        
+            $newTrack = $track->findNewDailyChallenger();
+            if(count($newTrack) > 0)
+            {
+                // Reset previous track challenge and save the status on the new track
+                $track->resetChallenge();
+                $track->makeDailyChallenge($newTrack["Track"]["id"]);
+                
+                $this->setTrackChallengeUpdate();      
+            }
+        }
+    }
     
+    public function updateCachedWeekly()
+    {
+        $data = $this->getWeekly();
+        $this->data = $data;
+        
+        if($this->requiresNewReleasesUpdate())
+        {
+            $artist = new Artist();
+            $album = new Album();
+            $newReleases = $this->getRdioNewReleases("twoweeks");
+            
+            if(count($newReleases) > 0)
+            {
+                // Save the new artists
+                $artist->filterNewAndSave($newReleases);
+
+                // Get all the rdio artist keys that will require an album update
+                $rdioArtistKeys = array();
+                $rdioAlbumKeys = array();
+                foreach($newReleases as $release)
+                {
+                    $rdioArtistKeys[] = $release->artistKey;
+                    $rdioAlbumKeys[] = $release->key;
+                }            
+
+                $rArtistData = $artist->RdioArtist->getListByKeys($rdioArtistKeys);            
+
+                foreach($newReleases as $release)
+                {
+                    $album->data = array(
+                        "Artist"        => array("id" => $rArtistData[$release->artistKey]),
+                        "RdioArtist"    => array("key" => $release->artistKey)
+                    );
+                    $album->saveDiscography(array($release));
+                }
+
+                $album->resetNewReleases();
+                $album->setNewReleases(array_values($album->RdioAlbum->getListByKeys($rdioAlbumKeys)));
+
+                $this->setNewReleasesUpdate();
+            }
+        } 
+    }    
     
     /**
      * Preloads all the configuration options related to a daily update
@@ -70,34 +159,28 @@ class Config extends AppModel
     
     /**
      * Specifies if the popular artists need to be updated.
-     * @param type $data
      * @return boolean True is content is not up to date, False if it is
      */
-    public function requiresPopularArtistUpdate($data = null)
+    public function requiresPopularArtistUpdate()
     {        
-        if(!is_null($data)) $this->data = $data; 
         return $this->_validateDelay("last_heavyrotation_sync", 60*60*24);
     }
     
     /**
      * Specifies if the popular artists need to be updated.
-     * @param type $data
      * @return boolean True is content is not up to date, False if it is
      */
-    public function requiresNewReleasesUpdate($data = null)
+    public function requiresNewReleasesUpdate()
     {  
-        if(!is_null($data)) $this->data = $data;
         return $this->_validateDelay("last_newreleases_sync", 60*60*24*7);  
     }
     
     /**
      * Specifies if the track challenge needs to be updated.
-     * @param type $data
      * @return boolean True is content is not up to date, False if it is
      */
-    public function requiresDailyTrackChallengeUpdate($data = null)
+    public function requiresDailyTrackChallengeUpdate()
     {
-        if(!is_null($data)) $this->data = $data;  
         return $this->_validateDelay("last_trackchallenge_sync", 60*60*24);  
     }
     
@@ -121,9 +204,9 @@ class Config extends AppModel
     
     private function _setSyncUpdate($key)
     {
-        $record = $this->_getRecordByKey($key);    
+        $record = $this->_getRecordByKey($key);
         return $this->save(array(
-            "id"        => is_null($record) ? $record["Config"]["id"] : null,
+            "id"        => !is_null($record) ? $record["Config"]["id"] : null,
             "key"       => $key,
             "value"     => time()
         ));
@@ -131,7 +214,7 @@ class Config extends AppModel
     
     private function _validateDelay($key, $syncDelay)
     {
-        $record = $this->_getRecordByKey($key);     
+        $record = $this->_getRecordByKey($key);            
         if($record)
         {            
             return (int)$record["Config"]["value"] + $syncDelay < time();

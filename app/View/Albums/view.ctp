@@ -36,9 +36,7 @@
     </div>    
 </article>
 
-
 <?php echo $this->element("albumGraph"); ?>
-
 
 <section class="statistics">
     <h3><?php echo __("Everyone"); ?></h3>

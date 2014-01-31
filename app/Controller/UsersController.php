@@ -175,13 +175,9 @@ class UsersController extends AppController {
             // Now, data should be up to date.
             if($data)
             {        
-                !$this->userIsLoggedIn() ? $this->startUserSession($data) : $this->updateUserSession($data);
-                
-                if($this->User->RdioUser->requiresUpdate($data))
-                {   
-                    $this->redirectByRURL(array("controller" => "artists", "action" => "syncUserLibrary"), true);
-                }
-                
+                !$this->userIsLoggedIn() ? $this->startUserSession($data) : $this->updateUserSession($data);                
+                $this->User->RdioUser->data = $data;
+                $this->User->RdioUser->updateCached();       
                 $this->redirectByRURL(array('controller' => 'users', 'action' => 'dashboard'));
             }
         }

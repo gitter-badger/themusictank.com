@@ -25,6 +25,11 @@
         $customMetas[] = $this->Html->script(array_merge(array('//code.jquery.com/ui/1.10.3/jquery-ui.js', 'lib/animation/RequestAnimationFrame', 'player/player', 'player/graph'), $playerScript));
     }    
     
+    if(isset($oembedLink))
+    {
+         $customMetas[] =  '<link rel="alternate" type="application/json+oembed" href="'.$oembedLink.'" title="oEmbed Profile" />';
+    }    
+    
     if(isset($customMetas) && count($customMetas))
     {
         $this->MetaTags->add($customMetas);

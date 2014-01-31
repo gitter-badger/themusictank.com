@@ -100,36 +100,5 @@ class ArtistsController extends AppController {
         
         $this->render("browse");
     }    
-    
-    /** @todo : Move to model
-     * Loads the artist library of the current user and compares the list with ours.
-     * If new matches are found, they are then saved in the DB.
-     */
-    public function syncUserLibrary()
-    {   
-        $rdioUserData = $this->User->RdioUser->getFromUserId($this->getAuthUserId());
-        if($rdioUserData)
-        {
-            if($this->User->RdioUser->requiresUpdate($rdioUserData))
-            {         
-                $artists = $this->RdioApi->getArtistLibrary();
-                if($artists)
-                {
-                    $filtered = $this->Artist->RdioArtist->filterNew($artists);
-                    $this->Artist->saveMany($filtered, array('deep' => true));                
-                    $this->User->RdioUser->setSyncTimestamp($rdioUserData);
-                }
-            }
-        }
-
-        $user = $this->Session->read('Auth.User.User'); 
-        if($user)
-        {
-            $this->redirectByRURL(array("controller" => "users", "action" => "dashboard"));
-        }
         
-        $this->Session->setFlash(__("Your session could not be started."));
-        $this->redirect(array("controller" => "pages", "action" => "error"));
-    }
-    
 }

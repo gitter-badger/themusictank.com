@@ -1,7 +1,8 @@
 <!DOCTYPE html>
 <html>
 <head>    
-	<title><?php echo __("The Music Tank"); ?></title>
+	<title><?php echo ($title_for_layout) ? $title_for_layout . " &mdash; " : ""; ?><?php echo __("The Music Tank"); ?></title>
+    <?php echo $this->element('head'); ?>
 </head>
 <body>
     <?php echo $this->fetch('content'); ?>

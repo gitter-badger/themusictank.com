@@ -1,5 +1,4 @@
 <?php
-
 App::uses('User', 'Model');
 class Album extends AppModel
 {	    
@@ -20,8 +19,7 @@ class Album extends AppModel
             "conditions" => array("Album.slug" => $slug),
             "fields"    => array("Album.id", "Album.name", "RdioAlbum.*", "Artist.name", "LastfmAlbum.id", "LastfmAlbum.lastsync", "AlbumReviewSnapshot.*")
         ));
-        
-        
+                
         $this->RdioAlbum->data = $syncValues;        
         $this->RdioAlbum->updateCached();
                       
@@ -43,8 +41,8 @@ class Album extends AppModel
             $user->UserAlbumReviewSnapshot->data    = $data;
             $data["UserAlbumReviewSnapshot"]        = $user->UserAlbumReviewSnapshot->updateCached();            
         }
-                
-        // Everything has been sync'd. Fetch every field we have.
+        
+        $this->data = $data;
         return $data;
     }
             
@@ -90,5 +88,29 @@ class Album extends AppModel
             "limit" => $limit,
             "order" => array("Album.release_date DESC")
         )); 
+    }
+    
+    public function toOEmbed()
+    {
+        $data = $this->getData("AlbumReviewSnapshot");
+        unset($data["album_id"]);
+        unset($data["id"]);
+        unset($data["metacritic_score"]);
+        unset($data["snapshot_ppf"]);
+        
+        return array(          
+            "url"   => sprintf("http://%s/albums/view/%s/", $_SERVER['SERVER_NAME'], $this->getData("Album.slug")),
+            "title" => $this->getData("Album.name"),
+            "data"  => $data,
+            "width" => 500,
+            "height" => 350,
+            "html"  => '<iframe width="500" height="350" src="'.sprintf("http://%s/albums/embed/%s/", $_SERVER['SERVER_NAME'], $this->getData("Album.slug")).'" frameborder="0"></iframe>'
+        );
+    }    
+    
+    public function getOEmbedUrl()
+    {
+        $destination = sprintf("http://%s/albums/view/%s/", $_SERVER['SERVER_NAME'], $this->getData("Album.slug"));
+        return sprintf("http://%s/oembed?url=%s", $_SERVER['SERVER_NAME'], urlencode($destination));
     }
 }

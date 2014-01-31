@@ -1,25 +1,40 @@
 <?php
 
+App::uses('Artist', 'Model');
 class RdioUser extends AppModel
 {	
-	public $belongsTo = array('User');    
+	public $belongsTo   = array('User');    
+    public $actsAs       = array('Rdio');
     
-    public function requiresUpdate($data = null)
+    public function updateCached()
+    {
+        if($this->requiresUpdate())
+        {    
+            $artists = $this->getRdioArtistLibrary();
+            if($artists)
+            {   
+                $artist = new Artist();
+                $filtered = $artist->RdioArtist->filterNew($artists);
+                
+                $artist->data = $this->data;                
+                $artist->saveMany($filtered, array('deep' => true));                
+                
+                $this->setSyncTimestamp();
+            }
+        }
+    }    
+    
+    public function requiresUpdate()
     {   
-        if(!is_null($data)) $this->data = $data;
-        return (int)$this->data["RdioUser"]["lastsync"] + 60*60*24 < time();
+        $timestamp = (int)$this->getData("RdioUser.lastsync");
+        return $timestamp + DAY < time();
     } 
     
     // Save the last sync timestamp
-    public function setSyncTimestamp($data = null)
+    public function setSyncTimestamp()
     {
-        if($data["RdioUser"]["id"])
-        {
-            $this->id = $data["RdioUser"]["id"];
-            return $this->saveField("lastsync", time());
-        }
-        
-        return false;
+        $this->id = $this->getData("RdioUser.id");
+        return $this->saveField("lastsync", time());
     }
         
     public function getFromUserId($userId)

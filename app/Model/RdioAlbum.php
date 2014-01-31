@@ -5,13 +5,15 @@ require_once ($vendor[0] . "rdio-simple/rdio.php");
 
 class RdioAlbum extends AppModel
 {	
-	public $belongsTo = array('Album');    
+	public $belongsTo   = array('Album');  
+    public $actsAs       = array('Rdio');  
        
     public function updateCached()
     {
         if($this->requiresUpdate())
         {    
-            $tracks = $this->_getTracksFromRdio();
+            $key    = $this->getData("RdioAlbum.key");
+            $tracks = $this->getTracksFromRdio($key);
             if($tracks)
             {
                 $this->Album->Tracks->data = $this->data;
@@ -76,18 +78,5 @@ class RdioAlbum extends AppModel
         }
         
         return $returnList;
-    }
-    
-    public function _getRdioInstance()
-    {
-        return new Rdio(Configure::read('RdioApiConfig'));
-    }
-    
-    public function _getTracksFromRdio()
-    {
-        $key = $this->getData("RdioAlbum.key");
-        $data = $this->_getRdioInstance()->call('get', array("keys" => $key, "extras" => "tracks"));           
-        return ($data) ? $data->result->{$key}->tracks : null;
-    }
-    
+    }    
 }

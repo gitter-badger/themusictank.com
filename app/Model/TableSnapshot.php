@@ -73,13 +73,15 @@ class TableSnapshot extends AppModel
         $belongsToData  = $this->getBelongsToData();
         $belongsToLabel = strtolower($this->getBelongsToAlias()) . "_id";
         $belongsToId    = (int)$belongsToData["id"];
+        $rf             = new ReviewFrames();
         
         $conditions = array_merge($extraConditions, array(
             "ReviewFrames.$belongsToLabel"  => $belongsToId, 
             "ReviewFrames.created >"        => $timestamp
         ));
                 
-        return (new ReviewFrames())->getRawCurve($conditions);
+        
+        return $rf->getRawCurve($conditions);
     }    
     
     public function getRawSplitData($threshold, $timestamp = 0, $extraConditions = array())
@@ -108,7 +110,8 @@ class TableSnapshot extends AppModel
      */
     public function getRawCurveSpan($conditions)
     {        
-        return (new ReviewFrames())->getRawCurveByCreated($conditions);
+        $rf = new ReviewFrames();
+        return $rf->getRawCurveByCreated($conditions);
     }    
     
     /**
@@ -119,7 +122,8 @@ class TableSnapshot extends AppModel
      */
     public function getRecentReviews($conditions, $limit = 5)
     {   
-        return (new ReviewFrames())->getByCreated($conditions, $limit);
+        $rf = new ReviewFrames();
+        return $rf->getByCreated($conditions, $limit);
     }    
     
     /**
@@ -132,13 +136,14 @@ class TableSnapshot extends AppModel
     {                
         $belongsToAlias = strtolower($this->getBelongsToAlias() . "_id");
         $conditions = "$belongsToAlias = $belongsToId AND created > $timestamp";
+        $rf = new ReviewFrames();
         
         if(!is_null($extraConditions))
         {
             $conditions .= " AND $extraConditions";
         }
         
-        return (new ReviewFrames())->getAppreciation($conditions);
+        return $rf->getAppreciation($conditions);
     }        
     
     /**
@@ -174,7 +179,8 @@ class TableSnapshot extends AppModel
     public function getUserAppreciation($belongsToId, $userId, $timestamp = 0)
     {                
         $belongsToAlias = strtolower($this->getBelongsToAlias() . "_id");
-        return (new ReviewFrames())->getAppreciation("user_id = $userId AND $belongsToAlias = $belongsToId AND created > $timestamp");
+        $rf = new ReviewFrames();
+        return $rf->getAppreciation("user_id = $userId AND $belongsToAlias = $belongsToId AND created > $timestamp");
     }        
     
     
@@ -251,8 +257,9 @@ class TableSnapshot extends AppModel
         $belongsToData  = $this->getBelongsToData();      
         $belongsToId    = (int)$belongsToData["id"];        
         $timestamp      = $this->getData($this->alias . ".lastsync");
+        $rf             = new ReviewFrames();
        
-        $appreciation   = (new ReviewFrames())->mergeAppreciationData($this->data[$this->alias], $this->getAppreciation($belongsToId, $timestamp));
+        $appreciation   = $rf->mergeAppreciationData($this->data[$this->alias], $this->getAppreciation($belongsToId, $timestamp));
         $curve          = $this->getCurve($belongsToId, 150, $timestamp); 
         
         return $this->_validateAndSave($appreciation, $curve);  

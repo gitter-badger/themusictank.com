@@ -33,7 +33,8 @@ class UserTrackReviewSnapshot extends UserReviewSnapshot
     {                
         $belongsToAlias = strtolower($this->getBelongsToAlias() . "_id");
         $id         = CakeSession::read('Auth.User.User.id');   
-        return (new ReviewFrames())->getAppreciation("$belongsToAlias = $belongsToId AND created > $timestamp AND user_id = $id");
+        $rf         = new ReviewFrames();
+        return $rf->getAppreciation("$belongsToAlias = $belongsToId AND created > $timestamp AND user_id = $id");
     }       
     
 }

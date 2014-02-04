@@ -18,7 +18,8 @@ class Track extends AppModel
     public function getUpdatedSetBySlug($slug, $addCurrentUser = false)
     {
         $syncValues = $this->getBySlugContained($slug);
-                
+        $syncValues["Artist"] = $syncValues["Album"]["Artist"];
+        
         $this->LastfmTrack->data = $syncValues;        
         $this->LastfmTrack->updateCached();
                 

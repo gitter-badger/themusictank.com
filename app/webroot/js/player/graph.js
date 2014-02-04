@@ -1,20 +1,13 @@
 (function() {
-    var tmt = window.tmt;
     
     var PADDING = 20,
-        MARGIN = 5;
+        MARGIN = 5;    
     
-    
-    var graph = tmt.graph = function(config)
-    {
-        this.config = config;
-        return this;
-    };
-    
-    graph.prototype = {
-      
-        init : function() 
+    var Graph = tmt.Graph = Class.extend({
+                       
+        init : function(config) 
         {
+            this.config = config;
             this.config.container   = {ref : $(this.config.containerSelector)}; 
             this.config.container.ref.parent(".player").find(".legend input[type=checkbox]").change($.proxy(_onViewToggle, this));
             
@@ -160,7 +153,7 @@
             context.closePath();
         }        
         
-    };
+    });
     
     function _onViewToggle(evt)
     {

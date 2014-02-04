@@ -3,11 +3,13 @@
         "containerSelector"     => ".play-" . $track["slug"],
         "domain"    => $_SERVER['SERVER_NAME'],
         "type"      => $preferredPlayer,
-        "visual"    => "equilizer",
         "trackDuration" => (int)$track["duration"],
+        "visual"    => "equilizer",
         "debug"     => (Configure::read('debug') < 1) ? "false" : "true"
     );    
-
+    $playerClassName = "Mp3";
+    $isLogged = $this->Session->read("Auth.User.User.id");        
+    
     $graphConfig = array(
         "containerSelector" => ".play-" . $track["slug"] . " canvas",
         "trackDuration" => (int)$track["duration"],
@@ -18,11 +20,11 @@
         "user_curve_snapshot" => isset($userAlbumReviewSnapshot) && count($userAlbumReviewSnapshot) ? $userAlbumReviewSnapshot["curve_snapshot"] : null, 
         "user_range_snapshot" => isset($userAlbumReviewSnapshot) && count($userAlbumReviewSnapshot) ? $userAlbumReviewSnapshot["range_snapshot"] : null
     );
-    
-    $isLogged = $this->Session->read("Auth.User.User.id");
+        
     
     if($preferredPlayer == "rdio")
     {
+        $playerClassName = "Rdio";
         $config["swfRoot"] = "http://www.rdio.com/api/swf/";
         $config["swfId"] = "play-" . $track["slug"];        
         $config["playbackToken"]  = CakeSession::read("Player.RdioPlaybackToken");
@@ -34,8 +36,11 @@
     }    
 ?>
 <section class="player chart timed <?php echo $preferredPlayer; ?> <?php echo $isLogged ? 'logged' : 'not-logged' ?> play-<?php echo $track["slug"]; ?>">
-    <canvas></canvas>        
-    <div class="cursor"></div>        
+    
+    <canvas></canvas>
+    
+    <div class="cursor"></div>  
+    
     <ul class="legend">
         <li class="everyone">
             <label>
@@ -58,10 +63,12 @@
         </li>
         <?php endif; ?>
     </ul>    
+        
     <div class="seek">            
         <div class="bar"><div class="progress"><span class="knob"></span></div></div>
     </div>
-    <div class="controls">        
+        
+    <div class="controls">   
         <ul style="float:right;">
             <li><?php echo $this->Html->link(__("Review"), array('controller' => 'player', 'action' => 'play', $track["slug"])); ?></li>
         </ul>
@@ -93,7 +100,7 @@
         <?php endif; ?>        
     </div>     
 <script>$(function(){
-new tmt.player(<?php echo json_encode($config); ?>).setupCallback().init();
-new tmt.graph(<?php echo json_encode($graphConfig); ?>).init();
+new tmt.<?php echo $playerClassName; ?>(<?php echo json_encode($config); ?>).run();
+new tmt.Graph(<?php echo json_encode($graphConfig); ?>);
 });</script>
 </section>

@@ -10,8 +10,7 @@
     {
         $this->MetaTags->addLayoutMeta($meta_for_layout);
     }
-    
-    
+        
     if(!isset($customMetas)) $customMetas = array();
     
     if(isset($preferredPlayer))
@@ -23,6 +22,11 @@
         }
         
         $customMetas[] = $this->Html->script(array_merge(array('//code.jquery.com/ui/1.10.3/jquery-ui.js', 'lib/animation/RequestAnimationFrame', 'player/player', 'player/graph'), $playerScript));
+        
+        if(isset($isReview) && $isReview)
+        {
+            $customMetas[] = $this->Html->script('player/reviewer');
+        }
     }    
     
     if(isset($oembedLink))

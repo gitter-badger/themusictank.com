@@ -6,7 +6,7 @@ require_once ($vendor[0] . "rdio-simple/rdio.php");
 class RdioArtist extends AppModel
 {	
 	public $belongsTo   = array('Artist');    
-    public $actAs       = array('Rdio');
+    public $actsAs       = array('Rdio');
     
     public function updateCached()
     {
@@ -14,6 +14,7 @@ class RdioArtist extends AppModel
         {    
             $rdioKey    = $this->getData("RdioArtist.key");
             $albums     = $this->getRdioAlbumsForArtists($rdioKey);
+            
             if($albums)
             {                
                 $this->Artist->Albums->data = $this->data;

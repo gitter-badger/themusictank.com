@@ -2,6 +2,8 @@
 
 App::uses('AuthComponent', 'Controller/Component');
 App::uses('CakeSession', 'Model/Datasource');
+App::uses('UserActivity', 'Model');
+App::uses('Notifications', 'Model');
 
 class User extends AppModel
 {	
@@ -40,14 +42,19 @@ class User extends AppModel
 		)
 	);
     
+    
+    const PLAYER_RDIO   = "rdio";
+    const PLAYER_MP3    = "mp3";
+    
+    
     public static function getPreferredPlayer($userdata)
     {                   
         if((int)$userdata["preferred_player_api"] === 1 && CakeSession::read('Player.Rdio'))
         {
-            return "rdio";
+            return self::PLAYER_RDIO;
         }
         
-        return "mp3";
+        return self::PLAYER_MP3;
     }
         
     public static function getFullName($userdata)
@@ -70,26 +77,33 @@ class User extends AppModel
     {
         if($created)
         {
-            $this->dispatchEvent('onCreate');
+            $userId = $this->getData("User.id");
+            $this->reward($userId, UserActivity::TYPE_NEW_ACCOUNT);
         }
     }
         
     public function reward($userId, $key)
     {       
-        $achievement = $this->UserAchievements->Achievement->findByKey($key);
-        $achievementId = $achievement["Achievement"]["id"];
-        
-        if($achievement && $this->UserAchievements->checkIfApplies($userId, $achievementId))
+        $achievement = $this->UserAchievements->Achievement->findByKey($key);        
+        if($achievement)
         {   
-            if($this->UserAchievements->grant($userId, $achievementId))
-            {
-                $this->notify($userId, "achievement", __("Achivement unlocked: ") . " " . $achievement["Achievement"]["name"], $achievement["Achievement"]["id"]);
+            $achievementId    = $achievement["Achievement"]["id"];
+            $achievementName  = $achievement["Achievement"]["name"];
+            if($this->UserAchievements->notObtained($userId, $achievementId))
+            {                
+                if($this->UserAchievements->grant($userId, $achievementId))
+                {
+                    $msg = sprintf(__("Achievement unlocked: \"%s\"!"), $achievementName);
+                    return $this->notify($userId, Notifications::TYPE_ACHIEVEMENT, $msg);
+                }
             }
         }
+        return false;
     }
  
     public function notify($userId, $type, $title, $id = null)
     {
+        $this->Notifications->create();
         return $this->Notifications->save(array(
             "type"      => $type,
             "title"     => $title,

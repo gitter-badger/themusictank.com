@@ -13,7 +13,8 @@ class Notifications extends ImplicitRelationModel
     {    
         return $this->find("all", array(
                 "conditions"    => array("user_id" => $userId),
-                "limit"         => $limit
+                "limit"         => $limit,
+                "order"         => "Notifications.created DESC"
             )
         );
     }    

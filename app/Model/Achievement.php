@@ -1,5 +1,7 @@
 <?php
 
+App::uses('UserActivity', 'Model');
+
 class Achievement extends AppModel
 {	
     public $useDbConfig = 'array';
@@ -9,8 +11,8 @@ class Achievement extends AppModel
      * @var array
      */
     public $records     = array(
-        array('id' => 1, 'key' => "NEW_USER",   'name' => 'Welcome to TMT', 'description' => 'Welcome Tanker! No go and rock!'),
-        array('id' => 2, 'key' => "NEW_ARTIST", 'name' => 'Builder',        'description' => 'By importing your collection, you have added a new artist to our list. Thanks!')
+        array('id' => 1, 'key' => UserActivity::TYPE_NEW_ACCOUNT,   'name' => 'Welcome to TMT', 'description' => 'Welcome Tanker! No go and rock!'),
+        array('id' => 2, 'key' => UserActivity::TYPE_CREATED_ARTIST, 'name' => 'Builder',        'description' => 'By importing your collection, you have added a new artist to our list. Thanks!')
     );
         
     /**

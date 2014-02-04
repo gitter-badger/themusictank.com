@@ -11,9 +11,9 @@ class RdioBehavior extends ModelBehavior {
         return new Rdio(Configure::read('RdioApiConfig'));
     }
     
-    public function getRdioArtistLibrary($model)
+    public function getRdioArtistLibrary($model, $key)
     {
-        $data = $this->_getRdioInstance()->call('getArtistsInCollection');   
+        $data = $this->_getRdioInstance()->call('getArtistsInCollection', array("user" => $key));        
         return ($data) ? $data->result : null;
     }
     
@@ -39,6 +39,12 @@ class RdioBehavior extends ModelBehavior {
     {
         $data = $this->_getRdioInstance()->call('getNewReleases', array("time" => $time, "extras" => "tracks"));  
         return ($data) ? $data->result : null;
-    }
+    }   
     
+    public function getPlaybackToken()
+    {
+        $data = $this->_getRdioInstance->call('getPlaybackToken', array("domain" => $_SERVER['SERVER_NAME']));  
+        return ($data) ? $data->result : null;
+    }
+                
 }

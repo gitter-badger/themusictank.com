@@ -47,7 +47,8 @@ class SubscribersAlbumReviewSnapshot extends UserReviewSnapshot
     
     public function getAppreciation($belongsToId, $timestamp = 0, $extraConditions = null)
     {                
-        $ids = $this->User->UserFollowers->getSubscriptions(CakeSession::read('Auth.User.User.id'), true);   
-        return parent::getappreciation($belongsToId, $timestamp, "user_id IN (" . implode(",", $ids) . ")");
+        $ids            = $this->User->UserFollowers->getSubscriptions(CakeSession::read('Auth.User.User.id'), true);   
+        $extraConditions=  (count($ids) > 0) ? "user_id IN (" . implode(",", $ids) . ")" : "0 = 1";
+        return parent::getappreciation($belongsToId, $timestamp, $extraConditions);
     }       
 }

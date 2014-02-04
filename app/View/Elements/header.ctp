@@ -34,9 +34,5 @@
         </ul>
         <?php endif; ?>
     </nav>
-    
-    <?php echo $this->Form->create(array('action' => 'search', 'type' => 'get')); ?>
-    <?php echo $this->Form->input('name', array('placeholder' => __('Search'))); ?>
-    <?php echo $this->Form->end(__("go")); ?>
-    
+        
  </header>

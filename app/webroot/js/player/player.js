@@ -1,27 +1,22 @@
 (function() {
-    var tmt = window.tmt = {};
-
+    
     var FRAMERATE           = 24,
         APP_FRAMERATE       = 1 / FRAMERATE * 1000;    
 
-    var player = tmt.player = function(config)
-    {
-        this.config = config;
-        return this;
-    };
-
-    player.prototype = {
-                  
-        init : function()
+    var Player = Class.extend({
+                 
+        init : function(config)
         {
+            this.config = config;
+        
             // Make constant available to overriding classes
             this.config.APP_FRAMERATE = APP_FRAMERATE;
             this.config.container   = {ref : $(this.config.containerSelector)};   
             this.config.seek        = {ref : this.config.container.ref.find(".seek")};               
-            this.config.seekCursor      = {ref : this.config.container.ref.find(".cursor")};  
+            this.config.seekCursor  = {ref : this.config.container.ref.find(".cursor")};  
             this.config.progress    = {ref : this.config.seek.ref.find(".progress")};        
             this.config.playBtn     = {ref : this.config.container.ref.find('button[name=play]')};
-            this.config.timer = {ref : $(this.config.containerSelector + ".timed .time")};
+            this.config.timer       = {ref : $(this.config.containerSelector + ".timed .time")};
             
             this.config.saveEquilizer = !(this.config.equilizerData);
             
@@ -31,11 +26,16 @@
                 tick:0,
                 frameId : 0,
                 wavelength : []
-            };        
+            };
+            
+            return this;
+        },
+        
+        run : function()
+        {
             
             this.addEvents();  
-            this.loadSongStreamer();           
-            return this;
+            this.loadSongStreamer();   
         },
                 
         addEvents : function()
@@ -53,7 +53,7 @@
         },  
         
         play : function()
-        {                
+        {
             if(this.isPlayingSong())
             {
                 return this.pause();
@@ -165,7 +165,7 @@
         
         displaySongInfo : function()
         {
-            if(this.config.trackDuration && this.config.progress.position != this.data.position)
+            if(this.config.trackDuration && this.config.progress.position !== this.data.position)
             {
                 var pct = ((this.data.position  / this.config.trackDuration) * 100);
                 
@@ -175,7 +175,7 @@
                 this.config.progress.position = this.data.position;
             }
             
-            if(this.config.timer && this.config.timer.position != this.data.position)
+            if(this.config.timer && this.config.timer.position !== this.data.position)
             {
                 var position = this.data.position;
                 var total = this.config.trackDuration;
@@ -185,9 +185,7 @@
                     totMins = Math.floor(total / 60),
                     totSecs =  Math.floor(total - (totMins * 60));
             
-                if(posSecs === 0) posSecs += "0";
                 if(posSecs < 10) posSecs = "0" + posSecs;
-                if(totSecs === 0) totSecs += "0";
                 if(totSecs < 10) totSecs = "0" + totSecs;
                 
                 this.config.timer.ref.html(posMins + ":" + posSecs + " / " + totMins + ":" + totSecs);
@@ -246,12 +244,13 @@
         // Saving wavelength + bars
         onFrequencyChange : function(data)
         {
+            this.data.frequency = [];
             var total = 0, i = 0, len = data.length, value = 0;
             for( ; i < len; i++) 
             {
                 value = parseFloat(data[i]);
                 total += value;
-                this.data.frequency[i] = value;
+                this.data.frequency.push(value);
             }
         },
         
@@ -274,10 +273,10 @@
         loadSongStreamer    : _notOverriden,
         onReady             : _notOverriden,
         onTrackChanged      : _notOverriden
-    };
+    });
 
-    function _notOverriden() {
-        
-    };
+    function _notOverriden() {};
+    
+    tmt.Player = Player;
     
 })();

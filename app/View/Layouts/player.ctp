@@ -6,10 +6,12 @@
     <?php 
         echo $this->element('head', array(
             "customMetas" => array(
-                $this->Html->css(array('lib/animations', 'player')),
-                $this->Html->script(array('//code.jquery.com/ui/1.10.3/jquery-ui.js', 'lib/jquery.ui.touch-punch.min', 'lib/animation/RequestAnimationFrame', 'reviewer/player'))
+                $this->Html->script(array('player/reviewer'))
+               // $this->Html->css(array('lib/animations', 'player')),
+               // $this->Html->script(array('//code.jquery.com/ui/1.10.3/jquery-ui.js', 'lib/jquery.ui.touch-punch.min', 'lib/animation/RequestAnimationFrame', 'reviewer/player'))
             )
         )); 
+        echo  $this->Html->script(array('player/reviewer');
     ?>    
 </head>
 <body class="player loading">
@@ -81,9 +83,8 @@
             <?php echo $this->Html->link($track["title"], array('controller' => 'tracks', 'action' => 'view', $track["slug"])); ?>
             
         </div>
-
-        <div id="apiswf"></div>
-
+     
+        <?php echo $this->element('reviewer'); ?>
         <?php echo $this->fetch('content'); ?>    
 
         <div class="dlg focusLost" title="<?php echo __('Must retain focus'); ?>">

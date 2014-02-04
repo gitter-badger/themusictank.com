@@ -1,10 +1,11 @@
 <?php
+App::uses('UserActivity', 'Model');
 
 class UserAchievements extends AppModel
 {	    
     public $belongsTo   = array("Achievement");
     
-    public function checkIfApplies($userId, $achievementId, $value = null)
+    public function notObtained($userId, $achievementId)
     {        
         $conditions = array(
             "UserAchievements.user_id"          => $userId,
@@ -16,20 +17,18 @@ class UserAchievements extends AppModel
     
     public function grant($userId, $achievementId)
     {
-        return $this->save(array("user_id" => $userId, "achievement_id" => $achievementId));        
+        $this->create();
+        if($this->save(array("user_id" => $userId, "achievement_id" => $achievementId)))
+        {
+            $activity = new UserActivity();
+            return $activity->add($userId, UserActivity::TYPE_ACHIEVEMENT, $achievementId);
+        }
+        
+        return false;
     }
     
     public function getAchievementDetails($id)
     {
         return $this->Achievement->findById($id);
-    }
-    
-    public function afterSave($created, $options = array())
-    {
-        if($created)
-        {
-            $this->dispatchEvent('onCreate');
-        }
-    }
-    
+    }    
 }

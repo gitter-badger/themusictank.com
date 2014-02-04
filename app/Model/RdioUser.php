@@ -1,6 +1,9 @@
 <?php
 
 App::uses('Artist', 'Model');
+App::uses('UserActivity', 'Model');
+App::uses('CakeSession', 'Model/Datasource');
+
 class RdioUser extends AppModel
 {	
 	public $belongsTo   = array('User');    
@@ -10,14 +13,20 @@ class RdioUser extends AppModel
     {
         if($this->requiresUpdate())
         {    
-            $artists = $this->getRdioArtistLibrary();
+            $userKey = $this->getData("RdioUser.key");
+            $artists = $this->getRdioArtistLibrary($userKey);
             if($artists)
-            {   
+            {                   
                 $artist = new Artist();
                 $filtered = $artist->RdioArtist->filterNew($artists);
                 
-                $artist->data = $this->data;                
-                $artist->saveMany($filtered, array('deep' => true));                
+                if(count($filtered) > 0)
+                {
+                    $artist->data = $this->data;                
+                    $artist->saveMany($filtered, array('deep' => true));                                    
+                    
+                    $this->User->reward((int)CakeSession::read('Auth.User.User.id'), UserActivity::TYPE_CREATED_ARTIST);
+                }
                 
                 $this->setSyncTimestamp();
             }
@@ -72,5 +81,4 @@ class RdioUser extends AppModel
             return $this->User->read(null, $this->User->id);
         }
     }
-    
 }

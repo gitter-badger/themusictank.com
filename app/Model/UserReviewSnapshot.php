@@ -17,7 +17,12 @@ class UserReviewSnapshot extends TableSnapshot
      * @return boolean True on success, false on failure
      */ 
     public function updateCached()
-    {                   
+    {
+        if(!array_key_exists($this->alias, $this->data))
+        {
+            $this->data[$this->alias] = array("id" => null);        
+        }
+        
         if($this->requiresUpdate())
         {
             return $this->snap();   

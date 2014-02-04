@@ -242,12 +242,14 @@ ul.horizontal li:last-child {
     border:1px solid #666;
 }
 
+.player .focus-lost,
 .player .parsing-mp3,
 .player .drop {
     display:none;
     position:absolute;
     top:0;
     left:0;
+    height:100%;
     width:100%;
     background:#fff;
 }
@@ -260,6 +262,18 @@ ul.horizontal li:last-child {
     width:50%;
     background:#fff;
 }
+
+
+.player.synchronising .synchronising {
+    display:none;
+    position:absolute;
+    right:5px;
+    bottom:5px;
+    background:transparent url(../img/ico-loading.gif) 50% 50% no-repeat;
+    min-height: 32px;
+    min-width: 32px;
+}
+
 
 .player.not-logged .drop {
     width:50%;
@@ -274,6 +288,8 @@ ul.horizontal li:last-child {
     display:block;
 }
 
+.player.synchronising .synchronising,
+.player.focuslost .focus-lost,
 .player.parsingmp3 .parsing-mp3 {
     display:block;
 }
@@ -284,18 +300,45 @@ ul.horizontal li:last-child {
 }
 
 
-
-/* Charts 
-.chart {
-    height:400px;
+.player .ui {
+    position:relative;
 }
 
-.chart-small {
-    height:80px;
-    width:80px;
+.joystick {
+    position:absolute;
+    top:15%;
+    bottom:15%;
+    left:50%;
+    width:130px;
+    margin:0 0 0 -65px;
+    border:1px solid #333;
+    background:#999;
+    text-align:center;
+}
+
+.joystick b {
+    background:#aeaeae;
+    height:120px;
+    width:120px;
     display:inline-block;
+    border:1px solid #333;
+    border-radius: 80px;
 }
-*/ 
+
+/* FX */
+
+.suckpowering .joystick  {
+    box-shadow: 0 0 10px 30px #a00;
+}
+
+.starpowering .joystick {
+    box-shadow: 0 0 10px 30px #2d6324;
+}
+
+.shaking .joystick {
+    box-shadow: 0 0 10px #E6B800;
+}
+
 .mask {
     position:absolute;
     top:0;
@@ -320,10 +363,3 @@ ul.horizontal li:last-child {
 
 .loading .loading-mask { display:block; }
 
-.dlg {
-    display:none;
-    background:#fff;
-    border:1px solid #999;
-}
-
-/*.highcharts-container svg text { display:none;}*/

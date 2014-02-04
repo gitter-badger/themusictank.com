@@ -1,63 +1,67 @@
 (function() {
-    
-    var player = window.tmt.player.prototype,
-        TRACK_LENGTH_DIFF = 5;
-
-    player.loadSongStreamer = function()
-    {
-        if(_hasAPISupport() && _hasSongAPISupport())
-        {
-            this.onReady();
-        }
-        else
-        {
-            this.config.container.ref.addClass("featureunavailable");
-        }
-    };
-    
-    player.onReady = function()
-    { 
-        this.config.container.ref.removeClass("loading");
-        this.config.container.ref.addClass("askingfordrop");
-               
-        var drop = this.config.container.ref,
-            inputRef = this.config.container.ref.find("input[type=file]").get(0),
-            dropRef = this.config.container.ref.get(0);
-                
-        this.config.upload = { ref : drop };
         
-        this.config.container.ref.find("button[name=try-again]").click($.proxy(_onErrorDismiss, this));
+    var TRACK_LENGTH_DIFF = 5;
         
-        dropRef.addEventListener('dragover', $.proxy(_handleDragOver, this), false);
-        dropRef.addEventListener('drop', $.proxy(_handleFileSelect, this), false);
-        inputRef.addEventListener('change', $.proxy(_handleFileInputSelect, this), false);        
-    };
+    tmt.Mp3 = tmt.Player.extend({
+        
+        loadSongStreamer : function()
+        {
+            if(_hasAPISupport() && _hasSongAPISupport())
+            {
+                this.onReady();
+            }
+            else
+            {
+                this.config.container.ref.addClass("featureunavailable");
+            }
+        },
+        
+        onReady : function()
+        { 
+            this.config.container.ref.removeClass("loading");
+            this.config.container.ref.addClass("askingfordrop");
 
-    player.apicontrols_play = function()
-    {
-        this.config.audio.ref.get(0).play();
-        this.onStatusChange("playing");
-    };
+            var drop = this.config.container.ref,
+                inputRef = this.config.container.ref.find("input[type=file]").get(0),
+                dropRef = this.config.container.ref.get(0);
 
-    player.apicontrols_stop = function()
-    {
-        var ref = this.config.audio.ref.get(0);
-        ref.pause();
-        ref.currentTime = 0;
-        this.onStatusChange("stopped");    
-    };
+            this.config.upload = { ref : drop };
 
-    player.apicontrols_pause = function()
-    {
-        this.config.audio.ref.get(0).pause();
-        this.onStatusChange("paused");
-    };
+            this.config.container.ref.find("button[name=try-again]").click($.proxy(_onErrorDismiss, this));
 
-    player.apicontrols_resume = function()
-    {
-        this.config.audio.ref.get(0).play();
-        this.onStatusChange("playing");
-    };
+            dropRef.addEventListener('dragover', $.proxy(_handleDragOver, this), false);
+            dropRef.addEventListener('drop', $.proxy(_handleFileSelect, this), false);
+            inputRef.addEventListener('change', $.proxy(_handleFileInputSelect, this), false);        
+        },
+        
+        apicontrols_play : function()
+        {
+            this.config.audio.ref.get(0).play();
+            this.onStatusChange("playing");
+        },
+
+        apicontrols_stop : function()
+        {
+            var ref = this.config.audio.ref.get(0);
+            ref.pause();
+            ref.currentTime = 0;
+            this.onStatusChange("stopped");    
+        },
+
+        apicontrols_pause : function()
+        {
+            this.config.audio.ref.get(0).pause();
+            this.onStatusChange("paused");
+        },
+
+        apicontrols_resume : function()
+        {
+            this.config.audio.ref.get(0).play();
+            this.onStatusChange("playing");
+        }
+    
+    });
+
     
     function _addEvents()
     {
@@ -235,24 +239,4 @@
         this.data.reader = reader;
     };    
     
-    /*
-    function _readFile(start, limit)
-    {
-        var buffer = this.data.file,
-            binary_string = "",
-            bytes;
-
-        if(parseInt(start, 10) >= 0 && parseInt(limit,10) > 0)          
-        {
-            buffer = buffer.slice(start, limit);
-        }
-        
-        bytes = new Uint8Array(buffer);
-        for (var i = 0; i < bytes.byteLength; i++) {
-            binary_string += String.fromCharCode(bytes[i]);
-        }
-        
-        return binary_string;
-    }
-    */
 })();

@@ -32,8 +32,7 @@ class AlbumReviewSnapshot extends TableSnapshot
             $trackSplitMin      = ReviewFrames::getTrackSpan($splitData["min"], $track["id"]);
             $trackSplitMax      = ReviewFrames::getTrackSpan($splitData["max"], $track["id"]);
             $range["min"]       = array_merge($range["min"], ReviewFrames::lowerSpanResolution($trackSplitMin, $ppf, $trackResolution));
-            $range["max"]       = array_merge($range["max"], ReviewFrames::lowerSpanResolution($trackSplitMax, $ppf, $trackResolution));
-            
+            $range["max"]       = array_merge($range["max"], ReviewFrames::lowerSpanResolution($trackSplitMax, $ppf, $trackResolution));            
         }                
         
         return array(

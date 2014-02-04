@@ -33,12 +33,7 @@ class AppController extends Controller {
         parent::beforeFilter();
         
         // Include models that are used globally
-        $this->loadModel("User");        
-        
-        // Attach the Achievement listener to the global
-        // Cake event manager so it catches everything.
-        CakeEventManager::instance()->attach(new AchievementListener());     
-        CakeEventManager::instance()->attach(new ActivityListener());      
+        $this->loadModel("User");
     }
                     
     /** 
@@ -169,7 +164,7 @@ class AppController extends Controller {
      * Prepares all the flags to load the proper player on a page
      * @return void
      */
-    public function usesPlayer()
+    public function usesPlayer($isReview = false)
     {        
         $preferredPlayer = "mp3";
         if($this->userIsLoggedIn())
@@ -179,6 +174,7 @@ class AppController extends Controller {
         }
         $this->preferredPlayer = $preferredPlayer;
         $this->set("preferredPlayer", $preferredPlayer);
+        $this->set("isReview", $isReview);
     }
         
 }

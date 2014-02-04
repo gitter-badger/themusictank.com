@@ -9,7 +9,7 @@ class UserActivity extends ImplicitRelationModel
          return $this->save(array("user_id" => $userId, "type" => $activityType, "related_model_id" => $relatedModelId));  
     }
  
-    public function fetchFriendsActivity($idList)
+    public function fetchActivity($idList)
     {        
         return $this->associateRelated(
                 $this->find("all", array(

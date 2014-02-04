@@ -9,9 +9,17 @@ class ImplicitRelationModel extends AppModel
         "User" => array()
     );
     
-    const TYPE_ACHIEVEMENT  = "achievement";
-    const TYPE_FOLLOWER     = "follower";
+    const TYPE_ACHIEVEMENT      = "achievement";
+    const TYPE_FOLLOWER         = "follower";
+    const TYPE_NEW_ACCOUNT      = "newaccount";
+    const TYPE_CREATED_ARTIST   = "newartist";
         
+    
+    public function getType($typeId)
+    {
+        return self::$typeId;
+    }
+    
     // In a perfect world, this function should be an afterFind
     // but loading users starts a recursive loop. 
     public function associateRelated($results)

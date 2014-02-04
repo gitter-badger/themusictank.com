@@ -7,26 +7,19 @@
  */
 class MetacriticApiComponent extends Component {
 	
+    const METACRITIC_ROOT_URL = "http://www.metacritic.com/music/";
+    
 	public function initialize(Controller $controller)
 	{
 		$this->_controller = $controller;
 	}
-    
-    private function _post($subfolders)
-    {        
-        $curl = curl_init('http://www.metacritic.com/music/');
-        curl_setopt($curl, CURLOPT_RETURNTRANSFER, TRUE);
-        $body = curl_exec($curl);
-        curl_close($curl);    
-        return $body;
-    }    
-    
+        
     public function getAlbumScore($albumTitle, $artistName)
     {
         try
         {
             $doc = new DOMDocument();
-            @$doc->loadHTMLFile('http://www.metacritic.com/music/' . $albumTitle . '/' . $artistName);
+            @$doc->loadHTMLFile(sprintf("%s/%s/%s", self::METACRITIC_ROOT_URL, $albumTitle, $artistName));
 
             foreach($doc->getElementsByTagName("div") as $div)
             {

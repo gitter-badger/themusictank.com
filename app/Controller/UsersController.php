@@ -41,8 +41,11 @@ class UsersController extends AppController {
     {   
         $this->loadModel("UserActivity");
                 
-        $list = array_values($this->User->UserFollowers->getSubscriptions($this->getAuthUserId()));
-        $feed = $this->UserActivity->fetchFriendsActivity($list);
+        $userId = $this->getAuthUserId();
+        $list = array_values($this->User->UserFollowers->getSubscriptions($userId));
+        $list[] = $userId;
+                
+        $feed = $this->UserActivity->fetchActivity($list);
         
         $this->set("feed", $feed);        
         $this->setPageTitle(array(__("TMT dashboard")));
@@ -56,7 +59,7 @@ class UsersController extends AppController {
     {
         $user = $this->getAuthUser();
         $saved = false;
-        
+            
         if(!$user)
         {
             throw new NotFoundException('Could not find that user');
@@ -177,7 +180,7 @@ class UsersController extends AppController {
             {        
                 !$this->userIsLoggedIn() ? $this->startUserSession($data) : $this->updateUserSession($data);                
                 $this->User->RdioUser->data = $data;
-                $this->User->RdioUser->updateCached();       
+                $this->User->RdioUser->updateCached();
                 $this->redirectByRURL(array('controller' => 'users', 'action' => 'dashboard'));
             }
         }

@@ -1,5 +1,7 @@
 <?php
 
+//App::uses('User', 'Model');
+
 class Artist extends AppModel
 {	    
 	public $hasOne = array('RdioArtist', /*'EchonestArtist',*/ 'LastfmArtist', "ArtistReviewSnapshot");	
@@ -50,22 +52,11 @@ class Artist extends AppModel
         return true;
     }
     
-    public function afterSave($created, $options = array())
-    {
-        
-        // Validating against the auth component because the cron launches this.
-        if($created && (int)AuthComponent::user('id') > 0) 
-        {
-            $this->dispatchEvent('onCreate');
-        }
-    }
-    
     public function filterNewAndSave($artistList)
     {
         $list = $this->RdioArtist->filterNew($artistList);
         return $this->saveMany($list, array('deep' => true));                
-    }
-    
+    }    
         
     /**
      * Finds all artists that have been flagged as popular.

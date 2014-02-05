@@ -4,10 +4,10 @@
         MIDDLE_GROOVE_VALUE = 0.500,
         FRAMERATE           = 24,
         //FRAMES_PER_SAVE     = FRAMERATE * 15, // every 15 seconds 
-        FRAMES_PER_SAVE     = FRAMERATE*5, // expects that it doesn't take up to 5 seconds to save, though it would still work
+        FRAMES_PER_SAVE     = null, // expects that it doesn't take up to 5 seconds to save, though it would still work
 
-        SAVE_FRAMERATE       = 1 / (FRAMERATE / 3) * 1000,
-        MAX_MULTIPLIER      = 2,
+        SAVE_FRAMERATE       = 3 / FRAMERATE * 1000,
+        MAX_MULTIPLIER      = 3,
   
         // These define the length of all 'animations'
         DURATION_COMPARE    = 3.5 * 60, // the basis for all effects is based on 1 sec when song is 3m30s
@@ -45,7 +45,8 @@
             this.data["multiplier"] = 0;
             this.data["reviewFrames"] = [];
             this.data["appHasFocus"] = true;
-            
+            this.data["savetick"] = 0;
+            this.data["lastframeSent"] = 0;
         },
         
         run : function()
@@ -70,6 +71,9 @@
             FRAME_PER_SHAKE     = FRAMERATE * LENGTH_SHAKING;
             FRAMES_PER_MULTIPLIER = FRAMES_PER_POWERING * (this.config.trackDuration * LENGTH_TO_MULTIPLIER / DURATION_COMPARE); 
             FRAMES_PER_MULTIPLY = FRAMES_PER_MULTIPLIER * (this.config.trackDuration * LENGTH_MULTIPLYING / DURATION_COMPARE);
+
+            FRAMES_PER_SAVE     = FRAMERATE * 5;
+            this.debug("config", "FRAMES_PER_SAVE", FRAMES_PER_SAVE);
             
             this.debug("config", "FRAMES_PER_POWERING", FRAMES_PER_POWERING);
             this.debug("config", "FRAMES_TO_SHAKE", FRAMES_TO_SHAKE);
@@ -175,11 +179,9 @@
         },                
                  
         frameShouldSave : function()
-        {            
-            return  !this.data.paused &&
-                    (this.data.savetick + SAVE_FRAMERATE <= this.getNow());
-        },                 
-         
+        {
+            return  !this.data.paused && (this.data.savetick + SAVE_FRAMERATE <= this.getNow());
+        },
 
         render : function()
         {
@@ -540,61 +542,42 @@
         },
              
         saveCurrentFrame : function()
-        {        
-
-            var length = this.data.reviewFrames.length,
-                isDone = this.data.position >= this.config.trackDuration,
-                previousFrame = this.data.reviewFrames.length > 0 ? this.data.reviewFrames[this.data.reviewFrames.length - 1] : null,
-                currentFrame = {
-                    gv  : this.data.groove,
-                    st  : this.data.starpowering === true ? 1 : 0,
-                    su  : this.data.suckpowering === true ? 1 : 0,
-                    g   : this.data.grooving  === true ? 1 : 0,
-                    m   : this.data.multiplier,
-                    p   : this.data.position,
-                    o   : isDone ? 1 : null
-                };
-
-
+        {
             if(this.frameShouldSave())
             {
-                this.saveCurrentFrame();
-                this.data.reviewFrames.push(currentFrame);
-                this.data.savetick = this.getNow();
-            }
+                var lastFrame = null,
+                    idx = null
+                    currentFrame = {
+                        gv  : this.data.groove,
+                        st  : this.data.starpowering === true ? 1 : 0,
+                        su  : this.data.suckpowering === true ? 1 : 0,
+                        m   : this.data.multiplier,
+                        p   : this.data.position,
+                        o   : this.data.position >= this.config.trackDuration ? 1 : null
+                    };
 
-            if(isDone ||  (length + 1) % 20 === 0) //(length > 0 && (length+1) % FRAMES_PER_SAVE === 0))
-            {
-                this.sendFramesPackage((length+1) - 20, length);
-            }    
-
-
-            /* This might be a bit too conservative 
-            if(prevFrame)
-            {           
-                if(currentFrame["p"] !== prevFrame["p"])
+                if(this.data.reviewFrames.length > 0)
                 {
-                    var keys = ["st", "su", "gv", "g"];
-                    for(var attr in keys)
-                    {
-                        if(currentFrame[keys[attr]] !== prevFrame[keys[attr]])
-                        {
-                            shouldSave = true;
-                            break;
-                        }
-                    }
+                    lastFrame = this.data.reviewFrames[this.data.reviewFrames.length - 1];
+                }
+
+                if(lastFrame && (lastFrame["p"] != currentFrame["p"] || lastFrame["gv"] != currentFrame["gv"]) )
+                {
+                    this.data.reviewFrames.push(currentFrame);
+                    this.data.savetick = this.getNow();
+                }
+                else if(!lastFrame)
+                {
+                    this.data.reviewFrames.push(currentFrame);
+                    this.data.savetick = this.getNow();
                 }
             }
-            
-            if(!prevFrame || shouldSave)
+
+            if(this.data.frameId % FRAMES_PER_SAVE === 0)
             {
-                this.data.reviewFrames.push(currentFrame);
-                
-                if(length > 0 && (length+1) % FRAMES_PER_SAVE === 0)
-                {
-                    this.sendFramesPackage((length+1) - FRAMES_PER_SAVE, length);
-                }                
-            }*/
+                this.sendFramesPackage(this.data.lastframeSent, this.data.reviewFrames.length);
+                this.data.lastframeSent = this.data.reviewFrames.length - 1;
+            }
         },        
                 
         calculateGrooveCurve : function()

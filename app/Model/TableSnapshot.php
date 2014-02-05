@@ -78,8 +78,7 @@ class TableSnapshot extends AppModel
         $conditions = array_merge($extraConditions, array(
             "ReviewFrames.$belongsToLabel"  => $belongsToId, 
             "ReviewFrames.created >"        => $timestamp
-        ));
-                
+        ));                
         
         return $rf->getRawCurve($conditions);
     }    

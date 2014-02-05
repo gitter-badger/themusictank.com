@@ -27,7 +27,7 @@ class Track extends AppModel
         $this->TrackReviewSnapshot->updateCached();
                
         $data = $this->getBySlugContained($slug);
-        
+
         if($addCurrentUser)
         {   
             $user = new User();
@@ -38,7 +38,7 @@ class Track extends AppModel
             $user->SubscribersTrackReviewSnapshot->data    = $data;
             $data["SubscribersTrackReviewSnapshot"]        = $user->SubscribersTrackReviewSnapshot->updateCached();   
         }
-                
+               
         $this->data = $data;
         return $data;
     }    

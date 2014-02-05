@@ -7,7 +7,7 @@ class SubscribersTrackReviewSnapshot extends UserReviewSnapshot
 	public $name        = 'SubscribersTrackReviewSnapshot';
     public $useTable    = 'subscribers_track_review_snapshots';  
     public $belongsTo   = array('Track', 'User');
-             
+
     public function getCurve($trackId, $resolution = 100, $timestamp = 0)
     {             
         $ids        = $this->User->UserFollowers->getSubscriptions(CakeSession::read('Auth.User.User.id'), true);   

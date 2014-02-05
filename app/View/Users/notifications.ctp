@@ -5,7 +5,11 @@
 <ul class="notifications">    
     <?php foreach($notifications as $notification) : ?>
         <li class="notification <?php echo $notification["Notifications"]["is_viewed"] ? "read" : "new"; ?> <?php echo $notification["Notifications"]["type"]; ?>"> 
-            <p><?php echo date("F j, Y, g:i a", $notification["Notifications"]["created"]); ?></p>
+
+            <time datetime="<?php echo $this->Time->i18nFormat($notification["Notifications"]["created"]); ?>" data-title="true" title="<?php echo $this->Time->niceShort($notification["Notifications"]["created"]); ?>">
+                <?php echo $this->Time->timeAgoInWords($notification["Notifications"]["created"], array('accuracy' => array('day' => 'day'), 'end' => '1 month')); ?>
+            </time>
+
             <p><?php echo $notification["Notifications"]["title"]; ?></p>
 
             <?php if(array_key_exists("Achievement", $notification["Notifications"])) : ?>
@@ -30,7 +34,7 @@
         $("button[name=markAsRead]").click(function(){
             $.getJSON("<?php echo Router::url(array("controller" => "ajax", "action" => "okstfu")); ?>", function(){
                 $('.notifications .notification.new').removeClass("new").addClass("read");
-            });
+            }); 
         });
     });
 </script>

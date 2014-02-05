@@ -68,7 +68,7 @@ class AppController extends Controller {
      */
 	public function userIsLoggedIn()
 	{        
-        return ($this->getAuthUser());
+        return !is_null($this->getAuthUser());
 	}
     
     /** 

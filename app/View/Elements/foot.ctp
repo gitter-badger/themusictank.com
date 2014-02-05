@@ -13,9 +13,4 @@
     </ul>
 
     &copy; 1999 - <?php echo date("Y"); ?> <?php echo __("The Music Tank"); ?>
-</footer>    
-    
-<?php if(isset($this->Chart) && $this->Chart->beingUsed()) : ?>
-    <?php echo $this->Html->script( array('lib/highcharts/highcharts', 'lib/highcharts/highcharts-more')); ?>
-    <?php echo $this->Chart->getScript(); ?>
-<?php endif; ?>
+</footer>

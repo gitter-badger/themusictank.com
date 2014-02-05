@@ -17,10 +17,9 @@
         "range_snapshot" => $trackReviewSnapshot["range_snapshot"],
         "subs_curve_snapshot" => isset($subsTrackReviewSnapshot) && count($subsTrackReviewSnapshot) ? $subsTrackReviewSnapshot["curve_snapshot"] : null, 
         "subs_range_snapshot" => isset($subsTrackReviewSnapshot) && count($subsTrackReviewSnapshot) ? $subsTrackReviewSnapshot["range_snapshot"] : null,
-        "user_curve_snapshot" => isset($userAlbumReviewSnapshot) && count($userAlbumReviewSnapshot) ? $userAlbumReviewSnapshot["curve_snapshot"] : null, 
-        "user_range_snapshot" => isset($userAlbumReviewSnapshot) && count($userAlbumReviewSnapshot) ? $userAlbumReviewSnapshot["range_snapshot"] : null
-    );
-        
+        "user_curve_snapshot" => isset($userTrackReviewSnapshot) && count($userTrackReviewSnapshot) ? $userTrackReviewSnapshot["curve_snapshot"] : null, 
+        "user_range_snapshot" => isset($userTrackReviewSnapshot) && count($userTrackReviewSnapshot) ? $userTrackReviewSnapshot["range_snapshot"] : null
+    );  
     
     if($preferredPlayer == "rdio")
     {

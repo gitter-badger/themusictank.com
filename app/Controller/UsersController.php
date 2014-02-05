@@ -8,7 +8,7 @@
  */
 class UsersController extends AppController {
     
-    var $helpers    = array("Chart");
+    var $helpers    = array("Chart", "Time");
     var $components = array("Paginator", "FacebookApi", "RdioApi");
     var $paginate = array(
         'limit' => 25,

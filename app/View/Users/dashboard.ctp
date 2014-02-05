@@ -2,7 +2,6 @@
     $currentUserId = $this->Session->read('Auth.User.User.id');
 ?>
 
-
 <h2><?php echo __("Home"); ?></h2>
 
 <section class="activity">
@@ -12,8 +11,11 @@
         <?php foreach($feed as $event) : ?>
         
             <?php if(array_key_exists("Achievement", $event["UserActivity"])) : ?>
-                <li class="achievement">                   
-                    <span><?php echo date("F j, Y, g:i a", $event["UserActivity"]["created"]); ?></span>
+                <li class="achievement">              
+
+                    <time datetime="<?php echo $this->Time->i18nFormat($event["UserActivity"]["created"]); ?>" data-title="true" title="<?php echo $this->Time->niceShort($event["UserActivity"]["created"]); ?>">
+                        <?php echo $this->Time->timeAgoInWords($event["UserActivity"]["created"], array('accuracy' => array('day' => 'day'), 'end' => '1 month')); ?>
+                    </time>
                     
                     <?php if($event["User"]["id"] === $currentUserId) : ?>
                         <p><?php echo sprintf(__("You have unlocked the achievement \"%s\".", $event["UserActivity"]["Achievement"]["name"])); ?></p>
@@ -30,7 +32,9 @@
 
             <?php elseif(array_key_exists("UserFollower", $event["UserActivity"])) : ?>            
                 <li class="subscription">
-                        <span><?php echo date("F j, Y, g:i a", $event["UserActivity"]["created"]); ?></span>                        
+                    <time datetime="<?php echo $this->Time->i18nFormat($event["UserActivity"]["created"]); ?>" data-title="true" title="<?php echo $this->Time->niceShort($event["UserActivity"]["created"]); ?>">
+                        <?php echo $this->Time->timeAgoInWords($event["UserActivity"]["created"], array('accuracy' => array('day' => 'day'), 'end' => '1 month')); ?>
+                    </time>               
                         <p>
                             <?php if($event["User"]["id"] === $currentUserId) : ?>
                                 <?php echo __("You have subscribed to "); ?>

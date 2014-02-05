@@ -55,8 +55,6 @@
         <p><?php echo __("None of the people you are subscribed to have reviewed this track yet."); ?></p>
     <?php endif; ?>
 </section>
-<?php endif; ?>
-
 
 <p class="credits">
     <?php echo __("Track description courtesy of"); ?> <?php echo $this->Html->link("Last.fm", "http://www.last.fm/", array("target" => "_blank")); ?>. 

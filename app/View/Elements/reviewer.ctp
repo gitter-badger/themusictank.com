@@ -40,7 +40,7 @@
         
     <div class="controls">
         <ul>
-            <li><button type="button" title="<?php echo __("Play"); ?>" name="play"><?php echo __("Play"); ?></button></li>
+            <li><button type="button" title="<?php echo __("Play"); ?>" name="play" autofocus="autofocus"><?php echo __("Play"); ?></button></li>
             <li class="time">--:-- / --:--</li>
         </ul>        
         <?php  if($preferredPlayer == "mp3") : ?>

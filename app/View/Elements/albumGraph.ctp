@@ -43,9 +43,8 @@
             </label>
         </li>
         <?php endif; ?>
-    </ul>    
-    </div>     
+    </ul> 
 <script>$(function(){
-new tmt.graph(<?php echo json_encode($graphConfig); ?>).init();
+new tmt.Graph(<?php echo json_encode($graphConfig); ?>);
 });</script>
 </section>

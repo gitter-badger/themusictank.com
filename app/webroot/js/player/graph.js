@@ -8,13 +8,13 @@
         init : function(config) 
         {
             this.config = config;
-            this.config.container   = {ref : $(this.config.containerSelector)}; 
+            this.config.container   = {ref : $( this.config.containerSelector )}; 
             this.config.container.ref.parent(".player").find(".legend input[type=checkbox]").change($.proxy(_onViewToggle, this));
             
             this.config.display = {
-                "everyone" : (this.config.curve_snapshot),
-                "subs" : (this.config.subs_curve_snapshot),
-                "user" : (this.config.user_curve_snapshot)
+                "everyone" : this.config.curve_snapshot != null,
+                "subs" : this.config.subs_curve_snapshot != null,
+                "user" : this.config.user_curve_snapshot != null
             };
             
             this.getContextSizes();
@@ -33,12 +33,12 @@
             
             if(this.config.display.subs && this.config.subs_range_snapshot)
             {
-                _drawRange.call(this, this.config.subs_range_snapshot, "avg", "rgba(66, 133, 244,.4)");         
+                _drawRange.call(this, this.config.subs_range_snapshot, "avg", "rgba(66, 133, 244, .4)");         
             }
             
             if(this.config.display.user && this.config.user_range_snapshot)
             {
-                _drawRange.call(this, this.config.user_range_snapshot, "avg", "rgba(90, 20, 244,.4)");         
+                _drawRange.call(this, this.config.user_range_snapshot, "avg", "rgba(90, 20, 244, .4)");         
             }
             
             if(this.config.display.everyone && this.config.curve_snapshot)
@@ -53,10 +53,10 @@
                 _drawCircles.call(this, this.config.subs_curve_snapshot, "avg", '#4285f4');                
             }  
             
-            if(this.config.display.user && this.config.user_range_snapshot)
+            if(this.config.display.user && this.config.user_curve_snapshot)
             {
-                _drawJoints.call(this, this.config.user_range_snapshot, "avg", "rgb(90, 20, 244)");
-                _drawCircles.call(this, this.config.user_range_snapshot, "avg", "rgb(90, 20, 244)");                
+                _drawJoints.call(this, this.config.user_curve_snapshot, "avg", "rgb(90, 20, 244)");
+                _drawCircles.call(this, this.config.user_curve_snapshot, "avg", "rgb(90, 20, 244)");                
             }
         },
         
@@ -297,38 +297,6 @@
         
         context.fill();
         context.closePath();
-        
-        /*
-        var context = this.config.context,
-            i = 0,
-            len = datasource["min"].length,
-            dotSize = 4,
-            currentPoint    = (dotSize / 2) + 15,
-            distanceBetweenPoints = (this.config.sizes.width -30) / len,
-            height = this.config.sizes.height,
-            yPos, yPosMax, prevYPos = 0, prevYMaxPos = 0;
-
-        for( ; i < len; i++, yPos = 0, yPosMax = 0)
-        {
-            if(datasource[i])
-            {
-                yPos = height * (1-datasource["min"][i][which]);
-                yPosMax = height * (1-datasource["max"][i][which]);
-            }       
-
-            if(prevYPos > 0 && yPos > 0)
-            {
-                context.beginPath();
-                context.moveTo(currentPoint - distanceBetweenPoints- (dotSize / 2), prevYPos);
-                context.lineTo(currentPoint - (dotSize / 2), yPos);
-                context.lineWidth = 1;
-                context.strokeStyle = color;
-                context.stroke();
-            }
-
-            prevYPos = yPos;
-            currentPoint += distanceBetweenPoints;
-        }   */
     }
     
     

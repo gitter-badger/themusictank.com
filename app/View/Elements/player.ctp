@@ -21,6 +21,7 @@
         "user_range_snapshot" => isset($userTrackReviewSnapshot) && count($userTrackReviewSnapshot) ? $userTrackReviewSnapshot["range_snapshot"] : null
     );  
     
+    
     if($preferredPlayer == "rdio")
     {
         $playerClassName = "Rdio";

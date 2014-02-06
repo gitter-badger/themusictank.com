@@ -40,8 +40,7 @@ class TableSnapshot extends AppModel
         {
             $this->snap();   
         }
-    }   
-    
+    }       
     
     /**
      * Creates or updates a model's snapshot
@@ -62,6 +61,32 @@ class TableSnapshot extends AppModel
         $timestamp = $this->getData($this->alias . ".lastsync");
         return empty($timestamp) || $timestamp + (HOUR*12) < time();
     }
+    
+    public function getUserIdsWhoReviewed($trackId, $userIdFilter = null)
+    {
+        $rf = new ReviewFrames();
+        $limit = null;
+        $conditions = array('track_id'  => $trackId);
+        
+        if(is_null($userIdFilter))
+        {
+            $limit = 5;
+        }
+        else
+        {            
+            $conditions['user_id'] = $userIdFilter;
+        }
+        
+        return $rf->find("list", array(
+            'conditions' => $conditions, 
+            "limit" => $limit, 
+            "fields" => "user_id", 
+            "group" => "user_id", 
+            'order' => 'rand()'
+            )
+        );
+    }
+    
     
     /**
      * Returns all the reviewing data based on a Model query. This function does not permit user based queries.
@@ -228,7 +253,8 @@ class TableSnapshot extends AppModel
         }
                 
         return $extras;
-    }           
+    }
+    
     
     /**
      * Creates a model's snapshot
@@ -245,6 +271,40 @@ class TableSnapshot extends AppModel
         
         return $this->_validateAndSave($appreciation, $curve);        
     }
+    
+    public function temporarySnapshot()
+    {
+        $belongsToData  = $this->getBelongsToData();         
+        $belongsToId    = (int)$belongsToData["id"];
+        
+        $appreciation   = $this->getAppreciation($belongsToId);
+        $curve          = $this->getCurve($belongsToId, 150);
+        
+        
+        $saveArray = array_merge($appreciation, $this->getExtraSaveFields());
+        if(array_key_exists("ppf", $curve))
+        {
+            $saveArray["snapshot_ppf"]      = $curve["ppf"];
+        }
+        
+        if(array_key_exists("curve", $curve))
+        {
+            $saveArray["curve_snapshot"]    = $curve["curve"];
+        }
+        
+        if(array_key_exists("score", $curve))
+        {
+            $saveArray["score_snapshot"]    = $curve["score"];
+        }
+        
+        if(array_key_exists("split", $curve))
+        {
+            $saveArray["range_snapshot"]    = $curve["split"];
+        }        
+        
+        return $saveArray; 
+    }
+    
     
     /**
      * Updates an existing model snapshot
@@ -263,7 +323,7 @@ class TableSnapshot extends AppModel
         
         return $this->_validateAndSave($appreciation, $curve);  
     }        
-    
+        
     /**
      * Validates and saves a snapshot
      * @private
@@ -272,6 +332,12 @@ class TableSnapshot extends AppModel
      * @return boolean True on success, false on failure
      */
     private function _validateAndSave($appreciation, $curve)
+    {
+        $saveArray = $this->_validate($appreciation, $curve);                 
+        return $this->save($saveArray) ? $saveArray : null;
+    }
+    
+    private function _validate($appreciation, $curve)
     {
         $saveArray = array_merge($appreciation, $this->getExtraSaveFields());
         
@@ -304,8 +370,8 @@ class TableSnapshot extends AppModel
         {
             $saveArray["range_snapshot"] = json_encode($saveArray["range_snapshot"]);
         }
-                
-        return $this->save($saveArray) ? $saveArray : null;
+        
+        return $saveArray;
     }
         
     /**

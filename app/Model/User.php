@@ -114,7 +114,7 @@ class User extends AppModel
 
     public function getSubscribers($userId)
     {
-        $idList = array_values($this->UserFollowers->getSubscriptions($userId));
+        $idList = $this->UserFollowers->getSubscriptions($userId, true);
         return $this->find('all', array(
             'conditions' => array("User.id" => $idList),
             'fields' => array("User.*")
@@ -123,11 +123,26 @@ class User extends AppModel
 
     public function getFollowers($userId)
     {
-        $idList = array_values($this->UserFollowers->getFollowers($userId)); 
+        $idList = $this->UserFollowers->getFollowers($userId, true); 
         return $this->find('all', array(
             'conditions' => array("User.id" => $idList),
             'fields' => array("User.*")
         ));
     }
 
+    public function getCommonSubscriberReview($userId, $trackId)
+    {
+        $idList     = $this->UserFollowers->getSubscriptions($userId, true);
+        $filtered   = $this->SubscribersTrackReviewSnapshot->getUserIdsWhoReviewed($trackId, $idList);
+                
+        return $this->find("all", array("conditions" => array("User.id" => $filtered), "fields" => array("User.*")));
+    }
+    
+    public function getReviewUserSummary($trackId)
+    {
+        $filtered = $this->SubscribersTrackReviewSnapshot->getUserIdsWhoReviewed($trackId);
+        return $this->find("all", array("conditions" => array("User.id" => $filtered), "fields" => array("User.*")));
+    }
+    
+    
 }

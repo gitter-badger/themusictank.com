@@ -1,22 +1,27 @@
 <?php
     $currentUserId = $this->Session->read('Auth.User.User.id');
+    $todaysDayNumber = date("z");
+    $currentDay = -1;
+    $lastHeader = -1;
 ?>
 
-<h2><?php echo __("Home"); ?></h2>
+<h2><?php echo __("Activity stream"); ?></h2>
 
-<section class="activity">
-    
-    <?php if(count($feed) > 0) : ?>
-    <ul>
+<section class="activity">    
+    <?php if(count($feed) > 0) : ?>    
         <?php foreach($feed as $event) : ?>
-        
-            <?php if(array_key_exists("Achievement", $event["UserActivity"])) : ?>
-                <li class="achievement">              
-
+            <?php $currentDay = date("z", $event["UserActivity"]["created"]); ?>
+            <?php if($currentDay != $lastHeader) : ?>           
+                <header class="time-header">
                     <time datetime="<?php echo $this->Time->i18nFormat($event["UserActivity"]["created"]); ?>" data-title="true" title="<?php echo $this->Time->niceShort($event["UserActivity"]["created"]); ?>">
                         <?php echo $this->Time->timeAgoInWords($event["UserActivity"]["created"], array('accuracy' => array('day' => 'day'), 'end' => '1 month')); ?>
                     </time>
-                    
+                </header>
+                <?php $lastHeader = $currentDay; ?>
+            <?php endif; ?>
+
+            <?php if(array_key_exists("Achievement", $event["UserActivity"])) : ?>
+                <div class="achievement">                
                     <?php if($event["User"]["id"] === $currentUserId) : ?>
                         <p><?php echo sprintf(__("You have unlocked the achievement \"%s\".", $event["UserActivity"]["Achievement"]["name"])); ?></p>
                     <?php else : ?>
@@ -28,13 +33,10 @@
                             "<?php echo $event["UserActivity"]["Achievement"]["description"]; ?>"
                         </blockquote>
                     <?php endif; ?>
-                </li>
+                </div>
 
             <?php elseif(array_key_exists("UserFollower", $event["UserActivity"])) : ?>            
-                <li class="subscription">
-                    <time datetime="<?php echo $this->Time->i18nFormat($event["UserActivity"]["created"]); ?>" data-title="true" title="<?php echo $this->Time->niceShort($event["UserActivity"]["created"]); ?>">
-                        <?php echo $this->Time->timeAgoInWords($event["UserActivity"]["created"], array('accuracy' => array('day' => 'day'), 'end' => '1 month')); ?>
-                    </time>               
+                <div class="subscription">             
                         <p>
                             <?php if($event["User"]["id"] === $currentUserId) : ?>
                                 <?php echo __("You have subscribed to "); ?>
@@ -49,15 +51,11 @@
                                 <?php endif; ?>
                             <?php endif; ?>
                         </p>
-                    </li>
-            <?php endif; ?>
-        
+                    </div>
+                    
+            <?php endif; ?>        
         <?php endforeach; ?>
-    </ul>
-    <?php else : ?>
-    
-        <p><?php echo __("Nothing is happening."); ?></p>
-    
-    <?php endif; ?>
-    
+    <?php else : ?>    
+        <p><?php echo __("Nothing is happening."); ?></p>    
+    <?php endif; ?>    
 </section>

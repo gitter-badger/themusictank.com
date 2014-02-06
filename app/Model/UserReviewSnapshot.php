@@ -1,12 +1,11 @@
 <?php
 App::uses('TableSnapshot', 'Model');
-App::uses('CakeSession', 'Model/Datasource');   
 
 class UserReviewSnapshot extends TableSnapshot
 {	                    
     public function requiresUpdate()
     {        
-        $userId     = CakeSession::read('Auth.User.User.id');        
+        $userId     = $this->getData("User.id");
         $relationId = $this->getData($this->getBelongsToAlias() . ".id");
         if($userId) return $this->_isExpired($userId, $relationId);
         return false;
@@ -42,7 +41,7 @@ class UserReviewSnapshot extends TableSnapshot
     
     public function getExtraSaveFields()
     {
-        $userId = CakeSession::read('Auth.User.User.id');
+        $userId = $this->getData("User.id");
         $relationId = $this->getData($this->getBelongsToAlias() . ".id");
         $data   = $this->_getId($userId, $relationId);     
         
@@ -64,7 +63,7 @@ class UserReviewSnapshot extends TableSnapshot
     {        
          $data = $this->find("first", array(
             "conditions" => array(
-                "user_id"   => CakeSession::read('Auth.User.User.id'), 
+                "user_id"   => $this->getData("User.id"), 
                 strtolower($this->getBelongsToAlias()) . "_id"  => $objId,
                 "lastsync > " => time() - (HOUR*12)
             ),

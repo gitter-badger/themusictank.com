@@ -11,7 +11,7 @@ class UserTrackReviewSnapshot extends UserReviewSnapshot
     public function getCurve($trackId, $resolution = 100, $timestamp = 0)
     {             
         $belongsToAlias = $this->getBelongsToAlias();    
-        $id         = CakeSession::read('Auth.User.User.id');   
+        $id         = $this->getData("User.id");   
         $curveData  = $this->getRawCurveData($timestamp, array("ReviewFrames.user_id" => $id));
         $data       = $this->Track->find("first", array("fields" => array("duration"), "conditions" => array("Track.id" => $trackId)));
         $ppf        = ReviewFrames::resolutionToPositionsPerFrames((int)$data[$belongsToAlias]["duration"], $resolution);
@@ -32,7 +32,7 @@ class UserTrackReviewSnapshot extends UserReviewSnapshot
     public function getAppreciation($belongsToId, $timestamp = 0, $extraConditions = null)
     {                
         $belongsToAlias = strtolower($this->getBelongsToAlias() . "_id");
-        $id         = CakeSession::read('Auth.User.User.id');   
+        $id         = $this->getData("User.id"); 
         $rf         = new ReviewFrames();
         return $rf->getAppreciation("$belongsToAlias = $belongsToId AND created > $timestamp AND user_id = $id");
     }       

@@ -48,4 +48,5 @@ class ReviewFramesController extends AppController {
         $this->set('response', $response);
         $this->render('/Pages/json/');
     }
+    
 }

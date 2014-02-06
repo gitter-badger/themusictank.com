@@ -1,5 +1,6 @@
 <?php
 
+App::uses('CakeSession', 'Model/Datasource');   
 class Track extends AppModel
 {	    
 	public $hasOne = array('RdioTrack', 'TrackReviewSnapshot', 'LastfmTrack');	
@@ -31,6 +32,7 @@ class Track extends AppModel
         if($addCurrentUser)
         {   
             $user = new User();
+            $data["User"]["id"] = CakeSession::read('Auth.User.User.id');
             
             $user->UserTrackReviewSnapshot->data    = $data;
             $data["UserTrackReviewSnapshot"]        = $user->UserTrackReviewSnapshot->updateCached();      

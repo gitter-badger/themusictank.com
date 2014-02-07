@@ -6,7 +6,7 @@ class TracksController extends AppController {
     public function beforeFilter()
     {   
         parent::beforeFilter();   
-        $this->Auth->deny(array("subscribers", "me"));
+        $this->Auth->deny(array("by_subscriptions"));
     }    
     
     /** 
@@ -22,7 +22,8 @@ class TracksController extends AppController {
         
         $isLoggedIn = $this->userIsLoggedIn();
         $data       = $this->Track->getUpdatedSetBySlug($trackSlug, $isLoggedIn);
-                        
+        if(!$data) throw new NotFoundException(sprintf(__("Could not find the track %s"), $trackSlug));
+                
         $this->set("track", $data["Track"]);    
         $this->set("rdioTrack", $data["RdioTrack"]);    
         $this->set("lastfmTrack", $data["LastfmTrack"]);    
@@ -37,7 +38,7 @@ class TracksController extends AppController {
             $this->set("subsTrackReviewSnapshot", $data["SubscribersTrackReviewSnapshot"]);
             $this->set("subsWhoReviewed", $this->User->getCommonSubscriberReview($this->getAuthUserId(), $data["Track"]["id"]));
         }
-                
+        
         $this->set("oembedLink", $this->Track->getOEmbedUrl());
                 
         $this->setPageTitle(array($data["Track"]["title"], $data["Album"]["name"], $data["Album"]["Artist"]["name"]));
@@ -64,6 +65,7 @@ class TracksController extends AppController {
         $this->layout = "blank";
         
         $data = $this->Track->getUpdatedSetBySlug($trackSlug);
+        if(!$data) throw new NotFoundException(sprintf(__("Could not find the track %s"), $trackSlug));
 
         $this->set("track", $data["Track"]);    
         $this->set("rdioTrack", $data["RdioTrack"]);    
@@ -78,9 +80,11 @@ class TracksController extends AppController {
     {
         $this->usesPlayer();        
              
+        $isLoggedIn = $this->userIsLoggedIn();
         
-        $data       = $this->Track->getUpdatedSetBySlug($trackSlug);
-                        
+        $data = $this->Track->getUpdatedSetBySlug($trackSlug, $isLoggedIn);        
+        if(!$data) throw new NotFoundException(sprintf(__("Could not find the track %s"), $trackSlug));
+                
         $this->set("track", $data["Track"]);    
         $this->set("rdioTrack", $data["RdioTrack"]);    
         $this->set("lastfmTrack", $data["LastfmTrack"]);    
@@ -88,30 +92,19 @@ class TracksController extends AppController {
         $this->set("artist", $data["Album"]["Artist"]);  
         $this->set("trackReviewSnapshot", $data["TrackReviewSnapshot"]); 
         
+         if($isLoggedIn) {
+            $this->set("userTrackReviewSnapshot", $data["UserTrackReviewSnapshot"]);             
+            $this->set("subsTrackReviewSnapshot", $data["SubscribersTrackReviewSnapshot"]);
+        }
+        
         $userData = $this->User->findBySlug($userSlug, array("fields" => "User.*"));
-        $data["User"]["id"] = $userData["User"]["id"];
-        $this->User->UserTrackReviewSnapshot->data = $data; 
-        $this->set("userTrackReviewSnapshot", $this->User->UserTrackReviewSnapshot->temporarySnapshot());     
-        $this->set("user", $userData["User"]);
+        if(!$userData) throw new NotFoundException(sprintf(__("Could not find the user %s"), $userSlug));
         
-        /*
+        $this->set("viewingUser", $userData["User"]);
         
-        $data = $this->Track->getUpdatedSetBySlug($trackSlug);
-        $userData = $this->User->findBySlug($userSlug, array("fields" => "User.*"));
-        $data["User"]["id"] = $userData["User"]["id"];
-        
-        $this->set("track", $data["Track"]);    
-        $this->set("rdioTrack", $data["RdioTrack"]);    
-        $this->set("lastfmTrack", $data["LastfmTrack"]);    
-        $this->set("album", $data["Album"]);     
-        $this->set("artist", $data["Album"]["Artist"]);  
-        $this->set("user", $userData["User"]);
-        $this->set("trackReviewSnapshot", $data["TrackReviewSnapshot"]);   
-        
-        $this->User->UserTrackReviewSnapshot->data = $data; 
-        $this->set("reviewData", $this->User->UserTrackReviewSnapshot->temporarySnapshot());     
-        
-         */
+        $this->User->data = $data;
+        $this->set("viewingTrackReviewSnapshot", $this->User->getUncachedSnapshot($userData["User"]["id"]));
+                
         $this->setPageTitle(array($data["Track"]["title"], $data["Album"]["name"], $data["Album"]["Artist"]["name"]));
         $this->setPageMeta(array(
             "keywords" => array($data["Track"]["title"], $data["Album"]["name"], $data["Album"]["Artist"]["name"]),
@@ -128,12 +121,12 @@ class TracksController extends AppController {
     public function by_subscriptions($trackSlug)
     {        
         $data = $this->Track->getBySlugContained($trackSlug);
+        if(!$data) throw new NotFoundException(sprintf(__("Could not find the track %s"), $trackSlug));
         
         $this->set("track", $data["Track"]);
         $this->set("album", $data["Album"]);     
         $this->set("artist", $data["Album"]["Artist"]);        
-        $this->set("usersWhoReviewed", $this->User->getCommonSubscriberReview($this->getAuthUserId(), $data["Track"]["id"]));
-        
+        $this->set("usersWhoReviewed", $this->User->getCommonSubscriberReview($this->getAuthUserId(), $data["Track"]["id"]));        
                         
         $this->setPageTitle(array($data["Track"]["title"], $data["Album"]["name"], $data["Album"]["Artist"]["name"]));
         $this->setPageMeta(array(

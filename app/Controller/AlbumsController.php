@@ -21,7 +21,8 @@ class AlbumsController extends AppController {
         
         $isLoggedIn = $this->userIsLoggedIn();
         $data       = $this->Album->getUpdatedSetBySlug($albumSlug, $isLoggedIn);
-                        
+        if(!$data) throw new NotFoundException(sprintf(__("Could not find the album %s"), $albumSlug));                
+        
         $this->set("album",     $data["Album"]);
         $this->set("rdioAlbum", $data["RdioAlbum"]);  
         $this->set("lastfmAlbum", $data["LastfmAlbum"]);    
@@ -55,6 +56,7 @@ class AlbumsController extends AppController {
         $this->layout = "blank";
         
         $data = $this->Album->getUpdatedSetBySlug($albumSlug);
+        if(!$data) throw new NotFoundException(sprintf(__("Could not find the album %s"), $albumSlug));   
                         
         $this->set("album",     $data["Album"]);
         $this->set("rdioAlbum", $data["RdioAlbum"]);  

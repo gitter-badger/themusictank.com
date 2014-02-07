@@ -1,6 +1,7 @@
 <?php
 
-App::uses('CakeSession', 'Model/Datasource');   
+App::uses('CakeSession', 'Model/Datasource');
+
 class Track extends AppModel
 {	    
 	public $hasOne = array('RdioTrack', 'TrackReviewSnapshot', 'LastfmTrack');	
@@ -19,6 +20,12 @@ class Track extends AppModel
     public function getUpdatedSetBySlug($slug, $addCurrentUser = false)
     {
         $syncValues = $this->getBySlugContained($slug);
+        
+        if(!count($syncValues) > 0)
+        {
+            return false;
+        }
+        
         $syncValues["Artist"] = $syncValues["Album"]["Artist"];
         
         $this->LastfmTrack->data = $syncValues;        

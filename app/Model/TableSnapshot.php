@@ -30,6 +30,20 @@ class TableSnapshot extends AppModel
         return $results;        
     }
     
+    public function beforeSave($options = array())
+    {
+        if(array_key_exists("curve_snapshot", $this->data[$this->alias]) && !is_string($this->data[$this->alias]["curve_snapshot"]))
+        {   
+            $this->data[$this->alias]["curve_snapshot"] = json_encode($this->data[$this->alias]["curve_snapshot"]);
+        }                
+        if(array_key_exists("range_snapshot", $this->data[$this->alias]) && !is_string($this->data[$this->alias]["range_snapshot"]))
+        {   
+            $this->data[$this->alias]["range_snapshot"] = json_encode($this->data[$this->alias]["range_snapshot"]);
+        } 
+                
+        return true;
+    }
+    
     /**
      * Creates or updates a model's snapshot
      * @return boolean True on success, false on failure
@@ -333,14 +347,12 @@ class TableSnapshot extends AppModel
      */
     private function _validateAndSave($appreciation, $curve)
     {
-        $saveArray = $this->_validate($appreciation, $curve);                 
+        $saveArray = array_merge($appreciation, $this->getExtraSaveFields(), $this->_validate($appreciation, $curve));         
         return $this->save($saveArray) ? $saveArray : null;
     }
     
     private function _validate($appreciation, $curve)
-    {
-        $saveArray = array_merge($appreciation, $this->getExtraSaveFields());
-        
+    {        
         if(array_key_exists("ppf", $curve))
         {
             $saveArray["snapshot_ppf"]      = $curve["ppf"];
@@ -359,16 +371,6 @@ class TableSnapshot extends AppModel
         if(array_key_exists("split", $curve))
         {
             $saveArray["range_snapshot"]    = $curve["split"];
-        }
-                
-        if(isset($saveArray["curve_snapshot"]) && !is_string($saveArray["curve_snapshot"])) 
-        {
-            $saveArray["curve_snapshot"] = json_encode($saveArray["curve_snapshot"]);
-        }
-        
-        if(isset($saveArray["range_snapshot"]) && !is_string($saveArray["range_snapshot"])) 
-        {
-            $saveArray["range_snapshot"] = json_encode($saveArray["range_snapshot"]);
         }
         
         return $saveArray;

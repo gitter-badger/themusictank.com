@@ -144,5 +144,12 @@ class User extends AppModel
         return $this->find("all", array("conditions" => array("User.id" => $filtered), "fields" => array("User.*")));
     }
     
+    public function getUncachedSnapshot($userId)
+    {            
+        $this->data["User"] = array("id" => $userId);
+        $this->UserTrackReviewSnapshot->data = $this->data;
+        return $this->UserTrackReviewSnapshot->temporarySnapshot();
+    }
+    
     
 }

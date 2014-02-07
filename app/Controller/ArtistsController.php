@@ -43,6 +43,7 @@ class ArtistsController extends AppController {
     {   
         $isLoggedIn = $this->userIsLoggedIn();
         $data       = $this->Artist->getUpdatedSetBySlug($artistSlug, $isLoggedIn);
+        if(!$data) throw new NotFoundException(sprintf(__("Could not find the artist %s"), $artistSlug));   
         
         $this->set("artist",        $data["Artist"]);
         $this->set("rdioArtist",    $data["RdioArtist"]);

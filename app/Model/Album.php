@@ -1,5 +1,8 @@
 <?php
+
 App::uses('User', 'Model');
+App::uses('CakeSession', 'Model/Datasource');   
+
 class Album extends AppModel
 {	    
 	public $hasOne      = array('RdioAlbum', 'AlbumReviewSnapshot', "LastfmAlbum");
@@ -34,6 +37,7 @@ class Album extends AppModel
         if($addCurrentUser)
         {   
             $user = new User();
+            $data["User"]["id"] = CakeSession::read('Auth.User.User.id');
             
             $user->SubscribersAlbumReviewSnapshot->data    = $data;
             $data["SubscribersAlbumReviewSnapshot"]        = $user->SubscribersAlbumReviewSnapshot->updateCached();        

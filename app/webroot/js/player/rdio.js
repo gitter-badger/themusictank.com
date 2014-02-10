@@ -59,7 +59,11 @@
             // Track metadata is provided as playingTrack and the position within the playing source as sourcePosition.
             callback_object.playingTrackChanged = function playingTrackChanged(playingTrack, sourcePosition) {   
 
-                if(playingTrack.canStream)
+                if(scope.isPlayingSong()  && scope.data.frameId > 1 && scope.data.reviewFrames.length > 0 && playingTrack == null)
+                {
+                    scope.onSongEnd();
+                }
+                else if(playingTrack.canStream)
                 {
                     if (playingTrack != null) scope.onTrackChange(playingTrack);
                     if (sourcePosition !=  null) scope.onPositionChange(sourcePosition);

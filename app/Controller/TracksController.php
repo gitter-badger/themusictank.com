@@ -81,6 +81,7 @@ class TracksController extends AppController {
         $this->usesPlayer();        
              
         $isLoggedIn = $this->userIsLoggedIn();
+        $currentUserSlug = "";
         
         $data = $this->Track->getUpdatedSetBySlug($trackSlug, $isLoggedIn);        
         if(!$data) throw new NotFoundException(sprintf(__("Could not find the track %s"), $trackSlug));
@@ -94,16 +95,22 @@ class TracksController extends AppController {
         
          if($isLoggedIn) {
             $this->set("userTrackReviewSnapshot", $data["UserTrackReviewSnapshot"]);             
-            $this->set("subsTrackReviewSnapshot", $data["SubscribersTrackReviewSnapshot"]);
+            //$this->set("subsTrackReviewSnapshot", $data["SubscribersTrackReviewSnapshot"]);
         }
-        
-        $userData = $this->User->findBySlug($userSlug, array("fields" => "User.*"));
-        if(!$userData) throw new NotFoundException(sprintf(__("Could not find the user %s"), $userSlug));
-        
-        $this->set("viewingUser", $userData["User"]);
-        
-        $this->User->data = $data;
-        $this->set("viewingTrackReviewSnapshot", $this->User->getUncachedSnapshot($userData["User"]["id"]));
+                
+        if($userSlug != $this->Session->read('Auth.User.User.slug'))
+        {        
+            $userData = $this->User->findBySlug($userSlug, array("fields" => "User.*"));
+            if(!$userData) throw new NotFoundException(sprintf(__("Could not find the user %s"), $userSlug));
+
+            $this->set("viewingUser", $userData["User"]);
+
+            $this->User->data = $data;
+            $this->set("viewingTrackReviewSnapshot", $this->User->getUncachedSnapshot($userData["User"]["id"]));
+        }
+        else {
+            $this->set("viewingUser", $this->Session->read('Auth.User.User'));            
+        }
                 
         $this->setPageTitle(array($data["Track"]["title"], $data["Album"]["name"], $data["Album"]["Artist"]["name"]));
         $this->setPageMeta(array(

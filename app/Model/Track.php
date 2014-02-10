@@ -51,6 +51,25 @@ class Track extends AppModel
         $this->data = $data;
         return $data;
     }    
+    
+    public function getNextTrack()
+    {        
+        $albumId = $this->getData("Track.album_id");
+        $trackIdx = $this->getData("Track.track_num");
+        
+        
+        $track = $this->find("first", array(
+            "conditions" => array(
+                "album_id" => $albumId,
+                "track_num >" => $trackIdx
+            ),
+            "order" => "track_num",
+            "fields" => array("Track.*")
+        ));
+        
+        return $track["Track"];
+    }
+    
 	
     public function beforeSave($options = array())
     {

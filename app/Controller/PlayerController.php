@@ -57,13 +57,17 @@ class PlayerController extends AppController {
     public function rdio($trackSlug)
     {              
         $this->loadModel("Track");
-        $data = $this->Track->getBySlugContained($trackSlug);
-                
+        $data = $this->Track->getBySlugContained($trackSlug);        
+        
         $this->set("track",     $data["Track"]); 
         $this->set("rdioTrack", $data["RdioTrack"]);   
         $this->set("album",     $data["Album"]);     
         $this->set("artist",    $data["Album"]["Artist"]);   
         $token = $this->Session->read('Player.RdioPlaybackToken');
+                
+        $this->Track->data = $data;
+        $nextTrack = $this->Track->getNextTrack();
+        $this->set("nextTrack",     $nextTrack); 
         
         if($this->Session->check('Player.Rdio'))
         { 

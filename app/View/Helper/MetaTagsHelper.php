@@ -49,7 +49,7 @@ class MetaTagsHelper extends AppHelper {
             $this->_metas[] = $this->Html->meta($key, $meta);   
         }
     }
-    
+        
     public function compile()
     {    
         if(isset($this->_layoutMetas))

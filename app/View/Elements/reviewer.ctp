@@ -16,7 +16,7 @@
     {
         $config["swfRoot"] = "http://www.rdio.com/api/swf/";
         $config["swfId"] = "play-" . $track["slug"];        
-        $config["playbackToken"]  = CakeSession::read("Player.RdioPlaybackToken");
+        $config["playbackToken"]  = $this->Session->read("Player.RdioPlaybackToken");
         $config["trackKey"] = $rdioTrack["key"];
         $config["startOnReady"] = true;    
         
@@ -113,6 +113,41 @@
     <div class="mask loading-mask">
         <div class="icon">Loading</div>
     </div>
+        
+    <div class="review-complete">
+        <h3><?php echo __("Review completed!"); ?></h3>
+        <p><?php echo sprintf(__('You have completed the review of %s'), $track['slug']); ?></p>
+        <ul>
+            <li>
+                <?php echo $this->Html->link(__("View your review's groove"), array('controller' => 'tracks', 'action' => 'by_user', $track["slug"], $this->Session->read('Auth.User.User.slug'))); ?>
+            </li>
+            <li>
+                <?php echo __('Share with your friends'); ?>
+                <?php $currentPage = "http://" . $_SERVER['SERVER_NAME'] . Router::url(array('controller' => 'tracks', 'action' => 'by_user', $track["slug"], $this->Session->read('Auth.User.User.slug'))); ?>
+                 <a href="https://twitter.com/share" class="twitter-share-button" 
+                    data-url="<?php echo $currentPage; ?>" 
+                    data-text="<?php echo sprintf(__("View my review of '%s' on @themusictank : "), $track["title"]); ?>"
+                    data-lang="en">Tweet</a>
+                 <script>!function(d,s,id){var js,fjs=d.getElementsByTagName(s)[0];if(!d.getElementById(id)){js=d.createElement(s);js.id=id;js.src="https://platform.twitter.com/widgets.js";fjs.parentNode.insertBefore(js,fjs);}}(document,"script","twitter-wjs");</script>        
+
+                 <div class="fb-share-button" data-href="<?php echo $currentPage; ?>" data-type="button_count"></div>
+                 <div id="fb-root"></div>
+                 <script>(function(d, s, id) {
+                   var js, fjs = d.getElementsByTagName(s)[0];
+                   if (d.getElementById(id)) return;
+                   js = d.createElement(s); js.id = id;
+                   js.src = "//connect.facebook.net/en_US/all.js#xfbml=1&appId=497725690321176";
+                   fjs.parentNode.insertBefore(js, fjs);
+                 }(document, 'script', 'facebook-jssdk'));</script>
+            </li>
+            <?php if(isset($nextTrack)) : ?>
+            <li>
+                <?php echo $this->Html->link(sprintf(__("Review next track: %s"), $nextTrack["title"]), array('controller' => 'player', 'action' => 'play', $nextTrack["slug"])); ?>
+            </li>
+            <?php endif; ?>
+        </ul>
+    </div>  
+    
     
 <script>$(function(){
     var r = new (tmt.Rdio.extend(tmt.Reviewer))(<?php echo json_encode($config); ?>);  

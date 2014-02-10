@@ -15,7 +15,7 @@
         LENGTH_POWERING     = 4.2,
         LENGTH_SHAKING      = 1.8,
         LENGTH_TO_MULTIPLIER = 3,
-        LENGTH_MULTIPLYING  = 3.1,
+        LENGTH_MULTIPLYING  = 3.5,
         
         FRAMES_PER_POWERING = null,
         FRAMES_TO_SHAKE     = null,
@@ -47,6 +47,7 @@
             this.data["appHasFocus"] = true;
             this.data["savetick"] = 0;
             this.data["lastframeSent"] = 0;
+            this.data["songIsOver"] = false;
         },
         
         run : function()
@@ -553,8 +554,8 @@
                         su  : this.data.suckpowering === true ? 1 : 0,
                         m   : this.data.multiplier,
                         p   : this.data.position,
-                        o   : this.data.position >= this.config.trackDuration ? 1 : null
-                    };
+                        o   : this.data.songIsOver === true ? 1 : 0 
+                   };
 
                 if(this.data.reviewFrames.length > 0)
                 {
@@ -761,7 +762,13 @@
                     else if (this.data.groove < MIDDLE_GROOVE_VALUE) this.data.decay = GROOVE_DECAY_VALUE;
                 }
             }
-        },   
+        },
+        
+        onSongEnd : function()
+        {
+            this.data.songIsOver = true;
+            this.sendFramesPackage(this.data.lastframeSent, this.data.reviewFrames.length);
+        },
         
         onGrooveStart : function()
         {
@@ -776,6 +783,11 @@
         onSyncSuccess : function()
         {
             this.data.synchronising = false;
+            
+            if(this.data.songIsOver)
+            {
+                this.config.container.ref.addClass("completed");
+            }            
         },
                 
         onSyncFail : function()
@@ -798,6 +810,19 @@
             this.data.appHasFocus = isVisible;
             this.debug("data", "appHasFocus", this.data.appHasFocus);
         }
+        
+        /*
+        onStatusChange : function (status)
+        {
+         
+            if(status == "stopped")
+            {
+                console.log(this.data);
+                return;
+            }            
+            
+            this._super(status);
+        }   */    
     };    
      
 })();

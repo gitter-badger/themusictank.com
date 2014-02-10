@@ -1,13 +1,52 @@
 <?php
     $graphConfig = array(
         "containerSelector" => ".graph-" . $album["slug"] . " canvas",
-        "curve_snapshot" => $albumReviewSnapshot["curve_snapshot"],
-        "range_snapshot" => $albumReviewSnapshot["range_snapshot"],
-        "subs_curve_snapshot" => isset($subsAlbumReviewSnapshot) && count($subsAlbumReviewSnapshot) ? $subsAlbumReviewSnapshot["curve_snapshot"] : null, 
-        "subs_range_snapshot" => isset($subsAlbumReviewSnapshot) && count($subsAlbumReviewSnapshot) ? $subsAlbumReviewSnapshot["range_snapshot"] : null,
-        "user_curve_snapshot" => isset($userAlbumReviewSnapshot) && count($userAlbumReviewSnapshot) ? $userAlbumReviewSnapshot["curve_snapshot"] : null, 
-        "user_range_snapshot" => isset($userAlbumReviewSnapshot) && count($userAlbumReviewSnapshot) ? $userAlbumReviewSnapshot["range_snapshot"] : null
+        "curves" =>array(),
+        "ranges" => array()
     );
+    
+    
+    if(isset($albumReviewSnapshot) && count($albumReviewSnapshot))
+    {
+        $graphConfig["curves"][ "tankers" ] = array(
+            "label" => __("Everyone"),
+            "data" => $albumReviewSnapshot["curve_snapshot"],
+            "color" => "#999999"
+        );         
+        $graphConfig["ranges"][ "tankers" ] = array(
+            "label" => __("Everyone"),
+            "data" => $albumReviewSnapshot["range_snapshot"],
+            "color" => "rgba(66, 66, 66,.4)"
+        ); 
+    }     
+    
+    if(isset($subsAlbumReviewSnapshot) && count($subsAlbumReviewSnapshot))
+    {
+        $graphConfig["curves"][ "subs" ] = array(
+            "label" => __("Your subscriptions"),
+            "data" => $subsAlbumReviewSnapshot["curve_snapshot"],
+            "color" => "#4285f4"
+        );         
+        $graphConfig["ranges"][ "subs" ] = array(
+            "label" => __("Your subscriptions"),
+            "data" => $subsAlbumReviewSnapshot["range_snapshot"],
+            "color" => "rgba(66, 133, 244, .4)"
+        ); 
+    }
+    
+    if(isset($userAlbumReviewSnapshot) && count($userAlbumReviewSnapshot))
+    {
+        $graphConfig["curves"][ "you" ] = array(
+            "label" => __("You"),
+            "data" => $userAlbumReviewSnapshot["curve_snapshot"],
+            "color" => "rgb(90, 20, 244)"
+        );         
+        $graphConfig["ranges"][ "you" ] = array(
+            "label" => __("You"),
+            "data" => $userAlbumReviewSnapshot["range_snapshot"],
+            "color" => "rgba(90, 20, 244, .4)"            
+        ); 
+    }   
     
     $trackLength = 0;
     foreach($tracks as $track)
@@ -22,28 +61,18 @@
     <div class="tracks">
     <?php foreach($tracks as $track) : ?><div style="width:<?php echo ($track["duration"] / $trackLength) * 100; ?>%;"><span><?php echo $track["title"]; ?></span></div><?php endforeach; ?>
     </div>
-    <ul class="legend">
-        <li class="everyone">
+    <?php if(count($graphConfig["curves"]) > 0) : ?>    
+    <ul class="legend">      
+        <?php foreach($graphConfig["curves"] as $key => $curveInfo) : ?>
+        <li class="<?php echo $key; ?>">
             <label>
-                <input type="checkbox" name="view" value="everyone" checked="checked" />
-                <?php echo __("Everyone"); ?>
+                <input type="checkbox" name="view" value="<?php echo $key; ?>" checked="checked" />
+                <?php echo $curveInfo["label"]; ?>
             </label>
         </li>
-        <?php if($isLogged) : ?>
-        <li class="friends">
-            <label>
-                <input type="checkbox" name="view" value="subs" checked="checked" />
-                <?php echo __("People you are subscribed to"); ?>
-            </label>
-        </li>
-        <li class="you">
-            <label>
-                <input type="checkbox" name="view" value="user" checked="checked" />
-                <?php echo __("You"); ?>
-            </label>
-        </li>
-        <?php endif; ?>
+        <?php endforeach; ?>
     </ul> 
+    <?php endif; ?>
 <script>$(function(){
 new tmt.Graph(<?php echo json_encode($graphConfig); ?>);
 });</script>

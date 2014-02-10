@@ -15,7 +15,7 @@ class ReviewFrames extends AppModel
         {
             $formattedData[] = array(
                 "groove"        => $frame["gv"],
-                "grooving"      => $frame["g"],
+                //"grooving"      => $frame["g"],
                 "starpowering"  => $frame["st"],
                 "suckpowering"  => $frame["su"],
                 "multiplier"    => array_key_exists("m", $frame) ? $frame["m"] : 0,
@@ -160,7 +160,17 @@ class ReviewFrames extends AppModel
      */
     public static function lowerSpanResolution($curveData, $positionsPerFrame, $resolution)
     {
-        $curve = array_fill(0, $resolution, null);
+        if(count($curveData) > 0 && count($curveData) < $resolution)
+        {
+            $positionsPerFrame = 1;
+            $length = count($curveData);
+        }
+        else
+        {
+            $length = $resolution;            
+        }
+                
+        $curve = array_fill(0, $length, null);
         $count = count($curveData);
                
         foreach($curve as $idx => $point)

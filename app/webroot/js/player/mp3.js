@@ -68,6 +68,7 @@
         var ref = this.config.audio.ref.get(0);
         ref.addEventListener("timeupdate", $.proxy(_onProgress, this));
         ref.addEventListener("durationchange", $.proxy(_onDurationChange, this));
+        ref.addEventListener("ended", $.proxy(this.onSongEnd, this));
     };
     
     function _hasAPISupport()

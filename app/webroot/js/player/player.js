@@ -272,7 +272,8 @@
         apicontrols_resume  : _notOverriden,
         loadSongStreamer    : _notOverriden,
         onReady             : _notOverriden,
-        onTrackChanged      : _notOverriden
+        onTrackChanged      : _notOverriden,
+        onSongEnd           : _notOverriden
     });
 
     function _notOverriden() {};

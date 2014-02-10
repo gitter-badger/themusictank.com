@@ -12,14 +12,65 @@
     
     $graphConfig = array(
         "containerSelector" => ".play-" . $track["slug"] . " canvas",
-        "trackDuration" => (int)$track["duration"],
-        "curve_snapshot" => $trackReviewSnapshot["curve_snapshot"],
-        "range_snapshot" => $trackReviewSnapshot["range_snapshot"],
-        "subs_curve_snapshot" => isset($subsTrackReviewSnapshot) && count($subsTrackReviewSnapshot) ? $subsTrackReviewSnapshot["curve_snapshot"] : null, 
-        "subs_range_snapshot" => isset($subsTrackReviewSnapshot) && count($subsTrackReviewSnapshot) ? $subsTrackReviewSnapshot["range_snapshot"] : null,
-        "user_curve_snapshot" => isset($userTrackReviewSnapshot) && count($userTrackReviewSnapshot) ? $userTrackReviewSnapshot["curve_snapshot"] : null, 
-        "user_range_snapshot" => isset($userTrackReviewSnapshot) && count($userTrackReviewSnapshot) ? $userTrackReviewSnapshot["range_snapshot"] : null
-    );  
+        "trackDuration" => (int)$track["duration"]
+    );
+    
+    if(isset($trackReviewSnapshot) && count($trackReviewSnapshot))
+    {
+        $graphConfig["curves"][ "tankers" ] = array(
+            "label" => __("Everyone"),
+            "data" => $trackReviewSnapshot["curve_snapshot"],
+            "color" => "#999999"
+        );         
+        $graphConfig["ranges"][ "tankers" ] = array(
+            "label" => __("Everyone"),
+            "data" => $trackReviewSnapshot["range_snapshot"],
+            "color" => "rgba(66, 66, 66,.4)"
+        ); 
+    }     
+    
+    if(isset($subsTrackReviewSnapshot) && count($subsTrackReviewSnapshot))
+    {
+        $graphConfig["curves"][ "subs" ] = array(
+            "label" => __("Your subscriptions"),
+            "data" => $subsTrackReviewSnapshot["curve_snapshot"],
+            "color" => "#4285f4"
+        );         
+        $graphConfig["ranges"][ "subs" ] = array(
+            "label" => __("Your subscriptions"),
+            "data" => $subsTrackReviewSnapshot["range_snapshot"],
+            "color" => "rgba(66, 133, 244, .4)"
+        ); 
+    }
+    
+    if(isset($userTrackReviewSnapshot) && count($userTrackReviewSnapshot))
+    {
+        $graphConfig["curves"][ "you" ] = array(
+            "label" => __("You"),
+            "data" => $userTrackReviewSnapshot["curve_snapshot"],
+            "color" => "rgb(90, 20, 244)"
+        );         
+        $graphConfig["ranges"][ "you" ] = array(
+            "label" => __("You"),
+            "data" => $userTrackReviewSnapshot["range_snapshot"],
+            "color" => "rgba(90, 20, 244, .4)"            
+        ); 
+    }
+    
+    if(isset($viewingTrackReviewSnapshot) && count($viewingTrackReviewSnapshot))
+    {
+        $graphConfig["curves"][ "user" ] = array(
+            "label" => $viewingUser["firstname"] . " " . $viewingUser["lastname"],
+            "data" => $viewingTrackReviewSnapshot["curve_snapshot"],
+            "color" => "rgb(90, 20, 244)"
+        );         
+        $graphConfig["ranges"][ "viewingUser" ] = array(
+            "label" => $viewingUser["firstname"] . " " . $viewingUser["lastname"],
+            "data" => $viewingTrackReviewSnapshot["range_snapshot"],
+            "color" => "rgba(90, 20, 244, .4)"            
+        ); 
+    }
+    
     
     
     if($preferredPlayer == "rdio")
@@ -35,34 +86,21 @@
         $config["trackTitle"] = $track["title"];
     }    
 ?>
-<section class="player chart timed <?php echo $preferredPlayer; ?> <?php echo $isLogged ? 'logged' : 'not-logged' ?> play-<?php echo $track["slug"]; ?>">
-    
-    <canvas></canvas>
-    
-    <div class="cursor"></div>  
-    
-    <ul class="legend">
-        <li class="everyone">
+<section class="player chart timed <?php echo $preferredPlayer; ?> <?php echo $isLogged ? 'logged' : 'not-logged' ?> play-<?php echo $track["slug"]; ?>">    
+    <canvas></canvas>    
+    <div class="cursor"></div>
+    <?php if(count($graphConfig["curves"]) > 0) : ?>    
+    <ul class="legend">      
+        <?php foreach($graphConfig["curves"] as $key => $curveInfo) : ?>
+        <li class="<?php echo $key; ?>">
             <label>
-                <input type="checkbox" name="view" value="everyone" checked="checked" />
-                <?php echo __("Everyone"); ?>
+                <input type="checkbox" name="view" value="<?php echo $key; ?>" checked="checked" />
+                <?php echo $curveInfo["label"]; ?>
             </label>
         </li>
-        <?php if($isLogged) : ?>
-        <li class="friends">
-            <label>
-                <input type="checkbox" name="view" value="subs" checked="checked" />
-                <?php echo __("People you are subscribed to"); ?>
-            </label>
-        </li>
-        <li class="you">
-            <label>
-                <input type="checkbox" name="view" value="user" checked="checked" />
-                <?php echo __("You"); ?>
-            </label>
-        </li>
-        <?php endif; ?>
-    </ul>    
+        <?php endforeach; ?>
+    </ul> 
+    <?php endif; ?>
         
     <div class="seek">            
         <div class="bar"><div class="progress"><span class="knob"></span></div></div>

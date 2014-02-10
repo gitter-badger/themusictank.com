@@ -10,13 +10,14 @@
             this.config = config;
             this.config.container   = {ref : $( this.config.containerSelector )}; 
             this.config.container.ref.parent(".player").find(".legend input[type=checkbox]").change($.proxy(_onViewToggle, this));
+            this.config.display = {};
             
-            this.config.display = {
-                "everyone" : this.config.curve_snapshot != null,
-                "subs" : this.config.subs_curve_snapshot != null,
-                "user" : this.config.user_curve_snapshot != null
-            };
-            
+            var key;
+            for(var key in this.config.curves)
+            {
+                this.config.display[key] = true;
+            }
+                        
             this.getContextSizes();
             this.draw();
         },
@@ -26,37 +27,22 @@
             this.drawGridLines();
             this.drawTimeLabels();
                 
-            if(this.config.display.everyone && this.config.range_snapshot)
-            {
-                _drawRange.call(this, this.config.range_snapshot, "avg", "rgba(66, 66, 66,.4)");
-            }            
-            
-            if(this.config.display.subs && this.config.subs_range_snapshot)
-            {
-                _drawRange.call(this, this.config.subs_range_snapshot, "avg", "rgba(66, 133, 244, .4)");         
+                
+            for(var key in this.config.ranges)
+            {                
+                if(this.config.display[key])
+                {
+                    _drawRange.call(this, this.config.ranges[key].data, "avg", this.config.ranges[key].color);
+                }
             }
-            
-            if(this.config.display.user && this.config.user_range_snapshot)
-            {
-                _drawRange.call(this, this.config.user_range_snapshot, "avg", "rgba(90, 20, 244, .4)");         
-            }
-            
-            if(this.config.display.everyone && this.config.curve_snapshot)
-            {
-                _drawJoints.call(this, this.config.curve_snapshot, "avg", '#999999');
-                _drawCircles.call(this, this.config.curve_snapshot, "avg", '#999999');
-            }
-                        
-            if(this.config.display.subs && this.config.subs_curve_snapshot)
-            {
-                _drawJoints.call(this, this.config.subs_curve_snapshot, "avg", '#4285f4');
-                _drawCircles.call(this, this.config.subs_curve_snapshot, "avg", '#4285f4');                
-            }  
-            
-            if(this.config.display.user && this.config.user_curve_snapshot)
-            {
-                _drawJoints.call(this, this.config.user_curve_snapshot, "avg", "rgb(90, 20, 244)");
-                _drawCircles.call(this, this.config.user_curve_snapshot, "avg", "rgb(90, 20, 244)");                
+                
+            for(var key in this.config.curves)
+            {                
+                if(this.config.display[key])
+                {
+                    _drawJoints.call(this, this.config.curves[key].data, "avg", this.config.curves[key].color);
+                    _drawCircles.call(this, this.config.curves[key].data, "avg", this.config.curves[key].color);
+                }
             }
         },
         

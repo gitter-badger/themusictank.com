@@ -242,6 +242,7 @@ ul.horizontal li:last-child {
     border:1px solid #666;
 }
 
+.player .review-complete,
 .player .focus-lost,
 .player .parsing-mp3,
 .player .drop {
@@ -288,6 +289,7 @@ ul.horizontal li:last-child {
     display:block;
 }
 
+.player.completed .review-complete,
 .player.synchronising .synchronising,
 .player.focuslost .focus-lost,
 .player.parsingmp3 .parsing-mp3 {

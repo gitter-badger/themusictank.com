@@ -9,6 +9,28 @@ class TracksController extends AppController {
         $this->Auth->deny(array("by_subscriptions"));
     }    
     
+    
+      
+    public function savewave($trackSlug, $shaCheck)
+    {       
+        $this->layout = "ajax";
+                
+        $data = $this->Track->findBySlug($trackSlug);
+        $validSha = sha1($data["Track"]["slug"] . $data["Track"]["id"] . "foraiurtheplayer");
+        if($shaCheck != $validSha)
+        {
+            throw new NotFoundException(__("We don't know where you are from."));
+        }
+        
+        $this->Track->data = $data;
+        $this->Track->saveWave($this->request->data["waves"]);
+        
+                
+        $this->set('response', array("status" => "ok"));
+        $this->render('/Pages/json/');
+    }
+    
+    
     /** 
      * Track profile page.
      *
@@ -81,7 +103,6 @@ class TracksController extends AppController {
         $this->usesPlayer();        
              
         $isLoggedIn = $this->userIsLoggedIn();
-        $currentUserSlug = "";
         
         $data = $this->Track->getUpdatedSetBySlug($trackSlug, $isLoggedIn);        
         if(!$data) throw new NotFoundException(sprintf(__("Could not find the track %s"), $trackSlug));
@@ -93,9 +114,8 @@ class TracksController extends AppController {
         $this->set("artist", $data["Album"]["Artist"]);  
         $this->set("trackReviewSnapshot", $data["TrackReviewSnapshot"]); 
         
-         if($isLoggedIn) {
+        if($isLoggedIn) {
             $this->set("userTrackReviewSnapshot", $data["UserTrackReviewSnapshot"]);             
-            //$this->set("subsTrackReviewSnapshot", $data["SubscribersTrackReviewSnapshot"]);
         }
                 
         if($userSlug != $this->Session->read('Auth.User.User.slug'))

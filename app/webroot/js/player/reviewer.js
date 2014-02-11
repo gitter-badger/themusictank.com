@@ -514,6 +514,7 @@
                     this.config.container.isFocusLost = true;
                     btn.click(onclick);       
                     container.ref.addClass("focuslost");
+                    btn.focus();
                 }
             }
         },    
@@ -529,7 +530,8 @@
                 this.checkMultiplier();   
                 this.checkMultiplierTimers();   
                 this.decayGrooveCurve();
-                this.saveCurrentFrame();
+                this.saveCurrentFrame();                
+                this.saveEquilizerFrame();
             } catch(e) {
                 console.error(e);
                 console.trace(e.message);
@@ -554,7 +556,7 @@
                         su  : this.data.suckpowering === true ? 1 : 0,
                         m   : this.data.multiplier,
                         p   : this.data.position,
-                        o   : this.data.songIsOver === true ? 1 : 0 
+                        o   : 0 
                    };
 
                 if(this.data.reviewFrames.length > 0)
@@ -579,7 +581,7 @@
                 this.sendFramesPackage(this.data.lastframeSent, this.data.reviewFrames.length);
                 this.data.lastframeSent = this.data.reviewFrames.length - 1;
             }
-        },        
+        },
                 
         calculateGrooveCurve : function()
         {
@@ -766,7 +768,23 @@
         
         onSongEnd : function()
         {
+            this._super();
+            
             this.data.songIsOver = true;
+            this.config.container.ref.addClass("loading");
+            
+            var last = this.data.reviewFrames[this.data.reviewFrames.length - 1];
+            if(this.data.lastframeSent < this.data.reviewFrames.length)
+            {
+                last["o"] = 1;
+            }
+            // Make sure we send in at least a frame.
+            else
+            {
+                last["o"] = 1;
+                this.data.reviewFrames.push(last);                
+            }
+                        
             this.sendFramesPackage(this.data.lastframeSent, this.data.reviewFrames.length);
         },
         
@@ -786,6 +804,7 @@
             
             if(this.data.songIsOver)
             {
+                this.config.container.ref.removeClass("loading");
                 this.config.container.ref.addClass("completed");
             }            
         },
@@ -810,19 +829,6 @@
             this.data.appHasFocus = isVisible;
             this.debug("data", "appHasFocus", this.data.appHasFocus);
         }
-        
-        /*
-        onStatusChange : function (status)
-        {
-         
-            if(status == "stopped")
-            {
-                console.log(this.data);
-                return;
-            }            
-            
-            this._super(status);
-        }   */    
     };    
      
 })();

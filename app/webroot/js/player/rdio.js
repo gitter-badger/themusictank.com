@@ -9,6 +9,14 @@
         },
                
         loadSongStreamer : function() {    
+            
+            if(!FlashDetect.installed)
+            {
+                this.config.container.ref.addClass("flashrequired");
+                return;
+            }
+            
+            
             if(!swfobject) alert("swfObject is not loaded.");
 
             var flashvars = {
@@ -59,7 +67,7 @@
             // Track metadata is provided as playingTrack and the position within the playing source as sourcePosition.
             callback_object.playingTrackChanged = function playingTrackChanged(playingTrack, sourcePosition) {   
 
-                if(scope.isPlayingSong()  && scope.data.frameId > 1 && scope.data.reviewFrames.length > 0 && playingTrack == null)
+                if(scope.isPlayingSong()  && scope.data.frameId > 1 && playingTrack == null)
                 {
                     scope.onSongEnd();
                 }

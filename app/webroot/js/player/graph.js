@@ -27,6 +27,8 @@
             this.drawGridLines();
             this.drawTimeLabels();
                 
+            this.drawWavelength();
+                
                 
             for(var key in this.config.ranges)
             {                
@@ -137,7 +139,34 @@
             context.shadowBlur = 0;
             context.fillText("-1", 0, this.config.sizes.height - 5);
             context.closePath();
-        }        
+        },
+        
+        drawWavelength : function()
+        {
+            if(this.config.equilizerData.length > 0)
+            {
+                var context = this.config.context,
+                    i = 0,
+                    len = this.config.equilizerData.length,
+                    height = this.config.sizes.height,            
+                    containerHeight = this.config.sizes.height,           
+                    containerHalfHeight = containerHeight / 2,      
+                    width = Math.ceil(this.config.sizes.width / len),
+                    freq;
+
+                for(; i < len; i++)
+                {
+                    freq = parseFloat(this.config.equilizerData[i]);
+                    height = containerHeight * freq;
+                    if(height < 1) height = 1;
+
+                    context.beginPath();
+                    context.rect(i * width,  containerHalfHeight - (height / 2), width, height);
+                    context.fillStyle = 'rgba(130,130,130,.2)';
+                    context.fill();         
+                }
+            }
+        }
         
     });
     
@@ -227,11 +256,10 @@
     
     function _drawRange(datasource, which, color)
     {
-        
         var context = this.config.context,
             dotSize = 4, 
             i = 0, 
-            len = datasource.length,
+            len = datasource["max"].length,
             distanceBetweenPoints = (this.config.sizes.width -30) / len,
             yPos,
             height = this.config.sizes.height,
@@ -239,47 +267,49 @@
 
         if(datasource[i])
         {
-            yPos = height * (1-datasource[i]["max"][which]);
+            yPos = height * (1-datasource["max"][i][which]);
         }     
-            
+                    
         context.beginPath();
         context.fillStyle = color;
-        context.opacity = .4;
+       /* context.opacity = .4;
         context.shadowColor = "rgba( 0, 0, 0, 0.3 )";
         context.shadowOffsetX = 1;
         context.shadowOffsetY = 1;
-        context.shadowBlur = 3;
-        context.moveTo(currentPoint - distanceBetweenPoints- (dotSize / 2), yPos);
-                            
+        context.shadowBlur = 3; */
+        context.moveTo(currentPoint - distanceBetweenPoints - (dotSize / 2), yPos);
+                     
+        
+        
         for( ; i < len; i++, yPos = 0)
         {
-            if(datasource[i])
+            if(datasource["max"][i])
             {
-                yPos = height * (1-datasource[i]["max"][which]);
+                yPos = height * (1-datasource["max"][i][which]);
             }
             
             if(yPos)
             {
                 context.lineTo(currentPoint - (dotSize / 2), yPos);    
             }        
+            
             currentPoint += distanceBetweenPoints;
         }
                 
-        for( ; i > 0; i--, yPos = 0)
+        for( i = len ; i > -1; i--, yPos = 0)
         {
-            if(datasource[i])
+            if(datasource["min"][i])
             {
-                yPos = height * (1-datasource[i]["min"][which]); 
+                yPos = height * (1-datasource["min"][i][which]); 
             }
                   
             if(yPos)
-            {
+            { 
                 context.lineTo(currentPoint - (dotSize / 2), yPos);   
             }
                     
             currentPoint -= distanceBetweenPoints;
         }
-        
         
         context.fill();
         context.closePath();

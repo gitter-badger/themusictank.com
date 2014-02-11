@@ -17,7 +17,7 @@
     {     
         switch($preferredPlayer)
         {
-            case "rdio" : $playerScript = array('lib/swf/swfobject', 'player/rdio'); break;            
+            case "rdio" : $playerScript = array('lib/swf/swfobject', 'lib/swf/flash_detect_min.js', 'player/rdio'); break;            
             case "mp3" : $playerScript = array('lib/id3/id3-minimized', 'player/mp3'); break;
         }
         

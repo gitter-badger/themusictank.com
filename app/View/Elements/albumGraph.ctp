@@ -3,8 +3,7 @@
         "containerSelector" => ".graph-" . $album["slug"] . " canvas",
         "curves" =>array(),
         "ranges" => array()
-    );
-    
+    );    
     
     if(isset($albumReviewSnapshot) && count($albumReviewSnapshot))
     {

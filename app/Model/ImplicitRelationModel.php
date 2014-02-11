@@ -6,14 +6,15 @@ class ImplicitRelationModel extends AppModel
     // autoloaded to save juice.
     private $_preloadedObjects = array(
         "Achievement" => array(),
-        "User" => array()
+        "User" => array(),
+        "Track" => array()
     );
     
     const TYPE_ACHIEVEMENT      = "achievement";
     const TYPE_FOLLOWER         = "follower";
     const TYPE_NEW_ACCOUNT      = "newaccount";
     const TYPE_CREATED_ARTIST   = "newartist";
-        
+    const TYPE_REVIEW_COMPLETE  = "reviewcomplete";
     
     public function getType($typeId)
     {
@@ -42,7 +43,14 @@ class ImplicitRelationModel extends AppModel
                         {
                             $results[$idx][$this->alias]["UserFollower"] = $this->_loadLinkedUser((int)$row[$this->alias]["related_model_id"]);
                         }
-                        break;                        
+                        break;      
+
+                    case self::TYPE_REVIEW_COMPLETE :
+                        if(!array_key_exists("ReviewedTrack", $results[$idx][$this->alias]))
+                        {
+                            $results[$idx][$this->alias]["ReviewedTrack"] = $this->_loadLinkedTrack((int)$row[$this->alias]["related_model_id"]);
+                        }
+                        break;                     
                 }
             }
         }
@@ -94,4 +102,17 @@ class ImplicitRelationModel extends AppModel
         return $this->_getCached("User", $userId);
     }
     
+    private function _loadLinkedTrack($trackId)
+    {
+        if(!$this->_isCached("Track", $trackId))
+        {
+            $track = ClassRegistry::init('Track')->find("first", array(
+                "conditions" => array("Track.id" => $trackId),
+                "fields" => "Track.*"
+            ));
+            $this->_saveToCache("Track", $trackId, $track["Track"]);
+        }
+        
+        return $this->_getCached("Track", $trackId);
+    }
 } 

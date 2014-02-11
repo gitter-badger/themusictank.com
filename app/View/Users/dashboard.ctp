@@ -1,5 +1,6 @@
 <?php
     $currentUserId = $this->Session->read('Auth.User.User.id');
+    $currentUserSlug = $this->Session->read('Auth.User.User.slug');
     $todaysDayNumber = date("z");
     $currentDay = -1;
     $lastHeader = -1;
@@ -29,30 +30,44 @@
                             <?php echo $this->Html->link(sprintf("%s %s", $event["UserActivity"]["User"]["firstname"], $event["UserActivity"]["User"]["lastname"]), array('controller' => 'profiles', 'action' => 'view', $event["UserActivity"]["UserFollower"]["slug"])); ?> 
                             <?php echo sprintf(__(" has unlocked the achievement \"%s\"."), $event["UserActivity"]["Achievement"]["name"]); ?>
                         </p>
-                        <blockquote>
-                            "<?php echo $event["UserActivity"]["Achievement"]["description"]; ?>"
-                        </blockquote>
                     <?php endif; ?>
+                    <blockquote>
+                        &laquo;<?php echo $event["UserActivity"]["Achievement"]["description"]; ?>&raquo;
+                    </blockquote>
                 </div>
 
             <?php elseif(array_key_exists("UserFollower", $event["UserActivity"])) : ?>            
                 <div class="subscription">             
-                        <p>
-                            <?php if($event["User"]["id"] === $currentUserId) : ?>
-                                <?php echo __("You have subscribed to "); ?>
-                                <?php echo $this->Html->link($event["UserActivity"]["UserFollower"]["firstname"] . " " . $event["UserActivity"]["UserFollower"]["lastname"], array('controller' => 'profiles', 'action' => 'view', $event["UserActivity"]["UserFollower"]["slug"])); ?>                            
+                    <p>
+                        <?php if($event["User"]["id"] === $currentUserId) : ?>
+                            <?php echo __("You have subscribed to "); ?>
+                            <?php echo $this->Html->link($event["UserActivity"]["UserFollower"]["firstname"] . " " . $event["UserActivity"]["UserFollower"]["lastname"], array('controller' => 'profiles', 'action' => 'view', $event["UserActivity"]["UserFollower"]["slug"])); ?>                            
+                        <?php else : ?>
+                            <?php echo $this->Html->link($event["UserActivity"]["UserFollower"]["firstname"] . " " . $event["UserActivity"]["UserFollower"]["lastname"], array('controller' => 'profiles', 'action' => 'view', $event["UserActivity"]["UserFollower"]["slug"])); ?>
+                            <?php echo __(" has subscribed to "); ?>                            
+                            <?php if($event["UserActivity"]["UserFollower"]["id"] === $currentUserId) : ?>
+                                <?php echo __("you."); ?>
                             <?php else : ?>
-                                <?php echo $this->Html->link($event["UserActivity"]["UserFollower"]["firstname"] . " " . $event["UserActivity"]["UserFollower"]["lastname"], array('controller' => 'profiles', 'action' => 'view', $event["UserActivity"]["UserFollower"]["slug"])); ?>
-                                <?php echo __(" has subscribed to "); ?>                            
-                                <?php if($event["UserActivity"]["UserFollower"]["id"] === $currentUserId) : ?>
-                                    <?php echo __("you."); ?>
-                                <?php else : ?>
-                                    <?php echo $this->Html->link($event["UserActivity"]["UserFollower"]["firstname"] . " " . $event["UserActivity"]["UserFollower"]["lastname"], array('controller' => 'profiles', 'action' => 'view', $event["UserActivity"]["UserFollower"]["slug"])); ?>.
-                                <?php endif; ?>
+                                <?php echo $this->Html->link($event["UserActivity"]["UserFollower"]["firstname"] . " " . $event["UserActivity"]["UserFollower"]["lastname"], array('controller' => 'profiles', 'action' => 'view', $event["UserActivity"]["UserFollower"]["slug"])); ?>.
                             <?php endif; ?>
-                        </p>
-                    </div>
-                    
+                        <?php endif; ?>
+                    </p>
+                </div>
+    
+            <?php elseif(array_key_exists("ReviewedTrack", $event["UserActivity"])) : ?>            
+                <div class="review">             
+                    <p>
+                        <?php if($event["User"]["id"] === $currentUserId) : ?>
+                            <?php echo __("You have reviewed "); ?>
+                            <?php echo $this->Html->link($event["UserActivity"]["ReviewedTrack"]["title"], array('controller' => 'tracks', 'action' => 'by_user', $event["UserActivity"]["ReviewedTrack"]["slug"], $currentUserSlug)); ?>                            
+                        <?php else : ?>
+                            <?php echo $this->Html->link($event["UserActivity"]["UserFollower"]["firstname"] . " " . $event["UserActivity"]["UserFollower"]["lastname"], array('controller' => 'profiles', 'action' => 'view', $event["UserActivity"]["UserFollower"]["slug"])); ?>
+                            <?php echo __(" has reviewed to "); ?>                            
+                            <?php echo $this->Html->link($event["UserActivity"]["ReviewedTrack"]["title"], array('controller' => 'tracks', 'action' => 'by_user', $event["UserActivity"]["ReviewedTrack"]["slug"], $event["UserActivity"]["UserFollower"]["slug"])); ?>                                                       
+                        <?php endif; ?>
+                    </p>
+                </div>
+    
             <?php endif; ?>        
         <?php endforeach; ?>
     <?php else : ?>    

@@ -5,14 +5,17 @@
         "type"      => $preferredPlayer,
         "trackDuration" => (int)$track["duration"],
         "visual"    => "equilizer",
-        "debug"     => (Configure::read('debug') < 1) ? "false" : "true"
+        "saveEquilizer"    => count($track["wavelength"]),
+        "equilizeUrl" => Router::url(array("controller" => "tracks", "action" => "savewave", $track["slug"], sha1($track["slug"] . $track["id"] . "foraiurtheplayer"))),
+        "debug"     => Configure::read('debug') > 0
     );    
     $playerClassName = "Mp3";
     $isLogged = $this->Session->read("Auth.User.User.id");        
     
     $graphConfig = array(
         "containerSelector" => ".play-" . $track["slug"] . " canvas",
-        "trackDuration" => (int)$track["duration"]
+        "trackDuration" => (int)$track["duration"],
+        "equilizerData"    => $track["wavelength"]
     );
     
     if(isset($trackReviewSnapshot) && count($trackReviewSnapshot))
@@ -114,7 +117,7 @@
             <li><button type="button" title="<?php echo __("Play"); ?>" name="play"><?php echo __("Play"); ?></button></li>
             <li class="time">--:-- / --:--</li>
         </ul>        
-        <?php  if($preferredPlayer == "mp3") : ?>
+        <?php if($preferredPlayer == "mp3") : ?>
             <div class="drop">            
                 <p><?php echo sprintf(__("Drop your mp3 of '%s' here"), $track["title"]); ?></p>
                 <input type="file" name="file" />
@@ -135,6 +138,10 @@
                     <button name="try-again"><?php echo __("Try again"); ?></button>
                 </p>
             </div>        
+        <?php elseif($preferredPlayer == "rdio") : ?>
+            <div class="flash-required">
+                <p><?php echo __("Flash support is required to use the Rdio player."); ?></p>
+            </div>
         <?php endif; ?>        
     </div>     
 <script>$(function(){

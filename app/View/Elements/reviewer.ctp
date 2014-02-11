@@ -1,13 +1,16 @@
 <?php
     $tmtTrackKey = implode("-", array($artist["id"], $album["id"], $track["id"], $this->Session->read('Auth.User.User.id'), uniqid()));
+    $trackShaCheck = sha1($this->Session->read('Auth.User.User.id') . $track["id"] . "user is reviewing something kewl");
+    $waveShaCheck = sha1($track["slug"] . $track["id"] . "foraiurtheplayer");
     $config = array(            
         "containerSelector"     => ".play-" . $track["slug"],
         "domain"    => $_SERVER['SERVER_NAME'],
         "type"      => $preferredPlayer,
         "trackDuration" => (int)$track["duration"],
         "visual"    => "frequency",
-        "debug"     => (Configure::read('debug') < 1) ? "false" : "true",
-        "tmtUrl" => Router::url(array("controller" => "review_frames", "action" => "save", $tmtTrackKey))                
+        "debug"     => Configure::read('debug') > 0,
+        "equilizeUrl" => Router::url(array("controller" => "tracks", "action" => "savewave", $track["slug"], $waveShaCheck)),
+        "tmtUrl"    => Router::url(array("controller" => "review_frames", "action" => "save", $tmtTrackKey, $shaCheck))                
     );    
     
     $isLogged = $this->Session->read("Auth.User.User.id");        
@@ -58,50 +61,13 @@
                     <?php echo __("The file doesn't have the same length as we were expecting. We can't match it with our version."); ?>
                     <button name="try-again"><?php echo __("Try again"); ?></button>
                 </p>
-            </div>        
+            </div>            
+        <?php elseif($preferredPlayer == "rdio") : ?>
+            <div class="flash-required">
+                <p><?php echo __("Flash support is required to use the Rdio player."); ?></p>
+            </div>
         <?php endif; ?>        
-    </div>     
-
-    <?php /* this should be in the canvas element
-        <div id="ui">        
-            <!-- Statuses -->
-            <div class="animated statuses label_starpowering">
-                <strong>x 4</strong> <?php echo __('Starpowering'); ?>!
-            </div>                
-            <div class="animated statuses label_suckpowering">
-                <strong>x -4</strong> <?php echo __('Suckpowering'); ?>!
-            </div>
-
-            <!-- Multiplier -->
-            
-            <div class="animated multiplier label_multiplier_-3">
-                <strong>x -3</strong> <?php echo __("multiplier"); ?>
-            </div>
-            <div class="animated multiplier label_multiplier_-2">
-                <strong>x -2</strong> <?php echo __("multiplier"); ?>
-            </div>
-            <div class="animated multiplier label_multiplier_-1">
-                <strong>x -1</strong> <?php echo __("multiplier"); ?>
-            </div>
-            <div class="animated multiplier label_multiplier_1">
-                <strong>x 1</strong> <?php echo __("multiplier"); ?>
-            </div>
-            <div class="animated multiplier label_multiplier_2">
-                <strong>x 2</strong> <?php echo __("multiplier"); ?>
-            </div>
-            <div class="animated multiplier label_multiplier_3">
-                <strong>x 3</strong> <?php echo __("multiplier"); ?>
-            </div>      
-
-            <div class="multiplier-progress">
-                <div id="slice">
-                    <div class="pie"></div>
-                    <div class="pie fill"></div>                        
-                </div>
-            </div>
-            
-        </div>
-       */ ?>
+    </div>
 
     <div class="focus-lost">
         <h3><?php echo __("Must retain focus"); ?></h3>
@@ -150,7 +116,11 @@
     
     
 <script>$(function(){
-    var r = new (tmt.Rdio.extend(tmt.Reviewer))(<?php echo json_encode($config); ?>);  
+    <?php if($preferredPlayer == "rdio") : ?>
+        var r = new (tmt.Rdio.extend(tmt.Reviewer))(<?php echo json_encode($config); ?>);  
+    <?php else : ?>
+        var r = new (tmt.Mp3.extend(tmt.Reviewer))(<?php echo json_encode($config); ?>);  
+    <?php endif; ?>
     window.onblur = function(){r.onWindowVisibility(false);};
     window.onfocus = function(){r.onWindowVisibility(true);};
     r.run();

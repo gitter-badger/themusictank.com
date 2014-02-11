@@ -70,12 +70,48 @@ class Track extends AppModel
         return $track["Track"];
     }
     
-	
+	public function saveWave($wavelength)
+    { 
+        $this->save(array(
+            "id"    => $this->getData("Track.id"),
+            "wavelength"  => $wavelength
+        ));
+    }
+    
     public function beforeSave($options = array())
     {
         $this->checkSlug(array('title'));
+        
+        if(array_key_exists("wavelength", $this->data[$this->alias]) && !is_string($this->data[$this->alias]["wavelength"]))
+        {   
+            $this->data[$this->alias]["wavelength"] = json_encode($this->data[$this->alias]["wavelength"]);
+        }    
+        
         return true;
-    }    
+    }        
+    
+    
+    public function afterFind($results, $primary = false)
+    {
+        foreach($results as $idx => $row)
+        {   
+            if(array_key_exists($this->alias, $row))
+            { 
+                if(array_key_exists("wavelength", $row[$this->alias]) && is_string($row[$this->alias]["wavelength"]))
+                {   
+                    $results[$idx][$this->alias]["wavelength"] = json_decode($row[$this->alias]["wavelength"]);
+                }   
+            }
+        }    
+        return $results;        
+    }
+    
+    
+    public function onReviewComplete()
+    {
+        // Check for achievements here.
+    }
+    
     
     /**
      * Finds the current daily track challenge with related models.

@@ -20,8 +20,8 @@ class ReviewFramesController extends AppController {
      * @param array $keys An array of reviewframe values
      * @return json $reponse
      */
-    public function save($keys)
-    {           
+    public function save($keys, $shaCheck)
+    {
         $this->layout = "ajax";
         
         $response = array();
@@ -30,19 +30,21 @@ class ReviewFramesController extends AppController {
         
         if($userId !== (int)$keyMapping[3])
         {
-            $response["error"] = true;
-            $response["msg"] = __("User session not valid.");
+            throw new NotFoundException(__("This is not your user."));
         }        
         elseif(!array_key_exists("frames", $this->request->data))
         {
-            $response["error"] = true;
-            $response["msg"] = __("Not a valid request.");
+            throw new NotFoundException(__("Request is missing frames."));
         }
         else
-        {  
-            // wtf am i doing here
-            $this->loadModel("ReviewFrames");
-            $response["saved"] = $this->ReviewFrames->savePlayerData($this->request->data["frames"], $keyMapping);
+        {              
+            $validSha =  sha1($userId . (int)$keyMapping[2] . "user is reviewing something kewl");
+            if($shaCheck != $validSha)
+            {
+                throw new NotFoundException(__("We don't know where you are from."));
+            }            
+            
+            $response["saved"] = $this->ReviewFrame->savePlayerData($this->request->data["frames"], $keyMapping);
         }
         
         $this->set('response', $response);

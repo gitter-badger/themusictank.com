@@ -1,7 +1,8 @@
 (function() {
     
     var FRAMERATE           = 24,
-        APP_FRAMERATE       = 1 / FRAMERATE * 1000;    
+        APP_FRAMERATE       = 1 / FRAMERATE * 1000,
+        FRAMES_PER_SAVE     = FRAMERATE * 5;
 
     var Player = Class.extend({
                  
@@ -17,8 +18,6 @@
             this.config.progress    = {ref : this.config.seek.ref.find(".progress")};        
             this.config.playBtn     = {ref : this.config.container.ref.find('button[name=play]')};
             this.config.timer       = {ref : $(this.config.containerSelector + ".timed .time")};
-            
-            this.config.saveEquilizer = !(this.config.equilizerData);
             
             this.data = {
                 frequency : [],
@@ -150,17 +149,27 @@
         
         saveEquilizerFrame : function()
         {
-            if(this.config.saveEquilizer && this.data.frameId % FRAMERATE === 0)
+            if(this.config.saveEquilizer)
             {
                 for(var total = 0, i = 0, len = this.data.frequency.length; i < len; i++) 
                 {
                     total += this.data.frequency[i];
                 }
                 
-                // a cause que jai pas la confirmation que le ui update, il faudrai associer le frame a la position
-                // dans larray. et ajouter when is null/ save
-                this.data.wavelength.push(total / len);
+                this.data.wavelength[Math.floor(this.data.position)] = parseFloat((total / len));
             }
+        },
+        
+        sendEquilizerPackage : function()
+        {
+            this.data.synchronising = true;
+            
+            $.ajax(this.config.equilizeUrl, {
+                type : "POST",                
+                data: { waves : this.data.wavelength },
+                success : $.proxy(this.onSyncSuccess, this),
+                error : $.proxy(this.onSyncFail, this)
+            });            
         },
         
         displaySongInfo : function()
@@ -259,10 +268,14 @@
             this.data.position = position;
         },           
         
-        onUserChange : function() {
-            
-        },
-        
+        onSongEnd : function()
+        {
+            if(this.config.saveEquilizer)
+            {
+                this.sendEquilizerPackage();
+                this.config.saveEquilizer = false;
+            }
+        },        
                 
         // These must be overriden :
         setupCallback       : function(){return this;},
@@ -273,7 +286,7 @@
         loadSongStreamer    : _notOverriden,
         onReady             : _notOverriden,
         onTrackChanged      : _notOverriden,
-        onSongEnd           : _notOverriden
+        onUserChange        : _notOverriden
     });
 
     function _notOverriden() {};

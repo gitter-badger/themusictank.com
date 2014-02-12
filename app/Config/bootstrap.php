@@ -26,13 +26,8 @@
 
 // Setup a 'default' cache configuration for use in the application.
 
-if(preg_match('/themusictank\.com/', $_SERVER['SERVER_NAME']))
-{
-    Cache::config('default', array('engine' => 'Apc'));
-}
-else {
+
     Cache::config('default', array('engine' => 'File'));
-}
 
 
 /**

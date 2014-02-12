@@ -320,8 +320,16 @@ else
  *       Please check the comments in bootstrap.php for more info on the cache engines available
  *       and their settings.
  */
+    
+if(preg_match('/themusictank\.com/', $_SERVER['SERVER_NAME']))
+{
+	$engine = 'Apc';
+}
+else {
 	$engine = 'File';
-
+}
+    
+    
 // In development mode, caches should expire quickly.
 $duration = '+999 days';
 if (Configure::read('debug') > 0) {

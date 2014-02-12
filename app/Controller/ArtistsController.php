@@ -22,10 +22,9 @@ class ArtistsController extends AppController {
      */
     public function index()
     {                
-        $this->loadModel("Album");
         $this->set("popularArtists",    $this->Artist->findAllPopular());
         $this->set("artistCategories",  $this->Artist->getCategories());        
-        $this->set("newReleases",       $this->Album->getNewReleases(5));
+        $this->set("newReleases",       $this->Artist->Albums->getNewReleases(5));
                         
         $this->setPageTitle(__("Artist list"));        
         $this->setPageMeta(array(
@@ -43,13 +42,17 @@ class ArtistsController extends AppController {
     {   
         $isLoggedIn = $this->userIsLoggedIn();
         $data       = $this->Artist->getUpdatedSetBySlug($artistSlug, $isLoggedIn);
-        if(!$data) throw new NotFoundException(sprintf(__("Could not find the artist %s"), $artistSlug));   
+                
+        if(!$data)
+        {
+            throw new NotFoundException(sprintf(__("Could not find the artist %s"), $artistSlug));
+        }
         
         $this->set("artist",        $data["Artist"]);
         $this->set("rdioArtist",    $data["RdioArtist"]);
         $this->set("lastfmArtist",  $data["LastfmArtist"]);
         $this->set("albums",        $data["Albums"]);
-        $this->set("artistReviewSnapshot",      $data["ArtistReviewSnapshot"]);
+        $this->set("artistReviewSnapshot", $data["ArtistReviewSnapshot"]);
                         
         $this->setPageTitle(array($data["Artist"]["name"]));        
         $this->setPageMeta(array(
@@ -84,8 +87,8 @@ class ArtistsController extends AppController {
     {
         if($this->request->is('get'))
         {
-            $this->set('artists', $this->Paginator->paginate('Artist', array('Artist.name LIKE' => "%". trim($_GET['name'])."%")));
-            $title = __("Searching for") . ": \"". trim($_GET['name']) ."\"";
+            $this->set('artists', $this->Paginator->paginate('Artist', array('Artist.name LIKE' => "%". trim($this->request->query['name'])."%")));
+            $title = sprintf(__("Searching for: \"%s\""), trim($this->request->query['name']));
         }
         else
         {   

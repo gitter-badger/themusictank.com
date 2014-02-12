@@ -1,8 +1,9 @@
 <?php
 
 App::uses('CakeSession', 'Model/Datasource');
+App::uses('OEmbedable', 'Model');
 
-class Track extends AppModel
+class Track extends OEmbedable
 {	    
 	public $hasOne = array('RdioTrack', 'TrackReviewSnapshot', 'LastfmTrack');	
     public $belongsTo = "Album";
@@ -209,28 +210,14 @@ class Track extends AppModel
         $filtered   = $this->filterNew($tracks, $albumId);
         return $this->saveMany($filtered, array('deep' => true));
     }
-    
-    
-    public function toOEmbed()
+        
+    public function toOEmbed($additionalData = array())
     {
         $data = $this->getData("TrackReviewSnapshot");        
         unset($data["id"]);
         unset($data["track_id"]);
         unset($data["snapshot_ppf"]);
-                
-        return array(          
-            "url"   => sprintf("http://%s/tracks/view/%s/", $_SERVER['SERVER_NAME'], $this->getData("Track.slug")),
-            "title" => $this->getData("Track.title"),
-            "data"  => $data,
-            "width" => 500,
-            "height" => 350,
-            "html"  => '<iframe width="500" height="350" src="'.sprintf("http://%s/tracks/embed/%s/", $_SERVER['SERVER_NAME'], $this->getData("Track.slug")).'" frameborder="0"></iframe>'
-        );
-    }
-    
-    public function getOEmbedUrl()
-    {
-        $destination = sprintf("http://%s/tracks/view/%s/", $_SERVER['SERVER_NAME'], $this->getData("Track.slug"));
-        return sprintf("http://%s/oembed?url=%s", $_SERVER['SERVER_NAME'], urlencode($destination));
-    }
+               
+        return parent::toOEmbed(array_merge($additionalData, $data));
+    }    
 }

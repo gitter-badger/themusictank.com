@@ -7,12 +7,12 @@
  * @package       app.Controller
  */
 class AjaxController extends AppController {
-                 
+    
     public function beforeFilter()
     {   
         $this->layout   = "ajax";   
         parent::beforeFilter();   
-        $this->Auth->deny("whatsup", "okstfu", "follow", "unfollow");
+        $this->Auth->deny("whatsup", "okstfu", "follow", "unfollow", "pushrf");
     }
         
     /** 
@@ -36,25 +36,13 @@ class AjaxController extends AppController {
         
     public function follow($userSlug)
     {     
-        $relationExists = false;
-        
-        if($this->userIsLoggedIn())
-        {
-            $relationExists = $this->User->UserFollowers->addRelation($this->getAuthUserId(), $userSlug);
-        }  
-        
+        $relationExists = $this->userIsLoggedIn() && $this->User->UserFollowers->addRelation($this->getAuthUserId(), $userSlug);        
         $this->set("user", array("slug" => $userSlug, "currently_followed" => $relationExists)); 
     }
            
     public function unfollow($userSlug)
     {              
-        $relationExists = false;
-
-        if($this->userIsLoggedIn())
-        {
-            $relationExists = !$this->User->UserFollowers->removeRelation($this->getAuthUserId(), $userSlug);
-        }  
-
+        $relationExists = $this->userIsLoggedIn() && !$this->User->UserFollowers->removeRelation($this->getAuthUserId(), $userSlug);
         $this->set("user", array("slug" => $userSlug, "currently_followed" => $relationExists)); 
     }
         
@@ -62,29 +50,100 @@ class AjaxController extends AppController {
         $this->response->type('application/json');
         
         if(!array_key_exists("url", $this->request->query))
+        {
             throw new NotFoundException();
+        }
+                          
+        $instance = $this->_loadObjectFromOEmbededUrl($this->request->query["url"]);                      
+                
+        if(!$instance->data)
+        {
+            throw new NotFoundException();
+        }
         
-        $url = $this->request->query["url"];
+        $this->set("jsonOutput", $instance->toOEmbed());
+        $this->render('index');
+    }
+    
+    /** 
+     * Push review frames while reviewing
+     */
+    public function pushrf($keys, $shaCheck)
+    {
+        $this->response->type('application/json');
+        
+        $keyMapping = explode("-", $keys);
+        $userId = $this->getAuthUserId(); 
+        $validSha =  sha1($userId . (int)$keyMapping[2] . "user is reviewing something kewl");
+        
+        if($userId !== (int)$keyMapping[3])
+        {
+            throw new NotFoundException(__("This is not your user."));
+        }        
+        elseif(!array_key_exists("frames", $this->request->data))
+        {
+            throw new NotFoundException(__("Request is missing frames."));
+        }
+        elseif($shaCheck == $validSha)
+        {
+            $this->loadModel("ReviewFrame");
+            $this->set("jsonOutput", $this->ReviewFrame->savePlayerData($this->request->data["frames"], $keyMapping));
+        }               
+        else
+        {                
+            throw new NotFoundException(__("We don't know where you are from."));
+        }    
+        $this->render('index');    
+    }            
+    
+    public function savewave($trackSlug, $shaCheck)
+    {       
+        $this->response->type('application/json');
+                        
+        $this->loadModel("Track");        
+        $data = $this->Track->findBySlug($trackSlug);
+        
+        if(!$data)
+        {
+            throw new NotFoundException();
+        }
+        
+        $validSha = sha1($data["Track"]["slug"] . $data["Track"]["id"] . "foraiurtheplayer");        
+        if($shaCheck != $validSha)
+        {
+            throw new NotFoundException(__("We don't know where you are from."));
+        }
+        
+        $this->Track->data = $data;
+        $this->set("jsonOutput", $this->Track->saveWave($this->request->data["waves"]));
+        $this->render('index');
+    }
+    
+    
+    private function _loadObjectFromOEmbededUrl($url)
+    {
         $pattern = explode("/", preg_replace('/http:\/\//', "", $url));
+        
+        if(count($pattern) !== 4)
+        {
+            throw new NotFoundException();
+        }
+                
         $model = $pattern[1];
         $slug = $pattern[3];
         
         if(!preg_match('/albums|tracks/', $model))
+        {
             throw new NotFoundException();
-        
+        }
+                
         $modelName = substr(ucfirst($model), 0, -1);
-        $this->loadModel($modelName);        
-        $instance = new $modelName();
-        $instance->getUpdatedSetBySlug($slug);
-                        
-        $defaults = array(
-            "version"   => "1.0",
-            "type"      => "rich",
-            "provider_name" => "The Music Tank",
-            "provider_url"=> sprintf("http://%s/", $_SERVER['SERVER_NAME']),
-        );
-                        
-        $this->set("jsonOutput", array_merge($defaults, $instance->toOEmbed()));
+        $this->loadModel($modelName);
+        
+        $instance = new $modelName();        
+        $instance->getUpdatedSetBySlug($slug);    
+        
+        return $instance;
     }
     
 }

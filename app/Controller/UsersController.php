@@ -32,8 +32,7 @@ class UsersController extends AppController {
         $this->set('notifications', $this->User->Notifications->associateRelated($notifications));
         $this->setPageTitle(array(__("Recent notifications")));
     }    
-       
-        
+               
     /** 
      * Builds the default user dashboard
      */
@@ -49,8 +48,7 @@ class UsersController extends AppController {
         
         $this->set("feed", $feed);        
         $this->setPageTitle(array(__("TMT dashboard")));
-    }
-             
+    }             
     
     /** 
      * Edit the current user's details

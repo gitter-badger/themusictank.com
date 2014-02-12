@@ -13,8 +13,6 @@ class PlayerController extends AppController {
     /** 
      * Player selection page. Automatically forwards to the prefered api and logs the user in.
      *
-     * @param string $artistSlug Artist slug
-     * @param string $albumSlug Album slug
      * @param string $trackSlug Track slug
      */
     public function play($trackSlug)
@@ -50,8 +48,6 @@ class PlayerController extends AppController {
     /** 
      * Rdio web playback player page
      *
-     * @param string $artistSlug Artist slug
-     * @param string $albumSlug Album slug
      * @param string $trackSlug Track slug
      */
     public function rdio($trackSlug)
@@ -97,8 +93,6 @@ class PlayerController extends AppController {
     /** 
      * Mp3 web playback player page
      *
-     * @param string $artistSlug Artist slug
-     * @param string $albumSlug Album slug
      * @param string $trackSlug Track slug
      */
     public function mp3($trackSlug)

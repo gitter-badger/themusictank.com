@@ -6,7 +6,7 @@
         "trackDuration" => (int)$track["duration"],
         "visual"    => "equilizer",
         "saveEquilizer"    => count($track["wavelength"]),
-        "equilizeUrl" => Router::url(array("controller" => "tracks", "action" => "savewave", $track["slug"], sha1($track["slug"] . $track["id"] . "foraiurtheplayer"))),
+        "equilizeUrl" => Router::url(array("controller" => "ajax", "action" => "savewave", $track["slug"], sha1($track["slug"] . $track["id"] . "foraiurtheplayer"))),
         "debug"     => Configure::read('debug') > 0
     );    
     $playerClassName = "Mp3";

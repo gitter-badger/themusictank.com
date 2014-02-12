@@ -9,8 +9,8 @@
         "trackDuration" => (int)$track["duration"],
         "visual"    => "frequency",
         "debug"     => Configure::read('debug') > 0,
-        "equilizeUrl" => Router::url(array("controller" => "tracks", "action" => "savewave", $track["slug"], $waveShaCheck)),
-        "tmtUrl"    => Router::url(array("controller" => "review_frames", "action" => "save", $tmtTrackKey, $shaCheck))                
+        "equilizeUrl" => Router::url(array("controller" => "ajax", "action" => "savewave", $track["slug"], $waveShaCheck)),
+        "tmtUrl"    => Router::url(array("controller" => "ajax", "action" => "pushrf", $tmtTrackKey, $shaCheck))                
     );    
     
     $isLogged = $this->Session->read("Auth.User.User.id");        

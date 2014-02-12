@@ -176,5 +176,4 @@ class AppController extends Controller {
         $this->set("preferredPlayer", $preferredPlayer);
         $this->set("isReview", $isReview);
     }
-        
 }

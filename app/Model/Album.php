@@ -2,8 +2,9 @@
 
 App::uses('User', 'Model');
 App::uses('CakeSession', 'Model/Datasource');   
+App::uses('OEmbedable', 'Model');
 
-class Album extends AppModel
+class Album extends OEmbedable
 {	    
 	public $hasOne      = array('RdioAlbum', 'AlbumReviewSnapshot', "LastfmAlbum");
     public $hasMany     = array('Tracks' => array('order' => 'track_num ASC'));
@@ -88,33 +89,20 @@ class Album extends AppModel
     public function getNewReleases($limit = null)
     {   
         return $this->find("all", array(
-            "conditions" => array("Album.is_newrelease" => true),
+            "conditions" => array("is_newrelease" => true),
             "limit" => $limit,
-            "order" => array("Album.release_date DESC")
+            "order" => array("release_date DESC")
         )); 
     }
     
-    public function toOEmbed()
+    public function toOEmbed($additionalData = array())
     {
         $data = $this->getData("AlbumReviewSnapshot");
         unset($data["album_id"]);
         unset($data["id"]);
         unset($data["metacritic_score"]);
         unset($data["snapshot_ppf"]);
-        
-        return array(          
-            "url"   => sprintf("http://%s/albums/view/%s/", $_SERVER['SERVER_NAME'], $this->getData("Album.slug")),
-            "title" => $this->getData("Album.name"),
-            "data"  => $data,
-            "width" => 500,
-            "height" => 350,
-            "html"  => '<iframe width="500" height="350" src="'.sprintf("http://%s/albums/embed/%s/", $_SERVER['SERVER_NAME'], $this->getData("Album.slug")).'" frameborder="0"></iframe>'
-        );
-    }    
-    
-    public function getOEmbedUrl()
-    {
-        $destination = sprintf("http://%s/albums/view/%s/", $_SERVER['SERVER_NAME'], $this->getData("Album.slug"));
-        return sprintf("http://%s/oembed?url=%s", $_SERVER['SERVER_NAME'], urlencode($destination));
+     
+        return parent::toOEmbed(array_merge($additionalData, $data));
     }
 }

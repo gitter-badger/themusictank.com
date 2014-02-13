@@ -7,7 +7,7 @@
 <body>
     <?php echo $this->element('header'); ?>
     
-    <section>
+    <section class="site-main">
         <?php echo $this->Session->flash(); ?>
         <?php echo $this->fetch('content'); ?>
     </section>

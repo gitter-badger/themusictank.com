@@ -20,7 +20,7 @@ class MetaTagsHelper extends AppHelper {
             $this->Html->meta('canonical', $this->Html->url( null, true ), array('rel'=>'canonical', 'type'=>null, 'title'=>null)),  
             '<link rel="author" type="text/plain" href="'.$domain.'humans.txt"" />',
             '<noscript><meta http-equiv="refresh" content="0; URL=/pages/requirements/" /></noscript>',
-            $this->Html->css(array("//fonts.googleapis.com/css?family=Raleway", "styles")), 
+            $this->Html->css(array("//fonts.googleapis.com/css?family=Raleway|Hammersmith+One", "styles")), 
             $this->Html->script(array("src" => "//code.jquery.com/jquery-2.0.3.min.js", "lib/sjsi", "tmt")),
         );
         

@@ -1,13 +1,12 @@
-<header>
-     <nav>
+<header class="site-head">
+    <h1><?php echo $this->Html->link(__("TMT"), "/", array("title" => __("The Music Tank"))); ?></h1>
+    <nav class="website">
          <ul class="horizontal">
-             <li><?php echo $this->Html->link(__("The Music Tank"), "/"); ?></li>
-             <!--li><?php echo $this->Html->link(__("Charts"),     array('controller' => 'charts',     'action' => 'index')); ?></li -->
              <li><?php echo $this->Html->link(__("Artists"),    array('controller' => 'artists',    'action' => 'index')); ?></li>
              <li><?php echo $this->Html->link(__("Community"),  array('controller' => 'pages',      'action' => 'community')); ?></li>
          </ul>
     </nav>
-    <nav>
+    <nav class="accounts">
          <?php $userSession = $this->Session->read('Auth.User.User');  ?>
          <?php if($userSession) : ?>
          <ul class="horizontal">             
@@ -30,7 +29,6 @@
         <?php else : ?>
          <ul class="horizontal">             
             <li><?php echo $this->Html->link(__("Login"), array('controller' => 'users', 'action' => 'login')); ?></li>
-            <li><?php echo $this->Html->link(__("Create account"), array('controller' => 'users', 'action' => 'login')); ?></li>
         </ul>
         <?php endif; ?>
     </nav>

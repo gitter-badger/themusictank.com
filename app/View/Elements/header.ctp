@@ -1,11 +1,14 @@
 <header class="site-head">
-    <h1><?php echo $this->Html->link(__("TMT"), "/", array("title" => __("The Music Tank"))); ?></h1>
+    
+    <h1><?php echo $this->Html->link(__("The Music Tank"), "/", array("title" => __("The Music Tank"))); ?></h1>
+    
     <nav class="website">
          <ul class="horizontal">
              <li><?php echo $this->Html->link(__("Artists"),    array('controller' => 'artists',    'action' => 'index')); ?></li>
              <li><?php echo $this->Html->link(__("Community"),  array('controller' => 'pages',      'action' => 'community')); ?></li>
          </ul>
     </nav>
+    
     <nav class="accounts">
          <?php $userSession = $this->Session->read('Auth.User.User');  ?>
          <?php if($userSession) : ?>

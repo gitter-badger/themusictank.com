@@ -43,9 +43,9 @@ class LastfmArtist extends AppModel
             "id"        => $lastfmArtistId,
             "artist_id" => $artistId,
             "lastsync"  => time(),
-            "image"     => empty($infos->image[3]->{'#text'}) ? null : $this->getImageFromUrl($infos->image[3]->{'#text'}, $image),
-            "image_src" => empty($infos->image[3]->{'#text'}) ? null : $infos->image[3]->{'#text'},
-            "biography" => empty($infos->bio->summary) ? __("Biography is not available at this time.") : $this->cleanLastFmWikiText($infos->bio->summary),
+            "image"     => empty($infos->image[4]->{'#text'}) ? null : $this->getImageFromUrl($infos->image[4]->{'#text'}, $image),
+            "image_src" => empty($infos->image[4]->{'#text'}) ? null : $infos->image[4]->{'#text'},
+            "biography" => empty($infos->bio->summary) ? __("Biography is not available at this time.") : $this->cleanLastFmWikiText($infos->bio->content),
             "url"       => $infos->url
         );
             

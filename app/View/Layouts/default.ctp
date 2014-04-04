@@ -4,7 +4,8 @@
 	<title><?php echo ($title_for_layout) ? $title_for_layout . " &mdash; " : ""; ?><?php echo __("The Music Tank"); ?></title>
     <?php echo $this->element('head'); ?>
 </head>
-<body>
+<body class="<?php echo sprintf("%s %s %s", $this->params["controller"], $this->params["action"], implode(" ", $this->params["pass"])); ?>">
+
     <?php echo $this->element('header'); ?>
     
     <section class="site-main">

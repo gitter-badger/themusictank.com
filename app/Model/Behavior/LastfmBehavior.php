@@ -29,12 +29,19 @@ class LastfmBehavior extends ModelBehavior {
     
     public function cleanLastFmWikiText($model, $text)
     {
-        $text = preg_replace('/\n.*\n.*\n/', "\n", $text);
-        $text = preg_replace('/\n.*\n/', "\n", $text);
-        $text = preg_replace('/Read more about .* on .*/', '', $text);        
-        $text = trim(strip_tags($text));        
-        
-        return str_replace("\n", "</p>\n<p>", '<p>'.$text.'</p>');
+        $text = trim($text);           
+        $text = preg_replace('/Read more about .* on .*/', '', $text);
+        $text = strip_tags($text);
+        $text = str_replace(array("\r\n", "\r"), "\n", $text);
+        $lines = explode("\n", $text);
+        $new_lines = array();
+
+        foreach ($lines as $i => $line) {
+            $data = trim($line);
+            if(!empty($data)) $new_lines[] = $data;
+        }
+
+        return "<p>" . implode("</p>\n<p>", $new_lines) . "</p>";
     }    
  
     public function getArtistBiography($model, $artistName)

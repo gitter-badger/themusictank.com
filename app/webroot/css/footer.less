@@ -1,0 +1,54 @@
+.site-foot {
+
+    border-top:1px solid rgba(233,233,233,.8);
+    color:#b9b9b9;
+    padding:0 7%;   
+
+	nav {
+		display:inline-block;
+
+		a {
+		    color:#121212;
+		    display:inline-block;
+		    font-weight:bold;
+		    padding:0 1em;
+		    text-decoration:none;
+		}
+
+	}
+	.social {
+	    margin-left:1em;
+	    padding-left:1em;
+
+	    a {
+		    background:#fff url(../img/icons-social.png) top left no-repeat;   
+		    display:inline-block;    
+		    height:50px;
+		    text-indent:-999px;
+		    overflow:hidden;    
+		    width:55px;
+		}
+		.facebook a {
+		    background-position:0 0;
+
+		    &:hover {
+    			background-position:0 -48px;
+		    }
+		}
+
+		.twitter a {
+		    background-position:-55px 0;
+
+		    &:hover {
+    			background-position:-55px -48px;
+		    }
+		}
+
+		.googleplus a {
+		    background-position:-110px 0;
+		    &:hover {
+    			background-position:-110px -48px;
+		    }
+		}
+	}
+}

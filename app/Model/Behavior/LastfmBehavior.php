@@ -31,6 +31,7 @@ class LastfmBehavior extends ModelBehavior {
     {
         $text = trim($text);           
         $text = preg_replace('/Read more about .* on .*/', '', $text);
+        $text = preg_replace('/User-contributed text is available under the Creative Commons By-SA License and may also be available under the GNU FDL./', '', $text);
         $text = strip_tags($text);
         $text = str_replace(array("\r\n", "\r"), "\n", $text);
         $lines = explode("\n", $text);

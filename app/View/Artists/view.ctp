@@ -3,8 +3,8 @@
     <ul class="horizontal">
         <li><?php echo $this->Html->link(__("Artists"), array('controller' => 'artists', 'action' => 'index')); ?></li>
         <li><?php echo $this->Html->link($artist["name"], array('controller' => 'artists', 'action' => 'view', $artist["slug"])); ?></li>
-        <li><?php echo $this->Html->link($artist["name"], array('controller' => 'artists', 'action' => 'view', $artist["slug"], "#" => "biography")); ?></li>
-        <li><?php echo $this->Html->link($artist["name"], array('controller' => 'artists', 'action' => 'view', $artist["slug"], "#" => "discography")); ?></li>
+        <li><?php echo $this->Html->link(__("Biography"), array('controller' => 'artists', 'action' => 'view', $artist["slug"], "#" => "biography")); ?></li>
+        <li><?php echo $this->Html->link(__("Discography"), array('controller' => 'artists', 'action' => 'view', $artist["slug"], "#" => "discography")); ?></li>
     </ul>
 </nav>
 
@@ -26,7 +26,7 @@
         </header>
     </div>
 
-    <aside class="fixable-hit">
+    <aside class="fixable-hit" id="biography">
 
         <section class="biography">
             <?php echo $lastfmArtist["biography"]; ?>
@@ -57,7 +57,7 @@
     </aside>
 </article>
 
-<section class="fixable-hit discography">
+<section class="fixable-hit" id="discography">
 <h2><?php echo __("Discography"); ?></h2>
 <?php if(count($albums) > 0) : ?>
     <ul class="tiled-list albums">
@@ -84,7 +84,7 @@
     <?php echo __("Artist biography and profile image courtesy of"); ?> <?php echo $this->Html->link("Last.fm", "http://www.last.fm/", array("target" => "_blank")); ?>. 
     <?php echo __("They were last updated on"); ?> <?php echo date("F j, g:i a", $lastfmArtist["lastsync"]); ?>. 
     <?php echo __("Album information and images courtesy of"); ?> <?php echo $this->Html->link("Rdio.com", "http://www.rdio.com/", array("target" => "_blank")); ?>. 
-    <?php echo __("These ones were last updated on"); ?> <?php echo date("F j, g:i a", $rdioArtist["lastsync"]); ?>.
+    <?php echo __("These ones were last updated on"); ?> <?php echo date("F j, g:i a", $rdioArtist["lastsync"]); ?>. User-contributed text is available under the Creative Commons By-SA License and may also be available under the GNU FDL.
 </p>
     
 <?php echo $this->Disqus->get('/artists/view/'.$artist["slug"].'/', $artist["name"]); ?>

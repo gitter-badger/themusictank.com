@@ -1,8 +1,8 @@
-
-var tmt = window.tmt || {};
+$(function () {
     
-$(function(){
-        
+    "use strict";
+    var tmt = window.tmt || {};
+    
     // Add remove follower
     var onFollowClick = function(event){        
         var $el = $(this);
@@ -17,6 +17,19 @@ $(function(){
     
     $("a.follow, a.unfollow").on("click", onFollowClick);
         
+    
+    // fixed elements
+    
+    $('.fixable').waypoint(function() {
+        $(this).toggleClass("fixed");
+
+    });
+
+    $('.fixable-hit ').waypoint(function() {
+        $('.fixable.fixed').toggleClass($(this).attr("id"));
+    });
+    
+    
         
     // Expander util    
     var box = $(".expandable");

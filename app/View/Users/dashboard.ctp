@@ -11,7 +11,7 @@
 <section class="activity">    
     <?php if(count($feed) > 0) : ?>    
         <?php foreach($feed as $event) : ?>
-            <?php $currentDay = date("z", $event["UserActivity"]["created"]); ?>
+            <?php $currentDay = date("z", (int)$event["UserActivity"]["created"]); ?>
             <?php if($currentDay != $lastHeader) : ?>           
                 <header class="time-header">
                     <time datetime="<?php echo $this->Time->i18nFormat($event["UserActivity"]["created"]); ?>" data-title="true" title="<?php echo $this->Time->niceShort($event["UserActivity"]["created"]); ?>">

@@ -1,4 +1,4 @@
-<header class="site-head">
+<header class="fixable site-head">
     
     <h1><?php echo $this->Html->link(__("The Music Tank"), "/", array("title" => __("The Music Tank"))); ?></h1>
     

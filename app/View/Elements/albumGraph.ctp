@@ -47,19 +47,30 @@
         ); 
     }   
     
-    $trackLength = 0;
+    $albumLength = 0;
     foreach($tracks as $track)
     {
-        $trackLength += $track["duration"];
+        $albumLength += $track["duration"];
     }
     
     $isLogged = $this->Session->read("Auth.User.User.id");
 ?>
-<section class="player chart album-chart <?php echo $isLogged ? 'logged' : 'not-logged' ?> graph-<?php echo $album["slug"]; ?>">
-    <canvas></canvas>        
+<section class="player chart album-chart <?php echo $isLogged ? 'logged' : 'not-logged' ?> graph-<?php echo $album["slug"]; ?>" style="height:1000px;">
+    <canvas></canvas>
+    <ul class="labels">
+        <li><?php echo __("Dislike"); ?></li>
+        <li><?php echo __("Neutral"); ?></li>
+        <li><?php echo __("Liking"); ?></li>
+    </ul>
     <div class="tracks">
-    <?php foreach($tracks as $track) : ?><div style="width:<?php echo ($track["duration"] / $trackLength) * 100; ?>%;"><span><?php echo $track["title"]; ?></span></div><?php endforeach; ?>
+        <?php foreach($tracks as $track) : ?>
+            <div style="height:<?php echo ($track["duration"] / $albumLength) * 100; ?>%;">
+                <?php echo $track["title"]; ?>
+            </div>
+        <?php endforeach; ?>
     </div>
+
+        
     <?php if(count($graphConfig["curves"]) > 0) : ?>    
     <ul class="legend">      
         <?php foreach($graphConfig["curves"] as $key => $curveInfo) : ?>

@@ -1,1 +1,4 @@
-app/tmp/cache/persistent/
+#app/tmp/cache/persistent/
+app/tmp/
+app/webroot/img/cache/
+sftp-config.json

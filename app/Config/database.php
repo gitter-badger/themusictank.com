@@ -91,6 +91,18 @@ class DATABASE_CONFIG {
 		'encoding' => 'utf8',
 	);
     
+    // .local test information
+    public $test3 = array(
+		'datasource' => 'Database/Mysql',
+		'persistent' => false,
+		'host' => 'localhost',
+		'login' => 'tmtdb',
+		'password' => '7m7dat4u9ser',
+		'database' => 'devthemusictank',
+		'prefix' => '',
+		'encoding' => 'utf8',
+	);
+
     public $array = array('datasource' => 'ArraySource');
     
     function __construct ()
@@ -102,6 +114,10 @@ class DATABASE_CONFIG {
         elseif(preg_match('/themusictank\.nvi/', $_SERVER['SERVER_NAME']))
         {
             $this->default = $this->test;
+        }
+        elseif(preg_match('/dev\.themusictank\.com/', $_SERVER['SERVER_NAME']))
+        {
+            $this->default = $this->test3;
         }
 	}
     

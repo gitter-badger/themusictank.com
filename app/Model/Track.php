@@ -67,8 +67,29 @@ class Track extends OEmbedable
             "order" => "track_num",
             "fields" => array("Track.*")
         ));
-        
-        return $track["Track"];
+                
+        if($track) {
+            return $track["Track"];
+        }
+    }
+
+    public function getPreviousTrack()
+    {        
+        $albumId = $this->getData("Track.album_id");
+        $trackIdx = $this->getData("Track.track_num");
+                
+        $track = $this->find("first", array(
+            "conditions" => array(
+                "album_id" => $albumId,
+                "track_num =" => $trackIdx - 1
+            ),
+            "order" => "track_num",
+            "fields" => array("Track.*")
+        ));
+
+        if($track) {
+            return $track["Track"];
+        }
     }
     
 	public function saveWave($wavelength)

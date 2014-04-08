@@ -3,23 +3,17 @@
     <ul class="horizontal">
         <li><?php echo $this->Html->link(__("Artists"), array('controller' => 'artists', 'action' => 'index')); ?></li>
         <li><?php echo $this->Html->link($artist["name"], array('controller' => 'artists', 'action' => 'view', $artist["slug"])); ?></li>
-        <li><?php echo $this->Html->link(__("Biography"), array('controller' => 'artists', 'action' => 'view', $artist["slug"], "#" => "biography")); ?></li>
-        <li><?php echo $this->Html->link(__("Discography"), array('controller' => 'artists', 'action' => 'view', $artist["slug"], "#" => "discography")); ?></li>
     </ul>
 </nav>
 
 <article class="heading artist-profile">
 
-    <div class="thumbnail"
-        <?php if(!is_null($lastfmArtist["image"])) : ?>
-            style="background-image:url(/img/<?php echo $lastfmArtist["image"]; ?>);"
-        <?php endif;?>
-    >
+    <div class="thumbnail" <?php if(!is_null($lastfmArtist["image"])) : ?>style="background-image:url(/img/<?php echo $lastfmArtist["image"]; ?>);"<?php endif;?>>
         <div class="fx1"></div>
         <div class="fx2"></div> 
     </div>
 
-    <aside class="fixable-hit" id="biography">
+    <aside>
         <h1><?php echo $artist["name"]; ?></h1>
         <section class="biography">
             <?php echo $lastfmArtist["biography"]; ?>
@@ -28,21 +22,24 @@
 
     <div class="statistics">
         <section class="tankers">
-            <h4><?php echo __("Tankers"); ?></h4>            
             <?php echo $this->Chart->getBigPie("track", $artist["slug"], $artistReviewSnapshot); ?>
-            <p><?php echo __("Average user score"); ?> <?php echo $this->Chart->formatScore($artistReviewSnapshot["score_snapshot"]); ?></p>        
-            <p><?php echo __("Enjoyment"); ?> <?php echo $artistReviewSnapshot["liking_pct"]; ?> %</p>
-            <p><?php echo __("Disliking"); ?> <?php echo $artistReviewSnapshot["disliking_pct"]; ?> %</p>
+            <h3><?php echo __("General"); ?></h3>  
+            <ul>
+                <li class="average"><?php echo $this->Chart->formatScore($artistReviewSnapshot["score_snapshot"]); ?></li>
+                <li class="enjoyment"><?php echo $this->Chart->formatPct($artistReviewSnapshot["liking_pct"]); ?><br>:)</li>
+                <li class="displeasure"><?php echo $this->Chart->formatPct($artistReviewSnapshot["disliking_pct"]); ?><br>:(</li>
+            </ul>  
         </section>
 
         <?php if(isset($userArtistReviewSnapshot)) : ?>
             <section class="subscribers">
-                <h3><?php echo __("People you are subscribed to"); ?></h3>
-                <p><?php echo __("Average subscriber score"); ?> <?php echo $this->Chart->formatScore($userArtistReviewSnapshot["score_snapshot"]); ?></p>        
-                <?php $enjoymentTimes =  $this->Chart->getEnjoymentTime($userArtistReviewSnapshot, (int)$track["duration"]); ?>
-                <p><?php echo __("Enjoyment"); ?> <?php echo $userArtistReviewSnapshot["liking_pct"]; ?> %</p>
-                <p><?php echo __("Disliking"); ?> <?php echo $userArtistReviewSnapshot["disliking_pct"]; ?> %</p>
+                <h3><?php echo __("Subscriptions"); ?></h3>  
                 <?php echo $this->Chart->getBigPie("track", $artist["slug"], $userArtistReviewSnapshot); ?>
+                <ul>
+                    <li class="average"><?php echo $this->Chart->formatScore($userArtistReviewSnapshot["score_snapshot"]); ?></li>
+                    <li class="enjoyment"><?php echo $this->Chart->formatPct($userArtistReviewSnapshot["liking_pct"]); ?><br>:)</li>
+                    <li class="displeasure"><?php echo $this->Chart->formatPct($userArtistReviewSnapshot["disliking_pct"]); ?><br>:(</li>
+                </ul>
             </section>
         <?php endif; ?>
     </div>

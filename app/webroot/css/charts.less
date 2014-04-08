@@ -1,0 +1,98 @@
+.enjoyment-chart {
+	position:relative;
+	overflow:hidden;
+	//box-shadow: 0 1px 3px rgba(0, 0, 0, 0.7);
+	div {
+		font-size:0.85em;
+		color:#dedede;
+		overflow:hidden;
+		min-height: 2px;
+	}
+	.like {
+		background:#7da0db;
+	}
+
+	.dislike {
+		background:#0b1c38;
+	}
+
+	.neutral {
+		background:#28416b;
+	}
+
+}
+
+ .enjoyment-chart.big {
+ 	height:150px;
+ 	width:150px;
+ 	.enjoyment-chart;
+ }
+
+
+
+
+.timeline-chart {
+
+	.curves {
+		list-style-type: none;
+		li {
+			display:inline-block;
+			marign-left:1em;			
+		}
+	}
+
+	.viewport {
+		height:630px;
+		overflow:auto;
+		position:relative;
+
+		canvas {	
+			position:absolute;
+			top:0;
+			left:0;
+			width:2000px;
+			height:600px;
+		}
+		.times {
+			color:#ccc;
+			font-size:11px;
+			width:2000px;		
+			list-style-type: none;				
+			li {
+				overflow: hidden;
+				display: block;
+				float:left;	
+			}
+		}
+
+		.tracks {		
+			position:absolute;
+			top:0;
+			left:0;
+			width:2000px;
+			height:600px;
+			font-size:.9em;
+			color:#ccc;
+
+			div {
+				display: block;
+				float:left;
+				height:600px;
+				vertical-align: top;
+
+				//padding:1em 10% 0 10%;				
+				a {
+					background-color:rgba(255,255,255,.5);
+				}
+			}	
+
+			div:nth-child(odd) {
+				text-align: left;
+			}
+			div:nth-child(even) {
+				text-align: right;
+				background-color:rgba(215,215,215,.5);
+			}
+		}
+	}
+}

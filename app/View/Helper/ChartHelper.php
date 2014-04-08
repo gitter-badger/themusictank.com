@@ -16,10 +16,24 @@ class ChartHelper extends AppHelper {
     
     public function formatScore($score)
     {
-        // @Todo : colorize by the amount of good
+        return $this->formatPct(round($score * 100));
+    }
+
+    public function formatPct($score)
+    {
         if(!is_null($score) && $score > 0)
-            return round($score * 100) . "%";
-        
+        {
+            $class = "neutral";
+            if($score > 80) {
+                $class = "positive";
+            }
+            elseif($score < 60)
+            {
+                $class = "negative";
+            }
+
+            return  sprintf("<span class=\"%s\">%s</span>", $class, $score . "%");
+        }
         return "N/A";
     }
 
@@ -45,10 +59,10 @@ class ChartHelper extends AppHelper {
                     <div class=\"col\">".(int)$data["liking_pct"]."%</div>
                </div>";*/        
         
-        return '<div class="square" style="display:inline-block; width:60px; height:40px; position:relative;">
-                    <div style="background:#7da0db; height:'. ($data["liking_pct"] ? $data["liking_pct"] : 0) .'%; overflow:hidden;"></div>
-                    <div style="background:#28416b; height:'. ($data["neutral_pct"] ? $data["neutral_pct"] : 100) .'%; overflow:hidden;"></div>
-                    <div style="background:#0b1c38; height:'. ($data["disliking_pct"] ? $data["neutral_pct"] : 0).'%; overflow:hidden;"></div>
+        return '<div class="enjoyment-chart">
+                    <div class="like" style="height:'. ($data["liking_pct"] ? $data["liking_pct"] : 0) .'%;"></div>
+                    <div class="neutral" style="height:'. ($data["neutral_pct"] ? $data["neutral_pct"] : 100) .'%;"></div>
+                    <div class="dislike" style="height:'. ($data["disliking_pct"] ? $data["neutral_pct"] : 0).'%;"></div>
                 </div>';
     }
 
@@ -64,10 +78,10 @@ class ChartHelper extends AppHelper {
         return "<div class=\"pie appreciation-pie\" id=\"pie-$type-$key\"></div>";*/
         
         /* square pie */
-        return '<div class="square" style="width:200px; height:200px; position:relative;">
-                    <div style="background:#7da0db; height:'.$data["liking_pct"].'%; overflow:hidden;">'.__('Liking').'</div>
-                    <div style="background:#28416b; height:'.$data["neutral_pct"].'%; overflow:hidden;">'.__('Neutral').'</div>
-                    <div style="background:#0b1c38; height:'.$data["disliking_pct"].'%; overflow:hidden;">'.__('Disliking').'</div>
+        return '<div class="enjoyment-chart big">
+                    <div class="like" style="height:'.$data["liking_pct"].'%;"">'.__('Liking').'</div>
+                    <div class="neutral" style="height:'.$data["neutral_pct"].'%;"">'.__('Neutral').'</div>
+                    <div class="dislike" style="height:'.$data["disliking_pct"].'%;"">'.__('Disliking').'</div>
                 </div>';
     }
        

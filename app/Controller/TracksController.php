@@ -35,6 +35,11 @@ class TracksController extends AppController {
         $this->set("artist", $data["Album"]["Artist"]);  
         $this->set("trackReviewSnapshot", $data["TrackReviewSnapshot"]);        
         
+        $this->set("nextTrack", $this->Track->getNextTrack());
+        // reset object
+        $this->Track->track_num = $data["Track"]["track_num"];
+        $this->set("previousTrack", $this->Track->getPreviousTrack());
+
         $this->set("usersWhoReviewed", $this->User->getReviewUserSummary($data["Track"]["id"]));
         
         if($isLoggedIn) {

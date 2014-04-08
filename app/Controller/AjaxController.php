@@ -87,8 +87,8 @@ class AjaxController extends AppController {
         elseif($shaCheck == $validSha)
         {
             $this->loadModel("ReviewFrame");
-            $this->set("jsonOutput", $this->ReviewFrame->savePlayerData($this->request->data["frames"], $keyMapping));
-        }               
+            $this->set("jsonOutput", array("status" => $this->ReviewFrame->savePlayerData($this->request->data["frames"], $keyMapping) ? "success" : "failure"));
+        }
         else
         {                
             throw new NotFoundException(__("We don't know where you are from."));
@@ -124,15 +124,15 @@ class AjaxController extends AppController {
     {
         $pattern = explode("/", preg_replace('/http:\/\//', "", $url));
         
-        if(count($pattern) !== 4)
+        if(count($pattern) < 3 && count($pattern) > 4)
         {
             throw new NotFoundException();
         }
                 
         $model = $pattern[1];
         $slug = $pattern[3];
-        
-        if(!preg_match('/albums|tracks/', $model))
+
+        if(!preg_match('/albums|tracks/i', $model))
         {
             throw new NotFoundException();
         }

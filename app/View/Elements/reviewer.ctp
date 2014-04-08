@@ -1,6 +1,6 @@
 <?php
     $tmtTrackKey = implode("-", array($artist["id"], $album["id"], $track["id"], $this->Session->read('Auth.User.User.id'), uniqid()));
-    $trackShaCheck = sha1($this->Session->read('Auth.User.User.id') . $track["id"] . "user is reviewing something kewl");
+    $shaCheck = sha1($this->Session->read('Auth.User.User.id') . $track["id"] . "user is reviewing something kewl");
     $waveShaCheck = sha1($track["slug"] . $track["id"] . "foraiurtheplayer");
     $config = array(            
         "containerSelector"     => ".play-" . $track["slug"],

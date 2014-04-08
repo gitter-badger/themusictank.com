@@ -7,7 +7,6 @@
     </ul>
 </nav>
 
-
 <article class="heading album-profile">
 
     <div class="thumbnail">
@@ -53,7 +52,6 @@
         </section>
         <?php endif; ?>
 
-
         <?php if(isset($userAlbumReviewSnapshot)) : ?>
         <section class="you">
             <?php echo $this->Chart->getBigPie("album", $album["slug"] . "-3", $userAlbumReviewSnapshot); ?>  
@@ -73,27 +71,30 @@
 
 </article>
 
+<section class="album-overview">
+    <h2><?php echo __("Overview"); ?></h2>
+    <?php echo $this->element("albumGraph"); ?>
+</section>
 
-<h2><?php echo __("Overview"); ?></h2>
-<?php echo $this->element("albumGraph"); ?>
-
-<h2><?php echo __("Detailed track data"); ?></h2>
-<?php if(count($tracks) > 0) : ?> 
-    <ol class="tracks">            
-    <?php  foreach($tracks as $track) : ?>
-        <li>
-            <?php echo $this->Html->link($track["title"], array('controller' => 'tracks', 'action' => 'view', $track["slug"])); ?>
-        </li>
-    <?php endforeach; ?>
-    </ol>        
-<?php else : ?>        
-    <p><?php echo __("Sorry for the inconvenience, but we could not fetch the tracks."); ?></p>            
-<?php endif; ?>    
-
-<?php echo $this->Disqus->get('/artists/view/'.$artist["slug"].'/', $artist["name"]); ?>
+<section class="track-details">
+    <h2><?php echo __("Detailed track data"); ?></h2>
+    <?php if(count($tracks) > 0) : ?> 
+        <ol class="tracks">            
+        <?php  foreach($tracks as $track) : ?>
+            <li>
+                <?php echo $this->Html->link($track["title"], array('controller' => 'tracks', 'action' => 'view', $track["slug"])); ?>
+            </li>
+        <?php endforeach; ?>
+        </ol>        
+    <?php else : ?>        
+        <p><?php echo __("Sorry for the inconvenience, but we could not fetch the tracks."); ?></p>            
+    <?php endif; ?>    
+</section>
 
 <p class="credits">
     <?php echo __("Album description courtesy of"); ?> <?php echo $this->Html->link("Last.fm", "http://www.last.fm/", array("target" => "_blank")); ?>. 
     <?php echo __("They were last updated on"); ?> <?php echo date("F j, g:i a", $lastfmAlbum["lastsync"]); ?>. 
     <?php echo __("Album tracks and image courtesy of"); ?> <?php echo $this->Html->link("Rdio.com", "http://www.rdio.com/", array("target" => "_blank")); ?>.
 </p>
+
+<?php echo $this->Disqus->get('/artists/view/'.$artist["slug"].'/', $artist["name"]); ?>

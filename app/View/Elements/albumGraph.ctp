@@ -63,8 +63,7 @@
         <div class="tracks">
             <?php foreach($tracks as $track) : ?>
                 <div style="width:<?php echo ($track["duration"] / $albumLength) * 100; ?>%;">
-                    <?php echo $this->Html->link($track["title"], array('controller' => 'tracks', 'action' => 'view', $track["slug"])); ?>  
-                    [<?php echo $this->Html->link(__("Review"), array('controller' => 'player', 'action' => 'play', $track["slug"])); ?>]            
+                    <?php echo $this->Html->link($track["title"], array('controller' => 'tracks', 'action' => 'view', $track["slug"])); ?>
                 </div>
             <?php endforeach; ?>
         </div>

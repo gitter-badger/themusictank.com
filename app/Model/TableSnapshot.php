@@ -72,6 +72,7 @@ class TableSnapshot extends AppModel
      */
     public function requiresUpdate()
     {                
+        return true;
         $timestamp = $this->getData($this->alias . ".lastsync");
         return empty($timestamp) || $timestamp + (HOUR*12) < time();
     }

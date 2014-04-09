@@ -82,7 +82,12 @@
         <ol class="tracks">            
         <?php  foreach($tracks as $track) : ?>
             <li>
-                <?php echo $this->Html->link($track["title"], array('controller' => 'tracks', 'action' => 'view', $track["slug"])); ?>
+                <?php echo $this->Html->link($track["title"], array('controller' => 'tracks', 'action' => 'view', $track["slug"])); ?>                        
+                <ul class="score">
+                    <li class="average"><?php echo $this->Chart->formatScore($track["TrackReviewSnapshot"]["score_snapshot"]); ?></li>
+                    <li class="enjoyment"><?php echo $this->Chart->formatPct($track["TrackReviewSnapshot"]["liking_pct"]); ?><br>:)</li>
+                    <li class="displeasure"><?php echo $this->Chart->formatPct($track["TrackReviewSnapshot"]["disliking_pct"]); ?><br>:(</li>
+                </ul>                
             </li>
         <?php endforeach; ?>
         </ol>        

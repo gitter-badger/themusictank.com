@@ -52,6 +52,18 @@ class Track extends OEmbedable
         $this->data = $data;
         return $data;
     }    
+
+    public function getSnapshotById($id)
+    {
+        $data = $this->findById($id, array("fields" => "TrackReviewSnapshot.*"));
+
+        if(array_key_exists("TrackReviewSnapshot", $data))
+        {
+            return $data["TrackReviewSnapshot"];
+        }
+        
+        return false;
+    }
     
     public function getNextTrack()
     {        

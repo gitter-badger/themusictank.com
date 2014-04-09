@@ -8,11 +8,7 @@ class TracksController extends AppController {
         parent::beforeFilter();   
         $this->Auth->deny(array("by_subscriptions"));
     }    
-    
-      
-   
-    
-    
+              
     /** 
      * Track profile page.
      *

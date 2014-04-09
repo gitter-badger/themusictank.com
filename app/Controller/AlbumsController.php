@@ -32,16 +32,23 @@ class AlbumsController extends AppController {
         $this->set("album",         $data["Album"]);
         $this->set("rdioAlbum",     $data["RdioAlbum"]);  
         $this->set("lastfmAlbum",   $data["LastfmAlbum"]);    
-        $this->set("tracks",        $data["Tracks"]);
         $this->set("artist",        $data["Artist"]);
         $this->set("oembedLink",    $this->Album->getOEmbedUrl());
-        
+            
         // Associate review snapshots.
-        $this->set("albumReviewSnapshot",  $data["AlbumReviewSnapshot"]);             
-        if($isLoggedIn) {
+        $this->set("albumReviewSnapshot",  $data["AlbumReviewSnapshot"]);     
+
+        if($isLoggedIn)
+        {
             $this->set("userAlbumReviewSnapshot", $data["UserAlbumReviewSnapshot"]); 
             $this->set("subsAlbumReviewSnapshot", $data["SubscribersAlbumReviewSnapshot"]); 
         }
+
+        foreach ($data["Tracks"] as $key => $track)
+        {
+            $data["Tracks"][$key]["TrackReviewSnapshot"] = $this->Album->Tracks->getSnapshotById($track["id"]);
+        }
+        $this->set("tracks", $data["Tracks"]);
                         
         // Set meta information
         $this->setPageTitle(array($data["Album"]["name"], $data["Artist"]["name"]));
@@ -54,7 +61,7 @@ class AlbumsController extends AppController {
                 date("F j Y", $data["Album"]["release_date"])
             )
         ));
-    }            
+    }
     
     /** 
      * Album profile page.

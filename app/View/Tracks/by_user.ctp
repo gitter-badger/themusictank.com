@@ -1,73 +1,64 @@
-<header>
-    <h2>
-        <?php echo $this->Html->link($track["title"], array('controller' => 'tracks', 'action' => 'view', $track["slug"])); ?>,
-    </h2>
-    <h3>
-        <?php echo __("By"); ?>
-        <?php echo $this->Html->link($artist["name"], array('controller' => 'artists', 'action' => 'view', $artist["slug"])); ?>,
-        <?php echo __("found on"); ?>
-        <?php echo $this->Html->link($album["name"], array('controller' => 'albums', 'action' => 'view', $album["slug"])); ?>
-        <?php echo __("reviewed by"); ?>
-        <?php echo $this->Html->link($viewingUser["firstname"] . " " . $viewingUser["lastname"], array('controller' => 'profile', 'action' => 'view', $viewingUser["slug"])); ?>
-    </h3>
-    <?php $currentPage = "http://" . $_SERVER['SERVER_NAME'] . Router::url(array('controller' => 'tracks', 'action' => 'by_user', $track["slug"], $viewingUser["slug"])); ?>
-    <div class="share">                
-        <a href="https://twitter.com/share" class="twitter-share-button" 
-           data-url="<?php echo $currentPage; ?>" 
-           data-text="<?php echo sprintf(__("%s's review of '%s' on @themusictank : "), $viewingUser["firstname"] . " " . $viewingUser["lastname"], $track["title"]); ?>"
-           data-lang="en">Tweet</a>    
-        <div class="fb-share-button" data-href="<?php echo $currentPage; ?>" data-type="button_count"></div>
-       
+<article class="heading track-profile">
+    <div class="thumbnail">
+        <?php echo $this->Html->image($album["image"], array("alt" => $album["name"])); ?>
     </div>
-    
-</header>
+
+    <aside>
+        <h1><?php echo $track["title"]; ?></h1>
+        <h2><?php echo sprintf(__("Off of %s, by %s"), $this->Html->link($album["name"], array('controller' => 'albums', 'action' => 'view', $album["slug"])), $this->Html->link($artist["name"], array('controller' => 'artists', 'action' => 'view', $artist["slug"])));?> </h2>
+        <p>
+            <?php echo __("Reviewed by"); ?>
+            <?php echo $this->Html->link($viewingUser["firstname"] . " " . $viewingUser["lastname"], array('controller' => 'profiles', 'action' => 'view', $viewingUser["slug"])); ?>
+            <?php echo $this->element('followButton', array("user" => $viewingUser)); ?>
+        </p>
+
+        <?php $currentPage = "http://" . $_SERVER['SERVER_NAME'] . Router::url(array('controller' => 'tracks', 'action' => 'by_user', $track["slug"], $viewingUser["slug"])); ?>
+        <div class="share">                
+            <a href="https://twitter.com/share" class="twitter-share-button" 
+               data-url="<?php echo $currentPage; ?>" 
+               data-text="<?php echo sprintf(__("%s's review of '%s' on @themusictank : "), $viewingUser["firstname"] . " " . $viewingUser["lastname"], $track["title"]); ?>"
+               data-lang="en">Tweet</a>    
+            <div class="fb-share-button" data-href="<?php echo $currentPage; ?>" data-type="button_count"></div>       
+        </div>
+    </aside>
+
+    <div class="statistics">
+
+        <section class="tankers">
+            <?php echo $this->Chart->getBigPie("track", $track["slug"], $trackReviewSnapshot); ?>
+            <h3><?php echo __("General"); ?></h3>  
+            <ul>
+                <li class="average"><?php echo $this->Chart->formatScore($trackReviewSnapshot["score_snapshot"]); ?></li>
+                <li class="enjoyment"><?php echo $this->Chart->formatPct($trackReviewSnapshot["liking_pct"]); ?><br>:)</li>
+                <li class="displeasure"><?php echo $this->Chart->formatPct($trackReviewSnapshot["disliking_pct"]); ?><br>:(</li>
+            </ul>
+        </section>
+
+        <section class="tankers">
+            <?php echo $this->Chart->getBigPie("track", $track["slug"], $viewingTrackReviewSnapshot); ?>
+            <h3><?php echo $viewingUser["firstname"] . " " . $viewingUser["lastname"]; ?></h3>  
+            <ul>
+                <li class="average"><?php echo $this->Chart->formatScore($viewingTrackReviewSnapshot["score_snapshot"]); ?></li>
+                <li class="enjoyment"><?php echo $this->Chart->formatPct($viewingTrackReviewSnapshot["liking_pct"]); ?><br>:)</li>
+                <li class="displeasure"><?php echo $this->Chart->formatPct($viewingTrackReviewSnapshot["disliking_pct"]); ?><br>:(</li>
+            </ul>
+        </section>        
+
+        <?php if(isset($userTrackReviewSnapshot)) : ?>
+            <section class="you">
+                <?php echo $this->Chart->getBigPie("track", $track["slug"], $viewingTrackReviewSnapshot); ?>
+                <h3><?php echo __("You"); ?></h3>
+                <ul>
+                    <li class="average"><?php echo $this->Chart->formatScore($userTrackReviewSnapshot["score_snapshot"]); ?></li>
+                    <li class="enjoyment"><?php echo $this->Chart->formatPct($userTrackReviewSnapshot["liking_pct"]); ?><br>:)</li>
+                    <li class="displeasure"><?php echo $this->Chart->formatPct($userTrackReviewSnapshot["disliking_pct"]); ?><br>:(</li>
+                </ul>
+            </section>
+        <?php endif; ?>
+    </div>
+</article>
 
 <?php echo $this->element("player"); ?>
-
-<section class="statistics">
-    <h3><?php echo __("Everyone"); ?></h3>
-    <p><?php echo __("Average user score"); ?> <?php echo $this->Chart->formatScore($trackReviewSnapshot["score_snapshot"]); ?></p>        
-    <?php $enjoymentTimes =  $this->Chart->getEnjoymentTime($trackReviewSnapshot, (int)$track["duration"]); ?>
-    <p><?php echo __("Enjoyment"); ?> <?php echo $trackReviewSnapshot["liking_pct"]; ?> %</p>
-    <p><?php echo __("Disliking"); ?> <?php echo $trackReviewSnapshot["disliking_pct"]; ?> %</p>
-    <p><?php echo __("Enjoyment time"); ?> <?php echo $enjoymentTimes["liking"]; ?></p>
-    <p><?php echo __("Time disliked"); ?> <?php echo $enjoymentTimes["disliking"]; ?></p>
-    <?php echo $this->Chart->getBigPie("track", $track["slug"], $trackReviewSnapshot); ?>            
-</section>
-
-<?php if(isset($userTrackReviewSnapshot)) : ?>
-<section class="statistics you">
-    <?php if(count($userTrackReviewSnapshot) > 0) : ?>
-        <h3><?php echo __("You"); ?></h3>
-        <p><?php echo __("Average subscriber score"); ?> <?php echo $this->Chart->formatScore($userTrackReviewSnapshot["score_snapshot"]); ?></p>        
-        <?php $enjoymentTimes =  $this->Chart->getEnjoymentTime($userTrackReviewSnapshot, (int)$track["duration"]); ?>
-        <p><?php echo __("Enjoyment"); ?> <?php echo $userTrackReviewSnapshot["liking_pct"]; ?> %</p>
-        <p><?php echo __("Disliking"); ?> <?php echo $userTrackReviewSnapshot["disliking_pct"]; ?> %</p>
-        <p><?php echo __("Enjoyment time"); ?> <?php echo $enjoymentTimes["liking"]; ?></p>
-        <p><?php echo __("Time disliked"); ?> <?php echo $enjoymentTimes["disliking"]; ?></p>
-        <?php echo $this->Chart->getBigPie("track", $track["slug"], $userTrackReviewSnapshot); ?>
-    <?php else : ?>
-        <p><?php echo __("You have not reviewed this track yet."); ?></p>
-    <?php endif; ?>
-</section>
-<?php endif; ?>
-
-<?php if(isset($viewingTrackReviewSnapshot)) : ?>
-<section class="statistics user">
-    <?php if(count($viewingTrackReviewSnapshot) > 0) : ?>
-        <h3><?php echo __("You"); ?></h3>
-        <p><?php echo __("Average subscriber score"); ?> <?php echo $this->Chart->formatScore($viewingTrackReviewSnapshot["score_snapshot"]); ?></p>        
-        <?php $enjoymentTimes =  $this->Chart->getEnjoymentTime($viewingTrackReviewSnapshot, (int)$track["duration"]); ?>
-        <p><?php echo __("Enjoyment"); ?> <?php echo $viewingTrackReviewSnapshot["liking_pct"]; ?> %</p>
-        <p><?php echo __("Disliking"); ?> <?php echo $viewingTrackReviewSnapshot["disliking_pct"]; ?> %</p>
-        <p><?php echo __("Enjoyment time"); ?> <?php echo $enjoymentTimes["liking"]; ?></p>
-        <p><?php echo __("Time disliked"); ?> <?php echo $enjoymentTimes["disliking"]; ?></p>
-        <?php echo $this->Chart->getBigPie("track", $track["slug"], $userTrackReviewSnapshot); ?>
-    <?php else : ?>
-        <p><?php echo __("You have not reviewed this track yet."); ?></p>
-    <?php endif; ?>
-</section>
-<?php endif; ?>
 
 <div id="fb-root"></div>
 <script>

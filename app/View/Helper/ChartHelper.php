@@ -66,6 +66,19 @@ class ChartHelper extends AppHelper {
                 </div>';
     }
 
+    public function getHorizontalGraph($type, $key, $data)
+    {
+        return '<div class="enjoyment-chart horizontal">
+                    <div class="average">'. $this->formatScore($data["score_snapshot"]) .'</div>
+                    <div class="enjoyment">
+                        ' . ($data["liking_pct"] > 0 ? '<div class="like" style="width:'.$data["liking_pct"].'%;"">'.__('Liking').'</div>' : '') . '
+                        ' . ($data["neutral_pct"] > 0 ? '<div class="neutral" style="width:'.$data["neutral_pct"].'%;"">'.__('Neutral').'</div>' : '') . '
+                        ' . ($data["disliking_pct"] > 0 ? '<div class="dislike" style="width:'.$data["disliking_pct"].'%;"">'.__('Disliking').'</div>' : '') . '
+                    </div>
+                </div>';
+
+    }
+
     public function getBigPie($type, $key, $data)
     {
         

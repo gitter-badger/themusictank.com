@@ -74,8 +74,6 @@
         ); 
     }
     
-    
-    
     if($preferredPlayer == "rdio")
     {
         $playerClassName = "Rdio";

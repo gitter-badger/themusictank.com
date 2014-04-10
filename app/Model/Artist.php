@@ -15,6 +15,15 @@ class Artist extends AppModel
 			)
 		)
 	);
+
+    public function search($query)
+    {
+        return $this->find('all', array(
+            "conditions" => array("Artist.name LIKE" => sprintf("%%%s%%", $query)),
+            "fields"     => array("Artist.slug", "Artist.name"),
+            "limit"      => 10
+        ));
+    }
     
     public function getUpdatedSetBySlug($slug, $addCurrentUser = false)
     {

@@ -1,16 +1,19 @@
 
 <nav class="sub-menu">
     <ul class="horizontal">
-        <li><?php echo $this->Html->link(__("Artists"), array('controller' => 'artists', 'action' => 'index')); ?></li>
         <li><?php echo $this->Html->link($artist["name"], array('controller' => 'artists', 'action' => 'view', $artist["slug"])); ?></li>
     </ul>
+
+    <div class="search">
+        <form action="/search/" method="get"><input type="text" name="q" value="" placeholder="Search..." /><input type="submit" name="Go" /></form>
+    </div>
 </nav>
 
 <article class="heading artist-profile">
 
     <div class="thumbnail" <?php if(!is_null($lastfmArtist["image"])) : ?>style="background-image:url(/img/<?php echo $lastfmArtist["image"]; ?>);"<?php endif;?>>
         <div class="fx1"></div>
-        <div class="fx2"></div> 
+        <div class="vertical-vignette"></div> 
     </div>
 
     <aside>

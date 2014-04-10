@@ -1,10 +1,13 @@
 <nav class="sub-menu">
     <ul class="horizontal">
-        <li><?php echo $this->Html->link(__("Artists"), array('controller' => 'artists', 'action' => 'index')); ?></li>
-        <li><?php echo $this->Html->link($artist["name"], array('controller' => 'artists', 'action' => 'view', $artist["slug"])); ?></li>
-        <li><?php echo $this->Html->link($album["name"], array('controller' => 'albums', 'action' => 'view', $album["slug"])); ?></li>
-        <li><?php echo $this->Html->link($track["title"], array('controller' => 'tracks', 'action' => 'view', $track["slug"])); ?></li>
+        <li><?php echo $this->Html->link($artist["name"], array('controller' => 'artists', 'action' => 'view', $artist["slug"])); ?> \ </li>
+        <li>"<?php echo $this->Html->link($album["name"], array('controller' => 'albums', 'action' => 'view', $album["slug"])); ?>" \ </li>
+        <li>"<?php echo $this->Html->link($track["title"], array('controller' => 'tracks', 'action' => 'view', $track["slug"])); ?>"</li>
     </ul>
+
+    <div class="search">
+        <form action="/search/" method="get"><input type="text" name="q" value="" placeholder="Search..." /><input type="submit" name="Go" /></form>
+    </div>
 </nav>
 
 <article class="heading track-profile">
@@ -25,25 +28,40 @@
             </div>        
         </section>
 
-        <?php if(isset($previousTrack)) : ?>
-        <ol start="<?php echo $previousTrack["track_num"]; ?>">
-        <?php else : ?>
-        <ol start="<?php echo $track["track_num"]; ?>">
-        <?php endif; ?>
+        <div class="track-context">
             <?php if(isset($previousTrack)) : ?>
-                <li>
-                    <?php echo $this->Html->link($previousTrack["title"], array('controller' => 'tracks', 'action' => 'view', $previousTrack["slug"])); ?>
-                </li>
+            <ol start="<?php echo $previousTrack["track_num"]; ?>">
+            <?php else : ?>
+            <ol start="<?php echo $track["track_num"]; ?>">
             <?php endif; ?>
+                <li>
+                <?php if(isset($previousTrack)) : ?>
+                    <?php echo $previousTrack["slug"]; ?>
+                <?php endif; ?>
+                </li>
+                <li><?php echo $track["title"]; ?></li>
+                <li>
+                <?php if(isset($nextTrack)) : ?>
+                    <?php echo $nextTrack["slug"]; ?>                    
+                <?php endif; ?>
+                </li>
+            </ol>
+            <div class="vertical-vignette"></div>            
+        </div>
+        <ul>
             <li>
-                <?php echo $this->Html->link($track["title"], array('controller' => 'tracks', 'action' => 'view', $track["slug"])); ?>
+                <?php if(isset($previousTrack)) : ?>
+                    <?php echo $this->Html->link($previousTrack["title"], array('controller' => 'tracks', 'action' => 'view', $previousTrack["slug"])); ?>
+                <?php endif; ?>
             </li>
-            <?php if(isset($nextTrack)) : ?>
-                <li>
+
+            <li>
+                <?php if(isset($nextTrack)) : ?>
                     <?php echo $this->Html->link($nextTrack["title"], array('controller' => 'tracks', 'action' => 'view', $nextTrack["slug"])); ?>
-                </li>
-            <?php endif; ?>
-        </ol>
+                <?php endif; ?>
+            </li>
+        </ul>
+
     </aside>
 
     <div class="statistics">

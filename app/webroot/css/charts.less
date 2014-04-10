@@ -28,6 +28,20 @@
  	.enjoyment-chart;
  }
 
+.enjoyment-chart.horizontal {
+	div {
+		float:left;
+	}
+	.average {
+		font-size:1.2em;
+		margin-right:.5em;
+		min-width:40px;
+	}
+	.enjoyment {
+		float:none;
+	}
+
+}
 
 
 .timeline-chart {
@@ -74,6 +88,13 @@
 			font-size:.9em;
 			color:#ccc;
 
+			div:nth-child(odd) {
+				text-align: left;
+			}
+			div:nth-child(even) {
+				background-color:rgba(215,215,215,.5);
+			}
+
 			div {
 				display: block;
 				float:left;
@@ -82,16 +103,27 @@
 
 				//padding:1em 10% 0 10%;				
 				a {
-					background-color:rgba(255,255,255,.5);
+					/*
+					background-color:rgba(255,255,255,.5);					
+		 			//position: relative;
+		 			padding: 1em;*/
 				}
+
+			 	&:hover {
+			 		z-index:2;
+			 		box-shadow: 0 1px 3px rgba(0, 0, 0, 0.7);
+			 		overflow: visible;
+			 		background:#7da0db;
+			 		position: relative;
+			 		a {			 			
+			 			background:#7da0db;		
+		 				position: absolute;
+		 				top:1em;
+		 				left:1em;
+		 			}
+			 	}
 			}	
 
-			div:nth-child(odd) {
-				text-align: left;
-			}
-			div:nth-child(even) {
-				background-color:rgba(215,215,215,.5);
-			}
 		}
 	}
 }

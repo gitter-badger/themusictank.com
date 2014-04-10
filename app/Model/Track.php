@@ -18,6 +18,15 @@ class Track extends OEmbedable
 		)
 	);
       
+    public function search($query)
+    {
+        return $this->find('all', array(
+            "conditions" => array("title LIKE" => sprintf("%%%s%%", $query)),
+            "fields"     => array("Track.slug", "Track.title"),
+            "limit"      => 10
+        ));
+    }
+
     public function getUpdatedSetBySlug($slug, $addCurrentUser = false)
     {
         $syncValues = $this->getBySlugContained($slug);
@@ -53,15 +62,18 @@ class Track extends OEmbedable
         return $data;
     }    
 
-    public function getSnapshotById($id)
+    public function getSnapshotsByTrackIds($ids)
     {
-        $data = $this->findById($id, array("fields" => "TrackReviewSnapshot.*"));
+        $data = $this->find("all", array(
+                "conditions" => array($this->alias . ".id" => $ids),
+                "fields" => "TrackReviewSnapshot.*"
+            )
+        );
 
-        if(array_key_exists("TrackReviewSnapshot", $data))
-        {
-            return $data["TrackReviewSnapshot"];
+        if($data) {
+            return Hash::extract($data, "{n}.TrackReviewSnapshot");
         }
-        
+
         return false;
     }
     

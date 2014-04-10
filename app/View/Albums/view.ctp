@@ -1,10 +1,12 @@
-
 <nav class="sub-menu">
     <ul class="horizontal">
-        <li><?php echo $this->Html->link(__("Artists"), array('controller' => 'artists', 'action' => 'index')); ?></li>
         <li><?php echo $this->Html->link($artist["name"], array('controller' => 'artists', 'action' => 'view', $artist["slug"])); ?></li>
         <li><?php echo $this->Html->link($album["name"], array('controller' => 'albums', 'action' => 'view', $album["slug"])); ?></li>
     </ul>
+
+    <div class="search">
+        <form action="/search/" method="get"><input type="text" name="q" value="" placeholder="Search..." /><input type="submit" name="Go" /></form>
+    </div>
 </nav>
 
 <article class="heading album-profile">
@@ -28,7 +30,7 @@
         <section class="tankers">
             <?php echo $this->Chart->getBigPie("album", $album["slug"] . "-1", $albumReviewSnapshot); ?>
             <h3><?php echo __("General"); ?></h3>  
-            <p><?php echo __("Metacritic score"); ?> <?php echo $this->Chart->formatScore($albumReviewSnapshot["metacritic_score"]); ?></p>
+            <!-- <p><?php echo __("Metacritic score"); ?> <?php echo $this->Chart->formatScore($albumReviewSnapshot["metacritic_score"]); ?></p> -->
             <ul>
                 <li class="average"><?php echo $this->Chart->formatScore($albumReviewSnapshot["score_snapshot"]); ?></li>
                 <li class="enjoyment"><?php echo $this->Chart->formatPct($albumReviewSnapshot["liking_pct"]); ?><br>:)</li>
@@ -82,12 +84,8 @@
         <ol class="tracks">            
         <?php  foreach($tracks as $track) : ?>
             <li>
-                <?php echo $this->Html->link($track["title"], array('controller' => 'tracks', 'action' => 'view', $track["slug"])); ?>                        
-                <ul class="score">
-                    <li class="average"><?php echo $this->Chart->formatScore($track["TrackReviewSnapshot"]["score_snapshot"]); ?></li>
-                    <li class="enjoyment"><?php echo $this->Chart->formatPct($track["TrackReviewSnapshot"]["liking_pct"]); ?><br>:)</li>
-                    <li class="displeasure"><?php echo $this->Chart->formatPct($track["TrackReviewSnapshot"]["disliking_pct"]); ?><br>:(</li>
-                </ul>                
+                <?php echo $this->Html->link($track["title"], array('controller' => 'tracks', 'action' => 'view', $track["slug"])); ?>                
+                <?php echo $this->Chart->getHorizontalGraph("track", $track["slug"] . "-1", $track["TrackReviewSnapshot"]); ?>
             </li>
         <?php endforeach; ?>
         </ol>        

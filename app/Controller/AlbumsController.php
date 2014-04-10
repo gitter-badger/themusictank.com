@@ -22,7 +22,7 @@ class AlbumsController extends AppController {
         
         $isLoggedIn = $this->userIsLoggedIn();
         $data       = $this->Album->getUpdatedSetBySlug($albumSlug, $isLoggedIn);
-        
+
         if(!$data)
         {
             throw new NotFoundException(sprintf(__("Could not find the album %s"), $albumSlug));
@@ -44,11 +44,8 @@ class AlbumsController extends AppController {
             $this->set("subsAlbumReviewSnapshot", $data["SubscribersAlbumReviewSnapshot"]); 
         }
 
-        foreach ($data["Tracks"] as $key => $track)
-        {
-            $data["Tracks"][$key]["TrackReviewSnapshot"] = $this->Album->Tracks->getSnapshotById($track["id"]);
-        }
-        $this->set("tracks", $data["Tracks"]);
+        $this->Album->addTracksSnapshots();
+        $this->set("tracks", $this->Album->data["Tracks"]);
                         
         // Set meta information
         $this->setPageTitle(array($data["Album"]["name"], $data["Artist"]["name"]));

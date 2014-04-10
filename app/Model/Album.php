@@ -16,6 +16,16 @@ class Album extends OEmbedable
         $this->checkSlug(array('name'));
         return true;
     }
+
+    public function search($query)
+    {
+        return $this->find('all', array(
+            "conditions" => array("Album.name LIKE" => sprintf("%%%s%%", $query)),
+            "fields"     => array("Album.slug", "Album.name", "Artist.slug"),
+            "recursive"  => 0,
+            "limit"      => 10
+        ));
+    }
     
     public function getUpdatedSetBySlug($slug, $addCurrentUser = false)
     {
@@ -105,4 +115,21 @@ class Album extends OEmbedable
      
         return parent::toOEmbed(array_merge($additionalData, $data));
     }
+
+    public function addTracksSnapshots()
+    {
+        $trackIds       = Hash::extract($this->data, "Tracks.{n}.id");
+        $trackSnapshots = $this->Tracks->getSnapshotsByTrackIds($trackIds);   
+
+        if($trackSnapshots)
+        {
+            foreach($trackSnapshots as $i => $snapshot)
+            {
+                $this->data["Tracks"][$i]["TrackReviewSnapshot"] = $snapshot;
+            }
+            return $this->data;
+        }
+        return false;
+    }
+
 }

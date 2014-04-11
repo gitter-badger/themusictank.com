@@ -1,6 +1,15 @@
-
-<?php echo $this->element('artistSearch', array("artistCategories" => $artistCategories)); ?>
-
+<section class="browse-by-letter">
+    <header>
+        <h2><?php echo __('Browse alphabetically'); ?></h2>
+    </header>
+    <ul class="tiled-list artist-categories">
+    <?php foreach($artistCategories as $category) : ?>
+        <li>
+            <?php echo $this->Html->link($category, array('controller' => 'artists', 'action' => 'browse',  strtolower($category))); ?>
+        </li>
+    <?php endforeach; ?>
+    </ul>    
+</section>
 
 <section class="popular-artists">
     <header>

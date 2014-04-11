@@ -6,7 +6,7 @@ class SearchController extends AppController {
 	public function index()
 	{
 		if($this->request->is('get'))
-        {
+        {		
         	$this->loadModel("Track");        	
         	$this->loadModel("Album");
         	$this->loadModel("Artist");
@@ -19,6 +19,4 @@ class SearchController extends AppController {
             $this->set('artists', $this->Artist->search($query));
         }
 	}
-
-
 }

@@ -1,12 +1,8 @@
 <nav class="sub-menu">
     <ul class="horizontal">
-        <li><?php echo $this->Html->link($artist["name"], array('controller' => 'artists', 'action' => 'view', $artist["slug"])); ?></li>
+        <li><?php echo $this->Html->link($artist["name"], array('controller' => 'artists', 'action' => 'view', $artist["slug"])); ?> \</li>
         <li><?php echo $this->Html->link($album["name"], array('controller' => 'albums', 'action' => 'view', $album["slug"])); ?></li>
     </ul>
-
-    <div class="search">
-        <form action="/search/" method="get"><input type="text" name="q" value="" placeholder="Search..." /><input type="submit" name="Go" /></form>
-    </div>
 </nav>
 
 <article class="heading album-profile">
@@ -16,7 +12,7 @@
     </div>
 
     <aside>
-        <h1><?php echo $artist["name"]; ?></h1>        
+        <h1><?php echo $album["name"]; ?></h1>        
         <time datetime="<?php echo date("c", $album["release_date"]); ?>"><?php echo __("Released"); ?> <?php echo date("F j Y", $album["release_date"]); ?></time>
         <section class="description expandable">
             <div class="wrapper">

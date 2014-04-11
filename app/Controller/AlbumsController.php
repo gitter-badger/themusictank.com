@@ -8,7 +8,9 @@
  */
 class AlbumsController extends AppController {
     
-    public $helpers    = array("Chart");   
+    public $helpers     = array("Chart");   
+    public $components  = array("Paginator");
+    public $paginate    = array('limit' => 25);
                 
     /** 
      * Album profile page.
@@ -114,4 +116,26 @@ class AlbumsController extends AppController {
             "description" => sprintf(__("Browse the list of the albums recently added on The Music Tank."))
         ));
     }
+
+    /** 
+     * Browse albums by term. Renders same view as browse action.
+     */
+    public function search()
+    {
+        if($this->request->is('get'))
+        {
+            $this->set('albums', $this->Paginator->paginate('Album', array('Album.name LIKE' => "%". trim($this->request->query['name'])."%")));
+            $title = sprintf(__("Searching for: \"%s\""), trim($this->request->query['name']));
+        }
+        else
+        {   
+            $title = __("Search");                 
+        }        
+        
+        $this->set("title", $title);
+        $this->setPageTitle(array($title, __("Album list")));
+        $this->setPageMeta(array(
+            "description" => __("Search page")
+        ));
+    }    
 }

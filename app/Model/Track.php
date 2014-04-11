@@ -18,12 +18,13 @@ class Track extends OEmbedable
 		)
 	);
       
-    public function search($query)
+    public function search($query, $limit = 10)
     {
         return $this->find('all', array(
             "conditions" => array("title LIKE" => sprintf("%%%s%%", $query)),
-            "fields"     => array("Track.slug", "Track.title"),
-            "limit"      => 10
+            "contain"    => array("Album" => array("Artist")),
+            "fields"     => array("Album.slug", "Album.name", "Album.image", "Track.title", "Track.slug"),
+            "limit"      => $limit
         ));
     }
 

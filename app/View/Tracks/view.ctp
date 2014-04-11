@@ -4,10 +4,6 @@
         <li>"<?php echo $this->Html->link($album["name"], array('controller' => 'albums', 'action' => 'view', $album["slug"])); ?>" \ </li>
         <li>"<?php echo $this->Html->link($track["title"], array('controller' => 'tracks', 'action' => 'view', $track["slug"])); ?>"</li>
     </ul>
-
-    <div class="search">
-        <form action="/search/" method="get"><input type="text" name="q" value="" placeholder="Search..." /><input type="submit" name="Go" /></form>
-    </div>
 </nav>
 
 <article class="heading track-profile">
@@ -36,13 +32,13 @@
             <?php endif; ?>
                 <li>
                 <?php if(isset($previousTrack)) : ?>
-                    <?php echo $previousTrack["slug"]; ?>
+                    <?php echo $previousTrack["title"]; ?>
                 <?php endif; ?>
                 </li>
                 <li><?php echo $track["title"]; ?></li>
                 <li>
                 <?php if(isset($nextTrack)) : ?>
-                    <?php echo $nextTrack["slug"]; ?>                    
+                    <?php echo $nextTrack["title"]; ?>                    
                 <?php endif; ?>
                 </li>
             </ol>

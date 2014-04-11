@@ -17,13 +17,13 @@ class Album extends OEmbedable
         return true;
     }
 
-    public function search($query)
+    public function search($query, $limit = 10)
     {
         return $this->find('all', array(
             "conditions" => array("Album.name LIKE" => sprintf("%%%s%%", $query)),
-            "fields"     => array("Album.slug", "Album.name", "Artist.slug"),
+            "fields"     => array("Album.slug", "Album.name", "Album.image", "Artist.name", "Artist.slug"),
             "recursive"  => 0,
-            "limit"      => 10
+            "limit"      => $limit
         ));
     }
     

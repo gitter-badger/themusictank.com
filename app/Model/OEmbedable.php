@@ -5,8 +5,8 @@ class OEmbedable extends AppModel
     {                
         $serverUrl = $_SERVER['SERVER_NAME'];
         $slug = $this->getData($this->alias.".slug");
-        $iframeUrl = sprintf("http://%s/%ss/embed/%s/", $serverUrl, $this->alias, $slug);
-        $url = sprintf("http://%s/%ss/view/%s/", $serverUrl, $this->alias, $slug);
+        $iframeUrl = sprintf("http://%s/%ss/embed/%s/", $serverUrl, strtolower($this->alias), $slug);
+        $url = sprintf("http://%s/%ss/view/%s/", $serverUrl, strtolower($this->alias), $slug);
         return array(          
             "version"   => "1.0",
             "type"      => "rich",
@@ -24,7 +24,7 @@ class OEmbedable extends AppModel
     public function getOEmbedUrl()
     {
         $serverUrl = $_SERVER['SERVER_NAME'];
-        $destination = sprintf("http://%s/%ss/view/%s/", $serverUrl, $this->alias, $this->getData($this->alias.".slug"));
+        $destination = sprintf("http://%s/%ss/view/%s/", $serverUrl, strtolower($this->alias), $this->getData($this->alias.".slug"));
         return sprintf("http://%s/oembed?url=%s", $serverUrl, urlencode($destination));
     }
 }

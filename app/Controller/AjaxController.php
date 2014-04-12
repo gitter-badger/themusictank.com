@@ -87,8 +87,8 @@ class AjaxController extends AppController {
         elseif($shaCheck == $validSha)
         {
             $this->loadModel("ReviewFrame");
-            $this->set("jsonOutput", $this->ReviewFrame->savePlayerData($this->request->data["frames"], $keyMapping));
-        }               
+            $this->set("jsonOutput", array("status" => $this->ReviewFrame->savePlayerData($this->request->data["frames"], $keyMapping) ? "success" : "failure"));
+        }
         else
         {                
             throw new NotFoundException(__("We don't know where you are from."));
@@ -119,20 +119,103 @@ class AjaxController extends AppController {
         $this->render('index');
     }
     
+    public function artistsSearch()
+    {
+        $this->loadModel("Artist");
+
+        $results    = array();
+        $query      = trim($this->request->query['q']);
+        $artists    = $this->Artist->search($query, 3);
+
+        if(count($artists) > 0) 
+        {
+            $labels = Hash::extract($artists, '{n}.Artist.name');
+            $slugs  = Hash::extract($artists, '{n}.Artist.slug');
+
+            foreach($labels as $i => $row)
+            {
+                $results[] = array(
+                    "slug"  => $slugs[$i],
+                    "artist" => $labels[$i]                 
+                );
+            }
+        }
+
+        $this->set("jsonOutput", $results);
+        $this->render('index');
+    }
+
+    public function albumsSearch()
+    {         
+        $this->loadModel("Album");
+
+        $results    = array();
+        $query = trim($this->request->query['q']);
+        $albums = $this->Album->search($query, 3);
+
+        if(count($albums) > 0) 
+        {
+            $labels = Hash::extract($albums, '{n}.Album.name');
+            $slugs  = Hash::extract($albums, '{n}.Album.slug');
+            $artists= Hash::extract($albums, '{n}.Artist.name');
+
+            foreach($labels as $i => $row)
+            {
+                $results[] = array(
+                    "slug"  => $slugs[$i],
+                    "album" => $labels[$i],             
+                    "artist" => $artists[$i]                 
+                );
+            }
+        }
+
+        $this->set("jsonOutput", $results);
+        $this->render('index');
+    }
+
+    public function tracksSearch()
+    {
+        $this->loadModel("Track");
+
+        $results    = array();
+        $query      = trim($this->request->query['q']);
+        $tracks     = $this->Track->search($query, 3);
+
+        if(count($tracks) > 0)
+        {
+            $labels         = Hash::extract($tracks, '{n}.Track.title');
+            $slugs          = Hash::extract($tracks, '{n}.Track.slug');
+            $albums         = Hash::extract($tracks, '{n}.Album.name');
+            $artists        = Hash::extract($tracks, '{n}.Artist.name');
+
+            foreach($labels as $i => $row)
+            {
+                $results[] = array(
+                    "track" => $labels[$i],
+                    "slug"  => $slugs[$i],
+                    "album" => $albums[$i],             
+                    //"artist" => $artists[$i]
+                );
+            }
+        }
+
+        $this->set("jsonOutput", $results);
+        $this->render('index');
+    }
     
     private function _loadObjectFromOEmbededUrl($url)
     {
         $pattern = explode("/", preg_replace('/http:\/\//', "", $url));
         
-        if(count($pattern) !== 4)
+        if(count($pattern) < 3 && count($pattern) > 4)
         {
             throw new NotFoundException();
         }
                 
         $model = $pattern[1];
         $slug = $pattern[3];
-        
-        if(!preg_match('/albums|tracks/', $model))
+
+        if(!preg_match('/albums|tracks/i', $model))
         {
             throw new NotFoundException();
         }

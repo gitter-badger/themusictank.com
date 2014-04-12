@@ -143,7 +143,7 @@
         
         drawWavelength : function()
         {
-            if(this.config.equilizerData.length > 0)
+            if(this.config.equilizerData && this.config.equilizerData.length > 0)
             {
                 var context = this.config.context,
                     i = 0,

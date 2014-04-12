@@ -17,6 +17,63 @@ $(function () {
     
     $("a.follow, a.unfollow").on("click", onFollowClick);
         
+    // search box
+    var artistsSearch = new Bloodhound({
+        datumTokenizer: Bloodhound.tokenizers.obj.whitespace('value'),
+        queryTokenizer: Bloodhound.tokenizers.whitespace,
+        //prefetch: '../data/films/post_1960.json',
+        remote: '/ajax/artistssearch/?q=%QUERY'
+    }),
+    albumsSearch = new Bloodhound({
+        datumTokenizer: Bloodhound.tokenizers.obj.whitespace('value'),
+        queryTokenizer: Bloodhound.tokenizers.whitespace,
+        //prefetch: '../data/films/post_1960.json',
+        remote: '/ajax/albumssearch/?q=%QUERY'
+    }),
+    tracksSearch = new Bloodhound({
+        datumTokenizer: Bloodhound.tokenizers.obj.whitespace('value'),
+        queryTokenizer: Bloodhound.tokenizers.whitespace,
+        //prefetch: '../data/films/post_1960.json',
+        remote: '/ajax/trackssearch/?q=%QUERY'
+    }); 
+
+    artistsSearch.initialize();
+    albumsSearch.initialize();
+    tracksSearch.initialize();
+ 
+    var searchBox = $('.site-head .search input[type=text]');
+    searchBox.typeahead({ highlight: true }, {
+            name: 'artists',
+            displayKey: 'artist',
+            source: artistsSearch.ttAdapter(),
+            templates: {
+            header: '<h3>Artists</h3>',
+                suggestion: function(data) { return ["<p>", data.artist, "</p>"].join(""); }
+            }
+        }, {
+            name: 'albums',
+            displayKey: 'album',
+            source: albumsSearch.ttAdapter(),
+            templates: {
+            header: '<h3>Albums</h3>',
+                suggestion: function(data) { return ["<p>", data.album, " by ", data.artist, "</p>"].join(""); }
+            }
+        }, {
+            name: 'tracks',
+            displayKey: 'track',
+            source: tracksSearch.ttAdapter(),
+            templates: {
+            header: '<h3>Tracks</h3>',
+                suggestion: function(data) { return ["<p>", data.track, " from ", data.album, "</p>"].join(""); }
+            }
+        }
+    );
+
+    searchBox.on("typeahead:selected", function(e, data, section) {
+        document.location = "/" + [section, 'view', data.slug].join("/");
+        e.preventDefault();
+    });
+
     
     // fixed elements
     

@@ -47,32 +47,49 @@
         ); 
     }   
     
-    $trackLength = 0;
+    $albumLength = 0;
     foreach($tracks as $track)
     {
-        $trackLength += $track["duration"];
+        $albumLength += $track["duration"];
     }
     
     $isLogged = $this->Session->read("Auth.User.User.id");
 ?>
-<section class="player chart album-chart <?php echo $isLogged ? 'logged' : 'not-logged' ?> graph-<?php echo $album["slug"]; ?>">
-    <canvas></canvas>        
-    <div class="tracks">
-    <?php foreach($tracks as $track) : ?><div style="width:<?php echo ($track["duration"] / $trackLength) * 100; ?>%;"><span><?php echo $track["title"]; ?></span></div><?php endforeach; ?>
+
+<section class="timeline-chart album-chart <?php echo $isLogged ? 'logged' : 'not-logged' ?> graph-<?php echo $album["slug"]; ?>">               
+    <div class="viewport">
+        <canvas></canvas>       
+
+        <div class="tracks">
+            <?php foreach($tracks as $track) : ?>
+                <div style="width:<?php echo ($track["duration"] / $albumLength) * 100; ?>%;">
+                    <?php echo $this->Html->link($track["title"], array('controller' => 'tracks', 'action' => 'view', $track["slug"])); ?>
+                </div>
+            <?php endforeach; ?>
+        </div>
+        <?php  
+            $i = 0; 
+            $minutePrecision = (60*5);
+            $nbIntervals = round((int)$album["duration"] / $minutePrecision); 
+        ?>
+        <ul class="times">
+        <?php while($i <  $nbIntervals) :  $timestamp = $i * $minutePrecision; ?>  
+            <li <?php if($i+1 != $nbIntervals) : ?>style="width:<?php echo 100 / $nbIntervals; ?>%;"<?php endif; ?>><?php echo date("i:s", $timestamp); ?></li>
+        <?php $i++; endwhile; ?>
+        </ul>
+        <script>$(function(){new tmt.Graph(<?php echo json_encode($graphConfig); ?>);});</script>
     </div>
-    <?php if(count($graphConfig["curves"]) > 0) : ?>    
-    <ul class="legend">      
-        <?php foreach($graphConfig["curves"] as $key => $curveInfo) : ?>
-        <li class="<?php echo $key; ?>">
-            <label>
-                <input type="checkbox" name="view" value="<?php echo $key; ?>" checked="checked" />
-                <?php echo $curveInfo["label"]; ?>
-            </label>
-        </li>
-        <?php endforeach; ?>
-    </ul> 
-    <?php endif; ?>
-<script>$(function(){
-new tmt.Graph(<?php echo json_encode($graphConfig); ?>);
-});</script>
-</section>
+
+     <?php if(count($graphConfig["curves"]) > 0) : ?>    
+        <ul class="curves">      
+            <?php foreach($graphConfig["curves"] as $key => $curveInfo) : ?>
+            <li class="<?php echo $key; ?>">
+                <label>
+                    <input type="checkbox" name="view" value="<?php echo $key; ?>" checked="checked" />
+                    <?php echo $curveInfo["label"]; ?>
+                </label>
+            </li>
+            <?php endforeach; ?>
+        </ul> 
+    <?php endif; ?>     
+</section>  

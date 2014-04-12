@@ -1,15 +1,12 @@
 <ul class="tiled-list artists">
 <?php foreach($artists as $artist) : ?>
-    <li>           
-        <div class="thumbnail">
-            <?php $imgSrc = isset($artist["LastfmArtist"]["image"]) ? $artist["LastfmArtist"]["image"] : "/img/placeholder.png"; ?>
-            <?php echo $this->Html->link(
-                        $this->Html->image($imgSrc, array("alt" => $artist["Artist"]["name"])),
-                        array('controller' => 'artists', 'action' => 'view', $artist["Artist"]["slug"]),
-                        array('escape' => false)
-                ); ?>                    
-            <h3><?php echo $this->Html->link($artist["Artist"]["name"], array('controller' => 'artists', 'action' => 'view', $artist["Artist"]["slug"])); ?></h3>
-        </div>
+    <li>
+        <h3>
+            <a class="thumbnail" href="<?php echo $this->Html->url(array('controller' => 'artists', 'action' => 'view', $artist["Artist"]["slug"])); ?>" <?php if(isset($artist["LastfmArtist"]["image"])){  echo 'style="background-image:url(/img/'.$artist["LastfmArtist"]["image"].');"'; } ?>>
+                <span><?php echo $artist["Artist"]["name"]; ?></span>
+            </a>
+        </h3>
+
         <?php if(count($artist["Albums"])) : ?>
         <ul class="recent-albums">
             <?php foreach($artist["Albums"] as $i => $album) : if($i >= 3) break;?>

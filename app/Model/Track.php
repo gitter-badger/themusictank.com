@@ -18,6 +18,16 @@ class Track extends OEmbedable
 		)
 	);
       
+    public function search($query, $limit = 10)
+    {
+        return $this->find('all', array(
+            "conditions" => array("title LIKE" => sprintf("%%%s%%", $query)),
+            "contain"    => array("Album" => array("Artist")),
+            "fields"     => array("Album.slug", "Album.name", "Album.image", "Track.title", "Track.slug"),
+            "limit"      => $limit
+        ));
+    }
+
     public function getUpdatedSetBySlug($slug, $addCurrentUser = false)
     {
         $syncValues = $this->getBySlugContained($slug);
@@ -52,6 +62,21 @@ class Track extends OEmbedable
         $this->data = $data;
         return $data;
     }    
+
+    public function getSnapshotsByTrackIds($ids)
+    {
+        $data = $this->find("all", array(
+                "conditions" => array($this->alias . ".id" => $ids),
+                "fields" => "TrackReviewSnapshot.*"
+            )
+        );
+
+        if($data) {
+            return Hash::extract($data, "{n}.TrackReviewSnapshot");
+        }
+
+        return false;
+    }
     
     public function getNextTrack()
     {        
@@ -67,8 +92,29 @@ class Track extends OEmbedable
             "order" => "track_num",
             "fields" => array("Track.*")
         ));
-        
-        return $track["Track"];
+                
+        if($track) {
+            return $track["Track"];
+        }
+    }
+
+    public function getPreviousTrack()
+    {        
+        $albumId = $this->getData("Track.album_id");
+        $trackIdx = $this->getData("Track.track_num");
+                
+        $track = $this->find("first", array(
+            "conditions" => array(
+                "album_id" => $albumId,
+                "track_num =" => $trackIdx - 1
+            ),
+            "order" => "track_num",
+            "fields" => array("Track.*")
+        ));
+
+        if($track) {
+            return $track["Track"];
+        }
     }
     
 	public function saveWave($wavelength)

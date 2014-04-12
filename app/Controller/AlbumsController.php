@@ -8,7 +8,9 @@
  */
 class AlbumsController extends AppController {
     
-    public $helpers    = array("Chart");   
+    public $helpers     = array("Chart");   
+    public $components  = array("Paginator");
+    public $paginate    = array('limit' => 25);
                 
     /** 
      * Album profile page.
@@ -22,7 +24,7 @@ class AlbumsController extends AppController {
         
         $isLoggedIn = $this->userIsLoggedIn();
         $data       = $this->Album->getUpdatedSetBySlug($albumSlug, $isLoggedIn);
-        
+
         if(!$data)
         {
             throw new NotFoundException(sprintf(__("Could not find the album %s"), $albumSlug));
@@ -32,16 +34,20 @@ class AlbumsController extends AppController {
         $this->set("album",         $data["Album"]);
         $this->set("rdioAlbum",     $data["RdioAlbum"]);  
         $this->set("lastfmAlbum",   $data["LastfmAlbum"]);    
-        $this->set("tracks",        $data["Tracks"]);
         $this->set("artist",        $data["Artist"]);
         $this->set("oembedLink",    $this->Album->getOEmbedUrl());
-        
+            
         // Associate review snapshots.
-        $this->set("albumReviewSnapshot",  $data["AlbumReviewSnapshot"]);             
-        if($isLoggedIn) {
+        $this->set("albumReviewSnapshot",  $data["AlbumReviewSnapshot"]);     
+
+        if($isLoggedIn)
+        {
             $this->set("userAlbumReviewSnapshot", $data["UserAlbumReviewSnapshot"]); 
             $this->set("subsAlbumReviewSnapshot", $data["SubscribersAlbumReviewSnapshot"]); 
         }
+
+        $this->Album->addTracksSnapshots();
+        $this->set("tracks", $this->Album->data["Tracks"]);
                         
         // Set meta information
         $this->setPageTitle(array($data["Album"]["name"], $data["Artist"]["name"]));
@@ -54,7 +60,7 @@ class AlbumsController extends AppController {
                 date("F j Y", $data["Album"]["release_date"])
             )
         ));
-    }            
+    }
     
     /** 
      * Album profile page.
@@ -110,4 +116,26 @@ class AlbumsController extends AppController {
             "description" => sprintf(__("Browse the list of the albums recently added on The Music Tank."))
         ));
     }
+
+    /** 
+     * Browse albums by term. Renders same view as browse action.
+     */
+    public function search()
+    {
+        if($this->request->is('get'))
+        {
+            $this->set('albums', $this->Paginator->paginate('Album', array('Album.name LIKE' => "%". trim($this->request->query['name'])."%")));
+            $title = sprintf(__("Searching for: \"%s\""), trim($this->request->query['name']));
+        }
+        else
+        {   
+            $title = __("Search");                 
+        }        
+        
+        $this->set("title", $title);
+        $this->setPageTitle(array($title, __("Album list")));
+        $this->setPageMeta(array(
+            "description" => __("Search page")
+        ));
+    }    
 }

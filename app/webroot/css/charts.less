@@ -1,0 +1,129 @@
+.enjoyment-chart {
+	position:relative;
+	overflow:hidden;
+	//box-shadow: 0 1px 3px rgba(0, 0, 0, 0.7);
+	div {
+		font-size:0.85em;
+		color:#dedede;
+		overflow:hidden;
+		min-height: 2px;
+	}
+	.like {
+		background:#7da0db;
+	}
+
+	.dislike {
+		background:#0b1c38;
+	}
+
+	.neutral {
+		background:#28416b;
+	}
+
+}
+
+ .enjoyment-chart.big {
+ 	height:150px;
+ 	width:150px;
+ 	.enjoyment-chart;
+ }
+
+.enjoyment-chart.horizontal {
+	div {
+		float:left;
+	}
+	.average {
+		font-size:1.2em;
+		margin-right:.5em;
+		min-width:40px;
+	}
+	.enjoyment {
+		float:none;
+	}
+
+}
+
+
+.timeline-chart {
+	.curves {
+		list-style-type: none;
+		li {
+			display:inline-block;
+			marign-left:1em;			
+		}
+	}
+
+	.viewport {
+		height:630px;
+		overflow:auto;
+		position:relative;
+
+		canvas {	
+			position:absolute;
+			top:0;
+			left:0;
+			width:2000px;
+			height:600px;
+		}
+		.times {
+			position:absolute;
+			bottom:0;
+			color:#ccc;
+			font-size:11px;
+			width:2000px;		
+			list-style-type: none;				
+			li {
+				overflow: hidden;
+				display: block;
+				float:left;	
+			}
+		}
+
+		.tracks {		
+			position:absolute;
+			top:0;
+			left:0;
+			width:2000px;
+			height:600px;
+			font-size:.9em;
+			color:#ccc;
+
+			div:nth-child(odd) {
+				text-align: left;
+			}
+			div:nth-child(even) {
+				background-color:rgba(215,215,215,.5);
+			}
+
+			div {
+				display: block;
+				float:left;
+				height:600px;
+				vertical-align: top;
+
+				//padding:1em 10% 0 10%;				
+				a {
+					/*
+					background-color:rgba(255,255,255,.5);					
+		 			//position: relative;
+		 			padding: 1em;*/
+				}
+
+			 	&:hover {
+			 		z-index:1;
+			 		box-shadow: 0 1px 3px rgba(0, 0, 0, 0.7);
+			 		overflow: visible;
+			 		background:#7da0db;
+			 		position: relative;
+			 		a {			 			
+			 			background:#7da0db;		
+		 				position: absolute;
+		 				top:1em;
+		 				left:1em;
+		 			}
+			 	}
+			}	
+
+		}
+	}
+}

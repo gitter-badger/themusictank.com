@@ -6,6 +6,9 @@
          <ul class="horizontal">
              <li><?php echo $this->Html->link(__("Artists"),    array('controller' => 'artists',    'action' => 'index')); ?></li>
              <li><?php echo $this->Html->link(__("Community"),  array('controller' => 'pages',      'action' => 'community')); ?></li>
+             <li class="search">
+                <form action="/search/" method="get"><input type="text" name="q" value="" placeholder="Search across everything..." /></form>
+             </li>
          </ul>
     </nav>
     

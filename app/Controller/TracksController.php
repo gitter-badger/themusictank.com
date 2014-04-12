@@ -2,17 +2,15 @@
 class TracksController extends AppController {
                     
     var $helpers    = array("Chart", "Time");
+    var $components = array("Paginator");
+    var $paginate = array('limit' => 25);
     
     public function beforeFilter()
     {   
         parent::beforeFilter();   
         $this->Auth->deny(array("by_subscriptions"));
     }    
-    
-      
-   
-    
-    
+              
     /** 
      * Track profile page.
      *
@@ -35,6 +33,11 @@ class TracksController extends AppController {
         $this->set("artist", $data["Album"]["Artist"]);  
         $this->set("trackReviewSnapshot", $data["TrackReviewSnapshot"]);        
         
+        $this->set("nextTrack", $this->Track->getNextTrack());
+        // reset object
+        $this->Track->track_num = $data["Track"]["track_num"];
+        $this->set("previousTrack", $this->Track->getPreviousTrack());
+
         $this->set("usersWhoReviewed", $this->User->getReviewUserSummary($data["Track"]["id"]));
         
         if($isLoggedIn) {
@@ -150,4 +153,25 @@ class TracksController extends AppController {
         ));
     } 
     
+    /** 
+     * Browse albums by term. Renders same view as browse action.
+     */
+    public function search()
+    {
+        if($this->request->is('get'))
+        {
+            $this->set('tracks', $this->Paginator->paginate('Track', array('Track.title LIKE' => "%". trim($this->request->query['name'])."%")));
+            $title = sprintf(__("Searching for: \"%s\""), trim($this->request->query['name']));
+        }
+        else
+        {   
+            $title = __("Search");                 
+        }        
+        
+        $this->set("title", $title);
+        $this->setPageTitle(array($title, __("Album list")));
+        $this->setPageMeta(array(
+            "description" => __("Search page")
+        ));
+    }    
 }

@@ -1,6 +1,15 @@
-
-<?php echo $this->element('artistSearch', array("artistCategories" => $artistCategories)); ?>
-
+<section class="browse-by-letter">
+    <header>
+        <h2><?php echo __('Browse alphabetically'); ?></h2>
+    </header>
+    <ul class="tiled-list artist-categories">
+    <?php foreach($artistCategories as $category) : ?>
+        <li>
+            <?php echo $this->Html->link($category, array('controller' => 'artists', 'action' => 'browse',  strtolower($category))); ?>
+        </li>
+    <?php endforeach; ?>
+    </ul>    
+</section>
 
 <section class="popular-artists">
     <header>
@@ -17,14 +26,14 @@
     <ul class="tiled-list albums">
         <?php foreach($newReleases as $album) :?>
             <li>
-                <?php $imgSrc = !is_null($album["Albums"]["image"]) ? $album["Albums"]["image"] : "/img/placeholder.png"; ?>
-                <?php echo $this->Html->link(
-                            $this->Html->image($imgSrc, array("alt" => $album["Albums"]["name"], "class" => "thumbnail")),
-                            array('controller' => 'albums', 'action' => 'view', $album["Albums"]["slug"]),
-                            array('escape' => false)
-                    ); ?>                    
+                <a class="thumbnail" href="<?php echo $this->Html->url(array('controller' => 'albums', 'action' => 'view', $album["Albums"]["slug"])); ?>" <?php if(isset($album["Albums"]["image"])){  echo 'style="background-image:url(/img/'.$album["Albums"]["image"].');"'; } ?>>
+                    &nbsp;
+                </a>                
                 <time datetime="<?php echo date("c", $album["Albums"]["release_date"]); ?>"><?php echo date("F j Y", $album["Albums"]["release_date"]); ?></time>
-                <h3><?php echo $this->Html->link($album["Albums"]["name"], array('controller' => 'albums', 'action' => 'view', $album["Albums"]["slug"])); ?></h3>
+                <h3>
+                    <?php echo $this->Html->link($album["Albums"]["name"], array('controller' => 'albums', 'action' => 'view', $album["Albums"]["slug"])); ?> <br />
+                    <?php echo __("by"); ?> <?php echo $this->Html->link($album["Artist"]["name"], array('controller' => 'artists', 'action' => 'view', $album["Artist"]["slug"])); ?>
+                </h3>
             </li>
         <?php endforeach; ?>
     </ul>

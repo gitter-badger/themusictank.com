@@ -68,7 +68,7 @@ class DATABASE_CONFIG {
 	);  
 
     // .nvi test information
-	public $test = array(
+	public $nvi = array(
 		'datasource' => 'Database/Mysql',
 		'persistent' => false,
 		'host' => 'localhost',
@@ -78,21 +78,8 @@ class DATABASE_CONFIG {
 		'prefix' => '',
 		'encoding' => 'utf8',
 	);
-    
-    // .local test information
-    public $test2 = array(
-		'datasource' => 'Database/Mysql',
-		'persistent' => false,
-		'host' => 'localhost',
-		'login' => 'root',
-		'password' => 'root',
-		'database' => 'themusictank',
-		'prefix' => '',
-		'encoding' => 'utf8',
-	);
-    
-    // .local test information
-    public $test3 = array(
+        
+    public $tmt_francoisfaubert_com = array(
 		'datasource' => 'Database/Mysql',
 		'persistent' => false,
 		'host' => 'localhost',
@@ -107,17 +94,13 @@ class DATABASE_CONFIG {
     
     function __construct ()
 	{
-        if(preg_match('/themusictank\.local/', $_SERVER['SERVER_NAME']))
+        if(preg_match('/themusictank\.nvi/', $_SERVER['SERVER_NAME']))
         {
-            $this->default = $this->test2;
+            $this->default = $this->nvi;
         }
-        elseif(preg_match('/themusictank\.nvi/', $_SERVER['SERVER_NAME']))
+        elseif(preg_match('/tmt\.francoisfaubert\.com/', $_SERVER['SERVER_NAME']))
         {
-            $this->default = $this->test;
-        }
-        elseif(preg_match('/dev\.themusictank\.com/', $_SERVER['SERVER_NAME']))
-        {
-            $this->default = $this->test3;
+            $this->default = $this->tmt_francoisfaubert_com;
         }
 	}
     

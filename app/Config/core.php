@@ -33,7 +33,7 @@
  * In production mode, flash messages redirect after a time interval.
  * In development mode, you need to click the flash message to continue.
  */
-if($_SERVER['SERVER_NAME'] == "themusictank.com" || $_SERVER['SERVER_NAME'] == "www.themusictank.com")
+if(preg_match('/themusictank\.com/', $_SERVER['SERVER_NAME']))
 {
 	Configure::write('debug', 0);
 }

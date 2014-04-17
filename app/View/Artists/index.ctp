@@ -2,13 +2,14 @@
     <header>
         <h2><?php echo __('Browse alphabetically'); ?></h2>
     </header>
-    <ul class="tiled-list artist-categories">
+
+    <div class="row tiled-list artist-categories">
     <?php foreach($artistCategories as $category) : ?>
-        <li>
+        <div class="col-xs-1 col-md-2">
             <?php echo $this->Html->link($category, array('controller' => 'artists', 'action' => 'browse',  strtolower($category))); ?>
-        </li>
+        </div>
     <?php endforeach; ?>
-    </ul>    
+    </div>    
 </section>
 
 <section class="popular-artists">
@@ -23,9 +24,9 @@
         <h2><?php echo __('New album releases'); ?></h2>
         <?php echo $this->Html->link(__("More"), array('controller' => 'albums', 'action' => 'newreleases'), array("class" => "view-more")); ?>        
     </header>     
-    <ul class="tiled-list albums">
+    <div class="row tiled-list albums">
         <?php foreach($newReleases as $album) :?>
-            <li>
+            <div class="col-xs-4 col-md-4">
                 <a class="thumbnail" href="<?php echo $this->Html->url(array('controller' => 'albums', 'action' => 'view', $album["Albums"]["slug"])); ?>" style="background-image:url(<?php echo $this->App->getImageUrl($album["Albums"], true); ?>);">
                     &nbsp;
                 </a>                
@@ -34,7 +35,7 @@
                     <?php echo $this->Html->link($album["Albums"]["name"], array('controller' => 'albums', 'action' => 'view', $album["Albums"]["slug"])); ?> <br />
                     <?php echo __("by"); ?> <?php echo $this->Html->link($album["Artist"]["name"], array('controller' => 'artists', 'action' => 'view', $album["Artist"]["slug"])); ?>
                 </h3>
-            </li>
+            </div>
         <?php endforeach; ?>
-    </ul>
+    </div>
 </section>

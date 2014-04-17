@@ -29,6 +29,7 @@
 				border-top:1px solid #dedede;
 				font-size:0.85em;
 				padding:0.5em;
+				left:0;
 				width:100%;
 			}
 
@@ -346,9 +347,29 @@ filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#eeeeee', end
 	
 }
 
-.sub-menu.fixed {
-	z-index:2;
+
+.browse-by-letter {
+	.artist-categories {
+		li {
+			list-style-type: none;
+			
+			a {
+				background:#fff;
+				display:block;
+				line-height:50px;
+				text-align:center;
+
+				&:hover {
+					background:#428bca;
+					color:#fff;
+					border-radius: 3px;
+				}
+			}	
+		}
+	}
 }
+
+
 
 .credits {
 	color:#ccc;

@@ -1,6 +1,130 @@
 //@import "bootstrap.less";
-@import "base.less";
+@import "../fonts/fontawesome/css/font-awesome.min.css";
+@import "expandable.less";
+@import "player.less";
+@import "charts.less";
 @import "header.less";
+
+
+
+
+.sub-menu {
+	background:#fff;
+	position:relative;
+	margin:-1em -1em 0;
+	height:80px;
+	border-bottom:1px solid #dedede;
+
+	ul {
+		width:50%;
+	}
+
+	.search {		
+		position:absolute;
+		top:10px;
+		right:10px;
+		text-align: right;
+
+		div {
+			display:inline-block;
+		}
+	}	
+}
+
+
+.browse-by-letter {
+	.artist-categories {			
+		a {
+			background:#fff;
+			display:block;
+			line-height:50px;
+			text-align:center;
+
+			&:hover {
+				background:#428bca;
+				color:#fff;
+				border-radius: 3px;
+			}
+		}	
+	}
+}
+@lightBoxShadow: 0 1px 3px rgba(0, 0, 0, 0.35);
+@darkBoxShadow: 0 1px 3px rgba(0, 0, 0, 0.7);
+
+.tiled-list {
+
+	.col-xs-6:nth-child(3n+3) {
+		clear:right;
+	}
+
+	.col-xs-6:nth-child(3n+4) {
+		clear:left;
+	}
+
+	.col-xs-6:nth-child(3n+3) {
+		clear:right;
+	}
+
+	.col-xs-6:nth-child(3n+4) {
+		clear:left;
+	}
+
+	.thumbnail {
+		border-radius: 3px;
+		box-shadow: @lightBoxShadow;
+		overflow: hidden;
+		position: relative;
+		height:225px;	
+		background-image: url(/img/placeholder.png);
+		background-position: 50% 50%;
+		background-repeat:no-repeat;
+		background-size:cover;
+		display:block;
+		text-decoration: none;
+		span {
+			display: block;
+			background-color:rgba(255, 255, 255, 0.8);				
+			position:absolute;
+			bottom:0;
+			border-top:1px solid #dedede;
+			font-size:0.85em;
+			padding:0.5em;
+			left:0;
+			width:100%;
+		}
+
+		&:hover {				
+			box-shadow: @darkBoxShadow;
+		}	
+	}
+	.recent-albums {
+		margin-top:1em;
+		li {
+			list-style-type: none;
+			clear:left;
+			margin:0;
+			img {
+				width:40px;
+				height:40px;
+				min-height: 40px;
+				min-width: 40px;
+				float:left;
+				margin-right:1em;
+			}
+		}
+	}
+}
+
+
+
+
+
+
+//@import "pages.less";
+
+/*
+@import "base.less";
+//@import "header.less";
 @import "footer.less";
 @import "expandable.less";
 @import "dropdown.less";
@@ -10,3 +134,4 @@
 @import "charts.less";
 
 @import "responsive-767.less";	
+*/

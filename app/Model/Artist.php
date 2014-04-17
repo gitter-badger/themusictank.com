@@ -73,7 +73,7 @@ class Artist extends AppModel
      */
     public function findAllPopular()
     {
-        return $this->find("all", array("conditions" => array("RdioArtist.is_popular" => true)));
+        return $this->find("all", array("conditions" => array("RdioArtist.is_popular" => true), "limit" => 9));
     }
     
     /**

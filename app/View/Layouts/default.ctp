@@ -10,12 +10,17 @@
         if(isset($customMetas))     $this->MetaTags->add($customMetas);
         echo $this->MetaTags->compile();
      ?>
+    <!-- HTML5 shim and Respond.js IE8 support of HTML5 elements and media queries -->
+    <!--[if lt IE 9]>
+      <script src="https://oss.maxcdn.com/libs/html5shiv/3.7.0/html5shiv.js"></script>
+      <script src="https://oss.maxcdn.com/libs/respond.js/1.4.2/respond.min.js"></script>
+    <![endif]-->
 </head>
 <body class="<?php echo $this->App->contextToClassNames(); ?>">
 
     <?php echo $this->element('header'); ?>
     
-    <section class="site-main">
+    <section class="container container-fluid site-main">
         <?php echo $this->Session->flash(); ?>
         <?php echo $this->fetch('content'); ?>
     </section>

@@ -60,6 +60,27 @@ class MetaTagsHelper extends AppHelper {
                 
         return implode("\n\t", array_filter($this->_metas));    
     }
+
+    public function addPlayerMeta($preferredPlayer)
+    {
+        switch($preferredPlayer)
+        {
+            case "rdio" : $playerScript = array('vendor/swf/swfobject', 'vendor/swf/flash_detect_min.js', 'player/rdio'); break;            
+            case "mp3" : $playerScript = array('vendor/id3/id3-minimized', 'player/mp3'); break;
+        }
+        
+        $this->_metas[] = $this->Html->script(array_merge(array('//code.jquery.com/ui/1.10.3/jquery-ui.js', 'vendor/animation/RequestAnimationFrame', 'player/player', 'player/graph'), $playerScript));
+        
+        if(isset($isReview) && $isReview)
+        {
+            $this->_metas[] = $this->Html->script('player/reviewer');
+        }
+    }
+
+    public function addOEmbedMeta($oembedLink)
+    {
+        $this->_metas[] = '<link rel="alternate" type="application/json+oembed" href="'.$oembedLink.'" title="oEmbed Profile" />';
+    }    
     
     public function _buildOpenGraphTags()
     {

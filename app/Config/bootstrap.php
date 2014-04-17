@@ -129,7 +129,7 @@ if(preg_match('/themusictank\.com/', $_SERVER['SERVER_NAME']))
     ));  
 }
 
-elseif(preg_match('/themusictank\.local/', $_SERVER['SERVER_NAME']))
+elseif(preg_match('/francoisfaubert\.com/', $_SERVER['SERVER_NAME']))
 {
     Configure::write('RdioApiConfig', array("9tram6gwz5td4t9hmv8fkqjk", "3yuAttXm2T"));        
     Configure::write('LastFmApiConfig', array(

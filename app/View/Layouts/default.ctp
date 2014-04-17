@@ -1,10 +1,17 @@
 <!DOCTYPE html>
 <html>
 <head>    
-	<title><?php echo ($title_for_layout) ? $title_for_layout . " &mdash; " : ""; ?><?php echo __("The Music Tank"); ?></title>
-    <?php echo $this->element('head'); ?>
+	<title><?php echo $this->App->getTitle($title_for_layout); ?></title>
+    <?php 
+        $this->MetaTags->init();
+        if(isset($meta_for_layout)) $this->MetaTags->addLayoutMeta($meta_for_layout);
+        if(isset($preferredPlayer)) $this->MetaTags->addPlayerMeta($preferredPlayer);
+        if(isset($oembedLink))      $this->MetaTags->addOEmbedMeta($oembedLink);
+        if(isset($customMetas))     $this->MetaTags->add($customMetas);
+        echo $this->MetaTags->compile();
+     ?>
 </head>
-<body class="<?php echo sprintf("%s %s %s", $this->params["controller"], $this->params["action"], implode(" ", $this->params["pass"])); ?>">
+<body class="<?php echo $this->App->contextToClassNames(); ?>">
 
     <?php echo $this->element('header'); ?>
     

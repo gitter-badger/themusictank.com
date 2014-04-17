@@ -5,7 +5,7 @@
 <?php echo $this->Form->input("id"); ?>
 
 <p><?php echo __("Modify your personal TMT url"); ?></p>
-<?php echo $this->Form->input("slug", array("label" => "http://www.themusictank.com/users/view/")); ?>
+<?php echo $this->Form->input("slug", array("label" => "http://www.themusictank.com/profiles/view/")); ?>
 
 
 <h3><?php echo __("Preferences"); ?></h3>

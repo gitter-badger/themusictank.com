@@ -18,12 +18,20 @@ class ProfilesController extends AppController {
     {
         $data = $this->_getUserFromSlug($userSlug);
                 
-        $this->loadModel("TrackReviewSnapshot");  
-        $topAreas       = $this->TrackReviewSnapshot->getTopAreasByUserId($data["User"]["id"]);
-        $recentReviews  = $this->TrackReviewSnapshot->getRecentReviewsByUserId($data["User"]["id"], 5);
-                        
-        foreach($recentReviews as $idx => $review)
+        if(!$data)
         {
+            throw new NotFoundException('Could not find that user');
+        }
+
+
+        $this->loadModel("TrackReviewSnapshot");  
+       // $topAreas       = $this->TrackReviewSnapshot->getTopAreasByUserId($data["User"]["id"]);
+        //$recentReviews  = $this->TrackReviewSnapshot->getRecentReviewsByUserId($data["User"]["id"], 5);
+          
+        $recentReviews = $this->TrackReviewSnapshot->getRecentReviews(array("user_id" => $data["User"]["id"]));
+
+        foreach($recentReviews as $idx => $review)
+        {            
             $recentReviews[$idx]["appreciation"] = $this->TrackReviewSnapshot->getUserAppreciation($review["Track"]["id"], $data["User"]["id"]);
         }
             
@@ -36,7 +44,7 @@ class ProfilesController extends AppController {
                 
         $this->set("user",          $data['User']);                
         $this->set("recentReviews", $recentReviews);
-        $this->set("topAreas",      $topAreas);
+      //  $this->set("topAreas",      $topAreas);
         
         $this->setPageTitle(array(__("Profile"), User::getFullName($data['User'])));  
         $this->setPageMeta(array(

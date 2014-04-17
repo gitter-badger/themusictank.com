@@ -99,10 +99,20 @@ class TracksController extends AppController {
         $this->set("artist", $data["Album"]["Artist"]);  
         $this->set("trackReviewSnapshot", $data["TrackReviewSnapshot"]); 
         
-        if($isLoggedIn) {
+        if($userSlug != $this->Session->read('Auth.User.User.slug'))
+        {
             $this->set("userTrackReviewSnapshot", $data["UserTrackReviewSnapshot"]);             
         }
+
+        $userData = $this->User->findBySlug($userSlug, array("fields" => "User.*"));
+        if(!$userData) throw new NotFoundException(sprintf(__("Could not find the user %s"), $userSlug));
+
+        $this->set("viewingUser", $userData["User"]);
+
+        $this->User->data = $data;
+        $this->set("viewingTrackReviewSnapshot", $this->User->getUncachedSnapshot($userData["User"]["id"]));
                 
+                /*
         if($userSlug != $this->Session->read('Auth.User.User.slug'))
         {        
             $userData = $this->User->findBySlug($userSlug, array("fields" => "User.*"));
@@ -114,8 +124,9 @@ class TracksController extends AppController {
             $this->set("viewingTrackReviewSnapshot", $this->User->getUncachedSnapshot($userData["User"]["id"]));
         }
         else {
-            $this->set("viewingUser", $this->Session->read('Auth.User.User'));            
-        }
+            $this->set("viewingUser", $this->Session->read('Auth.User.User'));           
+            $this->set("viewingTrackReviewSnapshot", $this->User->getUncachedSnapshot($this->Session->read('Auth.User.User.id'))); 
+        }*/
                 
         $this->setPageTitle(array($data["Track"]["title"], $data["Album"]["name"], $data["Album"]["Artist"]["name"]));
         $this->setPageMeta(array(

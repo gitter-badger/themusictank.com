@@ -31,4 +31,14 @@ App::uses('Helper', 'View');
  * @package       app.View.Helper
  */
 class AppHelper extends Helper {
+
+	public function contextToClassNames()
+	{
+		return sprintf("%s %s %s", $this->params["controller"], $this->params["action"], implode(" ", $this->params["pass"]));
+	}
+
+	public function getTitle($title_for_layout)
+	{
+		return sprintf("%s %s", ($title_for_layout) ? $title_for_layout . " &mdash; " : "",  __("The Music Tank"));
+	}
 }

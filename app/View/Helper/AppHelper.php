@@ -41,4 +41,16 @@ class AppHelper extends Helper {
 	{
 		return sprintf("%s %s", ($title_for_layout) ? $title_for_layout . " &mdash; " : "",  __("The Music Tank"));
 	}
+
+	public function getImageUrl($obj, $addImplicitPath = false)
+	{
+		$implicit = "/img/";
+		$imgsrc = "placeholder.png";
+
+		if(array_key_exists("image", $obj) && file_exists(WEBROOT_DIR . $implicit . $obj["image"])) {
+			$imgsrc = $obj["image"];
+		}
+
+		return $addImplicitPath ? $implicit . $imgsrc : $imgsrc;
+	}
 }

@@ -4,15 +4,19 @@
 
 <h3><?php echo __("Authentication"); ?></h3>
 
+<p><?php echo __("Connecting The Music Tank with Rdio or Facebook will automatically give you access to this website. If you have accounts on these, you have an account on TMT."); ?></p>
+
+<ul>
+    <li><?php echo $this->Html->link(__("Login with Rdio"), array('controller' => 'apis', 'action' => 'connectRdio', '?' => array("rurl" => $redirectUrl))); ?>
+    <li><i class="fa fa-facebook-square"></i> <?php echo $this->Html->link(__("Login with Facebook"), array('controller' => 'apis', 'action' => 'connectFacebook', '?' => array("rurl" => $redirectUrl))); ?></p>        
+</ul>
+
+
 <div class="cols">
     <div class="col col-1-2">    
-        <ul>
-            <li><?php echo $this->Html->link(__("Login with Rdio"), array('controller' => 'apis', 'action' => 'connectRdio', '?' => array("rurl" => $redirectUrl))); ?>
-            <li><?php echo $this->Html->link(__("Login with Facebook"), array('controller' => 'apis', 'action' => 'connectFacebook', '?' => array("rurl" => $redirectUrl))); ?></p>        
-        </ul>
+       
     </div>
     <div class="col col-2-2">        
-        <p><?php echo __("Connecting The Music Tank with Rdio or Facebook will automatically give you access to this website. If you have accounts on these, you have an account on TMT."); ?></p>
     </div>            
 </div>        
 

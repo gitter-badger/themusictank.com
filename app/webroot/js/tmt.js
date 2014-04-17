@@ -41,7 +41,7 @@ $(function () {
     albumsSearch.initialize();
     tracksSearch.initialize();
  
-    var searchBox = $('.site-head .search input[type=text]');
+    var searchBox = $('.typeahead');
     searchBox.typeahead({ highlight: true }, {
             name: 'artists',
             displayKey: 'artist',
@@ -81,10 +81,10 @@ $(function () {
         $(this).toggleClass("fixed");
 
     });
-
+/*
     $('.fixable-hit ').waypoint(function() {
         $('.fixable.fixed').toggleClass($(this).attr("id"));
-    });
+    }); */
         
     // Expander util    
     var box = $(".expandable");
@@ -95,8 +95,8 @@ $(function () {
                 height = box.innerHeight(),
                 maxHeight = 200,
                 tpl = '<ul class="expander">' +
-                    '<li class="more">more</li>' +
-                    '<li class="less">less</li>' +
+                    '<li class="more"><i class="fa fa-plus-circle"></i> More</li>' +
+                    '<li class="less"><i class="fa fa-minus-circle"></i> Less</li>' +
                 '</ul>';
 
             if(height > maxHeight)

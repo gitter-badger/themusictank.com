@@ -3,10 +3,6 @@
     <ul class="horizontal">
         <li><?php echo $this->Html->link($artist["name"], array('controller' => 'artists', 'action' => 'view', $artist["slug"])); ?></li>
     </ul>
-
-    <div class="search">
-        <form action="/search/" method="get"><input type="text" name="q" value="" placeholder="Search..." /><input type="submit" name="Go" /></form>
-    </div>
 </nav>
 
 <article class="heading artist-profile">
@@ -29,8 +25,9 @@
             <h3><?php echo __("General"); ?></h3>  
             <ul>
                 <li class="average"><?php echo $this->Chart->formatScore($artistReviewSnapshot["score_snapshot"]); ?></li>
-                <li class="enjoyment"><?php echo $this->Chart->formatPct($artistReviewSnapshot["liking_pct"]); ?><br>:)</li>
-                <li class="displeasure"><?php echo $this->Chart->formatPct($artistReviewSnapshot["disliking_pct"]); ?><br>:(</li>
+                <li class="enjoyment"><?php echo $this->Chart->formatPct($artistReviewSnapshot["liking_pct"]); ?><i class="fa fa-smile-o"></i></li>
+                <li class="neutral"><?php echo $this->Chart->formatPct($artistReviewSnapshot["neutral_pct"]); ?><i class="fa fa-meh-o"></i></li>
+                <li class="displeasure"><?php echo $this->Chart->formatPct($artistReviewSnapshot["disliking_pct"]); ?><i class="fa fa-frown-o"></i></li>
             </ul>  
         </section>
 
@@ -40,8 +37,9 @@
                 <?php echo $this->Chart->getBigPie("track", $artist["slug"], $userArtistReviewSnapshot); ?>
                 <ul>
                     <li class="average"><?php echo $this->Chart->formatScore($userArtistReviewSnapshot["score_snapshot"]); ?></li>
-                    <li class="enjoyment"><?php echo $this->Chart->formatPct($userArtistReviewSnapshot["liking_pct"]); ?><br>:)</li>
-                    <li class="displeasure"><?php echo $this->Chart->formatPct($userArtistReviewSnapshot["disliking_pct"]); ?><br>:(</li>
+                    <li class="enjoyment"><?php echo $this->Chart->formatPct($userArtistReviewSnapshot["liking_pct"]); ?><i class="fa fa-smile-o"></i></li>
+                    <li class="neutral"><?php echo $this->Chart->formatPct($userArtistReviewSnapshot["neutral_pct"]); ?><i class="fa fa-meh-o"></i></li>
+                    <li class="displeasure"><?php echo $this->Chart->formatPct($userArtistReviewSnapshot["disliking_pct"]); ?><i class="fa fa-frown-o"></i></li>
                 </ul>
             </section>
         <?php endif; ?>
@@ -49,13 +47,13 @@
 
 </article>
 
-<section class="fixable-hit" id="discography">
+<section class="discography">
 <h2><?php echo __("Discography"); ?></h2>
 <?php if(count($albums) > 0) : ?>
     <ul class="tiled-list albums">
     <?php foreach($albums as $album) : ?>
         <li>
-            <a class="thumbnail" href="<?php echo $this->Html->url(array('controller' => 'albums', 'action' => 'view', $album["slug"])); ?>" <?php if(isset($album["image"])){  echo 'style="background-image:url(/img/'.$album["image"].');"'; } ?>>
+            <a class="thumbnail" href="<?php echo $this->Html->url(array('controller' => 'albums', 'action' => 'view', $album["slug"])); ?>" style="background-image:url(<?php echo $this->App->getImageUrl($album, true); ?>">
                 &nbsp;
             </a>                
             <time datetime="<?php echo date("c", $album["release_date"]); ?>"><?php echo date("F j Y", $album["release_date"]); ?></time>
@@ -70,9 +68,7 @@
 <?php endif; ?>
 </section>
 
-
 <?php echo $this->Disqus->get('/artists/view/'.$artist["slug"].'/', $artist["name"]); ?>
-
         
 <p class="credits">
     <?php echo __("Artist biography and profile image courtesy of"); ?> <?php echo $this->Html->link("Last.fm", "http://www.last.fm/", array("target" => "_blank")); ?>. 

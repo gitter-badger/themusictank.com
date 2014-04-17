@@ -8,7 +8,7 @@
 <article class="heading album-profile">
 
     <div class="thumbnail">
-        <?php echo $this->Html->image($album["image"], array("alt" => $album["name"])); ?>                                
+        <?php echo $this->Html->image( $this->App->getImageUrl($album), array("alt" => $album["name"])); ?>                                
     </div>
 
     <aside>
@@ -26,11 +26,12 @@
         <section class="tankers">
             <?php echo $this->Chart->getBigPie("album", $album["slug"] . "-1", $albumReviewSnapshot); ?>
             <h3><?php echo __("General"); ?></h3>  
-            <!-- <p><?php echo __("Metacritic score"); ?> <?php echo $this->Chart->formatScore($albumReviewSnapshot["metacritic_score"]); ?></p> -->
+            <?php /* <p><?php echo __("Metacritic score"); ?> <?php echo $this->Chart->formatScore($albumReviewSnapshot["metacritic_score"]); ?></p> */ ?>
             <ul>
                 <li class="average"><?php echo $this->Chart->formatScore($albumReviewSnapshot["score_snapshot"]); ?></li>
-                <li class="enjoyment"><?php echo $this->Chart->formatPct($albumReviewSnapshot["liking_pct"]); ?><br>:)</li>
-                <li class="displeasure"><?php echo $this->Chart->formatPct($albumReviewSnapshot["disliking_pct"]); ?><br>:(</li>
+                <li class="enjoyment"><?php echo $this->Chart->formatPct($albumReviewSnapshot["liking_pct"]); ?><i class="fa fa-smile-o"></i></li>                
+                <li class="neutral"><?php echo $this->Chart->formatPct($albumReviewSnapshot["neutral_pct"]); ?><i class="fa fa-meh-o"></i></li>
+                <li class="displeasure"><?php echo $this->Chart->formatPct($albumReviewSnapshot["disliking_pct"]); ?><i class="fa fa-frown-o"></i></li>
             </ul>
         </section>
 
@@ -40,9 +41,9 @@
             <?php if(count($subsAlbumReviewSnapshot) > 0) : ?>    
                 <h3><?php echo __("Subscriptions"); ?></h3>  
                 <ul>
-                    <li class="average"><?php echo $this->Chart->formatScore($subsAlbumReviewSnapshot["score_snapshot"]); ?></li>
-                    <li class="enjoyment"><?php echo $this->Chart->formatPct($subsAlbumReviewSnapshot["liking_pct"]); ?><br>:)</li>
-                    <li class="displeasure"><?php echo $this->Chart->formatPct($subsAlbumReviewSnapshot["disliking_pct"]); ?><br>:(</li>
+                    <li class="enjoyment"><?php echo $this->Chart->formatPct($subsAlbumReviewSnapshot["liking_pct"]); ?><i class="fa fa-smile-o"></i></li>                
+                    <li class="neutral"><?php echo $this->Chart->formatPct($subsAlbumReviewSnapshot["neutral_pct"]); ?><i class="fa fa-meh-o"></i></li>
+                    <li class="displeasure"><?php echo $this->Chart->formatPct($subsAlbumReviewSnapshot["disliking_pct"]); ?><i class="fa fa-frown-o"></i></li>
                 </ul>
             <?php else : ?>
                 <p><?php echo __("None of the people you are subscribed to have reviewed this album yet."); ?></p>
@@ -56,9 +57,9 @@
             <?php if(count($userAlbumReviewSnapshot) > 0) : ?> 
                 <h3><?php echo __("Your rating"); ?></h3>  
                 <ul>
-                    <li class="average"><?php echo $this->Chart->formatScore($userAlbumReviewSnapshot["score_snapshot"]); ?></li>
-                    <li class="enjoyment"><?php echo $this->Chart->formatPct($userAlbumReviewSnapshot["liking_pct"]); ?><br>:)</li>
-                    <li class="displeasure"><?php echo $this->Chart->formatPct($userAlbumReviewSnapshot["disliking_pct"]); ?><br>:(</li>
+                    <li class="enjoyment"><?php echo $this->Chart->formatPct($userAlbumReviewSnapshot["liking_pct"]); ?><i class="fa fa-smile-o"></i></li>                
+                    <li class="neutral"><?php echo $this->Chart->formatPct($userAlbumReviewSnapshot["neutral_pct"]); ?><i class="fa fa-meh-o"></i></li>
+                    <li class="displeasure"><?php echo $this->Chart->formatPct($userAlbumReviewSnapshot["disliking_pct"]); ?><i class="fa fa-frown-o"></i></li>
                 </ul>
             <?php else : ?>
                 <p><?php echo __("You have not reviewed this album yet."); ?></p>

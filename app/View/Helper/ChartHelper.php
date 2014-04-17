@@ -16,12 +16,16 @@ class ChartHelper extends AppHelper {
     
     public function formatScore($score)
     {
+        if(is_null($score))
+        {
+            return "N/A";
+        }
         return $this->formatPct(round($score * 100));
     }
 
     public function formatPct($score)
     {
-        if(!is_null($score) && $score > 0)
+        if(!is_null($score))
         {
             $class = "neutral";
             if($score > 80) {
@@ -71,9 +75,9 @@ class ChartHelper extends AppHelper {
         return '<div class="enjoyment-chart horizontal">
                     <div class="average">'. $this->formatScore($data["score_snapshot"]) .'</div>
                     <div class="enjoyment">
-                        ' . ($data["liking_pct"] > 0 ? '<div class="like" style="width:'.$data["liking_pct"].'%;"">'.__('Liking').'</div>' : '') . '
-                        ' . ($data["neutral_pct"] > 0 ? '<div class="neutral" style="width:'.$data["neutral_pct"].'%;"">'.__('Neutral').'</div>' : '') . '
-                        ' . ($data["disliking_pct"] > 0 ? '<div class="dislike" style="width:'.$data["disliking_pct"].'%;"">'.__('Disliking').'</div>' : '') . '
+                        ' . ($data["liking_pct"] > 0 ? '<div class="like" style="width:'.$data["liking_pct"].'%;""><i class="fa fa-smile-o"></i></div>' : '') . '
+                        ' . ($data["neutral_pct"] > 0 ? '<div class="neutral" style="width:'.$data["neutral_pct"].'%;""><i class="fa fa-meh-o"></i></div>' : '') . '
+                        ' . ($data["disliking_pct"] > 0 ? '<div class="dislike" style="width:'.$data["disliking_pct"].'%;""><i class="fa fa-frown-o"></i></div>' : '') . '
                     </div>
                 </div>';
 
@@ -92,9 +96,9 @@ class ChartHelper extends AppHelper {
         
         /* square pie */
         return '<div class="enjoyment-chart big">
-                    <div class="like" style="height:'.$data["liking_pct"].'%;"">'.__('Liking').'</div>
-                    <div class="neutral" style="height:'.$data["neutral_pct"].'%;"">'.__('Neutral').'</div>
-                    <div class="dislike" style="height:'.$data["disliking_pct"].'%;"">'.__('Disliking').'</div>
+                    <div class="like" style="height:'.$data["liking_pct"].'%;""><i class="fa fa-smile-o"></i></div>
+                    <div class="neutral" style="height:'.$data["neutral_pct"].'%;""><i class="fa fa-meh-o"></i></div>
+                    <div class="dislike" style="height:'.$data["disliking_pct"].'%;""><i class="fa fa-frown-o"></i></div>
                 </div>';
     }
        

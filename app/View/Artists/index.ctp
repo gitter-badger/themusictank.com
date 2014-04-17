@@ -26,7 +26,7 @@
     <ul class="tiled-list albums">
         <?php foreach($newReleases as $album) :?>
             <li>
-                <a class="thumbnail" href="<?php echo $this->Html->url(array('controller' => 'albums', 'action' => 'view', $album["Albums"]["slug"])); ?>" <?php if(isset($album["Albums"]["image"])){  echo 'style="background-image:url(/img/'.$album["Albums"]["image"].');"'; } ?>>
+                <a class="thumbnail" href="<?php echo $this->Html->url(array('controller' => 'albums', 'action' => 'view', $album["Albums"]["slug"])); ?>" style="background-image:url(<?php echo $this->App->getImageUrl($album["Albums"], true); ?>);">
                     &nbsp;
                 </a>                
                 <time datetime="<?php echo date("c", $album["Albums"]["release_date"]); ?>"><?php echo date("F j Y", $album["Albums"]["release_date"]); ?></time>

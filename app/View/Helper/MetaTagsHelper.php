@@ -20,8 +20,8 @@ class MetaTagsHelper extends AppHelper {
             $this->Html->meta('canonical', $this->Html->url( null, true ), array('rel'=>'canonical', 'type'=>null, 'title'=>null)),  
             '<link rel="author" type="text/plain" href="'.$domain.'humans.txt"" />',
             '<noscript><meta http-equiv="refresh" content="0; URL=/pages/requirements/" /></noscript>',
-            $this->Html->css(array("//fonts.googleapis.com/css?family=Open+Sans", "styles.min")),
-            $this->Html->script(array("src" => "//code.jquery.com/jquery-2.0.3.min.js", "lib/waypoints.min", "lib/typeahead", "lib/sjsi", "tmt")),
+            $this->Html->css(array("//fonts.googleapis.com/css?family=Open+Sans", "styles.min", "/fonts/fontawesome/css/font-awesome.min.css")),
+            $this->Html->script(array("src" => "//code.jquery.com/jquery-2.0.3.min.js", "vendor/waypoints.min", "vendor/typeahead", "vendor/sjsi", "tmt")),
         );
         
         if(Configure::read('debug') > 0)

@@ -26,7 +26,7 @@
     </header>     
     <div class="row tiled-list albums">
         <?php foreach($newReleases as $album) :?>
-            <div class="col-xs-4 col-md-4">
+            <div class="col-xs-6 col-md-3">
                 <a class="thumbnail" href="<?php echo $this->Html->url(array('controller' => 'albums', 'action' => 'view', $album["Albums"]["slug"])); ?>" style="background-image:url(<?php echo $this->App->getImageUrl($album["Albums"], true); ?>);">
                     &nbsp;
                 </a>                

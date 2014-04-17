@@ -20,25 +20,29 @@
             </ul> 
 
             <ul class="nav navbar-nav navbar-right">
-                <li class="picture">
-                    <?php echo $this->Html->link(
-                            $this->Html->image($this->App->getImageUrl($userSession), array("class" => "img-circle")),
-                            array('controller' => 'users', 'action' => 'dashboard'),
-                            array('escape' => false)
-                    ); ?>
-                </li>                
-                <li><?php echo $this->Html->link(__("Home"), array('controller' => 'users', 'action' => 'dashboard')); ?></li>
-                <li><?php echo $this->Html->link(__("Profile"), array('controller' => 'profiles', 'action' => 'view', $userSession['slug'])); ?></li>
-                <li class="dropdown">
-                    <button type="button" id="btnSettings" class="btn btn-default dropdown-toggle" data-toggle="dropdown">
-                      <i class="fa fa-cog"></i>
-                      <span class="caret"></span>
-                    </button>
-                    <ul class="dropdown-menu" role="menu" aria-labelledby="btnSettings">
-                        <li><?php echo $this->Html->link(__("Settings"), array('controller' => 'users', 'action' => 'edit')); ?></li>
-                        <li><?php echo $this->Html->link(__("Logout"), array('controller' => 'users', 'action' => 'logout')); ?></li>        
-                    </ul>
-                </li>
+                <?php if($isLogged) : ?>
+                    <li class="picture">
+                        <?php echo $this->Html->link(
+                                $this->Html->image($this->App->getImageUrl($userSession), array("class" => "img-circle")),
+                                array('controller' => 'users', 'action' => 'dashboard'),
+                                array('escape' => false)
+                        ); ?>
+                    </li>                
+                    <li><?php echo $this->Html->link(__("Home"), array('controller' => 'users', 'action' => 'dashboard')); ?></li>
+                    <li><?php echo $this->Html->link(__("Profile"), array('controller' => 'profiles', 'action' => 'view', $userSession['slug'])); ?></li>
+                    <li class="dropdown">
+                        <button type="button" id="btnSettings" class="btn btn-default dropdown-toggle" data-toggle="dropdown">
+                          <i class="fa fa-cog"></i>
+                          <span class="caret"></span>
+                        </button>
+                        <ul class="dropdown-menu" role="menu" aria-labelledby="btnSettings">
+                            <li><?php echo $this->Html->link(__("Settings"), array('controller' => 'users', 'action' => 'edit')); ?></li>
+                            <li><?php echo $this->Html->link(__("Logout"), array('controller' => 'users', 'action' => 'logout')); ?></li>        
+                        </ul>
+                    </li>
+                <?php else : ?>
+                    <li><?php echo $this->Html->link(__("Login or create account"), array('controller' => 'users', 'action' => 'login')); ?></li>
+                <?php endif; ?>
             </ul>
         </div>
     </div>

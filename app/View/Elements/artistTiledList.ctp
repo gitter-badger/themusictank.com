@@ -1,7 +1,7 @@
 <div class="row tiled-list artists">
 <?php foreach($artists as $idx => $artist) : ?>
 
-    <div class="col-xs-6 col-md-4">
+    <div class="col-xs-6 col-md-3">
         <h3>
             <a class="thumbnail" href="<?php echo $this->Html->url(array('controller' => 'artists', 'action' => 'view', $artist["Artist"]["slug"])); ?>" style="background-image:url(<?php echo $this->App->getImageUrl($artist["LastfmArtist"], true); ?>);">
                 <span><?php echo $artist["Artist"]["name"]; ?></span>

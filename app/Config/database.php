@@ -90,6 +90,17 @@ class DATABASE_CONFIG {
 		'encoding' => 'utf8',
 	);
 
+    public $tmt_dev = array(
+		'datasource' => 'Database/Mysql',
+		'persistent' => false,
+		'host' => 'localhost',
+		'login' => 'root',
+		'password' => 'root',
+		'database' => 'themusictank',
+		'prefix' => '',
+		'encoding' => 'utf8',
+	);
+
     public $array = array('datasource' => 'ArraySource');
     
     function __construct ()
@@ -101,6 +112,10 @@ class DATABASE_CONFIG {
         elseif(preg_match('/tmt\.francoisfaubert\.com/', $_SERVER['SERVER_NAME']))
         {
             $this->default = $this->tmt_francoisfaubert_com;
+        }
+        elseif(preg_match('/tmt\.dev/', $_SERVER['SERVER_NAME']))
+        {
+            $this->default = $this->tmt_dev;
         }
 	}
     

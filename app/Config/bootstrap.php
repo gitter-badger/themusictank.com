@@ -137,6 +137,15 @@ elseif(preg_match('/francoisfaubert\.com/', $_SERVER['SERVER_NAME']))
         "secret" => "a15fa4e5a198c77683eaa24374b24740"
     ));  
 }
+
+elseif(preg_match('/tmt\.dev/', $_SERVER['SERVER_NAME']))
+{
+    Configure::write('RdioApiConfig', array("9tram6gwz5td4t9hmv8fkqjk", "3yuAttXm2T"));        
+    Configure::write('LastFmApiConfig', array(
+        "key" => "145252e0c4a971f072e0fed4fa55a2bb",
+        "secret" => "6bbc4a7eeada3b668a6fbbfbb1d87aa0"
+    ));  
+}
 elseif(preg_match('/themusictank\.nvi/', $_SERVER['SERVER_NAME']))
 {
     Configure::write('RdioApiConfig', array("qj8gmx7r9jwdde6ramsvpse9", "m8qRMXtSuU"));    

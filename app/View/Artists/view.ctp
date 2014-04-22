@@ -1,4 +1,3 @@
-
 <nav class="sub-menu">
     <ul class="horizontal">
         <li><?php echo $this->Html->link($artist["name"], array('controller' => 'artists', 'action' => 'view', $artist["slug"])); ?></li>
@@ -7,7 +6,7 @@
 
 <article class="heading artist-profile">
 
-    <div class="thumbnail" <?php if(!is_null($lastfmArtist["image"])) : ?>style="background-image:url(/img/<?php echo $lastfmArtist["image"]; ?>);"<?php endif;?>>
+    <div class="image" <?php if(!is_null($lastfmArtist["image"])) : ?>style="background-image:url(/img/<?php echo $lastfmArtist["image"]; ?>);"<?php endif;?>>
         <div class="fx1"></div>
         <div class="vertical-vignette"></div> 
     </div>
@@ -50,19 +49,7 @@
 <section class="discography">
 <h2><?php echo __("Discography"); ?></h2>
 <?php if(count($albums) > 0) : ?>
-    <ul class="tiled-list albums">
-    <?php foreach($albums as $album) : ?>
-        <li>
-            <a class="thumbnail" href="<?php echo $this->Html->url(array('controller' => 'albums', 'action' => 'view', $album["slug"])); ?>" style="background-image:url(<?php echo $this->App->getImageUrl($album, true); ?>">
-                &nbsp;
-            </a>                
-            <time datetime="<?php echo date("c", $album["release_date"]); ?>"><?php echo date("F j Y", $album["release_date"]); ?></time>
-            <h3>
-                <?php echo $this->Html->link($album["name"], array('controller' => 'albums', 'action' => 'view', $album["slug"])); ?> 
-            </h3>
-        </li>
-    <?php endforeach; ?>
-    </ul>
+    <?php echo $this->element('albumTiledList', array("albums" => $albums)); ?>
 <?php else : ?>
     <p><?php echo __("This catalog is not available at the moment."); ?></p>
 <?php endif; ?>

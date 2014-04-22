@@ -1,15 +1,38 @@
  <div class="row tiled-list albums">
-    <?php foreach($albums as $album) : ?>
-        <div class="col-xs-4 col-md-4">
+    <?php foreach($albums as $album) : 
+        $albumData = null;
+        $artistData = null;
+
+        if(Hash::check($album, "Albums"))
+        {
+            $albumData = $album["Albums"];     
+        }
+        elseif(Hash::check($album, "Album"))
+        {
+            $albumData = $album["Album"];     
+        }
+        else {
+         $albumData = $album;
+        }
+
+        if(Hash::check($album, "Artist"))
+        {               
+            $artistData = $album["Artist"];
+        }
+    ?>
+        <div class="col-xs-12 col-md-3">
             <div class="thumbnail">
-                <?php echo $this->Html->link(
-                        $this->Html->image($this->App->getImageUrl($album["Album"]["image"]), array("alt" => $album["Album"]["name"], "class" => "thumbnail")),
-                        array('controller' => 'albums', 'action' => 'view', $album["Album"]["slug"]),
+                <?php  echo $this->Html->link(
+                        $this->Html->image($this->App->getImageUrl($albumData), array("alt" => $albumData["name"], "title" => $albumData["name"])),
+                        array('controller' => 'albums', 'action' => 'view', $albumData["slug"]),
                         array('escape' => false)
                 ); ?>
             </div>
-            <h3><?php echo $this->Html->link($album["Album"]["name"], array('controller' => 'albums', 'action' => 'view', $album["Album"]["slug"])); ?></h3>
-            <p><?php echo __("By"); ?> <?php echo $this->Html->link($album["Artist"]["name"], array('controller' => 'artists', 'action' => 'view', $album["Artist"]["slug"])); ?></p>
+             <time datetime="<?php echo date("c", $albumData["release_date"]); ?>"><?php echo date("F j Y", $albumData["release_date"]); ?></time>                
+            <h3><?php echo $this->Html->link($albumData["name"], array('controller' => 'albums', 'action' => 'view', $albumData["slug"])); ?></h3>
+            <?php if(!is_null($artistData)) : ?>
+            <p><?php echo __("By"); ?> <?php echo $this->Html->link($artistData["name"], array('controller' => 'artists', 'action' => 'view', $artistData["slug"])); ?></p>
+            <?php endif; ?>
         </div>
     <?php endforeach; ?>
 </ul>

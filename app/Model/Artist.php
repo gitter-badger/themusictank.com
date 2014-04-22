@@ -73,8 +73,18 @@ class Artist extends AppModel
      */
     public function findAllPopular()
     {
-        return $this->find("all", array("conditions" => array("RdioArtist.is_popular" => true), "limit" => 9));
+        return $this->findPopular();
     }
+
+    /**
+     * Finds all artists that have been flagged as popular.
+     * @return array Dataset of popular Artists.
+     */
+    public function findPopular($limit = null)
+    {
+        return $this->find("all", array("conditions" => array("RdioArtist.is_popular" => true), "limit" => $limit));
+    }
+
     
     /**
      * Fetches a list of possible categories based on the name of all our artists

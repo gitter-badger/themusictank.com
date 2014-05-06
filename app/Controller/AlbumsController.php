@@ -50,11 +50,7 @@ class AlbumsController extends AppController {
 
         $this->Album->addTracksSnapshots();
         $this->set("tracks", $this->Album->data["Tracks"]);
-                    
-
-
-
-        
+                           
 
         // Set meta information
         $this->setPageTitle(array($data["Album"]["name"], $data["Artist"]["name"]));

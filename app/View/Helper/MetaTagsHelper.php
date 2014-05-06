@@ -32,7 +32,6 @@ class MetaTagsHelper extends AppHelper {
             $this->Html->script(array(
                 array("src" => "//code.jquery.com/jquery-2.0.3.min.js"),
                 array("src" => "//netdna.bootstrapcdn.com/bootstrap/3.1.1/js/bootstrap.min.js"),
-                "vendor/waypoints.min",
                 "vendor/typeahead",
                 "vendor/sjsi",
                 "tmt"

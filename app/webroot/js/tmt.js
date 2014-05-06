@@ -1,7 +1,7 @@
 
 var tmt = window.tmt || {};
 
-$(function () {
+$(function() {
 
     // Add remove follower
     var onFollowClick = function(event){        
@@ -13,78 +13,74 @@ $(function () {
             parent.html(data);
             parent.find("a.follow, a.unfollow").on("click", onFollowClick);
         });
-    };
-    
+    };    
     $("a.follow, a.unfollow").on("click", onFollowClick);
+
         
     // search box
     var artistsSearch = new Bloodhound({
-        datumTokenizer: Bloodhound.tokenizers.obj.whitespace('value'),
-        queryTokenizer: Bloodhound.tokenizers.whitespace,
-        //prefetch: '../data/films/post_1960.json',
-        remote: '/ajax/artistssearch/?q=%QUERY'
-    }),
-    albumsSearch = new Bloodhound({
-        datumTokenizer: Bloodhound.tokenizers.obj.whitespace('value'),
-        queryTokenizer: Bloodhound.tokenizers.whitespace,
-        //prefetch: '../data/films/post_1960.json',
-        remote: '/ajax/albumssearch/?q=%QUERY'
-    }),
-    tracksSearch = new Bloodhound({
-        datumTokenizer: Bloodhound.tokenizers.obj.whitespace('value'),
-        queryTokenizer: Bloodhound.tokenizers.whitespace,
-        //prefetch: '../data/films/post_1960.json',
-        remote: '/ajax/trackssearch/?q=%QUERY'
-    }); 
+            name : 'artists',
+            datumTokenizer: function(d) { return Bloodhound.tokenizers.obj.whitespace(d.artist); },
+            queryTokenizer: Bloodhound.tokenizers.whitespace,
+            remote: '/ajax/artistssearch/?q=%QUERY'
+        }),
+        albumsSearch = new Bloodhound({
+            name : 'albums',
+            datumTokenizer: function(d) { return Bloodhound.tokenizers.obj.whitespace(d.album); },
+            queryTokenizer: Bloodhound.tokenizers.whitespace,
+            remote: '/ajax/albumssearch/?q=%QUERY'
+        }),
+        tracksSearch = new Bloodhound({
+            name : 'tracks',
+            datumTokenizer: function(d) { return Bloodhound.tokenizers.obj.whitespace(d.track); },
+            queryTokenizer: Bloodhound.tokenizers.whitespace,
+            remote: '/ajax/trackssearch/?q=%QUERY'
+        }); 
 
     artistsSearch.initialize();
     albumsSearch.initialize();
     tracksSearch.initialize();
  
+
     var searchBox = $('.typeahead');
-    searchBox.typeahead({ highlight: true }, {
-            name: 'artists',
-            displayKey: 'artist',
-            source: artistsSearch.ttAdapter(),
-            templates: {
-            header: '<h3>Artists</h3>',
-                suggestion: function(data) { return ["<p>", data.artist, "</p>"].join(""); }
-            }
-        }, {
-            name: 'albums',
-            displayKey: 'album',
-            source: albumsSearch.ttAdapter(),
-            templates: {
-            header: '<h3>Albums</h3>',
-                suggestion: function(data) { return ["<p>", data.album, " by ", data.artist, "</p>"].join(""); }
-            }
-        }, {
-            name: 'tracks',
-            displayKey: 'track',
-            source: tracksSearch.ttAdapter(),
-            templates: {
-            header: '<h3>Tracks</h3>',
-                suggestion: function(data) { return ["<p>", data.track, " from ", data.album, "</p>"].join(""); }
-            }
-        }
-    );
 
     searchBox.on("typeahead:selected", function(e, data, section) {
         document.location = "/" + [section, 'view', data.slug].join("/");
         e.preventDefault();
     });
 
-    
-    // fixed elements
-    
-    $('.fixable').waypoint(function() {
-        $(this).toggleClass("fixed");
-
-    });
-/*
-    $('.fixable-hit ').waypoint(function() {
-        $('.fixable.fixed').toggleClass($(this).attr("id"));
-    }); */
+    searchBox.typeahead({
+          minLength: 3,
+          highlight: true,
+        },
+        [{
+            name: 'artists',
+            displayKey: 'artist',
+            source: artistsSearch.ttAdapter(),
+            templates: {
+                header: '<h3>Artists</h3>',
+                suggestion: function(data) { return ["<p>", data.artist, "</p>"].join(""); }
+            }
+        },
+        {
+            name: 'albums',
+            displayKey: 'album',
+            source: albumsSearch.ttAdapter(),
+            templates: {
+                header: '<h3>Albums</h3>',
+                suggestion: function(data) { return ["<p>", data.album, " by ", data.artist, "</p>"].join(""); }
+            }            
+        },
+        {
+            name: 'tracks',
+            displayKey: 'track',
+            source: tracksSearch.ttAdapter(),
+            templates: {
+                header: '<h3>Tracks</h3>',
+                suggestion: function(data) { return ["<p>", data.track, " from ", data.album, "</p>"].join(""); }            
+            }
+        }
+    ]);
         
     // Expander util    
     var box = $(".expandable");
@@ -108,11 +104,10 @@ $(function () {
                     if(el.hasClass("more")) parent.removeClass("collapsed");
                     if(el.hasClass("less")) parent.addClass("collapsed");
                 });
-
             }   
         });
-    }
-    
+    } 
+
     // Notifier util
     var box = $(".notifier");
     if(box.length > 0)
@@ -126,7 +121,7 @@ $(function () {
             });
             return false;
         }
-        
+
         function getNotifications()
         {
             $.ajax({
@@ -139,8 +134,9 @@ $(function () {
                 }
             });
         }
+        
         setTimeout(getNotifications, 300);     
-    }    
+    }
     
     // Automagic charting
     tmt.pie = function(key, d)
@@ -190,7 +186,6 @@ $(function () {
 		    	zIndex: 0
 		    }]
         });
-    };      
-    
-        
+    };
+
 });

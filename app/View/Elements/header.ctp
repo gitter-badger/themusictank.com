@@ -49,9 +49,8 @@
 </div>
 
 <section class="search fixable">
-    <form action="/search/" method="get">
-        <i class="fa fa-search"></i>
-        <input class="typeahead tt-input" type="search" name="q" value="" placeholder="<?php echo __("Search"); ?>..." />
+    <form action="/search/" method="get">        
+        <input class="typeahead" type="text" name="q" value="" >        
         <input type="submit" />
     </form>
 </section>

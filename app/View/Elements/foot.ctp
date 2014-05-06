@@ -7,7 +7,7 @@
         </ul>
         <ul class="nav nav-pills website">   
             <li><?php echo $this->Html->link(__("About"), array('controller' => 'pages', 'action' => 'about')); ?></li>   
-            <li><?php echo $this->Html->link(__("Legal"), array('controller' => 'pages', 'action' => 'legal')); ?></li>
+            <li><?php echo $this->Html->link(__("Legal"), array(' controller' => 'pages', 'action' => 'legal')); ?></li>
             <li class="copyright">
                 &copy; 1999 - <?php echo date("Y"); ?> <?php echo __("The Music Tank"); ?>
             </li>

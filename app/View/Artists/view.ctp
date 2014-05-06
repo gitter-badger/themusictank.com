@@ -1,7 +1,7 @@
 <nav class="sub-menu">
-    <ul class="horizontal">
-        <li><?php echo $this->Html->link($artist["name"], array('controller' => 'artists', 'action' => 'view', $artist["slug"])); ?></li>
-    </ul>
+    <ol class="breadcrumb">
+        <li class="active"><?php echo $this->Html->link($artist["name"], array('controller' => 'artists', 'action' => 'view', $artist["slug"])); ?></li>
+    </ol>
 </nav>
 
 <article class="heading artist-profile">

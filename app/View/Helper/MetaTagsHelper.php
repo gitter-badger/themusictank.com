@@ -39,10 +39,11 @@ class MetaTagsHelper extends AppHelper {
             ))
         );
         
+        /*
         if(Configure::read('debug') > 0)
         {
             $metas[] = $this->Html->css('cakestyles');
-        }
+        }*/
         
         $this->_metas = $metas;
     }

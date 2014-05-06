@@ -4,9 +4,11 @@
 	//box-shadow: 0 1px 3px rgba(0, 0, 0, 0.7);
 	div {
 		font-size:0.85em;
-		color:#dedede;
+		color:#fff;
 		overflow:hidden;
 		min-height: 2px;
+		font-size: 6em;
+		text-shadow:0 1px 1px #333;
 	}
 	.like {
 		background:#7da0db;
@@ -24,21 +26,25 @@
 
  .enjoyment-chart.big {
  	height:150px;
- 	width:150px;
+ 	width:120px;
  	.enjoyment-chart;
  }
+
 
 .enjoyment-chart.horizontal {
 	div {
 		float:left;
-	}
-	.average {
 		font-size:1.2em;
-		margin-right:.5em;
+		padding:0;
 		min-width:40px;
+		text-align: center;
 	}
 	.enjoyment {
 		float:none;
+	}
+	.average {		
+		background:#ccc;
+		line-height: 28px;
 	}
 
 }
@@ -69,8 +75,7 @@
 			position:absolute;
 			bottom:0;
 			color:#ccc;
-			font-size:11px;
-			width:2000px;		
+			font-size:11px;	
 			list-style-type: none;				
 			li {
 				overflow: hidden;
@@ -83,7 +88,6 @@
 			position:absolute;
 			top:0;
 			left:0;
-			width:2000px;
 			height:600px;
 			font-size:.9em;
 			color:#ccc;
@@ -100,13 +104,14 @@
 				float:left;
 				height:600px;
 				vertical-align: top;
+				overflow: hidden;
 
 				//padding:1em 10% 0 10%;				
 				a {
-					/*
-					background-color:rgba(255,255,255,.5);					
-		 			//position: relative;
-		 			padding: 1em;*/
+	 				position: relative;
+	 				top:1em;
+	 				left:1em;
+	 				padding:0.5em;
 				}
 
 			 	&:hover {
@@ -120,10 +125,24 @@
 		 				position: absolute;
 		 				top:1em;
 		 				left:1em;
+		 				text-decoration: none;
+		 				color:#fff;
 		 			}
 			 	}
 			}	
-
+		}
+	}
+	.tracks, .times {
+		width:2000px;
+	}
+	&.long {
+		.tracks, .times {
+			width:4000px;
+		}
+	}
+	&.short {
+		.tracks, .times {
+			width:1000px;
 		}
 	}
 }

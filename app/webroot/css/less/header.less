@@ -6,7 +6,7 @@ body {
 .navbar {
     background:#fff;
     box-shadow: 0 1px 1px 0 rgba(0,0,0,.2);
-    z-index: 2;
+    z-index: 3;
 
     .picture img {
         height: 40px; 
@@ -23,7 +23,7 @@ body {
     width:100%;
     position:fixed;
     top:50px;
-    z-index: 1;
+    z-index: 2;
 }
 
 
@@ -104,10 +104,6 @@ filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#00eeeeee', e
         clear:right;
         min-height: 364px;
 
-        time {
-            color:#666;
-        }
-
         .track-context {
             position:relative;
             ol {            
@@ -165,6 +161,7 @@ filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#00eeeeee', e
             vertical-align: top;
             border-radius: 3px;
             overflow:hidden;
+            text-align: center;
 
             .enjoyment-chart {
                 float:left;
@@ -172,10 +169,19 @@ filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#00eeeeee', e
                 margin-right:1em;
             }
 
+            h3 {
+                margin:0;
+                font-size:1.3em;
+                color:#999;
+            }
+
             ul {
-                font-size:1.8em;
+                font-size:1.5em;
                 list-style-type:none;
-                margin-left:166px;
+                margin-left:117px;
+                padding:0;
+                text-align:center;
+
                 .positive {
                     color:green;
                 }
@@ -187,15 +193,19 @@ filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#00eeeeee', e
                 }
                 li {
                     float:left;
-                    width:40%;
+                    width:20%;
                     margin:0 5%;
-                    text-align:center;
+                    overflow: hidden;
+                    i {
+                        display:block;
+                    }
                 }
                 li.average {
-                    width:90%;
                     float:none;
                     font-size:2em;
-                    height:72px;
+                    height:50px;
+                    margin-top:10px;
+                    width   :auto;            
                 }
             }
 
@@ -237,6 +247,30 @@ filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#eeeeee', end
             width:50%;      
             margin:auto;
         }       
+    }
+}
+
+
+
+.track-profile,
+.album-profile {
+    aside {
+        h1 {
+            margin-bottom:0;
+        }
+        time {
+            display:block;
+            margin-bottom:10px;         
+        }
+    }
+    .thumbnail {
+        float: left;
+        width: 30%;
+        margin:6%;
+
+        img {
+            width:100%;
+        }
     }
 }
 

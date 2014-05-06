@@ -137,12 +137,27 @@ class User extends AppModel
                 
         return $this->find("all", array("conditions" => array("User.id" => $filtered), "fields" => array("User.*")));
     }
+
+    public function getCommonSubscriberAlbumReview($userId, $albumId)
+    {
+        $idList     = $this->UserFollowers->getSubscriptions($userId, true);
+        $filtered   = $this->SubscribersAlbumReviewSnapshot->getUserIdsWhoReviewed($albumId, $idList);
+                
+        return $this->find("all", array("conditions" => array("User.id" => $filtered), "fields" => array("User.*")));
+    }
     
     public function getReviewUserSummary($trackId)
     {
         $filtered = $this->SubscribersTrackReviewSnapshot->getUserIdsWhoReviewed($trackId);
         return $this->find("all", array("conditions" => array("User.id" => $filtered), "fields" => array("User.*")));
     }
+
+    public function getAlbumReviewUserSummary($albumId)
+    {
+        $filtered = $this->SubscribersAlbumReviewSnapshot->getUserIdsWhoReviewed($albumId);
+        return $this->find("all", array("conditions" => array("User.id" => $filtered), "fields" => array("User.*")));
+    }
+
     
     public function getUncachedSnapshot($userId)
     {            

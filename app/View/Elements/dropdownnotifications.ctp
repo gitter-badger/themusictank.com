@@ -17,4 +17,5 @@
     <li class="view"><?php echo $this->Html->link(__("View all notifications"), array('controller' => 'users', 'action' => 'notifications')); ?></li>
 </ul>
 
+<?php // <span class="badge">42</span ?>
 <?php echo $this->Html->link( $newOnes, array('controller' => 'users', 'action' => 'notifications')); ?>

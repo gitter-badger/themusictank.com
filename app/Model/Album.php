@@ -31,34 +31,36 @@ class Album extends OEmbedable
     {
         $syncValues = $this->find("first", array(
             "conditions" => array("Album.slug" => $slug),
-            "fields"    => array("Album.id", "Album.name", "RdioAlbum.*", "Artist.name", "LastfmAlbum.id", "LastfmAlbum.lastsync", "AlbumReviewSnapshot.*")
+            "fields"    => array("Album.id", "Album.name", "RdioAlbum.*", "Artist.name", "LastfmAlbum.id", "LastfmAlbum.lastsync", "AlbumReviewSnapshot.*", "RdioAlbum.*")
         ));
+
+        if(count($syncValues)) {
+            $this->RdioAlbum->data = $syncValues;        
+            $this->RdioAlbum->updateCached();
+                          
+            $this->LastfmAlbum->data = $syncValues;        
+            $this->LastfmAlbum->updateCached();
+                   
+            $this->AlbumReviewSnapshot->data = $syncValues;    
+            $this->AlbumReviewSnapshot->updateCached();
+                   
+            $data = $this->findBySlug($slug);
+            
+            if($addCurrentUser)
+            {   
+                $user = new User();
+                $data["User"]["id"] = CakeSession::read('Auth.User.User.id');
                 
-        $this->RdioAlbum->data = $syncValues;        
-        $this->RdioAlbum->updateCached();
-                      
-        $this->LastfmAlbum->data = $syncValues;        
-        $this->LastfmAlbum->updateCached();
-               
-        $this->AlbumReviewSnapshot->data = $syncValues;    
-        $this->AlbumReviewSnapshot->updateCached();
-               
-        $data = $this->findBySlug($slug);
-        
-        if($addCurrentUser)
-        {   
-            $user = new User();
-            $data["User"]["id"] = CakeSession::read('Auth.User.User.id');
+                $user->SubscribersAlbumReviewSnapshot->data    = $data;
+                $data["SubscribersAlbumReviewSnapshot"]        = $user->SubscribersAlbumReviewSnapshot->updateCached();        
+                
+                $user->UserAlbumReviewSnapshot->data    = $data;
+                $data["UserAlbumReviewSnapshot"]        = $user->UserAlbumReviewSnapshot->updateCached();            
+            }
             
-            $user->SubscribersAlbumReviewSnapshot->data    = $data;
-            $data["SubscribersAlbumReviewSnapshot"]        = $user->SubscribersAlbumReviewSnapshot->updateCached();        
-            
-            $user->UserAlbumReviewSnapshot->data    = $data;
-            $data["UserAlbumReviewSnapshot"]        = $user->UserAlbumReviewSnapshot->updateCached();            
+            $this->data = $data;
+            return $data;
         }
-        
-        $this->data = $data;
-        return $data;
     }
             
     /**

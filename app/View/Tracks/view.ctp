@@ -1,9 +1,9 @@
 <nav class="sub-menu">
-    <ul class="horizontal">
-        <li><?php echo $this->Html->link($artist["name"], array('controller' => 'artists', 'action' => 'view', $artist["slug"])); ?> \ </li>
-        <li>"<?php echo $this->Html->link($album["name"], array('controller' => 'albums', 'action' => 'view', $album["slug"])); ?>" \ </li>
-        <li>"<?php echo $this->Html->link($track["title"], array('controller' => 'tracks', 'action' => 'view', $track["slug"])); ?>"</li>
-    </ul>
+    <ol class="breadcrumb">
+        <li><?php echo $this->Html->link($artist["name"], array('controller' => 'artists', 'action' => 'view', $artist["slug"])); ?></li>
+        <li><?php echo $this->Html->link($album["name"], array('controller' => 'albums', 'action' => 'view', $album["slug"])); ?></li>
+        <li class="active">"<?php echo $this->Html->link($track["title"], array('controller' => 'tracks', 'action' => 'view', $track["slug"])); ?>"</li>
+    </ol>
 </nav>
 
 <article class="heading track-profile">
@@ -44,33 +44,43 @@
             </ol>
             <div class="vertical-vignette"></div>            
         </div>
-        <ul>
-            <li>
-                <?php if(isset($previousTrack)) : ?>
-                    <?php echo $this->Html->link($previousTrack["title"], array('controller' => 'tracks', 'action' => 'view', $previousTrack["slug"])); ?>
-                <?php endif; ?>
-            </li>
 
-            <li>
-                <?php if(isset($nextTrack)) : ?>
-                    <?php echo $this->Html->link($nextTrack["title"], array('controller' => 'tracks', 'action' => 'view', $nextTrack["slug"])); ?>
-                <?php endif; ?>
-            </li>
+        <ul class="pager">
+            <?php if(isset($previousTrack)) : ?>
+                <li class="previous"><?php echo $this->Html->link("&larr; " . $previousTrack["title"], array('controller' => 'tracks', 'action' => 'view', $previousTrack["slug"]), array('escape' => false)); ?></li>
+            <?php endif; ?>
+            <?php if(isset($nextTrack)) : ?>
+                <li class="next"><?php echo $this->Html->link($nextTrack["title"] . " &rarr;", array('controller' => 'tracks', 'action' => 'view', $nextTrack["slug"]), array('escape' => false)); ?></li>                
+            <?php endif; ?>
         </ul>
-
     </aside>
 
     <div class="statistics">
 
         <section class="tankers">
-            <?php echo $this->Chart->getBigPie("track", $track["slug"], $trackReviewSnapshot); ?>
+            <?php echo $this->Chart->getBigPie("track", $artist["slug"], $trackReviewSnapshot); ?>
             <h3><?php echo __("General"); ?></h3>  
             <ul>
                 <li class="average"><?php echo $this->Chart->formatScore($trackReviewSnapshot["score_snapshot"]); ?></li>
-                <li class="enjoyment"><?php echo $this->Chart->formatPct($trackReviewSnapshot["liking_pct"]); ?><br>:)</li>
-                <li class="displeasure"><?php echo $this->Chart->formatPct($trackReviewSnapshot["disliking_pct"]); ?><br>:(</li>
-            </ul>
+                <li class="enjoyment"><?php echo $this->Chart->formatPct($trackReviewSnapshot["liking_pct"]); ?><i class="fa fa-smile-o"></i></li>
+                <li class="neutral"><?php echo $this->Chart->formatPct($trackReviewSnapshot["neutral_pct"]); ?><i class="fa fa-meh-o"></i></li>
+                <li class="displeasure"><?php echo $this->Chart->formatPct($trackReviewSnapshot["disliking_pct"]); ?><i class="fa fa-frown-o"></i></li>
+            </ul>  
         </section>
+
+        <?php if(isset($userArtistReviewSnapshot)) : ?>
+            <section class="subscribers">
+                <h3><?php echo __("Subscriptions"); ?></h3>  
+                <?php echo $this->Chart->getBigPie("track", $artist["slug"], $userArtistReviewSnapshot); ?>
+                <ul>
+                    <li class="average"><?php echo $this->Chart->formatScore($userArtistReviewSnapshot["score_snapshot"]); ?></li>
+                    <li class="enjoyment"><?php echo $this->Chart->formatPct($userArtistReviewSnapshot["liking_pct"]); ?><i class="fa fa-smile-o"></i></li>
+                    <li class="neutral"><?php echo $this->Chart->formatPct($userArtistReviewSnapshot["neutral_pct"]); ?><i class="fa fa-meh-o"></i></li>
+                    <li class="displeasure"><?php echo $this->Chart->formatPct($userArtistReviewSnapshot["disliking_pct"]); ?><i class="fa fa-frown-o"></i></li>
+                </ul>
+            </section>
+        <?php endif; ?>
+
 
         <?php if(isset($subsAlbumReviewSnapshot)) : ?>
         <section class="subscribers">
@@ -79,8 +89,9 @@
                 <?php echo $this->Chart->getBigPie("track", $track["slug"], $subsTrackReviewSnapshot); ?>
                 <ul>
                     <li class="average"><?php echo $this->Chart->formatScore($subsTrackReviewSnapshot["score_snapshot"]); ?></li>
-                    <li class="enjoyment"><?php echo $this->Chart->formatPct($subsTrackReviewSnapshot["liking_pct"]); ?><br>:)</li>
-                    <li class="displeasure"><?php echo $this->Chart->formatPct($subsTrackReviewSnapshot["disliking_pct"]); ?><br>:(</li>
+                    <li class="enjoyment"><?php echo $this->Chart->formatPct($subsTrackReviewSnapshot["liking_pct"]); ?><i class="fa fa-smile-o"></i></li>
+                    <li class="neutral"><?php echo $this->Chart->formatPct($subsTrackReviewSnapshot["neutral_pct"]); ?><i class="fa fa-meh-o"></i></li>
+                    <li class="displeasure"><?php echo $this->Chart->formatPct($subsTrackReviewSnapshot["disliking_pct"]); ?><i class="fa fa-frown-o"></i></li>
                 </ul>                
             <?php else : ?>
                 <p><?php echo __("None of the people you are subscribed to have reviewed this track yet."); ?></p>
@@ -95,8 +106,9 @@
                 <?php echo $this->Chart->getBigPie("track", $track["slug"], $userTrackReviewSnapshot); ?>
                 <ul>
                     <li class="average"><?php echo $this->Chart->formatScore($userTrackReviewSnapshot["score_snapshot"]); ?></li>
-                    <li class="enjoyment"><?php echo $this->Chart->formatPct($userTrackReviewSnapshot["liking_pct"]); ?><br>:)</li>
-                    <li class="displeasure"><?php echo $this->Chart->formatPct($userTrackReviewSnapshot["disliking_pct"]); ?><br>:(</li>
+                    <li class="enjoyment"><?php echo $this->Chart->formatPct($userTrackReviewSnapshot["liking_pct"]); ?><i class="fa fa-smile-o"></i></li>
+                    <li class="neutral"><?php echo $this->Chart->formatPct($userTrackReviewSnapshot["neutral_pct"]); ?><i class="fa fa-meh-o"></i></li>
+                    <li class="displeasure"><?php echo $this->Chart->formatPct($userTrackReviewSnapshot["disliking_pct"]); ?><i class="fa fa-frown-o"></i></li>
                 </ul>
             <?php else : ?>
                 <p><?php echo __("You have not reviewed this track yet."); ?></p>
@@ -108,61 +120,65 @@
 
 <section class="recent-reviewers">
     <h2><?php echo __("Recent Reviewers"); ?></h2>
-    <?php if(count($usersWhoReviewed > 0)) : ?>
-        <section class="tankers">
-        <ul>
-            <?php foreach($usersWhoReviewed as $user) : ?>
-            <li>
-                <?php echo $this->Html->link(
-                        array_key_exists("image", $user["User"]) && !is_null($user["User"]["image"]) ? 
-                            $this->Html->image($user["User"]["image"], array("alt" => $user["User"]["firstname"] . " " . $user["User"]["lastname"])) 
-                            : $user["User"]["firstname"] . " " . $user["User"]["lastname"]
-                        ,
-                        array('controller' => 'tracks', 'action' => 'by_user', $track["slug"], $user["User"]["slug"]),
-                        array("escape" => false)
-                ); ?>                
-            </li>
-            <?php endforeach; ?>
-        </ul>
-        </section>
-    <?php endif; ?>
-
-    <section class="subscriptions">
-        <?php if(isset($subsWhoReviewed) && count($subsWhoReviewed > 0)) : ?>
-            <?php if(count($subsWhoReviewed) > 0) : ?>
-                <ul>
-                    <?php foreach($subsWhoReviewed as $idx => $user) : ?>
-                    <li>
-                        <?php
-                        $name = $user["User"]["firstname"] . " " . $user["User"]["lastname"];
-                        echo $this->Html->link(
-                                array_key_exists("image", $user["User"]) && !is_null($user["User"]["image"]) ? 
-                                    $this->Html->image($user["User"]["image"], array("alt" => $name)) 
-                                    : $name
-                                ,
-                                array('controller' => 'tracks', 'action' => 'by_user', $track["slug"], $user["User"]["slug"]),
-                                array("escape" => false)
-                        ); ?>                
-                    </li>
-                    <?php if($idx >= 3 && (count($subsWhoReviewed) - 4 > 0)) :  ?>
-                        <li class="others"><?php echo sprintf(__("+ %s others"), count($subsWhoReviewed) - 4); ?></li>
-                    <?php break; endif; ?>
-                    <?php endforeach; ?>
-                </ul>                
-                <p>
-                    <?php echo $this->Html->link(sprintf(__("%s of the people you are subscribed to reviewed %s."), count($subsWhoReviewed), $track["title"]),
-                        array('controller' => 'tracks', 'action' => 'by_subscriptions', $track["slug"])); 
-                    ?>
-                </p>                
-            <?php else : ?>
-                <p><?php echo __("None of your subscriptions have reviewed this track."); ?></p>
-            <?php endif; ?>
+    <div class="container container-fluid">
+        <section class="col-xs-12 col-md-4 tankers">
+        <?php if(count($usersWhoReviewed) > 0) : ?>
+            <ul>
+                <?php foreach($usersWhoReviewed as $user) : ?>
+                <li>
+                    <?php echo $this->Html->link(
+                            array_key_exists("image", $user["User"]) && !is_null($user["User"]["image"]) ? 
+                                $this->Html->image($user["User"]["image"], array("alt" => $user["User"]["firstname"] . " " . $user["User"]["lastname"])) 
+                                : $user["User"]["firstname"] . " " . $user["User"]["lastname"]
+                            ,
+                            array('controller' => 'tracks', 'action' => 'by_user', $track["slug"], $user["User"]["slug"]),
+                            array("escape" => false)
+                    ); ?>                
+                </li>
+                <?php endforeach; ?>
+            </ul>
+        <?php else : ?>
+            <p><?php echo __("Be the first to review this track."); ?></p>
         <?php endif; ?>
-    </section>
+        </section>
 
-    <section class="you"> 
-        <?php echo $this->Html->link(__("Review track"), array('controller' => 'player', 'action' => 'play', $track["slug"])); ?>
-    </section>
+        <section class="col-xs-12 col-md-4 subscriptions">
+            <?php if(isset($subsWhoReviewed) && count($subsWhoReviewed > 0)) : ?>
+                <?php if(count($subsWhoReviewed) > 0) : ?>
+                    <ul>
+                        <?php foreach($subsWhoReviewed as $idx => $user) : ?>
+                        <li>
+                            <?php
+                            $name = $user["User"]["firstname"] . " " . $user["User"]["lastname"];
+                            echo $this->Html->link(
+                                    array_key_exists("image", $user["User"]) && !is_null($user["User"]["image"]) ? 
+                                        $this->Html->image($user["User"]["image"], array("alt" => $name)) 
+                                        : $name
+                                    ,
+                                    array('controller' => 'tracks', 'action' => 'by_user', $track["slug"], $user["User"]["slug"]),
+                                    array("escape" => false)
+                            ); ?>                
+                        </li>
+                        <?php if($idx >= 3 && (count($subsWhoReviewed) - 4 > 0)) :  ?>
+                            <li class="others"><?php echo sprintf(__("+ %s others"), count($subsWhoReviewed) - 4); ?></li>
+                        <?php break; endif; ?>
+                        <?php endforeach; ?>
+                    </ul>                
+                    <p>
+                        <?php echo $this->Html->link(sprintf(__("%s of the people you are subscribed to reviewed %s."), count($subsWhoReviewed), $track["title"]),
+                            array('controller' => 'tracks', 'action' => 'by_subscriptions', $track["slug"])); 
+                        ?>
+                    </p>                
+                <?php else : ?>
+                    <p><?php echo __("None of your subscriptions have reviewed this track."); ?></p>
+                <?php endif; ?>
+            <?php endif; ?>
+        </section>
+
+        <section class="col-xs-12 col-md-4 you"> 
+            <?php echo $this->Html->link(__("Review track"), array('controller' => 'player', 'action' => 'play', $track["slug"])); ?>
+        </section>
+    </div>
 </section>
 
 <section class="track-player">
@@ -170,9 +186,9 @@
     <?php echo $this->element("player"); ?>
 </section>
 
+<?php echo $this->Disqus->get('/artists/view/'.$artist["slug"].'/', $artist["name"]); ?>
+
 <p class="credits">
     <?php echo __("Track description courtesy of"); ?> <?php echo $this->Html->link("Last.fm", "http://www.last.fm/", array("target" => "_blank")); ?>. 
     <?php echo __("It was last updated on"); ?> <?php echo date("F j, g:i a", $lastfmTrack["lastsync"]); ?>. 
 </p>
-
-<?php echo $this->Disqus->get('/artists/view/'.$artist["slug"].'/', $artist["name"]); ?>

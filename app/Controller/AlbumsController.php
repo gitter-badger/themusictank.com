@@ -38,17 +38,24 @@ class AlbumsController extends AppController {
         $this->set("oembedLink",    $this->Album->getOEmbedUrl());
             
         // Associate review snapshots.
-        $this->set("albumReviewSnapshot",  $data["AlbumReviewSnapshot"]);     
+        $this->set("albumReviewSnapshot",  $data["AlbumReviewSnapshot"]);
+        $this->set("usersWhoReviewed", $this->User->getAlbumReviewUserSummary($data["Album"]["id"]));
 
         if($isLoggedIn)
         {
             $this->set("userAlbumReviewSnapshot", $data["UserAlbumReviewSnapshot"]); 
             $this->set("subsAlbumReviewSnapshot", $data["SubscribersAlbumReviewSnapshot"]); 
+            $this->set("subsWhoReviewed", $this->User->getCommonSubscriberAlbumReview($this->getAuthUserId(), $data["Album"]["id"]));
         }
 
         $this->Album->addTracksSnapshots();
         $this->set("tracks", $this->Album->data["Tracks"]);
-                        
+                    
+
+
+
+        
+
         // Set meta information
         $this->setPageTitle(array($data["Album"]["name"], $data["Artist"]["name"]));
         $this->setPageMeta(array(

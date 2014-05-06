@@ -53,10 +53,17 @@
         $albumLength += $track["duration"];
     }
     
+    $lengthClass = "";
+    if($albumLength > 60*45) {
+        $lengthClass = "long";
+    }elseif($albumLength < 60*30) {
+        $lengthClass = "short";
+    }
+
     $isLogged = $this->Session->read("Auth.User.User.id");
 ?>
 
-<section class="timeline-chart album-chart <?php echo $isLogged ? 'logged' : 'not-logged' ?> graph-<?php echo $album["slug"]; ?>">               
+<section class="timeline-chart album-chart <?php echo $lengthClass; ?> <?php echo $isLogged ? 'logged' : 'not-logged' ?> graph-<?php echo $album["slug"]; ?>">               
     <div class="viewport">
         <canvas></canvas>       
 

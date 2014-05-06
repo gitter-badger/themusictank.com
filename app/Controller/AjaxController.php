@@ -223,7 +223,7 @@ class AjaxController extends AppController {
         $modelName = substr(ucfirst($model), 0, -1);
         $this->loadModel($modelName);
         
-        $instance = new $modelName();        
+        $instance = new $modelName();                
         $instance->getUpdatedSetBySlug($slug);    
         
         return $instance;

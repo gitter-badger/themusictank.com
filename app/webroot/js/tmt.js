@@ -137,7 +137,25 @@ $(function() {
         
         setTimeout(getNotifications, 300);     
     }
+
+    // map util
+    var box = $("#mapCanvas");
+    if(box.length > 0)
+    {
+        var mapOptions = {
+            center: new google.maps.LatLng(45.5000, -73.5667),
+            zoom: 8,
+            disableDefaultUI: true,
+            draggable: false,
+            disableDoubleClickZoom: false,
+            scrollwheel : false,
+            mapTypeId: google.maps.MapTypeId.ROADMAP
+        },
+        map = new google.maps.Map(box.get(0), mapOptions);
+
+    }
     
+
     // Automagic charting
     tmt.pie = function(key, d)
     {   

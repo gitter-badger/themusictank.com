@@ -49,8 +49,10 @@
 </div>
 
 <section class="search fixable">
-    <form action="/search/" method="get">        
-        <input class="typeahead" type="text" name="q" value="" >        
-        <input type="submit" />
-    </form>
+    <div class="container">
+        <form action="/search/" method="get">        
+            <input class="typeahead" type="text" name="q" value="" placeholder="Search across everything" />
+            <input type="submit" />
+        </form>
+    </div>
 </section>

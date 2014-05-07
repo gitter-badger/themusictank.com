@@ -206,8 +206,8 @@ class ReviewFrame extends AppModel
             if($skippedFrames > 0)
             {
                 $curve[$idx] = array(                    
-                    "avg" => round($avg                / $skippedFrames, 3),
-                    "calc" => round($calc               / $skippedFrames, 3)
+                    "avg" => round($avg  / $skippedFrames, 3),
+                    "calc" => round($calc / $skippedFrames, 3)
                 );
             }
         }       

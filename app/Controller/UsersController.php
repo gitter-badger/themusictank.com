@@ -28,7 +28,7 @@ class UsersController extends AppController {
      */
     public function notifications()
     {                
-        $notifications = $this->Paginator->paginate('Notifications', array('user_id' => $this->getAuthUserId()));        
+        $notifications = $this->Paginator->paginate('Notifications', array('user_id' => $this->getAuthUserId()));
         $this->set('notifications', $this->User->Notifications->associateRelated($notifications));
         $this->setPageTitle(array(__("Recent notifications")));
     }    

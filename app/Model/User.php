@@ -94,7 +94,7 @@ class User extends AppModel
                 if($this->UserAchievements->grant($userId, $achievementId))
                 {
                     $msg = sprintf(__("Achievement unlocked: \"%s\"!"), $achievementName);
-                    return $this->notify($userId, Notifications::TYPE_ACHIEVEMENT, $msg);
+                    return $this->notify($userId, Notifications::TYPE_ACHIEVEMENT, $msg, $achievementId);
                 }
             }
         }

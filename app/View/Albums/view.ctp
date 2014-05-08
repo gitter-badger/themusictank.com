@@ -10,7 +10,7 @@
     <article class="heading album-profile">
 
         <div class="thumbnail">
-            <?php echo $this->Html->image( $this->App->getImageUrl($album), array("alt" => $album["name"])); ?>                                
+            <?php echo $this->Html->image( $this->App->getImageUrl($album, true), array("alt" => $album["name"])); ?>                                
         </div>
 
         <aside>

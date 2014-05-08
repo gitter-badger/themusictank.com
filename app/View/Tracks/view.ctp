@@ -10,7 +10,7 @@
 
     <article class="heading track-profile">
         <div class="thumbnail">
-            <?php echo $this->Html->image($album["image"], array("alt" => $album["name"])); ?>
+            <?php echo $this->Html->image( $this->App->getImageUrl($album, true), array("alt" => $album["name"])); ?>       
         </div>
 
         <aside>
@@ -29,14 +29,14 @@
             <div class="track-context">
                 <?php if(isset($previousTrack)) : ?>
                 <ol start="<?php echo $previousTrack["track_num"]; ?>">
-                <?php else : ?>
-                <ol start="<?php echo $track["track_num"]; ?>">
+                <?php else : ?>                    
+                    <ol class="<?php echo isset($nextTrack) ? "begin" : "end" ?>" start="<?php echo $track["track_num"]; ?>">
                 <?php endif; ?>
-                    <li>
                     <?php if(isset($previousTrack)) : ?>
+                    <li>
                         <?php echo $previousTrack["title"]; ?>
-                    <?php endif; ?>
                     </li>
+                    <?php endif; ?>
                     <li><?php echo $track["title"]; ?></li>
                     <li>
                     <?php if(isset($nextTrack)) : ?>
@@ -44,7 +44,6 @@
                     <?php endif; ?>
                     </li>
                 </ol>
-                <div class="vertical-vignette"></div>            
             </div>
 
             <ul class="pager">

@@ -22,10 +22,10 @@ class MetaTagsHelper extends AppHelper {
             '<noscript><meta http-equiv="refresh" content="0; URL=/pages/requirements/" /></noscript>',
 
             $this->Html->css(array(
-                "//netdna.bootstrapcdn.com/bootstrap/3.1.1/css/bootstrap.min.css",
-                "//netdna.bootstrapcdn.com/bootstrap/3.1.1/css/bootstrap-theme.min.css",
-                "//fonts.googleapis.com/css?family=Open+Sans", 
-                "/fonts/fontawesome/css/font-awesome.min.css",
+              //  "//netdna.bootstrapcdn.com/bootstrap/3.1.1/css/bootstrap.min.css",
+              //  "//netdna.bootstrapcdn.com/bootstrap/3.1.1/css/bootstrap-theme.min.css",
+              //  "//fonts.googleapis.com/css?family=Open+Sans", 
+               // "/fonts/fontawesome/css/font-awesome.min.css",
                 "styles.min"
             )),
 

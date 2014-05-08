@@ -8,7 +8,7 @@
 
 <section class="map">
     <article>
-        We are based in <a href="https://goo.gl/maps/7NQ1r" rel="nofollow" target="_blank">Montreal</a>
+        * Based in <a href="https://goo.gl/maps/7NQ1r" rel="nofollow" target="_blank">Montreal</a>
     </article>
     <div id="mapCanvas"></div>
 </section>

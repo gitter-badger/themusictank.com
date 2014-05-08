@@ -18,7 +18,12 @@
 							<h3 class="panel-title"><?php echo $this->Html->link($follower["User"]["firstname"] . " " . $follower["User"]["lastname"], array('controller' => 'profiles', 'action' => 'view', $follower["User"]["slug"])); ?></h3>						
 						</div>
 						<div class="panel-body"> 
-						    <?php echo $this->Html->image($this->App->getImageUrl($user), array("class" => "img-circle", "alt" => $user["firstname"] . " " . $user["lastname"], "title" => $user["firstname"] . " " . $user["lastname"])); ?>   
+							<?php  echo $this->Html->link(
+			                        $this->Html->image($this->App->getImageUrl($user), array("class" => "img-circle", "alt" => $user["firstname"] . " " . $user["lastname"], "title" => $user["firstname"] . " " . $user["lastname"])),
+			                        array('controller' => 'profiles', 'action' => 'view', $follower["User"]["slug"]),
+			                        array('escape' => false)
+			                ); ?>
+
 						</div>						
 						<?php if($follower["User"]["id"] !== $currentUserId) : ?>
 						<ul class="list-group">

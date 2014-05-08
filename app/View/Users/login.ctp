@@ -1,4 +1,4 @@
-<div class="container">
+<div class="container container-fluid">
     <?php echo $this->Session->flash('auth'); ?>
 
     <h2><?php echo __("Access your account"); ?></h2>
@@ -41,7 +41,7 @@
 
                 </div>
                 <ul class="list-group">
-                    <li class="list-group-item"><?php echo $this->Html->link("Create a new TMT account", array('controller' => 'users', 'action' => 'create', '?' => array("rurl" => $redirectUrl))); ?></li>
+                    <li class="list-group-item"><?php echo $this->Html->link( '<span class="fa fa-certificate"></span> ' . __("Create a new TMT account"), array('controller' => 'users', 'action' => 'create', '?' => array("rurl" => $redirectUrl)), array('escape' => false)); ?></li>
                 </ul>
             </div>
 

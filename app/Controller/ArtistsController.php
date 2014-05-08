@@ -24,7 +24,7 @@ class ArtistsController extends AppController {
     {                
         $this->set("popularArtists",    $this->Artist->findPopular(8));
         $this->set("artistCategories",  $this->Artist->getCategories());        
-        $this->set("newReleases", $this->Artist->Albums->getNewReleases(5));
+        $this->set("newReleases", $this->Artist->Albums->getNewReleases(8));
                         
         $this->setPageTitle(__("Artist list"));        
         $this->setPageMeta(array(

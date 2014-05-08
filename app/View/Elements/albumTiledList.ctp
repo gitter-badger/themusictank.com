@@ -1,4 +1,4 @@
- <div class="row tiled-list albums">
+ <div class="row albums">
     <?php foreach($albums as $album) : 
         $albumData = null;
         $artistData = null;
@@ -35,4 +35,4 @@
             <?php endif; ?>
         </div>
     <?php endforeach; ?>
-</ul>
+</div>

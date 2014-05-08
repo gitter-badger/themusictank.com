@@ -1,16 +1,28 @@
-<?php echo $this->element('profilesmenu'); ?>
+<?php
+    $currentUserId = $this->Session->read('Auth.User.User.id');  
+?>
+<div class="container container-fluid">
 
-<h2><?php echo __("Unlocked achievements"); ?></h2>
+	<?php echo $this->element('profilesmenu'); ?>
 
-<ul class="achievements">
-    
-    <?php foreach($achievements as $achievement) : ?>
-    
-    <li class="achievement"> 
-        <h3><?php echo $achievement["Achievement"]["name"]; ?></h3>
-        <p><?php echo $achievement["Achievement"]["description"]; ?></p>
-        <p><?php echo __("You have unlocked this on "); ?> <?php echo $achievement["UserAchievements"]["created"]; ?></p>
-    </li>
-    <?php endforeach; ?>
-    
-</ul>
+	<h2><?php echo __("Unlocked achievements"); ?></h2>
+	<p class="lead"><?php echo sprintf(__("The list of all achievements unlocked by %s."), $user["firstname"] . " " . $user["lastname"]); ?></p>
+
+	<div class="row achievements">
+	    <?php foreach($achievements as $achievement) : ?>
+	        <div class="col-xs-12 col-md-3">
+				<div class="panel panel-default">
+					<div class="panel-heading">
+						<h3 class="panel-title"><?php echo $achievement["Achievement"]["name"]; ?></h3>
+					</div>
+					<div class="panel-body">
+                        <blockquote><?php echo $achievement["Achievement"]["description"]; ?></blockquote>
+					</div>
+					<div class="panel-footer">
+        				<p><?php echo __("Unlocked on "); ?> <?php echo date("m/d/Y", $achievement["UserAchievements"]["created"]); ?></p>
+					</div>
+				</div>
+			</div>
+	    <?php endforeach; ?>
+	</div>
+</div>

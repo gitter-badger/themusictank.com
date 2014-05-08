@@ -115,6 +115,9 @@ class Album extends OEmbedable
         unset($data["metacritic_score"]);
         unset($data["snapshot_ppf"]);
      
+        $data = Hash::insert($data, "Album.title", $this->getData("Album.name"));
+        $data = Hash::insert($data, "Album.slug", $this->getData("Album.slug"));
+
         return parent::toOEmbed(array_merge($additionalData, $data));
     }
 

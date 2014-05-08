@@ -1,5 +1,4 @@
 <?php $newOnes = 0; ?>
-
 <ul class="notices">
     <?php if(isset($notifications)) :  ?>
         <?php foreach($notifications as $notification) : ?>    
@@ -18,4 +17,4 @@
 </ul>
 
 <?php // <span class="badge">42</span ?>
-<?php echo $this->Html->link( $newOnes, array('controller' => 'users', 'action' => 'notifications')); ?>
+<?php echo $this->Html->link( "<span class=\"badge\">$newOnes</span>", array('controller' => 'users', 'action' => 'notifications')); ?>

@@ -47,9 +47,9 @@ class AppHelper extends Helper {
 		$implicit = "/img/";
 		$imgsrc = "placeholder.png";
 
-		if(array_key_exists("image", $obj) && file_exists(WEBROOT_DIR . $implicit . $obj["image"])) {
+		if(array_key_exists("image", $obj) && !is_null($obj["image"]) && file_exists(WWW_ROOT . ($addImplicitPath ? $implicit : "") . $obj["image"])) {
 			$imgsrc = $obj["image"];
-		}
+		}		
 
 		return $addImplicitPath ? $implicit . $imgsrc : $imgsrc;
 	}

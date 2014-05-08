@@ -4,16 +4,17 @@ class OEmbedable extends AppModel
     public function toOEmbed($data)
     {                
         $serverUrl = $_SERVER['SERVER_NAME'];
-        $slug = $this->getData($this->alias.".slug");
+        $slug = Hash::get($data, $this->alias.".slug");
         $iframeUrl = sprintf("http://%s/%ss/embed/%s/", $serverUrl, strtolower($this->alias), $slug);
         $url = sprintf("http://%s/%ss/view/%s/", $serverUrl, strtolower($this->alias), $slug);
+        
         return array(          
             "version"   => "1.0",
             "type"      => "rich",
             "provider_name" => "The Music Tank",
             "provider_url"  => sprintf("http://%s/", $serverUrl),
             "url"       => $url,
-            "title"     => $this->getData($this->alias.".title"),
+            "title"     => Hash::get($data, $this->alias.".title"),
             "data"      => $data,
             "width"     => 500,
             "height"    => 350,

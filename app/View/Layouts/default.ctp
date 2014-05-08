@@ -18,15 +18,12 @@
 </head>
 <body class="<?php echo $this->App->contextToClassNames(); ?>">
 
-    <?php echo $this->element('header'); ?>
-    
+    <?php echo $this->element('header'); ?>    
     <section class="container container-fluid site-main">
         <?php echo $this->Session->flash(); ?>
-        <?php echo $this->fetch('content'); ?>
     </section>
-    
-    <?php echo $this->element('foot'); ?>
-    
+    <?php echo $this->fetch('content'); ?>
+    <?php echo $this->element('foot'); ?>    
     <?php echo $this->element('analytics'); ?>    
     <?php echo $this->element('sql_dump'); ?> 
 </body>

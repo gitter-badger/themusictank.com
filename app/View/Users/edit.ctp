@@ -1,4 +1,4 @@
-<div class="container">
+<div class="container container-fluid">
     <?php echo $this->Session->flash('auth'); ?>
 
     <h2><?php echo __("Edit your profile"); ?></h2>
@@ -68,7 +68,7 @@
 </div>
 
 
-<div class="container">
+<div class="container container-fluid">
     
     <h2><?php echo __("Manage third party services"); ?></h2>
 

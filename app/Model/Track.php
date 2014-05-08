@@ -263,6 +263,9 @@ class Track extends OEmbedable
         unset($data["id"]);
         unset($data["track_id"]);
         unset($data["snapshot_ppf"]);
+
+        $data = Hash::insert($data, "Track.title", $this->getData("Track.title"));
+        $data = Hash::insert($data, "Track.slug", $this->getData("Track.slug"));
                
         return parent::toOEmbed(array_merge($additionalData, $data));
     }    

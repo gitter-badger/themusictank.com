@@ -28,7 +28,13 @@
                                 array('escape' => false)
                         ); ?>
                     </li>                
-                    <li><?php echo $this->Html->link(__("Home"), array('controller' => 'users', 'action' => 'dashboard')); ?></li>
+                    <li>
+                        <?php echo $this->Html->link(__("Home"), array('controller' => 'users', 'action' => 'dashboard')); ?>
+                    </li>
+                    <li> 
+                        <?php echo $this->Html->link("<i class=\"fa fa-bell-o\"></i>", array('controller' => 'users', 'action' => 'notifications'), array("escape" => false)); ?>
+                        <?php //echo $this->element("dropdownnotifications"); ?>
+                    </li>
                     <li><?php echo $this->Html->link(__("Profile"), array('controller' => 'profiles', 'action' => 'view', $userSession['slug'])); ?></li>
                     <li class="dropdown">
                         <button type="button" id="btnSettings" class="btn btn-default dropdown-toggle" data-toggle="dropdown">

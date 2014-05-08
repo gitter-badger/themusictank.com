@@ -1,8 +1,7 @@
 
 .browse-by-letter {
-	.artist-categories {			
+	div {				
 		a {
-			background:#fff;
 			display:block;
 			line-height:50px;
 			text-align:center;
@@ -14,6 +13,7 @@
 			}
 		}	
 	}
+	padding-bottom: 1em;
 }
 @lightBoxShadow: 0 1px 3px rgba(0, 0, 0, 0.35);
 @darkBoxShadow: 0 1px 3px rgba(0, 0, 0, 0.7);
@@ -75,6 +75,15 @@ time {
 
 .discography,
 .new-album-releases {
+	h2 {		
+
+		a {
+			font-weight: normal;
+			font-size:60%;
+			text-transform: uppercase;
+			color:#fff;
+		}
+	}
 	h3 {
 		margin-top:10px;
 		font-size:18px;
@@ -89,7 +98,12 @@ time {
 
 
 .credits {
-	margin:2em 0;
+	margin:2em 0 -2em;
+	background:#eee;
+	border-top:1px solid #dedede;
+	padding:1em 0;
+	color:#999;
+	font-size:90%;
 }
 
 #disqus_thread {
@@ -204,5 +218,21 @@ time {
 	.popover.left,
 	.event.right {
 		float:right;
+	}
+}
+
+.colored {
+	background:#4D433D;
+	border-radius: 5px;
+	border-bottom:2px solid #56877D;
+	color:#fff;
+}
+
+.user-badge {
+	text-align: center;
+}
+.big-user-badge {
+	.btn {
+		width:200px;
 	}
 }

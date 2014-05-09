@@ -8,13 +8,15 @@
 
 <div class="container container-fluid">
 
-    <h2><?php echo __("Activity stream"); ?></h2>
-
     <div class="row">
 
         <div class="col-md-8">
 
             <section class="activity-stream">    
+
+                <header>
+                    <h2><?php echo __("Activity stream"); ?></h2>
+                </header>
 
                 <?php if(count($feed) > 0) : ?>    
                     <?php foreach($feed as $idx => $event) : ?>
@@ -125,19 +127,35 @@
             </section>
         </div>
 
+        <aside class="col-md-4 aside">
 
-        <div class="col-md-4">
             <h3><?php echo __("Daily challenge"); ?></h3>
-            ---
+            <p class="lead"><?php echo $this->StringMaker->composeDailyChallengeIntro($dailyChallenge); ?></p>
+            <div class="media">
+                <?php  echo $this->Html->link(
+                        $this->Html->image($this->App->getImageUrl($dailyChallenge["Album"], true), array("alt" => $dailyChallenge["Track"]["title"], "title" => $dailyChallenge["Track"]["title"], "class" => "thumbnail")),
+                        array('controller' => 'player', 'action' => 'play', $dailyChallenge["Track"]["slug"]),
+                        array('escape' => false, 'class' => "pull-left")
+                ); ?>
+                <div class="media-body">
+                    <h4 class="media-heading"><?php echo $this->Html->link($dailyChallenge["Track"]["title"], array('controller' => 'player', 'action' => 'play', $dailyChallenge["Track"]["slug"])); ?></h4>
+                    <p>
+                        <?php echo __("Found on"); ?> <?php echo $this->Html->link($dailyChallenge["Album"]["name"], array('controller' => 'albums', 'action' => 'view', $dailyChallenge["Album"]["slug"])); ?>
+                        <?php echo __("by"); ?> <?php echo $this->Html->link($dailyChallenge["Album"]["Artist"]["name"], array('controller' => 'artists', 'action' => 'view', $dailyChallenge["Album"]["Artist"]["slug"])); ?>
+                    </p>
+                    <p><?php echo $this->Html->link(__("Let's do this"), array('controller' => 'player', 'action' => 'play', $dailyChallenge["Track"]["slug"]), array("class" => "btn btn-primary")); ?></p>        
+                </div>
+            </div>
 
+                <?php /*
 
             <h3><?php echo __("Recommandations"); ?></h3>
             --- albums<br>
             --- users<br>
 
-
+                */ ?>
         </div>
 
-    </div>
+    </aside>
     
 </div>

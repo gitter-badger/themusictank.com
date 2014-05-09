@@ -39,6 +39,7 @@ class UsersController extends AppController {
     public function dashboard()
     {   
         $this->loadModel("UserActivity");
+        $this->loadModel("Track");
                 
         $userId = $this->getAuthUserId();
         $list = array_values($this->User->UserFollowers->getSubscriptions($userId));
@@ -46,8 +47,9 @@ class UsersController extends AppController {
                 
         $feed = $this->UserActivity->fetchActivity($list);
         
-        $this->set("feed", $feed);        
-        $this->setPageTitle(array(__("TMT dashboard")));
+        $this->set("feed", $feed);
+        $this->set("dailyChallenge", $this->Track->findDailyChallenge());
+        $this->setPageTitle(array(__("Dashboard")));
     }             
     
     /** 

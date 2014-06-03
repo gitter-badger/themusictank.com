@@ -29,7 +29,7 @@
         LOW_GROOVE_THRESHOLD = .02; 
     
     
-    tmt.Reviewer = {
+    var Reviewer = tmt.Player.extend({
     
         init : function(config) {
             this._super(config);
@@ -829,6 +829,8 @@
             this.data.appHasFocus = isVisible;
             this.debug("data", "appHasFocus", this.data.appHasFocus);
         }
-    };    
-     
+    });    
+
+    window.tmt.Reviewer = Reviewer;
+    
 })();

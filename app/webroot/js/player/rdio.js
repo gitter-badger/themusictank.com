@@ -1,6 +1,6 @@
 (function() {
 
-    tmt.Rdio = tmt.Player.extend({
+    tmt.Rdio = tmt.Reviewer.extend({
                
         run : function()
         {
@@ -14,8 +14,7 @@
             {
                 this.config.container.ref.addClass("flashrequired");
                 return;
-            }
-            
+            }            
             
             if(!swfobject) alert("swfObject is not loaded.");
 

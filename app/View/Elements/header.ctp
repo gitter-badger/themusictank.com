@@ -27,9 +27,6 @@
                                 array('controller' => 'users', 'action' => 'dashboard'),
                                 array('escape' => false)
                         ); ?>
-                    </li>                
-                    <li>
-                        <?php echo $this->Html->link(__("Home"), array('controller' => 'users', 'action' => 'dashboard')); ?>
                     </li>
                     <li> 
                         <?php echo $this->Html->link("<i class=\"fa fa-bell-o\"></i>", array('controller' => 'users', 'action' => 'notifications'), array("escape" => false)); ?>

@@ -38,12 +38,14 @@ class AjaxController extends AppController {
     {     
         $relationExists = $this->userIsLoggedIn() && $this->User->UserFollowers->addRelation($this->getAuthUserId(), $userSlug);        
         $this->set("user", array("slug" => $userSlug, "currently_followed" => $relationExists)); 
+        $this->render("followbutton");
     }
            
     public function unfollow($userSlug)
     {              
         $relationExists = $this->userIsLoggedIn() && !$this->User->UserFollowers->removeRelation($this->getAuthUserId(), $userSlug);
         $this->set("user", array("slug" => $userSlug, "currently_followed" => $relationExists)); 
+        $this->render("followbutton");
     }
         
     public function oembed() {    

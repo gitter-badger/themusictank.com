@@ -7,7 +7,9 @@ class ImplicitRelationModel extends AppModel
     private $_preloadedObjects = array(
         "Achievement" => array(),
         "User" => array(),
-        "Track" => array()
+        "Track" => array(),
+        "Album" => array(),
+        "Artist" => array()
     );
     
     const TYPE_ACHIEVEMENT      = "achievement";
@@ -41,14 +43,16 @@ class ImplicitRelationModel extends AppModel
                     case self::TYPE_FOLLOWER :
                         if(!array_key_exists("UserFollower", $results[$idx][$this->alias]))
                         {
-                            $results[$idx][$this->alias]["UserFollower"] = $this->_loadLinkedUser((int)$row[$this->alias]["related_model_id"]);
+                            $results[$idx][$this->alias]["UserFollower"] = $this->_loadLinkedObject("User", (int)$row[$this->alias]["related_model_id"]);
                         }
                         break;      
 
                     case self::TYPE_REVIEW_COMPLETE :
                         if(!array_key_exists("ReviewedTrack", $results[$idx][$this->alias]))
                         {
-                            $results[$idx][$this->alias]["ReviewedTrack"] = $this->_loadLinkedTrack((int)$row[$this->alias]["related_model_id"]);
+                            $results[$idx][$this->alias]["ReviewedTrack"] = $this->_loadLinkedObject("Track", (int)$row[$this->alias]["related_model_id"]);
+                            $results[$idx][$this->alias]["ReviewedTrackAlbum"] = $this->_loadLinkedObject("Album", (int)$results[$idx][$this->alias]["ReviewedTrack"]["album_id"]);
+                            $results[$idx][$this->alias]["ReviewedTrackArtist"] = $this->_loadLinkedObject("Artist", (int)$results[$idx][$this->alias]["ReviewedTrackAlbum"]["artist_id"]);
                         }
                         break;                     
                 }
@@ -87,32 +91,18 @@ class ImplicitRelationModel extends AppModel
         return $this->_getCached("Achievement", $achievementId);
     }
     
-    private function _loadLinkedUser($userId)
-    {
-        if(!$this->_isCached("User", $userId))
+    private function _loadLinkedObject($type, $id)
+    {       
+        if(!$this->_isCached($type, $id))
         {
-            $user = ClassRegistry::init('User')->find("first", array(
-                "conditions" => array("User.id" => $userId),
-                "fields" => "User.*"
+            $obj = ClassRegistry::init($type)->find("first", array(
+                "conditions" => array("$type.id" => $id),
+                "fields" => "$type.*"
             ));
             
-            $this->_saveToCache("User", $userId, $user["User"]);
+            $this->_saveToCache($type, $id, $obj[$type]);
         }
         
-        return $this->_getCached("User", $userId);
-    }
-    
-    private function _loadLinkedTrack($trackId)
-    {
-        if(!$this->_isCached("Track", $trackId))
-        {
-            $track = ClassRegistry::init('Track')->find("first", array(
-                "conditions" => array("Track.id" => $trackId),
-                "fields" => "Track.*"
-            ));
-            $this->_saveToCache("Track", $trackId, $track["Track"]);
-        }
-        
-        return $this->_getCached("Track", $trackId);
+        return $this->_getCached($type, $id);
     }
 } 

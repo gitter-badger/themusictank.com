@@ -80,8 +80,8 @@ class MetaTagsHelper extends AppHelper {
     {
         switch($preferredPlayer)
         {
-            case "rdio" : $playerScript = array('vendor/swf/swfobject', 'vendor/swf/flash_detect_min.js', 'player/rdio'); break;            
-            case "mp3" : $playerScript = array('vendor/id3/id3-minimized', 'player/mp3'); break;
+            case "rdio" : $playerScript = array('vendor/swf/swfobject', 'vendor/swf/flash_detect_min.js', 'player/reviewer', 'player/rdio'); break;            
+            case "mp3" : $playerScript = array('vendor/id3/id3-minimized', 'player/reviewer', 'player/mp3'); break;
         }
         
         $this->_metas[] = $this->Html->script(array_merge(array('//code.jquery.com/ui/1.10.3/jquery-ui.js', 'vendor/animation/RequestAnimationFrame', 'player/player', 'player/graph'), $playerScript));

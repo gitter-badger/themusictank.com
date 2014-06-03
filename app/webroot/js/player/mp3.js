@@ -2,7 +2,7 @@
         
     var TRACK_LENGTH_DIFF = 5;
         
-    tmt.Mp3 = tmt.Player.extend({
+    tmt.Mp3 = tmt.Reviewer.extend({
         
         loadSongStreamer : function()
         {

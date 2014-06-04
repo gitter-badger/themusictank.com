@@ -1,0 +1,24 @@
+{
+	"folders":
+	[
+		{
+			"follow_symlinks": true,
+			"path": "."
+		}
+	],
+	"settings":
+    {
+        "less2css":
+        {
+			"autoCompile": true,
+			"ignorePrefixedFiles": false,
+			"lessBaseDir": "./app/webroot/css/less",
+			"lesscCommand": false,
+		  	"minName": true,
+			"minify": true,
+		  	"main_file": "styles.less",
+			"outputDir": "./app/webroot/css/",
+			"showErrorWithWindow": true
+        }
+    }
+}

@@ -1,0 +1,2538 @@
+{
+	"auto_complete":
+	{
+		"selected_items":
+		[
+			[
+				"_load",
+				"_loadLinkedObject"
+			],
+			[
+				"w",
+				"watchId"
+			],
+			[
+				"media",
+				"mediaFiles"
+			],
+			[
+				"get",
+				"getElementById"
+			],
+			[
+				"ap",
+				"appLoader"
+			],
+			[
+				"$ena",
+				"$enableBattery"
+			],
+			[
+				"$na",
+				"$enableCamera"
+			],
+			[
+				"text",
+				"text-align"
+			],
+			[
+				"background",
+				"background-image"
+			],
+			[
+				"back",
+				"background-color"
+			],
+			[
+				"$sto",
+				"$storeId"
+			],
+			[
+				"font-",
+				"font-weight"
+			],
+			[
+				"pad",
+				"padding"
+			],
+			[
+				"audio",
+				"audioTags"
+			],
+			[
+				"no",
+				"notePosition"
+			],
+			[
+				"play",
+				"playing"
+			],
+			[
+				"getElement",
+				"getElementsByTagName"
+			],
+			[
+				"getElemen",
+				"getElementsByTagName"
+			],
+			[
+				"getNod",
+				"getNodeId"
+			],
+			[
+				"end",
+				"endif"
+			],
+			[
+				"$main",
+				"$mainCategory"
+			],
+			[
+				"$wh",
+				"$wishlist"
+			],
+			[
+				"within",
+				"withinRadius"
+			],
+			[
+				"wi",
+				"wincache_unlock"
+			],
+			[
+				"select",
+				"selected"
+			],
+			[
+				"$e",
+				"$event"
+			],
+			[
+				"$ev",
+				"$eventList"
+			],
+			[
+				"getE",
+				"getElementsByTagName"
+			],
+			[
+				"time",
+				"timestamp_start"
+			],
+			[
+				"$vent",
+				"$eventContainers"
+			],
+			[
+				"preg_matc",
+				"preg_match_all"
+			],
+			[
+				"$even",
+				"$eventTypes"
+			],
+			[
+				"pre",
+				"prepopulatedVal"
+			],
+			[
+				"sel",
+				"select"
+			],
+			[
+				"trigger",
+				"triggerName"
+			],
+			[
+				"tri",
+				"triggerName"
+			],
+			[
+				"$img",
+				"$imgtitle"
+			],
+			[
+				"$data",
+				"$dataEvents"
+			],
+			[
+				"trigg",
+				"triggerName"
+			],
+			[
+				"trig",
+				"triggerValue"
+			],
+			[
+				"make",
+				"make_id"
+			],
+			[
+				"for",
+				"foreach	foreach …"
+			],
+			[
+				"Model_",
+				"Model_DbTable_Category"
+			],
+			[
+				"category",
+				"category_id"
+			],
+			[
+				"te",
+				"text-transform"
+			],
+			[
+				"text-",
+				"text-align"
+			],
+			[
+				"_zo",
+				"_zoho_account_user_full_name"
+			],
+			[
+				"json_",
+				"json_encode"
+			],
+			[
+				"offer_am",
+				"offer_amount_dollar"
+			],
+			[
+				"html",
+				"htmlentities"
+			],
+			[
+				"descr",
+				"description_en"
+			],
+			[
+				"getDe",
+				"getDescriptionEn"
+			],
+			[
+				"getDescrip",
+				"getDescriptionFr"
+			],
+			[
+				"$d",
+				"$dealerOffer"
+			],
+			[
+				"off",
+				"_offer_amount_percent"
+			],
+			[
+				"offer",
+				"offer_type_id"
+			],
+			[
+				"chan",
+				"change"
+			],
+			[
+				"sele",
+				"selectgrp"
+			],
+			[
+				"data-",
+				"data-linkto-label"
+			],
+			[
+				"el",
+				"elKey"
+			],
+			[
+				"apply",
+				"apply_to_all"
+			],
+			[
+				"selec",
+				"selectList"
+			],
+			[
+				"root",
+				"rootElementCount"
+			],
+			[
+				"sub",
+				"subElementCount"
+			],
+			[
+				"json",
+				"json_encode"
+			],
+			[
+				"pro",
+				"prepropulatedVal"
+			],
+			[
+				"reba",
+				"rebate"
+			],
+			[
+				"getUser",
+				"getUserId"
+			],
+			[
+				"Model_D",
+				"Model_DbTable_User"
+			],
+			[
+				"_zoho_",
+				"_zoho_account_name"
+			],
+			[
+				"$user",
+				"$userId"
+			],
+			[
+				"load",
+				"loadZohoUser"
+			],
+			[
+				"setAp",
+				"setApiErrorResponse"
+			],
+			[
+				"call",
+				"call_user_method"
+			],
+			[
+				"$api",
+				"$apiUser"
+			],
+			[
+				"$curren",
+				"$currentOrder"
+			],
+			[
+				"exec",
+				"execute"
+			],
+			[
+				"$albu",
+				"$albumData"
+			],
+			[
+				"border",
+				"border-radius"
+			],
+			[
+				"array_",
+				"array_shift"
+			],
+			[
+				"inline",
+				"inline-block"
+			],
+			[
+				"inl",
+				"inline"
+			],
+			[
+				"padd",
+				"padding-top"
+			],
+			[
+				"list",
+				"list-style-type"
+			],
+			[
+				"inlin",
+				"inline-block"
+			],
+			[
+				"background-",
+				"background-size"
+			],
+			[
+				"to",
+				"toggleClass"
+			],
+			[
+				"di",
+				"display"
+			],
+			[
+				"r",
+				"rgba(r,g,b,a)"
+			],
+			[
+				"fun",
+				"function"
+			],
+			[
+				"A",
+				"APK_PATH_PATTERN"
+			],
+			[
+				"url",
+				"urlencode"
+			],
+			[
+				"backgorund-",
+				"background-size"
+			],
+			[
+				"iframe",
+				"iframeLoaded"
+			],
+			[
+				"explode",
+				"explode"
+			],
+			[
+				"file_",
+				"file_put_contents"
+			],
+			[
+				"ZEnd",
+				"Zend_Http_Client"
+			],
+			[
+				"implode",
+				"implode"
+			],
+			[
+				"_create",
+				"_createWidgetNode"
+			],
+			[
+				"_addPro",
+				"_addProjectInfoNodes"
+			],
+			[
+				"_add",
+				"_addAccessNode"
+			],
+			[
+				"_",
+				"_hex2rgb"
+			],
+			[
+				"getZip",
+				"getZipFilePath"
+			],
+			[
+				"$local",
+				"$localProject"
+			],
+			[
+				"$lcoa",
+				"$localProject"
+			],
+			[
+				"edit",
+				"editProjectForm"
+			],
+			[
+				"$las",
+				"$lastUpdate"
+			],
+			[
+				"Zen",
+				"Zend_Form_Element_Text"
+			],
+			[
+				"_to",
+				"_toUnderscore"
+			],
+			[
+				"$level",
+				"$levels"
+			],
+			[
+				"$vel",
+				"$levels"
+			],
+			[
+				"array_key",
+				"array_key_exists"
+			],
+			[
+				"$file",
+				"$field"
+			],
+			[
+				"en",
+				"endif"
+			],
+			[
+				"$proj",
+				"$project"
+			],
+			[
+				"str_re",
+				"str_replace"
+			],
+			[
+				"con",
+				"configure"
+			],
+			[
+				"loadFrom",
+				"loadFromPost"
+			],
+			[
+				"$dir",
+				"$dirname"
+			],
+			[
+				"pri",
+				"private"
+			],
+			[
+				"pack",
+				"package"
+			],
+			[
+				"$re",
+				"$requestType"
+			],
+			[
+				"pac",
+				"package"
+			],
+			[
+				"$xml",
+				"$xmlAttributes"
+			],
+			[
+				"is_a",
+				"is_array"
+			],
+			[
+				"xml",
+				"xmlData"
+			],
+			[
+				"categor",
+				"categories"
+			],
+			[
+				"$r",
+				"$resource"
+			]
+		]
+	},
+	"buffers":
+	[
+		{
+			"file": "app/View/Users/dashboard.ctp",
+			"settings":
+			{
+				"buffer_size": 12275,
+				"line_ending": "Unix"
+			}
+		},
+		{
+			"file": "app/View/Elements/followButton.ctp",
+			"settings":
+			{
+				"buffer_size": 926,
+				"line_ending": "Unix"
+			}
+		},
+		{
+			"file": "app/View/Ajax/followbutton.ctp",
+			"settings":
+			{
+				"buffer_size": 69,
+				"line_ending": "Unix"
+			}
+		},
+		{
+			"file": "app/Controller/AjaxController.php",
+			"settings":
+			{
+				"buffer_size": 7422,
+				"line_ending": "Unix"
+			}
+		},
+		{
+			"file": "app/View/Elements/reviewer.ctp",
+			"settings":
+			{
+				"buffer_size": 6706,
+				"line_ending": "Unix"
+			}
+		},
+		{
+			"file": "app/View/Player/rdio.ctp",
+			"settings":
+			{
+				"buffer_size": 712,
+				"line_ending": "Unix"
+			}
+		},
+		{
+			"file": "app/webroot/js/player/mp3.js",
+			"settings":
+			{
+				"buffer_size": 8151,
+				"line_ending": "Unix"
+			}
+		},
+		{
+			"file": "app/webroot/js/player/reviewer.js",
+			"settings":
+			{
+				"buffer_size": 32019,
+				"line_ending": "Unix"
+			}
+		},
+		{
+			"file": "app/webroot/css/less/player.less",
+			"settings":
+			{
+				"buffer_size": 3812,
+				"line_ending": "Unix"
+			}
+		},
+		{
+			"file": "app/webroot/css/less/styles.less",
+			"settings":
+			{
+				"buffer_size": 248,
+				"line_ending": "Unix"
+			}
+		},
+		{
+			"file": ".lessconfig",
+			"settings":
+			{
+				"buffer_size": 330,
+				"line_ending": "Unix"
+			}
+		},
+		{
+			"file": ".editorconfig",
+			"settings":
+			{
+				"buffer_size": 265,
+				"line_ending": "Unix"
+			}
+		}
+	],
+	"build_system": "",
+	"command_palette":
+	{
+		"height": 207.0,
+		"selected_items":
+		[
+			[
+				"insta",
+				"Package Control: Install Package"
+			],
+			[
+				"Package Control: ins",
+				"Package Control: Install Package"
+			],
+			[
+				"Package Control: insta",
+				"Package Control: Install Package"
+			],
+			[
+				"Package Control: in",
+				"Package Control: Install Package"
+			],
+			[
+				"inst",
+				"Package Control: Install Package"
+			],
+			[
+				"Package Control: ing",
+				"Package Control: Install Package"
+			]
+		],
+		"width": 521.0
+	},
+	"console":
+	{
+		"height": 126.0,
+		"history":
+		[
+			"import urllib.request,os; pf = 'Package Control.sublime-package'; ipp = sublime.installed_packages_path(); urllib.request.install_opener( urllib.request.build_opener( urllib.request.ProxyHandler()) ); open(os.path.join(ipp, pf), 'wb').write(urllib.request.urlopen( 'http://sublime.wbond.net/' + pf.replace(' ','%20')).read())"
+		]
+	},
+	"distraction_free":
+	{
+		"menu_visible": true,
+		"show_minimap": false,
+		"show_open_files": false,
+		"show_tabs": false,
+		"side_bar_visible": false,
+		"status_bar_visible": false
+	},
+	"file_history":
+	[
+		"/Users/ffaubert/Library/Application Support/Sublime Text 3/Packages/User/less2css.sublime-settings",
+		"/Users/ffaubert/Library/Application Support/Sublime Text 3/Packages/Less2Css/less2css.sublime-settings",
+		"/Users/ffaubert/Library/Application Support/Sublime Text 3/Packages/LESS/LESS.sublime-settings",
+		"/Users/ffaubert/Library/Application Support/Sublime Text 3/Packages/User/Default (OSX).sublime-keymap",
+		"/Users/ffaubert/Sites/themusictank.com/.lessconfig",
+		"/Users/ffaubert/Sites/themusictank.com/app/webroot/css/less/styles.less",
+		"/Users/ffaubert/Sites/themusictank.com/app/View/Layouts/default.ctp",
+		"/Users/ffaubert/Sites/themusictank.com/app/webroot/js/player/rdio.js",
+		"/Users/ffaubert/Sites/themusictank.com/app/View/Layouts/blank.ctp",
+		"/Users/ffaubert/Sites/themusictank.com/app/Controller/PlayerController.php",
+		"/Users/ffaubert/Sites/themusictank.com/app/View/Helper/MetaTagsHelper.php",
+		"/Users/ffaubert/Sites/themusictank.com/app/Model/ImplicitRelationModel.php",
+		"/Users/ffaubert/Sites/themusictank.com/app/View/Elements/header.ctp",
+		"/Users/ffaubert/Downloads/cal (3).ics",
+		"/Users/ffaubert/Sites/as-hanging-site-web-magento/app/design/frontend/default/ashanging/template/checkout/cart/sidebar.phtml",
+		"/Users/ffaubert/Sites/as-hanging-site-web-magento/app/design/frontend/default/ashanging/template/catalog/category/homeProducts.phtml",
+		"/Users/ffaubert/Sites/simacanada/duplicator.php",
+		"/Users/ffaubert/Sites/as-hanging-site-web-magento/app/design/frontend/default/ashanging/template/callouts/right_col.phtml",
+		"/Users/ffaubert/Sites/as-hanging-site-web-magento/app/code/local/Nvi/Util/etc/config.xml",
+		"/Users/ffaubert/Sites/as-hanging-site-web-magento/app/design/frontend/default/ashanging/template/news/latest.phtml",
+		"/Users/ffaubert/Sites/as-hanging-site-web-magento/app/design/frontend/default/ashanging/template/page/2columns-right.phtml",
+		"/Users/ffaubert/Sites/as-hanging-site-web-magento/app/design/frontend/default/ashanging/template/directory/currency.phtml",
+		"/Users/ffaubert/Sites/as-hanging-site-web-magento/app/etc/modules/Nvi_Util.xml",
+		"/Users/ffaubert/Sites/as-hanging-site-web-magento/app/code/local/Nvi/Contacts/etc/config.xml",
+		"/Users/ffaubert/Sites/as-hanging-site-web-magento/app/design/frontend/base/default/template/directory/currency.phtml",
+		"/Users/ffaubert/Sites/as-hanging-site-web-magento/app/code/local/Nvi/Util/Helper/Data.php",
+		"/Users/ffaubert/Sites/as-hanging-site-web-magento/index.php",
+		"/Users/ffaubert/Sites/ernest/app/design/frontend/blank/ernest_2014/template/page/home.phtml",
+		"/Users/ffaubert/Sites/as-hanging-site-web-magento/app/etc/local_xml.stg",
+		"/Users/ffaubert/Sites/as-hanging-site-web-magento/app/etc/local.xml",
+		"/Users/ffaubert/Sites/as-hanging-site-web-magento/.htaccess",
+		"/Users/ffaubert/Sites/iprospect-phonegap-demos/phone_geolocation.html",
+		"/Users/ffaubert/Sites/iprospect-phonegap-demos/phone_file.html",
+		"/Users/ffaubert/Sites/iprospect-phonegap-demos/phone_contacts.html",
+		"/Users/ffaubert/Sites/iprospect-phonegap-demos/phone_media_capture.html",
+		"/Users/ffaubert/Sites/iprospect-phonegap-demos/phone_motion.html",
+		"/Users/ffaubert/Sites/iprospect-phonegap-demos/phone_device.html",
+		"/Users/ffaubert/Sites/iprospect-phonegap-demos/scripts.js",
+		"/Users/ffaubert/Sites/iprospect-phonegap-demos/phone_battery.html",
+		"/Users/ffaubert/Sites/iprospect-phonegap-demos/phone_camera.html",
+		"/Users/ffaubert/Sites/iprospect-phonegap-demos/inclusions.html",
+		"/Users/ffaubert/Sites/iprospect-phonegap-demos/contacts.html",
+		"/Users/ffaubert/Sites/iprospect-phonegap-demos/website-as-app-demo/phone_battery.html",
+		"/Users/ffaubert/Sites/phonegap-packager/application/controllers/ProjectsController.php",
+		"/Users/ffaubert/Sites/iprospect-phonegap-demos/README.md",
+		"/Users/ffaubert/Sites/iprospect-phonegap-demos/website-as-app-demo/index.html",
+		"/Users/ffaubert/Sites/iprospect-phonegap-demos/website-as-app-demo/scripts.js",
+		"/Users/ffaubert/Sites/iprospect-phonegap-responsive-website-app-template/index.html",
+		"/Users/ffaubert/Sites/iprospect-phonegap-responsive-website-app-template/css/styles.css",
+		"/Users/ffaubert/Sites/phonegap-packager/application/forms/EditFeatures.php",
+		"/Users/ffaubert/Sites/phonegap-packager/application/forms/EditTheme.php",
+		"/Users/ffaubert/Sites/phonegap-packager/application/models/PhonegapConfigFile.php",
+		"/Users/ffaubert/Sites/iprospect-phonegap-responsive-website-app-template/js/app.js",
+		"/Users/ffaubert/Sites/iprospect-phonegap-responsive-website-app-template/README.md",
+		"/Users/ffaubert/Sites/phonegap-packager/projects/app-823076/package/index.html",
+		"/Users/ffaubert/Sites/phonegap-packager/application/views/scripts/partials/projectprofileheader.phtml",
+		"/Users/ffaubert/Sites/phonegap-packager/application/views/scripts/projects/editfeatures.phtml",
+		"/Users/ffaubert/Sites/phonegap-packager/projects/app-823076/package/css/styles.css",
+		"/Users/ffaubert/Sites/phonegap-packager/application/views/scripts/projects/edittheme.phtml",
+		"/Users/ffaubert/Sites/phonegap-packager/application/models/IprospectProject.php",
+		"/Users/ffaubert/Sites/phonegap-packager/library/Zend/Locale/Data/ar_PS.xml",
+		"/Users/ffaubert/Sites/phonegap-packager/library/BashScripts/cloneGitSources.sh",
+		"/Users/ffaubert/Sites/iprospect-phonegap-responsive-website-app-template/config.xml",
+		"/Users/ffaubert/Sites/phonegap-packager/application/views/scripts/partials/projectprofilemenu.phtml",
+		"/Users/ffaubert/Sites/phonegap-packager/.gitignore",
+		"/Users/ffaubert/Sites/phonegap-packager/projects/app-823076/package.zip",
+		"/Users/ffaubert/Sites/phonegap-packager/application/views/scripts/projects/editconnection.phtml",
+		"/Users/ffaubert/Sites/phonegap-packager/application/forms/EditConnection.php",
+		"/Users/ffaubert/Sites/phonegap-packager/public/js/scripts.js",
+		"/Users/ffaubert/Sites/phonegap-packager/projects/app-823076/project.xml",
+		"/Users/ffaubert/Sites/phonegap-packager/projects/app-823076/package/config.xml",
+		"/Users/ffaubert/Sites/phonegap-packager/projects/app-823076/package/js/app.js",
+		"/Users/ffaubert/Sites/phonegap-packager/library/Zend/Filter/StripTags.php",
+		"/Users/ffaubert/Sites/phonegap-packager/library/Zend/Locale/Data/sr_Cyrl_RS.xml",
+		"/Users/ffaubert/Sites/phonegap-packager/library/Zend/Http/Header/SetCookie.php",
+		"/Users/ffaubert/Sites/phonegap-packager/application/models/PhonegapProject.php",
+		"/Users/ffaubert/Sites/phonegap-packager/public/index.php",
+		"/Users/ffaubert/Sites/phonegap-packager/application/layouts/scripts/layout.phtml",
+		"/Users/ffaubert/Sites/phonegap-packager/public/cli.php",
+		"/Users/ffaubert/Sites/phonegap-packager/application/views/scripts/projects/list.phtml",
+		"/Users/ffaubert/Sites/phonegap-packager/application/views/scripts/projects/create.phtml",
+		"/Users/ffaubert/Sites/phonegap-packager/application/views/scripts/projects/files.phtml",
+		"/Users/ffaubert/Sites/phonegap-packager/application/views/scripts/projects/upload.phtml",
+		"/Users/ffaubert/Sites/phonegap-packager/application/views/scripts/projects/gettemplate.phtml",
+		"/Users/ffaubert/Sites/phonegap-packager/application/views/scripts/projects/edit.phtml",
+		"/Users/ffaubert/Sites/phonegap-packager/application/forms/EditProject.php",
+		"/Users/ffaubert/Sites/phonegap-packager/public/css/styles.css",
+		"/Users/ffaubert/Sites/phonegap-packager/application/layouts/scripts/cli.phtml",
+		"/Users/ffaubert/Sites/phonegap-packager/application/views/scripts/projects/build.phtml",
+		"/Users/ffaubert/Sites/phonegap-packager/application/forms/AppForm.php",
+		"/Users/ffaubert/Sites/cloudcms/projects/silanis/connection.xml",
+		"/Users/ffaubert/Sites/cloudcms/projects/techobloc/application/views/controls/scripts/menus/header-consumer.phtml",
+		"/Users/ffaubert/Sites/cloudcms/projects/techobloc/application/views/controls/scripts/partials/searchDealerForm.phtml",
+		"/Users/ffaubert/Sites/cloudcms/projects/techobloc/application/views/controls/scripts/partials/searchDealerProfessionalForm.phtml",
+		"/Users/ffaubert/Sites/cloudcms/projects/techobloc/data/cache/sitemaps",
+		"/Users/ffaubert/Sites/cloudcms/projects/techobloc/leadworkz/templates/contacts/selectType.tpl",
+		"/Users/ffaubert/Sites/cloudcms/projects/techobloc/leadworkz/lib/smarty/plugins/shared.make_timestamp.php",
+		"/private/var/folders/z_/kx5wgpqd21q_ggngsxlq8vzsx_bmqj/T/fz3temp-1/.htaccess",
+		"/Users/ffaubert/Sites/simacanada/.htaccess_prod",
+		"/Users/ffaubert/Sites/simacanada/.htaccess_nvitest",
+		"/Users/ffaubert/Sites/simacanada/.htaccess_nvistaging",
+		"/Users/ffaubert/Sites/the-song-of-time/index.php",
+		"/Users/ffaubert/Sites/simacanada/app/code/local/Nvi/Adminhtml/Block/Catalog/Category/Tab/General.php",
+		"/Users/ffaubert/Sites/simacanada/app/etc/modules/Nvi_Adminhtml.xml",
+		"/Users/ffaubert/Sites/simacanada/app/code/local/Mage/Adminhtml/Block/Catalog/Category/Tab/General.php",
+		"/Users/ffaubert/Sites/cloudcms/modules/apps/cloudcms/controllers/BaseControllerObject.php",
+		"/Users/ffaubert/Sites/cloudcms/modules/apps/projectauthentication/controllers/BaseControllerObject.php",
+		"/Users/ffaubert/Sites/cloudcms/modules/controls/nvi/complexproductlist/complexproductlist.php",
+		"/Users/ffaubert/Sites/cloudcms/modules/controls/nvi/complexproduct/complexproduct.php",
+		"/Users/ffaubert/Sites/cloudcms/lib/compression/Compression.php",
+		"/Users/ffaubert/Sites/cloudcms/lib/captcha/CaptchaObject.php",
+		"/Users/ffaubert/Sites/cloudcms/projects/config.xml",
+		"/private/var/folders/z_/kx5wgpqd21q_ggngsxlq8vzsx_bmqj/T/fz3temp-1/cron_import_products.php",
+		"/Users/ffaubert/Sites/simacanada/app/code/community/Ebizmarts/MageMonkey/Model/MCAPI.php",
+		"/Users/ffaubert/Sites/cloudcms/projects/multiprets-site-web-cloud/application/models/empty",
+		"/Users/ffaubert/Sites/cloudcms/projects/techobloc/application/controllers/FaqController.php",
+		"/Users/ffaubert/Sites/cloudcms/projects/techobloc/leadworkz/tmpUpload/contractors1.csv",
+		"/Users/ffaubert/Sites/cloudcms/projects/techobloc/data/setup/Contact-Catalog",
+		"/Users/ffaubert/Sites/cloudcms/projects/techobloc/config.xml",
+		"/Users/ffaubert/Sites/cloudcms/projects/techobloc/data/setup/Contact-Send-Wishlist",
+		"/Users/ffaubert/Sites/cloudcms/projects/techobloc/leadworkz/dataObjects/Contact_Salesrep.DataObject.php",
+		"/Users/ffaubert/Sites/cloudcms/projects/techobloc/leadworkz/dataObjects/Campaign.DataObject.php",
+		"/Users/ffaubert/Sites/cloudcms/projects/techobloc/data/setup/attributeContactMessage-Friend-Wishlist-Id",
+		"/Users/ffaubert/Sites/cloudcms/projects/techobloc/application/controllers/WishlistController.php",
+		"/Users/ffaubert/Sites/cloudcms/projects/techobloc/public/static/web.config",
+		"/Users/ffaubert/Sites/team-liquid-calendar/app/Model/RemoteEvent.php",
+		"/Users/ffaubert/Sites/team-liquid-calendar/app/View/Calendar/index.ctp",
+		"/Users/ffaubert/Sites/team-liquid-calendar/app/Config/core.php"
+	],
+	"find":
+	{
+		"height": 35.0
+	},
+	"find_in_files":
+	{
+		"height": 93.0,
+		"where_history":
+		[
+			"/Users/ffaubert/Sites/as-hanging-site-web-magento/app/design/frontend/default",
+			"/Users/ffaubert/Sites/as-hanging-site-web-magento/app/design/frontend",
+			"/Users/ffaubert/Sites/as-hanging-site-web-magento/app/design/frontend/default/ashanging/template",
+			"/Users/ffaubert/Sites/as-hanging-site-web-magento",
+			"/Users/ffaubert/Sites/cloudcms/projects/techobloc/application/views/controls/scripts/partials",
+			"/Users/ffaubert/Sites/team-liquid-calendar/app/View",
+			"/Users/ffaubert/Sites/cloudcms/projects/techobloc/application/views",
+			"/Users/ffaubert/Sites/cloudcms/projects/mirageoscience/application/views",
+			"/Users/ffaubert/Sites/code-rouge-website/public/js",
+			"/Users/ffaubert/Sites/code-rouge-backend-dealer/application/views",
+			"/Users/ffaubert/Sites/code-rouge-backend-dealer/application/controllers",
+			"/Users/ffaubert/Sites/code-rouge-backend-dealer/application/views",
+			"/Users/ffaubert/Sites/code-rouge-backend-dealer/application",
+			"/Users/ffaubert/Sites/themusictank.com/app/Controller",
+			"/Users/ffaubert/Sites/ernest/app/code/local/Zeon",
+			"/Users/ffaubert/Sites/ernest",
+			"/Users/ffaubert/Sites/ernest/app",
+			"/Users/ffaubert/Sites/ernest/app/code/core/Mage",
+			"/Users/ffaubert/Sites/ernest/app/code",
+			"/Users/ffaubert/Sites/ernest/app/design/frontend/blank",
+			"/Users/ffaubert/Sites/ernest/app/code",
+			"/Users/ffaubert/Sites/ernest/app/code/local/AdjustWare",
+			"/Users/ffaubert/Sites/ernest/app/code/local/Aitoc",
+			"/Users/ffaubert/Sites/ernest/app/code/local/AdjustWare",
+			"/Users/ffaubert/Sites/ernest/app",
+			"/Users/ffaubert/Sites/ernest/skin",
+			"/Users/ffaubert/Sites/ernest/js",
+			"/Users/ffaubert/Sites/ernest/app/design/frontend/blank/ernest_2014",
+			"/Users/ffaubert/Sites/ernest/app/code",
+			"/Users/ffaubert/Sites/ernest/app/design/frontend/blank/ernest_2014/template/checkout",
+			"/Users/ffaubert/Sites/ernest/app/design/frontend/blank/ernest_2014/template/checkout/onepage",
+			"/Users/ffaubert/Sites/ernest/skin",
+			"/Users/ffaubert/Sites/ernest/js",
+			"/Users/ffaubert/Sites/ernest/app",
+			"/Users/ffaubert/Sites/ernest/app/design/frontend/blank/ernest_2014/template",
+			"/Users/ffaubert/Sites/ernest/downloader",
+			"/Users/ffaubert/Sites/phonegap-packager",
+			"/Users/ffaubert/Sites/phonegap-packager/application",
+			"/Users/ffaubert/Sites/ernest/app",
+			"/Users/ffaubert/Sites/ernest/app/code/local/NVI/Layout",
+			"/Users/ffaubert/Sites/simacanada/app/code/local",
+			"/Users/ffaubert/Sites/messagefactory/app/design/frontend",
+			"/Users/ffaubert/Sites/ernest/app/design/frontend/blank/ernest_2014/template",
+			"/Users/ffaubert/Sites/simacanada",
+			"/Users/ffaubert/Sites/ernest (update branch)",
+			"/Volumes/ffaubert/Dev/Projects/simacanada/app/design/frontend",
+			"/Volumes/ffaubert/Dev/Projects/simacanada",
+			"/Volumes/ffaubert/Dev/Projects/simacanada/app/design/frontend/precise/default",
+			"/Volumes/ffaubert/Dev/Projects/simacanada/skin/frontend/precise/default/js",
+			"/Volumes/ffaubert/Dev/Projects/simacanada",
+			"/Volumes/ffaubert/Dev/Projects/simacanada/app/code/local/Nvi",
+			"/Volumes/ffaubert/Dev/Projects/simacanada/app/code/local/Nvi/Services",
+			"/Volumes/ffaubert/Dev/Projects/simacanada/app/code/local/Nvi/Promotions",
+			"/Volumes/ffaubert/Dev/Projects/simacanada/app/code",
+			"/Volumes/ffaubert/Dev/Projects/simacanada"
+		]
+	},
+	"find_state":
+	{
+		"case_sensitive": false,
+		"find_history":
+		[
+			"body",
+			"setDisplayHeight",
+			"onWindowVisibility",
+			"$language_settings",
+			"$assetsPathFr",
+			"getCMSBlocks",
+			"NEW_TO_AS_COOKIE_NAME",
+			"items_qty",
+			"error",
+			"test",
+			"our_company",
+			"ourCompany",
+			"_stg",
+			"local.xml",
+			"ashanstg_ashangi",
+			".nvistaging.com",
+			"_addPluginsNodes",
+			"icon",
+			"hasic",
+			"hashic",
+			"hasicon",
+			"icon",
+			"hasIco",
+			"icons",
+			"popul",
+			"popula",
+			"_addAccessNode",
+			"_run",
+			"hasico",
+			"delTree",
+			"delTree\ndelTree",
+			"hasIcon",
+			"edittheme.phtml",
+			"();",
+			"catalog",
+			"ProductsNode",
+			"Contractoraddress",
+			"locations wi",
+			"80",
+			"8025",
+			"25",
+			"80",
+			"monkey/api",
+			"api",
+			"lists(",
+			"lists (",
+			"lists",
+			"http://www.philharmonia.co.uk/assets/audio/samples/guitar",
+			"countActiveItems",
+			"starcraft",
+			"_eventNotPassed",
+			"Fourgonnette",
+			"withVideo",
+			" :",
+			"\"48",
+			"find",
+			"();\n",
+			"dealerAside",
+			"valuesToLabels",
+			"trim_id",
+			"addGTMPushEventOnIndexedLink",
+			"classicleisurelifestyles",
+			"parklanepoolandspa",
+			"piscinesprestige",
+			"evasionchezsoi",
+			"piscinedecorjoliette",
+			"piscinesroyale",
+			"piscinesetspasalainrioux",
+			"Bad Request",
+			"        \n",
+			"cultures.phtml",
+			"helper",
+			"sendVisitorCouponMail",
+			"rsVide",
+			"aureli",
+			"body_type_name",
+			"year",
+			"vehicle ty",
+			"getListingAgesMinDays",
+			"getListingAgeMinDays",
+			"getListingAgesMinDays",
+			"listing",
+			"\"]);",
+			"selectsToHash",
+			"rootElementCount",
+			"subeleme\nsubeleme",
+			"length",
+			"trim_id",
+			"trim",
+			"listing_",
+			"sql",
+			"offer_status_id",
+			"name",
+			"get",
+			"getFullName",
+			"getDealerEmailAddress",
+			"email",
+			"PDl",
+			"PD;",
+			"valuesToLabels",
+			"addRule",
+			"valuesToLabels",
+			"sponso",
+			"offer_type_id",
+			"conso",
+			"/delete",
+			"delete/",
+			"offer_ty",
+			"elementcoun",
+			"$linkTofield",
+			"vehicul",
+			"condition_id",
+			"apply_to",
+			"_dealer_id",
+			"2",
+			"---",
+			"===",
+			"$_apiUrls",
+			"update (",
+			"update",
+			"getZohocmrid",
+			"die",
+			"_config[",
+			"$this->_config =",
+			"sess",
+			"$page",
+			"$pagingRange",
+			"$formSearch"
+		],
+		"highlight": true,
+		"in_selection": false,
+		"preserve_case": false,
+		"regex": false,
+		"replace_history":
+		[
+			".local",
+			"/assets/mp3s",
+			"0",
+			"$albumLength",
+			"$project->",
+			"->get(\"remote\")",
+			"->get(\"local\")",
+			"nvi_util",
+			"ordercatalog",
+			"promotion",
+			"../../img/"
+		],
+		"reverse": false,
+		"show_context": true,
+		"use_buffer2": true,
+		"whole_word": false,
+		"wrap": true
+	},
+	"groups":
+	[
+		{
+			"selected": 10,
+			"sheets":
+			[
+				{
+					"buffer": 0,
+					"file": "app/View/Users/dashboard.ctp",
+					"semi_transient": false,
+					"settings":
+					{
+						"buffer_size": 12275,
+						"regions":
+						{
+						},
+						"selection":
+						[
+							[
+								2377,
+								2377
+							]
+						],
+						"settings":
+						{
+							"BracketHighlighterBusy": false,
+							"bh_regions":
+							[
+								"bh_curly",
+								"bh_curly_center",
+								"bh_curly_open",
+								"bh_curly_close",
+								"bh_single_quote",
+								"bh_single_quote_center",
+								"bh_single_quote_open",
+								"bh_single_quote_close",
+								"bh_regex",
+								"bh_regex_center",
+								"bh_regex_open",
+								"bh_regex_close",
+								"bh_round",
+								"bh_round_center",
+								"bh_round_open",
+								"bh_round_close",
+								"bh_tag",
+								"bh_tag_center",
+								"bh_tag_open",
+								"bh_tag_close",
+								"bh_double_quote",
+								"bh_double_quote_center",
+								"bh_double_quote_open",
+								"bh_double_quote_close",
+								"bh_unmatched",
+								"bh_unmatched_center",
+								"bh_unmatched_open",
+								"bh_unmatched_close",
+								"bh_angle",
+								"bh_angle_center",
+								"bh_angle_open",
+								"bh_angle_close",
+								"bh_square",
+								"bh_square_center",
+								"bh_square_open",
+								"bh_square_close",
+								"bh_default",
+								"bh_default_center",
+								"bh_default_open",
+								"bh_default_close"
+							],
+							"incomplete_sync": null,
+							"remote_loading": false,
+							"synced": false,
+							"syntax": "Packages/HTML/HTML.tmLanguage",
+							"tab_size": 4,
+							"translate_tabs_to_spaces": true
+						},
+						"translation.x": 0.0,
+						"translation.y": 1795.0,
+						"zoom_level": 1.0
+					},
+					"stack_index": 11,
+					"type": "text"
+				},
+				{
+					"buffer": 1,
+					"file": "app/View/Elements/followButton.ctp",
+					"semi_transient": false,
+					"settings":
+					{
+						"buffer_size": 926,
+						"regions":
+						{
+						},
+						"selection":
+						[
+							[
+								926,
+								926
+							]
+						],
+						"settings":
+						{
+							"BracketHighlighterBusy": false,
+							"bh_regions":
+							[
+								"bh_curly",
+								"bh_curly_center",
+								"bh_curly_open",
+								"bh_curly_close",
+								"bh_single_quote",
+								"bh_single_quote_center",
+								"bh_single_quote_open",
+								"bh_single_quote_close",
+								"bh_regex",
+								"bh_regex_center",
+								"bh_regex_open",
+								"bh_regex_close",
+								"bh_round",
+								"bh_round_center",
+								"bh_round_open",
+								"bh_round_close",
+								"bh_tag",
+								"bh_tag_center",
+								"bh_tag_open",
+								"bh_tag_close",
+								"bh_double_quote",
+								"bh_double_quote_center",
+								"bh_double_quote_open",
+								"bh_double_quote_close",
+								"bh_unmatched",
+								"bh_unmatched_center",
+								"bh_unmatched_open",
+								"bh_unmatched_close",
+								"bh_angle",
+								"bh_angle_center",
+								"bh_angle_open",
+								"bh_angle_close",
+								"bh_square",
+								"bh_square_center",
+								"bh_square_open",
+								"bh_square_close",
+								"bh_default",
+								"bh_default_center",
+								"bh_default_open",
+								"bh_default_close"
+							],
+							"incomplete_sync": null,
+							"remote_loading": false,
+							"synced": false,
+							"syntax": "Packages/HTML/HTML.tmLanguage"
+						},
+						"translation.x": 0.0,
+						"translation.y": 0.0,
+						"zoom_level": 1.0
+					},
+					"stack_index": 10,
+					"type": "text"
+				},
+				{
+					"buffer": 2,
+					"file": "app/View/Ajax/followbutton.ctp",
+					"semi_transient": false,
+					"settings":
+					{
+						"buffer_size": 69,
+						"regions":
+						{
+						},
+						"selection":
+						[
+							[
+								0,
+								0
+							]
+						],
+						"settings":
+						{
+							"BracketHighlighterBusy": false,
+							"bh_regions":
+							[
+								"bh_curly",
+								"bh_curly_center",
+								"bh_curly_open",
+								"bh_curly_close",
+								"bh_single_quote",
+								"bh_single_quote_center",
+								"bh_single_quote_open",
+								"bh_single_quote_close",
+								"bh_regex",
+								"bh_regex_center",
+								"bh_regex_open",
+								"bh_regex_close",
+								"bh_round",
+								"bh_round_center",
+								"bh_round_open",
+								"bh_round_close",
+								"bh_tag",
+								"bh_tag_center",
+								"bh_tag_open",
+								"bh_tag_close",
+								"bh_double_quote",
+								"bh_double_quote_center",
+								"bh_double_quote_open",
+								"bh_double_quote_close",
+								"bh_unmatched",
+								"bh_unmatched_center",
+								"bh_unmatched_open",
+								"bh_unmatched_close",
+								"bh_angle",
+								"bh_angle_center",
+								"bh_angle_open",
+								"bh_angle_close",
+								"bh_square",
+								"bh_square_center",
+								"bh_square_open",
+								"bh_square_close",
+								"bh_default",
+								"bh_default_center",
+								"bh_default_open",
+								"bh_default_close"
+							],
+							"incomplete_sync": null,
+							"remote_loading": false,
+							"synced": false,
+							"syntax": "Packages/HTML/HTML.tmLanguage"
+						},
+						"translation.x": 0.0,
+						"translation.y": 0.0,
+						"zoom_level": 1.0
+					},
+					"stack_index": 9,
+					"type": "text"
+				},
+				{
+					"buffer": 3,
+					"file": "app/Controller/AjaxController.php",
+					"semi_transient": false,
+					"settings":
+					{
+						"buffer_size": 7422,
+						"regions":
+						{
+						},
+						"selection":
+						[
+							[
+								1967,
+								1967
+							]
+						],
+						"settings":
+						{
+							"BracketHighlighterBusy": false,
+							"bh_regions":
+							[
+								"bh_curly",
+								"bh_curly_center",
+								"bh_curly_open",
+								"bh_curly_close",
+								"bh_single_quote",
+								"bh_single_quote_center",
+								"bh_single_quote_open",
+								"bh_single_quote_close",
+								"bh_regex",
+								"bh_regex_center",
+								"bh_regex_open",
+								"bh_regex_close",
+								"bh_round",
+								"bh_round_center",
+								"bh_round_open",
+								"bh_round_close",
+								"bh_tag",
+								"bh_tag_center",
+								"bh_tag_open",
+								"bh_tag_close",
+								"bh_double_quote",
+								"bh_double_quote_center",
+								"bh_double_quote_open",
+								"bh_double_quote_close",
+								"bh_unmatched",
+								"bh_unmatched_center",
+								"bh_unmatched_open",
+								"bh_unmatched_close",
+								"bh_angle",
+								"bh_angle_center",
+								"bh_angle_open",
+								"bh_angle_close",
+								"bh_square",
+								"bh_square_center",
+								"bh_square_open",
+								"bh_square_close",
+								"bh_default",
+								"bh_default_center",
+								"bh_default_open",
+								"bh_default_close"
+							],
+							"incomplete_sync": null,
+							"remote_loading": false,
+							"synced": false,
+							"syntax": "Packages/PHP/PHP.tmLanguage",
+							"tab_size": 4,
+							"translate_tabs_to_spaces": true
+						},
+						"translation.x": 0.0,
+						"translation.y": 134.0,
+						"zoom_level": 1.0
+					},
+					"stack_index": 8,
+					"type": "text"
+				},
+				{
+					"buffer": 4,
+					"file": "app/View/Elements/reviewer.ctp",
+					"semi_transient": false,
+					"settings":
+					{
+						"buffer_size": 6706,
+						"regions":
+						{
+						},
+						"selection":
+						[
+							[
+								399,
+								399
+							]
+						],
+						"settings":
+						{
+							"BracketHighlighterBusy": false,
+							"bh_regions":
+							[
+								"bh_curly",
+								"bh_curly_center",
+								"bh_curly_open",
+								"bh_curly_close",
+								"bh_single_quote",
+								"bh_single_quote_center",
+								"bh_single_quote_open",
+								"bh_single_quote_close",
+								"bh_regex",
+								"bh_regex_center",
+								"bh_regex_open",
+								"bh_regex_close",
+								"bh_round",
+								"bh_round_center",
+								"bh_round_open",
+								"bh_round_close",
+								"bh_tag",
+								"bh_tag_center",
+								"bh_tag_open",
+								"bh_tag_close",
+								"bh_double_quote",
+								"bh_double_quote_center",
+								"bh_double_quote_open",
+								"bh_double_quote_close",
+								"bh_unmatched",
+								"bh_unmatched_center",
+								"bh_unmatched_open",
+								"bh_unmatched_close",
+								"bh_angle",
+								"bh_angle_center",
+								"bh_angle_open",
+								"bh_angle_close",
+								"bh_square",
+								"bh_square_center",
+								"bh_square_open",
+								"bh_square_close",
+								"bh_default",
+								"bh_default_center",
+								"bh_default_open",
+								"bh_default_close"
+							],
+							"incomplete_sync": null,
+							"remote_loading": false,
+							"synced": false,
+							"syntax": "Packages/HTML/HTML.tmLanguage",
+							"tab_size": 4,
+							"translate_tabs_to_spaces": true
+						},
+						"translation.x": 0.0,
+						"translation.y": 0.0,
+						"zoom_level": 1.0
+					},
+					"stack_index": 6,
+					"type": "text"
+				},
+				{
+					"buffer": 5,
+					"file": "app/View/Player/rdio.ctp",
+					"semi_transient": false,
+					"settings":
+					{
+						"buffer_size": 712,
+						"regions":
+						{
+						},
+						"selection":
+						[
+							[
+								712,
+								712
+							]
+						],
+						"settings":
+						{
+							"BracketHighlighterBusy": false,
+							"bh_regions":
+							[
+								"bh_curly",
+								"bh_curly_center",
+								"bh_curly_open",
+								"bh_curly_close",
+								"bh_single_quote",
+								"bh_single_quote_center",
+								"bh_single_quote_open",
+								"bh_single_quote_close",
+								"bh_regex",
+								"bh_regex_center",
+								"bh_regex_open",
+								"bh_regex_close",
+								"bh_round",
+								"bh_round_center",
+								"bh_round_open",
+								"bh_round_close",
+								"bh_tag",
+								"bh_tag_center",
+								"bh_tag_open",
+								"bh_tag_close",
+								"bh_double_quote",
+								"bh_double_quote_center",
+								"bh_double_quote_open",
+								"bh_double_quote_close",
+								"bh_unmatched",
+								"bh_unmatched_center",
+								"bh_unmatched_open",
+								"bh_unmatched_close",
+								"bh_angle",
+								"bh_angle_center",
+								"bh_angle_open",
+								"bh_angle_close",
+								"bh_square",
+								"bh_square_center",
+								"bh_square_open",
+								"bh_square_close",
+								"bh_default",
+								"bh_default_center",
+								"bh_default_open",
+								"bh_default_close"
+							],
+							"incomplete_sync": null,
+							"remote_loading": false,
+							"synced": false,
+							"syntax": "Packages/HTML/HTML.tmLanguage"
+						},
+						"translation.x": 0.0,
+						"translation.y": 0.0,
+						"zoom_level": 1.0
+					},
+					"stack_index": 5,
+					"type": "text"
+				},
+				{
+					"buffer": 6,
+					"file": "app/webroot/js/player/mp3.js",
+					"semi_transient": false,
+					"settings":
+					{
+						"buffer_size": 8151,
+						"regions":
+						{
+						},
+						"selection":
+						[
+							[
+								491,
+								491
+							]
+						],
+						"settings":
+						{
+							"BracketHighlighterBusy": false,
+							"bh_regions":
+							[
+								"bh_curly",
+								"bh_curly_center",
+								"bh_curly_open",
+								"bh_curly_close",
+								"bh_single_quote",
+								"bh_single_quote_center",
+								"bh_single_quote_open",
+								"bh_single_quote_close",
+								"bh_regex",
+								"bh_regex_center",
+								"bh_regex_open",
+								"bh_regex_close",
+								"bh_round",
+								"bh_round_center",
+								"bh_round_open",
+								"bh_round_close",
+								"bh_tag",
+								"bh_tag_center",
+								"bh_tag_open",
+								"bh_tag_close",
+								"bh_double_quote",
+								"bh_double_quote_center",
+								"bh_double_quote_open",
+								"bh_double_quote_close",
+								"bh_unmatched",
+								"bh_unmatched_center",
+								"bh_unmatched_open",
+								"bh_unmatched_close",
+								"bh_angle",
+								"bh_angle_center",
+								"bh_angle_open",
+								"bh_angle_close",
+								"bh_square",
+								"bh_square_center",
+								"bh_square_open",
+								"bh_square_close",
+								"bh_default",
+								"bh_default_center",
+								"bh_default_open",
+								"bh_default_close"
+							],
+							"incomplete_sync": null,
+							"remote_loading": false,
+							"synced": false,
+							"syntax": "Packages/JavaScript/JavaScript.tmLanguage",
+							"tab_size": 4,
+							"translate_tabs_to_spaces": true
+						},
+						"translation.x": 0.0,
+						"translation.y": 0.0,
+						"zoom_level": 1.0
+					},
+					"stack_index": 7,
+					"type": "text"
+				},
+				{
+					"buffer": 7,
+					"file": "app/webroot/js/player/reviewer.js",
+					"semi_transient": false,
+					"settings":
+					{
+						"buffer_size": 32019,
+						"regions":
+						{
+						},
+						"selection":
+						[
+							[
+								31729,
+								31729
+							]
+						],
+						"settings":
+						{
+							"BracketHighlighterBusy": false,
+							"bh_regions":
+							[
+								"bh_curly",
+								"bh_curly_center",
+								"bh_curly_open",
+								"bh_curly_close",
+								"bh_single_quote",
+								"bh_single_quote_center",
+								"bh_single_quote_open",
+								"bh_single_quote_close",
+								"bh_regex",
+								"bh_regex_center",
+								"bh_regex_open",
+								"bh_regex_close",
+								"bh_round",
+								"bh_round_center",
+								"bh_round_open",
+								"bh_round_close",
+								"bh_tag",
+								"bh_tag_center",
+								"bh_tag_open",
+								"bh_tag_close",
+								"bh_double_quote",
+								"bh_double_quote_center",
+								"bh_double_quote_open",
+								"bh_double_quote_close",
+								"bh_unmatched",
+								"bh_unmatched_center",
+								"bh_unmatched_open",
+								"bh_unmatched_close",
+								"bh_angle",
+								"bh_angle_center",
+								"bh_angle_open",
+								"bh_angle_close",
+								"bh_square",
+								"bh_square_center",
+								"bh_square_open",
+								"bh_square_close",
+								"bh_default",
+								"bh_default_center",
+								"bh_default_open",
+								"bh_default_close"
+							],
+							"incomplete_sync": null,
+							"remote_loading": false,
+							"synced": false,
+							"syntax": "Packages/JavaScript/JavaScript.tmLanguage",
+							"tab_size": 4,
+							"translate_tabs_to_spaces": true
+						},
+						"translation.x": 0.0,
+						"translation.y": 12973.0,
+						"zoom_level": 1.0
+					},
+					"stack_index": 4,
+					"type": "text"
+				},
+				{
+					"buffer": 8,
+					"file": "app/webroot/css/less/player.less",
+					"semi_transient": false,
+					"settings":
+					{
+						"buffer_size": 3812,
+						"regions":
+						{
+						},
+						"selection":
+						[
+							[
+								3174,
+								3174
+							]
+						],
+						"settings":
+						{
+							"BracketHighlighterBusy": false,
+							"bh_regions":
+							[
+								"bh_curly",
+								"bh_curly_center",
+								"bh_curly_open",
+								"bh_curly_close",
+								"bh_single_quote",
+								"bh_single_quote_center",
+								"bh_single_quote_open",
+								"bh_single_quote_close",
+								"bh_regex",
+								"bh_regex_center",
+								"bh_regex_open",
+								"bh_regex_close",
+								"bh_round",
+								"bh_round_center",
+								"bh_round_open",
+								"bh_round_close",
+								"bh_tag",
+								"bh_tag_center",
+								"bh_tag_open",
+								"bh_tag_close",
+								"bh_double_quote",
+								"bh_double_quote_center",
+								"bh_double_quote_open",
+								"bh_double_quote_close",
+								"bh_unmatched",
+								"bh_unmatched_center",
+								"bh_unmatched_open",
+								"bh_unmatched_close",
+								"bh_angle",
+								"bh_angle_center",
+								"bh_angle_open",
+								"bh_angle_close",
+								"bh_square",
+								"bh_square_center",
+								"bh_square_open",
+								"bh_square_close",
+								"bh_default",
+								"bh_default_center",
+								"bh_default_open",
+								"bh_default_close"
+							],
+							"incomplete_sync": null,
+							"remote_loading": false,
+							"synced": false,
+							"syntax": "Packages/LESS/LESS.tmLanguage",
+							"tab_size": 4,
+							"translate_tabs_to_spaces": true
+						},
+						"translation.x": 0.0,
+						"translation.y": 2459.0,
+						"zoom_level": 1.0
+					},
+					"stack_index": 3,
+					"type": "text"
+				},
+				{
+					"buffer": 9,
+					"file": "app/webroot/css/less/styles.less",
+					"semi_transient": false,
+					"settings":
+					{
+						"buffer_size": 248,
+						"regions":
+						{
+						},
+						"selection":
+						[
+							[
+								248,
+								248
+							]
+						],
+						"settings":
+						{
+							"BracketHighlighterBusy": false,
+							"bh_regions":
+							[
+								"bh_curly",
+								"bh_curly_center",
+								"bh_curly_open",
+								"bh_curly_close",
+								"bh_single_quote",
+								"bh_single_quote_center",
+								"bh_single_quote_open",
+								"bh_single_quote_close",
+								"bh_regex",
+								"bh_regex_center",
+								"bh_regex_open",
+								"bh_regex_close",
+								"bh_round",
+								"bh_round_center",
+								"bh_round_open",
+								"bh_round_close",
+								"bh_tag",
+								"bh_tag_center",
+								"bh_tag_open",
+								"bh_tag_close",
+								"bh_double_quote",
+								"bh_double_quote_center",
+								"bh_double_quote_open",
+								"bh_double_quote_close",
+								"bh_unmatched",
+								"bh_unmatched_center",
+								"bh_unmatched_open",
+								"bh_unmatched_close",
+								"bh_angle",
+								"bh_angle_center",
+								"bh_angle_open",
+								"bh_angle_close",
+								"bh_square",
+								"bh_square_center",
+								"bh_square_open",
+								"bh_square_close",
+								"bh_default",
+								"bh_default_center",
+								"bh_default_open",
+								"bh_default_close"
+							],
+							"incomplete_sync": null,
+							"remote_loading": false,
+							"synced": false,
+							"syntax": "Packages/LESS/LESS.tmLanguage"
+						},
+						"translation.x": 0.0,
+						"translation.y": 0.0,
+						"zoom_level": 1.0
+					},
+					"stack_index": 2,
+					"type": "text"
+				},
+				{
+					"buffer": 10,
+					"file": ".lessconfig",
+					"semi_transient": false,
+					"settings":
+					{
+						"buffer_size": 330,
+						"regions":
+						{
+						},
+						"selection":
+						[
+							[
+								330,
+								330
+							]
+						],
+						"settings":
+						{
+							"BracketHighlighterBusy": false,
+							"bh_regions":
+							[
+								"bh_curly",
+								"bh_curly_center",
+								"bh_curly_open",
+								"bh_curly_close",
+								"bh_single_quote",
+								"bh_single_quote_center",
+								"bh_single_quote_open",
+								"bh_single_quote_close",
+								"bh_regex",
+								"bh_regex_center",
+								"bh_regex_open",
+								"bh_regex_close",
+								"bh_round",
+								"bh_round_center",
+								"bh_round_open",
+								"bh_round_close",
+								"bh_tag",
+								"bh_tag_center",
+								"bh_tag_open",
+								"bh_tag_close",
+								"bh_double_quote",
+								"bh_double_quote_center",
+								"bh_double_quote_open",
+								"bh_double_quote_close",
+								"bh_unmatched",
+								"bh_unmatched_center",
+								"bh_unmatched_open",
+								"bh_unmatched_close",
+								"bh_angle",
+								"bh_angle_center",
+								"bh_angle_open",
+								"bh_angle_close",
+								"bh_square",
+								"bh_square_center",
+								"bh_square_open",
+								"bh_square_close",
+								"bh_default",
+								"bh_default_center",
+								"bh_default_open",
+								"bh_default_close"
+							],
+							"incomplete_sync": null,
+							"remote_loading": false,
+							"synced": false,
+							"syntax": "Packages/Text/Plain text.tmLanguage"
+						},
+						"translation.x": 0.0,
+						"translation.y": 0.0,
+						"zoom_level": 1.0
+					},
+					"stack_index": 0,
+					"type": "text"
+				},
+				{
+					"buffer": 11,
+					"file": ".editorconfig",
+					"semi_transient": true,
+					"settings":
+					{
+						"buffer_size": 265,
+						"regions":
+						{
+						},
+						"selection":
+						[
+							[
+								265,
+								265
+							]
+						],
+						"settings":
+						{
+							"BracketHighlighterBusy": false,
+							"bh_regions":
+							[
+								"bh_curly",
+								"bh_curly_center",
+								"bh_curly_open",
+								"bh_curly_close",
+								"bh_single_quote",
+								"bh_single_quote_center",
+								"bh_single_quote_open",
+								"bh_single_quote_close",
+								"bh_regex",
+								"bh_regex_center",
+								"bh_regex_open",
+								"bh_regex_close",
+								"bh_round",
+								"bh_round_center",
+								"bh_round_open",
+								"bh_round_close",
+								"bh_tag",
+								"bh_tag_center",
+								"bh_tag_open",
+								"bh_tag_close",
+								"bh_double_quote",
+								"bh_double_quote_center",
+								"bh_double_quote_open",
+								"bh_double_quote_close",
+								"bh_unmatched",
+								"bh_unmatched_center",
+								"bh_unmatched_open",
+								"bh_unmatched_close",
+								"bh_angle",
+								"bh_angle_center",
+								"bh_angle_open",
+								"bh_angle_close",
+								"bh_square",
+								"bh_square_center",
+								"bh_square_open",
+								"bh_square_close",
+								"bh_default",
+								"bh_default_center",
+								"bh_default_open",
+								"bh_default_close"
+							],
+							"incomplete_sync": null,
+							"remote_loading": false,
+							"synced": false,
+							"syntax": "Packages/Text/Plain text.tmLanguage"
+						},
+						"translation.x": 0.0,
+						"translation.y": 0.0,
+						"zoom_level": 1.0
+					},
+					"stack_index": 1,
+					"type": "text"
+				}
+			]
+		}
+	],
+	"incremental_find":
+	{
+		"height": 25.0
+	},
+	"input":
+	{
+		"height": 34.0
+	},
+	"layout":
+	{
+		"cells":
+		[
+			[
+				0,
+				0,
+				1,
+				1
+			]
+		],
+		"cols":
+		[
+			0.0,
+			1.0
+		],
+		"rows":
+		[
+			0.0,
+			1.0
+		]
+	},
+	"menu_visible": true,
+	"output.find_results":
+	{
+		"height": 0.0
+	},
+	"output.sftp":
+	{
+		"height": 53.0
+	},
+	"project": "tmt.sublime-project",
+	"replace":
+	{
+		"height": 46.0
+	},
+	"save_all_on_build": true,
+	"select_file":
+	{
+		"height": 0.0,
+		"selected_items":
+		[
+			[
+				"default/ashanging/template/directory/currency.phtml",
+				"app/design/frontend/default/ashanging/template/directory/currency.phtml"
+			],
+			[
+				"template/directory/currency.phtml",
+				"app/design/frontend/base/default/template/directory/currency.phtml"
+			],
+			[
+				"app/design/frontend/default/ashanging/template/checkout/cart/sidebar.phtml",
+				"app/design/frontend/default/ashanging/template/checkout/cart/sidebar.phtml"
+			],
+			[
+				"app.j",
+				"iprospect-phonegap-responsive-website-app-template/js/app.js"
+			],
+			[
+				"scripts",
+				"phonegap-packager/public/js/scripts.js"
+			],
+			[
+				"styl",
+				"iprospect-phonegap-responsive-website-app-template/css/styles.css"
+			],
+			[
+				"scripts.js",
+				"phonegap-packager/public/js/scripts.js"
+			],
+			[
+				"iprospe",
+				"application/models/IprospectProject.php"
+			],
+			[
+				"site",
+				"public/xml/SiteMap.xml"
+			],
+			[
+				"complex",
+				"modules/apps/cloudcms/controllers/ComplexproductController.php"
+			],
+			[
+				"lib/doctrine/lib/doctrine/core.php",
+				"lib/Doctrine/lib/Doctrine/Core.php"
+			],
+			[
+				"controllerwish",
+				"application/controllers/WishlistController.php"
+			],
+			[
+				"wishlistin",
+				"application/views/scripts/wishlist/index.phtml"
+			],
+			[
+				"grunt",
+				"Gruntfile.js"
+			],
+			[
+				"pack",
+				"package.json"
+			],
+			[
+				"",
+				"public/js/script.js"
+			],
+			[
+				"script",
+				"public/js/script.js"
+			],
+			[
+				"eaventityattributesource",
+				"app/code/core/Mage/Eav/Model/Entity/Attribute/Source/Abstract.php"
+			],
+			[
+				"scri",
+				"public/js/script.js"
+			],
+			[
+				"modelapo",
+				"application/models/Appointment.php"
+			],
+			[
+				"acl",
+				"application/plugins/ACL.php"
+			],
+			[
+				"head",
+				"application/layouts/header.phtml"
+			],
+			[
+				"app",
+				"application/configs/application.ini"
+			],
+			[
+				"zoho",
+				"application/models/ZohoUser.php"
+			],
+			[
+				"iden",
+				"application/models/Identity.php"
+			],
+			[
+				"ifen",
+				"library/Zend/Gdata/App/FeedEntryParent.php"
+			],
+			[
+				"boot",
+				"application/Bootstrap.php"
+			],
+			[
+				"user/",
+				"application/views/scripts/user/account.phtml"
+			],
+			[
+				"user",
+				"application/models/User.php"
+			],
+			[
+				"stat",
+				"application/controllers/StaticPageController.php"
+			],
+			[
+				"authco",
+				"application/controllers/AuthController.php"
+			],
+			[
+				"auth",
+				"application/controllers/AuthController.php"
+			],
+			[
+				"terms",
+				"application/views/scripts/static-page/termsandconditions.phtml"
+			],
+			[
+				"vehiclein",
+				"application/views/scripts/vehicle/index.phtml"
+			],
+			[
+				"i",
+				"application/models/Identity.php"
+			],
+			[
+				"usercon",
+				"application/controllers/UserController.php"
+			],
+			[
+				"header",
+				"application/layouts/header.phtml"
+			],
+			[
+				"static",
+				"application/controllers/StaticPageController.php"
+			],
+			[
+				"heade",
+				"application/layouts/header.phtml"
+			],
+			[
+				"role",
+				"application/models/Role.php"
+			],
+			[
+				"hea",
+				"application/layouts/header.phtml"
+			],
+			[
+				"user.p",
+				"application/models/User.php"
+			],
+			[
+				"logge",
+				"application/models/Logger.php"
+			],
+			[
+				"user.",
+				"application/models/User.php"
+			],
+			[
+				"zo",
+				"application/models/ZohoUser.php"
+			],
+			[
+				"suppo",
+				"application/controllers/SupportController.php"
+			],
+			[
+				"vehiccle",
+				"application/controllers/VehicleController.php"
+			],
+			[
+				"zenddbtable",
+				"library/Zend/Db/Table/Abstract.php"
+			],
+			[
+				"zenddbtableabstract",
+				"library/Zend/Db/Table/Abstract.php"
+			],
+			[
+				"boo",
+				"application/Bootstrap.php"
+			],
+			[
+				"aja",
+				"application/controllers/AjaxController.php"
+			],
+			[
+				"library/zend/db/adapter/pdo/abstract.php",
+				"library/Zend/Db/Adapter/Pdo/Abstract.php"
+			],
+			[
+				"vehicle/ind",
+				"application/views/scripts/vehicle/index.phtml"
+			],
+			[
+				"messa",
+				"application/layouts/messages.phtml"
+			],
+			[
+				"formupda",
+				"application/forms/Updatepassword.php"
+			],
+			[
+				"formlog",
+				"application/forms/Auth/Login.php"
+			],
+			[
+				"getfilter",
+				"application/views/scripts/ajax/getfilter.phtml"
+			],
+			[
+				"pagination",
+				"application/views/scripts/partials/pagination.phtml"
+			],
+			[
+				".ini",
+				"application/configs/application.ini"
+			],
+			[
+				"appco",
+				"application/controllers/AppController.php"
+			],
+			[
+				"mes",
+				"application/layouts/messages.phtml"
+			],
+			[
+				"foot",
+				"application/layouts/footer.phtml"
+			],
+			[
+				"zendapplicationbootstrapbootstrap",
+				"library/Zend/Application/Bootstrap/Bootstrap.php"
+			],
+			[
+				"alb",
+				"app/Model/Album.php"
+			],
+			[
+				"artistcon",
+				"app/Controller/ArtistsController.php"
+			],
+			[
+				"modelartist",
+				"app/Model/Artist.php"
+			],
+			[
+				"artisttil",
+				"app/View/Elements/artistTiledList.ctp"
+			],
+			[
+				"default.ct",
+				"app/View/Layouts/default.ctp"
+			],
+			[
+				"modelatist",
+				"app/Model/Artist.php"
+			],
+			[
+				"page",
+				"app/webroot/css/less/pages.less"
+			],
+			[
+				"artistin",
+				"app/View/Artists/index.ctp"
+			],
+			[
+				"header.",
+				"app/webroot/css/less/header.less"
+			],
+			[
+				"pages.les",
+				"app/webroot/css/less/pages.less"
+			],
+			[
+				"defaul",
+				"app/View/Layouts/default.ctp"
+			],
+			[
+				"meta",
+				"app/View/Helper/MetaTagsHelper.php"
+			],
+			[
+				"header.c",
+				"app/View/Elements/header.ctp"
+			],
+			[
+				"bas",
+				"app/webroot/css/less/base.less"
+			],
+			[
+				"tables",
+				"app/Model/TableSnapshot.php"
+			],
+			[
+				"userrev",
+				"app/Model/UserReviewSnapshot.php"
+			],
+			[
+				"trackre",
+				"app/Model/TrackReviewSnapshot.php"
+			],
+			[
+				"profi",
+				"app/Controller/ProfilesController.php"
+			],
+			[
+				"users/e",
+				"app/View/Users/edit.ctp"
+			],
+			[
+				"trackscon",
+				"app/Controller/TracksController.php"
+			],
+			[
+				"track",
+				"app/Model/Tracks.php"
+			],
+			[
+				"lastfmbeh",
+				"app/Model/Behavior/LastfmBehavior.php"
+			],
+			[
+				"succes",
+				"app/design/frontend/blank/ernest_2014/template/checkout/success.phtml"
+			],
+			[
+				"main.j",
+				"skin/frontend/blank/ernest_2014/js/main.js"
+			],
+			[
+				"app/code/core/mage/adminhtml/block/system/config/form/field.php",
+				"app/code/core/Mage/Adminhtml/Block/System/Config/Form/Field.php"
+			],
+			[
+				"main.js",
+				"skin/frontend/blank/ernest_2014/js/main.js"
+			],
+			[
+				"look",
+				"app/design/frontend/blank/ernest_2014/template/catalog/category/lookbook.phtml"
+			],
+			[
+				"main",
+				"skin/frontend/blank/ernest_2014/js/main.js"
+			],
+			[
+				"retailcon",
+				"app/code/local/NVI/Retail/controllers/IndexController.php"
+			],
+			[
+				"retail",
+				"app/code/local/NVI/Retail/Model/Retail.php"
+			],
+			[
+				"success",
+				"app/code/core/Mage/Checkout/Block/Success.php"
+			],
+			[
+				"homepage",
+				"app/design/frontend/blank/ernest_2014/template/page/partials/homepageTile.phtml"
+			],
+			[
+				"2014home.pht",
+				"app/design/frontend/blank/ernest_2014/template/page/home.phtml"
+			],
+			[
+				"mobiledet",
+				"lib/Mobiledetect/Mobiledetect.php"
+			],
+			[
+				"home.phtml",
+				"app/design/frontend/blank/ernest_2014/template/page/home.phtml"
+			],
+			[
+				"home.p",
+				"app/design/frontend/blank/ernest_2014/template/page/home.phtml"
+			],
+			[
+				"suc",
+				"app/design/frontend/blank/ernest_2014/template/checkout/success.phtml"
+			],
+			[
+				"2014head.",
+				"app/design/frontend/blank/ernest_2014/template/page/html/head.phtml"
+			],
+			[
+				"succ",
+				"app/design/frontend/blank/ernest_2014/template/checkout/success.phtml"
+			],
+			[
+				"frontend/blank/default/template/catalog/product/view/options.phtml",
+				"app/design/frontend/blank/default/template/catalog/product/view/options.phtml"
+			],
+			[
+				"frontend/blank/default/template/catalog/product/view/options/js.phtml",
+				"app/design/frontend/blank/default/template/catalog/product/view/options/js.phtml"
+			],
+			[
+				"player",
+				"app/webroot/css/player.less"
+			],
+			[
+				"chart",
+				"app/webroot/css/charts.less"
+			],
+			[
+				"graph.j",
+				"app/webroot/js/player/graph.js"
+			],
+			[
+				"base.",
+				"app/webroot/css/base.less"
+			],
+			[
+				"styles.l",
+				"ernest_2014/less/styles.less"
+			],
+			[
+				"frontend/blank/ernest_2014/template/persistent/checkout/onepage/billing.phtml",
+				"app/design/frontend/blank/ernest_2014/template/persistent/checkout/onepage/billing.phtml"
+			],
+			[
+				"getcontrole",
+				"app/code/community/SMDesign/ColorswatchProductView/controllers/GetController.php"
+			],
+			[
+				"frontend/blank/ernest_2014/template/persistent/customer/form/login.phtml",
+				"app/design/frontend/blank/ernest_2014/template/persistent/customer/form/login.phtml"
+			],
+			[
+				"confi",
+				"application/models/Configurable.php"
+			],
+			[
+				"generap",
+				"application/views/scripts/projects/generate.phtml"
+			],
+			[
+				"cli",
+				"public/cli.php"
+			],
+			[
+				"clip",
+				"public/cli.php"
+			],
+			[
+				"genrea",
+				"application/views/scripts/projects/generate.phtml"
+			],
+			[
+				"configu",
+				"application/models/Configurable.php"
+			],
+			[
+				"config",
+				"application/models/Configurable.php"
+			],
+			[
+				"edit.p",
+				"application/views/scripts/partials/edit.phtml"
+			],
+			[
+				"configura",
+				"application/models/Configurable.php"
+			],
+			[
+				"configurabl",
+				"application/models/Configurable.php"
+			],
+			[
+				"models",
+				"application/models/Project.php"
+			],
+			[
+				"zendcontrolleraction",
+				"library/Zend/Controller/Action.php"
+			],
+			[
+				"magecatalogmodelpro",
+				"app/code/core/Mage/Catalog/Model/Product.php"
+			],
+			[
+				"mageeavmodelentitysetup",
+				"app/code/core/Mage/Eav/Model/Entity/Setup.php"
+			],
+			[
+				"app/code/core/mage/eav/model/entity/attribute/source/",
+				"app/code/core/Mage/Eav/Model/Entity/Attribute/Source/Store.php"
+			],
+			[
+				"app/code/core/mage/core/model/resource/setup.php",
+				"app/code/core/Mage/Core/Model/Resource/Setup.php"
+			]
+		],
+		"width": 0.0
+	},
+	"select_project":
+	{
+		"height": 0.0,
+		"selected_items":
+		[
+		],
+		"width": 0.0
+	},
+	"select_symbol":
+	{
+		"height": 392.0,
+		"selected_items":
+		[
+		],
+		"width": 881.0
+	},
+	"settings":
+	{
+	},
+	"show_minimap": true,
+	"show_open_files": false,
+	"show_tabs": true,
+	"side_bar_visible": true,
+	"side_bar_width": 261.0,
+	"status_bar_visible": true,
+	"template_settings":
+	{
+	}
+}

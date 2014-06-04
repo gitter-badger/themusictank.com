@@ -1,15 +1,15 @@
 <?php
 
 App::uses('User', 'Model');
-App::uses('CakeSession', 'Model/Datasource');   
+App::uses('CakeSession', 'Model/Datasource');
 App::uses('OEmbedable', 'Model');
 
 class Album extends OEmbedable
-{	    
+{
 	public $hasOne      = array('RdioAlbum', 'AlbumReviewSnapshot', "LastfmAlbum");
     public $hasMany     = array('Tracks' => array('order' => 'track_num ASC'));
     public $belongsTo   = "Artist";
-    	
+
     public function beforeSave($options = array())
     {
         // Ensure the data has a valid unique slug
@@ -26,7 +26,7 @@ class Album extends OEmbedable
             "limit"      => $limit
         ));
     }
-    
+
     public function getUpdatedSetBySlug($slug, $addCurrentUser = false)
     {
         $syncValues = $this->find("first", array(
@@ -35,34 +35,17 @@ class Album extends OEmbedable
         ));
 
         if(count($syncValues)) {
-            $this->RdioAlbum->data = $syncValues;        
+            $this->RdioAlbum->data = $syncValues;
             $this->RdioAlbum->updateCached();
-                          
-            $this->LastfmAlbum->data = $syncValues;        
-            $this->LastfmAlbum->updateCached();
-                   
-            $this->AlbumReviewSnapshot->data = $syncValues;    
-            $this->AlbumReviewSnapshot->updateCached();
-                   
-            $data = $this->findBySlug($slug);
-            
-            if($addCurrentUser)
-            {   
-                $user = new User();
-                $data["User"]["id"] = CakeSession::read('Auth.User.User.id');
-                
-                $user->SubscribersAlbumReviewSnapshot->data    = $data;
-                $data["SubscribersAlbumReviewSnapshot"]        = $user->SubscribersAlbumReviewSnapshot->updateCached();        
-                
-                $user->UserAlbumReviewSnapshot->data    = $data;
-                $data["UserAlbumReviewSnapshot"]        = $user->UserAlbumReviewSnapshot->updateCached();            
-            }
-            
+
+            $this->LastfmAlbum->data = $syncValues;
+        	$data["LastfmTrack"] = $this->LastfmAlbum->updateCached();
+
             $this->data = $data;
             return $data;
         }
     }
-            
+
     /**
      * Saves a list of RdioAlbums.
      * @param type $artistId
@@ -75,38 +58,38 @@ class Album extends OEmbedable
         $artistId   = $this->getData("Artist.id");
         $rdioKey    = $this->getData("RdioArtist.key");
         $filtered   = $this->RdioAlbum->filterNew($artistId, $rdioKey, $albums);
-        
+
         if(count($filtered))
         {
-            return $this->saveMany($filtered, array('deep' => true));                       
+            return $this->saveMany($filtered, array('deep' => true));
         }
         return true;
     }
-            
+
     public function setNewReleases($newReleasesIds)
-    {   
-        return $this->updateAll(array("Album.is_newrelease" => true), array("Album.id" => $newReleasesIds)); 
+    {
+        return $this->updateAll(array("Album.is_newrelease" => true), array("Album.id" => $newReleasesIds));
     }
-    
+
     public function resetArtistNotables($artistId)
     {
         $this->updateAll(array("Album.notability" => 'NULL'), array("Album.artist_id" => $artistId));
-    }            
-    
+    }
+
     public function resetNewReleases()
-    { 
+    {
         return $this->updateAll(array("Album.is_newrelease" => false), array("Album.is_newrelease" => true));
     }
-    
+
     public function getNewReleases($limit = null)
-    {   
+    {
         return $this->find("all", array(
             "conditions" => array("is_newrelease" => true),
             "limit" => $limit,
             "order" => array("release_date DESC")
-        )); 
+        ));
     }
-    
+
     public function toOEmbed($additionalData = array())
     {
         $data = $this->getData("AlbumReviewSnapshot");
@@ -114,17 +97,37 @@ class Album extends OEmbedable
         unset($data["id"]);
         unset($data["metacritic_score"]);
         unset($data["snapshot_ppf"]);
-     
+
         $data = Hash::insert($data, "Album.title", $this->getData("Album.name"));
         $data = Hash::insert($data, "Album.slug", $this->getData("Album.slug"));
 
         return parent::toOEmbed(array_merge($additionalData, $data));
     }
 
+
+    public function getSnapshot()
+    {
+		$reviews = new AlbumReviewSnapshot();
+    	return $reviews->fetch($this->getData("Album.id"));
+    }
+
+    public function getUserSnapshot($userId)
+    {
+		$reviews = new UserAlbumReviewSnapshot();
+    	return $reviews->fetch($this->getData("Album.id"), $userId);
+    }
+
+    public function getUserSubscribersSnapshot($userIds)
+    {
+		$reviews = new SubscribersAlbumReviewSnapshot();
+    	return $reviews->fetch($this->getData("Album.id"), $userIds);
+    }
+
+
     public function addTracksSnapshots()
     {
         $trackIds       = Hash::extract($this->data, "Tracks.{n}.id");
-        $trackSnapshots = $this->Tracks->getSnapshotsByTrackIds($trackIds);   
+        $trackSnapshots = $this->Tracks->getSnapshotsByTrackIds($trackIds);
 
         if($trackSnapshots)
         {

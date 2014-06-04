@@ -121,7 +121,6 @@
     <?php else : ?>
         var r = new tmt.Mp3(<?php echo json_encode($config); ?>);  
     <?php endif; ?>
-    console.log(r);
     window.onblur = function(){r.onWindowVisibility(false);};
     window.onfocus = function(){r.onWindowVisibility(true);};
     r.run();

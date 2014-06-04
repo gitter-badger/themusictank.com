@@ -6,12 +6,12 @@ App::uses('UserActivity', 'Model');
 App::uses('Notifications', 'Model');
 
 class User extends AppModel
-{	
-	public $name    = 'User';    
+{
+	public $name    = 'User';
 	public $hasOne  = array('RdioUser', 'FacebookUser');
     public $hasMany = array(
-        'UserAchievements', 'Notifications', 'UserFollowers', 
-        'UserAlbumReviewSnapshot', 'UserTrackReviewSnapshot', 
+        'UserAchievements', 'Notifications', 'UserFollowers',
+       // 'UserAlbumReviewSnapshot', 'UserTrackReviewSnapshot',
         'SubscribersAlbumReviewSnapshot', 'SubscribersTrackReviewSnapshot'
     );
 	public $validate = array(
@@ -41,38 +41,38 @@ class User extends AppModel
 			)
 		)
 	);
-    
-    
+
+
     const PLAYER_RDIO   = "rdio";
     const PLAYER_MP3    = "mp3";
-    
-    
+
+
     public static function getPreferredPlayer($userdata)
-    {                   
+    {
         if((int)$userdata["preferred_player_api"] === 1 && CakeSession::read('Player.Rdio'))
         {
             return self::PLAYER_RDIO;
         }
-        
+
         return self::PLAYER_MP3;
     }
-        
+
     public static function getFullName($userdata)
     {
         return $userdata["firstname"] . " " . $userdata['lastname'];
     }
-    
+
     public function beforeSave($options = array())
     {
         if (isset($this->data[$this->alias]['password']))
         {
             $this->data[$this->alias]['password'] = AuthComponent::password($this->data[$this->alias]['password']);
         }
-        
-        $this->checkSlug(array('firstname', 'lastname'));        
+
+        $this->checkSlug(array('firstname', 'lastname'));
         return true;
     }
-    
+
     public function afterSave($created, $options = array())
     {
         if($created)
@@ -81,16 +81,16 @@ class User extends AppModel
             $this->reward($userId, UserActivity::TYPE_NEW_ACCOUNT);
         }
     }
-        
+
     public function reward($userId, $key)
-    {       
-        $achievement = $this->UserAchievements->Achievement->findByKey($key);        
+    {
+        $achievement = $this->UserAchievements->Achievement->findByKey($key);
         if($achievement)
-        {   
+        {
             $achievementId    = $achievement["Achievement"]["id"];
             $achievementName  = $achievement["Achievement"]["name"];
             if($this->UserAchievements->notObtained($userId, $achievementId))
-            {                
+            {
                 if($this->UserAchievements->grant($userId, $achievementId))
                 {
                     $msg = sprintf(__("Achievement unlocked: \"%s\"!"), $achievementName);
@@ -100,7 +100,7 @@ class User extends AppModel
         }
         return false;
     }
- 
+
     public function notify($userId, $type, $title, $id = null)
     {
         $this->Notifications->create();
@@ -123,7 +123,7 @@ class User extends AppModel
 
     public function getFollowers($userId)
     {
-        $idList = $this->UserFollowers->getFollowers($userId, true); 
+        $idList = $this->UserFollowers->getFollowers($userId, true);
         return $this->find('all', array(
             'conditions' => array("User.id" => $idList),
             'fields' => array("User.*")
@@ -134,7 +134,7 @@ class User extends AppModel
     {
         $idList     = $this->UserFollowers->getSubscriptions($userId, true);
         $filtered   = $this->SubscribersTrackReviewSnapshot->getUserIdsWhoReviewed($trackId, $idList);
-                
+
         return $this->find("all", array("conditions" => array("User.id" => $filtered), "fields" => array("User.*")));
     }
 
@@ -142,10 +142,10 @@ class User extends AppModel
     {
         $idList     = $this->UserFollowers->getSubscriptions($userId, true);
         $filtered   = $this->SubscribersAlbumReviewSnapshot->getUserIdsWhoReviewed($albumId, $idList);
-                
+
         return $this->find("all", array("conditions" => array("User.id" => $filtered), "fields" => array("User.*")));
     }
-    
+
     public function getReviewUserSummary($trackId)
     {
         $filtered = $this->SubscribersTrackReviewSnapshot->getUserIdsWhoReviewed($trackId);
@@ -158,13 +158,16 @@ class User extends AppModel
         return $this->find("all", array("conditions" => array("User.id" => $filtered), "fields" => array("User.*")));
     }
 
-    
-    public function getUncachedSnapshot($userId)
-    {            
-        $this->data["User"] = array("id" => $userId);
-        $this->UserTrackReviewSnapshot->data = $this->data;
-        return $this->UserTrackReviewSnapshot->temporarySnapshot();
+
+    public function getSnapshot($userId, $trackId)
+    {
+    	$this->UserTrackReviewSnapshot->data = array(
+    		"User" 	=> array("id" => $userId),
+    		"Track" => array("id" => $trackId)
+		);
+
+        return $this->UserTrackReviewSnapshot->updateCached();
     }
-    
-    
+
+
 }

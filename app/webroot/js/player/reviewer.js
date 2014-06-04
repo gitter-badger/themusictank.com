@@ -821,7 +821,7 @@
         
         onWindowResize : function()
         {
-            this.setDisplayHeight();
+            //this.setDisplayHeight();
         },
         
         onWindowVisibility : function(isVisible)

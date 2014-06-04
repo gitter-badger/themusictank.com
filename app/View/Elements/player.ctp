@@ -1,5 +1,5 @@
 <?php
-    $config = array(            
+    $config = array(
         "containerSelector"     => ".play-" . $track["slug"],
         "domain"    => $_SERVER['SERVER_NAME'],
         "type"      => $preferredPlayer,
@@ -8,90 +8,90 @@
         "saveEquilizer"    => count($track["wavelength"]),
         "equilizeUrl" => Router::url(array("controller" => "ajax", "action" => "savewave", $track["slug"], sha1($track["slug"] . $track["id"] . "foraiurtheplayer"))),
         "debug"     => Configure::read('debug') > 0
-    );    
+    );
     $playerClassName = "Mp3";
-    $isLogged = $this->Session->read("Auth.User.User.id");        
-    
+    $isLogged = $this->Session->read("Auth.User.User.id");
+
     $graphConfig = array(
         "containerSelector" => ".play-" . $track["slug"] . " canvas",
         "trackDuration" => (int)$track["duration"],
         "equilizerData"    => $track["wavelength"]
     );
-    
+
     if(isset($trackReviewSnapshot) && count($trackReviewSnapshot))
     {
         $graphConfig["curves"][ "tankers" ] = array(
             "label" => __("Everyone"),
             "data" => $trackReviewSnapshot["curve_snapshot"],
             "color" => "#999999"
-        );         
+        );
         $graphConfig["ranges"][ "tankers" ] = array(
             "label" => __("Everyone"),
             "data" => $trackReviewSnapshot["range_snapshot"],
             "color" => "rgba(66, 66, 66,.4)"
-        ); 
-    }     
-    
+        );
+    }
+
     if(isset($subsTrackReviewSnapshot) && count($subsTrackReviewSnapshot))
     {
         $graphConfig["curves"][ "subs" ] = array(
             "label" => __("Your subscriptions"),
             "data" => $subsTrackReviewSnapshot["curve_snapshot"],
             "color" => "#4285f4"
-        );         
+        );
         $graphConfig["ranges"][ "subs" ] = array(
             "label" => __("Your subscriptions"),
             "data" => $subsTrackReviewSnapshot["range_snapshot"],
             "color" => "rgba(66, 133, 244, .4)"
-        ); 
+        );
     }
-    
+
     if(isset($userTrackReviewSnapshot) && count($userTrackReviewSnapshot))
     {
         $graphConfig["curves"][ "you" ] = array(
             "label" => __("You"),
             "data" => $userTrackReviewSnapshot["curve_snapshot"],
             "color" => "rgb(90, 20, 244)"
-        );         
+        );
         $graphConfig["ranges"][ "you" ] = array(
             "label" => __("You"),
             "data" => $userTrackReviewSnapshot["range_snapshot"],
-            "color" => "rgba(90, 20, 244, .4)"            
-        ); 
+            "color" => "rgba(90, 20, 244, .4)"
+        );
     }
-    
+
     if(isset($viewingTrackReviewSnapshot) && count($viewingTrackReviewSnapshot))
     {
         $graphConfig["curves"][ "user" ] = array(
             "label" => $viewingUser["firstname"] . " " . $viewingUser["lastname"],
             "data" => $viewingTrackReviewSnapshot["curve_snapshot"],
             "color" => "rgb(90, 20, 244)"
-        );         
+        );
         $graphConfig["ranges"][ "viewingUser" ] = array(
             "label" => $viewingUser["firstname"] . " " . $viewingUser["lastname"],
             "data" => $viewingTrackReviewSnapshot["range_snapshot"],
-            "color" => "rgba(90, 20, 244, .4)"            
-        ); 
+            "color" => "rgba(90, 20, 244, .4)"
+        );
     }
-    
+
     if($preferredPlayer == "rdio")
     {
         $playerClassName = "Rdio";
         $config["swfRoot"] = "http://www.rdio.com/api/swf/";
-        $config["swfId"] = "play-" . $track["slug"];        
+        $config["swfId"] = "play-" . $track["slug"];
         $config["playbackToken"]  = CakeSession::read("Player.RdioPlaybackToken");
-        $config["trackKey"] = $rdioTrack["key"];    
+        $config["trackKey"] = $rdioTrack["key"];
         echo '<b id="play-'.$track["slug"] .'"></b>';
     }
-    else {         
+    else {
         $config["trackTitle"] = $track["title"];
-    }    
+    }
 ?>
-<section class="player chart timed <?php echo $preferredPlayer; ?> <?php echo $isLogged ? 'logged' : 'not-logged' ?> play-<?php echo $track["slug"]; ?>">    
-    <canvas></canvas>    
+<section class="player chart timed <?php echo $preferredPlayer; ?> <?php echo $isLogged ? 'logged' : 'not-logged' ?> play-<?php echo $track["slug"]; ?>">
+    <canvas></canvas>
     <div class="cursor"></div>
-    <?php if(count($graphConfig["curves"]) > 0) : ?>    
-    <ul class="legend">      
+    <?php if(count($graphConfig["curves"]) > 0) : ?>
+    <ul class="legend">
         <?php foreach($graphConfig["curves"] as $key => $curveInfo) : ?>
         <li class="<?php echo $key; ?>">
             <label>
@@ -100,26 +100,26 @@
             </label>
         </li>
         <?php endforeach; ?>
-    </ul> 
+    </ul>
     <?php endif; ?>
-        
-    <div class="seek">            
+
+    <div class="seek">
         <div class="bar"><div class="progress"><span class="knob"></span></div></div>
     </div>
-        
-    <div class="controls">   
+
+    <div class="controls">
         <ul style="float:right;">
             <li><?php echo $this->Html->link(__("Review"), array('controller' => 'player', 'action' => 'play', $track["slug"])); ?></li>
         </ul>
         <ul>
             <li><button type="button" title="<?php echo __("Play"); ?>" name="play"><?php echo __("Play"); ?></button></li>
             <li class="time">--:-- / --:--</li>
-        </ul>        
+        </ul>
         <?php if($preferredPlayer == "mp3") : ?>
-            <div class="drop">            
+            <div class="drop">
                 <p><?php echo sprintf(__("Drop your mp3 of '%s' here"), $track["title"]); ?></p>
                 <input type="file" name="file" />
-            </div>       
+            </div>
             <?php if(!$isLogged) : ?>
                 <div class="or-login">
                     <p><?php echo $this->Html->link(__("or login"), array('controller' => 'users', 'action' => 'login', "?" => array("rurl" => "/tracks/view/".$track["slug"]))); ?></p>
@@ -135,13 +135,81 @@
                     <?php echo __("The file doesn't have the same length as we were expecting. We can't match it with our version."); ?>
                     <button name="try-again"><?php echo __("Try again"); ?></button>
                 </p>
-            </div>        
+            </div>
         <?php elseif($preferredPlayer == "rdio") : ?>
             <div class="flash-required">
                 <p><?php echo __("Flash support is required to use the Rdio player."); ?></p>
             </div>
-        <?php endif; ?>        
-    </div>     
+        <?php endif; ?>
+    </div>
+
+
+<style>
+.axis path, .axis line {
+  fill: none;
+  stroke: #000;
+  shape-rendering: crispEdges;
+}
+
+.area {
+  fill: lightsteelblue;
+}
+
+.range-tankers {
+  fill :rgba(22,155,155,0.2);
+}
+
+.line {
+  fill: none;
+  stroke: steelblue;
+  stroke-width: 1.5px;
+}
+
+.dot {
+  fill: white;
+  stroke: steelblue;
+  stroke-width: 1.5px;
+}
+</style>
+<script src="http://d3js.org/d3.v3.min.js"></script>
+<script>
+
+$(function() {
+	<?php if(isset($trackReviewSnapshot) && count($trackReviewSnapshot)) : ?>
+	//everyone
+	$(".d3chart").append("<h3>everyone</h3>");
+	var svg = d3.select(".d3chart").append("svg");
+		tmt.createRange(svg, <?php echo json_encode($trackReviewSnapshot["range_snapshot"]); ?>, {key: "range-everyone", total: <?php echo (int)$track["duration"]; ?>});
+		tmt.createLine(svg, <?php echo json_encode($trackReviewSnapshot["curve_snapshot"]); ?>, {key: "line-everyone", total: <?php echo (int)$track["duration"]; ?>});
+	<?php endif; ?>
+	<?php if(isset($viewingTrackReviewSnapshot) && count($viewingTrackReviewSnapshot)) : ?>
+	// a user
+	$(".d3chart").append("<h3>a user</h3>");
+	var svg = d3.select(".d3chart").append("svg");
+		tmt.createRange(svg, <?php echo json_encode($viewingTrackReviewSnapshot["range_snapshot"]); ?>, {key: "range-user", total: <?php echo (int)$track["duration"]; ?>});
+		tmt.createLine(svg, <?php echo json_encode($viewingTrackReviewSnapshot["curve_snapshot"]); ?>, {key: "line-user", total: <?php echo (int)$track["duration"]; ?>});
+	<?php endif; ?>
+	<?php if (isset($userTrackReviewSnapshot) && count($userTrackReviewSnapshot)) : ?>
+	// you
+	$(".d3chart").append("<h3>you</h3>");
+	var svg = d3.select(".d3chart").append("svg");
+		tmt.createRange(svg, <?php echo json_encode($userTrackReviewSnapshot["range_snapshot"]); ?>, {key: "range-you", total: <?php echo (int)$track["duration"]; ?>});
+		tmt.createLine(svg, <?php echo json_encode($userTrackReviewSnapshot["curve_snapshot"]); ?>, {key: "line-you", total: <?php echo (int)$track["duration"]; ?>});
+	<?php endif; ?>
+ 	<?php if(isset($subsTrackReviewSnapshot) && count($subsTrackReviewSnapshot)) : ?>
+ 	// subs
+ 	$(".d3chart").append("<h3>subs</h3>");
+	var svg = d3.select(".d3chart").append("svg");
+		tmt.createRange(svg, <?php echo json_encode($subsTrackReviewSnapshot["range_snapshot"]); ?>, {key: "range-subs", total: <?php echo (int)$track["duration"]; ?>});
+		tmt.createLine(svg, <?php echo json_encode($subsTrackReviewSnapshot["curve_snapshot"]); ?>, {key: "line-subs", total: <?php echo (int)$track["duration"]; ?>});
+	<?php endif; ?>
+});
+
+</script>
+
+<div class="d3chart"></div>
+
+
 <script>$(function(){
 new tmt.<?php echo $playerClassName; ?>(<?php echo json_encode($config); ?>).run();
 new tmt.Graph(<?php echo json_encode($graphConfig); ?>);

@@ -8,6 +8,7 @@ class PlayerController extends AppController {
         parent::beforeFilter();         
         $this->Auth->deny(array("rdio", "mp3"));
         $this->usesPlayer(true);
+        $this->layout = "blank";
     }
                             
     /** 

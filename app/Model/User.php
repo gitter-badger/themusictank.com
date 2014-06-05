@@ -5,6 +5,10 @@ App::uses('CakeSession', 'Model/Datasource');
 App::uses('UserActivity', 'Model');
 App::uses('Notifications', 'Model');
 
+App::uses('SubscribersAlbumReviewSnapshot', 'Model');
+App::uses('SubscribersTrackReviewSnapshot', 'Model');
+
+
 class User extends AppModel
 {
 	public $name    = 'User';
@@ -12,7 +16,7 @@ class User extends AppModel
     public $hasMany = array(
         'UserAchievements', 'Notifications', 'UserFollowers',
        // 'UserAlbumReviewSnapshot', 'UserTrackReviewSnapshot',
-        'SubscribersAlbumReviewSnapshot', 'SubscribersTrackReviewSnapshot'
+       // 'SubscribersAlbumReviewSnapshot', 'SubscribersTrackReviewSnapshot'
     );
 	public $validate = array(
 		'username' => array(
@@ -45,7 +49,6 @@ class User extends AppModel
 
     const PLAYER_RDIO   = "rdio";
     const PLAYER_MP3    = "mp3";
-
 
     public static function getPreferredPlayer($userdata)
     {
@@ -130,31 +133,59 @@ class User extends AppModel
         ));
     }
 
-    public function getCommonSubscriberReview($userId, $trackId)
+    public function getSubscribersWhichReviewedAlbum($userId, $albumId)
     {
-        $idList     = $this->UserFollowers->getSubscriptions($userId, true);
-        $filtered   = $this->SubscribersTrackReviewSnapshot->getUserIdsWhoReviewed($trackId, $idList);
+        $idList  = $this->UserFollowers->getSubscriptions($userId, true);
+		$reviews = new UserAlbumReviewSnapshot();
+        $filtered = $reviews->filterUserIdsWhoReviewedAblum($albumId, $idList);
 
-        return $this->find("all", array("conditions" => array("User.id" => $filtered), "fields" => array("User.*")));
+        return $this->find("all", array("conditions" => array("User.id" => $filtered), "fields" => array("User.*"), "limit" => 50));
     }
 
-    public function getCommonSubscriberAlbumReview($userId, $albumId)
+    public function getSubscribersWhichReviewedTrack($userId, $trackId)
     {
-        $idList     = $this->UserFollowers->getSubscriptions($userId, true);
-        $filtered   = $this->SubscribersAlbumReviewSnapshot->getUserIdsWhoReviewed($albumId, $idList);
+        $idList  = $this->UserFollowers->getSubscriptions($userId, true);
+		$reviews = new UserTrackReviewSnapshot();
+        $filtered = $reviews->filterUserIdsWhoReviewedTrack($trackId, $idList);
 
-        return $this->find("all", array("conditions" => array("User.id" => $filtered), "fields" => array("User.*")));
+        return $this->find("all", array("conditions" => array("User.id" => $filtered), "fields" => array("User.*"), "limit" => 50));
     }
 
-    public function getReviewUserSummary($trackId)
+    /**
+    *	returns a table snapshot of the user's subscribers.
+    */
+    public function getSubscriberAlbumSnapshot($userId, $albumId)
     {
-        $filtered = $this->SubscribersTrackReviewSnapshot->getUserIdsWhoReviewed($trackId);
-        return $this->find("all", array("conditions" => array("User.id" => $filtered), "fields" => array("User.*")));
+		$reviews = new SubscribersAlbumReviewSnapshot();
+		return $reviews->fetch($albumId, $this->UserFollowers->getSubscriptions($userId, true));
+    }
+
+    /**
+    *	Returns a list of people that have been reviwing the album
+    */
+    public function getRecentAlbumReviewers($albumId)
+    {
+		$reviews = new UserAlbumReviewSnapshot();
+        return $this->find("all", array("conditions" => array("User.id" => $reviews->getUserIdsWhoReviewedAblum($albumId)), "fields" => array("User.*")));
+    }
+
+    public function getRecentTrackReviewers($trackId)
+    {
+		$reviews = new UserTrackReviewSnapshot();
+        return $this->find("all", array("conditions" => array("User.id" => $reviews->getUserIdsWhoReviewedTrack($trackId)), "fields" => array("User.*")));
     }
 
     public function getAlbumReviewUserSummary($albumId)
     {
-        $filtered = $this->SubscribersAlbumReviewSnapshot->getUserIdsWhoReviewed($albumId);
+		$reviews = new UserAlbumReviewSnapshot();
+        $filtered = $reviews->filterUserIdsWhoReviewedAblum($albumId);
+        return $this->find("all", array("conditions" => array("User.id" => $filtered), "fields" => array("User.*")));
+    }
+
+    public function getTrackReviewUserSummary($trackId)
+    {
+		$reviews = new UserTrackReviewSnapshot();
+        $filtered = $reviews->filterUserIdsWhoReviewedTrack($trackId);
         return $this->find("all", array("conditions" => array("User.id" => $filtered), "fields" => array("User.*")));
     }
 

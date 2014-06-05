@@ -45,11 +45,15 @@ class AppHelper extends Helper {
 	public function getImageUrl($obj, $addImplicitPath = false)
 	{
 		$implicit = "/img/";
-		$imgsrc = "placeholder.png";
+		$image = Hash::get($obj, "image");
+		$imgsrc = "";
 
-		if(array_key_exists("image", $obj) && !is_null($obj["image"]) && file_exists(WWW_ROOT . ($addImplicitPath ? $implicit : "") . $obj["image"])) {
-			$imgsrc = $obj["image"];
-		}		
+		if($image && file_exists(WWW_ROOT . ($addImplicitPath ? $implicit : "") . $image)) {
+			$imgsrc = $image;
+		}
+		else {
+			$imgsrc = "placeholder.png";
+		}
 
 		return $addImplicitPath ? $implicit . $imgsrc : $imgsrc;
 	}

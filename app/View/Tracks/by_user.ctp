@@ -4,14 +4,13 @@
     </div>
 
     <aside>
-        <h1><?php echo $track["title"]; ?></h1>
+        <h1><?php echo $this->Html->link($track["title"], array('controller' => 'tracks', 'action' => 'view', $track["slug"])); ?></h1>
         <h2><?php echo sprintf(__("Off of %s, by %s"), $this->Html->link($album["name"], array('controller' => 'albums', 'action' => 'view', $album["slug"])), $this->Html->link($artist["name"], array('controller' => 'artists', 'action' => 'view', $artist["slug"])));?> </h2>
         <p>
             <?php echo __("Reviewed by"); ?>
             <?php echo $this->Html->link($viewingUser["firstname"] . " " . $viewingUser["lastname"], array('controller' => 'profiles', 'action' => 'view', $viewingUser["slug"])); ?>
             <?php echo $this->element('followButton', array("user" => $viewingUser)); ?>
         </p>
-
         <?php $currentPage = "http://" . $_SERVER['SERVER_NAME'] . Router::url(array('controller' => 'tracks', 'action' => 'by_user', $track["slug"], $viewingUser["slug"])); ?>
         <div class="share">
             <a href="https://twitter.com/share" class="twitter-share-button"

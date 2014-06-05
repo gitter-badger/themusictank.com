@@ -68,11 +68,10 @@ class TableSnapshot extends AppModel
     public function snap($conditions)
     {
     	return $this->_createSnapshot($conditions);
-
-
+/*
 
         $id = $this->getData($this->alias . ".id");
-        return (empty($id)) ? $this->_createSnapshot() : $this->_updateSnapshot();
+        return (empty($id)) ? $this->_createSnapshot() : $this->_updateSnapshot(); */
     }
 
     /**
@@ -81,12 +80,14 @@ class TableSnapshot extends AppModel
      */
     public function requiresUpdate()
     {
-        return true;
+    	$timestamp = Hash::get($this->data, $this->alias . ".lastsync");
+        return (int)$timestamp + (HOUR*12) < time();
 
         $timestamp = $this->getData($this->alias . ".lastsync");
         return empty($timestamp) || $timestamp + (HOUR*12) < time();
     }
 
+/*
     public function getUserIdsWhoReviewed($trackId, $userIdFilter = null)
     {
         $rf = new ReviewFrames();
@@ -110,8 +111,56 @@ class TableSnapshot extends AppModel
             'order' => 'rand()'
             )
         );
+    }*/
+
+    public function getUserIdsWhoReviewedTrack($trackId)
+    {
+    	$frames = new ReviewFrames();
+		//$count = $frames->find("count", array("conditions" => array("ReviewFrame.album_id" => $albumId), "fields" => "DISTINCT user_id"));
+
+    	return Hash::extract($frames->find("all", array(
+	    		"conditions" => array("ReviewFrames.track_id" => $trackId),
+	    		"fields" => array("DISTINCT user_id")
+			)),
+			"n.ReviewFrames.user_id");
     }
 
+	public function filterUserIdsWhoReviewedTrack($trackId, $userIds) {
+    	$frames = new ReviewFrames();
+    	return $frames->find("all", array(
+    		"conditions" => array(
+    			"ReviewFrames.track_id" => $trackId,
+    			"ReviewFrames.user_id" => $userIds
+			),
+    		"fields" => array("DISTINCT user_id"),
+    		"limit" => 100
+		));
+	}
+
+
+    public function getUserIdsWhoReviewedAblum($albumId)
+    {
+    	$frames = new ReviewFrames();
+		//$count = $frames->find("count", array("conditions" => array("ReviewFrame.album_id" => $albumId), "fields" => "DISTINCT user_id"));
+
+    	return Hash::extract($frames->find("all", array(
+	    		"conditions" => array("ReviewFrames.album_id" => $albumId),
+	    		"fields" => array("DISTINCT user_id")
+			)),
+			"n.ReviewFrames.user_id");
+    }
+
+	public function filterUserIdsWhoReviewedAblum($albumId, $userIds) {
+    	$frames = new ReviewFrames();
+    	return $frames->find("all", array(
+	    		"conditions" => array(
+	    			"ReviewFrames.album_id" => $albumId,
+	    			"ReviewFrames.user_id" => $userIds
+    			),
+	    		"fields" => array("DISTINCT user_id"),
+	    		"limit" => 100
+			));
+	}
 
     /**
      * Returns all the reviewing data based on a Model query. This function does not permit user based queries.
@@ -412,11 +461,11 @@ class TableSnapshot extends AppModel
     }*/
 
 
-    /**
+    /* *
      * Updates an existing model snapshot
      * @private
      * @return boolean True on success, false on failure
-     */
+
     private function _updateSnapshot()
     {
         $belongsToData  = $this->getBelongsToData();
@@ -428,7 +477,7 @@ class TableSnapshot extends AppModel
         $curve          = $this->getCurve($belongsToId, 150, $timestamp);
 
         return $this->_validateAndSave($appreciation, $curve);
-    }
+    }*/
 
     /**
      * Validates and saves a snapshot

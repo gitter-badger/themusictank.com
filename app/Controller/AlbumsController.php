@@ -38,15 +38,14 @@ class AlbumsController extends AppController {
         $this->set("oembedLink",    $this->Album->getOEmbedUrl());
 
         // Associate review snapshots.
-        $this->set("albumReviewSnapshot",  Hash::extract($this->Album->getSnapshot(), "AlbumReviewSnapshot"));
-        $this->set("usersWhoReviewed", $this->User->getAlbumReviewUserSummary($data["Album"]["id"]));
+        $this->set("albumReviewSnapshot", 	Hash::extract($this->Album->getSnapshot(), "AlbumReviewSnapshot"));
+        $this->set("usersWhoReviewed", 		$this->User->getRecentAlbumReviewers($data["Album"]["id"]));
 
         if($isLoggedIn)
         {
-            $this->set("userAlbumReviewSnapshot",  Hash::extract($this->Album->getUserSnapshot($this->getAuthUserId()), "UserAlbumReviewSnapshot"));
-            // this should pass an array of subscriber userids
-            $this->set("subsAlbumReviewSnapshot", Hash::extract($this->Album->getUserSubscribersSnapshot($this->getAuthUserId()), "SubscribersAlbumReviewSnapshot"));
-            $this->set("subsWhoReviewed", $this->User->getCommonSubscriberAlbumReview($this->getAuthUserId(), $data["Album"]["id"]));
+            $this->set("userAlbumReviewSnapshot", Hash::extract($this->Album->getUserSnapshot($this->getAuthUserId()), "UserAlbumReviewSnapshot"));
+            $this->set("subsAlbumReviewSnapshot", Hash::extract($this->User->getSubscriberAlbumSnapshot($this->getAuthUserId(), $data["Album"]["id"]), "SubscribersAlbumReviewSnapshot"));
+            $this->set("subsWhoReviewed", $this->User->getSubscribersWhichReviewedAlbum($this->getAuthUserId(), $data["Album"]["id"]));
         }
 
         $this->Album->addTracksSnapshots();
@@ -126,14 +125,12 @@ class AlbumsController extends AppController {
      */
     public function search()
     {
+        $title = __("Search");
+
         if($this->request->is('get'))
         {
             $this->set('albums', $this->Paginator->paginate('Album', array('Album.name LIKE' => "%". trim($this->request->query['name'])."%")));
             $title = sprintf(__("Searching for: \"%s\""), trim($this->request->query['name']));
-        }
-        else
-        {
-            $title = __("Search");
         }
 
         $this->set("title", $title);

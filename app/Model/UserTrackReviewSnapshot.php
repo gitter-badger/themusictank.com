@@ -8,7 +8,6 @@ class UserTrackReviewSnapshot extends TableSnapshot
     public $useTable    = 'user_track_review_snapshots';
     public $belongsTo   = array('Track', 'User');
 
-
     public function fetch($trackId, $userIds) {
 
     	$conditions = array();

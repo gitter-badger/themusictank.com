@@ -26,7 +26,6 @@ class TracksController extends AppController {
         $data       = $this->Track->getUpdatedSetBySlug($trackSlug, $isLoggedIn);
         if(!$data) throw new NotFoundException(sprintf(__("Could not find the track %s"), $trackSlug));
 
-
         // Set the default track information.
         $this->set("track", $data["Track"]);
         $this->set("rdioTrack", $data["RdioTrack"]);
@@ -35,10 +34,10 @@ class TracksController extends AppController {
         $this->set("artist", $data["Album"]["Artist"]);
 
         // Load the users who have reviewed the track
-        $this->set("usersWhoReviewed", $this->User->getReviewUserSummary($data["Track"]["id"]));
+        $this->set("usersWhoReviewed", $this->User->getRecentTrackReviewers($data["Track"]["id"]));
         if ($isLoggedIn)
         {
-            $this->set("subsWhoReviewed", $this->User->getCommonSubscriberReview($this->getAuthUserId(), $data["Track"]["id"]));
+            $this->set("subsWhoReviewed", $this->User->getSubscribersWhichReviewedTrack($this->getAuthUserId(), $data["Track"]["id"]));
         }
 
         // Load the previous and next tracks

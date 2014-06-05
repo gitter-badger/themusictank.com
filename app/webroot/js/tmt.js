@@ -214,7 +214,11 @@ $(function() {
 		    height = 500 - margin.top - margin.bottom;
 
 		var data = d3.range(details.total).map(function(i) {
-		  	return {x: i, y: parseFloat(jsonData[i].avg)};
+
+			if (jsonData[i]) {
+		  		return {x: i, y: parseFloat(jsonData[i].avg)};
+		  	}
+		  	return {x:i, y: 0.5};
 		});
 
 		var x = d3.scale.linear()
@@ -255,7 +259,10 @@ $(function() {
 			if(jsonData.max && jsonData.max[i]) {
 				max = jsonData[i].max;
 			}*/
-		  	return {x: i, y: parseFloat(jsonData[i].min), x1: i, y1 : parseFloat(jsonData[i].max)};
+			if(jsonData[i]) {
+		  		return {x: i, y: parseFloat(jsonData[i].min), x1: i, y1 : parseFloat(jsonData[i].max)};
+		  	}
+		  	return {x:i, y:0.5, x1:i, y1:0.5}
 		});
 
 

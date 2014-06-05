@@ -52,12 +52,20 @@ class ArtistsController extends AppController {
         $this->set("rdioArtist",    $data["RdioArtist"]);
         $this->set("lastfmArtist",  $data["LastfmArtist"]);        
         $this->set("albums",        $data["Albums"]);
-        $this->set("artistReviewSnapshot", $data["ArtistReviewSnapshot"]);
+
+        $this->set("artistReviewSnapshot",  Hash::extract($this->Artist->getSnapshot(), "artistReviewSnapshot"));
+        
+        if($isLoggedIn)
+        {
+            //$this->set("userArtistReviewSnapshot",  Hash::extract($this->Artist->getUserSnapshot($this->getAuthUserId()), "UserArtistReviewSnapshot"));
+            //$this->set("subsArtistReviewSnapshot", Hash::extract($this->Artist->getUserSubscribersSnapshot($this->getAuthUserId()), "SubscribersArtistReviewSnapshot"));
+            //$this->set("subsWhoReviewed", $this->User->getCommonSubscriberAlbumReview($this->getAuthUserId(), $data["Album"]["id"]));
+        }
 
         $this->setPageTitle(array($data["Artist"]["name"]));        
         $this->setPageMeta(array(
             "keywords" => array($data["Artist"]["name"]),      
-            "description" => __("Listening statistics of ") . $data["Artist"]["name"] . _("'s discography.")
+            "description" => __("Listening statistics of ") . $data["Artist"]["name"] . __("'s discography.")
         ));
     }
     

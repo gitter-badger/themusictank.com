@@ -1,12 +1,14 @@
 <?php
 
 App::uses('User', 'Model');
+App::uses('UserAlbumReviewSnapshot', 'Model');
+App::uses('AlbumReviewSnapshot', 'Model');
 App::uses('CakeSession', 'Model/Datasource');
 App::uses('OEmbedable', 'Model');
 
 class Album extends OEmbedable
 {
-	public $hasOne      = array('RdioAlbum', 'AlbumReviewSnapshot', "LastfmAlbum");
+	public $hasOne      = array('RdioAlbum', "LastfmAlbum");
     public $hasMany     = array('Tracks' => array('order' => 'track_num ASC'));
     public $belongsTo   = "Artist";
 
@@ -31,18 +33,21 @@ class Album extends OEmbedable
     {
         $syncValues = $this->find("first", array(
             "conditions" => array("Album.slug" => $slug),
-            "fields"    => array("Album.id", "Album.name", "RdioAlbum.*", "Artist.name", "LastfmAlbum.id", "LastfmAlbum.lastsync", "AlbumReviewSnapshot.*", "RdioAlbum.*")
+            "fields"    => array("Album.*", "RdioAlbum.*", "Artist.*", "LastfmAlbum.*", "RdioAlbum.*")
         ));
 
         if(count($syncValues)) {
+
             $this->RdioAlbum->data = $syncValues;
             $this->RdioAlbum->updateCached();
+            $syncValues["RdioAlbum"] = $this->RdioAlbum->data["RdioAlbum"];
 
             $this->LastfmAlbum->data = $syncValues;
-        	$data["LastfmTrack"] = $this->LastfmAlbum->updateCached();
+        	$this->LastfmAlbum->updateCached();
+            $syncValues["LastfmAlbum"] = $this->LastfmAlbum->data["LastfmAlbum"];
 
-            $this->data = $data;
-            return $data;
+            $this->data = $syncValues;
+            return $syncValues;
         }
     }
 
@@ -92,7 +97,7 @@ class Album extends OEmbedable
 
     public function toOEmbed($additionalData = array())
     {
-        $data = $this->getData("AlbumReviewSnapshot");
+        $data = $this->getSnapshot();
         unset($data["album_id"]);
         unset($data["id"]);
         unset($data["metacritic_score"]);
@@ -108,6 +113,16 @@ class Album extends OEmbedable
     public function getSnapshot()
     {
 		$reviews = new AlbumReviewSnapshot();
+        $reviews->data = array(
+            "Album" => array(
+                "id" => $this->getData("Album.id"),
+                "name" => $this->getData("Album.name")
+            ),
+            "Artist" => array(
+         //       "id" => $this->getData("Artist.id"),
+                "name" => $this->getData("Artist.name")
+            )
+        );
     	return $reviews->fetch($this->getData("Album.id"));
     }
 

@@ -50,12 +50,12 @@ class TableSnapshot extends AppModel
      */
     public function updateCached($conditions)
     {
-    	$this->data = $this->find("first", $conditions);
+        $this->data[$this->alias] = Hash::extract($this->find("first", $conditions), $this->alias);
 
         if($this->requiresUpdate())
         {
             $this->snap($conditions);
-    		$this->data = $this->find("first", $conditions);
+            $this->data[$this->alias] = Hash::extract($this->find("first", $conditions), $this->alias);
         }
 
         return $this->data;
@@ -270,7 +270,7 @@ class TableSnapshot extends AppModel
      */
     public function getBelongsToData()
     {
-        return $this->data[$this->getBelongsToAlias()];
+        return Hash::get($this->data, $this->getBelongsToAlias());
     }
 
     /**
@@ -287,8 +287,8 @@ class TableSnapshot extends AppModel
 
         $extras["lastsync"]  = time();
         $extras[strtolower($belongsToAlias) . "_id"] = (int)$belongsToData["id"];
-        $id = (int)$this->getData($this->alias . ".id");
 
+        $id = (int)Hash::check($this->data, $this->alias . ".id");
         if($id > 0)
         {
            $extras["id"] = $id;
@@ -324,7 +324,10 @@ class TableSnapshot extends AppModel
     	foreach ($curve as $value) {
     		$total += (float)$value["avg"];
     	}
-    	return $total / count($curve);
+
+        if (count($curve) > 0) {
+            return $total / count($curve);
+        }
     }
 
     public function getAverageCurve($conditions)

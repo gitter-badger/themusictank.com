@@ -1,10 +1,10 @@
 <?php
 
-//App::uses('User', 'Model');
+App::uses('ArtistReviewSnapshot', 'Model');
 
 class Artist extends AppModel
 {	    
-	public $hasOne = array('RdioArtist', /*'EchonestArtist',*/ 'LastfmArtist', "ArtistReviewSnapshot");	
+	public $hasOne = array('RdioArtist', /*'EchonestArtist',*/ 'LastfmArtist' /*, "ArtistReviewSnapshot"*/);	
     public $hasMany = array('Albums' => array('order' => array('Albums.notability DESC', 'Albums.release_date DESC')));
     public $order = "name ASC";    
 	public $validate = array(
@@ -29,31 +29,49 @@ class Artist extends AppModel
     {
         $syncValues = $this->find("first", array(
             "conditions" => array("Artist.slug" => $slug),
-            "fields"    => array("RdioArtist.*", "Artist.id", "Artist.name", "LastfmArtist.image", "LastfmArtist.id", "LastfmArtist.lastsync", "ArtistReviewSnapshot.*")
+            "fields"    => array("RdioArtist.*", "Artist.*", "LastfmArtist.*")
         ));
         
-        $this->RdioArtist->data = $syncValues;        
-        $this->RdioArtist->updateCached();
-                      
-        $this->LastfmArtist->data = $syncValues;        
-        $this->LastfmArtist->updateCached();
-                
-        $this->ArtistReviewSnapshot->data = $syncValues;    
-        $this->ArtistReviewSnapshot->updateCached();
-                
-        /* Feature is currently broken. We dont want graphs on the whole discography
-         * we would rather have avg scores
-        if($addCurrentUser)
-        {   
-            $user = new User();
-            $user->UserArtistReviewSnapshot->data = $syncValues;
-            $user->UserArtistReviewSnapshot->updateCached();            
-        }*/
-                
-        // Everything has been sync'd. Fetch every field we have.
-        return $this->findBySlug($slug);
+        if(count($syncValues)) {
+            $this->RdioArtist->data = $syncValues;        
+            $this->RdioArtist->updateCached();
+            $syncValues["RdioArtist"] = $this->RdioArtist->data["RdioArtist"];
+                          
+            $this->LastfmArtist->data = $syncValues;        
+            $this->LastfmArtist->updateCached();
+            $syncValues["LastfmArtist"] = $this->LastfmArtist->data["LastfmArtist"];
+                    
+            // Everything has been sync'd. Fetch every field we have.
+            $this->data = $syncValues;
+            return $syncValues; //$this->findBySlug($slug);
+        }
     }
     
+
+    public function getSnapshot()
+    {
+        $reviews = new ArtistReviewSnapshot();
+        $reviews->data = array(
+            "Artist" => array(
+                "id" => $this->getData("Artist.id"),
+                "name" => $this->getData("Artist.name")
+            )
+        );
+        return $reviews->fetch($this->getData("Artist.id"));
+    }
+
+    public function getUserSnapshot($userId)
+    {
+        $reviews = new UserArtistReviewSnapshot();
+        return $reviews->fetch($this->getData("Artist.id"), $userId);
+    }
+
+    public function getUserSubscribersSnapshot($userIds)
+    {
+        $reviews = new SubscribersArtistReviewSnapshot();
+        return $reviews->fetch($this->getData("Artist.id"), $userIds);
+    }
+
     public function beforeSave($options = array())
     {
         // Ensure the data has a valid unique slug

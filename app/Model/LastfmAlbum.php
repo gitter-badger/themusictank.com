@@ -16,8 +16,10 @@ class LastfmAlbum extends AppModel
             if($infos)
             {
                 $this->_saveDetails($infos);
+                return $infos;
             } 
         }
+        return $this->data;
     }    
     
     public function requiresUpdate()

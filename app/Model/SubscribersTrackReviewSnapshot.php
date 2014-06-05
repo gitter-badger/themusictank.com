@@ -1,8 +1,8 @@
 <?php
-App::uses('UserReviewSnapshot', 'Model');
+App::uses('TableSnapshot', 'Model');
 App::uses('CakeSession', 'Model/Datasource');   
 
-class SubscribersTrackReviewSnapshot extends UserReviewSnapshot
+class SubscribersTrackReviewSnapshot extends TableSnapshot
 {	    
 	public $name        = 'SubscribersTrackReviewSnapshot';
     public $useTable    = 'subscribers_track_review_snapshots';  
@@ -35,4 +35,15 @@ class SubscribersTrackReviewSnapshot extends UserReviewSnapshot
         $extraConditions=  (count($ids) > 0) ? "user_id IN (" . implode(",", $ids) . ")" : "0 = 1";
         return parent::getappreciation($belongsToId, $timestamp, $extraConditions);
     }
+
+
+    public function fetch($trackId, $userIds) {
+
+        $conditions = array();
+        $conditions = Hash::insert($conditions, "track_id", $trackId);
+        $conditions = Hash::insert($conditions, "user_id", $userIds);
+
+        return $this->updateCached( $conditions );
+    }
+    
 }

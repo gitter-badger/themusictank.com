@@ -57,6 +57,10 @@
         </aside>
 
         <div class="statistics">
+
+            <?php echo $this->element("stats"); ?>
+
+<?php /*
             <section class="tankers">
                 <?php echo $this->Chart->getBigPie("track", $artist["slug"], $trackReviewSnapshot); ?>
                 <h3><?php echo __("General"); ?></h3>
@@ -115,6 +119,8 @@
                 <?php endif; ?>
             </section>
             <?php endif; ?>
+
+            */ ?>
         </div>
     </article>
 

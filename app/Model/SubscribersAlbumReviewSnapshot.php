@@ -1,8 +1,8 @@
 <?php
-App::uses('UserReviewSnapshot', 'Model');
+App::uses('TableSnapshot', 'Model');
 App::uses('CakeSession', 'Model/Datasource');   
 
-class SubscribersAlbumReviewSnapshot extends UserReviewSnapshot
+class SubscribersAlbumReviewSnapshot extends TableSnapshot
 {	    
 	public $name        = 'SubscribersAlbumReviewSnapshot';
     public $useTable    = 'subscribers_album_review_snapshots';  
@@ -51,4 +51,8 @@ class SubscribersAlbumReviewSnapshot extends UserReviewSnapshot
         $extraConditions=  (count($ids) > 0) ? "user_id IN (" . implode(",", $ids) . ")" : "0 = 1";
         return parent::getappreciation($belongsToId, $timestamp, $extraConditions);
     }       
+
+    public function fetch($albumId, $userIds) {
+        return $this->updateCached( array("ReviewFrames.album_id"=>$albumId, "user_id" => $userIds) );
+    }
 }

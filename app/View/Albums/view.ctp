@@ -145,8 +145,10 @@
             <ol class="tracks">            
             <?php  foreach($tracks as $track) : ?>
                 <li>
-                    <?php echo $this->Html->link($track["title"], array('controller' => 'tracks', 'action' => 'view', $track["slug"])); ?>                
-                    <?php echo $this->Chart->getHorizontalGraph("track", $track["slug"] . "-1", $track["TrackReviewSnapshot"]); ?>
+                    <?php echo $this->Html->link($track["title"], array('controller' => 'tracks', 'action' => 'view', $track["slug"])); ?>             
+                    <?php if (Hash::check($track, "TrackReviewSnapshot")) : ?>   
+                        <?php echo $this->Chart->getHorizontalGraph("track", $track["slug"] . "-1", $track["TrackReviewSnapshot"]); ?>
+                    <?php endif; ?>
                 </li>
             <?php endforeach; ?>
             </ol>        

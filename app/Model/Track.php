@@ -51,17 +51,10 @@ class Track extends OEmbedable
 
     public function getSnapshotsByTrackIds($ids)
     {
-        $data = $this->find("all", array(
-                "conditions" => array($this->alias . ".id" => $ids),
-                "fields" => "TrackReviewSnapshot.*"
-            )
-        );
-
-        if($data) {
-            return Hash::extract($data, "{n}.TrackReviewSnapshot");
-        }
-
-        return false;
+        $reviews = new TrackReviewSnapshot();
+        return Hash::extract($reviews->find("all", array(
+            "conditions" => array("track_id" => $ids)
+        )), "TrackReviewSnapshot");
     }
 
     public function getNextTrack()

@@ -1,8 +1,8 @@
 <?php
-App::uses('UserReviewSnapshot', 'Model');
+App::uses('TableSnapshot', 'Model');
 App::uses('CakeSession', 'Model/Datasource');
 
-class UserTrackReviewSnapshot extends UserReviewSnapshot
+class UserTrackReviewSnapshot extends TableSnapshot
 {
 	public $name        = 'UserTrackReviewSnapshot';
     public $useTable    = 'user_track_review_snapshots';

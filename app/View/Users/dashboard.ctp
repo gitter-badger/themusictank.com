@@ -134,6 +134,7 @@
 
         <aside class="col-md-4 aside">
 
+        <?php if (!is_null($dailyChallenge)) : ?>
             <h3><?php echo __("Daily challenge"); ?></h3>
             <p class="lead"><?php echo $this->StringMaker->composeDailyChallengeIntro($dailyChallenge); ?></p>
             <div class="media">
@@ -151,6 +152,7 @@
                     <p><?php echo $this->Html->link(__("Let's do this"), array('controller' => 'player', 'action' => 'play', $dailyChallenge["Track"]["slug"]), array("class" => "btn btn-primary")); ?></p>        
                 </div>
             </div>
+        <?php endif; ?>
 
                 <?php /*
 

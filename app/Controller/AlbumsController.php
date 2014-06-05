@@ -45,7 +45,7 @@ class AlbumsController extends AppController {
         {
             $this->set("userAlbumReviewSnapshot",  Hash::extract($this->Album->getUserSnapshot($this->getAuthUserId()), "UserAlbumReviewSnapshot"));
             // this should pass an array of subscriber userids
-            $this->set("subsAlbumReviewSnapshot", Hash::extract($this->Album->getSubscribersSnapshot($this->getAuthUserId()), "SubscribersAlbumReviewSnapshot"));
+            $this->set("subsAlbumReviewSnapshot", Hash::extract($this->Album->getUserSubscribersSnapshot($this->getAuthUserId()), "SubscribersAlbumReviewSnapshot"));
             $this->set("subsWhoReviewed", $this->User->getCommonSubscriberAlbumReview($this->getAuthUserId(), $data["Album"]["id"]));
         }
 
@@ -88,7 +88,8 @@ class AlbumsController extends AppController {
         $this->set("tracks",        $data["Tracks"]);
         $this->set("artist",        $data["Artist"]);
         $this->set("oembedLink",    $this->Album->getOEmbedUrl());
-        $this->set("albumReviewSnapshot",  $data["AlbumReviewSnapshot"]);
+
+        $this->set("albumReviewSnapshot",  Hash::extract($this->Album->getSnapshot(), "AlbumReviewSnapshot"));
 
         $this->setPageTitle(array($data["Album"]["name"], $data["Artist"]["name"]));
         $this->setPageMeta(array(

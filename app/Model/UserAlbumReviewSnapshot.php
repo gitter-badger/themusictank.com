@@ -1,8 +1,8 @@
 <?php
-App::uses('UserReviewSnapshot', 'Model');
+App::uses('TableSnapshot', 'Model');
 App::uses('CakeSession', 'Model/Datasource');   
 
-class UserAlbumReviewSnapshot extends UserReviewSnapshot
+class UserAlbumReviewSnapshot extends TableSnapshot
 {	    
 	public $name        = 'UserAlbumReviewSnapshot';
     public $useTable    = 'user_album_review_snapshots';  
@@ -48,4 +48,9 @@ class UserAlbumReviewSnapshot extends UserReviewSnapshot
     {                
         return parent::getappreciation($belongsToId, $timestamp, "user_id = " . CakeSession::read('Auth.User.User.id'));
     }
+
+    public function fetch($albumId, $userId) {
+        return $this->updateCached( array("ReviewFrames.album_id"=>$albumId, "user_id" => $userId) );
+    }
+
 }

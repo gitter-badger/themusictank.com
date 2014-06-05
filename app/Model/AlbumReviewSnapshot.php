@@ -46,11 +46,14 @@ class AlbumReviewSnapshot extends TableSnapshot
     public function getExtraSaveFields()
     {   
         $saveArray  = parent::getExtraSaveFields();
-        
+
         // Add the metacritic score in the save array.
         $saveArray["metacritic_score"] = $this->getMetacriticScore($this->getData("Album.name"), $this->getData("Artist.name"));
         
         return $saveArray; 
     }
-        
+
+    public function fetch($albumId) {
+        return $this->updateCached( array("ReviewFrames.album_id"=>$albumId) );
+    }
 }

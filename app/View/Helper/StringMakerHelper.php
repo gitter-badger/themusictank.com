@@ -28,7 +28,7 @@ class StringMakerHelper extends AppHelper {
 			"Do you think this track justifies its length?"
 		);
 		$shortTrack = array(
-			"Short and sweet. This is one of the shortest tracks on the album.",
+			"Short and sweet, this is one of the shortest tracks on the album.",
 			"Because size isn't everything... right? A short track for today's challenge."
 		);
 

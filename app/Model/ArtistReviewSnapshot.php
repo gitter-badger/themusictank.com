@@ -81,5 +81,10 @@ class ArtistReviewSnapshot extends TableSnapshot
             array();
     }
     
+
+
+    public function fetch($artistId) {
+        return $this->updateCached( array("ReviewFrames.artist_id"=>$artistId) );
+    }
     
 }

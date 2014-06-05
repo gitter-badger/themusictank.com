@@ -27,18 +27,14 @@ class TracksController extends AppController {
         if(!$data) throw new NotFoundException(sprintf(__("Could not find the track %s"), $trackSlug));
 
         // Set the default track information.
-        $this->set("track", $data["Track"]);
+        $this->set("album", 	$data["Album"]);
+        $this->set("artist", 	$data["Album"]["Artist"]);
+        $this->set("track", 	$data["Track"]);
         $this->set("rdioTrack", $data["RdioTrack"]);
         $this->set("lastfmTrack", $data["LastfmTrack"]);
-        $this->set("album", $data["Album"]);
-        $this->set("artist", $data["Album"]["Artist"]);
 
         // Load the users who have reviewed the track
         $this->set("usersWhoReviewed", $this->User->getRecentTrackReviewers($data["Track"]["id"]));
-        if ($isLoggedIn)
-        {
-            $this->set("subsWhoReviewed", $this->User->getSubscribersWhichReviewedTrack($this->getAuthUserId(), $data["Track"]["id"]));
-        }
 
         // Load the previous and next tracks
         $this->set("nextTrack", $this->Track->getNextTrack());
@@ -51,6 +47,7 @@ class TracksController extends AppController {
         if($isLoggedIn) {
 			$this->set("userTrackReviewSnapshot", Hash::extract($this->Track->getUserSnapshot($this->getAuthUserId()), "UserTrackReviewSnapshot"));
 			$this->set("subsTrackReviewSnapshot", Hash::extract($this->Track->getUserSubscribersSnapshot($this->getAuthUserId()), "UserTrackReviewSnapshot"));
+            $this->set("subsWhoReviewed", $this->User->getSubscribersWhichReviewedTrack($this->getAuthUserId(), $data["Track"]["id"]));
         }
 
         $this->set("oembedLink", $this->Track->getOEmbedUrl());
@@ -75,19 +72,18 @@ class TracksController extends AppController {
      */
     public function embed($trackSlug)
     {
-        $this->usesPlayer();
         $this->layout = "blank";
 
         $data = $this->Track->getUpdatedSetBySlug($trackSlug);
         if(!$data) throw new NotFoundException(sprintf(__("Could not find the track %s"), $trackSlug));
 
-        $this->set("track", $data["Track"]);
-        $this->set("rdioTrack", $data["RdioTrack"]);
-        $this->set("lastfmTrack", $data["LastfmTrack"]);
-        $this->set("album", $data["Album"]);
-        $this->set("artist", $data["Album"]["Artist"]);
+        $this->set("track", 		$data["Track"]);
+        $this->set("rdioTrack", 	$data["RdioTrack"]);
+        $this->set("lastfmTrack", 	$data["LastfmTrack"]);
+        $this->set("album", 		$data["Album"]);
+        $this->set("artist", 		$data["Album"]["Artist"]);
         $this->set("trackReviewSnapshot", $data["TrackReviewSnapshot"]);
-        $this->set("oembedLink", $this->Track->getOEmbedUrl());
+        $this->set("oembedLink", 	$this->Track->getOEmbedUrl());
     }
 
     public function by_user($trackSlug, $userSlug)
@@ -95,26 +91,27 @@ class TracksController extends AppController {
         $userData = $this->User->findBySlug($userSlug, array("fields" => "User.*"));
         if(!$userData) throw new NotFoundException(sprintf(__("Could not find the user %s"), $userSlug));
 
-        $this->usesPlayer();
-
         $isLoggedIn = $this->userIsLoggedIn();
+
         $data = $this->Track->getUpdatedSetBySlug($trackSlug, $isLoggedIn);
         if(!$data) throw new NotFoundException(sprintf(__("Could not find the track %s"), $trackSlug));
 
+        $this->usesPlayer();
+
         // Setup the basic variables
-        $this->set("viewingUser", $userData["User"]);
-        $this->set("track", $data["Track"]);
-        $this->set("rdioTrack", $data["RdioTrack"]);
-        $this->set("lastfmTrack", $data["LastfmTrack"]);
-        $this->set("album", $data["Album"]);
-        $this->set("artist", $data["Album"]["Artist"]);
+        $this->set("viewingUser", 	$userData["User"]);
+        $this->set("track", 		$data["Track"]);
+        $this->set("rdioTrack", 	$data["RdioTrack"]);
+        $this->set("lastfmTrack", 	$data["LastfmTrack"]);
+        $this->set("album", 		$data["Album"]);
+        $this->set("artist", 		$data["Album"]["Artist"]);
 
  		// Load the review snapshots
 		$this->set("trackReviewSnapshot", Hash::extract($this->Track->getSnapshot(), "TrackReviewSnapshot"));
+		// Only load the profile snapshot if the profile is not the current user
 		if(!$isLoggedIn || $this->Session->read('Auth.User.User.id') != $userData["User"]["id"]) {
 			$this->set("profileTrackReviewSnapshot", Hash::extract($this->Track->getUserSnapshot($userData["User"]["id"]), "UserTrackReviewSnapshot"));
 		}
-
         if($isLoggedIn) {
 			$this->set("userTrackReviewSnapshot", Hash::extract($this->Track->getUserSnapshot($this->getAuthUserId()), "UserTrackReviewSnapshot"));
         }
@@ -137,10 +134,10 @@ class TracksController extends AppController {
         $data = $this->Track->getBySlugContained($trackSlug);
         if(!$data) throw new NotFoundException(sprintf(__("Could not find the track %s"), $trackSlug));
 
-        $this->set("track", $data["Track"]);
-        $this->set("album", $data["Album"]);
-        $this->set("artist", $data["Album"]["Artist"]);
-        $this->set("usersWhoReviewed", $this->User->getCommonSubscriberReview($this->getAuthUserId(), $data["Track"]["id"]));
+        $this->set("track", 	$data["Track"]);
+        $this->set("album", 	$data["Album"]);
+        $this->set("artist", 	$data["Album"]["Artist"]);
+        $this->set("usersWhoReviewed", $this->User->getSubscribersWhichReviewedTrack($this->getAuthUserId(), $data["Track"]["id"]));
 
         $this->setPageTitle(array($data["Track"]["title"], $data["Album"]["name"], $data["Album"]["Artist"]["name"]));
         $this->setPageMeta(array(

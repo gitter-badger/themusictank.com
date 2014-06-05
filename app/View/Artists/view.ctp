@@ -9,9 +9,9 @@
 
     <article class="heading artist-profile">
 
-        <div class="image" style="background-image:url(<?php echo $this->App->getImageUrl($lastfmArtist, true) ?>);">
+        <div class="image" <?php if(!is_null($lastfmArtist)) : ?>style="background-image:url(<?php echo $this->App->getImageUrl($lastfmArtist, true) ?>);"<?php endif; ?>>
             <div class="fx1"></div>
-            <div class="vertical-vignette"></div> 
+            <div class="vertical-vignette"></div>
         </div>
 
         <aside>
@@ -24,7 +24,7 @@
         <div class="statistics">
 
             <?php echo $this->element("stats"); ?>
-            
+
         </div>
 
     </article>
@@ -39,15 +39,15 @@
     </section>
 
     <?php echo $this->Disqus->get('/artists/view/'.$artist["slug"].'/', $artist["name"]); ?>
-            
+
 </div>
 
 <section class="credits">
     <div class="container container-fluid">
         <p>
-            <?php echo __("Artist biography and profile image courtesy of"); ?> <?php echo $this->Html->link("Last.fm", "http://www.last.fm/", array("target" => "_blank")); ?>. 
-            <?php echo __("They were last updated on"); ?> <?php echo date("F j, g:i a", $lastfmArtist["lastsync"]); ?>. 
-            <?php echo __("Album information and images courtesy of"); ?> <?php echo $this->Html->link("Rdio.com", "http://www.rdio.com/", array("target" => "_blank")); ?>. 
+            <?php echo __("Artist biography and profile image courtesy of"); ?> <?php echo $this->Html->link("Last.fm", "http://www.last.fm/", array("target" => "_blank")); ?>.
+            <?php echo __("They were last updated on"); ?> <?php echo date("F j, g:i a", $lastfmArtist["lastsync"]); ?>.
+            <?php echo __("Album information and images courtesy of"); ?> <?php echo $this->Html->link("Rdio.com", "http://www.rdio.com/", array("target" => "_blank")); ?>.
             <?php echo __("These ones were last updated on"); ?> <?php echo date("F j, g:i a", $rdioArtist["lastsync"]); ?>. User-contributed text is available under the Creative Commons By-SA License and may also be available under the GNU FDL.
         </p>
     </div>

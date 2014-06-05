@@ -1,36 +1,4 @@
-
-		<div class="d3chart"></div>
-
-
-
-<style>
-.axis path, .axis line {
-  fill: none;
-  stroke: #000;
-  shape-rendering: crispEdges;
-}
-
-.area {
-  fill: lightsteelblue;
-}
-
-.range-tankers {
-  fill :rgba(22,155,155,0.2);
-}
-
-.line {
-  fill: none;
-  stroke: steelblue;
-  stroke-width: 1.5px;
-}
-
-.dot {
-  fill: white;
-  stroke: steelblue;
-  stroke-width: 1.5px;
-}
-</style>
-<script src="http://d3js.org/d3.v3.min.js"></script>
+<div class="d3chart"></div>
 <script>
 	$(function(){
 		var svg = d3.select(".d3chart").append("svg");

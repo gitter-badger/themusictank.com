@@ -8,6 +8,19 @@
 	],
 	"settings":
     {
+		"dictionary": "Packages/Language - French - Français/fr_FR.dic",
+		"font_options":
+		[
+			"no_round"
+		],
+		"font_size": 13,
+		"ignored_packages":
+		[
+			"Vintage"
+		],
+		"word_separators": "./\\()\"'-:,.;<>~!@#%^&*|+=[]{}`~?",
+		"word_wrap": false,
+
         "less2css":
         {
 			"autoCompile": true,

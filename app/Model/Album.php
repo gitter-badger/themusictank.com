@@ -109,7 +109,6 @@ class Album extends OEmbedable
         return parent::toOEmbed(array_merge($additionalData, $data));
     }
 
-
     public function getSnapshot()
     {
 		$reviews = new AlbumReviewSnapshot();
@@ -119,7 +118,6 @@ class Album extends OEmbedable
                 "name" => $this->getData("Album.name")
             ),
             "Artist" => array(
-         //       "id" => $this->getData("Artist.id"),
                 "name" => $this->getData("Artist.name")
             )
         );

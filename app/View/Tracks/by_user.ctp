@@ -31,6 +31,13 @@
         <?php // echo $this->element("player"); ?>
         <?php echo $this->element("graph"); ?>
 
+<div class="piechart"></div>
+    <script>
+    $(function(){
+    	tmt.createPie(".piechart", [{"type" : "smile", "value" : <?php echo $trackReviewSnapshot["liking_pct"]; ?>}, {"type" : "meh", "value" : <?php echo $trackReviewSnapshot["neutral_pct"]; ?>}, {"type" : "frown", "value" : <?php echo $trackReviewSnapshot["disliking_pct"]; ?>}], {key: "tanker chart-tanker"});
+	});
+	</script>
+
 </div>
 
 

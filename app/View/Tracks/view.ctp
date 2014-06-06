@@ -196,7 +196,10 @@
 
     </section>
 
-    <?php echo $this->Disqus->get('/artists/view/'.$artist["slug"].'/', $artist["name"]); ?>
+
+
+
+    <?php // echo $this->Disqus->get('/artists/view/'.$artist["slug"].'/', $artist["name"]); ?>
 
 </div>
 

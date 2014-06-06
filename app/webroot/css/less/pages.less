@@ -1,6 +1,13 @@
+h2 {
+	color:#19a68d;
+	text-shadow:0 1px 1px rgba(0,0,0,.2);
+}
+h3, h4 {
+	color:#57ba93;
+}
 
 .browse-by-letter {
-	div {				
+	div {
 		a {
 			display:block;
 			line-height:50px;
@@ -11,7 +18,7 @@
 				color:#fff;
 				border-radius: 3px;
 			}
-		}	
+		}
 	}
 	padding-bottom: 1em;
 }
@@ -25,7 +32,7 @@
 		box-shadow: @lightBoxShadow;
 		overflow: hidden;
 		position: relative;
-		height:225px;	
+		height:225px;
 		background-image: url(/img/placeholder.png);
 		background-position: 50% 50%;
 		background-repeat:no-repeat;
@@ -35,7 +42,7 @@
 		border: none;
 		span {
 			display: block;
-			background-color:rgba(255, 255, 255, 0.8);				
+			background-color:rgba(255, 255, 255, 0.8);
 			position:absolute;
 			bottom:0;
 			border-top:1px solid #dedede;
@@ -45,9 +52,9 @@
 			width:100%;
 		}
 
-		&:hover {				
+		&:hover {
 			box-shadow: @darkBoxShadow;
-		}	
+		}
 	}
 	.recent-albums {
 		margin-top:1em;
@@ -75,7 +82,7 @@ time {
 
 .discography,
 .new-album-releases {
-	h2 {		
+	h2 {
 
 		a {
 			font-weight: normal;
@@ -125,13 +132,13 @@ time {
 	.website {
 		float:right;
 		clear:right;
-	}	
+	}
 }
 
 
 .map {
 	height:400px;
-	margin:2em 0;
+	margin:0 0 2em 	0;
 
 	article {
 		background:#000;
@@ -144,11 +151,12 @@ time {
 		font-size:2em;
 		text-align:center;
 		border-radius: 120px;
-		border:1px solid #aaa;
+		border:1px solid #eee;
 		position:absolute;
+		box-shadow:0 1px 4px rgba(0,0,0,.5);
 		transform:rotate(-7deg);
-		-ms-transform:rotate(-7deg); /* IE 9 */
-		-webkit-transform:rotate(-7deg); /* Opera, Chrome, and Safari */
+		-ms-transform:rotate(-7deg);
+		-webkit-transform:rotate(-7deg);
 	}
 
 	#mapCanvas {
@@ -166,9 +174,9 @@ time {
 		.col-md-2 {
 			text-align:center;
 		}
-		img {			
-			height:160px;
-			width:160px;
+		img {
+			height:100px;
+			width:100px;
 		}
 	}
 	h4 {
@@ -176,6 +184,8 @@ time {
 	}
 	blockquote {
 		font-size:1em;
+		border:none;
+		margin-top:1em;
 	}
 }
 
@@ -203,7 +213,7 @@ time {
 		font-size:1.2em;
 		width: 100%;
 
-		time {			
+		time {
 			color:#fff;
 			background:#000;
 			box-shadow:0 0 1px #000;
@@ -223,10 +233,12 @@ time {
 
 .notifications .new,
 .colored {
-	background:#4D433D;
-	border-radius: 5px;
-	border-bottom:2px solid #56877D;
+	background:#19a68d url(/img/pattern-1.png) top left repeat;
+	border-radius: 0;
+	border-bottom:1px solid #56877D;
+	border-top:1px solid #56877D;
 	color:#fff;
+	margin-bottom:0;
 }
 
 .user-badge {
@@ -244,4 +256,8 @@ time {
 			min-width: 120px;
 		}
 	}
+}
+
+.introduction {
+	text-shadow:0 1px 2px rgba(0,0,0,.4);
 }

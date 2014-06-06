@@ -67,17 +67,14 @@ class ReviewFrame extends AppModel
 
     public function getAppreciation($condition)
     {
-        $data = $this->query("
-            SELECT *
-            FROM
-                (SELECT count(*) AS liking_qty FROM review_frames WHERE $condition AND groove > .75) AS t1,
-                (SELECT count(*) AS disliking_qty FROM review_frames WHERE $condition AND groove < .25) AS t2,
-                (SELECT count(*) AS total_qty FROM review_frames WHERE $condition) AS t3;
-        ");
 
-        $liking     = $data[0]["t1"]["liking_qty"];
-        $disliking  = $data[0]["t2"]["disliking_qty"];
-        $total      = $data[0]["t3"]["total_qty"];
+		$dataT1 = $this->query("SELECT SUM(total_qty) as qty FROM (SELECT count(*) AS total_qty, AVG(groove) AS avg_groove FROM review_frames WHERE $condition group by position) as t1;");
+		$dataT2 = $this->query("SELECT SUM(liking_qty) as qty FROM (SELECT count(*) AS liking_qty, AVG(groove) AS avg_groove FROM review_frames WHERE $condition group by position HAVING avg_groove > .75) as t2");
+		$dataT3 = $this->query("SELECT SUM(disliking_qty) as qty FROM (SELECT count(*) AS disliking_qty, AVG(groove) AS avg_groove FROM review_frames WHERE $condition group by position HAVING avg_groove < .25 && avg_groove > 0) as t3");
+
+        $liking     = Hash::get($dataT2, "0.0.qty");
+        $disliking  = Hash::get($dataT3, "0.0.qty");
+        $total      = Hash::get($dataT1, "0.0.qty");
         $neutral    = $total - $disliking - $liking;
 
         // this prevents divisions by 0

@@ -1,10 +1,10 @@
 <?php
     $currentUserId = $this->Session->read('Auth.User.User.id');
 ?>
+
+<?php echo $this->element('profilesmenu'); ?>
+
 <div class="container container-fluid">
-
-    <?php echo $this->element('profilesmenu'); ?>
-
     <div class="row">
 
         <div class="col-md-6">

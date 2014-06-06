@@ -1,10 +1,8 @@
 <?php
-    $currentUserId = $this->Session->read('Auth.User.User.id');  
+    $currentUserId = $this->Session->read('Auth.User.User.id');
 ?>
+<?php echo $this->element('profilesmenu'); ?>
 <div class="container container-fluid">
-
-	<?php echo $this->element('profilesmenu'); ?>
-
 	<h2><?php echo __("Unlocked achievements"); ?></h2>
 	<p class="lead"><?php echo sprintf(__("The list of all achievements unlocked by %s."), $user["firstname"] . " " . $user["lastname"]); ?></p>
 

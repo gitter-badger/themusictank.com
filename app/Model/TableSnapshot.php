@@ -3,7 +3,6 @@
  * TableSnapshot is a class that handles common functions for models needing
  * to save ReviewFrames snapshots.
  */
-
 App::uses('ReviewFrames', 'Model');
 
 class TableSnapshot extends AppModel
@@ -117,15 +116,15 @@ class TableSnapshot extends AppModel
     {
     	$frames = new ReviewFrames();
 		//$count = $frames->find("count", array("conditions" => array("ReviewFrame.album_id" => $albumId), "fields" => "DISTINCT user_id"));
-
     	return Hash::extract($frames->find("all", array(
 	    		"conditions" => array("ReviewFrames.track_id" => $trackId),
 	    		"fields" => array("DISTINCT user_id")
 			)),
-			"n.ReviewFrames.user_id");
+			"{n}.ReviewFrames.user_id");
     }
 
 	public function filterUserIdsWhoReviewedTrack($trackId, $userIds) {
+
     	$frames = new ReviewFrames();
     	return $frames->find("all", array(
     		"conditions" => array(
@@ -147,7 +146,7 @@ class TableSnapshot extends AppModel
 	    		"conditions" => array("ReviewFrames.album_id" => $albumId),
 	    		"fields" => array("DISTINCT user_id")
 			)),
-			"n.ReviewFrames.user_id");
+			"{n}.ReviewFrames.user_id");
     }
 
 	public function filterUserIdsWhoReviewedAblum($albumId, $userIds) {
@@ -162,11 +161,11 @@ class TableSnapshot extends AppModel
 			));
 	}
 
-    /**
+    /* *
      * Returns all the reviewing data based on a Model query. This function does not permit user based queries.
      * @param int $timestamp The starting timestamp for all searches. Defaut 0
      * @return array Matching review frames dataset
-     */
+
     public function getRawCurveData($timestamp = 0, $extraConditions = array())
     {
         $belongsToData  = $this->getBelongsToData();
@@ -180,8 +179,9 @@ class TableSnapshot extends AppModel
         ));
 
         return $rf->getRawCurve($conditions);
-    }
+    } */
 
+/*
     public function getRawSplitData($threshold, $timestamp = 0, $extraConditions = array())
     {
         $belongsToData  = $this->getBelongsToData();
@@ -199,7 +199,7 @@ class TableSnapshot extends AppModel
         $avgMin = $reviews->getRawCurve(array_merge($conditions, array("ReviewFrames.groove <" => $threshold)));
 
         return array("min" => $avgMin, "max" => $avgMax);
-    }
+    }*/
 
 
     /**
@@ -244,7 +244,17 @@ class TableSnapshot extends AppModel
             $conditions .= " AND $extraConditions";
         } */
 
-        return array();
+
+		$conditionsStr = "";
+        foreach ($conditions as $key => $value) {
+        	$conditionsStr .= $key . "=" . $value . " ";
+        }
+
+		$rf = new ReviewFrames();
+        return $rf->getAppreciation($conditionsStr);
+
+
+
 
 
 		$rf = new ReviewFrames();
@@ -330,12 +340,8 @@ class TableSnapshot extends AppModel
     public function getExtraSaveFields()
     {
         $extras = array();
-
-        $belongsToAlias = $this->getBelongsToAlias();
-        $belongsToData  = $this->getBelongsToData();
-
         $extras["lastsync"]  = time();
-        $extras[strtolower($belongsToAlias) . "_id"] = (int)$belongsToData["id"];
+        //$extras[strtolower($belongsToAlias) . "_id"] = (int)$belongsToData["id"];
 
         $id = (int)Hash::check($this->data, $this->alias . ".id");
         if($id > 0)
@@ -358,7 +364,7 @@ class TableSnapshot extends AppModel
         $curve 		= $this->getAverageCurve($conditions);
         $ranges 	= $this->getRangeAverages($conditions, $curve);
 
-        return $this->_validateAndSave($avgs, $curve, $ranges);
+        return $this->_validateAndSave($conditions, $avgs, $curve, $ranges);
  /*
         $appreciation   = $this->getAppreciation($belongsToId);
         $curve          = $this->getCurve($belongsToId, 150);
@@ -486,7 +492,7 @@ class TableSnapshot extends AppModel
      * @param array $curve
      * @return boolean True on success, false on failure
      */
-    private function _validateAndSave($avgs, $curve, $ranges)
+    private function _validateAndSave($conditions, $avgs, $curve, $ranges)
     {
     	/*
         $saveArray = array_merge($appreciation, $this->getExtraSaveFields(), $this->_validate($appreciation, $curve));
@@ -494,6 +500,7 @@ class TableSnapshot extends AppModel
 
         $saveArray = array_merge(
         	$this->getExtraSaveFields(),
+        	$conditions,
         	$avgs,
         	array(
         		"curve" => $curve,
@@ -530,14 +537,14 @@ class TableSnapshot extends AppModel
         return $saveArray;
     }*/
 
-    /**
+    /* *
      * Gets the model linked to the snapshot through the belongs to association.
      * Expects that the object only belongs to one parent object.
      * @return string The name of the object.
-     */
+
     public function getBelongsToAlias()
     {
         $belongsAliases = array_keys($this->belongsTo);
         return $belongsAliases[0];
-    }
+    } */
 }

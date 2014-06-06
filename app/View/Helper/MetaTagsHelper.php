@@ -29,6 +29,8 @@ class MetaTagsHelper extends AppHelper {
                 array("src" => "//code.jquery.com/jquery-2.0.3.min.js"),
                 array("src" => "//netdna.bootstrapcdn.com/bootstrap/3.1.1/js/bootstrap.min.js"),
                 "//d3js.org/d3.v3.min.js",
+                "//vjs.zencdn.net/4.6/video.js",
+                "/js/vendor/videojs.youtube.js",
                 "vendor/typeahead",
                 "vendor/sjsi",
                 "tmt"

@@ -1,30 +1,29 @@
 <?php
-    $currentUserId = $this->Session->read('Auth.User.User.id');  
+    $currentUserId = $this->Session->read('Auth.User.User.id');
 ?>
+<?php echo $this->element('profilesmenu'); ?>
 <div class="container container-fluid">
-
-	<?php echo $this->element('profilesmenu'); ?>
 
 	<h2><?php echo __("Subscriptions"); ?></h2>
 	<p class="lead"><?php echo sprintf(__("The list of all people %s is currently following."), $user["firstname"] . " " . $user["lastname"]); ?></p>
 
 	<div class="row">
 		<?php if(count($subscriptions) > 0) : ?>
-		    <?php foreach($subscriptions as $follower) :  ?>    		    	
+		    <?php foreach($subscriptions as $follower) :  ?>
 	        	<div class="col-xs-12 col-md-3">
 
 					<div class="panel panel-default user-badge">
 						<div class="panel-heading">
-							<h3 class="panel-title"><?php echo $this->Html->link($follower["User"]["firstname"] . " " . $follower["User"]["lastname"], array('controller' => 'profiles', 'action' => 'view', $follower["User"]["slug"])); ?></h3>						
+							<h3 class="panel-title"><?php echo $this->Html->link($follower["User"]["firstname"] . " " . $follower["User"]["lastname"], array('controller' => 'profiles', 'action' => 'view', $follower["User"]["slug"])); ?></h3>
 						</div>
-						<div class="panel-body"> 
+						<div class="panel-body">
 							<?php  echo $this->Html->link(
 			                        $this->Html->image($this->App->getImageUrl($user), array("class" => "img-circle", "alt" => $user["firstname"] . " " . $user["lastname"], "title" => $user["firstname"] . " " . $user["lastname"])),
 			                        array('controller' => 'profiles', 'action' => 'view', $follower["User"]["slug"]),
 			                        array('escape' => false)
 			                ); ?>
 
-						</div>						
+						</div>
 						<?php if($follower["User"]["id"] !== $currentUserId) : ?>
 						<ul class="list-group">
 		                    <li class="list-group-item">

@@ -9,7 +9,7 @@
 class ArtistsController extends AppController {
     
     var $helpers    = array("Chart");
-	var $components = array("RdioApi", "Paginator");
+	var $components = array("Paginator");
     var $paginate = array(
         'limit' => 25,
         'order' => array(
@@ -24,7 +24,7 @@ class ArtistsController extends AppController {
     {                
         $this->set("popularArtists",    $this->Artist->findPopular(8));
         $this->set("artistCategories",  $this->Artist->getCategories());        
-        $this->set("newReleases", $this->Artist->Albums->getNewReleases(8));
+        $this->set("newReleases",       $this->Artist->Albums->getNewReleases(8));
                         
         $this->setPageTitle(__("Artist list"));        
         $this->setPageMeta(array(
@@ -49,11 +49,12 @@ class ArtistsController extends AppController {
         }
         
         $this->set("artist",        $data["Artist"]);
-        $this->set("rdioArtist",    $data["RdioArtist"]);
         $this->set("lastfmArtist",  $data["LastfmArtist"]);        
         $this->set("albums",        $data["Albums"]);
+        
 
-        $this->set("artistReviewSnapshot",  Hash::extract($this->Artist->getSnapshot(), "artistReviewSnapshot"));
+        $artistSnapshot = Hash::extract($this->Artist->getSnapshot(), "artistReviewSnapshot");
+        $this->set("artistReviewSnapshot", $artistSnapshot);
         
         if($isLoggedIn)
         {

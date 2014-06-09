@@ -28,7 +28,9 @@
                         array('escape' => false)
                 ); ?>
             </div>
+            <?php if((int)$albumData["release_date"] > 0) : ?>
             <time datetime="<?php echo date("c", $albumData["release_date"]); ?>"><?php echo date("F j Y", $albumData["release_date"]); ?></time>                
+            <?php endif; ?>
             <h3><?php echo $this->Html->link($albumData["name"], array('controller' => 'albums', 'action' => 'view', $albumData["slug"])); ?></h3>
             <?php if(!is_null($artistData)) : ?>
             <p><?php echo __("By"); ?> <?php echo $this->Html->link($artistData["name"], array('controller' => 'artists', 'action' => 'view', $artistData["slug"])); ?></p>

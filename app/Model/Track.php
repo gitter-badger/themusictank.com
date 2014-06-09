@@ -22,11 +22,29 @@ class Track extends OEmbedable
 
     public function search($query, $limit = 10)
     {
+        // Get an updated result set from LastFm before
+        // fetching our own results. This is to keep 
+        // our database up to date.
+        $this->LastfmTrack->search($query, $limit);
+
         return $this->find('all', array(
             "conditions" => array("title LIKE" => sprintf("%%%s%%", $query)),
             "contain"    => array("Album" => array("Artist")),
             "fields"     => array("Album.slug", "Album.name", "Album.image", "Track.title", "Track.slug"),
             "limit"      => $limit
+        ));
+    }
+
+    public function listCurrentCollection($albumId)
+    {
+        $trackIds = Hash::extract($this->find('all', array(
+            "conditions" => array("album_id" => $albumId),
+            "fields" => array("Track.id")
+        )), "{n}.Track.id");
+
+        return $this->LastfmTrack->find('list', array(
+            'fields' => array('LastfmTrack.mbid', 'LastfmTrack.track_id'),
+            "conditions" => array("track_id" => $trackIds)
         ));
     }
 
@@ -61,7 +79,6 @@ class Track extends OEmbedable
     {
         $albumId = $this->getData("Track.album_id");
         $trackIdx = $this->getData("Track.track_num");
-
 
         $track = $this->find("first", array(
             "conditions" => array(

@@ -1,5 +1,5 @@
 <?php
-
+App::uses('HttpSocket', 'Network/Http');
 class LastfmBehavior extends ModelBehavior {       
     
     private function _post($params)
@@ -8,11 +8,15 @@ class LastfmBehavior extends ModelBehavior {
         $params["api_key"] = $config["key"];
         $params["format"] = "json";
                 
-        $curl = curl_init('http://ws.audioscrobbler.com/2.0/?'. http_build_query($params));
-        curl_setopt($curl, CURLOPT_RETURNTRANSFER, TRUE);
-        $body = curl_exec($curl);
-        curl_close($curl);    
-        return json_decode($body);
+        $HttpSocket = new HttpSocket();
+        $results = $HttpSocket->get('http://ws.audioscrobbler.com/2.0/', http_build_query($params));
+
+        if ($results->isOk())
+        {
+            return json_decode($results->body());
+        }
+
+        return false;
     }  
         
     public function getLastFmTrackDetails($model, $trackName, $artistName)
@@ -45,10 +49,10 @@ class LastfmBehavior extends ModelBehavior {
         return "<p>" . implode("</p>\n<p>", $new_lines) . "</p>";
     }    
  
-    public function getArtistBiography($model, $artistName)
+    public function getArtistInfo($model, $artistName)
     {
         $data = $this->_post(array("method" => "artist.getinfo", "artist" => $artistName));
-        return ($data->artist) ? $data->artist : null;    
+        return (!is_null($data) && $data->artist) ? $data->artist : null;    
     }
     
     public function getArtistTopAlbums($model, $artistName)
@@ -56,4 +60,22 @@ class LastfmBehavior extends ModelBehavior {
         $data = $this->_post(array("method" => "artist.gettopalbums", "artist" => $artistName));
         return ($data->topalbums) ? $data->topalbums->album : null;     
     }    
+
+    public function searchArtists($model, $query, $limit)
+    {
+        $data = $this->_post(array("method" => "artist.search", "artist" => $query, "limit" => $limit));
+        return (!is_null($data) && is_object($data->results->artistmatches)) ? $data->results->artistmatches : null;    
+    }
+
+    public function searchAlbums($model, $query, $limit)
+    {
+        $data = $this->_post(array("method" => "album.search", "album" => $query, "limit" => $limit));
+        return (is_object($data->results->albummatches)) ? $data->results->albummatches : null;    
+    }
+
+    public function searchTracks($model, $query, $limit)
+    {
+        $data = $this->_post(array("method" => "track.search", "track" => $query, "limit" => $limit));
+        return (is_object($data->results->trackmatches)) ? $data->results->trackmatches : null;    
+    }
 }

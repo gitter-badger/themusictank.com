@@ -2,6 +2,9 @@
 
 class LastfmTrack extends AppModel
 {
+    const CACHE_SEARCH  = "LastfmTrack-Search-%s-%d";
+    const CACHE_SEARCH_TIMEOUT    = "daily";
+
 	public $belongsTo = array('Track');
     public $actsAs = array('Lastfm');
 
@@ -22,9 +25,62 @@ class LastfmTrack extends AppModel
 
     public function requiresUpdate()
     {
-        $timestamp = $this->getData("LastfmTrack.lastsync");
+        $timestamp = (int)Hash::get($this->data, "LastfmTrack.lastsync");
         return $timestamp + WEEK < time();
     }
+/*
+    public function search($query, $limit)
+    {
+        $cacheName = sprintf(self::CACHE_SEARCH, $query, $limit);
+   
+        $result = Cache::read($cacheName, self::CACHE_SEARCH_TIMEOUT);
+        if (!$result) {
+            $result = $this->searchTracks($query, $limit);
+            $list = $this->filterNew($result);
+            if (count($list)) {
+                $this->saveMany($list, array("deep" => true));
+            }
+            Cache::write($cacheName, $result, self::CACHE_SEARCH_TIMEOUT);
+        }
+    }
+    
+
+    public function filterNew($needles)
+    {
+        $currentList        = $this->listCurrentCollection();
+        $listBeingParsed    = array();
+        $returnList         = array(); 
+        
+        foreach($needles->track as $track)
+        {               
+            // only save albums of interest
+            if(property_exists($track, "mbid") && trim($track->mbid) != "")
+            {       
+                // Add the artist to the global collection if   
+                // its a new artist
+                if(!array_key_exists($track->mbid, $currentList))
+                {
+                    // Also make sure there are no doubles inside the possible new stack
+                    if(!in_array($track->mbid, $listBeingParsed))
+                    {
+                        $returnList[] = array(
+                            "Track" => array(
+                              "name" => $track->name
+                            ), 
+                            "LastfmTrack"  => array(
+                                "mbid" => $track->mbid,
+                                "artist_name" => $track->artist
+                            )
+                        );
+                        $listBeingParsed[] = $track->mbid;
+                    }
+                }
+            }
+        }
+
+        return $returnList;
+    }  
+*/
 
     private function _saveDetails($infos)
     {

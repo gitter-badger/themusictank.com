@@ -6,6 +6,7 @@
  *
  * @package       app.Controller
  */
+
 class AjaxController extends AppController {
     
     public function beforeFilter()
@@ -98,6 +99,47 @@ class AjaxController extends AppController {
         $this->render('index');    
     }            
     
+    public function getdiscography($artistSlug)
+    {
+        $this->loadModel("Artist");
+        $this->loadModel("Album");
+        $this->Album->data = $this->Artist->findBySlug($artistSlug);
+        
+        if (count($this->Album->data)) 
+        {
+            $albums = $this->Album->updateDiscography($this->Album->data["Artist"]["name"]);
+            $this->set("albums", $albums);
+        }
+        else throw new NotFoundException(__("We cannot load this artist."));
+    }
+
+    public function getsong($artistSlug, $trackSlug)
+    {
+        $this->response->type('application/json');
+        App::uses('HttpSocket', 'Network/Http');
+        $this->loadModel("Artist");
+        $this->loadModel("Track");
+
+        $artist = $this->Artist->findBySlug($artistSlug);
+        $track = $this->Track->findBySlug($trackSlug);
+
+        if(!$artist || !$track)
+            throw new NotFoundException(__("We don't know where you are from."));
+
+        $HttpSocket = new HttpSocket();
+        $results = $HttpSocket->get('http://gdata.youtube.com/feeds/api/videos', array(
+            "alt" => "json",
+            "max-results" => 1,
+            "q" => Hash::get($artist, "Artist.name") . "-" . Hash::get($track, "Track.title")
+        ));
+
+        if($results->isOk()) {
+            $this->set("jsonOutput", json_decode($results->body()));
+        }
+
+       $this->render('index');
+    }
+
     public function savewave($trackSlug, $shaCheck)
     {       
         $this->response->type('application/json');
@@ -176,7 +218,7 @@ class AjaxController extends AppController {
     }
 
     public function tracksSearch()
-    {
+    { 
         $this->loadModel("Track");
 
         $results    = array();

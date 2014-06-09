@@ -4,9 +4,10 @@ App::uses('ArtistReviewSnapshot', 'Model');
 
 class Artist extends AppModel
 {	    
+
 	public $hasOne = array('RdioArtist', /*'EchonestArtist',*/ 'LastfmArtist' /*, "ArtistReviewSnapshot"*/);	
     public $hasMany = array('Albums' => array('order' => array('Albums.notability DESC', 'Albums.release_date DESC')));
-    public $order = "name ASC";    
+    public $order = "Artist.name ASC";    
 	public $validate = array(
 		'name' => array(
 			'required' => array(
@@ -18,6 +19,12 @@ class Artist extends AppModel
 
     public function search($query, $limit = 10)
     {
+        // Get an updated result set from LastFm before
+        // fetching our own results. This is to keep 
+        // our database up to date.
+        $this->LastfmArtist->search($query, $limit);
+
+        // Secondly, query our own database for results.
         return $this->find('all', array(
             "conditions" => array("Artist.name LIKE" => sprintf("%%%s%%", $query)),
             "fields"     => array("Artist.slug", "Artist.name"),
@@ -29,14 +36,14 @@ class Artist extends AppModel
     {
         $syncValues = $this->find("first", array(
             "conditions" => array("Artist.slug" => $slug),
-            "fields"    => array("RdioArtist.*", "Artist.*", "LastfmArtist.*")
+            "fields"    => array("Artist.*", "LastfmArtist.*")
         ));
         
         if(count($syncValues)) {
-            $this->RdioArtist->data = $syncValues;        
+           /* $this->RdioArtist->data = $syncValues;        
             $this->RdioArtist->updateCached();
             $syncValues["RdioArtist"] = $this->RdioArtist->data["RdioArtist"];
-                          
+             */             
             $this->LastfmArtist->data = $syncValues;        
             $this->LastfmArtist->updateCached();
             $syncValues["LastfmArtist"] = $this->LastfmArtist->data["LastfmArtist"];
@@ -46,7 +53,6 @@ class Artist extends AppModel
             return $syncValues; //$this->findBySlug($slug);
         }
     }
-    
 
     public function getSnapshot()
     {

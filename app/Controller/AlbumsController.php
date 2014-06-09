@@ -32,7 +32,6 @@ class AlbumsController extends AppController {
 
         // Build general objects
         $this->set("album",         $data["Album"]);
-        $this->set("rdioAlbum",     $data["RdioAlbum"]);
         $this->set("lastfmAlbum",   $data["LastfmAlbum"]);
         $this->set("artist",        $data["Artist"]);
         $this->set("oembedLink",    $this->Album->getOEmbedUrl());

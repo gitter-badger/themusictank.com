@@ -30,7 +30,7 @@ class TracksController extends AppController {
         $this->set("album", 	$data["Album"]);
         $this->set("artist", 	$data["Album"]["Artist"]);
         $this->set("track", 	$data["Track"]);
-        $this->set("rdioTrack", $data["RdioTrack"]);
+       // $this->set("rdioTrack", $data["RdioTrack"]);
         $this->set("lastfmTrack", $data["LastfmTrack"]);
 
         // Load the users who have reviewed the track

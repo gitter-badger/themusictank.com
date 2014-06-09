@@ -1,6 +1,4 @@
-<?php
-    $currentUserId = $this->Session->read('Auth.User.User.id');
-?>
+
 <section class="jumbotron colored introduction">
 	<div class="container">
 	    <h1><?php echo __("About Us"); ?></h1>
@@ -22,28 +20,10 @@
     <h2><?php echo __("Meet the team"); ?></h2>
     <p class="lead">Follow us on TMT to have an idea of our musical taste.</p>
 
+	<?php if(isset($francois) && count($francois)) : ?>
     <div class="row">
     	<div class="col-md-3">
-			<div class="panel panel-default user-badge">
-				<div class="panel-heading">
-					<h3 class="panel-title"><?php echo $this->Html->link($francois["User"]["firstname"] . " " . $francois["User"]["lastname"], array('controller' => 'profiles', 'action' => 'view', $francois["User"]["slug"])); ?></h3>
-				</div>
-				<div class="panel-body">
-					<?php  echo $this->Html->link(
-		                    $this->Html->image($this->App->getImageUrl($francois["User"]), array("class" => "img-circle", "alt" => $francois["User"]["firstname"] . " " . $francois["User"]["lastname"], "title" => $francois["User"]["firstname"] . " " . $francois["User"]["lastname"])),
-		                    array('controller' => 'profiles', 'action' => 'view', $francois["User"]["slug"]),
-		                    array('escape' => false)
-		            ); ?>
-
-				</div>
-				<?php if($francois["User"]["id"] !== $currentUserId) : ?>
-				<ul class="list-group">
-		            <li class="list-group-item">
-						<?php echo $this->element('followButton', array("user" => $francois["User"])); ?>
-		            </li>
-		        </ul>
-		    	<?php endif; ?>
-		    </div>
+    		<?php echo $this->element("userbadge", array("user" => $francois)); ?>
 	    </div>
 	    <div class="col-md-9">
 
@@ -80,44 +60,28 @@
 	        <p><a href="http://www.twitter.com/francoisfaubert">~Francois Faubert</a></p>
 	    </div>
 	</div>
+	<?php endif; ?>
 
 
 	<?php if(isset($julien) && count($julien)) : ?>
     <div class="row">
     	<div class="col-md-3">
-			<div class="panel panel-default user-badge">
-				<div class="panel-heading">
-					<h3 class="panel-title"><?php echo $this->Html->link($francois["User"]["firstname"] . " " . $francois["User"]["lastname"], array('controller' => 'profiles', 'action' => 'view', $francois["User"]["slug"])); ?></h3>
-				</div>
-				<div class="panel-body">
-					<?php  echo $this->Html->link(
-		                    $this->Html->image($this->App->getImageUrl($francois["User"]), array("class" => "img-circle", "alt" => $francois["User"]["firstname"] . " " . $francois["User"]["lastname"], "title" => $francois["User"]["firstname"] . " " . $francois["User"]["lastname"])),
-		                    array('controller' => 'profiles', 'action' => 'view', $francois["User"]["slug"]),
-		                    array('escape' => false)
-		            ); ?>
-
-				</div>
-				<?php if($francois["User"]["id"] !== $currentUserId) : ?>
-				<ul class="list-group">
-		            <li class="list-group-item">
-						<?php echo $this->element('followButton', array("user" => $francois["User"])); ?>
-		            </li>
-		        </ul>
-		    	<?php endif; ?>
-		    </div>
+    		<?php echo $this->element("userbadge", array("user" => $julien)); ?>
 	    </div>
 	    <div class="col-md-9">
 	        <p><a href="http://www.twitter.com/julienguay">~Julien Guay</p>
 	    </div>
 	</div>
-<?php endif; ?>
+	<?php endif; ?>
 
 	<div class="row">
-	    <h2><?php echo __("Thanks"); ?></h2>
-	    <p class="lead">Check out the following services which have, in some way, helped us get up and running.</p>
-		<ul>
-			<li><a href="http://gethiphop.net/">Hip Hop</a></li>
-		</ul>
+		<div class="col-md-12">
+		    <h2><?php echo __("Thanks"); ?></h2>
+		    <p class="lead">Check out the following services which have, in some way, helped us get up and running.</p>
+			<ul>
+				<li><a href="http://gethiphop.net/">Hip Hop</a></li>
+			</ul>
+		</div>	
 	</div>
 
 </div>

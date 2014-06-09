@@ -147,26 +147,9 @@ class AppModel extends Model {
 
     public function getData($key)
     {
-        $path = explode(".", $key);
-
-        if(isset($this->data))
+        if (Hash::check($this->data, $key))
         {
-            $currentLevel = $this->data;
-            foreach($path as $idx => $level)
-            {
-                if(array_key_exists($level, $currentLevel))
-                {
-                    if($idx+1 == count($path))
-                    {
-                        return $currentLevel[$level];
-                    }
-                    else
-                    {
-                        $currentLevel = $currentLevel[$level];
-                    }
-                }
-                else break;
-            }
+            return Hash::get($this->data, $key);
         }
 
         throw new CakeException(sprintf("%s has no data value matching key '%s'", $this->alias, $key));

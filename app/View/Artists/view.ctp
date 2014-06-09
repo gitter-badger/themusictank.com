@@ -34,7 +34,8 @@
     <?php if(count($albums) > 0) : ?>
         <?php echo $this->element('albumTiledList', array("albums" => $albums)); ?>
     <?php else : ?>
-        <p><?php echo __("This catalog is not available at the moment."); ?></p>
+        <div class="loading">Loading...</div>
+        <script>$(".discography .loading").load("/ajax/getdiscography/<?php echo $artist['slug']; ?>/")</script>
     <?php endif; ?>
     </section>
 

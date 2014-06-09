@@ -79,11 +79,8 @@ class TableSnapshot extends AppModel
      */
     public function requiresUpdate()
     {
-    	$timestamp = Hash::get($this->data, $this->alias . ".lastsync");
-        return (int)$timestamp + (HOUR*12) < time();
-
-        $timestamp = $this->getData($this->alias . ".lastsync");
-        return empty($timestamp) || $timestamp + (HOUR*12) < time();
+    	$timestamp = (int)Hash::get($this->data, $this->alias . ".lastsync");
+        return $timestamp + (HOUR*12) < time();
     }
 
 /*

@@ -3,14 +3,14 @@
 App::uses('User', 'Model');
 App::uses('UserAlbumReviewSnapshot', 'Model');
 App::uses('AlbumReviewSnapshot', 'Model');
-App::uses('CakeSession', 'Model/Datasource');
+App::uses('SubscribersAlbumReviewSnapshot', 'Model');
 App::uses('OEmbedable', 'Model');
 
 class Album extends OEmbedable
 {
-	public $hasOne      = array('RdioAlbum', "LastfmAlbum");
+	public $hasOne      = array('LastfmAlbum');
     public $hasMany     = array('Tracks' => array('order' => 'track_num ASC'));
-    public $belongsTo   = "Artist";
+    public $belongsTo   = array('Artist');
 
     public function beforeSave($options = array())
     {
@@ -19,13 +19,16 @@ class Album extends OEmbedable
         return true;
     }
 
+    public function getFirstBySlug($slug)
+    {
+    	return $this->find("first", array(
+            "conditions" => array("Album.slug" => $slug),
+            "fields"    => array("Album.*", "Artist.*", "LastfmAlbum.*")
+        ));
+    }
+
     public function search($query, $limit = 10)
     {
-        // Get an updated result set from LastFm before
-        // fetching our own results. This is to keep 
-        // our database up to date.
-        //$this->LastfmAlbum->search($query, $limit);
-
         return $this->find('all', array(
             "conditions" => array("Album.name LIKE" => sprintf("%%%s%%", $query)),
             "fields"     => array("Album.slug", "Album.name", "Album.image", "Artist.name", "Artist.slug"),
@@ -36,91 +39,67 @@ class Album extends OEmbedable
 
     public function getUpdatedSetBySlug($slug, $addCurrentUser = false)
     {
-        $syncValues = $this->find("first", array(
-            "conditions" => array("Album.slug" => $slug),
-            "fields"    => array("Album.*", /*"RdioAlbum.*",*/ "Artist.*", "LastfmAlbum.*" /*, "RdioAlbum.*"*/)
-        ));
+        $syncValues = $this->getFirstBySlug($slug);
 
-        if(count($syncValues)) {
-/*
-            $this->RdioAlbum->data = $syncValues;
-            $this->RdioAlbum->updateCached();
-            $syncValues["RdioAlbum"] = $this->RdioAlbum->data["RdioAlbum"];*/
-
+        if(count($syncValues))
+        {
             $this->LastfmAlbum->data = $syncValues;
             if($this->LastfmAlbum->requiresUpdate())
             {
             	$this->LastfmAlbum->updateCached();
-                $syncValues = $this->find("first", array(
-                    "conditions" => array("Album.slug" => $slug),
-                    "fields"    => array("Album.*", /*"RdioAlbum.*",*/ "Artist.*", "LastfmAlbum.*" /*, "RdioAlbum.*"*/)
-                ));
+                $syncValues = $this->getFirstBySlug($slug);
             }
 
             $this->data = $syncValues;
-            return $syncValues;
         }
+
+        return $syncValues;
     }
-
-    /* *
-     * Saves a list of RdioAlbums.
-     * @param type $artistId
-     * @param type $rdioKey
-     * @param array $albums A dataset of Albums returned by Rdio
-     * @return boolean True on success, false on failure
-     
-    public function saveDiscography($albums)
-    {
-        $artistId   = $this->getData("Artist.id");
-        $rdioKey    = $this->getData("RdioArtist.key");
-        $filtered   = $this->RdioAlbum->filterNew($artistId, $rdioKey, $albums);
-
-        if(count($filtered))
-        {
-            return $this->saveMany($filtered, array('deep' => true));
-        }
-        return true;
-    }*/
 
 
     public function updateDiscography()
     {
-
-        $alreadyLoadedAlbums = Hash::get($this->data, "Albums");
-        $artistName = $this->getData("Artist.name");
-        $artistId   = $this->getData("Artist.id");
-        $artistMbid   = $this->getData("LastfmArtist.mbid");
-
         // only update when cache is out of date.
-        if(count($alreadyLoadedAlbums) > 0) {
-            if(!$this->LastfmAlbum->requiresUpdate()) {
+        $alreadyLoadedAlbums 	= Hash::get($this->data, "Albums");
+        if(count($alreadyLoadedAlbums) > 0)
+        {
+            if(!$this->LastfmAlbum->requiresUpdate())
+            {
                 return $alreadyLoadedAlbums;
             }
         }
 
+        $artistName 	= $this->getData("Artist.name");
+        $artistId   	= $this->getData("Artist.id");
+        $artistMbid   	= $this->getData("LastfmArtist.mbid");
         $existingAlbums = Hash::extract($this->findAllByArtistId($artistId), "{n}.LastfmAlbum.mbid");
-        $apiResult = $this->LastfmAlbum->getArtistTopAlbums($artistName);   
-
-        $albums = array();
-        $futuresSlugs = array(); 
+        $apiResult 		= $this->LastfmAlbum->getArtistTopAlbums($artistName);
+        $albums 		= array();
+        $futureSlugs 	= array();
 
         foreach($apiResult as $album)
         {
+    		// Albums which do not have a musicbrainz id are not
+    		// considered important enough. If we miss too many
+    		// albums, maybe we could remove this. (Had to do it for tracks)
             if(trim($album->mbid) != "")
             {
+            	// Ensure the artist is the one we are expecting and that it's a new one.
                 if($album->artist->mbid == $artistMbid && !in_array($album->mbid, $existingAlbums))
                 {
-                    $slug = $this->_doubleCheckSlug($this->createSlug($album->name), $album->name, $futuresSlugs);
-                    
-                    $futuresSlugs[] = $slug;
+                	// Often, albums have similar names but because we are saving in batch, the abc-1, abc-2 logic
+                	// doesn't work.
+                    $slug = $this->_doubleCheckSlug($this->createSlug($album->name), $album->name, $futureSlugs);
+
+                    $futureSlugs[] = $slug;
                     $albums[] = array(
                         "LastfmAlbum" => array(
                             "mbid" => $album->mbid
                         ),
                         "Album" => array(
                             "artist_id" => $artistId,
-                            "name" => $album->name, 
-                            "mbid" => $album->mbid, 
+                            "name" => $album->name,
+                            "mbid" => $album->mbid,
                             "slug" => $slug,
                             "release_date" => 0,
                             "notability" => $album->{"@attr"}->rank,
@@ -138,6 +117,8 @@ class Album extends OEmbedable
         }
     }
 
+	// Often, albums have similar names but because we are saving in batch, the abc-1, abc-2 logic
+	// doesn't work.
     private function _doubleCheckSlug($slug, $name, $existing)
     {
         if(in_array($slug, $existing))
@@ -161,7 +142,7 @@ class Album extends OEmbedable
 
     public function resetArtistNotables($artistId)
     {
-        $this->updateAll(array("Album.notability" => 'NULL'), array("Album.artist_id" => $artistId));
+        return $this->updateAll(array("Album.notability" => 'NULL'), array("Album.artist_id" => $artistId));
     }
 
     public function resetNewReleases()
@@ -218,7 +199,6 @@ class Album extends OEmbedable
 		$reviews = new SubscribersAlbumReviewSnapshot();
     	return $reviews->fetch($this->getData("Album.id"), $userIds);
     }
-
 
     public function addTracksSnapshots()
     {

@@ -30,13 +30,12 @@
     </article>
 
     <section class="discography">
-    <h2><?php echo __("Discography"); ?></h2>
-    <?php if(count($albums) > 0) : ?>
-        <?php echo $this->element('albumTiledList', array("albums" => $albums)); ?>
-    <?php else : ?>
-        <div class="loading">Loading...</div>
-        <script>$(".discography .loading").load("/ajax/getdiscography/<?php echo $artist['slug']; ?>/")</script>
-    <?php endif; ?>
+    	<h2><?php echo __("Discography"); ?></h2>
+	    <?php if(count($albums) > 0) : ?>
+	        <?php echo $this->element('albumTiledList', array("albums" => $albums)); ?>
+	    <?php else : ?>
+	        <div class="loading" data-post-load="/ajax/getdiscography/<?php echo $artist['slug']; ?>/"><?php echo __("Loading..."); ?></div>
+	    <?php endif; ?>
     </section>
 
     <?php echo $this->Disqus->get('/artists/view/'.$artist["slug"].'/', $artist["name"]); ?>
@@ -48,8 +47,7 @@
         <p>
             <?php echo __("Artist biography and profile image courtesy of"); ?> <?php echo $this->Html->link("Last.fm", "http://www.last.fm/", array("target" => "_blank")); ?>.
             <?php echo __("They were last updated on"); ?> <?php echo date("F j, g:i a", $lastfmArtist["lastsync"]); ?>.
-            <?php echo __("Album information and images courtesy of"); ?> <?php echo $this->Html->link("Rdio.com", "http://www.rdio.com/", array("target" => "_blank")); ?>.
-            <?php echo __("These ones were last updated on"); ?> <?php echo date("F j, g:i a", $rdioArtist["lastsync"]); ?>. User-contributed text is available under the Creative Commons By-SA License and may also be available under the GNU FDL.
+            User-contributed text is available under the Creative Commons By-SA License and may also be available under the GNU FDL.
         </p>
     </div>
 </section>

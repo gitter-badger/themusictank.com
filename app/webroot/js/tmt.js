@@ -155,6 +155,13 @@ $(function() {
 
     }
 
+    // Automate post loading of elements
+	$("*[data-post-load]").each(function(){
+		var $this = $(this);
+		$this.load($this.attr("data-post-load"));
+	});
+
+
 	tmt.createPie = function(whereClass, jsonData, details) {
 	 var w = 300,                        //width
 	    h = 300,                            //height
@@ -176,7 +183,7 @@ var vis = d3.select(whereClass)
 
 
     var pie = d3.layout.pie()           //this will create arc data for us given a list of values
-        .value(function(d) {console.log(d.value); return d.value; });    //we must tell it out to access the value of each element in our data array
+        .value(function(d) {return d.value; });    //we must tell it out to access the value of each element in our data array
 
     var arcs = vis.selectAll("g.slice")     //this selects all <g> elements with class slice (there aren't any yet)
         .data(pie)                          //associate the generated pie data (an array of arcs, each having startAngle, endAngle and value properties)

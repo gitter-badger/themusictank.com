@@ -3,11 +3,10 @@
 App::uses('ArtistReviewSnapshot', 'Model');
 
 class Artist extends AppModel
-{	    
-
-	public $hasOne = array('RdioArtist', /*'EchonestArtist',*/ 'LastfmArtist' /*, "ArtistReviewSnapshot"*/);	
-    public $hasMany = array('Albums' => array('order' => array('Albums.notability DESC', 'Albums.release_date DESC')));
-    public $order = "Artist.name ASC";    
+{
+	public $hasOne 	= array('LastfmArtist');
+    public $hasMany = array('Albums' => array('order' => array('Albums.notability ASC')));
+    public $order 	= array('Artist.name ASC');
 	public $validate = array(
 		'name' => array(
 			'required' => array(
@@ -17,10 +16,17 @@ class Artist extends AppModel
 		)
 	);
 
+    public function beforeSave($options = array())
+    {
+        // Ensure the data has a valid unique slug
+        $this->checkSlug(array('name'));
+        return true;
+    }
+
     public function search($query, $limit = 10)
     {
         // Get an updated result set from LastFm before
-        // fetching our own results. This is to keep 
+        // fetching our own results. This is to keep
         // our database up to date.
         $this->LastfmArtist->search($query, $limit);
 
@@ -31,27 +37,24 @@ class Artist extends AppModel
             "limit"      => $limit
         ));
     }
-    
+
     public function getUpdatedSetBySlug($slug, $addCurrentUser = false)
     {
         $syncValues = $this->find("first", array(
             "conditions" => array("Artist.slug" => $slug),
             "fields"    => array("Artist.*", "LastfmArtist.*")
         ));
-        
-        if(count($syncValues)) {
-           /* $this->RdioArtist->data = $syncValues;        
-            $this->RdioArtist->updateCached();
-            $syncValues["RdioArtist"] = $this->RdioArtist->data["RdioArtist"];
-             */             
-            $this->LastfmArtist->data = $syncValues;        
+
+        if(count($syncValues))
+        {
+            $this->LastfmArtist->data = $syncValues;
             $this->LastfmArtist->updateCached();
             $syncValues["LastfmArtist"] = $this->LastfmArtist->data["LastfmArtist"];
-                    
-            // Everything has been sync'd. Fetch every field we have.
+
             $this->data = $syncValues;
-            return $syncValues; //$this->findBySlug($slug);
         }
+
+        return $syncValues;
     }
 
     public function getSnapshot()
@@ -78,19 +81,13 @@ class Artist extends AppModel
         return $reviews->fetch($this->getData("Artist.id"), $userIds);
     }
 
-    public function beforeSave($options = array())
-    {
-        // Ensure the data has a valid unique slug
-        $this->checkSlug(array('name'));
-        return true;
-    }
-    
+
     public function filterNewAndSave($artistList)
     {
         $list = $this->RdioArtist->filterNew($artistList);
-        return $this->saveMany($list, array('deep' => true));                
-    }    
-        
+        return $this->saveMany($list, array('deep' => true));
+    }
+
     /**
      * Finds all artists that have been flagged as popular.
      * @return array Dataset of popular Artists.
@@ -106,10 +103,9 @@ class Artist extends AppModel
      */
     public function findPopular($limit = null)
     {
-        return $this->find("all", array("conditions" => array("RdioArtist.is_popular" => true), "limit" => $limit));
+        return $this->find("all", array("conditions" => array("LastfmArtist.is_popular" => true), "limit" => $limit, "order" => "rand()"));
     }
 
-    
     /**
      * Fetches a list of possible categories based on the name of all our artists
      * @return array An array of capitalized letters
@@ -117,13 +113,6 @@ class Artist extends AppModel
     public function getCategories()
     {
         $data = $this->query("SELECT DISTINCT LEFT(name, 1) as letter FROM artists as Artist ORDER BY letter");
-        $letters = array();
-        
-        foreach($data as $row)
-        {
-            $letters[] = $row[0]["letter"];
-        }
-        
-        return $letters;
+        return Hash::extract($data, "{n}.0.letter");
     }
 }

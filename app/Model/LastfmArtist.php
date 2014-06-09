@@ -2,8 +2,8 @@
 
 class LastfmArtist extends AppModel
 {
-    const CACHE_SEARCH  = "LastfmArtist-Search-%s-%d";
-    const CACHE_SEARCH_TIMEOUT    = "daily";
+    const CACHE_SEARCH  		= "LastfmArtist-Search-%s-%d";
+    const CACHE_SEARCH_TIMEOUT	= "daily";
 
 	public $belongsTo = array('Artist');
     public $actsAs = array('Lastfm');
@@ -20,13 +20,6 @@ class LastfmArtist extends AppModel
             {
                 $data["LastfmArtist"] = $this->_saveDetails($infos);
             }
-/*
-            $ranks = $this->getArtistTopAlbums($artistName);
-            if($ranks)
-            {
-                $this->Artist->Albums->LastfmAlbum->data = $data;
-                $this->Artist->Albums->LastfmAlbum->saveNotableAlbums($ranks);
-            }*/
 
             $this->data = $data;
         }
@@ -41,20 +34,59 @@ class LastfmArtist extends AppModel
     public function search($query, $limit)
     {
         $cacheName = sprintf(self::CACHE_SEARCH, $query, $limit);
-   
+
         $result = Cache::read($cacheName, self::CACHE_SEARCH_TIMEOUT);
         if (!$result) {
             $result = $this->searchArtists($query, $limit);
             $list = $this->filterNew($result);
             if (count($list)) {
                 $this->Artist->saveMany($list, array('deep' => true));
-            }   
+            }
             Cache::write($cacheName, $result, self::CACHE_SEARCH_TIMEOUT);
         }
 
         return $result;
     }
-    
+    /**
+    *	Connects to lastfm to get the most popular artists of the moment
+    */
+    public function updatePopular()
+    {
+    	$apidata 	= $this->getTopArtists();
+
+    	if (!$apidata) {
+    		return false;
+    	}
+
+    	// Save new artists
+    	$list = $this->filterNew($apidata);
+    	if (count($list))
+    	{
+    		$this->Artist->saveMany($list, array('deep' => true));
+		}
+
+		// Filter out the mbids of the popular ones.
+		$mbids = array();
+		foreach ($apidata->artist as $artist)
+		{
+			$mbids[] = $artist->mbid;
+		}
+
+		return count($mbids) ?
+			$this->resetPopular() && $this->makePopular($mbids) :
+			false;
+    }
+
+    public function makePopular($artistMbids)
+    {
+        return $this->updateAll(array("is_popular" => true), array("mbid" => $artistMbids));
+    }
+
+    public function resetPopular()
+    {
+        return $this->updateAll(array("is_popular" => false), array("is_popular" => true));
+    }
+
     public function listCurrentCollection($conditions = array())
     {
         return $this->find('list', array(
@@ -67,34 +99,38 @@ class LastfmArtist extends AppModel
     {
         $currentList        = $this->listCurrentCollection();
         $listBeingParsed    = array();
-        $returnList         = array(); 
-        
+        $returnList         = array();
+
         foreach($needles->artist as $artist)
-        {                      
-            // Add the artist to the global collection if   
-            // its a new artist
-            if(!array_key_exists($artist->mbid, $currentList))
+        {
+            // only save artists of interest
+            if(property_exists($artist, "mbid") && trim($artist->mbid) != "")
             {
-                // Also make sure there are no doubles inside the possible new stack
-                if(!in_array($artist->mbid, $listBeingParsed))
-                {
-                    $returnList[] = array(
-                        "LastfmArtist" => array(
-                            "url"       => $artist->url,
-                            "mbid" => $artist->mbid,
-                            "name" => $artist->name
-                        ),
-                        "Artist"    => array(
-                            "name" => $artist->name
-                        )
-                    );
-                    $listBeingParsed[] = $artist->mbid;
-                }
-            }
+	            // Add the artist to the global collection if
+	            // its a new artist
+	            if(!array_key_exists($artist->mbid, $currentList))
+	            {
+	                // Also make sure there are no doubles inside the possible new stack
+	                if(!in_array($artist->mbid, $listBeingParsed))
+	                {
+	                    $returnList[] = array(
+	                        "LastfmArtist" => array(
+	                            "url"       => $artist->url,
+	                            "mbid" => $artist->mbid,
+	                            "name" => $artist->name
+	                        ),
+	                        "Artist"    => array(
+	                            "name" => $artist->name
+	                        )
+	                    );
+	                    $listBeingParsed[] = $artist->mbid;
+	                }
+	            }
+	        }
         }
 
         return $returnList;
-    }  
+    }
 
     private function _saveDetails($infos)
     {

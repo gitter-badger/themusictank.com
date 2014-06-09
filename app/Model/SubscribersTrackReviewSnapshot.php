@@ -8,6 +8,7 @@ class SubscribersTrackReviewSnapshot extends TableSnapshot
     public $useTable    = 'subscribers_track_review_snapshots';
     public $belongsTo   = array('Track', 'User');
 
+/*
     public function getCurve($trackId, $resolution = 100, $timestamp = 0)
     {
         $ids        = $this->User->UserFollowers->getSubscriptions(CakeSession::read('Auth.User.User.id'), true);
@@ -35,9 +36,10 @@ class SubscribersTrackReviewSnapshot extends TableSnapshot
         $extraConditions=  (count($ids) > 0) ? "user_id IN (" . implode(",", $ids) . ")" : "0 = 1";
         return parent::getappreciation($belongsToId, $timestamp, $extraConditions);
     }
+*/
 
-    public function fetch($trackId, $userIds) {
-
+    public function fetch($trackId, $userIds)
+    {
         $conditions = array();
         $conditions = Hash::insert($conditions, "track_id", $trackId);
         $conditions = Hash::insert($conditions, "user_id", $userIds);

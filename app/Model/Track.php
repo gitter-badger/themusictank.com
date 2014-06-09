@@ -1,16 +1,15 @@
 <?php
 
-App::uses('CakeSession', 'Model/Datasource');
 App::uses('OEmbedable', 'Model');
 App::uses('TrackReviewSnapshot', 'Model');
 App::uses('UserTrackReviewSnapshot', 'Model');
+App::uses('SubscribersTrackReviewSnapshot', 'Model');
 
 class Track extends OEmbedable
 {
-	public $hasOne = array('RdioTrack', 'LastfmTrack');
-    public $belongsTo = "Album";
-    public $actsAs = array('Containable');
-
+	public $hasOne 		= array('LastfmTrack');
+    public $belongsTo 	= array('Album');
+    public $actsAs 		= array('Containable');
 	public $validate = array(
 		'title' => array(
 			'required' => array(
@@ -20,13 +19,36 @@ class Track extends OEmbedable
 		)
 	);
 
+    public function beforeSave($options = array())
+    {
+        $this->checkSlug(array('title'));
+
+        if(array_key_exists("wavelength", $this->data[$this->alias]) && !is_string($this->data[$this->alias]["wavelength"]))
+        {
+            $this->data[$this->alias]["wavelength"] = json_encode($this->data[$this->alias]["wavelength"]);
+        }
+
+        return true;
+    }
+
+
+    public function afterFind($results, $primary = false)
+    {
+        foreach($results as $idx => $row)
+        {
+            if(array_key_exists($this->alias, $row))
+            {
+                if(array_key_exists("wavelength", $row[$this->alias]) && is_string($row[$this->alias]["wavelength"]))
+                {
+                    $results[$idx][$this->alias]["wavelength"] = json_decode($row[$this->alias]["wavelength"]);
+                }
+            }
+        }
+        return $results;
+    }
+
     public function search($query, $limit = 10)
     {
-        // Get an updated result set from LastFm before
-        // fetching our own results. This is to keep 
-        // our database up to date.
-        $this->LastfmTrack->search($query, $limit);
-
         return $this->find('all', array(
             "conditions" => array("title LIKE" => sprintf("%%%s%%", $query)),
             "contain"    => array("Album" => array("Artist")),
@@ -121,40 +143,10 @@ class Track extends OEmbedable
         ));
     }
 
-    public function beforeSave($options = array())
-    {
-        $this->checkSlug(array('title'));
-
-        if(array_key_exists("wavelength", $this->data[$this->alias]) && !is_string($this->data[$this->alias]["wavelength"]))
-        {
-            $this->data[$this->alias]["wavelength"] = json_encode($this->data[$this->alias]["wavelength"]);
-        }
-
-        return true;
-    }
-
-
-    public function afterFind($results, $primary = false)
-    {
-        foreach($results as $idx => $row)
-        {
-            if(array_key_exists($this->alias, $row))
-            {
-                if(array_key_exists("wavelength", $row[$this->alias]) && is_string($row[$this->alias]["wavelength"]))
-                {
-                    $results[$idx][$this->alias]["wavelength"] = json_decode($row[$this->alias]["wavelength"]);
-                }
-            }
-        }
-        return $results;
-    }
-
-
     public function onReviewComplete()
     {
         // Check for achievements here.
     }
-
 
     /**
      * Finds the current daily track challenge with related models.
@@ -208,8 +200,8 @@ class Track extends OEmbedable
     public function getBySlugContained($trackSlug)
     {
         return $this->find("first", array(
-            "conditions" => array("Track.slug" => $trackSlug),
-            "contain" => array("LastfmTrack",/* "TrackReviewSnapshot",*/ "RdioTrack", "Album" => array( "Artist" ))
+            "conditions" 	=> array("Track.slug" => $trackSlug),
+            "contain" 		=> array("LastfmTrack", "Album" => array( "Artist" ))
         ));
     }
 
@@ -230,47 +222,6 @@ class Track extends OEmbedable
     {
 		$reviews = new SubscribersTrackReviewSnapshot();
     	return $reviews->fetch($this->getData("Track.id"), $userIds);
-    }
-
-
-    /**
-     * Returns a list of tracks that are not associated to an album in TMT's catalog
-     * @param array $needles A list of tracks
-     * @param integer $albumId Album id that should have the tracks
-     * @return array List of new tracks
-     */
-    public function filterNew($needles, $albumId)
-    {
-        $returnList = array();
-
-        foreach($needles as $track)
-        {
-            $returnList[] = array(
-                "title" => $track->name,
-                "key" => $track->key,
-                "album_id" => $albumId,
-                "track_num" => $track->trackNum,
-                "duration" => $track->duration,
-                "RdioTrack"  => array(
-                    "key" => $track->key
-                )
-            );
-        }
-
-        return $returnList;
-    }
-
-    /**
-     * Pull out the tracks not found on TMT and saves them.
-     * @param type $tracks list of RdioTracks
-     * @param integer $albumId Album id that receives the tracks
-     * @return boolean True on success, False on failure
-     */
-    public function filterNewAndSave($tracks)
-    {
-        $albumId    = $this->getData("Album.id");
-        $filtered   = $this->filterNew($tracks, $albumId);
-        return $this->saveMany($filtered, array('deep' => true));
     }
 
     public function toOEmbed($additionalData = array())

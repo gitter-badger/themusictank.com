@@ -80,8 +80,9 @@
 		    <p class="lead">Check out the following services which have, in some way, helped us get up and running.</p>
 			<ul>
 				<li><a href="http://gethiphop.net/">Hip Hop</a></li>
+				<li><a href="http://last.fm/">Last.fm</a></li>
 			</ul>
-		</div>	
+		</div>
 	</div>
 
 </div>

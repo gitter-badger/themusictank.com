@@ -54,16 +54,15 @@ class StringMakerHelper extends AppHelper {
 
 	public function composeTrackAppreciation($snapshot, $track, $album, $artist)
 	{
-
 		$randomSeed = $track["id"] % 2;
 		$strings = array();
 
 		if((int)$snapshot["neutral_pct"] >= 50)
 		{
-			if((int)$snapshot["neutral_pct"] > 60)
-				$descriptor = "mostly";
-			elseif((int)$snapshot["neutral_pct"] > 90)
+			if((int)$snapshot["neutral_pct"] > 90)
 				$descriptor = "entirely";
+			elseif((int)$snapshot["neutral_pct"] > 60)
+				$descriptor = "mostly";
 
 			$neutral = array(
 				sprintf("The general concensus regarding %s is %s neutral.", $track["title"], $descriptor),
@@ -75,10 +74,10 @@ class StringMakerHelper extends AppHelper {
 
 		if((int)$snapshot["disliking_pct"] >= 50)
 		{
-			if((int)$snapshot["disliking_pct"] > 60)
-				$descriptor = "mostly";
-			elseif((int)$snapshot["disliking_pct"] > 90)
+			if((int)$snapshot["disliking_pct"] > 90)
 				$descriptor = "entirely";
+			elseif((int)$snapshot["disliking_pct"] > 60)
+				$descriptor = "mostly";
 
 			$disliked = array(
 				sprintf("The general concensus regarding %s is %s neutral.", $track["title"], $descriptor),
@@ -90,10 +89,10 @@ class StringMakerHelper extends AppHelper {
 
 		if((int)$snapshot["liking_pct"] >= 50)
 		{
-			if((int)$snapshot["liking_pct"] > 60)
-				$descriptor = "mostly";
-			elseif((int)$snapshot["liking_pct"] > 90)
+			if((int)$snapshot["liking_pct"] > 90)
 				$descriptor = "entirely";
+			elseif((int)$snapshot["liking_pct"] > 60)
+				$descriptor = "mostly";
 
 			$liked = array(
 				sprintf("The general concensus regarding %s is %s neutral.", $track["title"], $descriptor),
@@ -106,9 +105,15 @@ class StringMakerHelper extends AppHelper {
 		return implode(" ", $strings);
 	}
 
-	public function composeTimedAppreciation($pcts, $track)
+	public function composeTimedAppreciation($snapshot, $track)
 	{
-		$strings = array();
+		$strings 	= array();
+		$pcts 		= array(
+			"enjoyment" 	=> $snapshot["liking_pct"],
+			"displeasure" 	=> $snapshot["disliking_pct"],
+			"meh" 			=> $snapshot["neutral_pct"]
+		);
+		asort($pcts, SORT_NUMERIC);
 
 		foreach ($pcts as $key => $value) {
 			$strings[] = sprintf("<strong>%s</strong> seconds of <em>%s</em>", ($value * (int)$track["duration"] / 100), $key);

@@ -7,10 +7,10 @@
 </nav>
 
 <section class="jumbotron colored introduction">
-	<div class="container">
+	<div class="container container-fluid">
 		<div class="row">
 			<div class="col-md-2 thumbnail">
-	            <?php echo $this->Html->image( $this->App->getImageUrl($album, true), array("alt" => $album["name"])); ?>
+	            <?php echo $this->Html->image( $this->App->getImageUrl($album), array("alt" => $album["name"])); ?>
 	        </div>
 	        <div class="col-md-10">
 			    <h1><?php echo $track["title"]; ?></h1>
@@ -28,97 +28,112 @@
 </section>
 
 
-<div class="container container-fluid review-details">
-	<div class="row">
-		<div class="col-md-4">
-			<div class="trs piechart"></div>
-		</div>
-		<div class="col-md-8">
-			<p><?php echo $this->StringMaker->composeTrackAppreciation($trackReviewSnapshot, $track, $album, $artist); ?></p>
-			<?php
-				$pcts = array(
-					"enjoyment" => $trackReviewSnapshot["liking_pct"],
-					"displeasure" => $trackReviewSnapshot["disliking_pct"],
-					"meh" => $trackReviewSnapshot["neutral_pct"]
-				);
-				asort($pcts, SORT_NUMERIC);
-			?>
-			<p><?php echo $this->StringMaker->composeTimedAppreciation($pcts, $track); ?></p>
+<div class="review-line appreciation odd">
+	<div class="container container-fluid">
+		<div class="row">
+			<div class="col-md-12">
+				<div class="trs piechart"></div>
+				<p><?php echo $this->StringMaker->composeTrackAppreciation($trackReviewSnapshot, $track, $album, $artist); ?></p>
+				<p><?php echo $this->StringMaker->composeTimedAppreciation($trackReviewSnapshot, $track); ?></p>
+			</div>
 		</div>
 	</div>
+</div>
 
-	<div class="row">
-	<?php if(isset($userTrackReviewSnapshot)) : ?>
-		<div class="col-md-8">
-			<p><?php echo sprintf("You have reviewed '%s' in the past.", $track["title"]); ?></p>
-			<p><?php echo $this->Html->link(__("View details"), array('controller' => 'tracks', 'action' => 'by_user', $track["slug"], $this->Session->read('Auth.User.User.slug'))); ?> of your review sessions of <?php echo $track["title"]; ?></p>
+<div class="review-line highlights even">
+	<div class="container container-fluid">
+		<div class="row">
+			<div class="col-md-12">
+				<p><?php echo sprintf(__("The most popular area of the song ranges from %s to %s while the least popular area ranges from %s to %s."), 0, 0, 0, 0 ); ?></p>
+				<div class="col-md-6 highlight">
+					<div class="highgraph"></div>
+					<button type="button">Play</button>
+				</div>
+				<div class="col-md-6 lowlight">
+					<div class="lowgraph"></div>
+					<button type="button">Play</button>
+				</div>
+			</div>
 		</div>
-		<div class="col-md-4">
-			<div class="utrs piechart"></div>
-		</div>
-	<?php else : ?>
-		<div class="col-md-12">
-			<p>Review '<?php echo $track["title"]; ?>' you wish to see how your opinion compares with others.</p>
-			<p><?php echo $this->Html->link(__("Review track"), array('controller' => 'player', 'action' => 'play', $track["slug"]), array("class" => "btn btn-primary")); ?></p>
-		</div>
-	<?php endif; ?>
 	</div>
+</div>
 
-	<div class="row social">
-		<div class="col-md-6">
-        <h2><?php echo __("Recent Reviewers"); ?></h2>
-			<?php if(count($usersWhoReviewed) > 0) : ?>
-                <ul>
-                    <?php foreach($usersWhoReviewed as $user) : ?>
-                    <li>
-                        <?php echo $this->Html->link(
-                                array_key_exists("image", $user["User"]) && !is_null($user["User"]["image"]) ?
-                                    $this->Html->image($user["User"]["image"], array("alt" => $user["User"]["firstname"] . " " . $user["User"]["lastname"]))
-                                    : $user["User"]["firstname"] . " " . $user["User"]["lastname"]
-                                ,
-                                array('controller' => 'tracks', 'action' => 'by_user', $track["slug"], $user["User"]["slug"]),
-                                array("escape" => false)
-                        ); ?>
-                    </li>
-                    <?php endforeach; ?>
-                </ul>
-            <?php else : ?>
-                <p><?php echo __("Be the first to review this track."); ?></p>
-            <?php endif; ?>
-        </div>
-        <div class="col-md-6">
-			<?php if(isset($subsWhoReviewed) && count($subsWhoReviewed > 0)) : ?>
-	            <?php if(count($subsWhoReviewed) > 0) : ?>
+<div class="review-line odd">
+	<div class="container container-fluid">
+		<div class="row">
+			<div class="col-md-12">
+				<?php if(isset($userTrackReviewSnapshot)) : ?>
+					<div class="utrs piechart"></div>
+					<p><?php echo sprintf("You have reviewed '%s' in the past.", $track["title"]); ?></p>
+					<p><?php echo $this->Html->link(__("View more details"), array('controller' => 'tracks', 'action' => 'by_user', $track["slug"], $this->Session->read('Auth.User.User.slug'))); ?> of your review sessions of <?php echo $track["title"]; ?></p>
+				<?php else : ?>
+					<p>Review '<?php echo $track["title"]; ?>' you wish to see how your opinion compares with others.</p>
+					<p><?php echo $this->Html->link(__("Review track"), array('controller' => 'player', 'action' => 'play', $track["slug"]), array("class" => "btn btn-primary")); ?></p>
+				<?php endif; ?>
+			</div>
+		</div>
+	</div>
+</div>
+
+<div class="review-line odd social">
+	<div class="container container-fluid">
+		<div class="row">
+			<div class="col-md-6">
+	        <h2><?php echo __("Recent Reviewers"); ?></h2>
+				<?php if(count($usersWhoReviewed) > 0) : ?>
 	                <ul>
-	                    <?php foreach($subsWhoReviewed as $idx => $user) : ?>
+	                    <?php foreach($usersWhoReviewed as $user) : ?>
 	                    <li>
-	                        <?php
-	                        $name = $user["User"]["firstname"] . " " . $user["User"]["lastname"];
-	                        echo $this->Html->link(
-                                array_key_exists("image", $user["User"]) && !is_null($user["User"]["image"]) ?
-                                    $this->Html->image($user["User"]["image"], array("alt" => $name))
-                                    : $name
-                                ,
-                                array('controller' => 'tracks', 'action' => 'by_user', $track["slug"], $user["User"]["slug"]),
-                                array("escape" => false)
+	                        <?php echo $this->Html->link(
+	                                array_key_exists("image", $user["User"]) && !is_null($user["User"]["image"]) ?
+	                                    $this->Html->image($user["User"]["image"], array("alt" => $user["User"]["firstname"] . " " . $user["User"]["lastname"]))
+	                                    : $user["User"]["firstname"] . " " . $user["User"]["lastname"]
+	                                ,
+	                                array('controller' => 'tracks', 'action' => 'by_user', $track["slug"], $user["User"]["slug"]),
+	                                array("escape" => false)
 	                        ); ?>
 	                    </li>
-	                    <?php if($idx >= 3 && (count($subsWhoReviewed) - 4 > 0)) :  ?>
-	                        <li class="others"><?php echo sprintf(__("+ %s others"), count($subsWhoReviewed) - 4); ?></li>
-	                    <?php break; endif; ?>
 	                    <?php endforeach; ?>
 	                </ul>
-	                <p>
-	                    <?php echo $this->Html->link(sprintf(__("%s of the people you are subscribed to reviewed %s."), count($subsWhoReviewed), $track["title"]),
-	                        array('controller' => 'tracks', 'action' => 'by_subscriptions', $track["slug"]));
-	                    ?>
-	                </p>
 	            <?php else : ?>
-	                <p><?php echo __("None of your subscriptions have reviewed this track."); ?></p>
+	                <p><?php echo __("Be the first to review this track."); ?></p>
 	            <?php endif; ?>
-	        <?php endif; ?>
-        </div>
+	        </div>
+	        <div class="col-md-6">
+				<?php if(isset($subsWhoReviewed) && count($subsWhoReviewed > 0)) : ?>
+		            <?php if(count($subsWhoReviewed) > 0) : ?>
+		                <ul>
+		                    <?php foreach($subsWhoReviewed as $idx => $user) : ?>
+		                    <li>
+		                        <?php
+		                        $name = $user["User"]["firstname"] . " " . $user["User"]["lastname"];
+		                        echo $this->Html->link(
+	                                array_key_exists("image", $user["User"]) && !is_null($user["User"]["image"]) ?
+	                                    $this->Html->image($user["User"]["image"], array("alt" => $name))
+	                                    : $name
+	                                ,
+	                                array('controller' => 'tracks', 'action' => 'by_user', $track["slug"], $user["User"]["slug"]),
+	                                array("escape" => false)
+		                        ); ?>
+		                    </li>
+		                    <?php if($idx >= 3 && (count($subsWhoReviewed) - 4 > 0)) :  ?>
+		                        <li class="others"><?php echo sprintf(__("+ %s others"), count($subsWhoReviewed) - 4); ?></li>
+		                    <?php break; endif; ?>
+		                    <?php endforeach; ?>
+		                </ul>
+		                <p>
+		                    <?php echo $this->Html->link(sprintf(__("%s of the people you are subscribed to reviewed %s."), count($subsWhoReviewed), $track["title"]),
+		                        array('controller' => 'tracks', 'action' => 'by_subscriptions', $track["slug"]));
+		                    ?>
+		                </p>
+		            <?php else : ?>
+		                <p><?php echo __("None of your subscriptions have reviewed this track."); ?></p>
+		            <?php endif; ?>
+		        <?php endif; ?>
+	        </div>
+		</div>
 	</div>
+</div>
 
 	<div class="row">
 		<div class="col-md-12">

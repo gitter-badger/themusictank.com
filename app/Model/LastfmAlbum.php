@@ -34,51 +34,28 @@ class LastfmAlbum extends AppModel
     {
         $albumId        = $this->getData("Album.id");
         $lastfmAlbumId  = $this->getData("LastfmAlbum.id");
+        $image          = Hash::get($this->data, "LastfmAlbum.image");
 
         $this->saveMany(array(
             "LastfmAlbum" => array(
                 "id"        => $lastfmAlbumId,
                 "mbid" => $infos->mbid,
                 "lastsync"  => time(),
-                "wiki"      => empty($infos->wiki->content) ? null : $this->cleanLastFmWikiText($infos->wiki->content)
-            ),
-            "Album" => array(
-                "id"  => $albumId,
-                "release_date" => strtotime(trim($infos->releasedate)),
-                "release_date_text" => $infos->releasedate,
+                "wiki"      => empty($infos->wiki->content) ? null : $this->cleanLastFmWikiText($infos->wiki->content),
+	            "Album" => array(
+	                "id"  => $albumId,
+	                "slug"  => $this->getData("Album.slug"),
+	                "release_date" => strtotime(trim($infos->releasedate)),
+	                "release_date_text" => $infos->releasedate,
+		            "image"     => empty($infos->image[4]->{'#text'}) ? null : $this->getImageFromUrl($infos->image[4]->{'#text'}, $image),
+		            "image_src" => empty($infos->image[4]->{'#text'}) ? null : $infos->image[4]->{'#text'}
+	            )
             )
         ), array("deep" => true));
 
-        $trackData = array();
         $Track = new Track();
-        $existing = $Track->listCurrentCollection($albumId);
-        foreach($infos->tracks->track as $idx => $track)
-        {
-            //if(property_exists($track, "mbid") && trim($track->mbid) != "")
-            //{
-                if(!array_key_exists($track->mbid, $existing))
-                {
-                    $trackData[] = array(
-                        "Track" => array(
-                            "title" => $track->name,
-                            "duration" => $track->duration,
-                            "album_id" => $albumId,
-                            "slug" => $Track->createSlug($track->name),
-                            "track_num" => $idx+1,
-                            "LastfmTrack" => array(
-                                "mbid" => $track->mbid,
-                                "artist_name" => $track->artist->name
-                            )
-                        )
-                    );
-               // }
-            }
-        }
-
-        if(count($trackData) > 0)
-        {
-            $Track->saveMany($trackData, array("deep" => true));
-        }
+        $Track->data = $this->data;
+        $Track->importFromLastFm($infos);
     }
 
     public function listCurrentCollection()

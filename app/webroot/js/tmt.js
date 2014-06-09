@@ -163,8 +163,8 @@ $(function() {
 
 
 	tmt.createPie = function(whereClass, jsonData, details) {
-	 var w = 300,                        //width
-	    h = 300,                            //height
+	 var w = 200,                        //width
+	    h = 200,                            //height
 	    r = 100,                            //radius
 	    color = d3.scale.category20c();     //builtin range of colors
 

@@ -143,6 +143,41 @@ class Track extends OEmbedable
         ));
     }
 
+    public function importFromLastFm($infos)
+    {
+        $albumId    = $this->getData("Album.id");
+        $trackData 	= array();
+        $existing 	= $this->listCurrentCollection($albumId);
+
+        foreach($infos->tracks->track as $idx => $track)
+        {
+            if(property_exists($track, "mbid") && trim($track->mbid) != "")
+            {
+                if(!array_key_exists($track->mbid, $existing))
+                {
+                    $trackData[] = array(
+                        "Track" => array(
+                            "title" => $track->name,
+                            "duration" => $track->duration,
+                            "album_id" => $albumId,
+                            "slug" => $this->createSlug($track->name),
+                            "track_num" => $idx+1,
+                            "LastfmTrack" => array(
+                                "mbid" => $track->mbid,
+                                "artist_name" => $track->artist->name
+                            )
+                        )
+                    );
+                }
+            }
+        }
+
+        if(count($trackData) > 0)
+        {
+            $this->saveMany($trackData, array("deep" => true));
+        }
+    }
+
     public function onReviewComplete()
     {
         // Check for achievements here.
@@ -215,7 +250,6 @@ class Track extends OEmbedable
     {
 		$reviews = new UserTrackReviewSnapshot();
     	return $reviews->fetch($this->getData("Track.id"), $userId);
-
     }
 
     public function getUserSubscribersSnapshot($userIds)
@@ -226,7 +260,6 @@ class Track extends OEmbedable
 
     public function toOEmbed($additionalData = array())
     {
-
 		$reviews = new TrackReviewSnapshot();
 
         $data = Hash::extract($reviews->fetch($this->getData("Track.id")), "TrackReviewSnapshot");

@@ -262,12 +262,27 @@ time {
 	text-shadow:0 1px 2px rgba(0,0,0,.4);
 }
 
-
-.review-details {
-	.row {
-		margin:2em;
-		p:first-child {
-			font-size:2em;
-		}
+.review-line {
+	padding:2em 0;
+	p {
+		font-size:1.5em;
 	}
+	p:first-child {
+		font-size:2em;
+	}
+	.piechart {
+		width:200px;
+		margin:2em;
+		float:left;
+		display:block;
+	}
+}
+.review-line.even {
+	.piechart {
+		float:right;
+	}
+	background:#D1EDE8;// url(/img/pattern-1.png) top left repeat;
+}
+.review-line.odd {
+	background:#fff;// url(/img/pattern-1.png) top left repeat;
 }

@@ -23,7 +23,7 @@ class AlbumsController extends AppController {
         $this->usesPlayer();
 
         $isLoggedIn = $this->userIsLoggedIn();
-        $data       = $this->Album->getUpdatedSetBySlug($albumSlug, $isLoggedIn);
+        $data       = $this->Album->getFirstBySlug($albumSlug);
 
         if(!$data)
         {
@@ -73,7 +73,7 @@ class AlbumsController extends AppController {
         $this->usesPlayer();
         $this->layout = "blank";
 
-        $data = $this->Album->getUpdatedSetBySlug($albumSlug);
+        $data = $this->Album->getFirstBySlug($albumSlug);
 
         if(!$data)
         {

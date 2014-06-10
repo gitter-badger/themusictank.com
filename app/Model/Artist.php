@@ -38,6 +38,7 @@ class Artist extends AppModel
         ));
     }
 
+/*
     public function getUpdatedSetBySlug($slug, $addCurrentUser = false)
     {
         $syncValues = $this->find("first", array(
@@ -55,6 +56,17 @@ class Artist extends AppModel
         }
 
         return $syncValues;
+    }*/
+
+
+    public function getBySlug($slug)
+    {
+    	$this->data = $this->find("first", array(
+            "conditions" => array("Artist.slug" => $slug),
+            "fields"    => array("Artist.*", "LastfmArtist.*")
+        ));
+
+        return $this->data;
     }
 
     public function getSnapshot()

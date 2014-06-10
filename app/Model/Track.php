@@ -31,7 +31,6 @@ class Track extends OEmbedable
         return true;
     }
 
-
     public function afterFind($results, $primary = false)
     {
         foreach($results as $idx => $row)
@@ -59,15 +58,20 @@ class Track extends OEmbedable
 
     public function listCurrentCollection($albumId)
     {
-        $trackIds = Hash::extract($this->find('all', array(
+    	$tracks = $this->find('all', array(
             "conditions" => array("album_id" => $albumId),
             "fields" => array("Track.id")
-        )), "{n}.Track.id");
-
-        return $this->LastfmTrack->find('list', array(
-            'fields' => array('LastfmTrack.mbid', 'LastfmTrack.track_id'),
-            "conditions" => array("track_id" => $trackIds)
         ));
+
+        if ($tracks)
+        {
+	        return $this->LastfmTrack->find('list', array(
+	            'fields' => array('LastfmTrack.mbid', 'LastfmTrack.track_id'),
+	            "conditions" => array("track_id" => Hash::extract($tracks, "{n}.Track.id"))
+	        ));
+	    }
+
+	    return array();
     }
 
     public function getUpdatedSetBySlug($slug, $addCurrentUser = false)
@@ -155,19 +159,22 @@ class Track extends OEmbedable
             {
                 if(!array_key_exists($track->mbid, $existing))
                 {
-                    $trackData[] = array(
-                        "Track" => array(
-                            "title" => $track->name,
-                            "duration" => $track->duration,
-                            "album_id" => $albumId,
-                            "slug" => $this->createSlug($track->name),
-                            "track_num" => $idx+1,
-                            "LastfmTrack" => array(
-                                "mbid" => $track->mbid,
-                                "artist_name" => $track->artist->name
-                            )
-                        )
-                    );
+                	if(property_exists($track, "duration"))
+        			{
+	                    $trackData[] = array(
+	                        "Track" => array(
+	                            "title" => $track->name,
+	                            "duration" => $track->duration,
+	                            "album_id" => $albumId,
+	                            "slug" => $this->createSlug($track->name),
+	                            "track_num" => $idx+1,
+	                            "LastfmTrack" => array(
+	                                "mbid" => $track->mbid,
+	                                "artist_name" => $track->artist->name
+	                            )
+	                        )
+	                    );
+	                }
                 }
             }
         }

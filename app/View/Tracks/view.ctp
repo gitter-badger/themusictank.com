@@ -14,11 +14,7 @@
 	        </div>
 	        <div class="col-md-10">
 			    <h1><?php echo $track["title"]; ?></h1>
-		        <?php if(empty($lastfmTrack["wiki"])) : ?>
-		            <p><?php echo sprintf(__("This is track number %s off of %s."), $track["track_num"], $album["name"]); ?></p>
-		        <?php else : ?>
-		             <?php echo $lastfmTrack["wiki"]; ?>
-		        <?php endif; ?>
+				<p><?php echo $this->StringMaker->composeTrackPresentation($lastfmTrack, $track, $album, $artist); ?></p>
 				<ul>
 					<li><?php echo $this->Html->link(__("Review track"), array('controller' => 'player', 'action' => 'play', $track["slug"]), array("class" => "btn btn-primary")); ?></li>
 				</ul>
@@ -26,7 +22,6 @@
         </div>
     </div>
 </section>
-
 
 <div class="review-line appreciation odd">
 	<div class="container container-fluid">

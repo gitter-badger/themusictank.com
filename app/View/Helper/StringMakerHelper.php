@@ -122,4 +122,28 @@ class StringMakerHelper extends AppHelper {
 		return implode(" ", $strings);
 	}
 
+	public function composeTrackPresentation($lastfmTrack, $track, $album, $artist)
+	{
+		if(empty($lastfmTrack["wiki"]))
+		{
+		    return sprintf(__("This is track number %s off of %s."), $track["track_num"], $album["name"]);
+		}
+		else
+		{
+		     return $lastfmTrack["wiki"];
+		}
+	}
+
+	public function composeAlbumPresentation($lastfmAlbum, $album, $artist)
+	{
+		if(empty($lastfmTrack["wiki"]))
+		{
+		    return sprintf(__("This is an album by %s."), $artist["name"]);
+		}
+		else
+		{
+		     return $lastfmAlbum["wiki"];
+		}
+	}
+
 }

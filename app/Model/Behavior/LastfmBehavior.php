@@ -16,7 +16,7 @@ class LastfmBehavior extends ModelBehavior {
             return json_decode($results->body());
         }
 
-        return false;
+        return null;
     }
 
     public function getLastFmTrackDetails($model, $trackName, $artistName)

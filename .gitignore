@@ -1,4 +1,6 @@
 sftp-config.json
+app/tmp/logs/error.log
+Thumbs.db
 app/tmp/cache/models/tmt_cake_model_default_themusictank_albums
 app/tmp/cache/models/tmt_cake_model_default_themusictank_artists
 app/tmp/cache/models/tmt_cake_model_default_themusictank_configs
@@ -11,6 +13,5 @@ app/tmp/cache/persistent/tmt_cake_core_cake_en-us
 app/tmp/cache/persistent/tmt_cake_core_default_en-us
 app/tmp/cache/persistent/tmt_cake_core_file_map
 app/tmp/cache/persistent/tmt_cake_core_method_cache
-app/tmp/logs/error.log
-Thumbs.db
-app/webroot/img/cache/*
+app/webroot/img/cache/lastf/*
+img/cache/lastf/*

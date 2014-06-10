@@ -8,6 +8,11 @@ class LastfmArtist extends AppModel
 	public $belongsTo = array('Artist');
     public $actsAs = array('Lastfm');
 
+    public function getExpiredRange()
+    {
+    	return time() - WEEK;
+    }
+
     public function updateCached()
     {
         if($this->requiresUpdate())
@@ -28,7 +33,7 @@ class LastfmArtist extends AppModel
     public function requiresUpdate()
     {
         $timestamp = (int)Hash::get($this->data, "LastfmArtist.lastsync");
-        return $timestamp + WEEK < time();
+        return $timestamp < $this->getExpiredRange();
     }
 
     public function search($query, $limit)

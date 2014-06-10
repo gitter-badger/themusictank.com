@@ -43,10 +43,10 @@ class TracksController extends AppController {
         $this->set("previousTrack", $this->Track->getPreviousTrack());
 
         // Load the review snapshots
-		$this->set("trackReviewSnapshot", Hash::extract($this->Track->getSnapshot(), "TrackReviewSnapshot"));
+		$this->set("trackReviewSnapshot", $this->Track->getSnapshot());
         if($isLoggedIn) {
-			$this->set("userTrackReviewSnapshot", Hash::extract($this->Track->getUserSnapshot($this->getAuthUserId()), "UserTrackReviewSnapshot"));
-			$this->set("subsTrackReviewSnapshot", Hash::extract($this->Track->getUserSubscribersSnapshot($this->getAuthUserId()), "UserTrackReviewSnapshot"));
+			$this->set("userTrackReviewSnapshot", $this->Track->getUserSnapshot($this->getAuthUserId()), "UserTrackReviewSnapshot");
+			$this->set("subsTrackReviewSnapshot", $this->Track->getUserSubscribersSnapshot($this->getAuthUserId()), "UserTrackReviewSnapshot");
             $this->set("subsWhoReviewed", $this->User->getSubscribersWhichReviewedTrack($this->getAuthUserId(), $data["Track"]["id"]));
         }
 
@@ -107,13 +107,13 @@ class TracksController extends AppController {
         $this->set("artist", 		$data["Album"]["Artist"]);
 
  		// Load the review snapshots
-		$this->set("trackReviewSnapshot", Hash::extract($this->Track->getSnapshot(), "TrackReviewSnapshot"));
+		$this->set("trackReviewSnapshot", $this->Track->getSnapshot(), "TrackReviewSnapshot");
 		// Only load the profile snapshot if the profile is not the current user
 		if(!$isLoggedIn || $this->Session->read('Auth.User.User.id') != $userData["User"]["id"]) {
-			$this->set("profileTrackReviewSnapshot", Hash::extract($this->Track->getUserSnapshot($userData["User"]["id"]), "UserTrackReviewSnapshot"));
+			$this->set("profileTrackReviewSnapshot", $this->Track->getUserSnapshot($userData["User"]["id"]), "UserTrackReviewSnapshot");
 		}
         if($isLoggedIn) {
-			$this->set("userTrackReviewSnapshot", Hash::extract($this->Track->getUserSnapshot($this->getAuthUserId()), "UserTrackReviewSnapshot"));
+			$this->set("userTrackReviewSnapshot", $this->Track->getUserSnapshot($this->getAuthUserId()), "UserTrackReviewSnapshot");
         }
 
         $this->setPageTitle(array($data["Track"]["title"], $data["Album"]["name"], $data["Album"]["Artist"]["name"]));

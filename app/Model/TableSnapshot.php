@@ -43,21 +43,24 @@ class TableSnapshot extends AppModel
         return true;
     }
 
+	public function getExpiredRange()
+	{
+		return time() - (HOUR * 12);
+	}
+
+
     /**
      * Creates or updates a model's snapshot
      * @return boolean True on success, false on failure
      */
     public function updateCached($conditions)
     {
-        $this->data[$this->alias] = Hash::extract($this->find("first", $conditions), $this->alias);
-
         if($this->requiresUpdate())
         {
-            $this->snap($conditions);
-            $this->data[$this->alias] = Hash::extract($this->find("first", $conditions), $this->alias);
+            return $this->snap($conditions);
         }
 
-        return $this->data;
+        return Hash::extract($this->data, $this->alias);
     }
 
     /**
@@ -67,10 +70,6 @@ class TableSnapshot extends AppModel
     public function snap($conditions)
     {
     	return $this->_createSnapshot($conditions);
-/*
-
-        $id = $this->getData($this->alias . ".id");
-        return (empty($id)) ? $this->_createSnapshot() : $this->_updateSnapshot(); */
     }
 
     /**
@@ -80,39 +79,12 @@ class TableSnapshot extends AppModel
     public function requiresUpdate()
     {
     	$timestamp = (int)Hash::get($this->data, $this->alias . ".lastsync");
-        return $timestamp + (HOUR*12) < time();
+        return $timestamp < $this->getExpiredRange();
     }
-
-/*
-    public function getUserIdsWhoReviewed($trackId, $userIdFilter = null)
-    {
-        $rf = new ReviewFrames();
-        $limit = null;
-        $conditions = array('track_id'  => $trackId);
-
-        if(is_null($userIdFilter))
-        {
-            $limit = 5;
-        }
-        else
-        {
-            $conditions['user_id'] = $userIdFilter;
-        }
-
-        return $rf->find("list", array(
-            'conditions' => $conditions,
-            "limit" => $limit,
-            "fields" => "user_id",
-            "group" => "user_id",
-            'order' => 'rand()'
-            )
-        );
-    }*/
 
     public function getUserIdsWhoReviewedTrack($trackId)
     {
     	$frames = new ReviewFrames();
-		//$count = $frames->find("count", array("conditions" => array("ReviewFrame.album_id" => $albumId), "fields" => "DISTINCT user_id"));
     	return Hash::extract($frames->find("all", array(
 	    		"conditions" => array("ReviewFrames.track_id" => $trackId),
 	    		"fields" => array("DISTINCT user_id")
@@ -133,12 +105,9 @@ class TableSnapshot extends AppModel
 		));
 	}
 
-
     public function getUserIdsWhoReviewedAblum($albumId)
     {
     	$frames = new ReviewFrames();
-		//$count = $frames->find("count", array("conditions" => array("ReviewFrame.album_id" => $albumId), "fields" => "DISTINCT user_id"));
-
     	return Hash::extract($frames->find("all", array(
 	    		"conditions" => array("ReviewFrames.album_id" => $albumId),
 	    		"fields" => array("DISTINCT user_id")
@@ -158,45 +127,6 @@ class TableSnapshot extends AppModel
 			));
 	}
 
-    /* *
-     * Returns all the reviewing data based on a Model query. This function does not permit user based queries.
-     * @param int $timestamp The starting timestamp for all searches. Defaut 0
-     * @return array Matching review frames dataset
-
-    public function getRawCurveData($timestamp = 0, $extraConditions = array())
-    {
-        $belongsToData  = $this->getBelongsToData();
-        $belongsToLabel = strtolower($this->getBelongsToAlias()) . "_id";
-        $belongsToId    = (int)$belongsToData["id"];
-        $rf             = new ReviewFrames();
-
-        $conditions = array_merge($extraConditions, array(
-            "ReviewFrames.$belongsToLabel"  => $belongsToId,
-            "ReviewFrames.created >"        => $timestamp
-        ));
-
-        return $rf->getRawCurve($conditions);
-    } */
-
-/*
-    public function getRawSplitData($threshold, $timestamp = 0, $extraConditions = array())
-    {
-        $belongsToData  = $this->getBelongsToData();
-        $belongsToLabel = strtolower($this->getBelongsToAlias()) . "_id";
-        $belongsToId    = (int)$belongsToData["id"];
-        $reviews        = new ReviewFrames();
-
-        $conditions = array_merge($extraConditions, array(
-            "ReviewFrames.$belongsToLabel"  => $belongsToId,
-            "ReviewFrames.created >"        => $timestamp
-        ));
-
-
-        $avgMax = $reviews->getRawCurve(array_merge($conditions, array("ReviewFrames.groove >" => $threshold)));
-        $avgMin = $reviews->getRawCurve(array_merge($conditions, array("ReviewFrames.groove <" => $threshold)));
-
-        return array("min" => $avgMin, "max" => $avgMax);
-    }*/
 
 
     /**
@@ -228,42 +158,14 @@ class TableSnapshot extends AppModel
      * @param integer $timestamp The earliest timestamp of the span. Defaults to 0.
      * @return boolean True on success, False on failure
      */
-   // public function getAppreciation($belongsToId, $timestamp = 0, $extraConditions = null)
     public function getAppreciation($conditions)
     {
-    	/*
-        $belongsToAlias = strtolower($this->getBelongsToAlias() . "_id");
-        $conditions = "$belongsToAlias = $belongsToId AND created > $timestamp";
-        $rf = new ReviewFrames();
-
-        if(!is_null($extraConditions))
-        {
-            $conditions .= " AND $extraConditions";
-        } */
-
-
 		$conditionsStr = "";
         foreach ($conditions as $key => $value) {
         	$conditionsStr .= $key . "=" . $value . " ";
         }
 
 		$rf = new ReviewFrames();
-        return $rf->getAppreciation($conditionsStr);
-
-
-
-
-
-		$rf = new ReviewFrames();
-        $conditionsStr = "";
-
-
-        foreach ($conditions as $key => $value) {
-        	foreach ($value as $key2 => $value2) {
-	        	$conditionsStr .= strtolower($key . "_" . $key2) . " = " . $value2 . " ";
-	        }
-        }
-
         return $rf->getAppreciation($conditionsStr);
     }
 
@@ -334,11 +236,15 @@ class TableSnapshot extends AppModel
      * side each snapshots.
      * @return array Data ready to be saved
      */
-    public function getExtraSaveFields()
+    public function getExtraSaveFields($conditions = array())
     {
         $extras = array();
         $extras["lastsync"]  = time();
-        //$extras[strtolower($belongsToAlias) . "_id"] = (int)$belongsToData["id"];
+
+        $belongsToAlias = $this->getBelongsToAlias();
+        $belongsToData = $this->getBelongsToData();
+        $belongsToId = (int)$belongsToData["id"];
+        $extras[strtolower($belongsToAlias) . "_id"] = $belongsToId;
 
         $id = (int)Hash::check($this->data, $this->alias . ".id");
         if($id > 0)
@@ -362,11 +268,6 @@ class TableSnapshot extends AppModel
         $ranges 	= $this->getRangeAverages($conditions, $curve);
 
         return $this->_validateAndSave($conditions, $avgs, $curve, $ranges);
- /*
-        $appreciation   = $this->getAppreciation($belongsToId);
-        $curve          = $this->getCurve($belongsToId, 150);
-
-        return $this->_validateAndSave($appreciation, $curve); */
     }
 
 
@@ -496,8 +397,7 @@ class TableSnapshot extends AppModel
         return $this->save($saveArray) ? $saveArray : null;*/
 
         $saveArray = array_merge(
-        	$this->getExtraSaveFields(),
-        	$conditions,
+        	$this->getExtraSaveFields($conditions),
         	$avgs,
         	array(
         		"curve" => $curve,
@@ -534,14 +434,14 @@ class TableSnapshot extends AppModel
         return $saveArray;
     }*/
 
-    /* *
+    /**
      * Gets the model linked to the snapshot through the belongs to association.
      * Expects that the object only belongs to one parent object.
      * @return string The name of the object.
-
+	*/
     public function getBelongsToAlias()
     {
         $belongsAliases = array_keys($this->belongsTo);
         return $belongsAliases[0];
-    } */
+    }
 }

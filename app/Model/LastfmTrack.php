@@ -5,6 +5,11 @@ class LastfmTrack extends AppModel
 	public $belongsTo 	= array('Track');
     public $actsAs 		= array('Lastfm');
 
+    public function getExpiredRange()
+    {
+    	return time() - WEEK;
+    }
+
     public function updateCached()
     {
         $syncData = $this->data;
@@ -29,7 +34,7 @@ class LastfmTrack extends AppModel
     public function requiresUpdate()
     {
         $timestamp = (int)Hash::get($this->data, "LastfmTrack.lastsync");
-        return $timestamp + WEEK < time();
+        return $timestamp < $this->getExpiredRange();
     }
 
     private function _saveDetails($infos)

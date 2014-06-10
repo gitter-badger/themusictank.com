@@ -21,10 +21,18 @@ class Album extends OEmbedable
 
     public function getFirstBySlug($slug)
     {
-    	return $this->find("first", array(
-            "conditions" => array("Album.slug" => $slug),
-            "fields"    => array("Album.*", "Artist.*", "LastfmAlbum.*")
+    	$this->data = $this->find("first", array(
+            "conditions" => array("Album.slug" => $slug)
         ));
+        return $this->data;
+    }
+
+    public function getFirstById($id)
+    {
+    	$this->data = $this->find("first", array(
+            "conditions" => array("Album.id" => $id)
+        ));
+        return $this->data;
     }
 
     public function search($query, $limit = 10)
@@ -36,6 +44,8 @@ class Album extends OEmbedable
             "limit"      => $limit
         ));
     }
+
+    /*
 
     public function getUpdatedSetBySlug($slug, $addCurrentUser = false)
     {
@@ -55,7 +65,7 @@ class Album extends OEmbedable
 
         return $syncValues;
     }
-
+*/
 
     public function updateDiscography()
     {
@@ -153,7 +163,6 @@ class Album extends OEmbedable
     public function getNewReleases($limit = null)
     {
         return $this->find("all", array(
-            "conditions" => array("is_newrelease" => true),
             "limit" => $limit,
             "order" => array("release_date DESC")
         ));

@@ -15,17 +15,19 @@
 
         <aside>
             <h1><?php echo $album["name"]; ?></h1>
-            <time datetime="<?php echo date("c", $album["release_date"]); ?>"><?php echo __("Released"); ?> <?php echo date("F j Y", $album["release_date"]); ?></time>
+            <?php if((int)$album["release_date"] > 0) : ?>
+	            <time datetime="<?php echo date("c", $album["release_date"]); ?>"><?php echo __("Released"); ?> <?php echo date("F j Y", $album["release_date"]); ?></time>
+	        <?php endif; ?>
             <section class="description expandable">
                 <div class="wrapper">
-                    <?php echo $lastfmAlbum["wiki"]; ?>
+					<p><?php echo $this->StringMaker->composeAlbumPresentation($lastfmAlbum, $album, $artist); ?></p>
                 </div>
             </section>
         </aside>
 
         <div class="statistics">
 
-            <?php echo $this->element("stats"); ?>
+            <?php  //echo $this->element("stats"); ?>
 
         </div>
 

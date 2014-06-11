@@ -15,3 +15,8 @@ app/tmp/cache/persistent/tmt_cake_core_file_map
 app/tmp/cache/persistent/tmt_cake_core_method_cache
 app/webroot/img/cache/lastf/*
 img/cache/lastf/*
+app\webroot\img\cache\lastf\*
+app\webroot\img\cache\user\*
+app/webroot/img/cache/rdioa/*
+app/webroot/img/cache/user/*
+img/cache/lastf/*

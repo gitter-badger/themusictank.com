@@ -10,6 +10,24 @@ class SubscribersAlbumReviewSnapshot extends TableSnapshot
 
 	public function fetch($albumId, $userIds)
 	{
-		return $this->updateCached( array("ReviewFrames.album_id"=>$albumId, "user_id" => $userIds) );
+		if(count($userIds)) {
+			$existing = $this->findByAlbumIdAndUserId($albumId, $userIds);
+			if($existing) {
+				$this->data[$this->alias] = Hash::extract($existing, $this->alias);
+			}
+
+	        $result = $this->updateCached(array("ReviewFrames.album_id" => $albumId, "ReviewFrames.user_id" => $userIds));
+	        if($result) return $result;
+		}
+
+        return array();
 	}
+
+    public function getExtraSaveFields($conditions = array())
+    {
+    	$extra = parent::getExtraSaveFields($conditions);
+		$extra = Hash::insert($extra, "album_id", $conditions["ReviewFrames.album_id"]);
+		$extra = Hash::insert($extra, "user_id", $conditions["ReviewFrames.user_id"]);
+    	return $extra;
+    }
 }

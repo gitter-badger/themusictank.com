@@ -8,15 +8,19 @@ class TrackReviewSnapshot extends TableSnapshot
 
     public function fetch($trackId)
     {
-		$this->data["Track"] = array("id" => $trackId);
-
 		$existing = $this->findByTrackId($trackId);
 		if ($existing) {
-			$this->data["TrackReviewSnapshot"] = Hash::extract($existing, "TrackReviewSnapshot");
+			$this->data[$this->alias] = Hash::extract($existing, $this->alias);
 		}
 
         $result = $this->updateCached(array("ReviewFrames.track_id" => $trackId));
-
         return ($result)  ? $result : array();
+    }
+
+    public function getExtraSaveFields($conditions = array())
+    {
+    	$extra = parent::getExtraSaveFields($conditions);
+	   	$extra = Hash::insert($extra, "track_id", $conditions["ReviewFrames.track_id"]);
+    	return $extra;
     }
 }

@@ -8,7 +8,7 @@ App::uses('OEmbedable', 'Model');
 
 class Album extends OEmbedable
 {
-	public $hasOne      = array('LastfmAlbum');
+	public $hasOne      = array('LastfmAlbum', "AlbumReviewSnapshot");
     public $hasMany     = array('Tracks' => array('order' => 'track_num ASC'));
     public $belongsTo   = array('Artist');
 

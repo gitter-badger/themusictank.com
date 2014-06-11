@@ -15,6 +15,25 @@ class AlbumSnapshotsSyncTask extends Shell {
 			$albumsIdsToSync = array_merge($albumsIdsToSync, Hash::extract($newIds, "{n}.review_frames.album_id"));
     	}
 
+    	// Check whether a default snapshot was not created for a new album
+		$newAlbums = $this->AlbumReviewSnapshot->query("SELECT id FROM albums where id NOT IN (SELECT album_id FROM album_review_snapshots);");
+    	if($newAlbums) {
+			$albumsIdsToSync = array_merge($albumsIdsToSync, Hash::extract($newAlbums, "{n}.albums.id"));
+    	}
+
+    	$expiredIds = $this->AlbumReviewSnapshot->find("list", array(
+    		'fields' => array('AlbumReviewSnapshot.album_id'),
+    		"conditions" => array(
+    			"or" => array(
+    				"AlbumReviewSnapshot.lastsync IS NULL",
+    				"AlbumReviewSnapshot.lastsync < " . $this->AlbumReviewSnapshot->getExpiredRange()
+				)
+			)
+		));
+    	if($expiredIds) {
+			$albumsIdsToSync = array_merge($albumsIdsToSync, Hash::extract($expiredIds, "{n}.AlbumReviewSnapshot.album_id"));
+		}
+
     	$expiredIds = $this->AlbumReviewSnapshot->find("list", array(
     		'fields' => array('AlbumReviewSnapshot.album_id'),
     		"conditions" => array(
@@ -32,8 +51,7 @@ class AlbumSnapshotsSyncTask extends Shell {
     	{
 	 		$expired = $this->LastfmAlbum->Album->find("all", array(
 	    		"conditions" => array("Album.id" => $albumsIdsToSync),
-	            "fields"    => array("Album.*", "Artist.*", "LastfmAlbum.*"),
-				"limit" => 200 // I think it's better to do a few of them at the time.
+	            "fields"    => array("Album.*", "Artist.*", "LastfmAlbum.*")
 			));
 
     		$this->out(sprintf("Found %s snapshots that are out of sync or new.", count($expired)));

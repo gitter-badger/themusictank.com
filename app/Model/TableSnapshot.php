@@ -160,13 +160,18 @@ class TableSnapshot extends AppModel
      */
     public function getAppreciation($conditions)
     {
-		$conditionsStr = "";
+		$conditionsStr = array();
         foreach ($conditions as $key => $value) {
-        	$conditionsStr .= $key . "=" . $value . " ";
+        	if(is_array($value)) {
+        		$conditionsStr[] = $key . " IN (" . implode(",", array_merge(array(0), $value)) . ") ";
+        	}
+        	else {
+        		$conditionsStr[] = $key . "=" . $value . " ";
+        	}
         }
 
 		$rf = new ReviewFrames();
-        return $rf->getAppreciation($conditionsStr);
+        return $rf->getAppreciation(implode(" AND ", $conditionsStr));
     }
 
     /**
@@ -240,13 +245,9 @@ class TableSnapshot extends AppModel
     {
         $extras = array();
         $extras["lastsync"]  = time();
+		$extras["id"] = null;
 
-        $belongsToAlias = $this->getBelongsToAlias();
-        $belongsToData = $this->getBelongsToData();
-        $belongsToId = (int)$belongsToData["id"];
-        $extras[strtolower($belongsToAlias) . "_id"] = $belongsToId;
-
-        $id = (int)Hash::check($this->data, $this->alias . ".id");
+        $id = (int)Hash::get($this->data, $this->alias . ".id");
         if($id > 0)
         {
            $extras["id"] = $id;
@@ -265,9 +266,20 @@ class TableSnapshot extends AppModel
     {
         $avgs 		= $this->getAppreciation($conditions);
         $curve 		= $this->getAverageCurve($conditions);
+        $score 		= $this->getAverageScore($conditions);
         $ranges 	= $this->getRangeAverages($conditions, $curve);
 
-        return $this->_validateAndSave($conditions, $avgs, $curve, $ranges);
+        $saveArray = array_merge(
+        	$this->getExtraSaveFields($conditions),
+        	$avgs,
+        	array(
+    			"score" => $score,
+        		"curve" => $curve,
+        		"ranges" => $ranges
+    		)
+    	);
+
+		return $this->save($saveArray) ? $saveArray : null;
     }
 
 
@@ -293,6 +305,18 @@ class TableSnapshot extends AppModel
             "group"         => array("ReviewFrames.position")
         ));
         return Hash::extract($records, '{n}.{n}');
+    }
+
+
+    public function getAverageScore($conditions)
+    {
+    	$review = new ReviewFrames();
+    	$records = $review->find("all", array(
+            "conditions"    => $conditions,
+            "fields"        => array("AVG(groove) as avg")
+        ));
+
+        return Hash::get($records, '{n}.{n}.avg');
     }
 
     public function getRangeAverages($conditions, $curve)
@@ -330,71 +354,18 @@ class TableSnapshot extends AppModel
         return $data;
     }
 
-/*
-    public function temporarySnapshot()
-    {
-        $belongsToData  = $this->getBelongsToData();
-        $belongsToId    = (int)$belongsToData["id"];
-
-        $appreciation   = $this->getAppreciation($belongsToId);
-        $curve          = $this->getCurve($belongsToId, 150);
-
-
-        $saveArray = array_merge($appreciation, $this->getExtraSaveFields());
-        if(array_key_exists("ppf", $curve))
-        {
-            $saveArray["snapshot_ppf"]      = $curve["ppf"];
-        }
-
-        if(array_key_exists("curve", $curve))
-        {
-            $saveArray["curve_snapshot"]    = $curve["curve"];
-        }
-
-        if(array_key_exists("score", $curve))
-        {
-            $saveArray["score_snapshot"]    = $curve["score"];
-        }
-
-        if(array_key_exists("split", $curve))
-        {
-            $saveArray["range_snapshot"]    = $curve["split"];
-        }
-
-        return $saveArray;
-    }*/
-
-
     /* *
-     * Updates an existing model snapshot
-     * @private
-     * @return boolean True on success, false on failure
-
-    private function _updateSnapshot()
-    {
-        $belongsToData  = $this->getBelongsToData();
-        $belongsToId    = (int)$belongsToData["id"];
-        $timestamp      = $this->getData($this->alias . ".lastsync");
-        $rf             = new ReviewFrames();
-
-        $appreciation   = $rf->mergeAppreciationData($this->data[$this->alias], $this->getAppreciation($belongsToId, $timestamp));
-        $curve          = $this->getCurve($belongsToId, 150, $timestamp);
-
-        return $this->_validateAndSave($appreciation, $curve);
-    }*/
-
-    /**
      * Validates and saves a snapshot
      * @private
      * @param array $appreciation
      * @param array $curve
      * @return boolean True on success, false on failure
-     */
+
     private function _validateAndSave($conditions, $avgs, $curve, $ranges)
     {
-    	/*
+    	/ *
         $saveArray = array_merge($appreciation, $this->getExtraSaveFields(), $this->_validate($appreciation, $curve));
-        return $this->save($saveArray) ? $saveArray : null;*/
+        return $this->save($saveArray) ? $saveArray : null; * /
 
         $saveArray = array_merge(
         	$this->getExtraSaveFields($conditions),
@@ -406,33 +377,8 @@ class TableSnapshot extends AppModel
     	);
 
 		return $this->save($saveArray) ? $saveArray : null;
-    }
-
-/*
-    private function _validate($appreciation, $curve)
-    {
-        if(array_key_exists("ppf", $curve))
-        {
-            $saveArray["snapshot_ppf"]      = $curve["ppf"];
-        }
-
-        if(array_key_exists("curve", $curve))
-        {
-            $saveArray["curve_snapshot"]    = $curve["curve"];
-        }
-
-        if(array_key_exists("score", $curve))
-        {
-            $saveArray["score_snapshot"]    = $curve["score"];
-        }
-
-        if(array_key_exists("split", $curve))
-        {
-            $saveArray["range_snapshot"]    = $curve["split"];
-        }
-
-        return $saveArray;
     }*/
+
 
     /**
      * Gets the model linked to the snapshot through the belongs to association.

@@ -15,6 +15,12 @@ class TrackSnapshotsSyncTask extends Shell {
 			$trackIdsToSync = array_merge($trackIdsToSync, Hash::extract($newIds, "{n}.review_frames.track_id"));
     	}
 
+    	// Check whether a default snapshot was not created for a new tracks
+		$newTracks = $this->TrackReviewSnapshot->query("SELECT id FROM tracks where id NOT IN (SELECT track_id FROM track_review_snapshots);");
+    	if($newTracks) {
+			$trackIdsToSync = array_merge($trackIdsToSync, Hash::extract($newTracks, "{n}.tracks.id"));
+    	}
+
     	$expiredIds = $this->TrackReviewSnapshot->find("list", array(
     		'fields' => array('TrackReviewSnapshot.track_id'),
     		"conditions" => array(
@@ -32,8 +38,7 @@ class TrackSnapshotsSyncTask extends Shell {
     	{
 	 		$expired = $this->LastfmTrack->Track->find("all", array(
 	    		"conditions" => array("Track.id" => $trackIdsToSync),
-	            "fields"    => array("Track.*", "LastfmTrack.*"),
-				"limit" => 200 // I think it's better to do a few of them at the time.
+	            "fields"    => array("Track.*", "LastfmTrack.*")
 			));
 
     		$this->out(sprintf("Found %s snapshots that are out of sync or new.", count($expired)));

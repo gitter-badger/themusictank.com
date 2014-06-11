@@ -115,6 +115,7 @@ CakeLog::config('error', array(
 // Allows CLI access
 if(!isset($_SERVER['SERVER_NAME']))
 {
+	//$_SERVER['SERVER_NAME'] = "themusictank.nvi";
 	$_SERVER['SERVER_NAME'] = $_SERVER['argv'][count($_SERVER['argv'])-1];
 }
 

@@ -23,7 +23,7 @@ class TracksController extends AppController {
         $this->usesPlayer();
 
         $isLoggedIn = $this->userIsLoggedIn();
-        $data       = $this->Track->getUpdatedSetBySlug($trackSlug, $isLoggedIn);
+        $data       = $this->Track->getBySlugContained($trackSlug);
         if(!$data) throw new NotFoundException(sprintf(__("Could not find the track %s"), $trackSlug));
 
         // Set the default track information.

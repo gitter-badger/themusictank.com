@@ -1,20 +1,31 @@
 <nav class="sub-menu">
     <ol class="breadcrumb">
+        <li><?php echo $this->Html->link(__("Artists"), array('controller' => 'artists', 'action' => 'index')); ?></li>
         <li><?php echo $this->Html->link($artist["name"], array('controller' => 'artists', 'action' => 'view', $artist["slug"])); ?></li>
         <li><?php echo $this->Html->link($album["name"], array('controller' => 'albums', 'action' => 'view', $album["slug"])); ?></li>
-        <li class="active">"<?php echo $this->Html->link($track["title"], array('controller' => 'tracks', 'action' => 'view', $track["slug"])); ?>"</li>
+        <li class="active"><?php echo $this->Html->link($track["title"], array('controller' => 'tracks', 'action' => 'view', $track["slug"])); ?></li>
     </ol>
 </nav>
 
 <section class="jumbotron colored introduction">
 	<div class="container container-fluid">
 		<div class="row">
-			<div class="col-md-2 thumbnail">
-	            <?php echo $this->Html->image( $this->App->getImageUrl($album), array("alt" => $album["name"])); ?>
+			<div class="col-md-3 thumbnail">
+	            <?php echo $this->Html->image( $this->App->getImageUrl($album, true), array("alt" => $album["name"])); ?>
 	        </div>
-	        <div class="col-md-10">
+	        <div class="col-md-8 col-md-offset-1">
+	        	<?php if(!is_null($trackReviewSnapshot["score"])) : ?>
+					<div class="score">
+						<?php echo (int)($trackReviewSnapshot["score"] * 100); ?>%
+					</div>
+				<?php endif; ?>
 			    <h1><?php echo $track["title"]; ?></h1>
-				<p><?php echo $this->StringMaker->composeTrackPresentation($lastfmTrack, $track, $album, $artist); ?></p>
+
+	            <section class="description expandable">
+	                <div class="wrapper">
+						<p><?php echo $this->StringMaker->composeTrackPresentation($lastfmTrack, $track, $album, $artist); ?></p>
+					</div>
+				</section>
 				<ul>
 					<li><?php echo $this->Html->link(__("Review track"), array('controller' => 'player', 'action' => 'play', $track["slug"]), array("class" => "btn btn-primary")); ?></li>
 				</ul>
@@ -29,7 +40,7 @@
 			<div class="col-md-12">
 				<div class="trs piechart"></div>
 				<p><?php echo $this->StringMaker->composeTrackAppreciation($trackReviewSnapshot, $track, $album, $artist); ?></p>
-				<p><?php echo $this->StringMaker->composeTimedAppreciation($trackReviewSnapshot, $track); ?></p>
+				<p><?php echo $this->StringMaker->composeTimedAppreciation($trackReviewSnapshot, $track["duration"]); ?></p>
 			</div>
 		</div>
 	</div>

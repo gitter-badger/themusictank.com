@@ -8,12 +8,23 @@ class UserTrackReviewSnapshot extends TableSnapshot
     public $useTable    = 'user_track_review_snapshots';
     public $belongsTo   = array('Track', 'User');
 
-    public function fetch($trackId, $userIds) {
+    public function fetch($trackId, $userIds)
+    {
+		$existing = $this->findByTrackIdAndUserId($trackId, $userIds);
 
-    	$conditions = array();
-    	$conditions = Hash::insert($conditions, "track_id", $trackId);
-    	$conditions = Hash::insert($conditions, "user_id", $userIds);
+		if ($existing) {
+			$this->data[$this->alias] = Hash::extract($existing, $this->alias);
+		}
 
-    	return $this->updateCached( $conditions );
+        $result = $this->updateCached(array("ReviewFrames.track_id" => $trackId, "ReviewFrames.user_id" => $userIds));
+        return ($result)  ? $result : array();
+    }
+
+    public function getExtraSaveFields($conditions = array())
+    {
+    	$extra = parent::getExtraSaveFields($conditions);
+    	$extra = Hash::insert($extra, "track_id", $conditions["ReviewFrames.track_id"]);
+    	$extra = Hash::insert($extra, "user_id", $conditions["ReviewFrames.user_id"]);
+    	return $extra;
     }
 }

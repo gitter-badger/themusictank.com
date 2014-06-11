@@ -65,7 +65,7 @@ class DATABASE_CONFIG {
 		'database' => 'themusictank',
 		'prefix' => '',
 		'encoding' => 'utf8'
-	);  
+	);
 
     // .nvi test information
 	public $nvi = array(
@@ -78,7 +78,7 @@ class DATABASE_CONFIG {
 		'prefix' => '',
 		'encoding' => 'utf8',
 	);
-        
+
     public $tmt_francoisfaubert_com = array(
 		'datasource' => 'Database/Mysql',
 		'persistent' => false,
@@ -102,7 +102,7 @@ class DATABASE_CONFIG {
 	);
 
     public $array = array('datasource' => 'ArraySource');
-    
+
     function __construct ()
 	{
         if(preg_match('/themusictank\.nvi/', $_SERVER['SERVER_NAME']))
@@ -118,5 +118,5 @@ class DATABASE_CONFIG {
             $this->default = $this->tmt_dev;
         }
 	}
-    
+
 }

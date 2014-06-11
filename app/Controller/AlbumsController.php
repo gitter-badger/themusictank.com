@@ -37,7 +37,7 @@ class AlbumsController extends AppController {
         $this->set("oembedLink",    $this->Album->getOEmbedUrl());
 
         // Associate review snapshots.
-        $this->set("albumReviewSnapshot", 	Hash::extract($this->Album->getSnapshot(), "AlbumReviewSnapshot"));
+        $this->set("albumReviewSnapshot", 	$data["AlbumReviewSnapshot"]);
         $this->set("usersWhoReviewed", 		$this->User->getRecentAlbumReviewers($data["Album"]["id"]));
 
         if($isLoggedIn)

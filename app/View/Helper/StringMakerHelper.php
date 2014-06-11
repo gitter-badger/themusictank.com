@@ -2,6 +2,8 @@
 
 class StringMakerHelper extends AppHelper {
 
+    var $helpers = array('Html');
+
     /**
      * From a daily challenge dataset, build an interesting introductary
      * paragraph. This should look as natural as possible.
@@ -105,7 +107,60 @@ class StringMakerHelper extends AppHelper {
 		return implode(" ", $strings);
 	}
 
-	public function composeTimedAppreciation($snapshot, $track)
+	public function composeAlbumAppreciation($snapshot, $album, $artist)
+	{
+		$randomSeed = $album["id"] % 2;
+		$strings = array();
+
+		if((int)$snapshot["neutral_pct"] >= 50)
+		{
+			if((int)$snapshot["neutral_pct"] > 90)
+				$descriptor = "entirely";
+			elseif((int)$snapshot["neutral_pct"] > 60)
+				$descriptor = "mostly";
+
+			$neutral = array(
+				sprintf("The general concensus regarding %s is %s neutral.", $album["name"], $descriptor),
+				sprintf("From what we have compiled, reviewers have been %s neutral of %s.", $descriptor, $album["name"])
+			);
+
+			$strings[] = $neutral[$randomSeed];
+		}
+
+		if((int)$snapshot["disliking_pct"] >= 50)
+		{
+			if((int)$snapshot["disliking_pct"] > 90)
+				$descriptor = "entirely";
+			elseif((int)$snapshot["disliking_pct"] > 60)
+				$descriptor = "mostly";
+
+			$disliked = array(
+				sprintf("The general concensus regarding %s is %s neutral.", $album["name"], $descriptor),
+				sprintf("From what we have compiled, reviewers have been %s neutral of %s.", $descriptor, $album["name"])
+			);
+
+			$strings[] = $disliked[$randomSeed];
+		}
+
+		if((int)$snapshot["liking_pct"] >= 50)
+		{
+			if((int)$snapshot["liking_pct"] > 90)
+				$descriptor = "entirely";
+			elseif((int)$snapshot["liking_pct"] > 60)
+				$descriptor = "mostly";
+
+			$liked = array(
+				sprintf("The general concensus regarding %s is %s neutral.", $album["name"], $descriptor),
+				sprintf("From what we have compiled, reviewers have been %s neutral of %s.", $descriptor, $album["name"])
+			);
+
+			$strings[] = $liked[$randomSeed];
+		}
+
+		return implode(" ", $strings);
+	}
+
+	public function composeTimedAppreciation($snapshot, $duration)
 	{
 		$strings 	= array();
 		$pcts 		= array(
@@ -116,7 +171,7 @@ class StringMakerHelper extends AppHelper {
 		asort($pcts, SORT_NUMERIC);
 
 		foreach ($pcts as $key => $value) {
-			$strings[] = sprintf("<strong>%s</strong> seconds of <em>%s</em>", ($value * (int)$track["duration"] / 100), $key);
+			$strings[] = sprintf("<strong>%s</strong> seconds of <em>%s</em>", ($value * (int)$duration / 100), $key);
 		}
 
 		return implode(" ", $strings);
@@ -126,12 +181,25 @@ class StringMakerHelper extends AppHelper {
 	{
 		if(empty($lastfmTrack["wiki"]))
 		{
-		    return sprintf(__("This is track number %s off of %s."), $track["track_num"], $album["name"]);
+			$albumLink = $this->Html->link($album["name"], array('controller' => 'albums', 'action' => 'view', $album["slug"]));
+			$artistLink = $this->Html->link($artist["name"], array('controller' => 'artists', 'action' => 'view', $artist["slug"]));
+
+
+			$trackIdxStr = $track["track_num"] . "<sup>th</sup>";
+			if($track["track_num"] == 3) {
+				$trackIdxStr = "third";
+			}
+			elseif($track["track_num"] == 2) {
+				$trackIdxStr = "second";
+			}
+			elseif($track["track_num"] == 1) {
+				$trackIdxStr = "first";
+			}
+
+		    return sprintf(__("This is the %s track off of %s. The album by %s that has been released on %s."), $trackIdxStr, $albumLink, $artistLink, date("F j Y", $album["release_date"]));
 		}
-		else
-		{
-		     return $lastfmTrack["wiki"];
-		}
+
+	    return $lastfmTrack["wiki"];
 	}
 
 	public function composeAlbumPresentation($lastfmAlbum, $album, $artist)

@@ -15,6 +15,12 @@ class ArtistSnapshotsSyncTask extends Shell {
 			$artistIdsToSync = array_merge($artistIdsToSync, Hash::extract($newIds, "{n}.review_frames.artist_id"));
     	}
 
+    	// Check whether a default snapshot was not created for a new artist
+		$newArtists = $this->ArtistReviewSnapshot->query("SELECT id FROM artists where id NOT IN (SELECT artist_id FROM artist_review_snapshots);");
+    	if($newArtists) {
+			$artistIdsToSync = array_merge($artistIdsToSync, Hash::extract($newArtists, "{n}.artists.id"));
+    	}
+
     	$expiredIds = $this->ArtistReviewSnapshot->find("list", array(
     		'fields' => array('ArtistReviewSnapshot.artist_id'),
     		"conditions" => array(
@@ -32,8 +38,7 @@ class ArtistSnapshotsSyncTask extends Shell {
     	{
 	 		$expired = $this->LastfmArtist->Artist->find("all", array(
 	    		"conditions" => array("Artist.id" => $artistIdsToSync),
-	            "fields"    => array("Artist.*", "LastfmArtist.*"),
-				"limit" => 200 // I think it's better to do a few of them at the time.
+	            "fields"    => array("Artist.*", "LastfmArtist.*")
 			));
 
     		$this->out(sprintf("Found %s snapshots that are out of sync or new.", count($expired)));

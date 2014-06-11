@@ -7,7 +7,7 @@ App::uses('SubscribersTrackReviewSnapshot', 'Model');
 
 class Track extends OEmbedable
 {
-	public $hasOne 		= array('LastfmTrack');
+	public $hasOne 		= array('LastfmTrack', 'TrackReviewSnapshot');
     public $belongsTo 	= array('Album');
     public $actsAs 		= array('Containable');
 	public $validate = array(
@@ -72,25 +72,6 @@ class Track extends OEmbedable
 	    }
 
 	    return array();
-    }
-
-    public function getUpdatedSetBySlug($slug, $addCurrentUser = false)
-    {
-        $syncValues = $this->getBySlugContained($slug);
-
-        if(!count($syncValues) > 0)
-        {
-            return false;
-        }
-
-        $syncValues["Artist"] = $syncValues["Album"]["Artist"];
-
-        $data = $syncValues;
-        $this->LastfmTrack->data = $syncValues;
-        $data["LastfmTrack"] = $this->LastfmTrack->updateCached();
-
-        $this->data = $data;
-        return $data;
     }
 
     public function getSnapshotsByTrackIds($ids)
@@ -241,10 +222,12 @@ class Track extends OEmbedable
      */
     public function getBySlugContained($trackSlug)
     {
-        return $this->find("first", array(
+        $this->data = $this->find("first", array(
             "conditions" 	=> array("Track.slug" => $trackSlug),
             "contain" 		=> array("LastfmTrack", "Album" => array( "Artist" ))
         ));
+
+     	return $this->data;
     }
 
     public function getSnapshot()

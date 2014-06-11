@@ -10,14 +10,19 @@ class AlbumReviewSnapshot extends TableSnapshot
 
     public function fetch($albumId)
     {
-    	$this->data["Album"] = array("id" => $albumId);
-
 		$existing = $this->findByAlbumId($albumId);
 		if ($existing) {
-			$this->data["AlbumReviewSnapshot"] = Hash::extract($existing, "AlbumReviewSnapshot");
+			$this->data[$this->alias] = Hash::extract($existing, $this->alias);
 		}
 
         $result = $this->updateCached(array("ReviewFrames.album_id" => $albumId));
         return ($result)  ? $result : array();
+    }
+
+    public function getExtraSaveFields($conditions = array())
+    {
+    	$extra = parent::getExtraSaveFields($conditions);
+		$extra = Hash::insert($extra, "album_id", $conditions["ReviewFrames.album_id"]);
+    	return $extra;
     }
 }

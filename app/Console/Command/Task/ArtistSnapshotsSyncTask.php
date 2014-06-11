@@ -1,42 +1,19 @@
 <?php
-
-class SyncArtistsShell extends AppShell {
+class ArtistSnapshotsSyncTask extends Shell {
 
     public $uses = array('LastfmArtist', 'ArtistReviewSnapshot');
 
-	// /Applications/MAMP/bin/php/php5.4.10/bin/php app/Console/cake.php SyncArtists syncLastFm themusictank.nvi
-    public function syncLastFm() {
-    	$expired = $this->LastfmArtist->find("all", array(
-    		"conditions" => array(
-    			"or" => array(
-    				"lastsync IS NULL",
-    				"lastsync < " . $this->LastfmArtist->getExpiredRange()
-				)
-			),
-			"limit" => 200 // I think it's better to do a few of them at the time.
-		));
-
-    	$this->out(sprintf("Found %s artist that are out of sync.", count($expired)));
-    	foreach ($expired as $artist) {
-    		$this->LastfmArtist->data = $artist;
-    		$this->out(sprintf("Syncing %s", $this->LastfmArtist->getData("Artist.name")));
-    		$this->LastfmArtist->updateCached();
-    	}
-    }
-
-    public function syncSnapshots()
+    public function execute()
     {
     	$artistIdsToSync = array();
 
-		$this->out("Syncing artist review snapshots");
-		$this->out("-------------------------------");
+		$this->out("Syncing artist review snapshots...");
 
     	// Check whether the new reviews have been taken into account
     	$newIds = $this->ArtistReviewSnapshot->query("SELECT distinct artist_id FROM review_frames where artist_id NOT IN (SELECT artist_id FROM artist_review_snapshots);");
     	if($newIds) {
 			$artistIdsToSync = array_merge($artistIdsToSync, Hash::extract($newIds, "{n}.review_frames.artist_id"));
     	}
-
 
     	$expiredIds = $this->ArtistReviewSnapshot->find("list", array(
     		'fields' => array('ArtistReviewSnapshot.artist_id'),
@@ -66,5 +43,8 @@ class SyncArtistsShell extends AppShell {
 	    		$this->ArtistReviewSnapshot->fetch($this->ArtistReviewSnapshot->getData("Artist.id"));
 	    	}
 		}
+
+
+		$this->out("Completed syncing artist review snapshots.");
     }
 }

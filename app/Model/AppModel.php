@@ -80,7 +80,7 @@ class AppModel extends Model {
         $subfolder      = substr(strtolower($this->name), 0, 5);
         $imagesRoot     = "img";
         $cacheRoot      = "cache";
-        $path           = $imagesRoot . $ds . $cacheRoot . $ds . $subfolder;
+        $path           = WWW_ROOT. $imagesRoot . $ds . $cacheRoot . $ds . $subfolder;
 
         if(!file_exists($path))
         {

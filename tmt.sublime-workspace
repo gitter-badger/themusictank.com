@@ -4,6 +4,18 @@
 		"selected_items":
 		[
 			[
+				"TRa",
+				"Track"
+			],
+			[
+				"end",
+				"endforeach"
+			],
+			[
+				"Album",
+				"AlbumReviewSnapshot"
+			],
+			[
 				"$al",
 				"$albumId"
 			],
@@ -198,10 +210,6 @@
 			[
 				"getNod",
 				"getNodeId"
-			],
-			[
-				"end",
-				"endif"
 			],
 			[
 				"$main",
@@ -506,107 +514,11 @@
 			[
 				"ZEnd",
 				"Zend_Http_Client"
-			],
-			[
-				"implode",
-				"implode"
-			],
-			[
-				"_create",
-				"_createWidgetNode"
 			]
 		]
 	},
 	"buffers":
 	[
-		{
-			"file": "app/Model/TableSnapshot.php",
-			"settings":
-			{
-				"buffer_size": 13701,
-				"line_ending": "Unix"
-			}
-		},
-		{
-			"file": "app/Model/Artist.php",
-			"settings":
-			{
-				"buffer_size": 3811,
-				"line_ending": "Unix"
-			}
-		},
-		{
-			"file": "app/Controller/ArtistsController.php",
-			"settings":
-			{
-				"buffer_size": 3920,
-				"line_ending": "Unix"
-			}
-		},
-		{
-			"file": "app/Model/LastfmAlbum.php",
-			"settings":
-			{
-				"buffer_size": 3688,
-				"line_ending": "Unix"
-			}
-		},
-		{
-			"file": "app/Model/Track.php",
-			"settings":
-			{
-				"buffer_size": 8420,
-				"line_ending": "Unix"
-			}
-		},
-		{
-			"file": ".gitignore",
-			"settings":
-			{
-				"buffer_size": 829,
-				"line_ending": "Unix"
-			}
-		},
-		{
-			"file": "/Users/ffaubert/Documents/work/themusictank/themusictank_2014-06-10.sql",
-			"settings":
-			{
-				"buffer_size": 15246,
-				"line_ending": "Unix"
-			}
-		},
-		{
-			"file": "app/Config/routes.php",
-			"settings":
-			{
-				"buffer_size": 2341,
-				"line_ending": "Unix"
-			}
-		},
-		{
-			"file": "app/Config/Schema/tmt.sql",
-			"settings":
-			{
-				"buffer_size": 15018,
-				"line_ending": "Unix"
-			}
-		},
-		{
-			"file": "app/Model/Album.php",
-			"settings":
-			{
-				"buffer_size": 7541,
-				"line_ending": "Unix"
-			}
-		},
-		{
-			"file": "app/Controller/TracksController.php",
-			"settings":
-			{
-				"buffer_size": 7553,
-				"line_ending": "Unix"
-			}
-		}
 	],
 	"build_system": "",
 	"command_palette":
@@ -660,45 +572,65 @@
 	},
 	"file_history":
 	[
-		"/Users/ffaubert/Sites/themusictank.com/app/tmp/logs/error.log",
-		"/Users/ffaubert/Sites/themusictank.com/app/webroot/js/tmt.js",
-		"/Users/ffaubert/Sites/themusictank.com/app/Model/Track.php",
-		"/Users/ffaubert/Sites/themusictank.com/app/Model/ArtistReviewSnapshot.php",
-		"/Users/ffaubert/Sites/themusictank.com/app/Controller/AlbumsController.php",
 		"/Users/ffaubert/Sites/themusictank.com/app/Model/TrackReviewSnapshot.php",
-		"/Users/ffaubert/Sites/themusictank.com/app/Model/AlbumReviewSnapshot.php",
-		"/Users/ffaubert/Sites/themusictank.com/app/View/Helper/StringMakerHelper.php",
-		"/Users/ffaubert/Sites/themusictank.com/lib/Cake/Utility/String.php",
-		"/Users/ffaubert/Sites/themusictank.com/app/Model/SubscribersTrackReviewSnapshot.php",
-		"/Users/ffaubert/Sites/themusictank.com/app/View/Elements/stats.ctp",
-		"/Users/ffaubert/Sites/themusictank.com/app/Model/Tracks.php",
-		"/Users/ffaubert/Sites/themusictank.com/app/Controller/TracksController.php",
-		"/Users/ffaubert/Sites/themusictank.com/app/View/Albums/view.ctp",
-		"/Users/ffaubert/Sites/themusictank.com/app/Config/bootstrap.php",
-		"/Users/ffaubert/Sites/themusictank.com/app/Model/ReviewFrame.php",
+		"/Users/ffaubert/Sites/themusictank.com/app/Model/UserAlbumReviewSnapshot.php",
 		"/Users/ffaubert/Sites/themusictank.com/app/Model/TableSnapshot.php",
-		"/Users/ffaubert/Sites/themusictank.com/app/Console/Command/CronShell.php",
-		"/Users/ffaubert/Sites/themusictank.com/app/Model/Config.php",
-		"/Users/ffaubert/Sites/themusictank.com/lib/Cake/Console/ConsoleOutput.php",
-		"/Users/ffaubert/Sites/themusictank.com/app/Console/cake",
-		"/Users/ffaubert/Sites/themusictank.com/app/Console/Command/SyncTracksShell.php",
+		"/Users/ffaubert/Sites/themusictank.com/app/Console/Command/Task/TrackSnapshotsSyncTask.php",
+		"/Users/ffaubert/Sites/themusictank.com/app/Console/Command/Task/AlbumSnapshotsSyncTask.php",
+		"/Users/ffaubert/Sites/themusictank.com/app/Console/Command/Task/ArtistSnapshotsSyncTask.php",
+		"/Users/ffaubert/Sites/themusictank.com/app/Model/AlbumReviewSnapshot.php",
+		"/Users/ffaubert/Sites/themusictank.com/app/Model/ArtistReviewSnapshot.php",
+		"/Users/ffaubert/Sites/themusictank.com/app/Model/SubscribersAlbumReviewSnapshot.php",
+		"/Users/ffaubert/Sites/themusictank.com/app/Model/SubscribersTrackReviewSnapshot.php",
+		"/Users/ffaubert/Sites/themusictank.com/app/Model/UserTrackReviewSnapshot.php",
+		"/Users/ffaubert/Sites/themusictank.com/app/Controller/TracksController.php",
+		"/Users/ffaubert/Sites/themusictank.com/app/View/Tracks/view.ctp",
+		"/Users/ffaubert/Sites/themusictank.com/app/View/Albums/view.ctp",
+		"/Users/ffaubert/Sites/themusictank.com/app/webroot/css/less/pages.less",
+		"/Users/ffaubert/Sites/themusictank.com/app/Model/Album.php",
+		"/Users/ffaubert/Sites/themusictank.com/app/Controller/AlbumsController.php",
+		"/Users/ffaubert/Sites/themusictank.com/app/Model/UserArtistReviewSnapshot.php",
+		"/Users/ffaubert/Sites/themusictank.com/app/View/Helper/StringMakerHelper.php",
+		"/Users/ffaubert/Sites/themusictank.com/app/Model/Track.php",
+		"/Users/ffaubert/Sites/themusictank.com/app/webroot/js/tmt.js",
+		"/Users/ffaubert/Sites/themusictank.com/app/webroot/css/less/header.less",
+		"/Users/ffaubert/Sites/themusictank.com/app/View/Elements/stats.ctp",
+		"/Users/ffaubert/Sites/themusictank.com/app/Config/database.php",
 		"/Users/ffaubert/Sites/themusictank.com/app/Console/Command/AppShell.php",
+		"/Users/ffaubert/Sites/themusictank.com/app/Console/Command/Task/PopulateTrackDetailsTask.php",
+		"/Users/ffaubert/Sites/themusictank.com/app/Console/Command/Task/PopulateAlbumDetailsTask.php",
+		"/Users/ffaubert/Sites/themusictank.com/app/Model/AppModel.php",
+		"/Users/ffaubert/Sites/themusictank.com/app/Config/bootstrap.php",
+		"/Users/ffaubert/Sites/themusictank.com/app/Model/Config.php",
+		"/Users/ffaubert/Sites/themusictank.com/app/Console/Command/Task/DailyConfigUpdateTask.php",
+		"/Users/ffaubert/Sites/themusictank.com/app/Console/Command/Task/UpdateSongChallengeTask.php",
+		"/Users/ffaubert/Sites/themusictank.com/app/Console/Command/Task/UpdatePopularArtistsTask.php",
+		"/Users/ffaubert/Sites/themusictank.com/app/Console/Command/SyncTracksShell.php",
+		"/Users/ffaubert/Sites/themusictank.com/app/Console/Command/Task/WeeklyConfigUpdateTask.php",
 		"/Users/ffaubert/Sites/themusictank.com/app/Console/Command/SyncAlbumsShell.php",
 		"/Users/ffaubert/Sites/themusictank.com/app/Console/Command/SyncArtistsShell.php",
+		"/Users/ffaubert/Sites/themusictank.com/app/Console/Command/Task/PopulateArtistDetailsTask.php",
+		"/Users/ffaubert/Sites/themusictank.com/app/Console/Command/Task/AlbumSnaphotsSyncTask.php",
+		"/Users/ffaubert/Sites/themusictank.com/app/Model/Artist.php",
+		"/Users/ffaubert/Sites/themusictank.com/app/Controller/ArtistsController.php",
+		"/Users/ffaubert/Sites/themusictank.com/app/Model/LastfmAlbum.php",
+		"/Users/ffaubert/Sites/themusictank.com/.gitignore",
+		"/Users/ffaubert/Documents/work/themusictank/themusictank_2014-06-10.sql",
+		"/Users/ffaubert/Sites/themusictank.com/app/Config/Schema/tmt.sql",
+		"/Users/ffaubert/Sites/themusictank.com/app/tmp/logs/error.log",
+		"/Users/ffaubert/Sites/themusictank.com/lib/Cake/Utility/String.php",
+		"/Users/ffaubert/Sites/themusictank.com/app/Model/Tracks.php",
+		"/Users/ffaubert/Sites/themusictank.com/app/Model/ReviewFrame.php",
+		"/Users/ffaubert/Sites/themusictank.com/app/Console/Command/CronShell.php",
+		"/Users/ffaubert/Sites/themusictank.com/lib/Cake/Console/ConsoleOutput.php",
+		"/Users/ffaubert/Sites/themusictank.com/app/Console/cake",
 		"/Users/ffaubert/Sites/themusictank.com/app/Model/Behavior/LastfmBehavior.php",
-		"/Users/ffaubert/Sites/themusictank.com/app/View/Tracks/view.ctp",
-		"/Users/ffaubert/Sites/themusictank.com/app/Model/Album.php",
 		"/Users/ffaubert/Sites/themusictank.com/app/Console/Command/SyncSnapshotsShell.php",
 		"/Users/ffaubert/Sites/themusictank.com/app/Model/RdioArtist.php",
 		"/Users/ffaubert/Sites/themusictank.com/app/Model/LastfmArtist.php",
 		"/Users/ffaubert/Sites/themusictank.com/app/View/Artists/index.ctp",
-		"/Users/ffaubert/Sites/themusictank.com/app/Controller/ArtistsController.php",
 		"/Users/ffaubert/Sites/themusictank.com/app/Model/LastfmTrack.php",
 		"/Users/ffaubert/Sites/themusictank.com/app/Console/Command/Task/SyncArtists.php",
-		"/Users/ffaubert/Sites/themusictank.com/app/Model/LastfmAlbum.php",
-		"/Users/ffaubert/Sites/themusictank.com/app/webroot/css/less/pages.less",
-		"/Users/ffaubert/Sites/themusictank.com/app/Model/Artist.php",
-		"/Users/ffaubert/Sites/themusictank.com/app/webroot/css/less/header.less",
 		"/Users/ffaubert/Sites/themusictank.com/app/Controller/AjaxController.php",
 		"/C/Users/Francois/Documents/htdocs/tmt/app/Model/LastfmArtist.php",
 		"/C/Users/Francois/Documents/htdocs/tmt/app/Model/Album.php",
@@ -737,10 +669,7 @@
 		"/Users/ffaubert/Sites/themusictank.com/lib/Cake/Model/Datasource/DataSource.php",
 		"/Users/ffaubert/Sites/themusictank.com/app/Config/Schema/db_acl.php",
 		"/Users/ffaubert/Sites/themusictank.com/app/View/Layouts/default.ctp",
-		"/Users/ffaubert/Sites/themusictank.com/app/Model/UserAlbumReviewSnapshot.php",
-		"/Users/ffaubert/Sites/themusictank.com/app/Model/UserTrackReviewSnapshot.php",
 		"/Users/ffaubert/Sites/themusictank.com/app/Model/User.php",
-		"/Users/ffaubert/Sites/themusictank.com/app/Model/SubscribersAlbumReviewSnapshot.php",
 		"/Users/ffaubert/Sites/themusictank.com/lib/Cake/Network/Email/SmtpTransport.php",
 		"/Users/ffaubert/Sites/themusictank.com/app/tmp/cache/models/tmt_cake_model_default_themusictank_users",
 		"/Users/ffaubert/Sites/themusictank.com/lib/Cake/Model/Model.php",
@@ -764,30 +693,13 @@
 		"/Users/ffaubert/Sites/themusictank.com/app/View/Player/rdio.ctp",
 		"/Users/ffaubert/Sites/themusictank.com/app/webroot/js/player/mp3.js",
 		"/Users/ffaubert/Sites/themusictank.com/app/webroot/js/player/reviewer.js",
-		"/Users/ffaubert/Sites/themusictank.com/app/Model/AppModel.php",
 		"/Users/ffaubert/Sites/themusictank.com/tmt.sublime-project",
 		"/Users/ffaubert/Sites/themusictank.com/lib/Cake/Model/Datasource/Session/CakeSessionHandlerInterface.php",
 		"/Users/ffaubert/Sites/themusictank.com/lib/Cake/TestSuite/CakeTestRunner.php",
 		"/Users/ffaubert/Sites/themusictank.com/app/Controller/SearchController.php",
 		"/Users/ffaubert/Sites/themusictank.com/app/Config/Schema/sessions.php",
 		"/Users/ffaubert/Sites/themusictank.com/app/webroot/css/less/styles.less",
-		"/Users/ffaubert/Sites/themusictank.com/.editorconfig",
-		"/Users/ffaubert/Sites/themusictank.com/lib/Cake/Test/test_app/Plugin/TestPlugin/View/Elements/translate.ctp",
-		"/Users/ffaubert/Sites/themusictank.com/lib/Cake/Routing/Route/PluginShortRoute.php",
-		"/Users/ffaubert/Sites/themusictank.com/lib/Cake/Test/Case/Routing/Route/PluginShortRouteTest.php",
-		"/Users/ffaubert/Sites/themusictank.com/lib/Cake/Console/Command/I18nShell.php",
-		"/Users/ffaubert/Sites/themusictank.com/.lessconfig",
-		"/Users/ffaubert/Library/Application Support/Sublime Text 3/Packages/User/less2css.sublime-settings",
-		"/Users/ffaubert/Library/Application Support/Sublime Text 3/Packages/Less2Css/less2css.sublime-settings",
-		"/Users/ffaubert/Library/Application Support/Sublime Text 3/Packages/LESS/LESS.sublime-settings",
-		"/Users/ffaubert/Library/Application Support/Sublime Text 3/Packages/User/Default (OSX).sublime-keymap",
-		"/Users/ffaubert/Sites/themusictank.com/app/webroot/js/player/rdio.js",
-		"/Users/ffaubert/Sites/themusictank.com/app/View/Layouts/blank.ctp",
-		"/Users/ffaubert/Sites/themusictank.com/app/Controller/PlayerController.php",
-		"/Users/ffaubert/Sites/themusictank.com/app/Model/ImplicitRelationModel.php",
-		"/Users/ffaubert/Sites/themusictank.com/app/View/Elements/header.ctp",
-		"/Users/ffaubert/Downloads/cal (3).ics",
-		"/Users/ffaubert/Sites/as-hanging-site-web-magento/app/design/frontend/default/ashanging/template/checkout/cart/sidebar.phtml"
+		"/Users/ffaubert/Sites/themusictank.com/.editorconfig"
 	],
 	"find":
 	{
@@ -862,6 +774,19 @@
 		"case_sensitive": false,
 		"find_history":
 		[
+			"_createSnapshot",
+			"rota",
+			"getAverageScore",
+			"_validateAndSave",
+			"getAverageCurve",
+			"sub-menu",
+			"release_",
+			"released",
+			"ArtistSnapshotsSyncTask",
+			"updatePopularArtists",
+			"requiresDailyTrackChallengeUpdate",
+			"requiresPopularArtistUpdate",
+			"requiresDailyTrackChallengeUpdate",
 			"_createSnapshot",
 			"_validateAndSave",
 			"getBelongsToAlias",
@@ -976,20 +901,7 @@
 			"helper",
 			"sendVisitorCouponMail",
 			"rsVide",
-			"aureli",
-			"body_type_name",
-			"year",
-			"vehicle ty",
-			"getListingAgesMinDays",
-			"getListingAgeMinDays",
-			"getListingAgesMinDays",
-			"listing",
-			"\"]);",
-			"selectsToHash",
-			"rootElementCount",
-			"subeleme\nsubeleme",
-			"length",
-			"trim_id"
+			"aureli"
 		],
 		"highlight": true,
 		"in_selection": false,
@@ -1018,883 +930,8 @@
 	"groups":
 	[
 		{
-			"selected": 8,
 			"sheets":
 			[
-				{
-					"buffer": 0,
-					"file": "app/Model/TableSnapshot.php",
-					"semi_transient": false,
-					"settings":
-					{
-						"buffer_size": 13701,
-						"regions":
-						{
-						},
-						"selection":
-						[
-							[
-								3210,
-								3210
-							]
-						],
-						"settings":
-						{
-							"BracketHighlighterBusy": false,
-							"bh_regions":
-							[
-								"bh_curly",
-								"bh_curly_center",
-								"bh_curly_open",
-								"bh_curly_close",
-								"bh_angle",
-								"bh_angle_center",
-								"bh_angle_open",
-								"bh_angle_close",
-								"bh_square",
-								"bh_square_center",
-								"bh_square_open",
-								"bh_square_close",
-								"bh_double_quote",
-								"bh_double_quote_center",
-								"bh_double_quote_open",
-								"bh_double_quote_close",
-								"bh_regex",
-								"bh_regex_center",
-								"bh_regex_open",
-								"bh_regex_close",
-								"bh_tag",
-								"bh_tag_center",
-								"bh_tag_open",
-								"bh_tag_close",
-								"bh_round",
-								"bh_round_center",
-								"bh_round_open",
-								"bh_round_close",
-								"bh_unmatched",
-								"bh_unmatched_center",
-								"bh_unmatched_open",
-								"bh_unmatched_close",
-								"bh_single_quote",
-								"bh_single_quote_center",
-								"bh_single_quote_open",
-								"bh_single_quote_close",
-								"bh_default",
-								"bh_default_center",
-								"bh_default_open",
-								"bh_default_close"
-							],
-							"editorconfig": true,
-							"ensure_newline_at_eof_on_save": true,
-							"incomplete_sync": null,
-							"remote_loading": false,
-							"synced": false,
-							"syntax": "Packages/PHP/PHP.tmLanguage",
-							"tab_size": 4,
-							"translate_tabs_to_spaces": false,
-							"trim_trailing_white_space_on_save": true
-						},
-						"translation.x": 0.0,
-						"translation.y": 1196.0,
-						"zoom_level": 1.0
-					},
-					"stack_index": 7,
-					"type": "text"
-				},
-				{
-					"buffer": 1,
-					"file": "app/Model/Artist.php",
-					"semi_transient": false,
-					"settings":
-					{
-						"buffer_size": 3811,
-						"regions":
-						{
-						},
-						"selection":
-						[
-							[
-								3700,
-								3700
-							]
-						],
-						"settings":
-						{
-							"BracketHighlighterBusy": false,
-							"bh_regions":
-							[
-								"bh_curly",
-								"bh_curly_center",
-								"bh_curly_open",
-								"bh_curly_close",
-								"bh_angle",
-								"bh_angle_center",
-								"bh_angle_open",
-								"bh_angle_close",
-								"bh_square",
-								"bh_square_center",
-								"bh_square_open",
-								"bh_square_close",
-								"bh_double_quote",
-								"bh_double_quote_center",
-								"bh_double_quote_open",
-								"bh_double_quote_close",
-								"bh_regex",
-								"bh_regex_center",
-								"bh_regex_open",
-								"bh_regex_close",
-								"bh_tag",
-								"bh_tag_center",
-								"bh_tag_open",
-								"bh_tag_close",
-								"bh_round",
-								"bh_round_center",
-								"bh_round_open",
-								"bh_round_close",
-								"bh_unmatched",
-								"bh_unmatched_center",
-								"bh_unmatched_open",
-								"bh_unmatched_close",
-								"bh_single_quote",
-								"bh_single_quote_center",
-								"bh_single_quote_open",
-								"bh_single_quote_close",
-								"bh_default",
-								"bh_default_center",
-								"bh_default_open",
-								"bh_default_close"
-							],
-							"editorconfig": true,
-							"ensure_newline_at_eof_on_save": true,
-							"incomplete_sync": null,
-							"remote_loading": false,
-							"synced": false,
-							"syntax": "Packages/PHP/PHP.tmLanguage",
-							"tab_size": 4,
-							"translate_tabs_to_spaces": false,
-							"trim_trailing_white_space_on_save": true
-						},
-						"translation.x": 0.0,
-						"translation.y": 1215.0,
-						"zoom_level": 1.0
-					},
-					"stack_index": 9,
-					"type": "text"
-				},
-				{
-					"buffer": 2,
-					"file": "app/Controller/ArtistsController.php",
-					"semi_transient": false,
-					"settings":
-					{
-						"buffer_size": 3920,
-						"regions":
-						{
-						},
-						"selection":
-						[
-							[
-								714,
-								714
-							]
-						],
-						"settings":
-						{
-							"BracketHighlighterBusy": false,
-							"bh_regions":
-							[
-								"bh_curly",
-								"bh_curly_center",
-								"bh_curly_open",
-								"bh_curly_close",
-								"bh_angle",
-								"bh_angle_center",
-								"bh_angle_open",
-								"bh_angle_close",
-								"bh_square",
-								"bh_square_center",
-								"bh_square_open",
-								"bh_square_close",
-								"bh_double_quote",
-								"bh_double_quote_center",
-								"bh_double_quote_open",
-								"bh_double_quote_close",
-								"bh_regex",
-								"bh_regex_center",
-								"bh_regex_open",
-								"bh_regex_close",
-								"bh_tag",
-								"bh_tag_center",
-								"bh_tag_open",
-								"bh_tag_close",
-								"bh_round",
-								"bh_round_center",
-								"bh_round_open",
-								"bh_round_close",
-								"bh_unmatched",
-								"bh_unmatched_center",
-								"bh_unmatched_open",
-								"bh_unmatched_close",
-								"bh_single_quote",
-								"bh_single_quote_center",
-								"bh_single_quote_open",
-								"bh_single_quote_close",
-								"bh_default",
-								"bh_default_center",
-								"bh_default_open",
-								"bh_default_close"
-							],
-							"editorconfig": true,
-							"ensure_newline_at_eof_on_save": true,
-							"incomplete_sync": null,
-							"remote_loading": false,
-							"synced": false,
-							"syntax": "Packages/PHP/PHP.tmLanguage",
-							"tab_size": 4,
-							"translate_tabs_to_spaces": false,
-							"trim_trailing_white_space_on_save": true
-						},
-						"translation.x": 0.0,
-						"translation.y": 278.0,
-						"zoom_level": 1.0
-					},
-					"stack_index": 10,
-					"type": "text"
-				},
-				{
-					"buffer": 3,
-					"file": "app/Model/LastfmAlbum.php",
-					"semi_transient": false,
-					"settings":
-					{
-						"buffer_size": 3688,
-						"regions":
-						{
-						},
-						"selection":
-						[
-							[
-								2137,
-								2137
-							]
-						],
-						"settings":
-						{
-							"BracketHighlighterBusy": false,
-							"bh_regions":
-							[
-								"bh_curly",
-								"bh_curly_center",
-								"bh_curly_open",
-								"bh_curly_close",
-								"bh_angle",
-								"bh_angle_center",
-								"bh_angle_open",
-								"bh_angle_close",
-								"bh_square",
-								"bh_square_center",
-								"bh_square_open",
-								"bh_square_close",
-								"bh_double_quote",
-								"bh_double_quote_center",
-								"bh_double_quote_open",
-								"bh_double_quote_close",
-								"bh_regex",
-								"bh_regex_center",
-								"bh_regex_open",
-								"bh_regex_close",
-								"bh_tag",
-								"bh_tag_center",
-								"bh_tag_open",
-								"bh_tag_close",
-								"bh_round",
-								"bh_round_center",
-								"bh_round_open",
-								"bh_round_close",
-								"bh_unmatched",
-								"bh_unmatched_center",
-								"bh_unmatched_open",
-								"bh_unmatched_close",
-								"bh_single_quote",
-								"bh_single_quote_center",
-								"bh_single_quote_open",
-								"bh_single_quote_close",
-								"bh_default",
-								"bh_default_center",
-								"bh_default_open",
-								"bh_default_close"
-							],
-							"editorconfig": true,
-							"ensure_newline_at_eof_on_save": true,
-							"incomplete_sync": null,
-							"remote_loading": false,
-							"synced": false,
-							"syntax": "Packages/PHP/PHP.tmLanguage",
-							"tab_size": 4,
-							"translate_tabs_to_spaces": false,
-							"trim_trailing_white_space_on_save": true
-						},
-						"translation.x": 0.0,
-						"translation.y": 413.0,
-						"zoom_level": 1.0
-					},
-					"stack_index": 5,
-					"type": "text"
-				},
-				{
-					"buffer": 4,
-					"file": "app/Model/Track.php",
-					"semi_transient": false,
-					"settings":
-					{
-						"buffer_size": 8420,
-						"regions":
-						{
-						},
-						"selection":
-						[
-							[
-								7742,
-								7742
-							]
-						],
-						"settings":
-						{
-							"BracketHighlighterBusy": false,
-							"bh_regions":
-							[
-								"bh_curly",
-								"bh_curly_center",
-								"bh_curly_open",
-								"bh_curly_close",
-								"bh_angle",
-								"bh_angle_center",
-								"bh_angle_open",
-								"bh_angle_close",
-								"bh_square",
-								"bh_square_center",
-								"bh_square_open",
-								"bh_square_close",
-								"bh_double_quote",
-								"bh_double_quote_center",
-								"bh_double_quote_open",
-								"bh_double_quote_close",
-								"bh_regex",
-								"bh_regex_center",
-								"bh_regex_open",
-								"bh_regex_close",
-								"bh_tag",
-								"bh_tag_center",
-								"bh_tag_open",
-								"bh_tag_close",
-								"bh_round",
-								"bh_round_center",
-								"bh_round_open",
-								"bh_round_close",
-								"bh_unmatched",
-								"bh_unmatched_center",
-								"bh_unmatched_open",
-								"bh_unmatched_close",
-								"bh_single_quote",
-								"bh_single_quote_center",
-								"bh_single_quote_open",
-								"bh_single_quote_close",
-								"bh_default",
-								"bh_default_center",
-								"bh_default_open",
-								"bh_default_close"
-							],
-							"editorconfig": true,
-							"ensure_newline_at_eof_on_save": true,
-							"incomplete_sync": null,
-							"remote_loading": false,
-							"synced": false,
-							"syntax": "Packages/PHP/PHP.tmLanguage",
-							"tab_size": 4,
-							"translate_tabs_to_spaces": false,
-							"trim_trailing_white_space_on_save": true
-						},
-						"translation.x": 0.0,
-						"translation.y": 3872.0,
-						"zoom_level": 1.0
-					},
-					"stack_index": 4,
-					"type": "text"
-				},
-				{
-					"buffer": 5,
-					"file": ".gitignore",
-					"semi_transient": false,
-					"settings":
-					{
-						"buffer_size": 829,
-						"regions":
-						{
-						},
-						"selection":
-						[
-							[
-								811,
-								811
-							]
-						],
-						"settings":
-						{
-							"BracketHighlighterBusy": false,
-							"bh_regions":
-							[
-								"bh_curly",
-								"bh_curly_center",
-								"bh_curly_open",
-								"bh_curly_close",
-								"bh_angle",
-								"bh_angle_center",
-								"bh_angle_open",
-								"bh_angle_close",
-								"bh_square",
-								"bh_square_center",
-								"bh_square_open",
-								"bh_square_close",
-								"bh_double_quote",
-								"bh_double_quote_center",
-								"bh_double_quote_open",
-								"bh_double_quote_close",
-								"bh_regex",
-								"bh_regex_center",
-								"bh_regex_open",
-								"bh_regex_close",
-								"bh_tag",
-								"bh_tag_center",
-								"bh_tag_open",
-								"bh_tag_close",
-								"bh_round",
-								"bh_round_center",
-								"bh_round_open",
-								"bh_round_close",
-								"bh_unmatched",
-								"bh_unmatched_center",
-								"bh_unmatched_open",
-								"bh_unmatched_close",
-								"bh_single_quote",
-								"bh_single_quote_center",
-								"bh_single_quote_open",
-								"bh_single_quote_close",
-								"bh_default",
-								"bh_default_center",
-								"bh_default_open",
-								"bh_default_close"
-							],
-							"editorconfig": true,
-							"ensure_newline_at_eof_on_save": true,
-							"incomplete_sync": null,
-							"remote_loading": false,
-							"synced": false,
-							"syntax": "Packages/Text/Plain text.tmLanguage",
-							"translate_tabs_to_spaces": false,
-							"trim_trailing_white_space_on_save": true
-						},
-						"translation.x": -0.0,
-						"translation.y": 0.0,
-						"zoom_level": 1.0
-					},
-					"stack_index": 3,
-					"type": "text"
-				},
-				{
-					"buffer": 6,
-					"file": "/Users/ffaubert/Documents/work/themusictank/themusictank_2014-06-10.sql",
-					"semi_transient": false,
-					"settings":
-					{
-						"buffer_size": 15246,
-						"regions":
-						{
-						},
-						"selection":
-						[
-							[
-								934,
-								934
-							]
-						],
-						"settings":
-						{
-							"BracketHighlighterBusy": false,
-							"bh_regions":
-							[
-								"bh_curly",
-								"bh_curly_center",
-								"bh_curly_open",
-								"bh_curly_close",
-								"bh_angle",
-								"bh_angle_center",
-								"bh_angle_open",
-								"bh_angle_close",
-								"bh_square",
-								"bh_square_center",
-								"bh_square_open",
-								"bh_square_close",
-								"bh_double_quote",
-								"bh_double_quote_center",
-								"bh_double_quote_open",
-								"bh_double_quote_close",
-								"bh_regex",
-								"bh_regex_center",
-								"bh_regex_open",
-								"bh_regex_close",
-								"bh_tag",
-								"bh_tag_center",
-								"bh_tag_open",
-								"bh_tag_close",
-								"bh_round",
-								"bh_round_center",
-								"bh_round_open",
-								"bh_round_close",
-								"bh_unmatched",
-								"bh_unmatched_center",
-								"bh_unmatched_open",
-								"bh_unmatched_close",
-								"bh_single_quote",
-								"bh_single_quote_center",
-								"bh_single_quote_open",
-								"bh_single_quote_close",
-								"bh_default",
-								"bh_default_center",
-								"bh_default_open",
-								"bh_default_close"
-							],
-							"incomplete_sync": null,
-							"remote_loading": false,
-							"synced": false,
-							"syntax": "Packages/SQL/SQL.tmLanguage",
-							"tab_size": 2,
-							"translate_tabs_to_spaces": true
-						},
-						"translation.x": 0.0,
-						"translation.y": 0.0,
-						"zoom_level": 1.0
-					},
-					"stack_index": 2,
-					"type": "text"
-				},
-				{
-					"buffer": 7,
-					"file": "app/Config/routes.php",
-					"semi_transient": true,
-					"settings":
-					{
-						"buffer_size": 2341,
-						"regions":
-						{
-						},
-						"selection":
-						[
-							[
-								0,
-								0
-							]
-						],
-						"settings":
-						{
-							"BracketHighlighterBusy": false,
-							"bh_regions":
-							[
-								"bh_curly",
-								"bh_curly_center",
-								"bh_curly_open",
-								"bh_curly_close",
-								"bh_angle",
-								"bh_angle_center",
-								"bh_angle_open",
-								"bh_angle_close",
-								"bh_square",
-								"bh_square_center",
-								"bh_square_open",
-								"bh_square_close",
-								"bh_double_quote",
-								"bh_double_quote_center",
-								"bh_double_quote_open",
-								"bh_double_quote_close",
-								"bh_regex",
-								"bh_regex_center",
-								"bh_regex_open",
-								"bh_regex_close",
-								"bh_tag",
-								"bh_tag_center",
-								"bh_tag_open",
-								"bh_tag_close",
-								"bh_round",
-								"bh_round_center",
-								"bh_round_open",
-								"bh_round_close",
-								"bh_unmatched",
-								"bh_unmatched_center",
-								"bh_unmatched_open",
-								"bh_unmatched_close",
-								"bh_single_quote",
-								"bh_single_quote_center",
-								"bh_single_quote_open",
-								"bh_single_quote_close",
-								"bh_default",
-								"bh_default_center",
-								"bh_default_open",
-								"bh_default_close"
-							],
-							"editorconfig": true,
-							"ensure_newline_at_eof_on_save": true,
-							"incomplete_sync": null,
-							"remote_loading": false,
-							"synced": false,
-							"syntax": "Packages/PHP/PHP.tmLanguage",
-							"tab_size": 4,
-							"translate_tabs_to_spaces": false,
-							"trim_trailing_white_space_on_save": true
-						},
-						"translation.x": 0.0,
-						"translation.y": 0.0,
-						"zoom_level": 1.0
-					},
-					"stack_index": 1,
-					"type": "text"
-				},
-				{
-					"buffer": 8,
-					"file": "app/Config/Schema/tmt.sql",
-					"semi_transient": false,
-					"settings":
-					{
-						"buffer_size": 15018,
-						"regions":
-						{
-						},
-						"selection":
-						[
-							[
-								13902,
-								13902
-							]
-						],
-						"settings":
-						{
-							"BracketHighlighterBusy": false,
-							"bh_regions":
-							[
-								"bh_curly",
-								"bh_curly_center",
-								"bh_curly_open",
-								"bh_curly_close",
-								"bh_angle",
-								"bh_angle_center",
-								"bh_angle_open",
-								"bh_angle_close",
-								"bh_square",
-								"bh_square_center",
-								"bh_square_open",
-								"bh_square_close",
-								"bh_double_quote",
-								"bh_double_quote_center",
-								"bh_double_quote_open",
-								"bh_double_quote_close",
-								"bh_regex",
-								"bh_regex_center",
-								"bh_regex_open",
-								"bh_regex_close",
-								"bh_tag",
-								"bh_tag_center",
-								"bh_tag_open",
-								"bh_tag_close",
-								"bh_round",
-								"bh_round_center",
-								"bh_round_open",
-								"bh_round_close",
-								"bh_unmatched",
-								"bh_unmatched_center",
-								"bh_unmatched_open",
-								"bh_unmatched_close",
-								"bh_single_quote",
-								"bh_single_quote_center",
-								"bh_single_quote_open",
-								"bh_single_quote_close",
-								"bh_default",
-								"bh_default_center",
-								"bh_default_open",
-								"bh_default_close"
-							],
-							"editorconfig": true,
-							"ensure_newline_at_eof_on_save": true,
-							"incomplete_sync": null,
-							"syntax": "Packages/SQL/SQL.tmLanguage",
-							"tab_size": 2,
-							"translate_tabs_to_spaces": false,
-							"trim_trailing_white_space_on_save": true
-						},
-						"translation.x": 0.0,
-						"translation.y": 7168.0,
-						"zoom_level": 1.0
-					},
-					"stack_index": 0,
-					"type": "text"
-				},
-				{
-					"buffer": 9,
-					"file": "app/Model/Album.php",
-					"semi_transient": false,
-					"settings":
-					{
-						"buffer_size": 7541,
-						"regions":
-						{
-						},
-						"selection":
-						[
-							[
-								2755,
-								2761
-							]
-						],
-						"settings":
-						{
-							"BracketHighlighterBusy": false,
-							"bh_regions":
-							[
-								"bh_curly",
-								"bh_curly_center",
-								"bh_curly_open",
-								"bh_curly_close",
-								"bh_angle",
-								"bh_angle_center",
-								"bh_angle_open",
-								"bh_angle_close",
-								"bh_square",
-								"bh_square_center",
-								"bh_square_open",
-								"bh_square_close",
-								"bh_double_quote",
-								"bh_double_quote_center",
-								"bh_double_quote_open",
-								"bh_double_quote_close",
-								"bh_regex",
-								"bh_regex_center",
-								"bh_regex_open",
-								"bh_regex_close",
-								"bh_tag",
-								"bh_tag_center",
-								"bh_tag_open",
-								"bh_tag_close",
-								"bh_round",
-								"bh_round_center",
-								"bh_round_open",
-								"bh_round_close",
-								"bh_unmatched",
-								"bh_unmatched_center",
-								"bh_unmatched_open",
-								"bh_unmatched_close",
-								"bh_single_quote",
-								"bh_single_quote_center",
-								"bh_single_quote_open",
-								"bh_single_quote_close",
-								"bh_default",
-								"bh_default_center",
-								"bh_default_open",
-								"bh_default_close"
-							],
-							"editorconfig": true,
-							"ensure_newline_at_eof_on_save": true,
-							"incomplete_sync": null,
-							"remote_loading": false,
-							"synced": false,
-							"syntax": "Packages/PHP/PHP.tmLanguage",
-							"tab_size": 4,
-							"translate_tabs_to_spaces": false,
-							"trim_trailing_white_space_on_save": true
-						},
-						"translation.x": 0.0,
-						"translation.y": 1102.0,
-						"zoom_level": 1.0
-					},
-					"stack_index": 6,
-					"type": "text"
-				},
-				{
-					"buffer": 10,
-					"file": "app/Controller/TracksController.php",
-					"semi_transient": false,
-					"settings":
-					{
-						"buffer_size": 7553,
-						"regions":
-						{
-						},
-						"selection":
-						[
-							[
-								5051,
-								5051
-							]
-						],
-						"settings":
-						{
-							"BracketHighlighterBusy": false,
-							"bh_regions":
-							[
-								"bh_curly",
-								"bh_curly_center",
-								"bh_curly_open",
-								"bh_curly_close",
-								"bh_angle",
-								"bh_angle_center",
-								"bh_angle_open",
-								"bh_angle_close",
-								"bh_square",
-								"bh_square_center",
-								"bh_square_open",
-								"bh_square_close",
-								"bh_double_quote",
-								"bh_double_quote_center",
-								"bh_double_quote_open",
-								"bh_double_quote_close",
-								"bh_regex",
-								"bh_regex_center",
-								"bh_regex_open",
-								"bh_regex_close",
-								"bh_tag",
-								"bh_tag_center",
-								"bh_tag_open",
-								"bh_tag_close",
-								"bh_round",
-								"bh_round_center",
-								"bh_round_open",
-								"bh_round_close",
-								"bh_unmatched",
-								"bh_unmatched_center",
-								"bh_unmatched_open",
-								"bh_unmatched_close",
-								"bh_single_quote",
-								"bh_single_quote_center",
-								"bh_single_quote_open",
-								"bh_single_quote_close",
-								"bh_default",
-								"bh_default_center",
-								"bh_default_open",
-								"bh_default_close"
-							],
-							"editorconfig": true,
-							"ensure_newline_at_eof_on_save": true,
-							"incomplete_sync": null,
-							"remote_loading": false,
-							"synced": false,
-							"syntax": "Packages/PHP/PHP.tmLanguage",
-							"tab_size": 4,
-							"translate_tabs_to_spaces": false,
-							"trim_trailing_white_space_on_save": true
-						},
-						"translation.x": 0.0,
-						"translation.y": 2069.0,
-						"zoom_level": 1.0
-					},
-					"stack_index": 8,
-					"type": "text"
-				}
 			]
 		}
 	],
@@ -1951,6 +988,18 @@
 			[
 				"track",
 				"app/Model/Track.php"
+			],
+			[
+				"trackcon",
+				"app/Controller/TracksController.php"
+			],
+			[
+				"stringm",
+				"app/View/Helper/StringMakerHelper.php"
+			],
+			[
+				"config.",
+				"app/Model/Config.php"
 			],
 			[
 				"stringmak",
@@ -2447,18 +1496,6 @@
 			[
 				"base.",
 				"app/webroot/css/base.less"
-			],
-			[
-				"styles.l",
-				"ernest_2014/less/styles.less"
-			],
-			[
-				"frontend/blank/ernest_2014/template/persistent/checkout/onepage/billing.phtml",
-				"app/design/frontend/blank/ernest_2014/template/persistent/checkout/onepage/billing.phtml"
-			],
-			[
-				"getcontrole",
-				"app/code/community/SMDesign/ColorswatchProductView/controllers/GetController.php"
 			]
 		],
 		"width": 0.0

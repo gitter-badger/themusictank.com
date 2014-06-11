@@ -1,9 +1,13 @@
 <nav class="sub-menu">
-    <ol class="breadcrumb">
-        <li><?php echo $this->Html->link(__("Artists"), array('controller' => 'artists', 'action' => 'index')); ?></li>
-        <li><?php echo $this->Html->link($artist["name"], array('controller' => 'artists', 'action' => 'view', $artist["slug"])); ?></li>
-        <li class="active"><?php echo $this->Html->link($album["name"], array('controller' => 'albums', 'action' => 'view', $album["slug"])); ?></li>
-    </ol>
+	<div class="container container-fluid">
+		<div class="row">
+		    <ol class="breadcrumb">
+		        <li><?php echo $this->Html->link(__("Artists"), array('controller' => 'artists', 'action' => 'index')); ?></li>
+		        <li><?php echo $this->Html->link($artist["name"], array('controller' => 'artists', 'action' => 'view', $artist["slug"])); ?></li>
+		        <li class="active"><?php echo $this->Html->link($album["name"], array('controller' => 'albums', 'action' => 'view', $album["slug"])); ?></li>
+		    </ol>
+	    </div>
+    </div>
 </nav>
 
 <section class="jumbotron colored introduction">
@@ -28,7 +32,6 @@
         </div>
     </div>
 </section>
-
 
 <div class="review-line appreciation odd">
 	<div class="container container-fluid">
@@ -131,6 +134,7 @@
         <p>
             <?php echo __("Album description courtesy of"); ?> <?php echo $this->Html->link("Last.fm", "http://www.last.fm/", array("target" => "_blank")); ?>.
             <?php echo __("They were last updated on"); ?> <?php echo date("F j, g:i a", $lastfmAlbum["lastsync"]); ?>.
+            User-contributed text is available under the Creative Commons By-SA License and may also be available under the GNU FDL.
         </p>
     </div>
 </section>

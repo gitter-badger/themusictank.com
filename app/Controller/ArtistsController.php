@@ -45,7 +45,14 @@ class ArtistsController extends AppController {
 
         if(!$data)
         {
-            throw new NotFoundException(sprintf(__("Could not find the artist %s"), $artistSlug));
+        	// query LastFm before 404-ing
+    		if ($this->Artist->LastfmArtist->search($artistSlug,3)) {
+    			// if we saved something, assume it's loadable.
+        		$data = $this->Artist->getBySlug($artistSlug);
+    		}
+    		else {
+    			throw new NotFoundException(sprintf(__("Could not find the artist %s"), $artistSlug));
+    		}
         }
 
         $this->set("artist",        $data["Artist"]);

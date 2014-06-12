@@ -106,6 +106,7 @@ class LastfmArtist extends AppModel
         $listBeingParsed    = array();
         $returnList         = array();
 
+
         foreach($needles->artist as $artist)
         {
             // only save artists of interest

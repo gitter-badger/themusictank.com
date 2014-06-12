@@ -111,7 +111,6 @@ CakeLog::config('error', array(
 	'file' => 'error',
 ));
 
-
 // Allows CLI access
 if(!isset($_SERVER['SERVER_NAME']))
 {

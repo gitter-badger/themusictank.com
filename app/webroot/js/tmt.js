@@ -3,6 +3,23 @@ var tmt = window.tmt || {};
 
 $(function() {
 
+	if($('.header-wrapper').length) {
+		$(window).scroll(function(e){
+		    var scrolled = $(window).scrollTop() * .9,
+		    	wrapHeight = $('.header-wrapper').innerHeight(),
+		    	buffer = 65;
+
+		    if(scrolled > buffer && scrolled < wrapHeight) { // should be dynamic
+		    	$('.header-wrapper .cover-image').css('background-position-y', -(scrolled - buffer) +'px'  );
+		    	//$('.header-wrapper .colored').css('background-position-y', -((scrolled*.8) - buffer) +'px'  );
+		    }
+		    else if(scrolled <= buffer) {
+		    	$('.header-wrapper .cover-image').css('background-position-y', '0px');
+		    	//$('.header-wrapper .colored').css('background-position-y', '0px'  );
+		    }
+		});
+	}
+
     // Add remove follower
     var onFollowClick = function(event){
         var $el = $(this);
@@ -15,7 +32,6 @@ $(function() {
         });
     };
     $("a.follow, a.unfollow").on("click", onFollowClick);
-
 
     // search box
     var artistsSearch = new Bloodhound({

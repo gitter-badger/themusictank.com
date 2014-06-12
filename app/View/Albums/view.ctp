@@ -10,28 +10,33 @@
     </div>
 </nav>
 
-<section class="jumbotron colored introduction">
-	<div class="container container-fluid">
-		<div class="row">
-			<div class="col-md-3 thumbnail">
-	            <?php echo $this->Html->image( $this->App->getImageUrl($album, true), array("alt" => $album["name"])); ?>
+<div class="header-wrapper">
+	<?php if(!is_null($album["image"])) : ?>
+		<div class="cover-image" style="background-image:url(<?php echo $this->App->getImageUrl($album, true); ?>);"></div>
+	<?php endif; ?>
+	<section class="jumbotron colored introduction">
+		<div class="container container-fluid">
+			<div class="row">
+				<div class="col-md-3 thumbnail">
+		            <?php echo $this->Html->image( $this->App->getImageUrl($album, true), array("alt" => $album["name"])); ?>
+		        </div>
+		        <div class="col-md-8 col-md-offset-1">
+		        	<?php if(!is_null($albumReviewSnapshot["score"])) : ?>
+						<div class="score">
+							<?php echo (int)($albumReviewSnapshot["score"] * 100); ?>%
+						</div>
+					<?php endif; ?>
+	           		<h1><?php echo $album["name"]; ?></h1>
+		            <section class="description expandable">
+		                <div class="wrapper">
+							<p><?php echo $this->StringMaker->composeAlbumPresentation($lastfmAlbum, $album, $artist); ?></p>
+						</div>
+					</section>
+		        </div>
 	        </div>
-	        <div class="col-md-8 col-md-offset-1">
-	        	<?php if(!is_null($albumReviewSnapshot["score"])) : ?>
-					<div class="score">
-						<?php echo (int)($albumReviewSnapshot["score"] * 100); ?>%
-					</div>
-				<?php endif; ?>
-           		<h1><?php echo $album["name"]; ?></h1>
-	            <section class="description expandable">
-	                <div class="wrapper">
-						<p><?php echo $this->StringMaker->composeAlbumPresentation($lastfmAlbum, $album, $artist); ?></p>
-					</div>
-				</section>
-	        </div>
-        </div>
-    </div>
-</section>
+	    </div>
+	</section>
+</div>
 
 <div class="review-line appreciation odd">
 	<div class="container container-fluid">

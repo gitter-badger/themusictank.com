@@ -43,6 +43,32 @@ body {
     }
 }
 
+.header-wrapper {
+	background: #19a68d;
+	position: relative;
+	overflow: hidden;
+
+	.cover-image {
+		opacity:0.08;
+		bottom:0;
+		left:0;
+		right:0;
+		top:0;
+		background-size: cover;
+		position:absolute;
+		background-position-y:0px;
+		//transition: background-position-y .2s;
+	}
+
+	.colored {
+		background-color: transparent;
+	}
+	.jumbotron h1 {
+		margin-top:0;
+	}
+}
+
+
 /* Artist profiles */
 @artistBGColor : #eee;
 .heading {

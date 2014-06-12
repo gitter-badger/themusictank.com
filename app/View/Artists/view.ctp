@@ -10,22 +10,29 @@
     </div>
 </nav>
 
-<section class="jumbotron colored introduction" <?php if(!is_null($lastfmArtist)) : ?>style="background-repeat:no-repeat; background-image:url(<?php echo $this->App->getImageUrl($lastfmArtist, true) ?>);"<?php endif; ?>>
-	<div class="container container-fluid" >
-		<div class="row">
-	        <div class="col-md-8 col-md-offset-4">
-           		<h1><?php echo $artist["name"]; ?></h1>
-	            <section class="description expandable">
-	                <div class="wrapper">
-                		<p><?php echo $lastfmArtist["biography"]; ?></p>
-						<p><?php // echo $this->StringMaker->composeAlbumPresentation($lastfmAlbum, $album, $artist); ?></p>
-					</div>
-				</section>
+<div class="header-wrapper">
+	<?php if(!is_null($lastfmArtist)) : ?>
+		<div class="cover-image" style="background-image:url(<?php echo $this->App->getImageUrl($lastfmArtist, true); ?>);"></div>
+	<?php endif; ?>
+	<section class="jumbotron colored introduction">
+		<div class="container container-fluid" >
+			<div class="row">
+				<div class="col-md-4 thumbnail">
+		            <?php echo $this->Html->image($this->App->getImageUrl($lastfmArtist, true), array("alt" => $artist["name"])); ?>
+		        </div>
+		        <div class="col-md-8">
+	           		<h1><?php echo $artist["name"]; ?></h1>
+		            <section class="description expandable">
+		                <div class="wrapper">
+	                		<p><?php echo $lastfmArtist["biography"]; ?></p>
+							<p><?php // echo $this->StringMaker->composeAlbumPresentation($lastfmAlbum, $album, $artist); ?></p>
+						</div>
+					</section>
+		        </div>
 	        </div>
-        </div>
-    </div>
-</section>
-
+	    </div>
+	</section>
+</div>
 
 <div class="discography odd">
 	<div class="container container-fluid">

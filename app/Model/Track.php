@@ -52,7 +52,8 @@ class Track extends OEmbedable
             "conditions" => array("title LIKE" => sprintf("%%%s%%", $query)),
             "contain"    => array("Album" => array("Artist")),
             "fields"     => array("Album.slug", "Album.name", "Album.image", "Track.title", "Track.slug"),
-            "limit"      => $limit
+            "limit"      => $limit,
+            "order"		 => array("LOCATE('".$query."', Track.title)", "Track.title")
         ));
     }
 

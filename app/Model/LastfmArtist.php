@@ -3,7 +3,7 @@
 class LastfmArtist extends AppModel
 {
     const CACHE_SEARCH  		= "LastfmArtist-Search-%s-%d";
-    const CACHE_SEARCH_TIMEOUT	= "daily";
+    const CACHE_SEARCH_TIMEOUT	= "weekly";
 
 	public $belongsTo = array('Artist');
     public $actsAs = array('Lastfm');
@@ -109,30 +109,32 @@ class LastfmArtist extends AppModel
 
         foreach($needles->artist as $artist)
         {
-            // only save artists of interest
-            if(property_exists($artist, "mbid") && trim($artist->mbid) != "")
-            {
-	            // Add the artist to the global collection if
-	            // its a new artist
-	            if(!array_key_exists($artist->mbid, $currentList))
+        	if ($artist) {
+	            // only save artists of interest
+	            if(property_exists($artist, "mbid") && trim($artist->mbid) != "")
 	            {
-	                // Also make sure there are no doubles inside the possible new stack
-	                if(!in_array($artist->mbid, $listBeingParsed))
-	                {
-	                    $returnList[] = array(
-	                        "LastfmArtist" => array(
-	                            "url"       => $artist->url,
-	                            "mbid" => $artist->mbid,
-	                            "name" => $artist->name
-	                        ),
-	                        "Artist"    => array(
-	                            "name" => $artist->name
-	                        )
-	                    );
-	                    $listBeingParsed[] = $artist->mbid;
-	                }
-	            }
-	        }
+		            // Add the artist to the global collection if
+		            // its a new artist
+		            if(!array_key_exists($artist->mbid, $currentList))
+		            {
+		                // Also make sure there are no doubles inside the possible new stack
+		                if(!in_array($artist->mbid, $listBeingParsed))
+		                {
+		                    $returnList[] = array(
+		                        "LastfmArtist" => array(
+		                            "url"       => $artist->url,
+		                            "mbid" => $artist->mbid,
+		                            "name" => $artist->name
+		                        ),
+		                        "Artist"    => array(
+		                            "name" => $artist->name
+		                        )
+		                    );
+		                    $listBeingParsed[] = $artist->mbid;
+		                }
+		            }
+		        }
+		    }
         }
 
         return $returnList;

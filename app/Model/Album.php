@@ -41,7 +41,8 @@ class Album extends OEmbedable
             "conditions" => array("Album.name LIKE" => sprintf("%%%s%%", $query)),
             "fields"     => array("Album.slug", "Album.name", "Album.image", "Artist.name", "Artist.slug"),
             "recursive"  => 0,
-            "limit"      => $limit
+            "limit"      => $limit,
+            "order"		 => array("LOCATE('".$query."', Album.name)", "Album.name")
         ));
     }
 

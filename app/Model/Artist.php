@@ -34,7 +34,8 @@ class Artist extends AppModel
         return $this->find('all', array(
             "conditions" => array("Artist.name LIKE" => sprintf("%%%s%%", $query)),
             "fields"     => array("Artist.slug", "Artist.name"),
-            "limit"      => $limit
+            "limit"      => $limit,
+            "order"		 => array("LOCATE('".$query."', Artist.name)", "Artist.name")
         ));
     }
 

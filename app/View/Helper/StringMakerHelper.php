@@ -184,7 +184,6 @@ class StringMakerHelper extends AppHelper {
 			$albumLink = $this->Html->link($album["name"], array('controller' => 'albums', 'action' => 'view', $album["slug"]));
 			$artistLink = $this->Html->link($artist["name"], array('controller' => 'artists', 'action' => 'view', $artist["slug"]));
 
-
 			$trackIdxStr = $track["track_num"] . "<sup>th</sup>";
 			if($track["track_num"] == 3) {
 				$trackIdxStr = "third";

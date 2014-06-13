@@ -70,7 +70,26 @@ class Config extends AppModel
         return $this->_setSyncUpdate("last_weeklychart_sync");
     }
 
-     private function _setSyncUpdate($key)
+    protected function _setCronUpdate($key)
+    {
+        return $this->_setSyncUpdate($key);
+    }
+
+    public function setCronStart($which)
+    {
+    	$key = "cron_".$which."_start";
+    	$this->getByKey($key);
+ 		$this->_setCronUpdate($key);
+    }
+
+    public function setCronEnd($which)
+    {
+    	$key = "cron_".$which."_end";
+    	$this->getByKey($key);
+ 		$this->_setCronUpdate($key);
+    }
+
+    private function _setSyncUpdate($key)
     {
     	$lastId = (int)Hash::get($this->data, "Config.id");
         return $this->save(array(

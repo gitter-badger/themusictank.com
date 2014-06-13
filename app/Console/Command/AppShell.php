@@ -2,6 +2,7 @@
 App::uses('Shell', 'Console');
 class AppShell extends Shell {
 
+	public $uses = array("Config");
 	public $tasks = array(
 		"AlbumSnapshotsSync", "ArtistSnapshotsSync",
 		"PopulateAlbumDetails", "PopulateArtistDetails", "PopulateTrackDetails",
@@ -13,20 +14,22 @@ class AppShell extends Shell {
 	public function daily()
 	{
 		$this->out("DAILY");
+
+		$this->Config->setCronStart("daily");
+
 		$this->UpdateSongChallenge->execute();
         $this->ArtistSnapshotsSync->execute();
         $this->AlbumSnapshotsSync->execute();
         $this->TrackSnapshotsSync->execute();
-	}
 
-/*	public function weekly()
-	{
-		$this->out("WEEKLY");
-	}*/
+        $this->Config->setCronEnd("daily");
+	}
 
 	public function twohours()
 	{
 		$this->out("EVERY TWO HOURS");
+
+		$this->Config->setCronStart("twohours");
 
 		// These tasks fail often due to Last.fm's api.
 		// Until a noticeable increase in successful responses
@@ -35,5 +38,7 @@ class AppShell extends Shell {
         $this->PopulateArtistDetails->execute();
         $this->PopulateTrackDetails->execute();
         $this->PopulateAlbumDetails->execute();
+
+        $this->Config->setCronEnd("twohours");
 	}
 }

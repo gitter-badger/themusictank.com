@@ -39,7 +39,7 @@ class TmtController extends AppController {
     	$this->set("userCount", $this->User->find("count"));
 
     	// Prepare all config values
-    	$this->set("configs", $this->Config->find("all"));
+    	$this->set("configs", $this->Config->find("all", array("order" => "key ASC")));
 
     	foreach(array("cron", "debug", "error") as $logName)
     	{

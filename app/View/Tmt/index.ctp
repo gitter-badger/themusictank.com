@@ -22,8 +22,8 @@
 					this.scrollTop = this.scrollHeight;
 				});
 			});
+			setTimeout(refreshConsole, 60 * 1000);
 		}
 		refreshConsole();
-		setTimeout(refreshConsole, 60 * 1000);
 	});
 </script>

@@ -17,10 +17,10 @@
 	<section class="jumbotron colored introduction">
 		<div class="container container-fluid">
 			<div class="row">
-				<div class="col-md-3 thumbnail">
+				<div class="col-xs-12 col-sm-6 col-md-3 thumbnail">
 		            <?php echo $this->Html->image( $this->App->getImageUrl($album, true), array("alt" => $album["name"])); ?>
 		        </div>
-		        <div class="col-md-8 col-md-offset-1">
+		        <div class="col-xs-12 col-sm-6 col-md-8 col-md-offset-1">
 		        	<?php if(!is_null($trackReviewSnapshot["score"])) : ?>
 						<div class="score">
 							<?php echo (int)($trackReviewSnapshot["score"] * 100); ?>%

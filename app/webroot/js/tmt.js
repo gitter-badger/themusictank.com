@@ -7,7 +7,7 @@ $(function() {
 		$(window).scroll(function(e){
 		    var scrolled = $(window).scrollTop() * .9,
 		    	wrapHeight = $('.header-wrapper').innerHeight(),
-		    	buffer = 65;
+		    	buffer = 15;
 
 		    if(scrolled > buffer && scrolled < wrapHeight) { // should be dynamic
 		    	$('.header-wrapper .cover-image').css('background-position-y', -(scrolled - buffer) +'px'  );

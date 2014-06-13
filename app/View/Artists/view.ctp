@@ -17,10 +17,10 @@
 	<section class="jumbotron colored introduction">
 		<div class="container container-fluid" >
 			<div class="row">
-				<div class="col-md-4 thumbnail">
+				<div class="col-xs-12 col-sm-6 col-md-4 thumbnail">
 		            <?php echo $this->Html->image($this->App->getImageUrl($lastfmArtist, true), array("alt" => $artist["name"])); ?>
 		        </div>
-		        <div class="col-md-8">
+		        <div class="col-xs-12 col-sm-6 col-md-8">
 	           		<h1><?php echo $artist["name"]; ?></h1>
 		            <section class="description expandable">
 		                <div class="wrapper">

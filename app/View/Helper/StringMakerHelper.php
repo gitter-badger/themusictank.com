@@ -14,20 +14,20 @@ class StringMakerHelper extends AppHelper {
 		$strings = array();
 
 		$newTrack = array(
-			sprintf("The challenge can be found off of the recently released %s, by %s.", $dailyChallenge["Album"]["name"], $dailyChallenge["Album"]["Artist"]["name"]),
-			sprintf("This one just came out, but is it really any good? This track can found on %, by %s.", $dailyChallenge["Album"]["name"], $dailyChallenge["Album"]["Artist"]["name"]),
+			sprintf("The challenge can be found off of the recently released <strong>%s</strong>, by <strong>%s</strong>.", $dailyChallenge["Album"]["name"], $dailyChallenge["Album"]["Artist"]["name"]),
+			sprintf("This one just came out, but is it really any good? This track can found on %, by <strong>%s</strong>.", $dailyChallenge["Album"]["name"], $dailyChallenge["Album"]["Artist"]["name"]),
 		);
 		$notable = array(
-			sprintf("Today's challenge is off a notable release by %s. How well does it compare to the other tracks on %s?", $dailyChallenge["Album"]["Artist"]["name"], $dailyChallenge["Album"]["name"]),
-			sprintf("You may have already heard the album, but that doesn't mean this track is any good. Today's challenge is a song off of %s by %s?", $dailyChallenge["Album"]["name"], $dailyChallenge["Album"]["Artist"]["name"]),
+			sprintf("Today's challenge is off a notable release by <strong>%s</strong>. How well does it compare to the other tracks on <strong>%s</strong>?", $dailyChallenge["Album"]["Artist"]["name"], $dailyChallenge["Album"]["name"]),
+			sprintf("You may have already heard the album, but that doesn't mean this track is any good. Today's challenge is a song off of <strong>%s</strong> by <strong>%s</strong>?", $dailyChallenge["Album"]["name"], $dailyChallenge["Album"]["Artist"]["name"]),
 		);
 		$nothingSpecial = array(
-			sprintf("The daily track challenge can be found on %s. The album was released by %s on %s.", $dailyChallenge["Album"]["name"], $dailyChallenge["Album"]["Artist"]["name"], date("m-d-Y", $dailyChallenge["Album"]["release_date"])),
-			sprintf("Today's challenge is the %th track of %s, by %s.", $dailyChallenge["Track"]["track_num"], $dailyChallenge["Album"]["name"], $dailyChallenge["Album"]["Artist"]["name"]),
+			sprintf("The daily track challenge can be found on <strong>%s</strong>. The album was released by <strong>%s</strong> on <strong>%s</strong>.", $dailyChallenge["Album"]["name"], $dailyChallenge["Album"]["Artist"]["name"], date("m-d-Y", $dailyChallenge["Album"]["release_date"])),
+			sprintf("Today's challenge is the <strong>%s</strong>th track of <strong>%s</strong> the <strong>%s</strong> album.", $dailyChallenge["Track"]["track_num"], $dailyChallenge["Album"]["name"], $dailyChallenge["Album"]["Artist"]["name"]),
 		);
 		$longTrack = array(
 			"That one will take some dedication. Today's challenge is a long one.",
-			"Do you think this track justifies its length?"
+			"Being longer than most tracks, do you think this one justifies its length?"
 		);
 		$shortTrack = array(
 			"Short and sweet, this is one of the shortest tracks on the album.",
@@ -37,7 +37,7 @@ class StringMakerHelper extends AppHelper {
 		if((int)$dailyChallenge["Album"]["is_newrelease"] > 0) {
     		$strings[] = $newTrack[$randomSeed];
 		}
-		elseif((int)$dailyChallenge["Album"]["notability"] >= 90 ) {
+		elseif((int)$dailyChallenge["Album"]["notability"] <= 2 ) {
     		$strings[] = $notable[$randomSeed];
 		}
 		else {

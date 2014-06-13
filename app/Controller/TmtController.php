@@ -19,7 +19,7 @@ class TmtController extends AppController {
 
     public function index()
     {
-
+    	$this->layout = "blank";
     }
 
     public function sync()

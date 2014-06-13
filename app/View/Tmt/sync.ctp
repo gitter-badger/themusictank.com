@@ -1,26 +1,31 @@
 <div class="row">
-	<div class="col-md-3">
-		<h2><?php echo $userCount; ?></h2>
-		<p>Users</p>
+
+	<div class="col-md-6">
+		<h3>Stats</h3>
+		<div class="row">
+			<div class="col-md-5 col-md-offset-1">
+				<h2><?php echo $userCount; ?></h2>
+				<p>Users</p>
+			</div>
+
+			<div class="col-md-5 col-md-offset-1">
+				<h2><?php echo $artistCount; ?></h2>
+				<p>Artists</p>
+			</div>
+
+			<div class="col-md-5 col-md-offset-1">
+				<h2><?php echo $albumCount; ?></h2>
+				<p>Albums</p>
+			</div>
+
+			<div class="col-md-5 col-md-offset-1">
+				<h2><?php echo $trackCount; ?></h2>
+				<p>Tracks</p>
+			</div>
+		</div>
+
 	</div>
 
-	<div class="col-md-3">
-		<h2><?php echo $artistCount; ?></h2>
-		<p>Artists</p>
-	</div>
-
-	<div class="col-md-3">
-		<h2><?php echo $albumCount; ?></h2>
-		<p>Albums</p>
-	</div>
-
-	<div class="col-md-3">
-		<h2><?php echo $trackCount; ?></h2>
-		<p>Tracks</p>
-	</div>
-</div>
-
-<div class="row">
 	<div class="col-md-6">
 		<h3>Config</h3>
 		<table class="table table-striped">
@@ -48,7 +53,11 @@
 			</tbody>
 		</table>
 	</div>
-	<div class="col-md-6">
+</div>
+
+<div class="row">
+
+	<div class="col-md-12">
 		<h3>Error</h3>
 		<div class="log"><pre><?php echo $logError; ?></pre></div>
 		<h3>Debug</h3>

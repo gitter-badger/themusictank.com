@@ -18,7 +18,7 @@
 	$(function(){
 		function refreshConsole() {
 			$("#refresher").load("/tmt/sync", function() {
-				$(".log").each(function(idx){
+				$(".log pre").each(function(idx){
 					this.scrollTop = this.scrollHeight;
 				});
 			});

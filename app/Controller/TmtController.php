@@ -65,7 +65,7 @@ class TmtController extends AppController {
 			else {
 				$lines[] = "File does not exist.";
 			}
-			$this->set("log" . ucfirst($logName), implode("\n", $lines));
+			$this->set("log" . ucfirst($logName), implode("", $lines));
     	}
     }
 

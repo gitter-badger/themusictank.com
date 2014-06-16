@@ -67,7 +67,7 @@ class Config extends AppModel
 
     public function setPopularArtistUpdate()
     {
-        return $this->_setSyncUpdate("last_weeklychart_sync");
+        return $this->_setSyncUpdate("last_popularartist_sync");
     }
 
     protected function _setCronUpdate($key)

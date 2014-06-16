@@ -27,11 +27,10 @@ class AppShell extends Shell {
 
 	public function twohours()
 	{
-		$this->out("EVERY TWO HOURS");
 		set_time_limit ((HOUR * 2) - 5); // ok bro, you have 1h55 to finish doing your thing
+		$this->out("EVERY TWO HOURS");
 
 		$this->Config->setCronStart("twohours");
-
 
 		// These tasks fail often due to Last.fm's api.
 		// Until a noticeable increase in successful responses

@@ -50,6 +50,7 @@ class ReviewFrame extends AppModel
         return $this->saveMany($formattedData);
     }
 
+/*
     public function getTopPositions($condition)
     {
         return $this->query("
@@ -63,11 +64,60 @@ class ReviewFrame extends AppModel
                 GROUP BY track_id
             LIMIT 5
         ");
-    }
+    }*/
+
+    public function getTopArea($condition)
+    {
+    	$topArea = $this->query("
+			SELECT
+			    AVG(groove) as avg_groove,
+			    ROUND(position / 30) AS area
+			FROM review_frames as ReviewFrames
+			WHERE $condition
+			GROUP BY area
+			ORDER BY avg_groove DESC
+            LIMIT 1;
+		");
+
+		$seconds = Hash::get($topArea, "0.0.area");
+
+
+		return array($seconds, $seconds + 30);
+
+		return $this->find("all", array(
+            "conditions"    => array("position >= " => $seconds, "position <=" => $seconds + 30),
+            "fields"        => array("AVG(groove) as avg", "position"),
+            "order"         => array("ReviewFrames.position ASC"),
+            "group"         => array("ReviewFrames.position")
+        ));
+	}
+
+    public function getBottomArea($condition)
+    {
+    	$bottomArea = $this->query("
+			SELECT
+			    AVG(groove) as avg_groove,
+			    ROUND(position / 30) AS area
+			FROM review_frames as ReviewFrames
+			WHERE $condition
+			GROUP BY area
+			ORDER BY avg_groove ASC
+            LIMIT 1;
+		");
+
+		$seconds = Hash::get($bottomArea, "0.0.area");
+		return array($seconds, $seconds + 30);
+
+		return $this->find("all", array(
+            "conditions"    => array("position >= " => $seconds, "position <=" => $seconds + 30),
+            "fields"        => array("AVG(groove) as avg", "position"),
+            "order"         => array("ReviewFrames.position ASC"),
+            "group"         => array("ReviewFrames.position")
+        ));
+	}
 
     public function getAppreciation($condition)
     {
-
 		$dataT1 = $this->query("SELECT SUM(total_qty) as qty FROM (SELECT count(*) AS total_qty, AVG(groove) AS avg_groove FROM review_frames AS ReviewFrames WHERE $condition group by position) as t1;");
 		$dataT2 = $this->query("SELECT SUM(liking_qty) as qty FROM (SELECT count(*) AS liking_qty, AVG(groove) AS avg_groove FROM review_frames AS ReviewFrames WHERE $condition group by position HAVING avg_groove > .75) as t2");
 		$dataT3 = $this->query("SELECT SUM(disliking_qty) as qty FROM (SELECT count(*) AS disliking_qty, AVG(groove) AS avg_groove FROM review_frames AS ReviewFrames WHERE $condition group by position HAVING avg_groove < .25 && avg_groove > 0) as t3");

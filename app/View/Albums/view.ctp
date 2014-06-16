@@ -42,9 +42,10 @@
 	<div class="container container-fluid">
 		<div class="row">
 			<div class="col-md-12">
-				<div class="trs piechart"></div>
+				<?php $album["duration"] = 260*12; ?>
+				<div class="ars piechart"></div>
 				<p><?php echo $this->StringMaker->composeAlbumAppreciation($albumReviewSnapshot, $album, $artist); ?></p>
-				<p><?php echo $this->StringMaker->composeTimedAppreciation($albumReviewSnapshot, /*$album["duration"]*/260*12); ?></p>
+				<p><?php echo $this->StringMaker->composeTimedAppreciation($albumReviewSnapshot, $album["duration"]); ?></p>
 			</div>
 		</div>
 	</div>
@@ -59,14 +60,7 @@
 	                <ul>
 	                    <?php foreach($usersWhoReviewed as $user) : ?>
 	                    <li>
-	                        <?php echo $this->Html->link(
-	                                array_key_exists("image", $user["User"]) && !is_null($user["User"]["image"]) ?
-	                                    $this->Html->image($user["User"]["image"], array("alt" => $user["User"]["firstname"] . " " . $user["User"]["lastname"]))
-	                                    : $user["User"]["firstname"] . " " . $user["User"]["lastname"]
-	                                ,
-	                                array('controller' => 'tracks', 'action' => 'by_user', $track["slug"], $user["User"]["slug"]),
-	                                array("escape" => false)
-	                        ); ?>
+	                    	<img src="<?php echo $this->App->getImageUrl($user["User"], true); ?>" alt="<?php $user["User"]["firstname"] . " " . $user["User"]["lastname"]; ?>" />
 	                    </li>
 	                    <?php endforeach; ?>
 	                </ul>
@@ -87,7 +81,7 @@
                                             $this->Html->image($user["User"]["image"], array("alt" => $name))
                                             : $name
                                         ,
-                                        array('controller' => 'tracks', 'action' => 'by_user', $track["slug"], $user["User"]["slug"]),
+                                        array('controller' => 'tracks', 'action' => 'by_user', $album["slug"], $user["User"]["slug"]),
                                         array("escape" => false)
                                 ); ?>
                             </li>
@@ -143,3 +137,25 @@
         </p>
     </div>
 </section>
+
+
+
+
+<script>$(function(){
+	var svg = d3.select(".d3chart").append("svg");
+	<?php if(isset($albumReviewSnapshot)) : ?>
+		tmt.createRange(svg, <?php echo json_encode($albumReviewSnapshot["ranges"]); ?>, {key: "everyone range-everyone", total: <?php echo (int)$album["duration"]; ?>});
+		tmt.createLine(svg, <?php echo json_encode($albumReviewSnapshot["curve"]); ?>, {key: "everyone line-everyone", total: <?php echo (int)$album["duration"]; ?>});
+		tmt.createPie(".ars.piechart", [{"type" : "smile", "value" : <?php echo $albumReviewSnapshot["liking_pct"]; ?>}, {"type" : "meh", "value" : <?php echo $albumReviewSnapshot["neutral_pct"]; ?>}, {"type" : "frown", "value" : <?php echo $albumReviewSnapshot["disliking_pct"]; ?>}], {key: "tanker chart-tanker"});
+	<?php endif; ?>
+	<?php if(isset($userAlbumReviewSnapshot)) : ?>
+		tmt.createRange(svg, <?php echo json_encode($userAlbumReviewSnapshot["ranges"]); ?>, {key: "user range-user", total: <?php echo (int)$album["duration"]; ?>});
+		tmt.createLine(svg, <?php echo json_encode($userAlbumReviewSnapshot["curve"]); ?>, {key: "user line-user", total: <?php echo (int)$album["duration"]; ?>});
+		tmt.createPie(".uars.piechart", [{"type" : "smile", "value" : <?php echo $userAlbumReviewSnapshot["liking_pct"]; ?>}, {"type" : "meh", "value" : <?php echo $userAlbumReviewSnapshot["neutral_pct"]; ?>}, {"type" : "frown", "value" : <?php echo $userAlbumReviewSnapshot["disliking_pct"]; ?>}], {key: "tanker chart-tanker"});
+	<?php endif; ?>
+	<?php if(isset($profileAlbumReviewSnapshot)) : ?>
+		tmt.createRange(svg, <?php echo json_encode($profileAlbumReviewSnapshot["ranges"]); ?>, {key: "profile range-profile", total: <?php echo (int)$album["duration"]; ?>});
+		tmt.createLine(svg, <?php echo json_encode($profileAlbumReviewSnapshot["curve"]); ?>, {key: "profile line-profile", total: <?php echo (int)$album["duration"]; ?>});
+	<?php endif; ?>
+});</script>
+

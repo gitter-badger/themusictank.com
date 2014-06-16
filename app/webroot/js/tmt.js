@@ -226,8 +226,8 @@ var vis = d3.select(whereClass)
 
     tmt.createLine = function (svg, jsonData, details) {
     	var margin = {top: 20, right: 20, bottom: 30, left: 40},
-		    width = 960 - margin.left - margin.right,
-		    height = 500 - margin.top - margin.bottom;
+		    width = svg[0][0].offsetWidth  - margin.left - margin.right,
+		    height = svg[0][0].offsetHeight  - margin.top - margin.bottom;
 
 		var data = d3.range(details.total).map(function(i) {
 
@@ -265,26 +265,15 @@ var vis = d3.select(whereClass)
 
     tmt.createRange = function (svg, jsonData, details) {
 		var data = d3.range(details.total).map(function(i) {
-/*
-			var min = null,
-				max = null;
-
-			if(jsonData.min && jsonData.min[i]) {
-				min = jsonData[i].min;
-			}
-			if(jsonData.max && jsonData.max[i]) {
-				max = jsonData[i].max;
-			}*/
 			if(jsonData[i]) {
 		  		return {x: i, y: parseFloat(jsonData[i].min), x1: i, y1 : parseFloat(jsonData[i].max)};
 		  	}
 		  	return {x:i, y:0.5, x1:i, y1:0.5}
 		});
 
-
 		var margin = {top: 20, right: 20, bottom: 30, left: 40},
-		    width = 960 - margin.left - margin.right,
-		    height = 500 - margin.top - margin.bottom;
+		    width = svg[0][0].offsetWidth - margin.left - margin.right,
+		    height = svg[0][0].offsetHeight - margin.top - margin.bottom;
 
 		var x = d3.scale.linear()
 			.domain([0, data[data.length-1].x])

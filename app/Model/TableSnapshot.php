@@ -7,6 +7,8 @@ App::uses('ReviewFrames', 'Model');
 
 class TableSnapshot extends AppModel
 {
+	private $_jsondFields = array("curve", "ranges", "top", "bottom");
+
     public function afterFind($results, $primary = false)
     {
         if(!array_key_exists("id", $results))
@@ -15,14 +17,13 @@ class TableSnapshot extends AppModel
             {
                 if(array_key_exists($this->alias, $row))
                 {
-                    if(array_key_exists("curve", $row[$this->alias]) && is_string($row[$this->alias]["curve"]))
-                    {
-                        $results[$idx][$this->alias]["curve"] = json_decode($row[$this->alias]["curve"]);
-                    }
-                    if(array_key_exists("ranges", $row[$this->alias]) && is_string($row[$this->alias]["ranges"]))
-                    {
-                        $results[$idx][$this->alias]["ranges"] = json_decode($row[$this->alias]["ranges"]);
-                    }
+                	foreach ($this->_jsondFields as $field)
+                	{
+	                    if(array_key_exists($field, $row[$this->alias]) && is_string($row[$this->alias][$field]))
+	                    {
+	                        $results[$idx][$this->alias][$field] = json_decode($row[$this->alias][$field]);
+	                    }
+                	}
                 }
             }
         }
@@ -31,14 +32,13 @@ class TableSnapshot extends AppModel
 
     public function beforeSave($options = array())
     {
-		if(array_key_exists("curve", $this->data[$this->alias]) && !is_string($this->data[$this->alias]["curve"]))
-        {
-            $this->data[$this->alias]["curve"] = json_encode($this->data[$this->alias]["curve"]);
-        }
-        if(array_key_exists("ranges", $this->data[$this->alias]) && !is_string($this->data[$this->alias]["ranges"]))
-        {
-            $this->data[$this->alias]["ranges"] = json_encode($this->data[$this->alias]["ranges"]);
-        }
+		foreach ($this->_jsondFields as $field)
+    	{
+            if(array_key_exists($field, $this->data[$this->alias]) && !is_string($this->data[$this->alias][$field]))
+	        {
+	            $this->data[$this->alias][$field] = json_encode($this->data[$this->alias][$field]);
+	        }
+    	}
 
         return true;
     }
@@ -160,6 +160,12 @@ class TableSnapshot extends AppModel
      */
     public function getAppreciation($conditions)
     {
+		$rf = new ReviewFrames();
+        return $rf->getAppreciation($this->_conditionArrayToString($conditions));
+    }
+
+    protected function _conditionArrayToString($conditions)
+    {
 		$conditionsStr = array();
         foreach ($conditions as $key => $value) {
         	if(is_array($value)) {
@@ -169,9 +175,7 @@ class TableSnapshot extends AppModel
         		$conditionsStr[] = $key . "=" . $value . " ";
         	}
         }
-
-		$rf = new ReviewFrames();
-        return $rf->getAppreciation(implode(" AND ", $conditionsStr));
+        return implode(" AND ", $conditionsStr);
     }
 
     /**
@@ -269,13 +273,18 @@ class TableSnapshot extends AppModel
         $score 		= $this->getAverageScore($conditions);
         $ranges 	= $this->getRangeAverages($conditions, $curve);
 
+        $topArea 	= $this->getTopAreaCurve($conditions);
+        $bottomArea = $this->getBottomAreaCurve($conditions);
+
         $saveArray = array_merge(
         	$this->getExtraSaveFields($conditions),
         	$avgs,
         	array(
     			"score" => $score,
         		"curve" => $curve,
-        		"ranges" => $ranges
+        		"ranges" => $ranges,
+        		"top" 	=> $topArea,
+        		"bottom" => $bottomArea
     		)
     	);
 
@@ -307,6 +316,19 @@ class TableSnapshot extends AppModel
         return Hash::extract($records, '{n}.{n}');
     }
 
+    public function getTopAreaCurve($conditions)
+    {
+    	$review = new ReviewFrames();
+    	$records = $review->getTopArea($this->_conditionArrayToString($conditions));
+        return Hash::extract($records, '{n}.{n}');
+    }
+
+    public function getBottomAreaCurve($conditions)
+    {
+    	$review = new ReviewFrames();
+    	$records = $review->getBottomArea($this->_conditionArrayToString($conditions));
+        return Hash::extract($records, '{n}.{n}');
+    }
 
     public function getAverageScore($conditions)
     {

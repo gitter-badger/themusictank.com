@@ -58,13 +58,13 @@
 	<div class="container container-fluid">
 		<div class="row">
 			<div class="col-md-12">
-				<p><?php echo sprintf(__("The most popular area of the song ranges from %s to %s while the least popular area ranges from %s to %s."), 0, 0, 0, 0 ); ?></p>
+				<p><?php echo sprintf(__("The most popular area of the song ranges from %s to %s while the least popular area ranges from %s to %s."), $trackReviewSnapshot["top"][0], $trackReviewSnapshot["top"][1], $trackReviewSnapshot["bottom"][0], $trackReviewSnapshot["bottom"][1] ); ?></p>
 				<div class="col-md-6 highlight">
-					<div class="highgraph"></div>
+					<div class="highgraph" style="height:200px;"></div>
 					<button type="button">Play</button>
 				</div>
 				<div class="col-md-6 lowlight">
-					<div class="lowgraph"></div>
+					<div class="lowgraph" style="height:200px;"></div>
 					<button type="button">Play</button>
 				</div>
 			</div>
@@ -149,25 +149,23 @@
 	</div>
 </div>
 
-	<div class="row">
-		<div class="col-md-12">
-            <p>
-	            <?php echo sprintf(__("This is track number %s off of %s."), $track["track_num"], $album["name"]); ?>
-	            <?php if(isset($previousTrack)) : ?>
-	                <?php echo sprintf("It is preceded by %s.", $this->Html->link($previousTrack["title"], array('controller' => 'tracks', 'action' => 'view', $previousTrack["slug"]))); ?>
-	            <?php endif; ?>
-				<?php if(isset($nextTrack)) : ?>
-					<?php echo sprintf("It is followed by %s.", $this->Html->link($nextTrack["title"], array('controller' => 'tracks', 'action' => 'view', $nextTrack["slug"]))); ?>
-	            <?php endif; ?>
-            </p>
-   		</div>
-	</div>
-
+<div class="row">
+	<div class="col-md-12">
+        <p>
+            <?php echo sprintf(__("This is track number %s off of %s."), $track["track_num"], $album["name"]); ?>
+            <?php if(isset($previousTrack)) : ?>
+                <?php echo sprintf("It is preceded by %s.", $this->Html->link($previousTrack["title"], array('controller' => 'tracks', 'action' => 'view', $previousTrack["slug"]))); ?>
+            <?php endif; ?>
+			<?php if(isset($nextTrack)) : ?>
+				<?php echo sprintf("It is followed by %s.", $this->Html->link($nextTrack["title"], array('controller' => 'tracks', 'action' => 'view', $nextTrack["slug"]))); ?>
+            <?php endif; ?>
+        </p>
+		</div>
 </div>
 
 <div class="graph">
 	<video id="songplayer" class="video-js moo-css" controls ></video>
-	<div class="d3chart"></div>
+	<div class="d3chart" style="height:500px;"></div>
 </div>
 
 <section class="credits">
@@ -186,7 +184,16 @@
 		tmt.createRange(svg, <?php echo json_encode($trackReviewSnapshot["ranges"]); ?>, {key: "everyone range-everyone", total: <?php echo (int)$track["duration"]; ?>});
 		tmt.createLine(svg, <?php echo json_encode($trackReviewSnapshot["curve"]); ?>, {key: "everyone line-everyone", total: <?php echo (int)$track["duration"]; ?>});
 		tmt.createPie(".trs.piechart", [{"type" : "smile", "value" : <?php echo $trackReviewSnapshot["liking_pct"]; ?>}, {"type" : "meh", "value" : <?php echo $trackReviewSnapshot["neutral_pct"]; ?>}, {"type" : "frown", "value" : <?php echo $trackReviewSnapshot["disliking_pct"]; ?>}], {key: "tanker chart-tanker"});
+
+		var highgraph = d3.select(".highgraph").append("svg");
+		tmt.createRange(highgraph, <?php echo json_encode( array_slice($trackReviewSnapshot["ranges"], $trackReviewSnapshot["top"][0], $trackReviewSnapshot["top"][1]) ); ?>, {key: "everyone range-everyone", total: 30});
+		tmt.createLine(highgraph, <?php echo json_encode( array_slice($trackReviewSnapshot["curve"], $trackReviewSnapshot["top"][0], $trackReviewSnapshot["top"][1])); ?>, {key: "everyone line-everyone", total: 30});
+
+		var lowgraph = d3.select(".lowgraph").append("svg");
+		tmt.createRange(lowgraph, <?php echo json_encode( array_slice($trackReviewSnapshot["ranges"], $trackReviewSnapshot["bottom"][0], $trackReviewSnapshot["bottom"][1]) ); ?>, {key: "everyone range-everyone", total: 30});
+		tmt.createLine(lowgraph, <?php echo json_encode( array_slice($trackReviewSnapshot["curve"], $trackReviewSnapshot["bottom"][0], $trackReviewSnapshot["bottom"][1]) ); ?>, {key: "everyone line-everyone", total: 30});
 	<?php endif; ?>
+
 	<?php if(isset($userTrackReviewSnapshot)) : ?>
 		tmt.createRange(svg, <?php echo json_encode($userTrackReviewSnapshot["ranges"]); ?>, {key: "user range-user", total: <?php echo (int)$track["duration"]; ?>});
 		tmt.createLine(svg, <?php echo json_encode($userTrackReviewSnapshot["curve"]); ?>, {key: "user line-user", total: <?php echo (int)$track["duration"]; ?>});

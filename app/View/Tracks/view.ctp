@@ -166,9 +166,12 @@
 	</div>
 </div>
 
-<div class="graph">
-	<video id="songplayer" class="video-js moo-css" controls ></video>
-	<div class="d3chart" style="height:500px;"></div>
+
+<div class="review-line even graph">
+	<div class="container container-fluid">
+		<video id="songplayer" class="video-js moo-css" controls ></video>
+		<div class="d3chart" style="height:500px;"></div>
+	</div>
 </div>
 
 <section class="credits">

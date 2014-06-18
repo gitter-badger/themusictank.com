@@ -15,10 +15,10 @@ class PopulateArtistDetailsTask extends Shell {
 			"limit" => 200 // I think it's better to do a few of them at the time.
 		));
 
-    	$this->out(sprintf("Found %s artist that are out of sync.", count($expired)));
+    	$this->out(sprintf("Found <comment>%s artist</comment> that are out of sync.", count($expired)));
     	foreach ($expired as $artist) {
     		$this->LastfmArtist->data = $artist;
-    		$this->out(sprintf("Syncing %s", $this->LastfmArtist->getData("Artist.name")));
+    		$this->out(sprintf("\t<info>%s (%d)</info>", $this->LastfmArtist->getData("Artist.name"), $this->LastfmArtist->getData("Artist.id")));
     		$this->LastfmArtist->updateCached();
     	}
     }

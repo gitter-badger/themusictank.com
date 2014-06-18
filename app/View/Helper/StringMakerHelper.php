@@ -171,7 +171,8 @@ class StringMakerHelper extends AppHelper {
 		asort($pcts, SORT_NUMERIC);
 
 		foreach ($pcts as $key => $value) {
-			$strings[] = sprintf("<strong>%s</strong> seconds of <em>%s</em>", ($value * (int)$duration / 100), $key);
+			$time = date("i\m s\s", ($value * (int)$duration / 100));
+			$strings[] = sprintf("<strong>%s</strong> of <em>%s</em>", $time, $key);
 		}
 
 		return implode(" ", $strings);
@@ -209,8 +210,17 @@ class StringMakerHelper extends AppHelper {
 		}
 		else
 		{
-		     return $lastfmAlbum["wiki"];
+		    return $lastfmAlbum["wiki"];
 		}
+	}
+
+	public function composeTrackHighlights($trackReviewSnapshot)
+	{
+		$startTop 		= date("i\m s\s", $trackReviewSnapshot["top"][0]);
+		$endTop 		= date("i\m s\s", $trackReviewSnapshot["top"][1]);
+		$startBottom 	= date("i\m s\s", $trackReviewSnapshot["bottom"][0]);
+		$endBottom 		= date("i\m s\s", $trackReviewSnapshot["bottom"][1]);
+		return sprintf(__("The most popular area of the song ranges from %s to %s while the least popular area ranges from %s to %s."), $startTop, $endTop, $startBottom, $endBottom);
 	}
 
 }

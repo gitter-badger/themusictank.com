@@ -166,6 +166,6 @@ elseif(preg_match('/themusictank\.nvi/', $_SERVER['SERVER_NAME']))
     ));
 }
 
-Configure::write('EchonestApiConfig', array("GHFU00H0UE0MMNHIU", "3bca019443f7106f8bb8cf199e9c5659", "auid3zodSWS7Ul/XIypNSg"));
+//Configure::write('EchonestApiConfig', array("GHFU00H0UE0MMNHIU", "3bca019443f7106f8bb8cf199e9c5659", "auid3zodSWS7Ul/XIypNSg"));
 
 

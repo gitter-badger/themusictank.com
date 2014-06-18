@@ -5,8 +5,8 @@ class UpdatePopularArtistsTask extends Shell {
 
     public function execute()
     {
-		$this->out("Updating popular artists...");
+		$this->out("Updating <comment>popular artists</comment>...");
 		$this->Config->updatePopularArtists();
-		$this->out("Completed.");
+		$this->out("\t<info>Completed.</info>");
     }
 }

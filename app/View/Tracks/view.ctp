@@ -54,11 +54,13 @@
 	</div>
 </div>
 
+<?php if(count($trackReviewSnapshot["top"]) > 1 && count($trackReviewSnapshot["bottom"] > 1)) : ?>
 <div class="review-line highlights even">
 	<div class="container container-fluid">
 		<div class="row">
 			<div class="col-md-12">
-				<p><?php echo sprintf(__("The most popular area of the song ranges from %s to %s while the least popular area ranges from %s to %s."), $trackReviewSnapshot["top"][0], $trackReviewSnapshot["top"][1], $trackReviewSnapshot["bottom"][0], $trackReviewSnapshot["bottom"][1] ); ?></p>
+
+			<p><?php echo $this->StringMaker->composeTrackHighlights($trackReviewSnapshot); ?></p>
 				<div class="col-md-6 highlight">
 					<div class="highgraph" style="height:200px;"></div>
 					<button type="button">Play</button>
@@ -71,6 +73,7 @@
 		</div>
 	</div>
 </div>
+<?php endif; ?>
 
 <div class="review-line odd">
 	<div class="container container-fluid">
@@ -160,7 +163,7 @@
 				<?php echo sprintf("It is followed by %s.", $this->Html->link($nextTrack["title"], array('controller' => 'tracks', 'action' => 'view', $nextTrack["slug"]))); ?>
             <?php endif; ?>
         </p>
-		</div>
+	</div>
 </div>
 
 <div class="graph">

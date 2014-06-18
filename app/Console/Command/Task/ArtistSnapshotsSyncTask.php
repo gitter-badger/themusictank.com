@@ -7,7 +7,7 @@ class ArtistSnapshotsSyncTask extends Shell {
     {
     	$artistIdsToSync = array();
 
-		$this->out("Syncing artist review snapshots...");
+		$this->out("Syncing <comment>artist</comment> review snapshots...");
 
     	// Check whether the new reviews have been taken into account
     	$newIds = $this->ArtistReviewSnapshot->query("SELECT distinct artist_id FROM review_frames where artist_id NOT IN (SELECT artist_id FROM artist_review_snapshots);");
@@ -44,12 +44,12 @@ class ArtistSnapshotsSyncTask extends Shell {
     		$this->out(sprintf("Found %s snapshots that are out of sync or new.", count($expired)));
 			foreach ($expired as $artist) {
 	    		$this->ArtistReviewSnapshot->data = $artist;
-	    		$this->out(sprintf("Syncing %s (%d)", $this->ArtistReviewSnapshot->getData("Artist.name"), $this->ArtistReviewSnapshot->getData("Artist.id")));
+	    		$this->out(sprintf("\t<info>%s (%d)</info>", $this->ArtistReviewSnapshot->getData("Artist.name"), $this->ArtistReviewSnapshot->getData("Artist.id")));
 	    		$this->ArtistReviewSnapshot->fetch($this->ArtistReviewSnapshot->getData("Artist.id"));
 	    	}
 		}
 
 
-		$this->out("Completed syncing artist review snapshots.");
+		$this->out("\t<info>Completed</info>");
     }
 }

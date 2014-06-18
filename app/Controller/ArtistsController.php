@@ -100,6 +100,7 @@ class ArtistsController extends AppController {
      */
     public function search()
     {
+    	// http://technet.weblineindia.com/web/pagination-with-custom-queries-in-cakephp/
         if($this->request->is('get'))
         {
             $this->set('artists', $this->Paginator->paginate('Artist', array('Artist.name LIKE' => "%". trim($this->request->query['name'])."%")));

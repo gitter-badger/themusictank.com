@@ -16,10 +16,10 @@ class PopulateAlbumDetailsTask extends Shell {
 			"limit" => 200 // I think it's better to do a few of them at the time.
 		));
 
-    	$this->out(sprintf("Found %s albums that are out of sync.", count($expired)));
+    	$this->out(sprintf("Found <comment>%s albums</comment> that are out of sync.", count($expired)));
     	foreach ($expired as $album) {
     		$this->LastfmAlbum->data = $album;
-    		$this->out(sprintf("Syncing %s (%d)", $this->LastfmAlbum->getData("Album.name"), $this->LastfmAlbum->getData("Album.id")));
+    		$this->out(sprintf("\t<info>%s (%d)</info>", $this->LastfmAlbum->getData("Album.name"), $this->LastfmAlbum->getData("Album.id")));
     		$this->LastfmAlbum->updateCached();
     	}
 	}

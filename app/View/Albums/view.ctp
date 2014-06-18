@@ -139,6 +139,10 @@
 </section>
 
 
+<div class="graph">
+	<video id="songplayer" class="video-js moo-css" controls ></video>
+	<div class="d3chart" style="height:500px;"></div>
+</div>
 
 
 <script>$(function(){

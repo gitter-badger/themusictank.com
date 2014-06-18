@@ -16,13 +16,13 @@ class PopulateTrackDetailsTask extends Shell {
             "limit"			=> 200
         ));
 
-		$this->out(sprintf("Found %s tracks that are out of sync.", count($expired)));
+		$this->out(sprintf("Found <comment>%s tracks</comment> that are out of sync.", count($expired)));
 		foreach ($expired as $track) {
 			$this->LastfmTrack->data = $track;
 			$this->LastfmTrack->data["Album"] = $track["Album"];
 			$this->LastfmTrack->data["Artist"] = $track["Album"]["Artist"];
 
-			$this->out(sprintf("Syncing %s", $this->LastfmTrack->getData("Track.title")));
+			$this->out(sprintf("\t<info>%s (%d)</info>", $this->LastfmTrack->getData("Track.title"), $this->LastfmTrack->getData("Track.id")));
 			$this->LastfmTrack->updateCached();
 		}
 	}

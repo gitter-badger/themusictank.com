@@ -7,7 +7,7 @@ class AlbumSnapshotsSyncTask extends Shell {
     {
 		$albumsIdsToSync = array();
 
-		$this->out("Syncing album review snapshots...");
+		$this->out("Syncing <comment>album</comment> review snapshots...");
 
     	// Check whether the new reviews have been taken into account
     	$newIds = $this->AlbumReviewSnapshot->query("SELECT distinct album_id FROM review_frames where album_id NOT IN (SELECT album_id FROM album_review_snapshots);");
@@ -57,11 +57,11 @@ class AlbumSnapshotsSyncTask extends Shell {
     		$this->out(sprintf("Found %s snapshots that are out of sync or new.", count($expired)));
 			foreach ($expired as $album) {
 	    		$this->AlbumReviewSnapshot->data = $album;
-	    		$this->out(sprintf("Syncing %s (%d)", $this->AlbumReviewSnapshot->getData("Album.name"), $this->AlbumReviewSnapshot->getData("Album.id")));
+	    		$this->out(sprintf("\t<info>%s (%d)</info>", $this->AlbumReviewSnapshot->getData("Album.name"), $this->AlbumReviewSnapshot->getData("Album.id")));
 	    		$this->AlbumReviewSnapshot->fetch($this->AlbumReviewSnapshot->getData("Album.id"));
 	    	}
 		}
 
-		$this->out("Completed syncing album review snapshots.");
+		$this->out("\t<info>Completed</info>");
     }
 }

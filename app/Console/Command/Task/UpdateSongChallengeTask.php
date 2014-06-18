@@ -5,8 +5,8 @@ class UpdateSongChallengeTask extends Shell {
 
     public function execute()
     {
-		$this->out("Updating daily song challenge...");
+		$this->out("Updating <comment>daily song challenge</comment>...");
 		$this->Config->updateTrackChallenge();
-		$this->out("Completed.");
+		$this->out("\t<info>Completed</info>");
     }
 }

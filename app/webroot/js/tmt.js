@@ -5,6 +5,8 @@ $(function() {
 
 	// initialize Royal Slider
 	if($(".royalSlider").length){
+
+  		jQuery.rsCSS3Easing.easeOutBack = 'cubic-bezier(0.175, 0.885, 0.320, 1.275)';
 		$(".royalSlider").royalSlider({
 		    imageScaleMode: "fill-if-smaller",
 		    imageAlignCenter: true,
@@ -13,8 +15,12 @@ $(function() {
 		    addActiveClass: true,
 		    imageScalePadding: 0,
 		    easeInOut: "easeInOutSine",
+    		blockLoop: true,
 		    loop: true,
-		    autoHeight:true,
+		    globalCaption:true,
+		    block: {
+		      delay: 400
+		    },
 		    autoPlay: {
 		    	enabled: true,
 		    	delay: 5000
@@ -22,20 +28,19 @@ $(function() {
 		});
 	}
 
-
 	if($('.header-wrapper').length) {
 		$(window).scroll(function(e){
 		    var scrolled = $(window).scrollTop() * .9,
 		    	wrapHeight = $('.header-wrapper').innerHeight(),
-		    	buffer = 15;
+		    	buffer = 5;
 
 		    if(scrolled > buffer && scrolled < wrapHeight) { // should be dynamic
 		    	$('.header-wrapper .cover-image').css('background-position-y', -(scrolled - buffer) +'px'  );
-		    	//$('.header-wrapper .colored').css('background-position-y', -((scrolled*.8) - buffer) +'px'  );
+		    	$('.header-wrapper .colored').css('background-position-y', -((scrolled*.8) - buffer) +'px'  );
 		    }
 		    else if(scrolled <= buffer) {
 		    	$('.header-wrapper .cover-image').css('background-position-y', '0px');
-		    	//$('.header-wrapper .colored').css('background-position-y', '0px'  );
+		    	$('.header-wrapper .colored').css('background-position-y', '0px'  );
 		    }
 		});
 	}
@@ -195,6 +200,28 @@ $(function() {
 	$("*[data-post-load]").each(function(){
 		var $this = $(this);
 		$this.load($this.attr("data-post-load"));
+	});
+
+	// Automate song loading
+	$("*[data-song]").each(function(){
+
+		var el = $(this),
+			id = el.attr("id"),
+			url = el.attr("data-song");
+
+		$.getJSON('/ajax/getsong/' + url,
+			function(response) {
+				if(response.feed.entry.length > 0) {
+		    		var links = response.feed.entry[0].link;
+		    		for (var i = 0, len = links.length; i < len; i++) {
+		    			if(links[i].type == "text/html" || links[i].type == "application/x-shockwave-flash") {
+		 					videojs(id, { "techOrder": ["youtube"], "src": links[i].href });
+		 					return;
+		  				}
+		  			}
+		  		}
+				// fallback to mp3
+		});
 	});
 
 
@@ -362,5 +389,8 @@ var formatCount = d3.format(",.0f"),
 		    .attr("d", bLine);
 
     };
+
+
+
 
 });

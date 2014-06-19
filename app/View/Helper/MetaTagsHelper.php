@@ -32,6 +32,7 @@ class MetaTagsHelper extends AppHelper {
                 "//vjs.zencdn.net/4.6/video.js",
                 "vendor/videojs.youtube.js",
                 "vendor/typeahead",
+                "vendor/jquery.easing-1.3.js",
                 "vendor/jquery.royalslider.min.js",
                 "vendor/sjsi",
                 "tmt"

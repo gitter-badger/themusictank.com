@@ -3,6 +3,26 @@ var tmt = window.tmt || {};
 
 $(function() {
 
+	// initialize Royal Slider
+	if($(".royalSlider").length){
+		$(".royalSlider").royalSlider({
+		    imageScaleMode: "fill-if-smaller",
+		    imageAlignCenter: true,
+		    arrowsNavAutoHide: false,
+		    arrowsNav: true,
+		    addActiveClass: true,
+		    imageScalePadding: 0,
+		    easeInOut: "easeInOutSine",
+		    loop: true,
+		    autoHeight:true,
+		    autoPlay: {
+		    	enabled: true,
+		    	delay: 5000
+		    }
+		});
+	}
+
+
 	if($('.header-wrapper').length) {
 		$(window).scroll(function(e){
 		    var scrolled = $(window).scrollTop() * .9,
@@ -275,6 +295,12 @@ var vis = d3.select(whereClass)
 		    width = svg[0][0].offsetWidth - margin.left - margin.right,
 		    height = svg[0][0].offsetHeight - margin.top - margin.bottom;
 
+// Formatters for counts and times (converting numbers to Dates).
+var formatCount = d3.format(",.0f"),
+    formatTime = d3.time.format("%H:%M"),
+    formatMinutes = function(d) { return formatTime(new Date(2012, 0, 1, 0, d)); };
+
+
 		var x = d3.scale.linear()
 			.domain([0, data[data.length-1].x])
 		    .range([0, width]);
@@ -285,7 +311,8 @@ var vis = d3.select(whereClass)
 
 		var xAxis = d3.svg.axis()
 		    .scale(x)
-		    .orient("bottom");
+		    .orient("bottom")
+    		.tickFormat(formatMinutes);
 
 		var yAxis = d3.svg.axis()
 		    .scale(y)

@@ -44,12 +44,37 @@
 
 <div class="review-line appreciation odd">
 	<div class="container container-fluid">
-		<div class="row">
-			<div class="col-md-12">
-				<div class="trs piechart"></div>
-				<p><?php echo $this->StringMaker->composeTrackAppreciation($trackReviewSnapshot, $track, $album, $artist); ?></p>
-				<p><?php echo $this->StringMaker->composeTimedAppreciation($trackReviewSnapshot, $track["duration"]); ?></p>
-			</div>
+		<div class="row royalSlider">
+			<section class="col-md-12">
+				<div class="trs piechart" data-move-effect="left"></div>
+				<p data-move-effect="right"><?php echo $this->StringMaker->composeTrackAppreciation($trackReviewSnapshot, $track, $album, $artist); ?></p>
+				<p data-move-effect="right"><?php echo $this->StringMaker->composeTimedAppreciation($trackReviewSnapshot, $track["duration"]); ?></p>
+			</section>
+
+			<?php if(isset($subsTrackReviewSnapshot)) : ?>
+			<section class="col-md-12">
+				<?php if(!count($subsTrackReviewSnapshot)) : ?>
+					<p><?php echo sprintf("Your subscribers have not reviewed %s yet.", $track['title']); ?></p>
+				<?php else : ?>
+					<div class="strs piechart" data-move-effect="left"></div>
+					<p data-move-effect="right"><?php echo $this->StringMaker->composeTrackAppreciation($subsTrackReviewSnapshot, $track, $album, $artist); ?></p>
+					<p data-move-effect="right"><?php echo $this->StringMaker->composeTimedAppreciation($subsTrackReviewSnapshot, $track["duration"]); ?></p>
+				<?php endif; ?>
+			</section>
+			<?php endif; ?>
+
+			<?php if(isset($userTrackReviewSnapshot)) : ?>
+			<section class="col-md-12">
+				<?php if(!count($userTrackReviewSnapshot)) : ?>
+					<p>Review '<?php echo $track["title"]; ?>' you wish to see how your opinion compares with others.</p>
+					<p><?php echo $this->Html->link(__("Review track"), array('controller' => 'player', 'action' => 'play', $track["slug"]), array("class" => "btn btn-primary")); ?></p>
+				<?php else : ?>
+					<div class="utrs piechart" data-move-effect="left"></div>
+					<p data-move-effect="right"><?php echo $this->StringMaker->composeTrackAppreciation($userTrackReviewSnapshot, $track, $album, $artist); ?></p>
+					<p data-move-effect="right"><?php echo $this->StringMaker->composeTimedAppreciation($userTrackReviewSnapshot, $track["duration"]); ?></p>
+				<?php endif; ?>
+			</section>
+			<?php endif; ?>
 		</div>
 	</div>
 </div>
@@ -74,23 +99,6 @@
 	</div>
 </div>
 <?php endif; ?>
-
-<div class="review-line odd">
-	<div class="container container-fluid">
-		<div class="row">
-			<div class="col-md-12">
-				<?php if(isset($userTrackReviewSnapshot)) : ?>
-					<div class="utrs piechart"></div>
-					<p><?php echo sprintf("You have reviewed '%s' in the past.", $track["title"]); ?></p>
-					<p><?php echo $this->Html->link(__("View more details"), array('controller' => 'tracks', 'action' => 'by_user', $track["slug"], $this->Session->read('Auth.User.User.slug'))); ?> of your review sessions of <?php echo $track["title"]; ?></p>
-				<?php else : ?>
-					<p>Review '<?php echo $track["title"]; ?>' you wish to see how your opinion compares with others.</p>
-					<p><?php echo $this->Html->link(__("Review track"), array('controller' => 'player', 'action' => 'play', $track["slug"]), array("class" => "btn btn-primary")); ?></p>
-				<?php endif; ?>
-			</div>
-		</div>
-	</div>
-</div>
 
 <div class="review-line odd social">
 	<div class="container container-fluid">
@@ -205,6 +213,13 @@
 		tmt.createLine(svg, <?php echo json_encode($userTrackReviewSnapshot["curve"]); ?>, {key: "user line-user", total: <?php echo (int)$track["duration"]; ?>});
 		tmt.createPie(".utrs.piechart", [{"type" : "smile", "value" : <?php echo $userTrackReviewSnapshot["liking_pct"]; ?>}, {"type" : "meh", "value" : <?php echo $userTrackReviewSnapshot["neutral_pct"]; ?>}, {"type" : "frown", "value" : <?php echo $userTrackReviewSnapshot["disliking_pct"]; ?>}], {key: "tanker chart-tanker"});
 	<?php endif; ?>
+
+	<?php if(isset($subsTrackReviewSnapshot)) : ?>
+		tmt.createRange(svg, <?php echo json_encode($subsTrackReviewSnapshot["ranges"]); ?>, {key: "user range-user", total: <?php echo (int)$track["duration"]; ?>});
+		tmt.createLine(svg, <?php echo json_encode($subsTrackReviewSnapshot["curve"]); ?>, {key: "user line-user", total: <?php echo (int)$track["duration"]; ?>});
+		tmt.createPie(".strs.piechart", [{"type" : "smile", "value" : <?php echo $subsTrackReviewSnapshot["liking_pct"]; ?>}, {"type" : "meh", "value" : <?php echo $subsTrackReviewSnapshot["neutral_pct"]; ?>}, {"type" : "frown", "value" : <?php echo $subsTrackReviewSnapshot["disliking_pct"]; ?>}], {key: "subs chart-tanker"});
+	<?php endif; ?>
+
 	<?php if(isset($profileTrackReviewSnapshot)) : ?>
 		tmt.createRange(svg, <?php echo json_encode($profileTrackReviewSnapshot["ranges"]); ?>, {key: "profile range-profile", total: <?php echo (int)$track["duration"]; ?>});
 		tmt.createLine(svg, <?php echo json_encode($profileTrackReviewSnapshot["curve"]); ?>, {key: "profile line-profile", total: <?php echo (int)$track["duration"]; ?>});

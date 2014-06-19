@@ -93,7 +93,7 @@ class TracksController extends AppController {
 
         $isLoggedIn = $this->userIsLoggedIn();
 
-        $data = $this->Track->getUpdatedSetBySlug($trackSlug, $isLoggedIn);
+        $data       = $this->Track->getBySlugContained($trackSlug);
         if(!$data) throw new NotFoundException(sprintf(__("Could not find the track %s"), $trackSlug));
 
         $this->usesPlayer();
@@ -101,7 +101,6 @@ class TracksController extends AppController {
         // Setup the basic variables
         $this->set("viewingUser", 	$userData["User"]);
         $this->set("track", 		$data["Track"]);
-        $this->set("rdioTrack", 	$data["RdioTrack"]);
         $this->set("lastfmTrack", 	$data["LastfmTrack"]);
         $this->set("album", 		$data["Album"]);
         $this->set("artist", 		$data["Album"]["Artist"]);

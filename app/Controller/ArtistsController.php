@@ -49,6 +49,9 @@ class ArtistsController extends AppController {
     		if ($this->Artist->LastfmArtist->search($artistSlug,3)) {
     			// if we saved something, assume it's loadable.
         		$data = $this->Artist->getBySlug($artistSlug);
+        		if(!$data) {
+    				throw new NotFoundException(sprintf(__("Could not find the artist %s"), $artistSlug));
+        		}
     		}
     		else {
     			throw new NotFoundException(sprintf(__("Could not find the artist %s"), $artistSlug));

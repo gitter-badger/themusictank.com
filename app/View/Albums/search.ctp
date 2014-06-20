@@ -1,22 +1,30 @@
-<h2><?php echo $title; ?></h2>
+<nav class="sub-menu">
+	<div class="container container-fluid">
+		<div class="row">
+		    <ol class="breadcrumb">
+		        <li class="active"><?php echo $this->Html->link(__("Artists"), array('controller' => 'artists', 'action' => 'index')); ?></li>
+		    </ol>
+	    </div>
+    </div>
+</nav>
 
-<section class="search album-search">
-    <header>
-        <h3><?php echo __('Find an album'); ?></h3>
-    </header>
+<div class="container container-fluid">
+	<div class="row">
+		<h2><?php echo __("Albums"); ?></h2>
+		<h3><?php echo $title; ?></h3>
 
-    <?php echo $this->Form->create(array('action' => 'search', 'type' => 'get')); ?>
-    <?php echo $this->Form->input('name', array('label' => __('Name'))); ?>
-    <?php echo $this->Form->end(__("Search")); ?>    
-</section>
+		<?php if(count($albums) > 0): ?>
+			<?php echo $this->element('albumTiledList', array("albums" => $albums)); ?>
+		<?php else : ?>
+			<p><?php echo __("Search returned no results."); ?></p>
+		<?php endif; ?>
 
-<?php if(count($albums) > 0): ?>
-    <?php echo $this->element('albumTiledList', array("albums" => $albums)); ?>
-<?php else : ?>
-	<p><?php echo __("Search returned no results."); ?></p>
-<?php endif; ?>
-    
-<div class="pagination">
-    <?php echo $this->Paginator->numbers(); ?>
-    <?php echo __("Page"); ?> <?php echo $this->Paginator->counter(); ?>
+		 <ul class="pagination">
+		    <?php
+		        echo $this->Paginator->prev(__('prev'), array('tag' => 'li'), null, array('tag' => 'li','class' => 'disabled','disabledTag' => 'a'));
+		        echo $this->Paginator->numbers(array('separator' => '','currentTag' => 'a', 'currentClass' => 'active','tag' => 'li','first' => 1));
+		        echo $this->Paginator->next(__('next'), array('tag' => 'li','currentClass' => 'disabled'), null, array('tag' => 'li','class' => 'disabled','disabledTag' => 'a'));
+		    ?>
+		</ul>
+    </div>
 </div>

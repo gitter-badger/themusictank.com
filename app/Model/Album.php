@@ -39,7 +39,7 @@ class Album extends OEmbedable
     {
         return $this->find('all', array(
             "conditions" => array("Album.name LIKE" => sprintf("%%%s%%", $query)),
-            "fields"     => array("Album.slug", "Album.name", "Album.image", "Artist.name", "Artist.slug"),
+            "fields"     => array("Album.slug", "Album.name", "Album.image", "Album.release_date", "Artist.name", "Artist.slug"),
             "recursive"  => 0,
             "limit"      => $limit,
             "order"		 => array("LOCATE('".$query."', Album.name)", "Album.name")

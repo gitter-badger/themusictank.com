@@ -33,32 +33,11 @@ class Artist extends AppModel
         // Secondly, query our own database for results.
         return $this->find('all', array(
             "conditions" => array("Artist.name LIKE" => sprintf("%%%s%%", $query)),
-            "fields"     => array("Artist.slug", "Artist.name"),
+            "fields"     => array("Artist.slug", "Artist.name", "LastfmArtist.image"),
             "limit"      => $limit,
             "order"		 => array("LOCATE('".$query."', Artist.name)", "Artist.name")
         ));
     }
-
-/*
-    public function getUpdatedSetBySlug($slug, $addCurrentUser = false)
-    {
-        $syncValues = $this->find("first", array(
-            "conditions" => array("Artist.slug" => $slug),
-            "fields"    => array("Artist.*", "LastfmArtist.*")
-        ));
-
-        if(count($syncValues))
-        {
-            $this->LastfmArtist->data = $syncValues;
-            $this->LastfmArtist->updateCached();
-            $syncValues["LastfmArtist"] = $this->LastfmArtist->data["LastfmArtist"];
-
-            $this->data = $syncValues;
-        }
-
-        return $syncValues;
-    }*/
-
 
     public function getBySlug($slug)
     {

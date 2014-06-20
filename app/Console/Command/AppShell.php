@@ -37,8 +37,8 @@ class AppShell extends Shell {
 		// query them often to make up for failed attempts
         $this->UpdatePopularArtists->execute();
         $this->PopulateArtistDetails->execute();
-        $this->PopulateTrackDetails->execute();
         $this->PopulateAlbumDetails->execute();
+        $this->PopulateTrackDetails->execute();
 
         $this->Config->setCronEnd("twohours");
 	}

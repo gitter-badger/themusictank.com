@@ -1,3 +1,6 @@
+<?php
+    $isLogged = $this->Session->check('Auth.User.User.id');
+?>
 <nav class="sub-menu">
 	<div class="container container-fluid">
 		<div class="row">
@@ -54,31 +57,39 @@
         		<div class="rsCaption"><?php echo __("Everyone"); ?></div>
 			</section>
 
-			<?php if(isset($subsTrackReviewSnapshot)) : ?>
-			<section class="col-md-12">
-				<?php if(!count($subsTrackReviewSnapshot)) : ?>
-					<p><?php echo sprintf("Your subscribers have not reviewed %s yet.", $track['title']); ?></p>
-				<?php else : ?>
-					<div class="rsABlock strs piechart" data-move-effect="left"></div>
-					<p class="rsABlock" data-move-effect="right"><?php echo $this->StringMaker->composeTrackAppreciation($subsTrackReviewSnapshot, $track, $album, $artist); ?></p>
-					<p dclass="rsABlock" ata-move-effect="right"><?php echo $this->StringMaker->composeTimedAppreciation($subsTrackReviewSnapshot, $track["duration"]); ?></p>
-        			<div class="rsCaption"><?php echo __("People you are subscribed to"); ?></div>
+			<?php if($isLogged) : ?>
+				<?php if(isset($subsTrackReviewSnapshot)) : ?>
+				<section class="col-md-12">
+					<?php if(!count($subsTrackReviewSnapshot)) : ?>
+						<p><?php echo sprintf("Your subscribers have not reviewed %s yet.", $track['title']); ?></p>
+					<?php else : ?>
+						<div class="rsABlock strs piechart" data-move-effect="left"></div>
+						<p class="rsABlock" data-move-effect="right"><?php echo $this->StringMaker->composeTrackAppreciation($subsTrackReviewSnapshot, $track, $album, $artist); ?></p>
+						<p dclass="rsABlock" data-move-effect="right"><?php echo $this->StringMaker->composeTimedAppreciation($subsTrackReviewSnapshot, $track["duration"]); ?></p>
+	        			<div class="rsCaption"><?php echo __("People you are subscribed to"); ?></div>
+					<?php endif; ?>
+				</section>
 				<?php endif; ?>
-			</section>
-			<?php endif; ?>
 
-			<?php if(isset($userTrackReviewSnapshot)) : ?>
-			<section class="col-md-12">
-				<?php if(!count($userTrackReviewSnapshot)) : ?>
-					<p>Review '<?php echo $track["title"]; ?>' you wish to see how your opinion compares with others.</p>
-					<p><?php echo $this->Html->link(__("Review track"), array('controller' => 'player', 'action' => 'play', $track["slug"]), array("class" => "btn btn-primary")); ?></p>
-				<?php else : ?>
-					<div class="rsABlock utrs piechart" data-move-effect="left"></div>
-					<p class="rsABlock" data-move-effect="right"><?php echo $this->StringMaker->composeTrackAppreciation($userTrackReviewSnapshot, $track, $album, $artist); ?></p>
-					<p class="rsABlock" data-move-effect="right"><?php echo $this->StringMaker->composeTimedAppreciation($userTrackReviewSnapshot, $track["duration"]); ?></p>
-        			<div class="rsCaption"><?php echo __("You"); ?></div>
+				<?php if(isset($userTrackReviewSnapshot)) : ?>
+				<section class="col-md-12">
+					<?php if(!count($userTrackReviewSnapshot)) : ?>
+						<p>Review '<?php echo $track["title"]; ?>' you wish to see how your opinion compares with others.</p>
+						<p><?php echo $this->Html->link(__("Review track"), array('controller' => 'player', 'action' => 'play', $track["slug"]), array("class" => "btn btn-primary")); ?></p>
+					<?php else : ?>
+						<div class="rsABlock utrs piechart" data-move-effect="left"></div>
+						<p class="rsABlock" data-move-effect="right"><?php echo $this->StringMaker->composeTrackAppreciation($userTrackReviewSnapshot, $track, $album, $artist); ?></p>
+						<p class="rsABlock" data-move-effect="right"><?php echo $this->StringMaker->composeTimedAppreciation($userTrackReviewSnapshot, $track["duration"]); ?></p>
+	        			<div class="rsCaption"><?php echo __("You"); ?></div>
+					<?php endif; ?>
+				</section>
 				<?php endif; ?>
-			</section>
+			<?php else : ?>
+				<section class="col-md-12">
+					<?php $login = $this->Html->link(__("Login"), array('controller' => 'users', 'action' => 'login', '?' => array("rurl" => '/tracks/view/' . $track['slug']))); ?>
+					<p class="rsABlock" data-move-effect="right"><?php echo sprintf(__("%s to see how you have rated %s"), $login, $track["title"]); ?></p>
+        			<div class="rsCaption"><?php echo __("You"); ?></div>
+				</section>
 			<?php endif; ?>
 		</div>
 	</div>

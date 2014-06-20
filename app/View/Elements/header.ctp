@@ -1,6 +1,6 @@
-<?php 
-    $userSession = $this->Session->read('Auth.User.User');  
-    $isLogged = $this->Session->check('Auth.User.User.id');  
+<?php
+	$isLogged = $this->Session->check('Auth.User.User.id');
+	$userSession = $this->Session->check('Auth.User.User');
 ?>
   <div class="navbar navbar-fixed-top" role="navigation">
     <div class="container">
@@ -17,7 +17,7 @@
             <ul class="nav navbar-nav">
                 <li><?php echo $this->Html->link(__("Artists"), array('controller' => 'artists', 'action' => 'index')); ?></li>
                 <li><?php echo $this->Html->link(__("Community"), array('controller' => 'pages', 'action' => 'community')); ?></li>
-            </ul> 
+            </ul>
 
             <ul class="nav navbar-nav navbar-right">
                 <?php if($isLogged) : ?>
@@ -28,7 +28,7 @@
                                 array('escape' => false)
                         ); ?>
                     </li>
-                    <li> 
+                    <li>
                         <?php echo $this->Html->link("<i class=\"fa fa-bell-o\"></i>", array('controller' => 'users', 'action' => 'notifications'), array("escape" => false)); ?>
                         <?php //echo $this->element("dropdownnotifications"); ?>
                     </li>
@@ -40,7 +40,7 @@
                         </button>
                         <ul class="dropdown-menu" role="menu" aria-labelledby="btnSettings">
                             <li><?php echo $this->Html->link(__("Settings"), array('controller' => 'users', 'action' => 'edit')); ?></li>
-                            <li><?php echo $this->Html->link(__("Logout"), array('controller' => 'users', 'action' => 'logout')); ?></li>        
+                            <li><?php echo $this->Html->link(__("Logout"), array('controller' => 'users', 'action' => 'logout')); ?></li>
                         </ul>
                     </li>
                 <?php else : ?>
@@ -51,9 +51,9 @@
     </div>
 </div>
 
-<section class="search fixable">
+<section class="searchbar">
     <div class="container">
-        <form action="/search/" method="get">        
+        <form action="/search/" method="get">
             <input class="typeahead" type="text" name="q" value="" placeholder="Search across everything" />
             <input type="submit" />
         </form>

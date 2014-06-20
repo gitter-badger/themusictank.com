@@ -22,7 +22,7 @@ $(function() {
 		      delay: 400
 		    },
 		    autoPlay: {
-		    	enabled: true,
+		    	enabled: false,
 		    	delay: 5000
 		    }
 		});

@@ -14,13 +14,13 @@
 	<?php if(!is_null($album["image"])) : ?>
 		<div class="cover-image" style="background-image:url(<?php echo $this->App->getImageUrl($album, true); ?>);"></div>
 	<?php endif; ?>
-	<section class="jumbotron colored introduction">
+	<section class="jumbotron introduction">
 		<div class="container container-fluid">
 			<div class="row">
-				<div class="col-xs-12 col-sm-6 col-md-3 thumbnail">
-		            <?php echo $this->Html->image( $this->App->getImageUrl($album, true), array("alt" => $album["name"])); ?>
+				<div class="col-xs-12 col-sm-6 col-md-3 mugshot">
+		            <?php echo $this->Html->image( $this->App->getImageUrl($album, true), array("alt" => $album["name"], "class" => "thumbnail")); ?>
 		        </div>
-		        <div class="col-xs-12 col-sm-6 col-md-8 col-md-offset-1">
+		        <div class="col-xs-12 col-sm-6 col-md-9 description">
 		        	<?php if(!is_null($albumReviewSnapshot["score"])) : ?>
 						<div class="score">
 							<?php echo (int)($albumReviewSnapshot["score"] * 100); ?>%
@@ -113,7 +113,6 @@
 		</div>
 	</div>
 
-
 	<div class="review-line odd tracklisting">
 		<div class="container container-fluid">
 			<h3><?php echo __("Tracks"); ?></h3>
@@ -125,6 +124,8 @@
 					</li>
 				<?php endforeach; ?>
 				</ol>
+			<?php else : ?>
+				<p><?php echo __("We could not fetch the album's tracks for the moment. We we try again every 2 hours until we can have an answer."); ?></p>
 			<?php endif; ?>
 		</div>
 	</div>
@@ -134,7 +135,7 @@
 	        <p>
 	            <?php echo __("Album description courtesy of"); ?> <?php echo $this->Html->link("Last.fm", "http://www.last.fm/", array("target" => "_blank")); ?>.
 	            <?php echo __("They were last updated on"); ?> <?php echo date("F j, g:i a", $lastfmAlbum["lastsync"]); ?>.
-	            User-contributed text is available under the Creative Commons By-SA License and may also be available under the GNU FDL.
+	            <?php echo __("User-contributed text is available under the Creative Commons By-SA License and may also be available under the GNU FDL."); ?>
 	        </p>
 	    </div>
 	</section>

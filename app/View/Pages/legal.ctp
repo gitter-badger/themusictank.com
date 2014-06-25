@@ -1,19 +1,27 @@
 <div class="container container-fluid">
+	<div class="row">
+		<div class="col-md-6">
+			<h1><?php echo __("Legalities"); ?></h1>
+			<p class="lead">There's no use pretending, we are not a business and we do not have any legal guidelines.</p>
 
-	<h1><?php echo __("Legalities"); ?></h1>
+			<p style="font-size:8em; text-align:center;"><i class="fa fa-umbrella"></i></p>
+		</div>
+		<div class="col-md-6">
+			<h1><?php echo __("Technicalities"); ?></h1>
 
-	<p class="lead">There's no use pretending, we are not a business and we do not have any legal guidelines.</p>
+			<p class="lead">All music is not hosted directly on this server. Music is
+			provided by public APIs of music streaming services or from your own mp3 files.</p>
 
-	<h2><?php echo __("So, 'Technicalities'"); ?></h2>
+			<p>We have no idea what these APIs do with your personal data, you are going to have to check their agreements for
+			yourselves if you care.</p>
 
-	<p>What is worth mentioning is that all music is not hosted directly on this server. Music is
-	provided by public APIs of music streaming services or from your own mp3 files.</p>
+			<p>Each time you login to this website using an account linked to an external website (Facebook, Google, etc.), we pull what we think is the bare minimum information we need.</p>
 
-	<p>We have no idea what these APIs do with your personal data, you are going to have to check their agreements for 
-	yourselves if you care (and you should).</p>
+			<p>We do go snooping around and we only keep your account id in order for us to re-link your TMT account when you log back in.</p>
 
-	<p>Each time you login to this website using an account linked to a music provider, we pull your whole collection and update our list of artists with it. 
-	It's the only snooping we do and the point of it is to make sure the artists you like will be on the website.</p>
+			<p>User profiles are public and everyone can see your ratings.</p>
 
-	<p>User profiles are public and everyone can see your ratings.</p>
+			<p>Comments are handled by another platform on another server.</p>
+		</div>
+	</div>
 </div>

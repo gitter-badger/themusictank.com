@@ -205,6 +205,10 @@ time {
 		clear:both;
 		width:50%;
 		margin:auto;
+
+		img {
+			max-width:100%;
+		}
 	}
 
 	.time-header {
@@ -232,9 +236,8 @@ time {
 	}
 }
 
-.notifications .new,
-.colored {
-	background:#19a68d url(/img/pattern-1.png) top left repeat;
+.notifications .new, .jumbotron {
+	background:#19a68d url(/img/triangles.png) top left repeat;
 	border-radius: 0;
 	border-bottom:1px solid #56877D;
 	color:#fff;
@@ -262,7 +265,7 @@ time {
 }
 
 .introduction {
-	text-shadow:0 1px 2px rgba(0,0,0,.4);
+	text-shadow:-1px -1px 0 @themeColorDark;
 }
 
 .review-line {
@@ -308,26 +311,39 @@ time {
 	-webkit-transform:rotate(5deg);
 }
 
-.albums {
-	h3 {
-		margin:0;
-		a {
-			font-size:80%;
-		}
-	}
-	p {
-		margin:0;
-	}
-	time {
-		font-size:85%;
+
+.tiles {
+	.album, .track {
 		margin-bottom:35px;
-		display: block;
-	}
-	.thumbnail {
-		margin-bottom:0;
+
+		.thumbnail {
+			margin-bottom:0;
+		}
+
+		h3, time, p {
+			margin:0 3%;
+		}
+		h3 {
+			a {
+				font-size:75%;
+			}
+		}
+		time {
+			display: block;
+		}
 	}
 }
 
 .royalSlider {
 	height:300px;
 }
+
+.loading-wrap {
+	i {
+		display:block;
+		margin:100px auto;
+		width:100px;
+		font-size:5em;
+	}
+}
+

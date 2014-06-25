@@ -80,7 +80,7 @@ class Track extends OEmbedable
         $reviews = new TrackReviewSnapshot();
         return Hash::extract($reviews->find("all", array(
             "conditions" => array("track_id" => $ids)
-        )), "TrackReviewSnapshot");
+        )), "{n}.TrackReviewSnapshot");
     }
 
     public function getNextTrack()
@@ -98,6 +98,9 @@ class Track extends OEmbedable
         ));
 
         if($track) {
+        	// Add the snapshot to the track
+        	$reviewSnapshot = $this->getSnapshotsByTrackIds(Hash::get($track, "Track.id"));
+			$track["Track"]["TrackReviewSnapshot"] = $reviewSnapshot[0];
             return $track["Track"];
         }
     }
@@ -117,6 +120,9 @@ class Track extends OEmbedable
         ));
 
         if($track) {
+        	// Add the snapshot to the track
+        	$reviewSnapshot = $this->getSnapshotsByTrackIds(Hash::get($track, "Track.id"));
+			$track["Track"]["TrackReviewSnapshot"] = $reviewSnapshot[0];
             return $track["Track"];
         }
     }

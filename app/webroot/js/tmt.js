@@ -34,13 +34,13 @@ $(function() {
 		    	wrapHeight = $('.header-wrapper').innerHeight(),
 		    	buffer = 5;
 
-		    if(scrolled > buffer && scrolled < wrapHeight) { // should be dynamic
+		    if(scrolled > buffer && scrolled < wrapHeight) {
 		    	$('.header-wrapper .cover-image').css('background-position-y', -(scrolled - buffer) +'px'  );
-		    	$('.header-wrapper .colored').css('background-position-y', -((scrolled*.8) - buffer) +'px'  );
+		    	$('.header-wrapper .jumbotron').css('background-position-y', -((scrolled*.5) - buffer) +'px'  );
 		    }
 		    else if(scrolled <= buffer) {
 		    	$('.header-wrapper .cover-image').css('background-position-y', '0px');
-		    	$('.header-wrapper .colored').css('background-position-y', '0px'  );
+		    	$('.header-wrapper .jumbotron').css('background-position-y', '0px'  );
 		    }
 		});
 	}

@@ -214,13 +214,20 @@ class StringMakerHelper extends AppHelper {
 		}
 	}
 
-	public function composeTrackHighlights($trackReviewSnapshot)
+	public function composeTrackHighlight($trackReviewSnapshot)
 	{
 		$startTop 		= date("i\m s\s", $trackReviewSnapshot["top"][0]);
 		$endTop 		= date("i\m s\s", $trackReviewSnapshot["top"][1]);
 		$startBottom 	= date("i\m s\s", $trackReviewSnapshot["bottom"][0]);
 		$endBottom 		= date("i\m s\s", $trackReviewSnapshot["bottom"][1]);
-		return sprintf(__("The most popular area of the song ranges from %s to %s while the least popular area ranges from %s to %s."), $startTop, $endTop, $startBottom, $endBottom);
+		return sprintf(__("The most popular area of the song ranges from %s to %s."), $startTop, $endTop);
+	}
+
+	public function composeTrackLowpoint($trackReviewSnapshot)
+	{
+		$startBottom 	= date("i\m s\s", $trackReviewSnapshot["bottom"][0]);
+		$endBottom 		= date("i\m s\s", $trackReviewSnapshot["bottom"][1]);
+		return sprintf(__("The least popular area ranges from %s to %s."), $startBottom, $endBottom);
 	}
 
 }

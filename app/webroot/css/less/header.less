@@ -1,36 +1,6 @@
-// Mixins
-.noPad {
-	padding:0;
-	margin:0;
-}
-
-.stretchFill {
-	bottom:0;
-	left:0;
-	right:0;
-	top:0;
-	position:absolute;
-}
-
-
-// Variables
-@navbarHeight 	: 	40px;
-@searchbarHeight: 	50px;
-@lightBoxShadow : 	0 1px 3px 0 rgba(0,0,0,.3);
-@themeColorDark : 	#1a5243;
-@themeColorMedium : #19a68d;
-
-
-
-// -----------------
-// Repeating objects
-// -----------------
-
-
-
 body {
 	.noPad;
-	background:		#fff;
+	background:		#fff url(/img/triangles-2.png) top left repeat;
 	color:			#111;
     padding-top: 	@navbarHeight + @searchbarHeight;
 }
@@ -119,5 +89,23 @@ body {
 		h1 {
 			margin-top:0;
 		}
+	}
+
+	// accompaning image
+	.mugshot {
+		img {
+			max-height: 40%;
+			max-width: 100%;
+		}
+	}
+}
+
+// User links
+nav.dashboard {
+	background:#fff;
+	padding-top:10px;
+
+	li:first-child {
+		margin-left:25px;
 	}
 }

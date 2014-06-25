@@ -99,17 +99,15 @@
 <div class="review-line highlights even">
 	<div class="container container-fluid">
 		<div class="row">
-			<div class="col-md-12">
-
-			<p><?php echo $this->StringMaker->composeTrackHighlights($trackReviewSnapshot); ?></p>
-				<div class="col-md-6 highlight">
-					<div class="highgraph" style="height:200px;"></div>
-					<button type="button">Play</button>
-				</div>
-				<div class="col-md-6 lowlight">
-					<div class="lowgraph" style="height:200px;"></div>
-					<button type="button">Play</button>
-				</div>
+			<div class="col-md-6 highlight">
+				<p><?php echo $this->StringMaker->composeTrackHighlight($trackReviewSnapshot); ?></p>
+				<div class="highgraph"></div>
+				<button type="button">Play</button>
+			</div>
+			<div class="col-md-6 lowlight">
+				<p><?php echo $this->StringMaker->composeTrackLowpoint($trackReviewSnapshot); ?></p>
+				<div class="lowgraph"></div>
+				<button type="button">Play</button>
 			</div>
 		</div>
 	</div>
@@ -177,23 +175,25 @@
 </div>
 
 <div class="row">
-	<div class="col-md-12">
-        <p>
-            <?php echo sprintf(__("This is track number %s off of %s."), $track["track_num"], $album["name"]); ?>
-            <?php if(isset($previousTrack)) : ?>
-                <?php echo sprintf("It is preceded by %s.", $this->Html->link($previousTrack["title"], array('controller' => 'tracks', 'action' => 'view', $previousTrack["slug"]))); ?>
-            <?php endif; ?>
-			<?php if(isset($nextTrack)) : ?>
-				<?php echo sprintf("It is followed by %s.", $this->Html->link($nextTrack["title"], array('controller' => 'tracks', 'action' => 'view', $nextTrack["slug"]))); ?>
-            <?php endif; ?>
-        </p>
+	<div class="col-md-6">
+        <?php if(isset($previousTrack)) : ?>
+			<div class="prevtrack piechart"></div>
+            <?php echo sprintf('<i class="fa fa-step-backward"></i> This track is preceded by "%s"', $this->Html->link($previousTrack["title"], array('controller' => 'tracks', 'action' => 'view', $previousTrack["slug"]))); ?>
+        <?php endif; ?>
+    </div>
+    <div class="col-md-6">
+		<?php if(isset($nextTrack)) : ?>
+			<div class="nexttrack piechart"></div>
+
+			<?php echo sprintf('It is followed by "%s" <i class="fa fa-step-forward"></i>', $this->Html->link($nextTrack["title"], array('controller' => 'tracks', 'action' => 'view', $nextTrack["slug"]))); ?>
+        <?php endif; ?>
 	</div>
 </div>
 
 <div class="review-line even graph">
 	<div class="container container-fluid">
 		<video id="songplayer" class="video-js moo-css" controls data-song="<?php echo $artist["slug"]?>/<?php echo $track["slug"]; ?>/"></video>
-		<div class="d3chart" style="height:500px;"></div>
+		<div class="d3chart big-graph"></div>
 	</div>
 </div>
 
@@ -202,7 +202,7 @@
         <p>
             <?php echo __("Track description courtesy of"); ?> <?php echo $this->Html->link("Last.fm", "http://www.last.fm/", array("target" => "_blank")); ?>.
             <?php echo __("It was last updated on"); ?> <?php echo date("F j, g:i a", $lastfmTrack["lastsync"]); ?>.
-            User-contributed text is available under the Creative Commons By-SA License and may also be available under the GNU FDL.
+            <?php echo __("User-contributed text is available under the Creative Commons By-SA License and may also be available under the GNU FDL."); ?>
         </p>
     </div>
 </section>
@@ -213,15 +213,18 @@ var svg = d3.select(".d3chart").append("svg");
 tmt.createRange(svg, <?php echo json_encode($trackReviewSnapshot["ranges"]); ?>, {key: "everyone range-everyone", total: <?php echo (int)$track["duration"]; ?>});
 tmt.createLine(svg, <?php echo json_encode($trackReviewSnapshot["curve"]); ?>, {key: "everyone line-everyone", total: <?php echo (int)$track["duration"]; ?>});
 tmt.createPie(".trs.piechart", [{"type" : "smile", "value" : <?php echo $trackReviewSnapshot["liking_pct"]; ?>}, {"type" : "meh", "value" : <?php echo $trackReviewSnapshot["neutral_pct"]; ?>}, {"type" : "frown", "value" : <?php echo $trackReviewSnapshot["disliking_pct"]; ?>}], {key: "tanker chart-tanker"});
-<?php /*
+<?php endif; ?>
+
+<?php if (count($trackReviewSnapshot["top"]) > 1) : ?>
 var highgraph = d3.select(".highgraph").append("svg");
 tmt.createRange(highgraph, <?php echo json_encode( array_slice($trackReviewSnapshot["ranges"], $trackReviewSnapshot["top"][0], $trackReviewSnapshot["top"][1]) ); ?>, {key: "everyone range-everyone", total: 30});
 tmt.createLine(highgraph, <?php echo json_encode( array_slice($trackReviewSnapshot["curve"], $trackReviewSnapshot["top"][0], $trackReviewSnapshot["top"][1])); ?>, {key: "everyone line-everyone", total: 30});
+<?php endif; ?>
 
+<?php if (count($trackReviewSnapshot["bottom"]) > 1) : ?>
 var lowgraph = d3.select(".lowgraph").append("svg");
 tmt.createRange(lowgraph, <?php echo json_encode( array_slice($trackReviewSnapshot["ranges"], $trackReviewSnapshot["bottom"][0], $trackReviewSnapshot["bottom"][1]) ); ?>, {key: "everyone range-everyone", total: 30});
 tmt.createLine(lowgraph, <?php echo json_encode( array_slice($trackReviewSnapshot["curve"], $trackReviewSnapshot["bottom"][0], $trackReviewSnapshot["bottom"][1]) ); ?>, {key: "everyone line-everyone", total: 30});
-*/ ?>
 <?php endif; ?>
 
 <?php if(isset($userTrackReviewSnapshot)) : ?>
@@ -241,4 +244,11 @@ tmt.createRange(svg, <?php echo json_encode($profileTrackReviewSnapshot["ranges"
 tmt.createLine(svg, <?php echo json_encode($profileTrackReviewSnapshot["curve"]); ?>, {key: "profile line-profile", total: <?php echo (int)$track["duration"]; ?>});
 <?php endif; ?>
 
+<?php if(isset($previousTrack)) : ?>
+tmt.createPie(".prevtrack.piechart", [{"type" : "smile", "value" : <?php echo $previousTrack["TrackReviewSnapshot"]["liking_pct"]; ?>}, {"type" : "meh", "value" : <?php echo $previousTrack["TrackReviewSnapshot"]["neutral_pct"]; ?>}, {"type" : "frown", "value" : <?php echo $previousTrack["TrackReviewSnapshot"]["disliking_pct"]; ?>}], {key: "prev chart-tanker"});
+<?php endif; ?>
+
+<?php if(isset($nextTrack)) : ?>
+tmt.createPie(".nexttrack.piechart", [{"type" : "smile", "value" : <?php echo $nextTrack["TrackReviewSnapshot"]["liking_pct"]; ?>}, {"type" : "meh", "value" : <?php echo $nextTrack["TrackReviewSnapshot"]["neutral_pct"]; ?>}, {"type" : "frown", "value" : <?php echo $nextTrack["TrackReviewSnapshot"]["disliking_pct"]; ?>}], {key: "next chart-tanker"});
+<?php endif; ?>
 });</script>

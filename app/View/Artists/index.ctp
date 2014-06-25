@@ -10,7 +10,7 @@
 
 <div class="header-wrapper">
 	<div class="cover-image" style="background-image:url(<?php echo $this->App->getImageUrl($popularArtists[0]["LastfmArtist"], true); ?>);"></div>
-	<section class="jumbotron colored introduction">
+	<section class="jumbotron introduction">
 		<div class="container container-fluid">
 			<div class="row">
 
@@ -36,26 +36,23 @@
 </div>
 
 <div class="container container-fluid">
-    <div class="row">
-        <section class="popular-artists">
-            <header>
-                <h2><?php echo __('Popular right now'); ?></h2>
-                <p class="lead"><?php echo __("A list of some of the artists currently popular."); ?></p>
-            </header>
-            <?php echo $this->element('artistTiledList', array("artists" => $popularArtists)); ?>
-        </section>
-    </div>
+    <section class="popular-artists">
+        <header>
+            <h2><?php echo __('Popular right now'); ?></h2>
+            <p class="lead"><?php echo __("A list of some of the artists currently popular."); ?></p>
+        </header>
+        <?php echo $this->element('artistTiledList', array("artists" => $popularArtists)); ?>
+    </section>
 
-    <div class="row">
-        <section class="new-album-releases">
-            <header>
-                <h2><?php echo __('New album releases'); ?></h2>
-                <p class="lead">
-                	<?php echo __("Check out the newest additions to our catalog."); ?>.
-                	<?php echo $this->Html->link(__("View more releases"), array('controller' => 'albums', 'action' => 'newreleases')); ?>
-            	</p>
-            </header>
-            <?php echo $this->element('albumTiledList', array("albums" => $newReleases)); ?>
-        </section>
-    </div>
+    <section class="new-album-releases">
+        <header>
+            <h2><?php echo __('New album releases'); ?></h2>
+            <p class="lead">
+            	<?php echo __("Check out the newest additions to our catalog."); ?>
+            	<?php echo $this->Html->link(__("View more releases"), array('controller' => 'albums', 'action' => 'newreleases')); ?>
+        	</p>
+        </header>
+        <?php echo $this->element('albumTiledList', array("albums" => $newReleases)); ?>
+    </section>
 </div>
+

@@ -45,7 +45,7 @@ class AppHelper extends Helper {
 	public function getImageUrl($obj, $addImplicitPath = false)
 	{
 		$implicit = "/img/";
-		$image = Hash::get($obj, "image");
+		$image = $obj ? Hash::get($obj, "image") : null;
 		$imgsrc = "";
 
 		if($image && file_exists(WWW_ROOT . ($addImplicitPath ? $implicit : "") . $image)) {

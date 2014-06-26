@@ -215,13 +215,13 @@ tmt.createLine(svg, <?php echo json_encode($trackReviewSnapshot["curve"]); ?>, {
 tmt.createPie(".trs.piechart", [{"type" : "smile", "value" : <?php echo $trackReviewSnapshot["liking_pct"]; ?>}, {"type" : "meh", "value" : <?php echo $trackReviewSnapshot["neutral_pct"]; ?>}, {"type" : "frown", "value" : <?php echo $trackReviewSnapshot["disliking_pct"]; ?>}], {key: "tanker chart-tanker"});
 <?php endif; ?>
 
-<?php if (count($trackReviewSnapshot["top"]) > 1) : ?>
+<?php if (Hash::check($trackReviewSnapshot, "top") && count($trackReviewSnapshot["top"]) > 1) : ?>
 var highgraph = d3.select(".highgraph").append("svg");
 tmt.createRange(highgraph, <?php echo json_encode( array_slice($trackReviewSnapshot["ranges"], $trackReviewSnapshot["top"][0], $trackReviewSnapshot["top"][1]) ); ?>, {key: "everyone range-everyone", total: 30});
 tmt.createLine(highgraph, <?php echo json_encode( array_slice($trackReviewSnapshot["curve"], $trackReviewSnapshot["top"][0], $trackReviewSnapshot["top"][1])); ?>, {key: "everyone line-everyone", total: 30});
 <?php endif; ?>
 
-<?php if (count($trackReviewSnapshot["bottom"]) > 1) : ?>
+<?php if (Hash::check($trackReviewSnapshot, "bottom") && count($trackReviewSnapshot["bottom"]) > 1) : ?>
 var lowgraph = d3.select(".lowgraph").append("svg");
 tmt.createRange(lowgraph, <?php echo json_encode( array_slice($trackReviewSnapshot["ranges"], $trackReviewSnapshot["bottom"][0], $trackReviewSnapshot["bottom"][1]) ); ?>, {key: "everyone range-everyone", total: 30});
 tmt.createLine(lowgraph, <?php echo json_encode( array_slice($trackReviewSnapshot["curve"], $trackReviewSnapshot["bottom"][0], $trackReviewSnapshot["bottom"][1]) ); ?>, {key: "everyone line-everyone", total: 30});

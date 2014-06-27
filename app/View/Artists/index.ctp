@@ -1,5 +1,5 @@
 <div class="header-wrapper">
-	<div class="cover-image" style="background-image:url(<?php echo $this->App->getImageUrl($popularArtists[0]["LastfmArtist"], true); ?>);"></div>
+	<div class="cover-image" style="background-image:url(<?php echo $this->App->getImageUrl($popularArtists[0]["LastfmArtist"], "big"); ?>);"></div>
 	<section class="jumbotron introduction">
 		<div class="container container-fluid">
 			<div class="row">

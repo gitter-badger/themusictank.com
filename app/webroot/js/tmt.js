@@ -123,6 +123,7 @@ $(function() {
 		}
 	]);
 
+/* demoted
 	// Expander util
 	var box = $(".expandable");
 	if(box.length > 0)
@@ -147,7 +148,7 @@ $(function() {
 				});
 			}
 		});
-	}
+	} */
 
 	// Notifier util
 	var box = $(".notifier");

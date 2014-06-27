@@ -18,9 +18,9 @@ class MetaTagsHelper extends AppHelper {
             $this->Html->meta('favicon.ico','/img/favicon.ico', array('type' => 'icon')),
             $this->Html->meta(array("name" => 'referrer', "value" => "origin")),
             $this->Html->meta('canonical', $this->Html->url( null, true ), array('rel'=>'canonical', 'type'=>null, 'title'=>null)),
-            '<link rel="author" type="text/plain" href="'.$domain.'humans.txt"" />',
+            '<link href="https://plus.google.com/117543200043480372792" rel="publisher" />',
+            '<link rel="author" type="text/plain" href="'.$domain.'humans.txt" />',
             '<noscript><meta http-equiv="refresh" content="0; URL=/pages/requirements/" /></noscript>',
-
             $this->Html->css(array(
                 "styles.min"
             )),

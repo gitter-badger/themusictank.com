@@ -2,7 +2,7 @@
     <?php foreach($tracks as $track) : ?>
         <div class="col-xs-6 col-md-3 track">
             <?php echo $this->Html->link(
-                $this->Html->image($this->App->getImageUrl($track["Album"], true), array("alt" => $track["Album"]["name"])),
+                $this->Html->image($this->App->getImageUrl($track["Album"]), array("alt" => $track["Album"]["name"])),
                 array('controller' => 'tracks', 'action' => 'view', $track["Album"]["slug"]),
                 array('escape' => false, "class" => "thumbnail")
             ); ?>

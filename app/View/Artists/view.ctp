@@ -1,12 +1,12 @@
 <div class="header-wrapper">
 	<?php if(!is_null($lastfmArtist)) : ?>
-		<div class="cover-image" style="background-image:url(<?php echo $this->App->getImageUrl($lastfmArtist, true); ?>);"></div>
+		<div class="cover-image" style="background-image:url(<?php echo $this->App->getImageUrl($lastfmArtist, "big"); ?>);"></div>
 	<?php endif; ?>
 	<section class="jumbotron introduction">
 		<div class="container container-fluid" >
 			<div class="row">
 				<div class="col-xs-12 col-sm-6 col-md-3 mugshot">
-		            <?php echo $this->Html->image($this->App->getImageUrl($lastfmArtist, true), array("alt" => $artist["name"], "class" => "thumbnail")); ?>
+		            <?php echo $this->Html->image($this->App->getImageUrl($lastfmArtist), array("alt" => $artist["name"], "class" => "thumbnail")); ?>
 		        </div>
 		        <div class="col-xs-12 col-sm-6 col-md-9 description">
 	           		<h1><?php echo $artist["name"]; ?></h1>

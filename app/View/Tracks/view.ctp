@@ -4,13 +4,13 @@
 
 <div class="header-wrapper introduction">
 	<?php if(!is_null($album["image"])) : ?>
-		<div class="cover-image" style="background-image:url(<?php echo $this->App->getImageUrl($album, true); ?>);"></div>
+		<div class="cover-image" style="background-image:url(<?php echo $this->App->getImageUrl($album, "big"); ?>);"></div>
 	<?php endif; ?>
 	<section class="jumbotron">
 		<div class="container container-fluid">
 			<div class="row">
-				<div class="col-xs-12 col-sm-6 col-md-3 thumbnail">
-		            <?php echo $this->Html->image( $this->App->getImageUrl($album, true), array("alt" => $album["name"])); ?>
+				<div class="col-xs-12 col-sm-6 col-md-3 mugshot">
+		            <?php echo $this->Html->image( $this->App->getImageUrl($album), array("alt" => $album["name"], "class" => "thumbnail")); ?>
 		        </div>
 		        <div class="col-xs-12 col-sm-6 col-md-8 col-md-offset-1">
 		        	<?php if(!is_null($trackReviewSnapshot["score"])) : ?>

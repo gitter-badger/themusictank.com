@@ -23,7 +23,7 @@
     ?>
         <div class="col-xs-6 col-md-3 album">
             <?php  echo $this->Html->link(
-                    $this->Html->image($this->App->getImageUrl($albumData, true), array("alt" => $albumData["name"], "title" => $albumData["name"])),
+                    $this->Html->image($this->App->getImageUrl($albumData), array("alt" => $albumData["name"], "title" => $albumData["name"])),
                     array('controller' => 'albums', 'action' => 'view', $albumData["slug"]),
                     array('escape' => false, "class" => "thumbnail")
             ); ?>

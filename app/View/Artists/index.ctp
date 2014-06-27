@@ -1,13 +1,3 @@
-<nav class="sub-menu">
-	<div class="container container-fluid">
-		<div class="row">
-		    <ol class="breadcrumb">
-		        <li class="active"><?php echo $this->Html->link(__("Artists"), array('controller' => 'artists', 'action' => 'index')); ?></li>
-		    </ol>
-	    </div>
-    </div>
-</nav>
-
 <div class="header-wrapper">
 	<div class="cover-image" style="background-image:url(<?php echo $this->App->getImageUrl($popularArtists[0]["LastfmArtist"], true); ?>);"></div>
 	<section class="jumbotron introduction">
@@ -34,6 +24,16 @@
 	    </div>
 	</section>
 </div>
+
+<nav class="sub-menu">
+	<div class="container container-fluid">
+		<div class="row">
+		    <ol class="breadcrumb">
+		        <li class="active"><?php echo $this->Html->link(__("Artists"), array('controller' => 'artists', 'action' => 'index')); ?></li>
+		    </ol>
+	    </div>
+    </div>
+</nav>
 
 <div class="container container-fluid">
     <section class="popular-artists">

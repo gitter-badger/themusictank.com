@@ -1,15 +1,3 @@
-
-<nav class="sub-menu">
-	<div class="container container-fluid">
-		<div class="row">
-		    <ol class="breadcrumb">
-		        <li><?php echo $this->Html->link(__("Artists"), array('controller' => 'artists', 'action' => 'index')); ?></li>
-		        <li class="active"><?php echo $this->Html->link($artist["name"], array('controller' => 'artists', 'action' => 'view', $artist["slug"])); ?></li>
-		    </ol>
-	    </div>
-    </div>
-</nav>
-
 <div class="header-wrapper">
 	<?php if(!is_null($lastfmArtist)) : ?>
 		<div class="cover-image" style="background-image:url(<?php echo $this->App->getImageUrl($lastfmArtist, true); ?>);"></div>
@@ -33,6 +21,17 @@
 	    </div>
 	</section>
 </div>
+
+<nav class="sub-menu">
+	<div class="container container-fluid">
+		<div class="row">
+		    <ol class="breadcrumb">
+		        <li><?php echo $this->Html->link(__("Artists"), array('controller' => 'artists', 'action' => 'index')); ?></li>
+		        <li class="active"><?php echo $this->Html->link($artist["name"], array('controller' => 'artists', 'action' => 'view', $artist["slug"])); ?></li>
+		    </ol>
+	    </div>
+    </div>
+</nav>
 
 <div class="discography odd">
 	<div class="container container-fluid">

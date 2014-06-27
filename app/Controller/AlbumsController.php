@@ -109,7 +109,7 @@ class AlbumsController extends AppController {
         $weekDate = date("F j Y", mktime(0, 0, 0, date("n"), date("j") - date("N")));
         $title = sprintf(__("New releases for the week of %s"), $weekDate);
 
-        $this->set("newReleases", $this->Album->getNewReleases());
+        $this->set("newReleases", $this->Album->getNewReleases(30));
         $this->set("forTheWeekOf", $weekDate);
 
         $this->setPageTitle(array($title));

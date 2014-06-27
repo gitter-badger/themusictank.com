@@ -1,14 +1,3 @@
-<nav class="sub-menu">
-	<div class="container container-fluid">
-		<div class="row">
-		    <ol class="breadcrumb">
-		        <li><?php echo $this->Html->link(__("Artists"), array('controller' => 'artists', 'action' => 'index')); ?></li>
-		        <li><?php echo $this->Html->link($artist["name"], array('controller' => 'artists', 'action' => 'view', $artist["slug"])); ?></li>
-		        <li class="active"><?php echo $this->Html->link($album["name"], array('controller' => 'albums', 'action' => 'view', $album["slug"])); ?></li>
-		    </ol>
-	    </div>
-    </div>
-</nav>
 
 <div class="header-wrapper">
 	<?php if(!is_null($album["image"])) : ?>
@@ -38,6 +27,17 @@
 	</section>
 </div>
 
+<nav class="sub-menu">
+	<div class="container container-fluid">
+		<div class="row">
+		    <ol class="breadcrumb">
+		        <li><?php echo $this->Html->link(__("Artists"), array('controller' => 'artists', 'action' => 'index')); ?></li>
+		        <li><?php echo $this->Html->link($artist["name"], array('controller' => 'artists', 'action' => 'view', $artist["slug"])); ?></li>
+		        <li class="active"><?php echo $this->Html->link($album["name"], array('controller' => 'albums', 'action' => 'view', $album["slug"])); ?></li>
+		    </ol>
+	    </div>
+    </div>
+</nav>
 
 <?php if ((int)$lastfmAlbum["lastsync"] > 0) : ?>
 
@@ -109,7 +109,7 @@
 
 	<div class="review-line odd graph">
 		<div class="container container-fluid">
-			<div class="d3chart" style="height:500px;"></div>
+			<div class="d3chart big-graph"></div>
 		</div>
 	</div>
 
@@ -163,6 +163,9 @@
 	<div class="review-line odd tracklisting">
 		<div class="container container-fluid">
 			<p><?php echo __("Sorry for the inconvenience but the track and album details are currently being processed. They should be available in less than 2 hours."); ?></p>
+	        <div class="loading-wrap">
+	        	<i class="fa fa-refresh fa-spin fa-fw"></i>
+	        </div>
 		</div>
 	</div>
 

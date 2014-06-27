@@ -1,3 +1,12 @@
+
+<div class="header-wrapper">
+	<section class="jumbotron introduction">
+		<div class="container">
+		    <h1><?php echo __("Album search"); ?></h1>
+	    </div>
+	</section>
+</div>
+
 <nav class="sub-menu">
 	<div class="container container-fluid">
 		<div class="row">

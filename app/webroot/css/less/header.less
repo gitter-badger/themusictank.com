@@ -1,18 +1,30 @@
 body {
 	.noPad;
 	background:		#fff url(/img/triangles-2.png) top left repeat;
-	color:			#111;
-    padding-top: 	@navbarHeight + @searchbarHeight;
+	color:			@themeColorDark;
+    //padding-top: 	@navbarHeight + @searchbarHeight;
 }
 
 // The top header containing the branding
 .navbar {
-    background:		#333;
-    box-shadow: 	@lightBoxShadow;
+	background:		rgba(48, 62, 70, .95);//@themeColorDark;
+	border-bottom:	1px solid @themeColorDark;
+	border-top:		3px solid @themeColorHighlight;
     color:			#fff;
     height: 		@navbarHeight;
     line-height: 	@navbarHeight;
     z-index: 		3;
+
+    a {
+    	color: #fff;
+    	text-shadow:-1px -1px 0 #000;
+    	font-size:1.1em;
+	}
+
+    li > a:hover {
+    	color: #fff;
+		background-color: rgba(255,255,255,.15);
+    }
 
     .picture {
     	.noPad;
@@ -25,13 +37,28 @@ body {
 	        width: 	@navbarHeight;
 	    }
     }
+
+    // The search top container bar
+	.searchbar {
+	    input[type="submit"] {
+	    	visibility:	hidden;
+		}
+
+	    input[type="text"] {
+	        width: 		350px;
+	        -webkit-border-radius: 3px;
+	         -moz-border-radius: 3px;
+	              border-radius: 3px;
+	   	}
+	}
 }
 
+/*
 // The search top container bar
 .searchbar {
     .size(100%, @searchbarHeight);
 
-    background:		#666;
+    background:		@themeColorMedium;
     box-shadow: 	@lightBoxShadow;
     color:			#fff;
     padding:		14px 5% 0;
@@ -53,29 +80,44 @@ body {
         width: 		350px;
     }
 }
+*/
 
 // Location menu
 .sub-menu {
-	background:		@themeColorDark;
-	border-bottom:	1px solid #7cbaaa;
+	background:		darken(@themeColorMedium, 10%);
+	//border-top:	1px solid darken(@themeColorMedium, 30%);
+	//border-bottom:	1px solid darken(@themeColorMedium, 30%);
+	border-bottom:	1px solid @themeColorDark;
+	border-top:	1px solid @themeColorDark;
 
 	// Breadcrumbs; overrides those set by bootstrap
 	.breadcrumb {
 		background:		none;
 		border-radius: 	0;
 		margin-bottom:	0;
+
+		a {
+			color:@themeColorLight;
+			&:hover {
+				color:#fff;
+			}
+		}
+	}
+	.breadcrumb>li+li:before {
+		color:@themeColorNeutral;
 	}
 }
 
 
 // Big themed header
 .header-wrapper {
-	background: @themeColorMedium;
-	position: relative;
-	overflow: hidden;
+	background:@themeColorNeutral  url(/img/triangles.png) top left repeat;
+	position: 	relative;
+	overflow: 	hidden;
+	padding-top:50px;
 
 	.cover-image {
-		.opacity(.1);
+		.opacity(.4);
 		.stretchFill;
 
 		background-size: 		cover;
@@ -85,7 +127,8 @@ body {
 
 	.jumbotron {
 		background-color: 		transparent;
-		color:					#fff;
+		color:					lighten(@themeColorNeutral, 80%); //#fff;
+		padding-bottom: 		0;
 		h1 {
 			margin-top:0;
 		}
@@ -99,6 +142,15 @@ body {
 		}
 	}
 }
+
+@media screen and (min-width: 768px) {
+	.jumbotron {
+		h1 {
+			font-size:50px;
+		}
+	}
+}
+
 
 // User links
 nav.dashboard {

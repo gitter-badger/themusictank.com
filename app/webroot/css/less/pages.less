@@ -1,9 +1,12 @@
 h2 {
-	color:#19a68d;
-	text-shadow:0 1px 1px rgba(0,0,0,.2);
+	color:darken(@themeColorHighlight, 15%); //#19a68d;
 }
 h3, h4 {
-	color:#57ba93;
+	color:@themeColorHighlight;
+}
+
+a {
+	color:@themeColorHighlight;
 }
 
 .browse-by-letter {
@@ -236,13 +239,14 @@ time {
 	}
 }
 
+/*
 .notifications .new, .jumbotron {
-	background:#19a68d url(/img/triangles.png) top left repeat;
+	background:@themeColorNeutral  url(/img/triangles.png) top left repeat;
 	border-radius: 0;
-	border-bottom:1px solid #56877D;
+	border-bottom:1px solid darken(@themeColorNeutral, 50%);
 	color:#fff;
 	margin-bottom:0;
-}
+}*/
 
 .user-badge {
 	text-align: center;
@@ -347,3 +351,6 @@ time {
 	}
 }
 
+.new-album-releases {
+	margin-top:2em;
+}

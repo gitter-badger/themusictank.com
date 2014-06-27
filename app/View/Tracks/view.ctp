@@ -1,18 +1,6 @@
 <?php
     $isLogged = $this->Session->check('Auth.User.User.id');
 ?>
-<nav class="sub-menu">
-	<div class="container container-fluid">
-		<div class="row">
-		    <ol class="breadcrumb">
-		        <li><?php echo $this->Html->link(__("Artists"), array('controller' => 'artists', 'action' => 'index')); ?></li>
-		        <li><?php echo $this->Html->link($artist["name"], array('controller' => 'artists', 'action' => 'view', $artist["slug"])); ?></li>
-		        <li><?php echo $this->Html->link($album["name"], array('controller' => 'albums', 'action' => 'view', $album["slug"])); ?></li>
-		        <li class="active"><?php echo $this->Html->link($track["title"], array('controller' => 'tracks', 'action' => 'view', $track["slug"])); ?></li>
-		    </ol>
-	    </div>
-    </div>
-</nav>
 
 <div class="header-wrapper introduction">
 	<?php if(!is_null($album["image"])) : ?>
@@ -46,6 +34,19 @@
 	    </div>
 	</section>
 </div>
+
+<nav class="sub-menu">
+	<div class="container container-fluid">
+		<div class="row">
+		    <ol class="breadcrumb">
+		        <li><?php echo $this->Html->link(__("Artists"), array('controller' => 'artists', 'action' => 'index')); ?></li>
+		        <li><?php echo $this->Html->link($artist["name"], array('controller' => 'artists', 'action' => 'view', $artist["slug"])); ?></li>
+		        <li><?php echo $this->Html->link($album["name"], array('controller' => 'albums', 'action' => 'view', $album["slug"])); ?></li>
+		        <li class="active"><?php echo $this->Html->link($track["title"], array('controller' => 'tracks', 'action' => 'view', $track["slug"])); ?></li>
+		    </ol>
+	    </div>
+    </div>
+</nav>
 
 <div class="review-line appreciation odd">
 	<div class="container container-fluid">

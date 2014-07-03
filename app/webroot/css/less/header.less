@@ -15,9 +15,17 @@ body {
     line-height: 	@navbarHeight;
     z-index: 		3;
 
+    .navbar-brand {
+		background:		transparent url(/img/tmt.png) 50% 50% no-repeat;
+		text-indent: -999px;
+		overflow: hidden;
+		display:inline-block;
+		width:100px;
+    }
+
     li > a {
     	color: #fff;
-    	text-shadow:-1px -1px 0 #000;
+    	//text-shadow:-1px -1px 0 #000;
     	font-size:1.1em;
     	padding-bottom: 12px;
 	}
@@ -26,6 +34,14 @@ body {
     	color: #fff;
 		background-color: rgba(255,255,255,.15);
     }
+
+	.dropdown-menu li > a {
+		color:@themeColorDark;
+	}
+	.dropdown-menu li > a:hover {
+		color:lighten(@themeColorDark, 10%);
+	}
+
 
     .picture {
     	.noPad;
@@ -42,6 +58,7 @@ body {
     // The search top container bar
 	.searchbar {
 		line-height:30px;
+		padding-top: 3px;
 
 	    input[type="submit"] {
 	    	visibility:	hidden;
@@ -59,9 +76,9 @@ body {
 
 // Location menu
 .sub-menu {
-	background:		darken(@themeColorMedium, 10%);
-	border-bottom:	1px solid @themeColorDark;
-	border-top:	1px solid @themeColorDark;
+	background:		darken(@themeColorMedium, 5%);
+	border-bottom:	3px solid @themeColorHighlight;
+	border-top:		1px solid lighten(@themeColorMedium, 15%);
 
 	// Breadcrumbs; overrides those set by bootstrap
 	.breadcrumb {
@@ -102,6 +119,7 @@ body {
 		background-color: 		transparent;
 		color:					lighten(@themeColorNeutral, 80%);
 		padding-bottom: 		0;
+		padding-top: 			30px;
 		h1 {
 			margin-top:0;
 		}
@@ -126,3 +144,28 @@ nav.dashboard {
 		margin-left:25px;
 	}
 }
+
+
+// footer
+.site-foot  {
+	background:			darken(#efefef, 5%);
+	border-top:			1px solid #dedede;
+	border-bottom:		3px solid @themeColorHighlight;
+	margin-top:			20px;
+	line-height:		40px;
+	clear:				both;
+
+	.copyright {
+		padding:10px 15px;
+		color:#999;
+	}
+	.social {
+		float:left;
+		clear:left;
+	}
+	.website {
+		float:right;
+		clear:right;
+	}
+}
+

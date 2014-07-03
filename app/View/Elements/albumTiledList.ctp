@@ -2,6 +2,7 @@
     <?php foreach($albums as $album) :
         $albumData = null;
         $artistData = null;
+        $albumScoreData = null;
 
         if(Hash::check($album, "Albums"))
         {
@@ -20,6 +21,12 @@
         {
             $artistData = $album["Artist"];
         }
+
+        if(Hash::check($album, "AlbumReviewSnapshot"))
+        {
+            $albumScoreData = $album["AlbumReviewSnapshot"];
+        }
+
     ?>
         <div class="col-xs-6 col-md-3 album">
             <?php  echo $this->Html->link(
@@ -34,6 +41,9 @@
             <?php if((int)$albumData["release_date"] > 0) : ?>
             <time datetime="<?php echo date("c", $albumData["release_date"]); ?>"><?php echo date("F j Y", $albumData["release_date"]); ?></time>
             <?php endif; ?>
+			<?php if(!is_null($albumScoreData) && !is_null($albumScoreData["score"])) :  ?>
+                <strong><?php echo $albumScoreData["score"]; ?>%</strong>
+        	<?php endif; ?>
         </div>
     <?php endforeach; ?>
 </div>

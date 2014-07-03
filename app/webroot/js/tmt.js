@@ -36,11 +36,11 @@ $(function() {
 
 			if(scrolled > buffer && scrolled < wrapHeight) {
 				$('.header-wrapper .cover-image').css('background-position-y', -(scrolled - buffer) +'px'  );
-				$('.header-wrapper .jumbotron').css('background-position-y', -((scrolled*.5) - buffer) +'px'  );
+				$('.header-wrapper').css('background-position-y', -((scrolled*.5) - buffer) +'px'  );
 			}
 			else if(scrolled <= buffer) {
 				$('.header-wrapper .cover-image').css('background-position-y', '0px');
-				$('.header-wrapper .jumbotron').css('background-position-y', '0px'  );
+				$('.header-wrapper').css('background-position-y', '0px'  );
 			}
 		});
 	}
@@ -222,6 +222,40 @@ $(function() {
 					}
 				}
 				// fallback to mp3
+		});
+	});
+
+	// Automate bug reporting
+	$("*[data-bug-type]").each(function(){
+		var el = $(this),
+			type = el.attr("data-bug-type"),
+			location = el.attr("data-location"),
+			userId = el.attr("data-user");
+
+		el.click(function(){
+
+			if($("#bugreport").length > 0) {
+				$("#bugreport .modal-content").html("<div class=\"loading-wrap\"><i class=\"fa fa-refresh fa-spin fa-fw\"></i></div>");
+				$("#bugreport").modal("show");
+			} else {
+				// Prepare the box
+				$("<div id=\"bugreport\" class=\"modal fade\"><div class=\"modal-dialog\"><div class=\"modal-content\"><div class=\"loading-wrap\"><i class=\"fa fa-refresh fa-spin fa-fw\"></i></div></div></div></div>").modal();
+			}
+
+			// Dump the server side response, but hook in the form post logic
+			$.post('/ajax/bugreport/', {'type': type, 'where': location, 'user_id': userId}, function(response) {
+
+				var form = $("#bugreport .modal-content");
+				form.html(response);
+				form.find(".btn-default").click(function( event ) {
+					var id = parseInt(form.find("input[name=id]").val(), 10),
+						details = form.find("textarea").val().trim();
+
+					if(details.length > 0) {
+						$.post('/ajax/bugreport/', {'id' : id, 'details' : details});
+					}
+				});
+			});
 		});
 	});
 

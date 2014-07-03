@@ -1,6 +1,7 @@
 <?php
 	$isLogged = $this->Session->check('Auth.User.User.id');
-	$userSession = $this->Session->check('Auth.User.User');
+	$userSession = $this->Session->read('Auth.User.User');
+	$userRole = $this->Session->read('Auth.User.User.role');
 ?>
   <div class="navbar navbar-fixed-top" role="navigation">
 	<div class="container">
@@ -34,21 +35,30 @@
 								array('escape' => false)
 						); ?>
 					</li>
-					<li>
-						<?php echo $this->Html->link("<i class=\"fa fa-bell-o\"></i>", array('controller' => 'users', 'action' => 'notifications'), array("escape" => false)); ?>
-						<?php //echo $this->element("dropdownnotifications"); ?>
-					</li>
+					<li><?php echo $this->Html->link("<i class=\"fa fa-bell-o\"></i>", array('controller' => 'users', 'action' => 'notifications'), array("escape" => false)); ?></li>
 					<li><?php echo $this->Html->link(__("Profile"), array('controller' => 'profiles', 'action' => 'view', $userSession['slug'])); ?></li>
 					<li class="dropdown">
-						<button type="button" id="btnSettings" class="btn btn-default dropdown-toggle" data-toggle="dropdown">
+						<a href="#" id="btnSettings" class="dropdown-toggle" data-toggle="dropdown">
 						  <i class="fa fa-cog"></i>
 						  <span class="caret"></span>
-						</button>
+						</a>
 						<ul class="dropdown-menu" role="menu" aria-labelledby="btnSettings">
 							<li><?php echo $this->Html->link(__("Settings"), array('controller' => 'users', 'action' => 'edit')); ?></li>
 							<li><?php echo $this->Html->link(__("Logout"), array('controller' => 'users', 'action' => 'logout')); ?></li>
 						</ul>
 					</li>
+					<?php if($userRole === "admin") : ?>
+						<li class="dropdown">
+							<a href="#" id="btnAdmin" class="dropdown-toggle" data-toggle="dropdown">
+							  <i class="fa fa-sliders"></i>
+							  <span class="caret"></span>
+							</a>
+							<ul class="dropdown-menu" role="menu" aria-labelledby="btnAdmin">
+								<li><?php echo $this->Html->link(__("Console"), array('controller' => 'tmt', 'action' => 'index')); ?></li>
+								<li><?php echo $this->Html->link(__("Bugs"), array('controller' => 'tmt', 'action' => 'bugs')); ?></li>
+							</ul>
+						</li>
+					<?php endif; ?>
 				<?php else : ?>
 					<li><?php echo $this->Html->link(__("Login or create account"), array('controller' => 'users', 'action' => 'login')); ?></li>
 				<?php endif; ?>

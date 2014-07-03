@@ -16,10 +16,8 @@
 						</div>
 					<?php endif; ?>
 	           		<h1><?php echo $album["name"]; ?></h1>
-		            <section class="description expandable">
-		                <div class="wrapper">
-							<p><?php echo $this->StringMaker->composeAlbumPresentation($lastfmAlbum, $album, $artist); ?></p>
-						</div>
+		            <section class="description">
+						<p><?php echo $this->StringMaker->composeAlbumPresentation($lastfmAlbum, $album, $artist); ?></p>
 					</section>
 		        </div>
 	        </div>

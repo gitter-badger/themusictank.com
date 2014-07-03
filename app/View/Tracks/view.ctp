@@ -96,23 +96,25 @@
 	</div>
 </div>
 
-<?php if(count($trackReviewSnapshot["top"]) > 1 && count($trackReviewSnapshot["bottom"] > 1)) : ?>
-<div class="review-line highlights even">
-	<div class="container container-fluid">
-		<div class="row">
-			<div class="col-md-6 highlight">
-				<p><?php echo $this->StringMaker->composeTrackHighlight($trackReviewSnapshot); ?></p>
-				<div class="highgraph"></div>
-				<button type="button">Play</button>
-			</div>
-			<div class="col-md-6 lowlight">
-				<p><?php echo $this->StringMaker->composeTrackLowpoint($trackReviewSnapshot); ?></p>
-				<div class="lowgraph"></div>
-				<button type="button">Play</button>
+<?php if(array_key_exists("top", $trackReviewSnapshot)) : ?>
+	<?php if(count($trackReviewSnapshot["top"]) > 1 && count($trackReviewSnapshot["bottom"] > 1)) : ?>
+	<div class="review-line highlights even">
+		<div class="container container-fluid">
+			<div class="row">
+				<div class="col-md-6 highlight">
+					<p><?php echo $this->StringMaker->composeTrackHighlight($trackReviewSnapshot); ?></p>
+					<div class="highgraph"></div>
+					<button type="button">Play</button>
+				</div>
+				<div class="col-md-6 lowlight">
+					<p><?php echo $this->StringMaker->composeTrackLowpoint($trackReviewSnapshot); ?></p>
+					<div class="lowgraph"></div>
+					<button type="button">Play</button>
+				</div>
 			</div>
 		</div>
 	</div>
-</div>
+	<?php endif; ?>
 <?php endif; ?>
 
 <div class="review-line odd social">

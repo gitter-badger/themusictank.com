@@ -21,6 +21,7 @@ class ImplicitRelationModel extends AppModel
     const TYPE_NEW_ACCOUNT      = "newaccount";
     const TYPE_CREATED_ARTIST   = "newartist";
     const TYPE_REVIEW_COMPLETE  = "reviewcomplete";
+    const TYPE_BUG_REPORT  		= "bugreport";
 
     public function getType($typeId)
     {

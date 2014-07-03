@@ -4,7 +4,7 @@ App::uses('ArtistReviewSnapshot', 'Model');
 
 class Artist extends AppModel
 {
-	public $hasOne 	= array('LastfmArtist');
+	public $hasOne 	= array('LastfmArtist', 'ArtistReviewSnapshot');
     public $hasMany = array('Albums' => array('order' => array('Albums.notability ASC')));
     public $order 	= array('Artist.name ASC');
 	public $validate = array(

@@ -1,6 +1,15 @@
 <?php
 class TmtController extends AppController {
 
+	var $components = array("Paginator");
+ 	public $paginate = array(
+        'limit' => 25,
+        'order' => array(
+            'Bug.created' => 'desc',
+            'Bug.is_fixed' => 'asc'
+        )
+    );
+
     public function beforeFilter()
     {
         parent::beforeFilter();
@@ -22,6 +31,25 @@ class TmtController extends AppController {
     	$this->layout = "blank";
     }
 
+    public function bugs()
+    {
+    	$this->layout = "blank";
+    	$this->loadModel("Bug");
+
+    	$this->set("bugs", $this->Paginator->paginate('Bug'));
+    }
+
+    public function bugstatus()
+    {
+    	$this->layout = "ajax";
+    	$this->loadModel("Bug");
+
+    	$this->Bug->save(array(
+    		"id" 		=> (int)$this->request->data["id"],
+    		"is_fixed" 	=> (int)$this->request->data["is_fixed"]
+		));
+    }
+
     public function sync()
     {
     	$this->layout = "ajax";
@@ -30,13 +58,14 @@ class TmtController extends AppController {
     	$this->loadModel("Album");
     	$this->loadModel("Track");
     	$this->loadModel("Users");
-
+    	$this->loadModel("Bug");
 
     	// Get general website data
     	$this->set("artistCount", $this->Artist->find("count"));
     	$this->set("albumCount", $this->Album->find("count"));
     	$this->set("trackCount", $this->Track->find("count"));
     	$this->set("userCount", $this->User->find("count"));
+    	$this->set("bugCount", $this->Bug->find("count", array("conditions" => array("is_fixed" => false))));
 
     	// Prepare all config values
     	$this->set("configs", $this->Config->find("all", array("order" => "key ASC")));

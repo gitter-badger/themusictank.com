@@ -1,3 +1,21 @@
+<div class="header-wrapper">
+	<section class="jumbotron introduction">
+		<div class="container">
+		    <h1><?php echo __("Tanker Profiles"); ?></h1>
+	    </div>
+	</section>
+</div>
+
+<nav class="sub-menu">
+	<div class="container container-fluid">
+		<div class="row">
+		    <ol class="breadcrumb">
+		        <li class="active"><?php echo $this->Html->link(__("User login"), array('controller' => 'users', 'action' => 'login')); ?></li>
+		    </ol>
+	    </div>
+    </div>
+</nav>
+
 <div class="container container-fluid">
     <?php echo $this->Session->flash('auth'); ?>
 
@@ -28,7 +46,7 @@
                     <h3 class="panel-title"><?php echo __("If you do not use any of these services..."); ?></h3>
                 </div>
                 <div class="panel-body">
-                    <p><?php echo __("Connect with your existing TMT account"); ?></p>      
+                    <p><?php echo __("Connect with your existing TMT account"); ?></p>
 
                     <?php echo $this->Form->create('User', array('action' => 'login', 'role' => 'form')); ?>
                         <div class="form-group">

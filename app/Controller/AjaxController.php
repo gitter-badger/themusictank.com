@@ -49,7 +49,29 @@ class AjaxController extends AppController {
         $this->render("followbutton");
     }
 
-    public function oembed() {
+    public function bugreport()
+    {
+		if ($this->request->is('post'))
+		{
+	    	$this->loadModel("Bug");
+
+	    	$postData = $this->request->data;
+	    	$notificationData = null;
+	    	$bug = new Bug();
+
+	    	if(Hash::check($postData, "id")) {
+	    		$bug->updateReport((int)Hash::get($postData, "id"), Hash::get($postData, "details"));
+	    	}
+	    	else {
+	    		$bugId = $bug->createReport(Hash::get($postData, "type"), Hash::get($postData, "where"), (int)Hash::get($postData, "user_id"));
+	    		$this->set("bugId", $bugId);
+	    	}
+        	$this->render("bugreport");
+	    }
+    }
+
+    public function oembed()
+    {
         $this->response->type('application/json');
 
         if(!array_key_exists("url", $this->request->query))

@@ -9,8 +9,6 @@ class AppShell extends Shell {
 		"TrackSnapshotsSync", "UpdatePopularArtists", "UpdateSongChallenge"
 	);
 
-	// /Applications/MAMP/bin/php/php5.4.10/bin/php app/Console/cake.php App daily themusictank.nvi
-	// php app/Console/cake.php App daily themusictank.com
 	public function daily()
 	{
 		$this->out("DAILY");

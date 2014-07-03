@@ -22,8 +22,16 @@
 				<h2><?php echo $trackCount; ?></h2>
 				<p>Tracks</p>
 			</div>
-		</div>
 
+			<div class="col-md-5 col-md-offset-1">
+				<h2><?php echo $bugCount; ?></h2>
+				<p>Opened issues</p>
+			</div>
+
+			<div class="col-md-5 col-md-offset-1">
+
+			</div>
+		</div>
 	</div>
 
 	<div class="col-md-6">
@@ -58,11 +66,17 @@
 <div class="row">
 
 	<div class="col-md-12">
-		<h3>Error</h3>
-		<div class="log"><pre><?php echo $logError; ?></pre></div>
-		<h3>Debug</h3>
-		<div class="log"><pre><?php echo $logDebug; ?></pre></div>
-		<h3>Cron</h3>
-		<div class="log"><pre><?php echo $logCron; ?></pre></div>
+
+		<ul class="nav nav-tabs" role="tablist">
+		  <li class="active"><a href="#error" role="tab" data-toggle="tab">Error log</a></li>
+		  <li><a href="#debug" role="tab" data-toggle="tab">Debug log</a></li>
+		</ul>
+
+		<div class="tab-content">
+		  <div class="tab-pane active" id="error"><div class="log"><pre><?php echo $logError; ?></pre></div></div>
+		  <div class="tab-pane" id="debug"><div class="log"><pre><?php echo $logDebug; ?></pre></div></div>
+		</div>
+
 	</div>
+
 </div>

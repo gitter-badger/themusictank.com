@@ -1,12 +1,27 @@
-<div class="container container-fluid">
+<?php echo $this->element('header'); ?>
 
-	<h1>Console</h1>
-	<div id="refresher">Loading...</div>
-
+<div class="header-wrapper">
+	<section class="jumbotron introduction">
+		<div class="container">
+		    <h1><?php echo __("Console"); ?></h1>
+	    </div>
+	</section>
 </div>
+
+<div class="container container-fluid">
+	<div class="row">
+		<div id="refresher" class="loading-wrap">
+        	<i class="fa fa-refresh fa-spin fa-fw"></i>
+        </div>
+	</div>
+</div>
+
 <style type="text/css">
+	.log {
+		min-height:300px;
+	}
 	.log pre {
-		max-height:300px;
+		height:300px;
 		overflow:auto;
 		background:#000;
 		color:#eee;

@@ -204,14 +204,36 @@ class StringMakerHelper extends AppHelper {
 
 	public function composeAlbumPresentation($lastfmAlbum, $album, $artist)
 	{
-		if(empty($lastfmTrack["wiki"]))
+		if (!is_null($lastfmAlbum["wiki_curated"]))
 		{
-		    return sprintf(__("This is an album by %s."), $artist["name"]);
+			return $lastfmAlbum["wiki_curated"];
 		}
 		else
 		{
-		    return $lastfmAlbum["wiki"];
+			if(!empty($lastfmAlbum["wiki"]))
+			{
+				return $lastfmAlbum["wiki"];
+			}
 		}
+
+	    return sprintf(__("This is an album by %s."), $artist["name"]);
+	}
+
+	public function composeArtistPresentation($lastfmArtist, $artist)
+	{
+		if (!is_null($lastfmArtist["biography_curated"]))
+		{
+			return $lastfmArtist["biography_curated"];
+		}
+		else
+		{
+			if(!empty($lastfmArtist["biography"]))
+			{
+				return $lastfmArtist["biography"];
+			}
+		}
+
+	    return sprintf(__("%s make music."), $artist["name"]);
 	}
 
 	public function composeTrackHighlight($trackReviewSnapshot)

@@ -26,14 +26,14 @@ class MetaTagsHelper extends AppHelper {
             )),
 
             $this->Html->script(array(
-                array("src" => "//code.jquery.com/jquery-2.0.3.min.js"),
-                array("src" => "//netdna.bootstrapcdn.com/bootstrap/3.1.1/js/bootstrap.min.js"),
-                "//d3js.org/d3.v3.min.js",
-                "//vjs.zencdn.net/4.6/video.js",
-                "vendor/videojs.youtube.js",
+                "vendor/jquery-2.1.1.min",
+                "vendor/bootstrap.min",
+                "vendor/d3.v3.min",
+                "vendor/video",
+                "vendor/videojs.youtube",
                 "vendor/typeahead",
-                "vendor/jquery.easing-1.3.js",
-                "vendor/jquery.royalslider.min.js",
+                "vendor/jquery.easing-1.3",
+                "vendor/jquery.royalslider.min",
                 "vendor/sjsi",
                 "tmt"
             ))

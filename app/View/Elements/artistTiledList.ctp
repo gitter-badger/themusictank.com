@@ -11,7 +11,7 @@
         <ul class="recent-albums">
             <?php foreach($artist["Albums"] as $i => $album) : if($i >= 3) break;?>
             <li>
-                <?php if(!is_null($artist["ArtistReviewSnapshot"]) && !is_null($artist["ArtistReviewSnapshot"]["score"])) :  ?>
+                <?php if(Hash::check($artist, "ArtistReviewSnapshot") && !is_null($artist["ArtistReviewSnapshot"]) && !is_null($artist["ArtistReviewSnapshot"]["score"])) :  ?>
                 <strong><?php echo $artist["ArtistReviewSnapshot"]["score"]; ?>%</strong>
             	<?php endif; ?>
                 <?php echo $this->Html->link($this->Html->image($this->App->getImageUrl($album, true), array("alt" => $album["name"])), array('controller' => 'albums', 'action' => 'view', $album["slug"]), array('escape' => false)); ?>

@@ -21,10 +21,9 @@
 
 				    <h1><?php echo $track["title"]; ?></h1>
 
-		            <section class="description expandable">
-		                <div class="wrapper">
-							<p><?php echo $this->StringMaker->composeTrackPresentation($lastfmTrack, $track, $album, $artist); ?></p>
-						</div>
+		            <section class="description">
+						<p><?php echo $this->StringMaker->composeTrackPresentation($lastfmTrack, $track, $album, $artist); ?></p>
+						<small class="report-bug" data-bug-type="track wiki" data-location="artist/<?php echo $artist["slug"]; ?>|album/<?php echo $album["slug"]; ?>|track<?php echo $track["slug"]; ?>" data-user="<?php echo $this->Session->read('Auth.User.User.id'); ?>"><i class="fa fa-bug"></i> <?php echo __("Wrong/weird bio?"); ?></small>
 					</section>
 					<ul>
 						<li><?php echo $this->Html->link(__("Review track"), array('controller' => 'player', 'action' => 'play', $track["slug"]), array("class" => "btn btn-primary")); ?></li>
@@ -104,12 +103,12 @@
 				<div class="col-md-6 highlight">
 					<p><?php echo $this->StringMaker->composeTrackHighlight($trackReviewSnapshot); ?></p>
 					<div class="highgraph"></div>
-					<button type="button">Play</button>
+					<button type="button" data-from="<?php echo $trackReviewSnapshot["top"][0]; ?>" data-to="<?php echo $trackReviewSnapshot["top"][1]; ?>">Play</button>
 				</div>
 				<div class="col-md-6 lowlight">
 					<p><?php echo $this->StringMaker->composeTrackLowpoint($trackReviewSnapshot); ?></p>
 					<div class="lowgraph"></div>
-					<button type="button">Play</button>
+					<button type="button" data-from="<?php echo $trackReviewSnapshot["bottom"][0]; ?>" data-to="<?php echo $trackReviewSnapshot["bottom"][1]; ?>">Play</button>
 				</div>
 			</div>
 		</div>
@@ -195,7 +194,6 @@
 
 <div class="review-line even graph">
 	<div class="container container-fluid">
-		<video id="songplayer" class="video-js moo-css" controls data-song="<?php echo $artist["slug"]?>/<?php echo $track["slug"]; ?>/"></video>
 		<div class="d3chart big-graph"></div>
 	</div>
 </div>
@@ -209,6 +207,24 @@
         </p>
     </div>
 </section>
+
+
+<div class="navbar navbar-fixed-bottom streamer" data-song="<?php echo $artist["slug"]?>/<?php echo $track["slug"]; ?>/">
+
+	<div class="progress-wrap">
+		<div class="progress">
+		  <div class="progress-bar loaded-bar" role="progressbar" aria-valuenow="0" aria-valuemin="0" aria-valuemax="<?php echo $track["duration"]; ?>" style="width: 0%;"></div>
+		  <div class="progress-bar playing-bar" role="progressbar" aria-valuenow="0" aria-valuemin="0" aria-valuemax="<?php echo $track["duration"]; ?>" style="width: 0%;"></div>
+		</div>
+	   <div class="cursor"></div>
+   </div>
+
+
+	<div class="position">0</div>
+	<i class="play fa fa-stop"></i>
+	<div class="duration"></div>
+</div>
+
 
 <script>$(function(){
 var svg = d3.select(".d3chart").append("svg");

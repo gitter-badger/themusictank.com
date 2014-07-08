@@ -331,12 +331,11 @@ $(function() {
 
 	// Automate bug reporting
 	$("*[data-bug-type]").each(function(){
-		var el = $(this),
-			type = el.attr("data-bug-type"),
-			location = el.attr("data-location"),
-			userId = el.attr("data-user");
-
-		el.click(function(){
+		$(this).click(function(){
+			var el = $(this),
+				type = el.attr("data-bug-type"),
+				location = el.attr("data-location"),
+				userId = el.attr("data-user");
 
 			if($("#bugreport").length > 0) {
 				$("#bugreport .modal-content").html("<div class=\"loading-wrap\"><i class=\"fa fa-refresh fa-spin fa-fw\"></i></div>");

@@ -154,7 +154,7 @@ class Track extends OEmbedable
 								"title" => $track->name,
 								"duration" => $track->duration,
 								"album_id" => $albumId,
-								//"slug" => $this->createSlug($track->name),
+								"slug" => null,
 								"track_num" => $idx+1,
 								"LastfmTrack" => array(
 									"mbid" => $track->mbid,

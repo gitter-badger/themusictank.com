@@ -64,7 +64,6 @@ class Album extends OEmbedable
         $existingAlbums = Hash::extract($this->findAllByArtistId($artistId), "{n}.LastfmAlbum.mbid");
         $apiResult 		= $this->LastfmAlbum->getArtistTopAlbums($artistName);
         $albums 		= array();
-        $futureSlugs 	= array();
 
 		if(is_null($apiResult)) {
 			return array();
@@ -85,11 +84,6 @@ class Album extends OEmbedable
             	// Ensure the artist is the one we are expecting and that it's a new one.
                 if($album->artist->mbid == $artistMbid && !in_array($album->mbid, $existingAlbums))
                 {
-                	// Often, albums have similar names but because we are saving in batch, the abc-1, abc-2 logic
-                	// doesn't work.
-                    //$slug = $this->_doubleCheckSlug($this->createSlug($album->name), $album->name, $futureSlugs);
-
-                    //$futureSlugs[] = $slug;
                     $albums[] = array(
                         "LastfmAlbum" => array(
                             "mbid" => $album->mbid
@@ -98,7 +92,7 @@ class Album extends OEmbedable
                             "artist_id" => $artistId,
                             "name" => $album->name,
                             "mbid" => $album->mbid,
-                            //"slug" => $slug,
+                            "slug" => null,
                             "release_date" => 0,
                             "notability" => $album->{"@attr"}->rank,
                             "image"     => empty($album->image[4]->{'#text'}) ? null : $this->getImageFromUrl($album->image[4]->{'#text'}, $this->getData("Album.image")),

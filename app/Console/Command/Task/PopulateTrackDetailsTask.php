@@ -22,7 +22,7 @@ class PopulateTrackDetailsTask extends Shell {
 			$this->LastfmTrack->data["Album"] = $track["Album"];
 			$this->LastfmTrack->data["Artist"] = $track["Album"]["Artist"];
 
-			$this->out(sprintf("\t<info>%s (%d)</info>", $this->LastfmTrack->getData("Track.title"), $this->LastfmTrack->getData("Track.id")));
+			$this->out(sprintf("\t<info>%d\t%s</info>", $this->LastfmTrack->getData("Track.id"), $this->LastfmTrack->getData("Track.title")));
 			$this->LastfmTrack->updateCached();
 		}
 	}

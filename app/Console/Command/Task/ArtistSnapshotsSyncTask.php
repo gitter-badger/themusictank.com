@@ -44,7 +44,7 @@ class ArtistSnapshotsSyncTask extends Shell {
     		$this->out(sprintf("Found %s snapshots that are out of sync or new.", count($expired)));
 			foreach ($expired as $artist) {
 	    		$this->ArtistReviewSnapshot->data = $artist;
-	    		$this->out(sprintf("\t<info>%s (%d)</info>", $this->ArtistReviewSnapshot->getData("Artist.name"), $this->ArtistReviewSnapshot->getData("Artist.id")));
+	    		$this->out(sprintf("\t<info>%d\t%s</info>", $this->ArtistReviewSnapshot->getData("Artist.id"), $this->ArtistReviewSnapshot->getData("Artist.name")));
 	    		$this->ArtistReviewSnapshot->fetch($this->ArtistReviewSnapshot->getData("Artist.id"));
 	    	}
 		}

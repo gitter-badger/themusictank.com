@@ -19,7 +19,7 @@ class PopulateAlbumDetailsTask extends Shell {
     	$this->out(sprintf("Found <comment>%s albums</comment> that are out of sync.", count($expired)));
     	foreach ($expired as $album) {
     		$this->LastfmAlbum->data = $album;
-    		$this->out(sprintf("\t<info>%s (%d)</info>", $this->LastfmAlbum->getData("Album.name"), $this->LastfmAlbum->getData("Album.id")));
+    		$this->out(sprintf("\t<info>%d\t%s</info>", $this->LastfmAlbum->getData("Album.id"), $this->LastfmAlbum->getData("Album.name")));
     		$this->LastfmAlbum->updateCached();
     	}
 	}

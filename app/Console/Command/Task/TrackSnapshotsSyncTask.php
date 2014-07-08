@@ -44,7 +44,7 @@ class TrackSnapshotsSyncTask extends Shell {
     		$this->out(sprintf("Found %s snapshots that are out of sync or new.", count($expired)));
 			foreach ($expired as $track) {
 	    		$this->TrackReviewSnapshot->data = $track;
-	    		$this->out(sprintf("\t<info>%s (%d)</info>", $this->TrackReviewSnapshot->getData("Track.title"), $this->TrackReviewSnapshot->getData("Track.id")));
+	    		$this->out(sprintf("\t<info>%d\t%s</info>", $this->TrackReviewSnapshot->getData("Track.id"), $this->TrackReviewSnapshot->getData("Track.title")));
 	    		$this->TrackReviewSnapshot->fetch($this->TrackReviewSnapshot->getData("Track.id"));
 	    	}
 		}

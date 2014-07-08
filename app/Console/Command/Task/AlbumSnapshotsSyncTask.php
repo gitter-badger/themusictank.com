@@ -57,7 +57,7 @@ class AlbumSnapshotsSyncTask extends Shell {
     		$this->out(sprintf("Found %s snapshots that are out of sync or new.", count($expired)));
 			foreach ($expired as $album) {
 	    		$this->AlbumReviewSnapshot->data = $album;
-	    		$this->out(sprintf("\t<info>%s (%d)</info>", $this->AlbumReviewSnapshot->getData("Album.name"), $this->AlbumReviewSnapshot->getData("Album.id")));
+	    		$this->out(sprintf("\t<info>%d\t%s</info>", $this->AlbumReviewSnapshot->getData("Album.id"), $this->AlbumReviewSnapshot->getData("Album.name")));
 	    		$this->AlbumReviewSnapshot->fetch($this->AlbumReviewSnapshot->getData("Album.id"));
 	    	}
 		}

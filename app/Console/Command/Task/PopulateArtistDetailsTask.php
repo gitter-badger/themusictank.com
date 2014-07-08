@@ -18,7 +18,7 @@ class PopulateArtistDetailsTask extends Shell {
     	$this->out(sprintf("Found <comment>%s artist</comment> that are out of sync.", count($expired)));
     	foreach ($expired as $artist) {
     		$this->LastfmArtist->data = $artist;
-    		$this->out(sprintf("\t<info>%s (%d)</info>", $this->LastfmArtist->getData("Artist.name"), $this->LastfmArtist->getData("Artist.id")));
+    		$this->out(sprintf("\t<info>%d\t%s</info>", $this->LastfmArtist->getData("Artist.id"), $this->LastfmArtist->getData("Artist.name")));
     		$this->LastfmArtist->updateCached();
     	}
     }

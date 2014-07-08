@@ -58,7 +58,7 @@ class LastfmBehavior extends ModelBehavior {
     public function getArtistTopAlbums($model, $artistName)
     {
         $data = $this->_post(array("method" => "artist.gettopalbums", "artist" => $artistName));
-        return ($data->topalbums) ? $data->topalbums->album : null;
+        return ($data->topalbums && property_exists($data->topalbums, "album")) ? $data->topalbums->album : null;
     }
 
     public function searchArtists($model, $query, $limit)

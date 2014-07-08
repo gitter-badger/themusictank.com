@@ -75,7 +75,8 @@ class AppModel extends Model {
     	foreach ($names as $name)
     	{
     		// Create a unique slug based on db values
-			$slug = $this->createSlug($name);
+			$slug = $this->createSlug($name, true);
+			$newSlug = $slug;
 
 			// Double check the current set for duplicates
 			// and loop until we have a available key
@@ -93,13 +94,11 @@ class AppModel extends Model {
 		                $newSlug = preg_replace ('/[0-9]+$/', ++$count, $slug );
 		            }
 	            }
-	            $batchSlugs[] = $newSlug;
 	        }
-	        else {
-	            $batchSlugs[] = $slug;
-	        }
+            $batchSlugs[] = $newSlug;
     	}
-        return $slug;
+
+        return $batchSlugs;
     }
 
 

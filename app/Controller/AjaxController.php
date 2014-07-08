@@ -129,8 +129,16 @@ class AjaxController extends AppController {
 
         if (count($this->Album->data))
         {
-            $albums = $this->Album->updateDiscography($this->Album->data["Artist"]["name"]);
+        	$artistName = $this->Album->data["Artist"]["name"];
+            $albums = $this->Album->updateDiscography($artistName);
+
             $this->set("albums", $albums);
+            $this->set("artistName", $artistName);
+
+			if(count($albums) < 1)
+			{
+				$this->log(sprintf('Failed to load discography from API for artist %s', $artistName));
+			}
         }
         else throw new NotFoundException(__("We cannot load this artist."));
     }

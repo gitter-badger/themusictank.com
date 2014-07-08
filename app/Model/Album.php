@@ -66,6 +66,10 @@ class Album extends OEmbedable
         $albums 		= array();
         $futureSlugs 	= array();
 
+		if(is_null($apiResult)) {
+			return array();
+		}
+
         // Ensure that we are dealing with arrays
         if(is_object($apiResult)) {
         	$apiResult = array($apiResult);
@@ -109,8 +113,10 @@ class Album extends OEmbedable
         {
         	// The albums have been formated and batched. We can validate the slugs
         	// and skip the unique key issues we had when the slug was set in the loop above
-        	$slugs = $this->batchSlug(Hash::extract("{n}.Album.name"));
-        	$albums = Hash::insert($albums, "{n}.Album.slug", $slugs);
+        	$slugs = $this->batchSlugs(Hash::extract($albums, "{n}.Album.name"));
+        	foreach($slugs as $idx => $slug) {
+        		$albums[$idx]["Album"]["slug"] = $slug;
+        	}
             return $this->saveMany($albums, array("deep" => true)) ? $albums : false;
         }
 

@@ -169,8 +169,10 @@ class Track extends OEmbedable
 
 		if(count($trackData) > 0)
 		{
-        	$slugs = $this->batchSlug(Hash::extract("{n}.Track.title"));
-        	$trackData = Hash::insert($trackData, "{n}.Track.slug", $slugs);
+        	$slugs = $this->batchSlugs(Hash::extract($trackData, "{n}.Track.title"));
+	     	foreach($slugs as $idx => $slug) {
+        		$trackData[$idx]["Track"]["slug"] = $slug;
+        	}
 			return $this->saveMany($trackData, array("deep" => true));
 		}
 	}

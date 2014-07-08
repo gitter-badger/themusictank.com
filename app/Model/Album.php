@@ -83,9 +83,9 @@ class Album extends OEmbedable
                 {
                 	// Often, albums have similar names but because we are saving in batch, the abc-1, abc-2 logic
                 	// doesn't work.
-                    $slug = $this->_doubleCheckSlug($this->createSlug($album->name), $album->name, $futureSlugs);
+                    //$slug = $this->_doubleCheckSlug($this->createSlug($album->name), $album->name, $futureSlugs);
 
-                    $futureSlugs[] = $slug;
+                    //$futureSlugs[] = $slug;
                     $albums[] = array(
                         "LastfmAlbum" => array(
                             "mbid" => $album->mbid
@@ -94,7 +94,7 @@ class Album extends OEmbedable
                             "artist_id" => $artistId,
                             "name" => $album->name,
                             "mbid" => $album->mbid,
-                            "slug" => $slug,
+                            //"slug" => $slug,
                             "release_date" => 0,
                             "notability" => $album->{"@attr"}->rank,
                             "image"     => empty($album->image[4]->{'#text'}) ? null : $this->getImageFromUrl($album->image[4]->{'#text'}, $this->getData("Album.image")),
@@ -104,29 +104,17 @@ class Album extends OEmbedable
                 }
             }
         }
-        if(count($albums) > 0) {
-            return $this->saveMany($albums, array("deep" => true)) ? $albums : false;
-        } else {
-            return $alreadyLoadedAlbums;
-        }
-    }
 
-	// Often, albums have similar names but because we are saving in batch, the abc-1, abc-2 logic
-	// doesn't work.
-    private function _doubleCheckSlug($slug, $name, $existing)
-    {
-        if(in_array($slug, $existing))
+        if(count($albums) > 0)
         {
-            $count = 1;
-            $newSlug = $this->createSlug($name . " " . $count);
-            while(in_array($newSlug, $existing))
-            {
-                $newSlug = $this->createSlug($name . " " . $count);
-                $count++;
-            }
-            return $newSlug;
+        	// The albums have been formated and batched. We can validate the slugs
+        	// and skip the unique key issues we had when the slug was set in the loop above
+        	$slugs = $this->batchSlug(Hash::extract("{n}.Album.name"));
+        	$albums = Hash::insert($albums, "{n}.Album.slug", $slugs);
+            return $this->saveMany($albums, array("deep" => true)) ? $albums : false;
         }
-        return $slug;
+
+        return $alreadyLoadedAlbums;
     }
 
     public function setNewReleases($newReleasesIds)

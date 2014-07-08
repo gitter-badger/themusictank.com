@@ -219,10 +219,12 @@
 	   <div class="cursor"></div>
    </div>
 
-
 	<div class="position">0</div>
 	<i class="play fa fa-stop"></i>
 	<div class="duration"></div>
+
+	<small class="report-bug" data-bug-type="track player" data-location="artist/<?php echo $artist["slug"]; ?>|album/<?php echo $album["slug"]; ?>|track<?php echo $track["slug"]; ?>" data-user="<?php echo $this->Session->read('Auth.User.User.id'); ?>"><i class="fa fa-bug"></i> <?php echo __("Wrong song?"); ?></small>
+
 </div>
 
 

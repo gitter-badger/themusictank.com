@@ -154,7 +154,7 @@ class Track extends OEmbedable
 								"title" => $track->name,
 								"duration" => $track->duration,
 								"album_id" => $albumId,
-								"slug" => $this->createSlug($track->name),
+								//"slug" => $this->createSlug($track->name),
 								"track_num" => $idx+1,
 								"LastfmTrack" => array(
 									"mbid" => $track->mbid,
@@ -169,7 +169,9 @@ class Track extends OEmbedable
 
 		if(count($trackData) > 0)
 		{
-			$this->saveMany($trackData, array("deep" => true));
+        	$slugs = $this->batchSlug(Hash::extract("{n}.Track.title"));
+        	$trackData = Hash::insert($trackData, "{n}.Track.slug", $slugs);
+			return $this->saveMany($trackData, array("deep" => true));
 		}
 	}
 

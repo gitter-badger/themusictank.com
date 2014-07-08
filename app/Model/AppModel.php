@@ -65,6 +65,45 @@ class AppModel extends Model {
         return false;
     }
 
+    // Creates unique slugs, but takes into account
+    // the values created by the current array instead of
+    // only db values
+    public function batchSlugs($names)
+    {
+    	$batchSlugs = array();
+
+    	foreach ($names as $name)
+    	{
+    		// Create a unique slug based on db values
+			$slug = $this->createSlug($name);
+
+			// Double check the current set for duplicates
+			// and loop until we have a available key
+	 		if(in_array($slug, $batchSlugs))
+	        {
+	            $count = 0;
+	            while(in_array($newSlug, $batchSlugs))
+	            {
+		            if (!preg_match ('/-{1}[0-9]+$/', $slug ))
+		            {
+		                $newSlug .= '-' . ++$count;
+		            }
+		            else
+		            {
+		                $newSlug = preg_replace ('/[0-9]+$/', ++$count, $slug );
+		            }
+	            }
+	            $batchSlugs[] = $newSlug;
+	        }
+	        else {
+	            $batchSlugs[] = $slug;
+	        }
+    	}
+        return $slug;
+    }
+
+
+
     /**
      * Dispatches a preformated event.
      *

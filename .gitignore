@@ -14,3 +14,16 @@ app/tmp/cache/persistent/tmt_cake_core_default_en-us
 app/tmp/cache/persistent/tmt_cake_core_file_map
 app/tmp/cache/persistent/tmt_cake_core_method_cache
 app/webroot/img/cache/*
+app/tmp/cache/models/tmt_cake_model_default_themusictank_album_review_snapshots
+app/tmp/cache/models/tmt_cake_model_default_themusictank_artist_review_snapshots
+app/tmp/cache/models/tmt_cake_model_default_themusictank_lastfm_albums
+app/tmp/cache/models/tmt_cake_model_default_themusictank_lastfm_artists
+app/tmp/cache/models/tmt_cake_model_default_themusictank_lastfm_tracks
+app/tmp/cache/models/tmt_cake_model_default_themusictank_notifications
+app/tmp/cache/models/tmt_cake_model_default_themusictank_review_frames
+app/tmp/cache/models/tmt_cake_model_default_themusictank_track_review_snapshots
+app/tmp/cache/models/tmt_cake_model_default_themusictank_track_youtubes
+app/tmp/cache/models/tmt_cake_model_default_themusictank_user_achievements
+app/tmp/cache/weekly/tmt_lastfm_artist-search-weezer-3
+app/tmp/cache/weekly/tmt_youtube-weezer-the world has turned and left me here
+app/tmp/cache/weekly/tmt_youtube_weezer_the-world-has-turned-and-left-me-here

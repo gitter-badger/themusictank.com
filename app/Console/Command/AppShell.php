@@ -6,7 +6,7 @@ class AppShell extends Shell {
 	public $tasks = array(
 		"AlbumSnapshotsSync", "ArtistSnapshotsSync",
 		"PopulateAlbumDetails", "PopulateArtistDetails", "PopulateTrackDetails",
-		"TrackSnapshotsSync", "UpdatePopularArtists", "UpdateSongChallenge"
+		"TrackSnapshotsSync", "TrackWavesSync", "UpdatePopularArtists", "UpdateSongChallenge"
 	);
 
 	public function daily()
@@ -22,6 +22,17 @@ class AppShell extends Shell {
 
         $this->Config->setCronEnd("daily");
 	}
+
+    public function dailycrawl()
+    {
+        $this->out("DAILY CRAWL");
+        $this->Config->setCronStart("dailycrawl");
+
+        $this->TrackWavesSync->execute();
+
+        $this->Config->setCronEnd("dailycrawl");
+
+    }
 
 	public function twohours()
 	{
@@ -40,4 +51,5 @@ class AppShell extends Shell {
 
         $this->Config->setCronEnd("twohours");
 	}
+
 }

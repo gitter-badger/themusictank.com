@@ -213,36 +213,36 @@ $(function() {
 
 		$.getJSON('/ajax/getsong/' + url,
 			function(response) {
-				if(response.feed.entry.length > 0) {
-					var links = response.feed.entry[0].link;
-					for (var i = 0, len = links.length; i < len; i++) {
-						if(links[i].type == "text/html" || links[i].type == "application/x-shockwave-flash") {
+				if(response.vid.length === 11) {
+					videoId = response.vid;
+					el.append('<iframe id="songplayer_youtube_api" scrolling="no" marginwidth="0" marginheight="0" frameborder="0" src="//www.youtube.com/embed/'+videoId+'?enablejsapi=1&amp;iv_load_policy=3&amp;playerapiid=songplayer_component_17&amp;disablekb=1&amp;wmode=transparent&amp;controls=0&amp;playsinline=0&amp;showinfo=0&amp;modestbranding=1&amp;rel=0&amp;autoplay=0&amp;loop=0&amp;origin='+window.location.origin+'"></iframe>');
 
-							var regId = /^.*(youtu.be\/|v\/|u\/\w\/|embed\/|watch\?v=|\&v=)([^#\&\?]*).*/;
-							var match = links[i].href.match(regId);
-							var videoId = null;
+					var tag = document.createElement('script');
+					tag.src = "//www.youtube.com/player_api";
 
-							if (match && match[2].length == 11){
-								videoId = match[2];
-
-
-
-								el.append('<iframe id="songplayer_youtube_api" scrolling="no" marginwidth="0" marginheight="0" frameborder="0" src="//www.youtube.com/embed/'+videoId+'?enablejsapi=1&amp;iv_load_policy=3&amp;playerapiid=songplayer_component_17&amp;disablekb=1&amp;wmode=transparent&amp;controls=0&amp;playsinline=0&amp;showinfo=0&amp;modestbranding=1&amp;rel=0&amp;autoplay=0&amp;loop=0&amp;origin='+window.location.origin+'"></iframe>');
-
-								var tag = document.createElement('script');
-								tag.src = "//www.youtube.com/player_api";
-
-								var firstScriptTag = document.getElementsByTagName('script')[0];
-								firstScriptTag.parentNode.insertBefore(tag, firstScriptTag);
-
-							}
-							return;
-						}
-					}
+					var firstScriptTag = document.getElementsByTagName('script')[0];
+					firstScriptTag.parentNode.insertBefore(tag, firstScriptTag);
 				}
 				// fallback to mp3
 		});
 	});
+
+	// Automate song loading
+	$("*[data-song-vid]").each(function(){
+
+		var el = $(this),
+			id = el.attr("id"),
+			videoId = el.attr("data-song-vid");
+
+		el.append('<iframe id="songplayer_youtube_api" scrolling="no" marginwidth="0" marginheight="0" frameborder="0" src="//www.youtube.com/embed/'+videoId+'?enablejsapi=1&amp;iv_load_policy=3&amp;playerapiid=songplayer_component_17&amp;disablekb=1&amp;wmode=transparent&amp;controls=0&amp;playsinline=0&amp;showinfo=0&amp;modestbranding=1&amp;rel=0&amp;autoplay=0&amp;loop=0&amp;origin='+window.location.origin+'"></iframe>');
+
+		var tag = document.createElement('script');
+		tag.src = "//www.youtube.com/player_api";
+
+		var firstScriptTag = document.getElementsByTagName('script')[0];
+		firstScriptTag.parentNode.insertBefore(tag, firstScriptTag);
+	});
+
 
 	tmt.onPlayerStateChange = function(newState) {
 		/*

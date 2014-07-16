@@ -7,7 +7,7 @@ App::uses('SubscribersTrackReviewSnapshot', 'Model');
 
 class Track extends OEmbedable
 {
-	public $hasOne 		= array('LastfmTrack', 'TrackReviewSnapshot');
+	public $hasOne 		= array('LastfmTrack', 'TrackReviewSnapshot', 'TrackYoutube');
 	public $belongsTo 	= array('Album');
 	public $actsAs 		= array('Containable');
 	public $validate = array(
@@ -235,7 +235,7 @@ class Track extends OEmbedable
 	{
 		$this->data = $this->find("first", array(
 			"conditions" 	=> array("Track.slug" => $trackSlug),
-			"contain" 		=> array("LastfmTrack", "Album" => array( "Artist" ))
+			"contain" 		=> array("LastfmTrack", "TrackYoutube", "Album" => array( "Artist" ))
 		));
 
 		return $this->data;

@@ -208,8 +208,7 @@
     </div>
 </section>
 
-
-<div class="navbar navbar-fixed-bottom streamer" data-song="<?php echo $artist["slug"]?>/<?php echo $track["slug"]; ?>/">
+<div class="navbar navbar-fixed-bottom streamer" <?php echo $this->App->getTrackPlayerAttributes($artist, $track, $trackYoutube); ?>>
 
 	<div class="progress-wrap">
 		<div class="progress">

@@ -42,7 +42,6 @@ class AppHelper extends Helper {
 		return sprintf("%s %s", ($title_for_layout) ? $title_for_layout . " &mdash; " : "",  __("The Music Tank"));
 	}
 
-
 	public function getImageUrl($obj, $type = "thumb")
 	{
 		$image = $obj ? Hash::get($obj, "image") : null;
@@ -57,5 +56,16 @@ class AppHelper extends Helper {
 		}
 
 		return $imgsrc;
+	}
+
+	public function getTrackPlayerAttributes($artist, $track, $trackYoutube)
+	{
+		if(Hash::check($trackYoutube, "youtube_key_manual")) {
+			return sprintf('data-song-vid="%s"', $trackYoutube["youtube_key_manual"]);
+		}
+		elseif(Hash::check($trackYoutube, "youtube_key")) {
+			return sprintf('data-song-vid="%s"', $trackYoutube["youtube_key"]);
+		}
+		return sprintf('data-song="%s/%s"', $artist["slug"], $track["slug"]);
 	}
 }

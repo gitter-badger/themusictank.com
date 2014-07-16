@@ -145,34 +145,19 @@ class AjaxController extends AppController {
 
     public function getsong($artistSlug, $trackSlug)
     {
-        $this->response->type('application/json');
-        App::uses('HttpSocket', 'Network/Http');
         $this->loadModel("Artist");
         $this->loadModel("Track");
 
         $artist = $this->Artist->findBySlug($artistSlug);
-        $track = $this->Track->findBySlug($trackSlug);
+        $data = $this->Track->findBySlug($trackSlug);
 
-        if(!$artist || !$track)
+        if(!$artist || !$data)
             throw new NotFoundException(__("We don't know where you are from."));
 
+        $this->response->type('application/json');
 
-        $cacheName = 'youtube-' . Hash::get($artist, "Artist.name") . '-' . Hash::get($track, "Track.title");
-        $result = Cache::read($cacheName, "weekly");
-        if (!$result) {
-            $HttpSocket = new HttpSocket();
-       		$response = $HttpSocket->get('http://gdata.youtube.com/feeds/api/videos', array(
-	            "alt" => "json",
-	            "max-results" => 1,
-	            "q" => Hash::get($artist, "Artist.name") . "-" . Hash::get($track, "Track.title")
-	        ));
-
-	        if($response->isOk()) {
-	        	$result = $response->body();
-            	Cache::write($cacheName, $result, "weekly");
-	        }
-        }
-       	$this->set("jsonOutput", json_decode($result));
+        $this->Track->TrackYoutube->data = $data;
+       	$this->set("jsonOutput", array("vid" => $this->Track->TrackYoutube->searchApi($artist)));
 
        $this->render('index');
     }

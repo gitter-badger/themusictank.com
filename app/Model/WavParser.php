@@ -1,10 +1,18 @@
 <?php
-class WavParser extends AppModel
+class WavParser
 {
-    $useTable = false;
+
+
+  function findValues($byte1, $byte2){
+    $byte1 = hexdec(bin2hex($byte1));
+    $byte2 = hexdec(bin2hex($byte2));
+    return ($byte1 + ($byte2*256));
+  }
+
+
 
     // https://github.com/afreiday/php-waveform-svg/blob/master/php-waveform-svg.php
-    public function parse($resolution, $filename)
+    public function parse($filename, $resolution = 100)
     {
         $waveform = array();
 
@@ -50,7 +58,7 @@ class WavParser extends AppModel
               switch($byte){
                 // get value for 8-bit wav
                 case 1:
-                  $data = findValues($bytes[0], $bytes[1]);
+                  $data = $this->findValues($bytes[0], $bytes[1]);
                   break;
                 // get value for 16-bit wav
                 case 2:
@@ -59,7 +67,7 @@ class WavParser extends AppModel
                   else
                     $temp = 128;
                   $temp = chr((ord($bytes[1]) & 127) + $temp);
-                  $data = floor(findValues($bytes[0], $temp) / 256);
+                  $data = floor($this->findValues($bytes[0], $temp) / 256);
                   break;
               }
 
@@ -68,13 +76,9 @@ class WavParser extends AppModel
 
               // draw this data point
               // data values can range between 0 and 255
-              $x1 = $x2 = number_format($data_point / $data_size * 100, 2);
-              $y1 = number_format($data / 255 * 100, 2);
-              $y2 = 100 - $y1;
-              // don't bother plotting if it is a zero point
-              if ($y1 != $y2) {
-                $waveform[] = array($x1, $y1, $x2, $y2);
-              }
+              $waveform[] = $data;
+              //$waveform[] = number_format($data_point / $data_size * 100, 2);
+
             } else {
               // skip this one due to lack of detail
               fseek($handle, $ratio + $byte, SEEK_CUR);

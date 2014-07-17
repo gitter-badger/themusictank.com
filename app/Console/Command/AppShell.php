@@ -23,9 +23,9 @@ class AppShell extends Shell {
         $this->Config->setCronEnd("daily");
 	}
 
-    public function dailycrawl()
+    public function wavescrawl()
     {
-        $this->out("DAILY CRAWL");
+        $this->out("WAVES CRAWL");
         $this->Config->setCronStart("dailycrawl");
 
         $this->TrackWavesSync->execute();

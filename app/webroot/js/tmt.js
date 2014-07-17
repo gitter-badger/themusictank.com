@@ -363,6 +363,30 @@ $(function() {
 	});
 
 
+	tmt.waveform = function(svg, data) {
+
+		var margin = {top: 20, right: 20, bottom: 30, left: 40},
+			width = svg[0][0].offsetWidth  - margin.left - margin.right,
+			height = svg[0][0].offsetHeight  - margin.top - margin.bottom;
+
+		var boxWidth = 	parseInt(width / data.length, 10);
+		var pctData = [];
+
+		for(var i = 0, len = data.length; i < len; i++) {
+
+			var barPct = data[i] / 255;
+			var barheight = ((height - 30) * barPct) * .8;
+
+		var rectangle = svg.append("rect")
+                .attr("x", parseInt(i * boxWidth, 10))
+                .attr("y", parseInt((height / 2 )- (barheight / 2), 10))
+                .attr("width", boxWidth)
+                .attr("height", barheight)
+                .attr("class", "waveform");
+		}
+	};
+
+
 	tmt.createPie = function(whereClass, jsonData, details) {
 	 var w = 200,                        //width
 		h = 200,                            //height

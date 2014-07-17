@@ -1,5 +1,5 @@
 <?php
-class TrackYoutube extends OEmbedable
+class TrackYoutube extends AppModel
 {
     public $belongsTo   = array('Track');
     public $actsAs = array('Youtube');
@@ -18,11 +18,13 @@ class TrackYoutube extends OEmbedable
     {
         foreach($results as $idx => $row)
         {
-            if(array_key_exists($this->alias, $row))
-            {
-                if(array_key_exists("waveform", $row[$this->alias]) && is_string($row[$this->alias]["waveform"]))
+            if(is_array($row)) {
+                if(array_key_exists($this->alias, $row))
                 {
-                    $results[$idx][$this->alias]["waveform"] = json_decode($row[$this->alias]["waveform"]);
+                    if(array_key_exists("waveform", $row[$this->alias]) && is_string($row[$this->alias]["waveform"]))
+                    {
+                        $results[$idx][$this->alias]["waveform"] = json_decode($row[$this->alias]["waveform"]);
+                    }
                 }
             }
         }
@@ -53,10 +55,10 @@ class TrackYoutube extends OEmbedable
 
     public function getMissingWaveforms()
     {
-        return $this->TrackYoutube->find("all", array(
+        return $this->find("all", array(
             "conditions" => array(
-                array("not" => array ( "TrackYoutube.youtube_key" => null),
-                array("TrackYoutube.youtube_key" => null)
+                array("not" => array ( "TrackYoutube.youtube_key" => null)),
+               //"TrackYoutube.waveform" => null
             )
         ));
     }

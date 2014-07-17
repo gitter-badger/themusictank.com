@@ -90,7 +90,7 @@ class Album extends OEmbedable
                         ),
                         "Album" => array(
                             "artist_id" => $artistId,
-                            "name" => $album->name,
+                            "name" => utf8_encode($album->name),
                             "mbid" => $album->mbid,
                             "slug" => null,
                             "release_date" => 0,

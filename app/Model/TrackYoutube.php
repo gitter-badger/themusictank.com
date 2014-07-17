@@ -58,7 +58,7 @@ class TrackYoutube extends AppModel
         return $this->find("all", array(
             "conditions" => array(
                 array("not" => array ( "TrackYoutube.youtube_key" => null)),
-               //"TrackYoutube.waveform" => null
+                "TrackYoutube.waveform IS NULL"
             )
         ));
     }

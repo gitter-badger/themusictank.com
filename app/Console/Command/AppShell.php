@@ -5,7 +5,7 @@ class AppShell extends Shell {
 	public $uses = array("Config");
 	public $tasks = array(
 		"AlbumSnapshotsSync", "ArtistSnapshotsSync",
-		"PopulateAlbumDetails", "PopulateArtistDetails", "PopulateTrackDetails",
+		"PopulateAlbumDetails", "PopulateArtistDetails", "PopulateArtistDiscography", "PopulateTrackDetails",
 		"TrackSnapshotsSync", "TrackWavesSync", "UpdatePopularArtists", "UpdateSongChallenge"
 	);
 
@@ -31,7 +31,6 @@ class AppShell extends Shell {
         $this->TrackWavesSync->execute();
 
         $this->Config->setCronEnd("dailycrawl");
-
     }
 
 	public function twohours()
@@ -45,10 +44,10 @@ class AppShell extends Shell {
 		// Until a noticeable increase in successful responses
 		// query them often to make up for failed attempts
         $this->UpdatePopularArtists->execute();
+        $this->PopulateArtistDiscography->execute();
         $this->PopulateArtistDetails->execute();
         $this->PopulateAlbumDetails->execute();
         $this->PopulateTrackDetails->execute();
-
         $this->Config->setCronEnd("twohours");
 	}
 

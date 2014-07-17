@@ -74,6 +74,8 @@ class AppModel extends Model {
 
     	foreach ($names as $name)
     	{
+            $name = utf8_encode($name);
+
     		// Create a unique slug based on db values
 			$slug = $this->createSlug($name, true);
 			$newSlug = $slug;

@@ -5,6 +5,7 @@ class PopulateAlbumDetailsTask extends Shell {
 
 	public function execute()
 	{
+        // Start with expired albums
     	$expired = $this->LastfmAlbum->Album->find("all", array(
     		"conditions" => array(
     			"or" => array(

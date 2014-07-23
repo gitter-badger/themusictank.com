@@ -10,10 +10,10 @@
 		        </div>
 		        <div class="col-xs-12 col-sm-6 col-md-9 description">
 	           		<h1><?php echo $artist["name"]; ?></h1>
-		            <section class="description">
+		            <section>
 						<p><?php echo $this->StringMaker->composeArtistPresentation($lastfmArtist, $artist); ?></p>
-		        		<small class="report-bug" data-bug-type="artist wiki" data-location="artist/<?php echo $artist["slug"]; ?>" data-user="<?php echo $this->Session->read('Auth.User.User.id'); ?>"><i class="fa fa-bug"></i> <?php echo __("Wrong/weird bio?"); ?></small>
-					</section>
+		        	</section>
+		        	<small class="report-bug" data-bug-type="artist wiki" data-location="artist/<?php echo $artist["slug"]; ?>" data-user="<?php echo $this->Session->read('Auth.User.User.id'); ?>"><i class="fa fa-bug"></i> <?php echo __("Wrong/weird bio?"); ?></small>
 		        </div>
 	        </div>
 	    </div>

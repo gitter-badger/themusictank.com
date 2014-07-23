@@ -15,11 +15,11 @@ class PopulateArtistDiscographyTask extends Shell {
 
         $this->out(sprintf("Found <comment>%s artist discographies</comment> that are out of sync.", count($expiredIds)));
 
-        if(count($expiredIds)) {
-
+        if(count($expiredIds))
+        {
             $expiredArtists = $this->Artist->findAllById(Hash::extract($expiredIds, "{n}.Artist.id"));
-            foreach ($expiredArtists as $artist) {
-
+            foreach ($expiredArtists as $artist)
+            {
                 $this->Album->data = $artist;
                 $this->out(sprintf("\t<info>%d\t%s</info>", $artist["Artist"]["id"], $artist["Artist"]["name"]));
                 $this->Album->updateDiscography($artist["Artist"]["name"]);

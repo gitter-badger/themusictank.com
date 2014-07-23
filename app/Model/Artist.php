@@ -73,12 +73,12 @@ class Artist extends AppModel
         return $reviews->fetch($this->getData("Artist.id"), $userIds);
     }
 
-
+/*
     public function filterNewAndSave($artistList)
     {
         $list = $this->RdioArtist->filterNew($artistList);
         return $this->saveMany($list, array('deep' => true));
-    }
+    }*/
 
     /**
      * Finds all artists that have been flagged as popular.

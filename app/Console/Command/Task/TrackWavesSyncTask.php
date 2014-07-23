@@ -21,7 +21,7 @@ class TrackWavesSyncTask extends Shell {
                 // Fetch the youtube video
 
                 $runYoutubeDownload = "$youtubedl -o ".$workingFilePath."file.mp4 https://www.youtube.com/watch?v=" . $track["TrackYoutube"]["youtube_key"];
-                $runVLCEncode = '/Applications/VLC.app/Contents/MacOS/VLC -I dummy -v '.$workingFilePath.'file.mp4 --sout="#transcode{vcodec=none,acodec=s16l,ab=64,channels=1,samplerate=8000,scodec=none,soverlay}:standard{mux=wav,access=file{no-overwrite},dst='.$workingFilePath.'file.wav}" vlc://quit';
+                $runVLCEncode = Configure::read('VLC') . ' -I dummy -v '.$workingFilePath.'file.mp4 --sout="#transcode{vcodec=none,acodec=s16l,ab=64,channels=1,samplerate=8000,scodec=none,soverlay}:standard{mux=wav,access=file{no-overwrite},dst='.$workingFilePath.'file.wav}" vlc://quit';
 
                 $this->out($runYoutubeDownload);
                 exec($runYoutubeDownload);
@@ -29,7 +29,6 @@ class TrackWavesSyncTask extends Shell {
                 if(file_exists($workingFilePath."file.mp4"))
                 {
                     // Convert video file to low quality wav
-                    // This would only work on my mac.
                     $this->out($runVLCEncode);
                     exec($runVLCEncode);
 

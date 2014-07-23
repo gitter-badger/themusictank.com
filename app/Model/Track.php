@@ -152,6 +152,7 @@ class Track extends OEmbedable
 	     	foreach($slugs as $idx => $slug) {
         		$trackData[$idx]["Track"]["slug"] = $slug;
         	}
+
 			return $this->saveMany($trackData, array("deep" => true));
 		}
 	}

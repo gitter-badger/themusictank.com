@@ -12,7 +12,7 @@
 				<div class="col-xs-12 col-sm-6 col-md-3 mugshot">
 		            <?php echo $this->Html->image( $this->App->getImageUrl($album), array("alt" => $album["name"], "class" => "thumbnail")); ?>
 		        </div>
-		        <div class="col-xs-12 col-sm-6 col-md-8 col-md-offset-1">
+		        <div class="col-xs-12 col-sm-6 col-md-8 col-md-offset-1 description">
 		        	<?php if(!is_null($trackReviewSnapshot["score"])) : ?>
 						<div class="score">
 							<?php echo (int)($trackReviewSnapshot["score"] * 100); ?>%
@@ -20,11 +20,10 @@
 					<?php endif; ?>
 
 				    <h1><?php echo $track["title"]; ?></h1>
-
-		            <section class="description">
+		            <section>
 						<p><?php echo $this->StringMaker->composeTrackPresentation($lastfmTrack, $track, $album, $artist); ?></p>
-						<small class="report-bug" data-bug-type="track wiki" data-location="artist/<?php echo $artist["slug"]; ?>|album/<?php echo $album["slug"]; ?>|track<?php echo $track["slug"]; ?>" data-user="<?php echo $this->Session->read('Auth.User.User.id'); ?>"><i class="fa fa-bug"></i> <?php echo __("Wrong/weird bio?"); ?></small>
 					</section>
+					<small class="report-bug" data-bug-type="track wiki" data-location="artist/<?php echo $artist["slug"]; ?>|album/<?php echo $album["slug"]; ?>|track<?php echo $track["slug"]; ?>" data-user="<?php echo $this->Session->read('Auth.User.User.id'); ?>"><i class="fa fa-bug"></i> <?php echo __("Wrong/weird bio?"); ?></small>
 					<ul>
 						<li><?php echo $this->Html->link(__("Review track"), array('controller' => 'player', 'action' => 'play', $track["slug"]), array("class" => "btn btn-primary")); ?></li>
 					</ul>

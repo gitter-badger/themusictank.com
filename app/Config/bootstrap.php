@@ -135,15 +135,8 @@ if(preg_match('/themusictank\.com/', $_SERVER['SERVER_NAME']))
         "key" => "ea2c81ee8d32aece42eb04671ede64c6",
         "secret" => "6b8ba6118181a36041f88b8ae4616c4c"
     ));
-}
 
-elseif(preg_match('/francoisfaubert\.com/', $_SERVER['SERVER_NAME']))
-{
-    Configure::write('RdioApiConfig', array("9tram6gwz5td4t9hmv8fkqjk", "3yuAttXm2T"));
-    Configure::write('LastFmApiConfig', array(
-        "key" => "9014609ad7074beda4be38b3011fec17",
-        "secret" => "a15fa4e5a198c77683eaa24374b24740"
-    ));
+    Configure::write('VLC', "VLC");
 }
 
 elseif(preg_match('/tmt\.dev/', $_SERVER['SERVER_NAME']))
@@ -153,6 +146,8 @@ elseif(preg_match('/tmt\.dev/', $_SERVER['SERVER_NAME']))
         "key" => "145252e0c4a971f072e0fed4fa55a2bb",
         "secret" => "6bbc4a7eeada3b668a6fbbfbb1d87aa0"
     ));
+
+    Configure::write('VLC', null);
 }
 elseif(preg_match('/themusictank\.nvi/', $_SERVER['SERVER_NAME']))
 {
@@ -165,6 +160,7 @@ elseif(preg_match('/themusictank\.nvi/', $_SERVER['SERVER_NAME']))
         "key" => "9014609ad7074beda4be38b3011fec17",
         "secret" => "a15fa4e5a198c77683eaa24374b24740"
     ));
+    Configure::write('VLC', "/Applications/VLC.app/Contents/MacOS/VLC");
 }
 
 //Configure::write('EchonestApiConfig', array("GHFU00H0UE0MMNHIU", "3bca019443f7106f8bb8cf199e9c5659", "auid3zodSWS7Ul/XIypNSg"));

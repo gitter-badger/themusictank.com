@@ -65,7 +65,18 @@ class Album extends OEmbedable
         $apiResult 		= $this->LastfmAlbum->getArtistTopAlbums($artistName);
         $albums 		= array();
 
-		if(is_null($apiResult)) {
+		if(is_null($apiResult))
+        {
+            // Save the latest updated timestamp as to not
+            $this->LastfmAlbum->save(array(
+                "id"        => $this->getData("LastfmArtist.id"),
+                "lastsync"  => time()
+            ));
+
+            debug(array(
+                "id"        => $this->getData("LastfmArtist.id"),
+                "lastsync"  => time()
+            ));
 			return array();
 		}
 

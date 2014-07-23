@@ -28,7 +28,7 @@ class LastfmBehavior extends ModelBehavior {
     public function getLastFmAlbumDetails($model, $artistName, $albumName)
     {
         $data = $this->_post(array("method" => "album.getinfo", "artist" => $artistName, "album" => $albumName));
-        return (!is_null($data) && $data->album) ? $data->album : null;
+        return (!is_null($data) && property_exists($data, "album") && $data->album) ? $data->album : null;
     }
 
     public function cleanLastFmWikiText($model, $text)

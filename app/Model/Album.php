@@ -50,6 +50,7 @@ class Album extends OEmbedable
     {
         // only update when cache is out of date.
         $alreadyLoadedAlbums 	= Hash::get($this->data, "Albums");
+
         if(count($alreadyLoadedAlbums) > 0)
         {
             if(!$this->LastfmAlbum->requiresUpdate())
@@ -65,23 +66,19 @@ class Album extends OEmbedable
         $apiResult 		= $this->LastfmAlbum->getArtistTopAlbums($artistName);
         $albums 		= array();
 
+
 		if(is_null($apiResult))
         {
-            // Save the latest updated timestamp as to not
-            $this->LastfmAlbum->save(array(
+            // Save the latest updated timestamp as to not query all the time
+            $this->Artist->LastfmArtist->save(array(
                 "id"        => $this->getData("LastfmArtist.id"),
                 "lastsync"  => time()
             ));
 
-            debug(array(
-                "id"        => $this->getData("LastfmArtist.id"),
-                "lastsync"  => time()
-            ));
 			return array();
 		}
-
         // Ensure that we are dealing with arrays
-        if(is_object($apiResult)) {
+        elseif(is_object($apiResult)) {
         	$apiResult = array($apiResult);
         }
 
@@ -90,8 +87,8 @@ class Album extends OEmbedable
     		// Albums which do not have a musicbrainz id are not
     		// considered important enough. If we miss too many
     		// albums, maybe we could remove this. (Had to do it for tracks)
-            if(trim($album->mbid) != "")
-            {
+           // if(trim($album->mbid) != "")
+           // {
             	// Ensure the artist is the one we are expecting and that it's a new one.
                 if($album->artist->mbid == $artistMbid && !in_array($album->mbid, $existingAlbums))
                 {
@@ -111,7 +108,7 @@ class Album extends OEmbedable
                         )
                     );
                 }
-            }
+           // }
         }
 
         if(count($albums) > 0)

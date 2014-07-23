@@ -119,7 +119,7 @@ class AppModel extends Model {
 
     public function getImageFromUrl($remoteUrl, $previousUrl = null)
     {
-    	ini_set('memory_limit', '64M');
+    	ini_set('memory_limit', '128M');
 
         $ds             = DIRECTORY_SEPARATOR;
         $newname        = md5($remoteUrl);

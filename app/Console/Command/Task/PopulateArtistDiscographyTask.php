@@ -9,9 +9,13 @@ class PopulateArtistDiscographyTask extends Shell {
             SELECT
                 Artist.id
             FROM artists as Artist
-            WHERE Artist.id NOT IN (SELECT artist_id FROM albums)
+            LEFT JOIN lastfm_artists as Lastfm_Artist on Artist.id = Lastfm_Artist.artist_id
+            WHERE
+                Artist.id NOT IN (SELECT artist_id FROM albums)
+                AND Lastfm_Artist.lastsync < " .  $this->Artist->LastfmArtist->getExpiredRange() . "
             LIMIT 200;
         ");
+
 
         $this->out(sprintf("Found <comment>%s artist discographies</comment> that are out of sync.", count($expiredIds)));
 

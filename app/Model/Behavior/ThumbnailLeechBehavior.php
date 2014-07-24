@@ -68,6 +68,8 @@ class ThumbnailLeechBehavior extends ModelBehavior {
         if(file_exists($path . $ds . $newname . ".jpg")) {
             unlink($path . $ds . $newname . ".jpg");
         }
+
+        return $objTypeFolder . $ds . $subfolder . $ds . $newname;
     }
 
 

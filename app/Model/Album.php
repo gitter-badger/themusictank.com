@@ -1,16 +1,14 @@
 <?php
 
-App::uses('User', 'Model');
 App::uses('UserAlbumReviewSnapshot', 'Model');
-App::uses('AlbumReviewSnapshot', 'Model');
 App::uses('SubscribersAlbumReviewSnapshot', 'Model');
-App::uses('OEmbedable', 'Model');
 
-class Album extends OEmbedable
+class Album extends AppModel
 {
 	public $hasOne      = array('LastfmAlbum', "AlbumReviewSnapshot");
     public $hasMany     = array('Tracks' => array('order' => 'track_num ASC'));
     public $belongsTo   = array('Artist');
+    public $actsAs      = array('OEmbedable');
 
     public function beforeSave($options = array())
     {
@@ -103,8 +101,8 @@ class Album extends OEmbedable
                             "slug" => null,
                             "release_date" => 0,
                             "notability" => $album->{"@attr"}->rank,
-                            "image"     => empty($album->image[4]->{'#text'}) ? null : $this->getImageFromUrl($album->image[4]->{'#text'}, $this->getData("Album.image")),
-                            "image_src" => empty($album->image[4]->{'#text'}) ? null : $album->image[4]->{'#text'}
+                            "image"     => empty($album->image[3]->{'#text'}) ? null : $this->getImageFromUrl($album->image[3]->{'#text'}, $this->getData("Album.image")),
+                            "image_src" => empty($album->image[3]->{'#text'}) ? null : $album->image[3]->{'#text'}
                         )
                     );
                 }

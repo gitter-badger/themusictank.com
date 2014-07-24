@@ -289,10 +289,14 @@ class AjaxController extends AppController {
         $modelName = substr(ucfirst($model), 0, -1);
         $this->loadModel($modelName);
 
-        $instance = new $modelName();
-        $instance->getUpdatedSetBySlug($slug);
-
-        return $instance;
+        if($modelName == "Album") {
+            $this->Album->getFirstBySlug($slug);
+            return $this->Album;
+        }
+        else {
+            $this->Track->getBySlugContained($slug);
+            return $this->Track;
+        }
     }
 
 }

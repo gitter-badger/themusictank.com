@@ -1,15 +1,13 @@
 <?php
 
-App::uses('OEmbedable', 'Model');
-App::uses('TrackReviewSnapshot', 'Model');
 App::uses('UserTrackReviewSnapshot', 'Model');
 App::uses('SubscribersTrackReviewSnapshot', 'Model');
 
-class Track extends OEmbedable
+class Track extends AppModel
 {
 	public $hasOne 		= array('LastfmTrack', 'TrackReviewSnapshot', 'TrackYoutube');
 	public $belongsTo 	= array('Album');
-	public $actsAs 		= array('Containable');
+	public $actsAs 		= array('Containable', 'OEmbedable');
 	public $validate = array(
 		'title' => array(
 			'required' => array(
@@ -56,8 +54,7 @@ class Track extends OEmbedable
 
 	public function getSnapshotsByTrackIds($ids)
 	{
-		$reviews = new TrackReviewSnapshot();
-		return Hash::extract($reviews->find("all", array(
+		return Hash::extract($this->TrackReviewSnapshot->find("all", array(
 			"conditions" => array("track_id" => $ids)
 		)), "{n}.TrackReviewSnapshot");
 	}
@@ -120,40 +117,43 @@ class Track extends OEmbedable
 		$trackData 	= array();
 		$existing 	= $this->listCurrentCollection($albumId);
 
-		foreach($infos->tracks->track as $idx => $track)
+		if($infos->tracks)
 		{
-			if(property_exists($track, "mbid") && trim($track->mbid) != "")
+			foreach($infos->tracks->track as $idx => $track)
 			{
-				if(!array_key_exists($track->mbid, $existing))
+				if(property_exists($track, "mbid") && trim($track->mbid) != "")
 				{
-					if(property_exists($track, "duration"))
+					if(!array_key_exists($track->mbid, $existing))
 					{
-						$trackData[] = array(
-							"Track" => array(
-								"title" => $track->name,
-								"duration" => $track->duration,
-								"album_id" => $albumId,
-								"slug" => null,
-								"track_num" => $idx+1,
-								"LastfmTrack" => array(
-									"mbid" => $track->mbid,
-									"artist_name" => $track->artist->name
+						if(property_exists($track, "duration"))
+						{
+							$trackData[] = array(
+								"Track" => array(
+									"title" => $track->name,
+									"duration" => $track->duration,
+									"album_id" => $albumId,
+									"slug" => null,
+									"track_num" => $idx+1,
+									"LastfmTrack" => array(
+										"mbid" => $track->mbid,
+										"artist_name" => $track->artist->name
+									)
 								)
-							)
-						);
+							);
+						}
 					}
 				}
 			}
-		}
 
-		if(count($trackData) > 0)
-		{
-        	$slugs = $this->batchSlugs(Hash::extract($trackData, "{n}.Track.title"));
-	     	foreach($slugs as $idx => $slug) {
-        		$trackData[$idx]["Track"]["slug"] = $slug;
-        	}
+			if(count($trackData) > 0)
+			{
+	        	$slugs = $this->batchSlugs(Hash::extract($trackData, "{n}.Track.title"));
+		     	foreach($slugs as $idx => $slug) {
+	        		$trackData[$idx]["Track"]["slug"] = $slug;
+	        	}
 
-			return $this->saveMany($trackData, array("deep" => true));
+				return $this->saveMany($trackData, array("deep" => true));
+			}
 		}
 	}
 
@@ -223,8 +223,7 @@ class Track extends OEmbedable
 
 	public function getSnapshot()
 	{
-		$reviews = new TrackReviewSnapshot();
-		return $reviews->fetch($this->getData("Track.id"));
+		return $this->TrackReviewSnapshot->fetch($this->getData("Track.id"));
 	}
 
 	public function getUserSnapshot($userId)
@@ -241,9 +240,7 @@ class Track extends OEmbedable
 
 	public function toOEmbed($additionalData = array())
 	{
-		$reviews = new TrackReviewSnapshot();
-
-		$data = Hash::extract($reviews->fetch($this->getData("Track.id")), "TrackReviewSnapshot");
+		$data = Hash::extract($this->TrackReviewSnapshot->fetch($this->getData("Track.id")), "TrackReviewSnapshot");
 		unset($data["id"]);
 		unset($data["track_id"]);
 		unset($data["snapshot_ppf"]);

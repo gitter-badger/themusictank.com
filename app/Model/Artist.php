@@ -7,6 +7,7 @@ class Artist extends AppModel
 	public $hasOne 	= array('LastfmArtist', 'ArtistReviewSnapshot');
     public $hasMany = array('Albums' => array('order' => array('Albums.notability ASC')));
     public $order 	= array('Artist.name ASC');
+    public $actsAs   = array('ThumbnailLeech');
 	public $validate = array(
 		'name' => array(
 			'required' => array(
@@ -72,13 +73,6 @@ class Artist extends AppModel
         $reviews = new SubscribersArtistReviewSnapshot();
         return $reviews->fetch($this->getData("Artist.id"), $userIds);
     }
-
-/*
-    public function filterNewAndSave($artistList)
-    {
-        $list = $this->RdioArtist->filterNew($artistList);
-        return $this->saveMany($list, array('deep' => true));
-    }*/
 
     /**
      * Finds all artists that have been flagged as popular.

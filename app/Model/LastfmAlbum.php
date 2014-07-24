@@ -5,7 +5,7 @@ App::uses('Track', 'Model');
 class LastfmAlbum extends AppModel
 {
 	public $belongsTo   = array('Album');
-    public $actsAs      = array('Lastfm');
+    public $actsAs      = array('Lastfm', 'ThumbnailLeech');
 
     public function getExpiredRange()
     {

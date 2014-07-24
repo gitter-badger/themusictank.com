@@ -160,9 +160,6 @@ elseif(preg_match('/themusictank\.nvi/', $_SERVER['SERVER_NAME']))
         "key" => "9014609ad7074beda4be38b3011fec17",
         "secret" => "a15fa4e5a198c77683eaa24374b24740"
     ));
+
     Configure::write('VLC', "/Applications/VLC.app/Contents/MacOS/VLC");
 }
-
-//Configure::write('EchonestApiConfig', array("GHFU00H0UE0MMNHIU", "3bca019443f7106f8bb8cf199e9c5659", "auid3zodSWS7Ul/XIypNSg"));
-
-

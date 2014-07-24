@@ -6,7 +6,7 @@ class LastfmArtist extends AppModel
     const CACHE_SEARCH_TIMEOUT	= "weekly";
 
 	public $belongsTo = array('Artist');
-    public $actsAs = array('Lastfm');
+    public $actsAs = array('Lastfm', 'ThumbnailLeech');
 
     public function getExpiredRange()
     {

@@ -56,45 +56,23 @@ class ThumbnailLeechBehavior extends ModelBehavior {
         fwrite($fp, $rawdata);
         fclose($fp);
 
-        // Open the bigass image and save thumbnails from it (if we have enough buffering to do so)
-        if(filesize($path . $ds . $newname . ".jpg") < (54 * 1024))
+
+        // Small thumb and bigger header pic
+        foreach($this->_thumbnailTypes as $key => $size)
         {
-            $originalImg = $this->_imageCreateFromAny($path . $ds . $newname . ".jpg");
-            $originalSize = GetimageSize($path . $ds . $newname . ".jpg");
-            $originalX = ImagesX($originalImg);
-            $originalY = ImagesY($originalImg);
+            // Run imagemagik in the command line as to stay more efficient resources wize.
+            exec(sprintf("convert %s -resize %d %s", $path . $ds . $newname . ".jpg", $size, $path . $ds . $newname . $key . ".jpg") );
+        }
 
-            // Small thumb and bigger header pic
-            foreach($this->_thumbnailTypes as $key => $size)
-            {
-                $ratio = 1;
-                if($originalSize[0] > $size)
-                {
-                    $ratio = $size / $originalSize[0];
-                }
-                elseif ($originalSize[1] > $size)
-                {
-                    $ratio = $size / $originalSize[1];
-                }
-                $resizeWidth = (int)($originalSize[0] * $ratio);
-                $resizeHeight = (int)($originalSize[1] * $ratio);
-
-                $smallThumb = ImageCreateTrueColor($resizeWidth, $resizeHeight);
-                ImageCopyResampled($smallThumb, $originalImg, 0, 0, 0, 0, $resizeWidth+1, $resizeHeight+1, $originalX, $originalY);
-                ImageJPEG($smallThumb, $imagesRoot . $ds . $objTypeFolder . $ds . $subfolder . $ds . $newname . $key);
-                ImageDestroy($smallThumb);
-            }
-
-            ImageDestroy($originalImg);
-
-            return $objTypeFolder . $ds . $subfolder . $ds . $newname;
-        } else {
-            $this->log("[BIG IMAGE] " . $path . $ds . $newname . ".jpg is too big to be parsed by the cron.");
+        // Delete the file downloaded as to not take too much space
+        if(file_exists($path . $ds . $newname . ".jpg")) {
+            unlink($path . $ds . $newname . ".jpg");
         }
     }
 
 
-    private function _imageCreateFromAny($filepath) {
+    private function _imageCreateFromAny($filepath)
+    {
         $type = exif_imagetype($filepath); // [] if you don't have exif you could use getImageSize()
         $allowedTypes = array(
             1,  // [] gif
@@ -102,24 +80,13 @@ class ThumbnailLeechBehavior extends ModelBehavior {
             3,  // [] png
             6   // [] bmp
         );
-        if (!in_array($type, $allowedTypes)) {
-            return false;
-        }
+
         switch ($type) {
-            case 1 :
-                $im = imageCreateFromGif($filepath);
-            break;
-            case 2 :
-                $im = imageCreateFromJpeg($filepath);
-            break;
-            case 3 :
-                $im = imageCreateFromPng($filepath);
-            break;
-            case 6 :
-                $im = imageCreateFromBmp($filepath);
-            break;
+            case 1 : return imageCreateFromGif($filepath);
+            case 2 : return imageCreateFromJpeg($filepath);
+            case 3 : return imageCreateFromPng($filepath);
+            case 6 : return imageCreateFromBmp($filepath);
         }
-        return $im;
     }
 
 }

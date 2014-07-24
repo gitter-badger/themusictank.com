@@ -269,10 +269,10 @@ tmt.createLine(svg, <?php echo json_encode($profileTrackReviewSnapshot["curve"])
 <?php endif; ?>
 
 <?php if(isset($previousTrack)) : ?>
-tmt.createPie(".prevtrack.piechart", [{"type" : "smile", "value" : <?php echo $previousTrack["TrackReviewSnapshot"]["liking_pct"]; ?>}, {"type" : "meh", "value" : <?php echo $previousTrack["TrackReviewSnapshot"]["neutral_pct"]; ?>}, {"type" : "frown", "value" : <?php echo $previousTrack["TrackReviewSnapshot"]["disliking_pct"]; ?>}], {key: "prev chart-tanker"});
+tmt.createPie(".prevtrack.piechart", [{"type" : "smile", "value" : <?php echo (int)$previousTrack["TrackReviewSnapshot"]["liking_pct"]; ?>}, {"type" : "meh", "value" : <?php echo (int)$previousTrack["TrackReviewSnapshot"]["neutral_pct"]; ?>}, {"type" : "frown", "value" : <?php echo (int)$previousTrack["TrackReviewSnapshot"]["disliking_pct"]; ?>}], {key: "prev chart-tanker"});
 <?php endif; ?>
 
 <?php if(isset($nextTrack)) : ?>
-tmt.createPie(".nexttrack.piechart", [{"type" : "smile", "value" : <?php echo $nextTrack["TrackReviewSnapshot"]["liking_pct"]; ?>}, {"type" : "meh", "value" : <?php echo $nextTrack["TrackReviewSnapshot"]["neutral_pct"]; ?>}, {"type" : "frown", "value" : <?php echo $nextTrack["TrackReviewSnapshot"]["disliking_pct"]; ?>}], {key: "next chart-tanker"});
+tmt.createPie(".nexttrack.piechart", [{"type" : "smile", "value" : <?php echo (int)$nextTrack["TrackReviewSnapshot"]["liking_pct"]; ?>}, {"type" : "meh", "value" : <?php echo (int)$nextTrack["TrackReviewSnapshot"]["neutral_pct"]; ?>}, {"type" : "frown", "value" : <?php echo (int)$nextTrack["TrackReviewSnapshot"]["disliking_pct"]; ?>}], {key: "next chart-tanker"});
 <?php endif; ?>
 });</script>

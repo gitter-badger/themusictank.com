@@ -283,7 +283,9 @@ $(function() {
 			}
 		});
 
-		play.switchClass("fa-stop", "fa-play");
+		play.removeClass("fa-stop");
+		play.addClass("fa-play");
+
 		play.click(function() {
 			tmt.playingRange = null;
 			(player.getPlayerState() != 1) ?

@@ -61,7 +61,7 @@ class ThumbnailLeechBehavior extends ModelBehavior {
         foreach($this->_thumbnailTypes as $key => $size)
         {
             // Run imagemagik in the command line as to stay more efficient resources wize.
-            exec(sprintf("convert %s -resize %d %s", $path . $ds . $newname . ".jpg", $size, $path . $ds . $newname . $key . ".jpg") );
+            exec(sprintf("convert %s -resize %d %s", $path . $ds . $newname . ".jpg", $size, $path . $ds . $newname . $key ) );
         }
 
         // Delete the file downloaded as to not take too much space

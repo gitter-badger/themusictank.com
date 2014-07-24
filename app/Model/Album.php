@@ -8,7 +8,7 @@ class Album extends AppModel
 	public $hasOne      = array('LastfmAlbum', "AlbumReviewSnapshot");
     public $hasMany     = array('Tracks' => array('order' => 'track_num ASC'));
     public $belongsTo   = array('Artist');
-    public $actsAs      = array('OEmbedable');
+    public $actsAs      = array('OEmbedable', 'ThumbnailLeech');
 
     public function beforeSave($options = array())
     {
@@ -85,8 +85,8 @@ class Album extends AppModel
     		// Albums which do not have a musicbrainz id are not
     		// considered important enough. If we miss too many
     		// albums, maybe we could remove this. (Had to do it for tracks)
-           // if(trim($album->mbid) != "")
-           // {
+            if(trim($album->mbid) != "")
+            {
             	// Ensure the artist is the one we are expecting and that it's a new one.
                 if($album->artist->mbid == $artistMbid && !in_array($album->mbid, $existingAlbums))
                 {
@@ -101,12 +101,12 @@ class Album extends AppModel
                             "slug" => null,
                             "release_date" => 0,
                             "notability" => $album->{"@attr"}->rank,
-                            "image"     => empty($album->image[3]->{'#text'}) ? null : $this->getImageFromUrl($album->image[3]->{'#text'}, $this->getData("Album.image")),
+                            "image"     => empty($album->image[3]->{'#text'}) ? null : $this->getImageFromUrl($album->image[3]->{'#text'}, Hash::check($this->data, "Album.image") ? $this->getData("Album.image") : null),
                             "image_src" => empty($album->image[3]->{'#text'}) ? null : $album->image[3]->{'#text'}
                         )
                     );
                 }
-           // }
+            }
         }
 
         if(count($albums) > 0)

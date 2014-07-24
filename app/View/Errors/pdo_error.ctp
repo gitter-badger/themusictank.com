@@ -11,6 +11,23 @@
     <div class="row">
         <div class="md-col-12">
         <?php if (Configure::read('debug') > 0): ?>
+
+            <h2><?php echo __d('cake_dev', 'Database Error'); ?></h2>
+            <p class="error">
+                <strong><?php echo __d('cake_dev', 'Error'); ?>: </strong>
+                <?php echo $message; ?>
+            </p>
+            <?php if (!empty($error->queryString)) : ?>
+                <p class="notice">
+                    <strong><?php echo __d('cake_dev', 'SQL Query'); ?>: </strong>
+                    <?php echo h($error->queryString); ?>
+                </p>
+            <?php endif; ?>
+            <?php if (!empty($error->params)) : ?>
+                    <strong><?php echo __d('cake_dev', 'SQL Query Params'); ?>: </strong>
+                    <?php echo Debugger::dump($error->params); ?>
+            <?php endif; ?>
+
             <?php echo $this->element('exception_stack_trace'); ?>
         <?php else : ?>
             <script>$.post('/ajax/bugreport/', {'type': '500', 'where': window.location.pathname, 'user_id': null}, $.noop);</script>

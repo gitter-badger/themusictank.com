@@ -70,11 +70,13 @@
 		<ul class="nav nav-tabs" role="tablist">
 		  <li class="active"><a href="#error" role="tab" data-toggle="tab">Error log</a></li>
 		  <li><a href="#debug" role="tab" data-toggle="tab">Debug log</a></li>
+		  <li><a href="#cron" role="tab" data-toggle="tab">Cron log</a></li>
 		</ul>
 
 		<div class="tab-content">
 		  <div class="tab-pane active" id="error"><div class="log"><pre><?php echo $logError; ?></pre></div></div>
 		  <div class="tab-pane" id="debug"><div class="log"><pre><?php echo $logDebug; ?></pre></div></div>
+		  <div class="tab-pane" id="cron"><div class="log"><pre><?php echo $logCron; ?></pre></div></div>
 		</div>
 
 	</div>

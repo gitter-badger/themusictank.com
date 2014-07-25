@@ -92,6 +92,7 @@ class Album extends AppModel
                 {
                     $albums[] = array(
                         "LastfmAlbum" => array(
+                            "id"   => $this->getData("LastfmArtist.id"),
                             "mbid" => $album->mbid
                         ),
                         "Album" => array(

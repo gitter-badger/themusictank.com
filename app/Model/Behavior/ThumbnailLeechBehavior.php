@@ -57,15 +57,16 @@ class ThumbnailLeechBehavior extends ModelBehavior {
         fclose($fp);
 
 
-        // Small thumb and bigger header pic
-        foreach($this->_thumbnailTypes as $key => $size)
+        if(file_exists($path . $ds . $newname . ".jpg"))
         {
-            // Run imagemagik in the command line as to stay more efficient resources wize.
-            exec(sprintf("convert %s -resize %d %s", $path . $ds . $newname . ".jpg", $size, $path . $ds . $newname . $key ) );
-        }
+            // Small thumb and bigger header pic
+            foreach($this->_thumbnailTypes as $key => $size)
+            {
+                // Run imagemagik in the command line as to stay more efficient resources wize.
+                exec(sprintf("convert %s -resize %d %s", $path . $ds . $newname . ".jpg", $size, $path . $ds . $newname . $key ) );
+            }
 
-        // Delete the file downloaded as to not take too much space
-        if(file_exists($path . $ds . $newname . ".jpg")) {
+            // Delete the file downloaded as to not take too much space
             unlink($path . $ds . $newname . ".jpg");
         }
 

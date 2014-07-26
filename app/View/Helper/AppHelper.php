@@ -49,10 +49,10 @@ class AppHelper extends Helper {
 		$ds = DIRECTORY_SEPARATOR;
 
 		if($image && file_exists(WWW_ROOT . "img" . $ds . "cache" . $ds . $image . "_" . $type . ".jpg")) {
-			$imgsrc = $ds . "img" . $ds . "cache" . $ds . $image . "_" . $type . ".jpg";
+			$imgsrc = "/img/cache/" . $image . "_" . $type . ".jpg";
 		}
 		else {
-			$imgsrc = $ds . "img" . $ds . "placeholder.png";
+			$imgsrc = "/img/placeholder.png";
 		}
 
 		return $imgsrc;

@@ -22,7 +22,7 @@ class ArtistsController extends AppController {
      */
     public function index()
     {
-        $this->set("popularArtists",    $this->Artist->findPopular(8));
+        $this->set("popularArtists",    $this->Artist->findPopular(12));
         $this->set("artistCategories",  $this->Artist->getCategories());
         $this->set("newReleases",       $this->Artist->Albums->getNewReleases(8));
 
@@ -45,7 +45,17 @@ class ArtistsController extends AppController {
 
         if(!$data)
         {
-            throw new NotFoundException(sprintf(__("Could not find the artist %s"), $artistSlug));
+        	// query LastFm before 404-ing
+    		if ($this->Artist->LastfmArtist->search($artistSlug,3)) {
+    			// if we saved something, assume it's loadable.
+        		$data = $this->Artist->getBySlug($artistSlug);
+        		if(!$data) {
+    				throw new NotFoundException(sprintf(__("Could not find the artist %s"), $artistSlug));
+        		}
+    		}
+    		else {
+    			throw new NotFoundException(sprintf(__("Could not find the artist %s"), $artistSlug));
+    		}
         }
 
         $this->set("artist",        $data["Artist"]);
@@ -93,6 +103,7 @@ class ArtistsController extends AppController {
      */
     public function search()
     {
+    	// http://technet.weblineindia.com/web/pagination-with-custom-queries-in-cakephp/
         if($this->request->is('get'))
         {
             $this->set('artists', $this->Paginator->paginate('Artist', array('Artist.name LIKE' => "%". trim($this->request->query['name'])."%")));

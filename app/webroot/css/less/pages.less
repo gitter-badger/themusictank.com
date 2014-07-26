@@ -1,10 +1,26 @@
 h2 {
-	color:#19a68d;
-	text-shadow:0 1px 1px rgba(0,0,0,.2);
+	color:darken(@themeColorHighlight, 15%); //#19a68d;
 }
 h3, h4 {
-	color:#57ba93;
+	color:@themeColorHighlight;
 }
+
+a {
+	color:@themeColorHighlight;
+}
+
+
+.report-bug {
+	text-shadow:none;
+	float:right;
+	color:@themeColorHighlight;
+	cursor: pointer;
+
+	&:hover {
+		color:lighten(@themeColorHighlight, 10%);
+	}
+}
+
 
 .browse-by-letter {
 	div {
@@ -62,14 +78,14 @@ h3, h4 {
 		li {
 			list-style-type: none;
 			clear:left;
-			margin:0;
+			margin:0 0 1em 0;
+			height:40px;
 			img {
 				width:40px;
 				height:40px;
-				min-height: 40px;
-				min-width: 40px;
 				float:left;
 				margin-right:1em;
+				box-shadow:0 1px 3px rgba(0,0,0,0.35);
 			}
 		}
 	}
@@ -80,6 +96,7 @@ time {
     color:#666;
 }
 
+/*
 .discography,
 .new-album-releases {
 	h2 {
@@ -95,7 +112,7 @@ time {
 		margin-top:10px;
 		font-size:18px;
 	}
-}
+}*/
 
 .track-details {
 	ol li {
@@ -117,23 +134,6 @@ time {
 	margin:2em 0;
 }
 
-
-.site-foot  {
-	background:#efefef;
-	border-top:1px solid #dedede;
-	margin-top:20px;
-	height:80px;
-	clear:both;
-
-	.social {
-		float:left;
-		clear:left;
-	}
-	.website {
-		float:right;
-		clear:right;
-	}
-}
 
 
 .map {
@@ -204,6 +204,10 @@ time {
 		clear:both;
 		width:50%;
 		margin:auto;
+
+		img {
+			max-width:100%;
+		}
 	}
 
 	.time-header {
@@ -231,15 +235,14 @@ time {
 	}
 }
 
-.notifications .new,
-.colored {
-	background:#19a68d url(/img/pattern-1.png) top left repeat;
+/*
+.notifications .new, .jumbotron {
+	background:@themeColorNeutral  url(/img/triangles.png) top left repeat;
 	border-radius: 0;
-	border-bottom:1px solid #56877D;
-	border-top:1px solid #56877D;
+	border-bottom:1px solid darken(@themeColorNeutral, 50%);
 	color:#fff;
 	margin-bottom:0;
-}
+}*/
 
 .user-badge {
 	text-align: center;
@@ -255,11 +258,14 @@ time {
 		.media-body {
 			min-width: 120px;
 		}
+		img {
+			max-width: 100%;
+		}
 	}
 }
 
 .introduction {
-	text-shadow:0 1px 2px rgba(0,0,0,.4);
+	text-shadow:-1px -1px 0 @themeColorDark;
 }
 
 .review-line {
@@ -285,4 +291,65 @@ time {
 }
 .review-line.odd {
 	background:#fff;// url(/img/pattern-1.png) top left repeat;
+}
+
+.score {
+	background:rgba(0,0,0,.6);
+	color:#fff;
+	width:120px;
+	height:120px;
+	z-index: 1;
+	padding-top:30px;
+	font-size:3em;
+	text-align:center;
+	border-radius: 60px;
+	border:1px solid #eee;
+	float:right;
+	box-shadow:0 1px 4px rgba(0,0,0,.6);
+	transform:rotate(5deg);
+	-ms-transform:rotate(5deg);
+	-webkit-transform:rotate(5deg);
+}
+
+
+.tiles {
+	.album, .track {
+		margin-bottom:35px;
+
+		.thumbnail {
+			margin-bottom:0;
+			img {
+				width:100%;
+			}
+		}
+
+		h3, time, p {
+			margin:0 3%;
+		}
+		h3 {
+			a {
+				font-size:75%;
+			}
+		}
+		time {
+			display: block;
+		}
+	}
+}
+
+.royalSlider {
+	height:300px;
+}
+
+.loading-wrap {
+	i {
+		display:block;
+		margin:100px auto;
+		width:100px;
+		font-size:5em;
+	}
+}
+
+.new-album-releases {
+	margin-top:2em;
 }

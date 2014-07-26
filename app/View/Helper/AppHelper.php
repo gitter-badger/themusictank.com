@@ -42,19 +42,30 @@ class AppHelper extends Helper {
 		return sprintf("%s %s", ($title_for_layout) ? $title_for_layout . " &mdash; " : "",  __("The Music Tank"));
 	}
 
-	public function getImageUrl($obj, $addImplicitPath = false)
+	public function getImageUrl($obj, $type = "thumb")
 	{
-		$implicit = "/img/";
-		$image = Hash::get($obj, "image");
+		$image = $obj ? Hash::get($obj, "image") : null;
 		$imgsrc = "";
+		$ds = DIRECTORY_SEPARATOR;
 
-		if($image && file_exists(WWW_ROOT . ($addImplicitPath ? $implicit : "") . $image)) {
-			$imgsrc = $image;
+		if($image && file_exists(WWW_ROOT . "img" . $ds . "cache" . $ds . $image . "_" . $type . ".jpg")) {
+			$imgsrc = $ds . "img" . $ds . "cache" . $ds . $image . "_" . $type . ".jpg";
 		}
 		else {
-			$imgsrc = "placeholder.png";
+			$imgsrc = $ds . "img" . $ds . "placeholder.png";
 		}
 
-		return $addImplicitPath ? $implicit . $imgsrc : $imgsrc;
+		return $imgsrc;
+	}
+
+	public function getTrackPlayerAttributes($artist, $track, $trackYoutube)
+	{
+		if(Hash::check($trackYoutube, "youtube_key_manual")) {
+			return sprintf('data-song-vid="%s"', $trackYoutube["youtube_key_manual"]);
+		}
+		elseif(Hash::check($trackYoutube, "youtube_key")) {
+			return sprintf('data-song-vid="%s"', $trackYoutube["youtube_key"]);
+		}
+		return sprintf('data-song="%s/%s"', $artist["slug"], $track["slug"]);
 	}
 }

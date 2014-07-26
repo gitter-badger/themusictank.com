@@ -4,7 +4,7 @@ App::uses('ArtistReviewSnapshot', 'Model');
 
 class Artist extends AppModel
 {
-	public $hasOne 	= array('LastfmArtist');
+	public $hasOne 	= array('LastfmArtist', 'ArtistReviewSnapshot');
     public $hasMany = array('Albums' => array('order' => array('Albums.notability ASC')));
     public $order 	= array('Artist.name ASC');
 	public $validate = array(
@@ -33,31 +33,11 @@ class Artist extends AppModel
         // Secondly, query our own database for results.
         return $this->find('all', array(
             "conditions" => array("Artist.name LIKE" => sprintf("%%%s%%", $query)),
-            "fields"     => array("Artist.slug", "Artist.name"),
-            "limit"      => $limit
+            "fields"     => array("Artist.slug", "Artist.name", "LastfmArtist.image"),
+            "limit"      => $limit,
+            "order"		 => array("LOCATE('".$query."', Artist.name)", "Artist.name")
         ));
     }
-
-/*
-    public function getUpdatedSetBySlug($slug, $addCurrentUser = false)
-    {
-        $syncValues = $this->find("first", array(
-            "conditions" => array("Artist.slug" => $slug),
-            "fields"    => array("Artist.*", "LastfmArtist.*")
-        ));
-
-        if(count($syncValues))
-        {
-            $this->LastfmArtist->data = $syncValues;
-            $this->LastfmArtist->updateCached();
-            $syncValues["LastfmArtist"] = $this->LastfmArtist->data["LastfmArtist"];
-
-            $this->data = $syncValues;
-        }
-
-        return $syncValues;
-    }*/
-
 
     public function getBySlug($slug)
     {
@@ -91,13 +71,6 @@ class Artist extends AppModel
     {
         $reviews = new SubscribersArtistReviewSnapshot();
         return $reviews->fetch($this->getData("Artist.id"), $userIds);
-    }
-
-
-    public function filterNewAndSave($artistList)
-    {
-        $list = $this->RdioArtist->filterNew($artistList);
-        return $this->saveMany($list, array('deep' => true));
     }
 
     /**

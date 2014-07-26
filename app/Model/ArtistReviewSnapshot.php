@@ -8,14 +8,19 @@ class ArtistReviewSnapshot extends TableSnapshot
 
     public function fetch($artistId)
     {
-		$this->data["Artist"] = array("id" => $artistId);
-
 		$existing = $this->findByArtistId($artistId);
 		if ($existing) {
-			$this->data["ArtistReviewSnapshot"] = Hash::extract($existing, "ArtistReviewSnapshot");
+			$this->data[$this->alias] = Hash::extract($existing, $this->alias);
 		}
 
-        $result = $this->updateCached( array("ReviewFrames.artist_id" => $artistId) );
+        $result = $this->updateCached(array("ReviewFrames.artist_id" => $artistId));
         return ($result)  ? $result : array();
+    }
+
+    public function getExtraSaveFields($conditions = array())
+    {
+    	$extra = parent::getExtraSaveFields($conditions);
+		$extra = Hash::insert($extra, "artist_id", $conditions["ReviewFrames.artist_id"]);
+    	return $extra;
     }
 }

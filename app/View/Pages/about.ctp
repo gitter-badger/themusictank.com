@@ -1,12 +1,13 @@
-
-<section class="jumbotron colored introduction">
-	<div class="container">
-	    <h1><?php echo __("About Us"); ?></h1>
-	    <p>We want to give you an easy and fun way to rate tracks and albums accurately. By integrating with various music streaming service, we aspire to collect opinions on the music you listen to.</p>
-	    <p>First launched on the 30th of December 1999, The Music Tank has always been around under a form or another</p>
-	    <p>The Music Tank is a team of 2 music enthusiasts who work together during our free time to build a place where people come hang out and discuss music.</p>
-    </div>
-</section>
+<div class="header-wrapper">
+	<section class="jumbotron introduction">
+		<div class="container">
+		    <h1><?php echo __("About Us"); ?></h1>
+		    <p>We want to give you an easy and fun way to rate tracks and albums accurately. By integrating with various music streaming service, we aspire to collect opinions on the music you listen to.</p>
+		    <p>First launched on the 30th of December 1999, The Music Tank has always been around under a form or another</p>
+		    <p>The Music Tank is a team of 2 music enthusiasts who work together during our free time to build a place where people come hang out and discuss music.</p>
+	    </div>
+	</section>
+</div>
 
 <section class="map">
     <article>

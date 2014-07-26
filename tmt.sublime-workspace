@@ -4,76 +4,80 @@
 		"selected_items":
 		[
 			[
-				"$al",
-				"$alreadyLoadedAlbums"
+				"bar",
+				"barPct"
 			],
 			[
-				"$ex",
-				"$existingAlbums"
-			],
-			[
-				"$arti",
-				"$artistId"
-			],
-			[
-				"$e",
-				"$existingAlbums"
-			],
-			[
-				"$o",
-				"$count"
-			],
-			[
-				"$albu",
-				"$albums"
-			],
-			[
-				"$art",
-				"$artist"
-			],
-			[
-				"$tra",
-				"$trackSlug"
-			],
-			[
-				"al",
-				"album_id"
+				"is_A",
+				"is_array"
 			],
 			[
 				"$track",
-				"$trackIds"
+				"$trackYoutube"
 			],
 			[
-				"list",
-				"listCurrentCollection"
+				"video",
+				"videoId"
 			],
 			[
-				"$tr",
-				"$track"
+				"$tra",
+				"$trackName"
 			],
 			[
-				"artist",
-				"artist_name"
+				"$art",
+				"$artistName"
 			],
 			[
-				"$trac",
-				"$trackData"
+				"Alb",
+				"Album"
 			],
 			[
-				"Last",
-				"LastfmAlbum"
+				"st",
+				"stretchFill"
 			],
 			[
-				"update",
-				"updateDiscography"
+				"$end",
+				"$endTop"
 			],
 			[
-				"$artist",
-				"$artistInfo"
+				"$start",
+				"$startTop"
 			],
 			[
-				"last",
-				"LastfmArtist"
+				"$ar",
+				"$arguments"
+			],
+			[
+				"background",
+				"background-size"
+			],
+			[
+				"$re",
+				"$result"
+			],
+			[
+				"TRa",
+				"Track"
+			],
+			[
+				"end",
+				"endforeach"
+			],
+			[
+				"Album",
+				"AlbumReviewSnapshot"
+			],
+			[
+				"$al",
+				"$albumId"
+			],
+			[
+				"getBe",
+				"getBelongsToData"
+			],
+			[
+				"color",
+				"colored"
 			],
 			[
 				"tblA",
@@ -82,6 +86,10 @@
 			[
 				"tbl",
 				"tblArtists"
+			],
+			[
+				"artist",
+				"artist_id"
 			],
 			[
 				"$",
@@ -96,6 +104,10 @@
 				"LastfmArtist"
 			],
 			[
+				"$arti",
+				"$artistValidationList"
+			],
+			[
 				"$current",
 				"$currentArtistList"
 			],
@@ -104,8 +116,8 @@
 				"array_keys"
 			],
 			[
-				"$re",
-				"$returnList"
+				"Last",
+				"LastfmArtist"
 			],
 			[
 				"CACH",
@@ -192,10 +204,6 @@
 				"text-align"
 			],
 			[
-				"background",
-				"background-image"
-			],
-			[
 				"back",
 				"background-color"
 			],
@@ -236,10 +244,6 @@
 				"getNodeId"
 			],
 			[
-				"end",
-				"endif"
-			],
-			[
 				"$main",
 				"$mainCategory"
 			],
@@ -258,6 +262,10 @@
 			[
 				"select",
 				"selected"
+			],
+			[
+				"$e",
+				"$event"
 			],
 			[
 				"$ev",
@@ -460,6 +468,10 @@
 				"execute"
 			],
 			[
+				"$albu",
+				"$albumData"
+			],
+			[
 				"border",
 				"border-radius"
 			],
@@ -480,6 +492,10 @@
 				"padding-top"
 			],
 			[
+				"list",
+				"list-style-type"
+			],
+			[
 				"inlin",
 				"inline-block"
 			],
@@ -498,33 +514,81 @@
 			[
 				"r",
 				"rgba(r,g,b,a)"
-			],
-			[
-				"fun",
-				"function"
-			],
-			[
-				"A",
-				"APK_PATH_PATTERN"
-			],
-			[
-				"url",
-				"urlencode"
-			],
-			[
-				"backgorund-",
-				"background-size"
 			]
 		]
 	},
 	"buffers":
 	[
 		{
+			"file": "app/View/Tracks/view.ctp",
+			"settings":
+			{
+				"buffer_size": 16537,
+				"line_ending": "Unix"
+			}
+		},
+		{
+			"file": "app/Model/Behavior/YoutubeBehavior.php",
+			"settings":
+			{
+				"buffer_size": 890,
+				"line_ending": "Unix"
+			}
+		},
+		{
+			"file": "app/Controller/ArtistsController.php",
+			"settings":
+			{
+				"buffer_size": 4378,
+				"line_ending": "Unix"
+			}
+		},
+		{
+			"file": "app/Model/Track.php",
+			"settings":
+			{
+				"buffer_size": 6720,
+				"line_ending": "Unix"
+			}
+		},
+		{
+			"file": "app/Model/AppModel.php",
+			"settings":
+			{
+				"buffer_size": 8016,
+				"line_ending": "Unix"
+			}
+		},
+		{
+			"file": "app/Console/Command/Task/TrackWavesSyncTask.php",
+			"settings":
+			{
+				"buffer_size": 2345,
+				"line_ending": "Unix"
+			}
+		},
+		{
 			"file": "app/Config/bootstrap.php",
 			"settings":
 			{
-				"buffer_size": 7178,
-				"line_ending": "Windows"
+				"buffer_size": 7049,
+				"line_ending": "Unix"
+			}
+		},
+		{
+			"file": "app/webroot/css/less/header.less",
+			"settings":
+			{
+				"buffer_size": 3028,
+				"line_ending": "Unix"
+			}
+		},
+		{
+			"file": "app/View/Artists/view.ctp",
+			"settings":
+			{
+				"buffer_size": 2679,
+				"line_ending": "Unix"
 			}
 		}
 	],
@@ -580,144 +644,147 @@
 	},
 	"file_history":
 	[
-		"/C/Program Files (x86)/Steam/SteamApps/common/Omerta/AppData.exe.config",
-		"/C/Users/Francois/Documents/htdocs/tmt/app/Model/LastfmArtist.php",
-		"/C/Users/Francois/Documents/htdocs/tmt/app/Model/LastfmAlbum.php",
-		"/C/Users/Francois/Documents/htdocs/tmt/app/Model/LastfmTrack.php",
-		"/C/Users/Francois/Documents/htdocs/tmt/app/Controller/ArtistsController.php",
-		"/C/Users/Francois/Documents/htdocs/tmt/app/Controller/AlbumsController.php",
-		"/C/Users/Francois/Documents/htdocs/tmt/app/Controller/AjaxController.php",
-		"/C/Users/Francois/Documents/htdocs/tmt/app/Model/Album.php",
-		"/C/Users/Francois/Documents/htdocs/tmt/.gitignore",
-		"/C/Users/Francois/Documents/htdocs/tmt/lib/Cake/LICENSE.txt",
-		"/C/Users/Francois/Documents/htdocs/tmt/app/Model/Artist.php",
-		"/C/Users/Francois/Documents/htdocs/tmt/app/View/Elements/albumTiledList.ctp",
-		"/C/Users/Francois/Documents/htdocs/tmt/app/View/Elements/graph.ctp",
-		"/C/Users/Francois/Documents/htdocs/tmt/app/View/Pages/about.ctp",
-		"/C/Users/Francois/Documents/htdocs/tmt/app/Model/Track.php",
-		"/C/Users/Francois/Documents/htdocs/tmt/app/Controller/TracksController.php",
-		"/C/Users/Francois/Documents/htdocs/tmt/app/View/Elements/userbadge.ctp",
-		"/C/Users/Francois/Documents/htdocs/tmt/app/Model/AppModel.php",
-		"/C/Users/Francois/Documents/htdocs/tmt/app/Model/Behavior/LastfmBehavior.php",
-		"/C/Users/Francois/Documents/htdocs/tmt/app/View/Artists/view.ctp",
-		"/C/Users/Francois/Documents/htdocs/tmt/app/Model/TableSnapshot.php",
-		"/C/Users/Francois/Documents/htdocs/tmt/app/Model/ReviewFrame.php",
-		"/C/Users/Francois/Documents/htdocs/tmt/app/View/Ajax/getdiscography.ctp",
-		"/C/Users/Francois/Documents/htdocs/tmt/app/Model/ImplicitRelationModel.php",
-		"/C/Users/Francois/Documents/htdocs/tmt/lib/Cake/Cache/Engine/RedisEngine.php",
-		"/C/Users/Francois/Documents/htdocs/tmt/README.md",
-		"/C/Users/Francois/Documents/htdocs/tmt/lib/Cake/Test/test_app/Vendor/css/test_asset.css",
-		"/C/Users/Francois/Documents/htdocs/tmt/tmt.sublime-project",
-		"/C/Users/Francois/Documents/htdocs/tmt/lib/Cake/Test/Case/AllRoutingTest.php",
-		"/C/Users/Francois/Documents/htdocs/tmt/app/Model/AlbumReviewSnapshot.php",
-		"/C/Users/Francois/Documents/htdocs/tmt/app/Lib/ActivityListener.php",
-		"/C/Users/Francois/Documents/htdocs/tmt/app/webroot/js/tmt.js",
-		"/C/Users/Francois/Documents/htdocs/tmt/app/View/Tracks/view.ctp",
-		"/C/Users/Francois/Documents/htdocs/tmt/app/View/Tracks/by_user.ctp",
-		"/Users/ffaubert/Sites/themusictank.com/app/View/Elements/graph.ctp",
-		"/Users/ffaubert/Sites/themusictank.com/app/View/Helper/MetaTagsHelper.php",
-		"/Users/ffaubert/Sites/themusictank.com/app/Model/Tracks.php",
-		"/Users/ffaubert/Sites/themusictank.com/app/webroot/css/less/player.less",
-		"/Users/ffaubert/Sites/themusictank.com/app/webroot/css/less/pages.less",
-		"/Users/ffaubert/Sites/themusictank.com/app/webroot/css/less/header.less",
-		"/Users/ffaubert/Sites/themusictank.com/app/View/Pages/about.ctp",
-		"/Users/ffaubert/Sites/themusictank.com/app/View/Elements/profilesmenu.ctp",
-		"/Users/ffaubert/Sites/themusictank.com/app/Controller/PagesController.php",
-		"/Users/ffaubert/Sites/themusictank.com/app/View/Profiles/view.ctp",
-		"/Users/ffaubert/Sites/themusictank.com/app/View/Profiles/achievements.ctp",
-		"/Users/ffaubert/Sites/themusictank.com/app/View/Profiles/subscriptions.ctp",
-		"/Users/ffaubert/Sites/themusictank.com/app/View/Profiles/followers.ctp",
-		"/Users/ffaubert/Sites/themusictank.com/app/View/Elements/followButton.ctp",
-		"/Users/ffaubert/Sites/themusictank.com/lib/Cake/TestSuite/templates/footer.php",
-		"/Users/ffaubert/Sites/themusictank.com/app/View/Elements/foot.ctp",
-		"/Users/ffaubert/Sites/themusictank.com/app/View/Users/dashboard.ctp",
-		"/Users/ffaubert/Sites/themusictank.com/app/View/Tracks/by_user.ctp",
-		"/Users/ffaubert/Sites/themusictank.com/app/View/Artists/view.ctp",
-		"/Users/ffaubert/Sites/themusictank.com/app/Model/RdioArtist.php",
-		"/Users/ffaubert/Sites/themusictank.com/app/Model/LastfmArtist.php",
-		"/Users/ffaubert/Sites/themusictank.com/app/Model/RdioAlbum.php",
-		"/Users/ffaubert/Sites/themusictank.com/README.md",
-		"/Users/ffaubert/Sites/themusictank.com/app/webroot/js/tmt.js",
-		"/Users/ffaubert/Sites/themusictank.com/app/webroot/css/less/charts.less",
+		"/Users/ffaubert01/Sites/themusictank.com/app/Model/Album.php",
+		"/Users/ffaubert01/Sites/themusictank.com/app/Console/Command/Task/PopulateArtistDiscographyTask.php",
+		"/Users/ffaubert01/Sites/themusictank.com/app/Console/Command/AppShell.php",
+		"/Users/ffaubert01/Sites/themusictank.com/app/Model/TrackYoutube.php",
+		"/Users/ffaubert01/Sites/themusictank.com/app/tmp/logs/error.log",
+		"/Users/ffaubert01/Sites/themusictank.com/app/Model/Artist.php",
+		"/Users/ffaubert01/Sites/themusictank.com/app/Model/LastfmArtist.php",
+		"/Users/ffaubert01/Sites/themusictank.com/app/tmp/cache/models/tmt_cake_model_default_themusictank_albums",
+		"/Users/ffaubert01/Sites/themusictank.com/app/Model/LastfmAlbum.php",
+		"/Users/ffaubert01/Sites/themusictank.com/app/Console/Command/Task/PopulateAlbumDetailsTask.php",
+		"/Users/ffaubert01/Sites/themusictank.com/app/View/Albums/view.ctp",
+		"/Users/ffaubert01/Sites/themusictank.com/app/View/Elements/albumGraph.ctp",
+		"/Users/ffaubert01/Sites/themusictank.com/app/webroot/js/tmt.js",
+		"/Users/ffaubert01/Sites/themusictank.com/app/View/Helper/AppHelper.php",
+		"/Users/ffaubert01/Sites/themusictank.com/README.md",
+		"/Users/ffaubert01/Sites/themusictank.com/lib/Cake/Cache/Engine/RedisEngine.php",
+		"/Users/ffaubert01/Sites/themusictank.com/app/Config/Schema/schema.php",
+		"/Users/ffaubert01/Sites/themusictank.com/app/Model/TrackReviewSnapshot.php",
+		"/Users/ffaubert01/Sites/themusictank.com/app/Console/Command/Task/TrackWavesSyncTask.php",
+		"/Users/ffaubert01/Sites/themusictank.com/app/Model/Track.php",
+		"/Users/ffaubert01/Sites/themusictank.com/app/Controller/AjaxController.php",
+		"/Users/ffaubert01/Library/Application Support/Sublime Text 3/Packages/User/Preferences.sublime-settings",
+		"/Users/ffaubert01/Sites/themusictank.com/app/View/Albums/search.ctp",
+		"/Users/ffaubert01/Sites/themusictank.com/app/Model/Behavior/LastfmBehavior.php",
+		"/Users/ffaubert01/Sites/themusictank.com/app/Model/Albums.php",
+		"/Users/ffaubert01/Sites/themusictank.com/app/tmp/cache/models/tmt_cake_model_default_themusictank_lastfm_albums",
+		"/Users/ffaubert01/Sites/themusictank.com/app/tmp/cache/models/tmt_cake_model_default_themusictank_album_review_snapshots",
+		"/Users/ffaubert01/Sites/themusictank.com/app/webroot/css/less/charts.less",
+		"/Users/ffaubert01/Sites/themusictank.com/app/Controller/TracksController.php",
+		"/Users/ffaubert01/Sites/themusictank.com/app/View/Artists/view.ctp",
+		"/Users/ffaubert01/Sites/themusictank.com/app/View/Artists/index.ctp",
+		"/Users/ffaubert01/Sites/themusictank.com/app/View/Helper/ChartHelper.php",
+		"/Users/ffaubert01/Sites/themusictank.com/app/View/Elements/chartsmenu.ctp",
+		"/Users/ffaubert01/Sites/themusictank.com/app/Model/Config.php",
+		"/Users/ffaubert01/Sites/themusictank.com/app/View/Tracks/by_subscriptions.ctp",
+		"/Users/ffaubert01/Sites/themusictank.com/app/Model/WavParser.php",
+		"/Users/ffaubert01/Sites/themusictank.com/app/tmp/cache/youtubedl/.keep",
+		"/Users/ffaubert01/Sites/themusictank.com/app/View/Tracks/view.ctp",
+		"/Users/ffaubert01/Sites/themusictank.com/app/Model/Behavior/YoutubeBehavior.php",
+		"/Users/ffaubert01/Sites/themusictank.com/app/Model/Youtube.php",
+		"/Users/ffaubert01/Sites/themusictank.com/app/Model/AppModel.php",
+		"/Users/ffaubert01/Sites/themusictank.com/app/Controller/UsersController.php",
+		"/Users/ffaubert01/Sites/themusictank.com/lib/Cake/Test/Fixture/AuthUserCustomFieldFixture.php",
+		"/Users/ffaubert01/Sites/themusictank.com/app/View/Users/edit.ctp",
+		"/Users/ffaubert01/Sites/themusictank.com/app/Model/UserAlbumReviewSnapshot.php",
+		"/Users/ffaubert01/Sites/themusictank.com/app/View/Helper/StringMakerHelper.php",
+		"/Users/ffaubert01/Sites/themusictank.com/app/Controller/ArtistsController.php",
+		"/Users/ffaubert01/Sites/themusictank.com/app/View/Elements/header.ctp",
+		"/Users/ffaubert01/Sites/themusictank.com/app/webroot/css/less/header.less",
+		"/Users/ffaubert01/Sites/themusictank.com/app/webroot/css/less/pages.less",
+		"/Users/ffaubert01/Sites/themusictank.com/app/webroot/css/less/variables.less",
 		"/Users/ffaubert/Sites/themusictank.com/app/View/Helper/AppHelper.php",
-		"/Users/ffaubert/Sites/themusictank.com/app/Model/TableSnapshot.php",
-		"/Users/ffaubert/Sites/themusictank.com/app/Controller/ProfilesController.php",
-		"/Users/ffaubert/Sites/themusictank.com/app/webroot/index.php",
-		"/Users/ffaubert/Sites/themusictank.com/lib/Cake/Test/test_app/View/Posts/index.ctp",
-		"/Users/ffaubert/Sites/themusictank.com/index.php",
-		"/Users/ffaubert/Sites/themusictank.com/lib/Cake/Model/Datasource/DataSource.php",
-		"/Users/ffaubert/Sites/themusictank.com/app/Config/Schema/db_acl.php",
-		"/Users/ffaubert/Sites/themusictank.com/app/View/Layouts/default.ctp",
-		"/Users/ffaubert/Sites/themusictank.com/app/Controller/TracksController.php",
-		"/Users/ffaubert/Sites/themusictank.com/app/Controller/AlbumsController.php",
-		"/Users/ffaubert/Sites/themusictank.com/app/Model/Album.php",
-		"/Users/ffaubert/Sites/themusictank.com/app/Model/UserAlbumReviewSnapshot.php",
-		"/Users/ffaubert/Sites/themusictank.com/app/Model/UserTrackReviewSnapshot.php",
-		"/Users/ffaubert/Sites/themusictank.com/app/View/Elements/stats.ctp",
-		"/Users/ffaubert/Sites/themusictank.com/app/Model/User.php",
-		"/Users/ffaubert/Sites/themusictank.com/app/View/Albums/view.ctp",
-		"/Users/ffaubert/Sites/themusictank.com/app/Model/Track.php",
-		"/Users/ffaubert/Sites/themusictank.com/app/Model/SubscribersAlbumReviewSnapshot.php",
-		"/Users/ffaubert/Sites/themusictank.com/app/Model/SubscribersTrackReviewSnapshot.php",
-		"/Users/ffaubert/Sites/themusictank.com/lib/Cake/Network/Email/SmtpTransport.php",
-		"/Users/ffaubert/Sites/themusictank.com/app/tmp/cache/models/tmt_cake_model_default_themusictank_users",
-		"/Users/ffaubert/Sites/themusictank.com/lib/Cake/Model/Model.php",
-		"/Users/ffaubert/Sites/themusictank.com/app/Model/UserActivity.php",
-		"/Users/ffaubert/Sites/themusictank.com/app/Model/Datasource/ArraySource.php",
-		"/Users/ffaubert/Sites/themusictank.com/lib/Cake/Test/Fixture/SecondaryModelFixture.php",
-		"/Users/ffaubert/Sites/themusictank.com/app/Model/UserAchievements.php",
-		"/Users/ffaubert/Sites/themusictank.com/app/View/Users/edit.ctp",
-		"/Users/ffaubert/Sites/themusictank.com/lib/Cake/Console/Command/UpgradeShell.php",
-		"/Users/ffaubert/Sites/themusictank.com/lib/Cake/View/Helper/PaginatorHelper.php",
-		"/Users/ffaubert/Sites/themusictank.com/lib/Cake/Test/test_app/Config/htmlhelper_tags.php",
-		"/Users/ffaubert/Sites/themusictank.com/lib/Cake/View/Helper.php",
-		"/Users/ffaubert/Sites/themusictank.com/lib/Cake/Test/Fixture/ImageFixture.php",
-		"/Users/ffaubert/Sites/themusictank.com/lib/Cake/Model/I18nModel.php",
-		"/Users/ffaubert/Sites/themusictank.com/app/Model/Albums.php",
-		"/Users/ffaubert/Sites/themusictank.com/app/View/Tracks/view.ctp",
-		"/Users/ffaubert/Sites/themusictank.com/app/Model/LastfmTrack.php",
-		"/Users/ffaubert/Sites/themusictank.com/app/Model/TrackReviewSnapshot.php",
-		"/Users/ffaubert/Sites/themusictank.com/app/Model/ReviewFrame.php",
-		"/Users/ffaubert/Sites/themusictank.com/app/Model/UserReviewSnapshot.php",
-		"/Users/ffaubert/Sites/themusictank.com/app/View/Elements/player.ctp",
-		"/Users/ffaubert/Sites/themusictank.com/app/View/Ajax/followbutton.ctp",
+		"/Users/ffaubert/Sites/themusictank.com/app/webroot/css/less/charts.less",
+		"/Users/ffaubert/Sites/themusictank.com/app/View/Artists/index.ctp",
+		"/Users/ffaubert/Sites/themusictank.com/app/Controller/AppController.php",
+		"/Users/ffaubert/Sites/themusictank.com/lib/Cake/Test/Fixture/ArmorsPlayerFixture.php",
 		"/Users/ffaubert/Sites/themusictank.com/app/Controller/AjaxController.php",
-		"/Users/ffaubert/Sites/themusictank.com/app/View/Elements/albumGraph.ctp",
-		"/Users/ffaubert/Sites/themusictank.com/app/View/Elements/reviewer.ctp",
-		"/Users/ffaubert/Sites/themusictank.com/app/View/Player/rdio.ctp",
-		"/Users/ffaubert/Sites/themusictank.com/app/webroot/js/player/mp3.js",
-		"/Users/ffaubert/Sites/themusictank.com/app/webroot/js/player/reviewer.js",
-		"/Users/ffaubert/Sites/themusictank.com/app/Model/AppModel.php",
-		"/Users/ffaubert/Sites/themusictank.com/tmt.sublime-project",
-		"/Users/ffaubert/Sites/themusictank.com/lib/Cake/Model/Datasource/Session/CakeSessionHandlerInterface.php",
-		"/Users/ffaubert/Sites/themusictank.com/lib/Cake/TestSuite/CakeTestRunner.php",
-		"/Users/ffaubert/Sites/themusictank.com/app/Controller/SearchController.php",
-		"/Users/ffaubert/Sites/themusictank.com/app/Config/Schema/sessions.php",
+		"/Users/ffaubert/Sites/themusictank.com/app/View/Pages/legal.ctp",
+		"/Users/ffaubert/Sites/themusictank.com/app/View/Albums/view.ctp",
+		"/Users/ffaubert/Sites/themusictank.com/app/View/Search/index.ctp",
+		"/Users/ffaubert/Sites/themusictank.com/app/View/Artists/view.ctp",
+		"/Users/ffaubert/Sites/themusictank.com/app/View/Elements/trackTiledList.ctp",
+		"/Users/ffaubert/Sites/themusictank.com/lib/Cake/Utility/String.php",
+		"/Users/ffaubert/Sites/themusictank.com/lib/Cake/Test/Fixture/SiteFixture.php",
+		"/Users/ffaubert/Sites/themusictank.com/app/View/Elements/stats.ctp",
+		"/Users/ffaubert/Sites/themusictank.com/app/View/Elements/albumTiledList.ctp",
+		"/Users/ffaubert/Sites/themusictank.com/app/webroot/css/less/header.less",
+		"/Users/ffaubert/Sites/themusictank.com/app/webroot/css/less/mixins.less",
+		"/Users/ffaubert/Sites/themusictank.com/app/webroot/css/less/pages.less",
 		"/Users/ffaubert/Sites/themusictank.com/app/webroot/css/less/styles.less",
-		"/Users/ffaubert/Sites/themusictank.com/.editorconfig",
-		"/Users/ffaubert/Sites/themusictank.com/lib/Cake/Test/test_app/Plugin/TestPlugin/View/Elements/translate.ctp",
-		"/Users/ffaubert/Sites/themusictank.com/lib/Cake/Routing/Route/PluginShortRoute.php",
-		"/Users/ffaubert/Sites/themusictank.com/lib/Cake/Test/Case/Routing/Route/PluginShortRouteTest.php",
-		"/Users/ffaubert/Sites/themusictank.com/lib/Cake/Console/Command/I18nShell.php",
-		"/Users/ffaubert/Sites/themusictank.com/.lessconfig",
-		"/Users/ffaubert/Library/Application Support/Sublime Text 3/Packages/User/less2css.sublime-settings",
-		"/Users/ffaubert/Library/Application Support/Sublime Text 3/Packages/Less2Css/less2css.sublime-settings",
-		"/Users/ffaubert/Library/Application Support/Sublime Text 3/Packages/LESS/LESS.sublime-settings",
-		"/Users/ffaubert/Library/Application Support/Sublime Text 3/Packages/User/Default (OSX).sublime-keymap",
-		"/Users/ffaubert/Sites/themusictank.com/app/webroot/js/player/rdio.js",
+		"/Users/ffaubert/Sites/themusictank.com/lib/Cake/Test/test_app/View/Elements/extended_element.ctp",
+		"/Users/ffaubert/Sites/themusictank.com/app/Config/email.php",
+		"/Users/ffaubert/Sites/themusictank.com/app/View/Elements/albumGraph.ctp",
+		"/Users/ffaubert/Sites/themusictank.com/lib/Cake/Console/Command/Task/ViewTask.php",
+		"/Users/ffaubert/Sites/themusictank.com/app/webroot/js/tmt.js",
+		"/Users/ffaubert/Sites/themusictank.com/app/View/Elements/header.ctp",
+		"/Users/ffaubert/Sites/themusictank.com/app/Model/Artist.php",
+		"/Users/ffaubert/Sites/themusictank.com/app/Controller/SearchController.php",
+		"/Users/ffaubert/Sites/themusictank.com/app/View/Albums/search.ctp",
+		"/Users/ffaubert/Sites/themusictank.com/app/View/Tracks/search.ctp",
+		"/Users/ffaubert/Sites/themusictank.com/app/Model/Album.php",
+		"/Users/ffaubert/Sites/themusictank.com/app/View/Artists/browse.ctp",
+		"/Users/ffaubert/Sites/themusictank.com/app/tmp/cache/models/tmt_cake_model_default_themusictank_albums",
+		"/Users/ffaubert/Sites/themusictank.com/lib/Cake/Model/Model.php",
+		"/Users/ffaubert/Sites/themusictank.com/app/View/Helper/MetaTagsHelper.php",
+		"/Users/ffaubert/Sites/themusictank.com/app/View/Tracks/view.ctp",
+		"/Users/ffaubert/Sites/themusictank.com/app/Console/Command/AppShell.php",
+		"/Users/ffaubert/Sites/themusictank.com/app/webroot/css/less/typeahead.less",
+		"/Users/ffaubert/Sites/themusictank.com/app/Controller/TracksController.php",
+		"/Users/ffaubert/Sites/themusictank.com/app/Controller/ArtistsController.php",
+		"/Users/ffaubert/Sites/themusictank.com/app/View/Elements/artistTiledList.ctp",
+		"/Users/ffaubert/Sites/themusictank.com/app/Model/Track.php",
+		"/Users/ffaubert/Sites/themusictank.com/lib/Cake/Test/Fixture/ArticleFixture.php",
+		"/Users/ffaubert/Sites/themusictank.com/app/View/Helper/StringMakerHelper.php",
+		"/Users/ffaubert/Sites/themusictank.com/lib/Cake/View/Helper/TextHelper.php",
+		"/Users/ffaubert/Sites/themusictank.com/app/Console/Command/Task/PopulateAlbumDetailsTask.php",
+		"/Users/ffaubert/Sites/themusictank.com/app/Console/Command/Task/AlbumSnapshotsSyncTask.php",
+		"/Users/ffaubert/Sites/themusictank.com/app/Console/Command/Task/UpdateSongChallengeTask.php",
+		"/Users/ffaubert/Sites/themusictank.com/app/Console/Command/Task/UpdatePopularArtistsTask.php",
+		"/Users/ffaubert/Sites/themusictank.com/app/Console/Command/Task/PopulateTrackDetailsTask.php",
+		"/Users/ffaubert/Sites/themusictank.com/app/Console/Command/Task/PopulateArtistDetailsTask.php",
+		"/Users/ffaubert/Sites/themusictank.com/app/Console/Command/Task/ArtistSnapshotsSyncTask.php",
+		"/Users/ffaubert/Sites/themusictank.com/app/Console/Command/Task/TrackSnapshotsSyncTask.php",
+		"/Users/ffaubert/Sites/themusictank.com/app/Model/TableSnapshot.php",
+		"/Users/ffaubert/Sites/themusictank.com/app/Model/ReviewFrame.php",
+		"/Users/ffaubert/Sites/themusictank.com/app/Config/bootstrap.php",
+		"/Users/ffaubert/Sites/themusictank.com/app/Controller/TmtController.php",
+		"/Users/ffaubert/Sites/themusictank.com/app/View/Tmt/index.ctp",
+		"/Users/ffaubert/Sites/themusictank.com/app/Model/Config.php",
+		"/Users/ffaubert/Sites/themusictank.com/app/View/Elements/analytics.ctp",
+		"/Users/ffaubert/Sites/themusictank.com/lib/Cake/Test/test_app/View/Posts/extend_loop.ctp",
+		"/Users/ffaubert/Sites/themusictank.com/app/Model/UserTrackReviewSnapshot.php",
+		"/Users/ffaubert/Sites/themusictank.com/app/Model/TrackReviewSnapshot.php",
+		"/Users/ffaubert/Sites/themusictank.com/app/Model/AlbumReviewSnapshot.php",
+		"/Users/ffaubert/Sites/themusictank.com/app/View/Tmt/sync.ctp",
+		"/Users/ffaubert/Sites/themusictank.com/app/Config/core.php",
 		"/Users/ffaubert/Sites/themusictank.com/app/View/Layouts/blank.ctp",
-		"/Users/ffaubert/Sites/themusictank.com/app/Controller/PlayerController.php",
-		"/Users/ffaubert/Sites/themusictank.com/app/Model/ImplicitRelationModel.php"
+		"/Users/ffaubert/Sites/themusictank.com/app/Model/LastfmArtist.php",
+		"/Users/ffaubert/Sites/themusictank.com/app/tmp/cache/weekly/.keep",
+		"/Users/ffaubert/Sites/themusictank.com/app/tmp/logs/error.log",
+		"/Users/ffaubert/Sites/themusictank.com/app/Model/LastfmAlbum.php",
+		"/Users/ffaubert/Sites/themusictank.com/app/Model/ImplicitRelationModel.php",
+		"/Users/ffaubert/Sites/themusictank.com/app/tmp/.gitignore",
+		"/Users/ffaubert/Sites/themusictank.com/app/Model/Behavior/LastfmBehavior.php",
+		"/Users/ffaubert/Sites/themusictank.com/.gitignore",
+		"/Users/ffaubert/Sites/themusictank.com/app/webroot/img/cache/.keep",
+		"/Users/ffaubert/Sites/themusictank.com/app/webroot/img/cache/user/.keep",
+		"/Users/ffaubert/Sites/themusictank.com/app/webroot/img/cache/lastf/.keep"
 	],
 	"find":
 	{
-		"height": 46.0
+		"height": 35.0
 	},
 	"find_in_files":
 	{
 		"height": 93.0,
 		"where_history":
 		[
+			"/Users/ffaubert/Sites/themusictank.com/app/webroot",
+			"/Users/ffaubert/Sites/themusictank.com/app",
+			"/Users/ffaubert/Sites/themusictank.com/app/webroot/css/less",
 			"/Users/ffaubert/Sites/themusictank.com/app",
 			"/Users/ffaubert/Sites/as-hanging-site-web-magento/app/design/frontend/default",
 			"/Users/ffaubert/Sites/as-hanging-site-web-magento/app/design/frontend",
@@ -781,8 +848,52 @@
 		"case_sensitive": false,
 		"find_history":
 		[
-			"$francois",
-			"throw",
+			"islands-in-the-stream",
+			"islands-in-the-stream-1",
+			"not in",
+			"no int",
+			"findValues",
+			"1405610052992",
+			"loadin",
+			"jumbotron",
+			"thumbn",
+			"fixab",
+			"jumbo",
+			"border-radi",
+			"top:",
+			"sprite_repeat.png",
+			"getRangeAverages",
+			"getAverageCurve",
+			"last_weeklychart_sync",
+			".album",
+			"%s",
+			"jumbo",
+			"log",
+			"\">\n",
+			"_createSnapshot",
+			"rota",
+			"getAverageScore",
+			"_validateAndSave",
+			"getAverageCurve",
+			"sub-menu",
+			"release_",
+			"released",
+			"ArtistSnapshotsSyncTask",
+			"updatePopularArtists",
+			"requiresDailyTrackChallengeUpdate",
+			"requiresPopularArtistUpdate",
+			"requiresDailyTrackChallengeUpdate",
+			"_createSnapshot",
+			"_validateAndSave",
+			"getBelongsToAlias",
+			"getExtra",
+			"_validateAndSave",
+			"_createSnapshot",
+			"getUpdatedSetBySlug",
+			"$addCurrentUser",
+			"getBySlugContained",
+			"listCurrentCollection",
+			"breadcr",
 			"_validateAndSave",
 			"createsnap",
 			"snap",
@@ -864,51 +975,7 @@
 			"starcraft",
 			"_eventNotPassed",
 			"Fourgonnette",
-			"withVideo",
-			" :",
-			"\"48",
-			"find",
-			"();\n",
-			"dealerAside",
-			"valuesToLabels",
-			"trim_id",
-			"addGTMPushEventOnIndexedLink",
-			"classicleisurelifestyles",
-			"parklanepoolandspa",
-			"piscinesprestige",
-			"evasionchezsoi",
-			"piscinedecorjoliette",
-			"piscinesroyale",
-			"piscinesetspasalainrioux",
-			"Bad Request",
-			"        \n",
-			"cultures.phtml",
-			"helper",
-			"sendVisitorCouponMail",
-			"rsVide",
-			"aureli",
-			"body_type_name",
-			"year",
-			"vehicle ty",
-			"getListingAgesMinDays",
-			"getListingAgeMinDays",
-			"getListingAgesMinDays",
-			"listing",
-			"\"]);",
-			"selectsToHash",
-			"rootElementCount",
-			"subeleme\nsubeleme",
-			"length",
-			"trim_id",
-			"trim",
-			"listing_",
-			"sql",
-			"offer_status_id",
-			"name",
-			"get",
-			"getFullName",
-			"getDealerEmailAddress",
-			"email"
+			"withVideo"
 		],
 		"highlight": true,
 		"in_selection": false,
@@ -916,7 +983,7 @@
 		"regex": false,
 		"replace_history":
 		[
-			"$user",
+			"<strong>%s</strong>",
 			".local",
 			"/assets/mp3s",
 			"0",
@@ -938,40 +1005,273 @@
 	"groups":
 	[
 		{
-			"selected": 0,
+			"selected": 3,
 			"sheets":
 			[
 				{
 					"buffer": 0,
-					"file": "app/Config/bootstrap.php",
-					"semi_transient": true,
+					"file": "app/View/Tracks/view.ctp",
+					"semi_transient": false,
 					"settings":
 					{
-						"buffer_size": 7178,
+						"buffer_size": 16537,
 						"regions":
 						{
 						},
 						"selection":
 						[
 							[
-								0,
-								0
+								1670,
+								1670
 							]
 						],
 						"settings":
 						{
-							"incomplete_sync": null,
-							"remote_loading": false,
-							"synced": false,
+							"syntax": "Packages/HTML/HTML.tmLanguage",
+							"translate_tabs_to_spaces": false
+						},
+						"translation.x": 0.0,
+						"translation.y": 0.0,
+						"zoom_level": 1.0
+					},
+					"stack_index": 7,
+					"type": "text"
+				},
+				{
+					"buffer": 1,
+					"file": "app/Model/Behavior/YoutubeBehavior.php",
+					"semi_transient": false,
+					"settings":
+					{
+						"buffer_size": 890,
+						"regions":
+						{
+						},
+						"selection":
+						[
+							[
+								890,
+								890
+							]
+						],
+						"settings":
+						{
 							"syntax": "Packages/PHP/PHP.tmLanguage",
 							"tab_size": 4,
 							"translate_tabs_to_spaces": true
 						},
 						"translation.x": 0.0,
-						"translation.y": 2287.0,
+						"translation.y": 0.0,
+						"zoom_level": 1.0
+					},
+					"stack_index": 6,
+					"type": "text"
+				},
+				{
+					"buffer": 2,
+					"file": "app/Controller/ArtistsController.php",
+					"semi_transient": false,
+					"settings":
+					{
+						"buffer_size": 4378,
+						"regions":
+						{
+						},
+						"selection":
+						[
+							[
+								2614,
+								2614
+							]
+						],
+						"settings":
+						{
+							"syntax": "Packages/PHP/PHP.tmLanguage",
+							"tab_size": 4,
+							"translate_tabs_to_spaces": true
+						},
+						"translation.x": -0.0,
+						"translation.y": 545.0,
+						"zoom_level": 1.0
+					},
+					"stack_index": 5,
+					"type": "text"
+				},
+				{
+					"buffer": 3,
+					"file": "app/Model/Track.php",
+					"semi_transient": false,
+					"settings":
+					{
+						"buffer_size": 6720,
+						"regions":
+						{
+						},
+						"selection":
+						[
+							[
+								2903,
+								2903
+							]
+						],
+						"settings":
+						{
+							"syntax": "Packages/PHP/PHP.tmLanguage",
+							"translate_tabs_to_spaces": false
+						},
+						"translation.x": 0.0,
+						"translation.y": 462.0,
 						"zoom_level": 1.0
 					},
 					"stack_index": 0,
+					"type": "text"
+				},
+				{
+					"buffer": 4,
+					"file": "app/Model/AppModel.php",
+					"semi_transient": false,
+					"settings":
+					{
+						"buffer_size": 8016,
+						"regions":
+						{
+						},
+						"selection":
+						[
+							[
+								2794,
+								2794
+							]
+						],
+						"settings":
+						{
+							"syntax": "Packages/PHP/PHP.tmLanguage",
+							"tab_size": 4,
+							"translate_tabs_to_spaces": true
+						},
+						"translation.x": 0.0,
+						"translation.y": 962.0,
+						"zoom_level": 1.0
+					},
+					"stack_index": 4,
+					"type": "text"
+				},
+				{
+					"buffer": 5,
+					"file": "app/Console/Command/Task/TrackWavesSyncTask.php",
+					"semi_transient": false,
+					"settings":
+					{
+						"buffer_size": 2345,
+						"regions":
+						{
+						},
+						"selection":
+						[
+							[
+								1148,
+								1148
+							]
+						],
+						"settings":
+						{
+							"syntax": "Packages/PHP/PHP.tmLanguage",
+							"tab_size": 4,
+							"translate_tabs_to_spaces": true
+						},
+						"translation.x": 0.0,
+						"translation.y": 0.0,
+						"zoom_level": 1.0
+					},
+					"stack_index": 1,
+					"type": "text"
+				},
+				{
+					"buffer": 6,
+					"file": "app/Config/bootstrap.php",
+					"semi_transient": false,
+					"settings":
+					{
+						"buffer_size": 7049,
+						"regions":
+						{
+						},
+						"selection":
+						[
+							[
+								6844,
+								6867
+							]
+						],
+						"settings":
+						{
+							"syntax": "Packages/PHP/PHP.tmLanguage",
+							"tab_size": 4,
+							"translate_tabs_to_spaces": true
+						},
+						"translation.x": 0.0,
+						"translation.y": 1933.0,
+						"zoom_level": 1.0
+					},
+					"stack_index": 2,
+					"type": "text"
+				},
+				{
+					"buffer": 7,
+					"file": "app/webroot/css/less/header.less",
+					"semi_transient": false,
+					"settings":
+					{
+						"buffer_size": 3028,
+						"regions":
+						{
+						},
+						"selection":
+						[
+							[
+								2438,
+								2438
+							]
+						],
+						"settings":
+						{
+							"syntax": "Packages/LESS/LESS.tmLanguage",
+							"translate_tabs_to_spaces": false
+						},
+						"translation.x": 0.0,
+						"translation.y": 1575.0,
+						"zoom_level": 1.0
+					},
+					"stack_index": 3,
+					"type": "text"
+				},
+				{
+					"buffer": 8,
+					"file": "app/View/Artists/view.ctp",
+					"semi_transient": false,
+					"settings":
+					{
+						"buffer_size": 2679,
+						"regions":
+						{
+						},
+						"selection":
+						[
+							[
+								1119,
+								1119
+							]
+						],
+						"settings":
+						{
+							"syntax": "Packages/HTML/HTML.tmLanguage",
+							"translate_tabs_to_spaces": false
+						},
+						"translation.x": 0.0,
+						"translation.y": 0.0,
+						"zoom_level": 1.0
+					},
+					"stack_index": 8,
 					"type": "text"
 				}
 			]
@@ -979,7 +1279,7 @@
 	],
 	"incremental_find":
 	{
-		"height": 25.0
+		"height": 27.0
 	},
 	"input":
 	{
@@ -1019,7 +1319,7 @@
 	"project": "tmt.sublime-project",
 	"replace":
 	{
-		"height": 86.0
+		"height": 50.0
 	},
 	"save_all_on_build": true,
 	"select_file":
@@ -1028,44 +1328,224 @@
 		"selected_items":
 		[
 			[
-				"lastfmart",
-				"app\\Model\\LastfmArtist.php"
-			],
-			[
-				"art",
-				"app\\Model\\Artist.php"
-			],
-			[
-				"aja",
-				"app\\Controller\\AjaxController.php"
-			],
-			[
-				"al",
-				"app\\Model\\Album.php"
-			],
-			[
-				"artistcno",
-				"app\\Controller\\ArtistsController.php"
-			],
-			[
-				"review",
-				"app\\Model\\ReviewFrame.php"
-			],
-			[
-				"table",
-				"app\\Model\\TableSnapshot.php"
-			],
-			[
-				"arti",
-				"app\\Controller\\ArtistsController.php"
+				"bo",
+				"app/Config/bootstrap.php"
 			],
 			[
 				"alb",
-				"app\\Model\\Album.php"
+				"app/Model/Album.php"
+			],
+			[
+				"modelartist",
+				"app/Model/Artist.php"
+			],
+			[
+				"modelalbum",
+				"app/Model/Album.php"
+			],
+			[
+				"apphe",
+				"app/View/Helper/AppHelper.php"
+			],
+			[
+				"readm",
+				"README.md"
+			],
+			[
+				"tmt.j",
+				"app/webroot/js/tmt.js"
+			],
+			[
+				"trackview",
+				"app/View/Tracks/view.ctp"
+			],
+			[
+				"album",
+				"app/View/Albums/view.ctp"
+			],
+			[
+				"artistview",
+				"app/View/Artists/view.ctp"
+			],
+			[
+				"boots",
+				"app/Config/bootstrap.php"
+			],
+			[
+				"appmode",
+				"app/Model/AppModel.php"
+			],
+			[
+				"lastfmbe",
+				"app/Model/Behavior/LastfmBehavior.php"
+			],
+			[
+				"ajax",
+				"app/Controller/AjaxController.php"
+			],
+			[
+				"artist",
+				"app/View/Artists/view.ctp"
+			],
+			[
+				"art",
+				"app/Controller/ArtistsController.php"
+			],
+			[
+				"char",
+				"app/webroot/css/less/charts.less"
+			],
+			[
+				"track/vi",
+				"app/View/Tracks/view.ctp"
 			],
 			[
 				"track",
 				"app/Model/Track.php"
+			],
+			[
+				"trackcon",
+				"app/Controller/TracksController.php"
+			],
+			[
+				"trackvi",
+				"app/View/Tracks/view.ctp"
+			],
+			[
+				"tmt.js",
+				"app/webroot/js/tmt.js"
+			],
+			[
+				"appmodel",
+				"app/Model/AppModel.php"
+			],
+			[
+				"usercontro",
+				"app/Controller/UsersController.php"
+			],
+			[
+				"apph",
+				"app/View/Helper/AppHelper.php"
+			],
+			[
+				"header.",
+				"app/webroot/css/less/header.less"
+			],
+			[
+				"track.",
+				"app/Model/Track.php"
+			],
+			[
+				"stirngma",
+				"app/View/Helper/StringMakerHelper.php"
+			],
+			[
+				"artist/v",
+				"app/View/Artists/view.ctp"
+			],
+			[
+				"elemental",
+				"app/View/Elements/albumTiledList.ctp"
+			],
+			[
+				"artistvi",
+				"app/View/Artists/view.ctp"
+			],
+			[
+				"viewalb",
+				"app/View/Albums/view.ctp"
+			],
+			[
+				"tmt",
+				"app/webroot/js/tmt.js"
+			],
+			[
+				"modelalb",
+				"app/Model/Album.php"
+			],
+			[
+				"modelart",
+				"app/Model/Artist.php"
+			],
+			[
+				"tmt.",
+				"app/webroot/js/tmt.js"
+			],
+			[
+				"artistcon",
+				"app/Controller/ArtistsController.php"
+			],
+			[
+				"stringma",
+				"app/View/Helper/StringMakerHelper.php"
+			],
+			[
+				"albumvi",
+				"app/View/Albums/view.ctp"
+			],
+			[
+				"albumtil",
+				"app/View/Elements/albumTiledList.ctp"
+			],
+			[
+				"header.les",
+				"app/webroot/css/less/header.less"
+			],
+			[
+				"lastfmart",
+				"app/Model/LastfmArtist.php"
+			],
+			[
+				"las",
+				"app/Model/LastfmAlbum.php"
+			],
+			[
+				"artistvie",
+				"app/View/Artists/view.ctp"
+			],
+			[
+				"view",
+				"app/View/Tracks/view.ctp"
+			],
+			[
+				"albu",
+				"app/Model/Album.php"
+			],
+			[
+				"aja",
+				"app/Controller/AjaxController.php"
+			],
+			[
+				"page",
+				"app/webroot/css/less/pages.less"
+			],
+			[
+				"stringm",
+				"app/View/Helper/StringMakerHelper.php"
+			],
+			[
+				"config.",
+				"app/Model/Config.php"
+			],
+			[
+				"stringmak",
+				"app/View/Helper/StringMakerHelper.php"
+			],
+			[
+				"config",
+				"app/Model/Config.php"
+			],
+			[
+				"table",
+				"app/Model/TableSnapshot.php"
+			],
+			[
+				"albumrev",
+				"app/Model/AlbumReviewSnapshot.php"
+			],
+			[
+				"lastfm",
+				"app/Model/LastfmAlbum.php"
 			],
 			[
 				"meta",
@@ -1074,10 +1554,6 @@
 			[
 				"rdioar",
 				"app/Model/RdioArtist.php"
-			],
-			[
-				"tmt.",
-				"app/webroot/js/tmt.js"
 			],
 			[
 				"profile",
@@ -1110,10 +1586,6 @@
 			[
 				"albumcon",
 				"app/Controller/AlbumsController.php"
-			],
-			[
-				"tmt.js",
-				"app/webroot/js/tmt.js"
 			],
 			[
 				"default/ashanging/template/directory/currency.phtml",
@@ -1360,184 +1832,12 @@
 				"library/Zend/Application/Bootstrap/Bootstrap.php"
 			],
 			[
-				"artistcon",
-				"app/Controller/ArtistsController.php"
-			],
-			[
-				"modelartist",
-				"app/Model/Artist.php"
-			],
-			[
 				"artisttil",
 				"app/View/Elements/artistTiledList.ctp"
 			],
 			[
 				"default.ct",
 				"app/View/Layouts/default.ctp"
-			],
-			[
-				"modelatist",
-				"app/Model/Artist.php"
-			],
-			[
-				"page",
-				"app/webroot/css/less/pages.less"
-			],
-			[
-				"artistin",
-				"app/View/Artists/index.ctp"
-			],
-			[
-				"header.",
-				"app/webroot/css/less/header.less"
-			],
-			[
-				"pages.les",
-				"app/webroot/css/less/pages.less"
-			],
-			[
-				"defaul",
-				"app/View/Layouts/default.ctp"
-			],
-			[
-				"header.c",
-				"app/View/Elements/header.ctp"
-			],
-			[
-				"bas",
-				"app/webroot/css/less/base.less"
-			],
-			[
-				"tables",
-				"app/Model/TableSnapshot.php"
-			],
-			[
-				"userrev",
-				"app/Model/UserReviewSnapshot.php"
-			],
-			[
-				"trackre",
-				"app/Model/TrackReviewSnapshot.php"
-			],
-			[
-				"profi",
-				"app/Controller/ProfilesController.php"
-			],
-			[
-				"users/e",
-				"app/View/Users/edit.ctp"
-			],
-			[
-				"trackscon",
-				"app/Controller/TracksController.php"
-			],
-			[
-				"lastfmbeh",
-				"app/Model/Behavior/LastfmBehavior.php"
-			],
-			[
-				"succes",
-				"app/design/frontend/blank/ernest_2014/template/checkout/success.phtml"
-			],
-			[
-				"main.j",
-				"skin/frontend/blank/ernest_2014/js/main.js"
-			],
-			[
-				"app/code/core/mage/adminhtml/block/system/config/form/field.php",
-				"app/code/core/Mage/Adminhtml/Block/System/Config/Form/Field.php"
-			],
-			[
-				"main.js",
-				"skin/frontend/blank/ernest_2014/js/main.js"
-			],
-			[
-				"look",
-				"app/design/frontend/blank/ernest_2014/template/catalog/category/lookbook.phtml"
-			],
-			[
-				"main",
-				"skin/frontend/blank/ernest_2014/js/main.js"
-			],
-			[
-				"retailcon",
-				"app/code/local/NVI/Retail/controllers/IndexController.php"
-			],
-			[
-				"retail",
-				"app/code/local/NVI/Retail/Model/Retail.php"
-			],
-			[
-				"success",
-				"app/code/core/Mage/Checkout/Block/Success.php"
-			],
-			[
-				"homepage",
-				"app/design/frontend/blank/ernest_2014/template/page/partials/homepageTile.phtml"
-			],
-			[
-				"2014home.pht",
-				"app/design/frontend/blank/ernest_2014/template/page/home.phtml"
-			],
-			[
-				"mobiledet",
-				"lib/Mobiledetect/Mobiledetect.php"
-			],
-			[
-				"home.phtml",
-				"app/design/frontend/blank/ernest_2014/template/page/home.phtml"
-			],
-			[
-				"home.p",
-				"app/design/frontend/blank/ernest_2014/template/page/home.phtml"
-			],
-			[
-				"suc",
-				"app/design/frontend/blank/ernest_2014/template/checkout/success.phtml"
-			],
-			[
-				"2014head.",
-				"app/design/frontend/blank/ernest_2014/template/page/html/head.phtml"
-			],
-			[
-				"succ",
-				"app/design/frontend/blank/ernest_2014/template/checkout/success.phtml"
-			],
-			[
-				"frontend/blank/default/template/catalog/product/view/options.phtml",
-				"app/design/frontend/blank/default/template/catalog/product/view/options.phtml"
-			],
-			[
-				"frontend/blank/default/template/catalog/product/view/options/js.phtml",
-				"app/design/frontend/blank/default/template/catalog/product/view/options/js.phtml"
-			],
-			[
-				"player",
-				"app/webroot/css/player.less"
-			],
-			[
-				"chart",
-				"app/webroot/css/charts.less"
-			],
-			[
-				"graph.j",
-				"app/webroot/js/player/graph.js"
-			],
-			[
-				"base.",
-				"app/webroot/css/base.less"
-			],
-			[
-				"styles.l",
-				"ernest_2014/less/styles.less"
-			],
-			[
-				"frontend/blank/ernest_2014/template/persistent/checkout/onepage/billing.phtml",
-				"app/design/frontend/blank/ernest_2014/template/persistent/checkout/onepage/billing.phtml"
-			],
-			[
-				"getcontrole",
-				"app/code/community/SMDesign/ColorswatchProductView/controllers/GetController.php"
 			]
 		],
 		"width": 0.0

@@ -19,9 +19,6 @@ class AlbumsController extends AppController {
      */
     public function view($albumSlug)
     {
-        // Prepare the view variables
-        $this->usesPlayer();
-
         $isLoggedIn = $this->userIsLoggedIn();
         $data       = $this->Album->getFirstBySlug($albumSlug);
 
@@ -37,7 +34,7 @@ class AlbumsController extends AppController {
         $this->set("oembedLink",    $this->Album->getOEmbedUrl());
 
         // Associate review snapshots.
-        $this->set("albumReviewSnapshot", 	Hash::extract($this->Album->getSnapshot(), "AlbumReviewSnapshot"));
+        $this->set("albumReviewSnapshot", 	$data["AlbumReviewSnapshot"]);
         $this->set("usersWhoReviewed", 		$this->User->getRecentAlbumReviewers($data["Album"]["id"]));
 
         if($isLoggedIn)
@@ -73,21 +70,31 @@ class AlbumsController extends AppController {
         $this->usesPlayer();
         $this->layout = "blank";
 
-        $data = $this->Album->getFirstBySlug($albumSlug);
+        $isLoggedIn = $this->userIsLoggedIn();
+        $data       = $this->Album->getFirstBySlug($albumSlug);
 
         if(!$data)
         {
             throw new NotFoundException(sprintf(__("Could not find the album %s"), $albumSlug));
         }
 
+        // Build general objects
         $this->set("album",         $data["Album"]);
-        $this->set("rdioAlbum",     $data["RdioAlbum"]);
         $this->set("lastfmAlbum",   $data["LastfmAlbum"]);
-        $this->set("tracks",        $data["Tracks"]);
         $this->set("artist",        $data["Artist"]);
         $this->set("oembedLink",    $this->Album->getOEmbedUrl());
 
-        $this->set("albumReviewSnapshot",  Hash::extract($this->Album->getSnapshot(), "AlbumReviewSnapshot"));
+        // Associate review snapshots.
+        $this->set("albumReviewSnapshot",   $data["AlbumReviewSnapshot"]);
+        $this->set("usersWhoReviewed",      $this->User->getRecentAlbumReviewers($data["Album"]["id"]));
+
+        if($isLoggedIn)
+        {
+            $this->set("userAlbumReviewSnapshot", Hash::extract($this->Album->getUserSnapshot($this->getAuthUserId()), "UserAlbumReviewSnapshot"));
+            $this->set("subsAlbumReviewSnapshot", Hash::extract($this->User->getSubscriberAlbumSnapshot($this->getAuthUserId(), $data["Album"]["id"]), "SubscribersAlbumReviewSnapshot"));
+            $this->set("subsWhoReviewed", $this->User->getSubscribersWhichReviewedAlbum($this->getAuthUserId(), $data["Album"]["id"]));
+        }
+
 
         $this->setPageTitle(array($data["Album"]["name"], $data["Artist"]["name"]));
         $this->setPageMeta(array(
@@ -109,7 +116,7 @@ class AlbumsController extends AppController {
         $weekDate = date("F j Y", mktime(0, 0, 0, date("n"), date("j") - date("N")));
         $title = sprintf(__("New releases for the week of %s"), $weekDate);
 
-        $this->set("newReleases", $this->Album->getNewReleases());
+        $this->set("newReleases", $this->Album->getNewReleases(30));
         $this->set("forTheWeekOf", $weekDate);
 
         $this->setPageTitle(array($title));

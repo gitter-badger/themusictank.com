@@ -1,29 +1,27 @@
-<?php
-/**
- *
- * PHP 5
- *
- * CakePHP(tm) : Rapid Development Framework (http://cakephp.org)
- * Copyright (c) Cake Software Foundation, Inc. (http://cakefoundation.org)
- *
- * Licensed under The MIT License
- * For full copyright and license information, please see the LICENSE.txt
- * Redistributions of files must retain the above copyright notice.
- *
- * @copyright     Copyright (c) Cake Software Foundation, Inc. (http://cakefoundation.org)
- * @link          http://cakephp.org CakePHP(tm) Project
- * @package       app.View.Errors
- * @since         CakePHP(tm) v 0.10.0.1076
- * @license       http://www.opensource.org/licenses/mit-license.php MIT License
- */
-?>
-<h2><?php echo $name; ?></h2>
-<p class="error">
-	<strong><?php echo __d('cake', 'Error'); ?>: </strong>
-	<?php echo __d('cake', 'An Internal Error Has Occurred.'); ?>
-</p>
-<?php
-if (Configure::read('debug') > 0):
-	echo $this->element('exception_stack_trace');
-endif;
-?>
+<div class="header-wrapper">
+    <section class="jumbotron introduction">
+        <div class="container">
+            <h1><?php echo __d('cake', 'Error'); ?></h1>
+            <p class="lead"><?php echo __d('cake', 'An Internal Error Has Occurred.'); ?></p>
+        </div>
+    </section>
+</div>
+
+<div class="container container-fluid">
+    <div class="row">
+        <div class="md-col-12">
+        <?php if (Configure::read('debug') > 0): ?>
+            <?php echo $this->element('exception_stack_trace'); ?>
+        <?php else : ?>
+            <script>$.post('/ajax/bugreport/', {'type': '500', 'where': window.location.pathname, 'user_id': null}, $.noop);</script>
+            <p>There is an important issue that breaks this page and it cannot be rendered.</p>
+            <p>I have been automatically notified and I will fix it real soon.</p>
+            <p>~ Francois</p>
+        <?php endif; ?>
+        </div>
+    </div>
+
+    <div class="row">
+        <p style="font-size:8em; text-align:center;"><i class="fa fa-bug"></i></p>
+    </div>
+</div>

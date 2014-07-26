@@ -1,30 +1,54 @@
 <?php
-/**
- * AppShell file
- *
- * CakePHP(tm) : Rapid Development Framework (http://cakephp.org)
- * Copyright (c) Cake Software Foundation, Inc. (http://cakefoundation.org)
- *
- * Licensed under The MIT License
- * For full copyright and license information, please see the LICENSE.txt
- * Redistributions of files must retain the above copyright notice.
- *
- * @copyright     Copyright (c) Cake Software Foundation, Inc. (http://cakefoundation.org)
- * @link          http://cakephp.org CakePHP(tm) Project
- * @since         CakePHP(tm) v 2.0
- * @license       http://www.opensource.org/licenses/mit-license.php MIT License
- */
-
 App::uses('Shell', 'Console');
-
-/**
- * Application Shell
- *
- * Add your application-wide methods in the class below, your shells
- * will inherit them.
- *
- * @package       app.Console.Command
- */
 class AppShell extends Shell {
+
+	public $uses = array("Config");
+	public $tasks = array(
+		"AlbumSnapshotsSync", "ArtistSnapshotsSync",
+		"PopulateAlbumDetails", "PopulateArtistDetails", "PopulateArtistDiscography", "PopulateTrackDetails",
+		"TrackSnapshotsSync", "TrackWavesSync", "UpdatePopularArtists", "UpdateSongChallenge"
+	);
+
+	public function daily()
+	{
+		$this->out("DAILY");
+
+		$this->Config->setCronStart("daily");
+
+		$this->UpdateSongChallenge->execute();
+        $this->ArtistSnapshotsSync->execute();
+        $this->AlbumSnapshotsSync->execute();
+        $this->TrackSnapshotsSync->execute();
+
+        $this->Config->setCronEnd("daily");
+	}
+
+    public function wavescrawl()
+    {
+        $this->out("WAVES CRAWL");
+        $this->Config->setCronStart("dailycrawl");
+
+        $this->TrackWavesSync->execute();
+
+        $this->Config->setCronEnd("dailycrawl");
+    }
+
+	public function twohours()
+	{
+		set_time_limit ((HOUR * 2) - 5); // ok bro, you have 1h55 to finish doing your thing
+		$this->out("EVERY TWO HOURS");
+
+		$this->Config->setCronStart("twohours");
+
+		// These tasks fail often due to Last.fm's api.
+		// Until a noticeable increase in successful responses
+		// query them often to make up for failed attempts
+        $this->UpdatePopularArtists->execute();
+        $this->PopulateArtistDiscography->execute();
+        $this->PopulateArtistDetails->execute();
+        $this->PopulateAlbumDetails->execute();
+        $this->PopulateTrackDetails->execute();
+        $this->Config->setCronEnd("twohours");
+	}
 
 }

@@ -1,16 +1,14 @@
 <?php
 
-App::uses('User', 'Model');
 App::uses('UserAlbumReviewSnapshot', 'Model');
-App::uses('AlbumReviewSnapshot', 'Model');
 App::uses('SubscribersAlbumReviewSnapshot', 'Model');
-App::uses('OEmbedable', 'Model');
 
-class Album extends OEmbedable
+class Album extends AppModel
 {
-	public $hasOne      = array('LastfmAlbum');
+	public $hasOne      = array('LastfmAlbum', "AlbumReviewSnapshot");
     public $hasMany     = array('Tracks' => array('order' => 'track_num ASC'));
     public $belongsTo   = array('Artist');
+    public $actsAs      = array('OEmbedable', 'ThumbnailLeech');
 
     public function beforeSave($options = array())
     {
@@ -39,38 +37,18 @@ class Album extends OEmbedable
     {
         return $this->find('all', array(
             "conditions" => array("Album.name LIKE" => sprintf("%%%s%%", $query)),
-            "fields"     => array("Album.slug", "Album.name", "Album.image", "Artist.name", "Artist.slug"),
+            "fields"     => array("Album.slug", "Album.name", "Album.image", "Album.release_date", "Artist.name", "Artist.slug", "AlbumReviewSnapshot.*"),
             "recursive"  => 0,
-            "limit"      => $limit
+            "limit"      => $limit,
+            "order"		 => array("LOCATE('".$query."', Album.name)", "Album.name")
         ));
     }
-
-    /*
-
-    public function getUpdatedSetBySlug($slug, $addCurrentUser = false)
-    {
-        $syncValues = $this->getFirstBySlug($slug);
-
-        if(count($syncValues))
-        {
-            $this->LastfmAlbum->data = $syncValues;
-            if($this->LastfmAlbum->requiresUpdate())
-            {
-            	$this->LastfmAlbum->updateCached();
-                $syncValues = $this->getFirstBySlug($slug);
-            }
-
-            $this->data = $syncValues;
-        }
-
-        return $syncValues;
-    }
-*/
 
     public function updateDiscography()
     {
         // only update when cache is out of date.
         $alreadyLoadedAlbums 	= Hash::get($this->data, "Albums");
+
         if(count($alreadyLoadedAlbums) > 0)
         {
             if(!$this->LastfmAlbum->requiresUpdate())
@@ -85,7 +63,22 @@ class Album extends OEmbedable
         $existingAlbums = Hash::extract($this->findAllByArtistId($artistId), "{n}.LastfmAlbum.mbid");
         $apiResult 		= $this->LastfmAlbum->getArtistTopAlbums($artistName);
         $albums 		= array();
-        $futureSlugs 	= array();
+
+
+		if(is_null($apiResult))
+        {
+            // Save the latest updated timestamp as to not query all the time
+            $this->Artist->LastfmArtist->save(array(
+                "id"        => $this->getData("LastfmArtist.id"),
+                "lastsync"  => time()
+            ));
+
+			return array();
+		}
+        // Ensure that we are dealing with arrays
+        elseif(is_object($apiResult)) {
+        	$apiResult = array($apiResult);
+        }
 
         foreach($apiResult as $album)
         {
@@ -97,52 +90,38 @@ class Album extends OEmbedable
             	// Ensure the artist is the one we are expecting and that it's a new one.
                 if($album->artist->mbid == $artistMbid && !in_array($album->mbid, $existingAlbums))
                 {
-                	// Often, albums have similar names but because we are saving in batch, the abc-1, abc-2 logic
-                	// doesn't work.
-                    $slug = $this->_doubleCheckSlug($this->createSlug($album->name), $album->name, $futureSlugs);
-
-                    $futureSlugs[] = $slug;
                     $albums[] = array(
                         "LastfmAlbum" => array(
+                            "id"   => $this->getData("LastfmArtist.id"),
                             "mbid" => $album->mbid
                         ),
                         "Album" => array(
                             "artist_id" => $artistId,
-                            "name" => $album->name,
+                            "name" => utf8_encode($album->name),
                             "mbid" => $album->mbid,
-                            "slug" => $slug,
+                            "slug" => null,
                             "release_date" => 0,
                             "notability" => $album->{"@attr"}->rank,
-                            "image"     => empty($album->image[4]->{'#text'}) ? null : $this->getImageFromUrl($album->image[4]->{'#text'}, $this->getData("Album.image")),
-                            "image_src" => empty($album->image[4]->{'#text'}) ? null : $album->image[4]->{'#text'}
+                            "image"     => empty($album->image[3]->{'#text'}) ? null : $this->getImageFromUrl($album->image[3]->{'#text'}, Hash::check($this->data, "Album.image") ? $this->getData("Album.image") : null),
+                            "image_src" => empty($album->image[3]->{'#text'}) ? null : $album->image[3]->{'#text'}
                         )
                     );
                 }
             }
         }
-        if(count($albums) > 0) {
-            return $this->saveMany($albums, array("deep" => true)) ? $albums : false;
-        } else {
-            return $alreadyLoadedAlbums;
-        }
-    }
 
-	// Often, albums have similar names but because we are saving in batch, the abc-1, abc-2 logic
-	// doesn't work.
-    private function _doubleCheckSlug($slug, $name, $existing)
-    {
-        if(in_array($slug, $existing))
+        if(count($albums) > 0)
         {
-            $count = 1;
-            $newSlug = $this->createSlug($name . " " . $count);
-            while(in_array($newSlug, $existing))
-            {
-                $newSlug = $this->createSlug($name . " " . $count);
-                $count++;
-            }
-            return $newSlug;
+        	// The albums have been formated and batched. We can validate the slugs
+        	// and skip the unique key issues we had when the slug was set in the loop above
+        	$slugs = $this->batchSlugs(Hash::extract($albums, "{n}.Album.name"));
+        	foreach($slugs as $idx => $slug) {
+        		$albums[$idx]["Album"]["slug"] = $slug;
+        	}
+            return $this->saveMany($albums, array("deep" => true)) ? $albums : false;
         }
-        return $slug;
+
+        return $alreadyLoadedAlbums;
     }
 
     public function setNewReleases($newReleasesIds)

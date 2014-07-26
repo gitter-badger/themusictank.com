@@ -1,9 +1,28 @@
-<section class="hero">
-    <h2><?php echo __("A new way of sharing your thoughts on music."); ?></h2>
-    <a href="#how-does-it-work"><?php echo __("How does it work?"); ?></a>        
-</section>
+<div class="header-wrapper">
+	<section class="jumbotron introduction">
+		<div class="container">
+		    <h1><?php echo __("Collaborative Reviews"); ?></h1>
+		    <p class="lead"><?php echo __("The Music Tank is a place where opiniated people share their thoughts on music."); ?></p>
 
-<section class="create-account">
-    <p><?php echo __("Using your personal mp3 collection or by connecting your Rdio account, The Music Tank's reviewer will precisely take note of your enjoyement throughout tracks."); ?></p>
-    <p><?php echo $this->Html->link( __("Start grooving!"), array('controller' => 'users', 'action' => 'login')); ?></p>
-</section>
+		    <ul>
+    			<li><a href="#how-does-it-work"><?php echo __("How does it work?"); ?></a></li>
+			</ul>
+	    </div>
+	</section>
+</div>
+
+<div class="container container-fluid">
+	<div class="row">
+		<section id="how-does-it-work" class="col-md-6">
+			<h2><?php echo __("A new way of sharing your thoughts on music."); ?></h2>
+		</section>
+	</div>
+</div>
+
+<div class="container container-fluid">
+	<div class="row">
+		<section class="col-md-6 create-account">
+		    <p><?php echo $this->Html->link( __("Start grooving!"), array('controller' => 'users', 'action' => 'login')); ?></p>
+		</section>
+	</div>
+</div>

@@ -17,16 +17,33 @@
  * @license       http://www.opensource.org/licenses/mit-license.php MIT License
  */
 ?>
-<h2><?php echo $name; ?></h2>
-<p class="error">
-	<strong><?php echo __d('cake', 'Error'); ?>: </strong>
-	<?php printf(
-		__d('cake', 'The requested address %s was not found on this server.'),
-		"<strong>'{$url}'</strong>"
-	); ?>
-</p>
-<?php
-if (Configure::read('debug') > 0):
-	echo $this->element('exception_stack_trace');
-endif;
-?>
+<div class="header-wrapper">
+    <section class="jumbotron introduction">
+        <div class="container">
+            <h1><?php echo __d('cake', '404'); ?></h1>
+            <p class="lead"><?php
+                printf(
+                    __d('cake', 'The requested address %s was not found on this server.'),
+                    "<strong>'{$url}'</strong>"
+                );
+            ?></p>
+        </div>
+    </section>
+</div>
+
+<div class="container container-fluid">
+    <div class="row">
+        <div class="md-col-12">
+            <h2>Oops.</h2>
+            <?php
+            if (Configure::read('debug') > 0):
+                echo $this->element('exception_stack_trace');
+            endif;
+            ?>
+        </div>
+    </div>
+
+    <div class="row">
+        <p style="font-size:8em; text-align:center;"><i class="fa fa-bug"></i></p>
+    </div>
+</div>

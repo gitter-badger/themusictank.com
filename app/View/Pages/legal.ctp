@@ -1,19 +1,39 @@
-<div class="container container-fluid">
+<div class="header-wrapper">
+	<section class="jumbotron introduction">
+		<div class="container">
+		    <h1><?php echo __("Legalities"); ?></h1>
+			<p class="lead">There's no use pretending, we are not a business and we do not impose or abide any obscure legal guidelines.</p>
+	    </div>
+	</section>
+</div>
 
-	<h1><?php echo __("Legalities"); ?></h1>
+<div class="container container-fluid technicalities">
+	<div class="row">
+		<h2><?php echo __("Technicalities"); ?></h2>
+		<p class="lead"><?php echo __("We do have some quirks, but it's nothing you should freak out about."); ?></p>
 
-	<p class="lead">There's no use pretending, we are not a business and we do not have any legal guidelines.</p>
+		<div class="col-md-6">
+			<ul>
+				<li>All music is not hosted directly on this server. Music is
+				provided by public APIs of music streaming services or from your own mp3 files.</li>
 
-	<h2><?php echo __("So, 'Technicalities'"); ?></h2>
+				<li>We have no idea what these APIs do with your personal data, you are going to have to check their agreements for
+				yourselves if you care.</li>
 
-	<p>What is worth mentioning is that all music is not hosted directly on this server. Music is
-	provided by public APIs of music streaming services or from your own mp3 files.</p>
+				<li>Each time you login to this website using an account linked to an external website (Facebook, Google, etc.), we pull what we think is the bare minimum information we need.</li>
+			</ul>
+		</div>
+		<div class="col-md-6">
+			<ul>
+				<li>We do go snooping around and we only keep your account id in order for us to re-link your TMT account when you log back in.</li>
 
-	<p>We have no idea what these APIs do with your personal data, you are going to have to check their agreements for 
-	yourselves if you care (and you should).</p>
+				<li>User profiles are public and everyone can see your ratings.</li>
 
-	<p>Each time you login to this website using an account linked to a music provider, we pull your whole collection and update our list of artists with it. 
-	It's the only snooping we do and the point of it is to make sure the artists you like will be on the website.</p>
-
-	<p>User profiles are public and everyone can see your ratings.</p>
+				<li>Comments are handled by another platform on another server.</li>
+			</ul>
+		</div>
+	</div>
+	<div class="row">
+		<p style="font-size:8em; text-align:center;"><i class="fa fa-umbrella"></i></p>
+	</div>
 </div>

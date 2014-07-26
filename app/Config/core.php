@@ -33,7 +33,7 @@
  * In production mode, flash messages redirect after a time interval.
  * In development mode, you need to click the flash message to continue.
  */
-if(preg_match('/themusictank\.com/', $_SERVER['SERVER_NAME']))
+if(array_key_exists('SERVER_NAME', $_SERVER) && preg_match('/themusictank\.com/', $_SERVER['SERVER_NAME']))
 {
 	Configure::write('debug', 0);
 }
@@ -240,14 +240,14 @@ else
  * The class name and database used in CakePHP's
  * access control lists.
  */
-	Configure::write('Acl.classname', 'DbAcl');
-	Configure::write('Acl.database', 'default');
+	//Configure::write('Acl.classname', 'DbAcl');
+	//Configure::write('Acl.database', 'default');
 
 /**
  * Uncomment this line and correct your server timezone to fix
  * any date & time related errors.
  */
-	//date_default_timezone_set('UTC');
+	date_default_timezone_set("America/Montreal");
 
 /**
  *
@@ -321,8 +321,8 @@ else
  *       and their settings.
  */
 
-	$engine = 'File';
-    
+$engine = 'File';
+
 // In development mode, caches should expire quickly.
 $duration = '+999 days';
 if (Configure::read('debug') > 0) {
@@ -332,28 +332,44 @@ if (Configure::read('debug') > 0) {
 // Prefix each application on the same server with a different string, to avoid Memcache and APC conflicts.
 $prefix = 'tmt_';
 
-	/**
-	 * Configure the cache used for general framework caching. Path information,
-	 * object listings, and translation cache files are stored with this configuration.
-	 */
-	Cache::config('_cake_core_', array(
-		'engine' => $engine,
-		'prefix' => $prefix . 'cake_core_',
-		'path' => CACHE . 'persistent' . DS,
-		'serialize' => ($engine === 'File'),
-		'duration' => $duration
-	));
+/**
+ * Configure the cache used for general framework caching. Path information,
+ * object listings, and translation cache files are stored with this configuration.
+ */
+Cache::config('_cake_core_', array(
+	'engine' => $engine,
+	'prefix' => $prefix . 'cake_core_',
+	'path' => CACHE . 'persistent' . DS,
+	'serialize' => ($engine === 'File'),
+	'duration' => $duration
+));
 
-	/**
-	 * Configure the cache for model and datasource caches. This cache configuration
-	 * is used to store schema descriptions, and table listings in connections.
-	 */
-	Cache::config('_cake_model_', array(
-		'engine' => $engine,
-		'prefix' => $prefix . 'cake_model_',
-		'path' => CACHE . 'models' . DS,
-		'serialize' => ($engine === 'File'),
-		'duration' => $duration
-	));
+/**
+ * Configure the cache for model and datasource caches. This cache configuration
+ * is used to store schema descriptions, and table listings in connections.
+ */
+Cache::config('_cake_model_', array(
+	'engine' => $engine,
+	'prefix' => $prefix . 'cake_model_',
+	'path' => CACHE . 'models' . DS,
+	'serialize' => ($engine === 'File'),
+	'duration' => $duration
+));
 
 
+Cache::config('_cake_model_', array(
+	'engine' => $engine,
+	'prefix' => $prefix . 'cake_model_',
+	'path' => CACHE . 'models' . DS,
+	'serialize' => ($engine === 'File'),
+	'duration' => $duration
+));
+
+
+Cache::config('weekly', array(
+	'prefix' => $prefix,
+    'engine' => 'File',
+    'duration' => '+1 week',
+    'probability' => 100,
+    'path' => CACHE . 'weekly' . DS,
+));

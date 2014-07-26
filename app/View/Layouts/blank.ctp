@@ -1,8 +1,8 @@
 <!DOCTYPE html>
 <html>
-<head>    
+<head>
     <title><?php echo $this->App->getTitle($title_for_layout); ?></title>
-    <?php 
+    <?php
         $this->MetaTags->init();
         if(isset($meta_for_layout)) $this->MetaTags->addLayoutMeta($meta_for_layout);
         if(isset($preferredPlayer)) $this->MetaTags->addPlayerMeta($preferredPlayer);
@@ -16,10 +16,10 @@
       <script src="https://oss.maxcdn.com/libs/respond.js/1.4.2/respond.min.js"></script>
     <![endif]-->
 </head>
-<body class="<?php echo $this->App->contextToClassNames(); ?>">
+<body class="<?php echo $this->App->contextToClassNames(); ?>" style="padding-top:0;">
     <?php echo $this->fetch('content'); ?>
-    <?php echo $this->element('analytics'); ?>    
-    <?php echo $this->element('sql_dump'); ?> 
+    <?php echo $this->element('analytics'); ?>
+    <?php echo $this->element('sql_dump'); ?>
 </body>
 </html>
-    
+

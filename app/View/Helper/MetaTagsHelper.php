@@ -18,20 +18,22 @@ class MetaTagsHelper extends AppHelper {
             $this->Html->meta('favicon.ico','/img/favicon.ico', array('type' => 'icon')),
             $this->Html->meta(array("name" => 'referrer', "value" => "origin")),
             $this->Html->meta('canonical', $this->Html->url( null, true ), array('rel'=>'canonical', 'type'=>null, 'title'=>null)),
-            '<link rel="author" type="text/plain" href="'.$domain.'humans.txt"" />',
+            '<link href="https://plus.google.com/117543200043480372792" rel="publisher" />',
+            '<link rel="author" type="text/plain" href="'.$domain.'humans.txt" />',
             '<noscript><meta http-equiv="refresh" content="0; URL=/pages/requirements/" /></noscript>',
-
             $this->Html->css(array(
                 "styles.min"
             )),
 
             $this->Html->script(array(
-                array("src" => "//code.jquery.com/jquery-2.0.3.min.js"),
-                array("src" => "//netdna.bootstrapcdn.com/bootstrap/3.1.1/js/bootstrap.min.js"),
-                "//d3js.org/d3.v3.min.js",
-                "//vjs.zencdn.net/4.6/video.js",
-                "/js/vendor/videojs.youtube.js",
+                "vendor/jquery-2.1.1.min",
+                "vendor/bootstrap.min",
+                "vendor/d3.v3.min",
+               // "vendor/video",
+               // "vendor/videojs.youtube",
                 "vendor/typeahead",
+                "vendor/jquery.easing-1.3",
+                "vendor/jquery.royalslider.min",
                 "vendor/sjsi",
                 "tmt"
             ))

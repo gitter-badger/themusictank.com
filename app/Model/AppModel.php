@@ -10,6 +10,7 @@ App::uses('Model', 'Model');
  */
 class AppModel extends Model {
 
+
     /**
      * Creates a unique slug based on the $string passed.
      * Unicity is based on a slug field in the table.
@@ -59,8 +60,40 @@ class AppModel extends Model {
         return false;
     }
 
+    // Creates unique slugs, but takes into account
+    // the values created by the current array instead of
+    // only db values
+    public function batchSlugs($names)
+    {
+    	$batchSlugs = array();
+
+    	foreach ($names as $name)
+    	{
+    		// Create a unique slug based on db values
+			$slug = $newSlug = $this->createSlug(utf8_encode($name));
+
+			// Double check the current set for duplicates
+			// and loop until we have a available key
+            // Assume that if the slug xyu-1 did not exist, so would xuy-2
+            while(in_array($newSlug, $batchSlugs))
+            {
+	            if (!preg_match ('/-{1}([0-9]+)$/', $slug, $matches))
+	            {
+	                $newSlug .= '-1';
+	            }
+	            else
+	            {
+	                $newSlug = preg_replace ('/[0-9]+$/', $matches[1]+1, $slug );
+	            }
+            }
+            $batchSlugs[] = $newSlug;
+    	}
+
+        return $batchSlugs;
+    }
+
     /**
-     * Dispatches a preformated event.
+     * Dispatches a pre-formated event.
      *
      * @param string $name The name of event triggered
      * @return void
@@ -70,44 +103,6 @@ class AppModel extends Model {
         $eventName = array("Model", $this->name, $name);
         CakeEventManager::instance()->dispatch(new CakeEvent(implode(".", $eventName), $this, $this->data));
     }
-
-
-    public function getImageFromUrl($remoteUrl, $previousUrl = null)
-    {
-        $ds             = DIRECTORY_SEPARATOR;
-        $newname        = md5($remoteUrl) . ".jpg";
-        $previousname   = md5($previousUrl) . ".jpg";
-        $subfolder      = substr(strtolower($this->name), 0, 5);
-        $imagesRoot     = "img";
-        $cacheRoot      = "cache";
-        $path           = $imagesRoot . $ds . $cacheRoot . $ds . $subfolder;
-
-        if(!file_exists($path))
-        {
-            mkdir($path, 0776, true);
-        }
-
-        // Delete previous pic
-        if(!is_null($previousUrl) && file_exists($path . $ds . $previousname))
-        {
-            unlink($path . $previousname);
-        }
-
-        // Save new pic
-        $ch = curl_init($remoteUrl);
-        curl_setopt($ch, CURLOPT_HEADER, 0);
-        curl_setopt ($ch, CURLOPT_FOLLOWLOCATION, 1);
-        curl_setopt($ch, CURLOPT_RETURNTRANSFER, 1);
-        curl_setopt($ch, CURLOPT_BINARYTRANSFER, 1);
-        $rawdata = curl_exec($ch);
-        curl_close($ch);
-        $fp = fopen($path . $ds . $newname, 'w');
-        fwrite($fp, $rawdata);
-        fclose($fp);
-
-        return $cacheRoot . $ds . $subfolder . $ds . $newname;
-    }
-
 
     private function _makeSlugUnique($slug)
     {

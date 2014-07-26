@@ -3,10 +3,10 @@
 class LastfmArtist extends AppModel
 {
     const CACHE_SEARCH  		= "LastfmArtist-Search-%s-%d";
-    const CACHE_SEARCH_TIMEOUT	= "daily";
+    const CACHE_SEARCH_TIMEOUT	= "weekly";
 
 	public $belongsTo = array('Artist');
-    public $actsAs = array('Lastfm');
+    public $actsAs = array('Lastfm', 'ThumbnailLeech');
 
     public function getExpiredRange()
     {
@@ -106,32 +106,35 @@ class LastfmArtist extends AppModel
         $listBeingParsed    = array();
         $returnList         = array();
 
+
         foreach($needles->artist as $artist)
         {
-            // only save artists of interest
-            if(property_exists($artist, "mbid") && trim($artist->mbid) != "")
-            {
-	            // Add the artist to the global collection if
-	            // its a new artist
-	            if(!array_key_exists($artist->mbid, $currentList))
+        	if ($artist) {
+	            // only save artists of interest
+	            if(property_exists($artist, "mbid") && trim($artist->mbid) != "")
 	            {
-	                // Also make sure there are no doubles inside the possible new stack
-	                if(!in_array($artist->mbid, $listBeingParsed))
-	                {
-	                    $returnList[] = array(
-	                        "LastfmArtist" => array(
-	                            "url"       => $artist->url,
-	                            "mbid" => $artist->mbid,
-	                            "name" => $artist->name
-	                        ),
-	                        "Artist"    => array(
-	                            "name" => $artist->name
-	                        )
-	                    );
-	                    $listBeingParsed[] = $artist->mbid;
-	                }
-	            }
-	        }
+		            // Add the artist to the global collection if
+		            // its a new artist
+		            if(!array_key_exists($artist->mbid, $currentList))
+		            {
+		                // Also make sure there are no doubles inside the possible new stack
+		                if(!in_array($artist->mbid, $listBeingParsed))
+		                {
+		                    $returnList[] = array(
+		                        "LastfmArtist" => array(
+		                            "url"       => $artist->url,
+		                            "mbid" => $artist->mbid,
+		                            "name" => $artist->name
+		                        ),
+		                        "Artist"    => array(
+		                            "name" => $artist->name
+		                        )
+		                    );
+		                    $listBeingParsed[] = $artist->mbid;
+		                }
+		            }
+		        }
+		    }
         }
 
         return $returnList;
@@ -147,8 +150,8 @@ class LastfmArtist extends AppModel
             "id"        => $lastfmArtistId,
             "artist_id" => $artistId,
             "lastsync"  => time(),
-            "image"     => empty($infos->image[4]->{'#text'}) ? null : $this->getImageFromUrl($infos->image[4]->{'#text'}, $image),
-            "image_src" => empty($infos->image[4]->{'#text'}) ? null : $infos->image[4]->{'#text'},
+            "image"     => empty($infos->image[3]->{'#text'}) ? null : $this->getImageFromUrl($infos->image[3]->{'#text'}, $image),
+            "image_src" => empty($infos->image[3]->{'#text'}) ? null : $infos->image[3]->{'#text'},
             "biography" => empty($infos->bio->summary) ? __("Biography is not available at this time.") : $this->cleanLastFmWikiText($infos->bio->content),
             "url"       => $infos->url,
             "mbid"      => $infos->mbid,

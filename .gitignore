@@ -20,3 +20,6 @@ app\webroot\img\cache\user\*
 app/webroot/img/cache/rdioa/*
 app/webroot/img/cache/user/*
 img/cache/lastf/*
+app/tmp/cache/persistent/tmt_cake_core_cake_dev_en-us
+app/tmp/cache/persistent/tmt_cake_core_cake_console_eng
+app/tmp/cache/persistent/tmt_cake_core_cake_dev_eng

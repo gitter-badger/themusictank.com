@@ -35,14 +35,14 @@ class LastfmAlbum extends AppModel
     private function _saveDetails($infos)
     {
         $albumId        = $this->getData("Album.id");
-        $lastfmAlbumId  = $this->getData("LastfmAlbum.id");
+        $lastfmAlbumId  = Hash::get($this->data, "LastfmAlbum.id");
         $image          = Hash::get($this->data, "LastfmAlbum.image");
 
         // Save the latest updated timestamp as to not query all the time
         if(is_null($infos))
         {
             $this->save(array(
-                "id"        => $this->getData("LastfmAlbum.id"),
+                "id"        => $lastfmAlbumId,
                 "lastsync"  => time()
             ));
             return;

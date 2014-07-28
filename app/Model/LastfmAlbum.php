@@ -20,11 +20,8 @@ class LastfmAlbum extends AppModel
             $albumName  = $this->getData("Album.name");
             $infos      = $this->getLastFmAlbumDetails($artistName, $albumName);
 
-            if($infos)
-            {
-                $this->_saveDetails($infos);
-                return $infos;
-            }
+            $this->_saveDetails($infos);
+            return $infos;
         }
         return $this->data;
     }
@@ -40,6 +37,16 @@ class LastfmAlbum extends AppModel
         $albumId        = $this->getData("Album.id");
         $lastfmAlbumId  = $this->getData("LastfmAlbum.id");
         $image          = Hash::get($this->data, "LastfmAlbum.image");
+
+        // Save the latest updated timestamp as to not query all the time
+        if(is_null($infos))
+        {
+            $this->save(array(
+                "id"        => $this->getData("LastfmAlbum.id"),
+                "lastsync"  => time()
+            ));
+            return;
+        }
 
         if(trim($infos->mbid) != "")
         {

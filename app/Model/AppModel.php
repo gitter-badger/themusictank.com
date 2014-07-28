@@ -70,7 +70,7 @@ class AppModel extends Model {
     	foreach ($names as $name)
     	{
     		// Create a unique slug based on db values
-			$slug = $newSlug = $this->createSlug(utf8_encode($name));
+			$slug = $newSlug = $this->createSlug($name);
 
 			// Double check the current set for duplicates
 			// and loop until we have a available key

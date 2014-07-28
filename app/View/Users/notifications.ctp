@@ -1,12 +1,20 @@
+<div class="header-wrapper">
+    <section class="jumbotron introduction">
+        <div class="container">
+            <h1><?php echo __("Notifications"); ?></h1>
+        </div>
+    </section>
+</div>
+
 <div class="container container-fluid">
 
-    <h2><?php echo __("Notifications"); ?></h2>
+    <h2></h2>
 
     <button name="markAsRead"  class="btn btn-primary"><?php echo __("Mark all as read"); ?></button>
 
-    <div class="notifications">    
+    <div class="notifications">
         <?php foreach($notifications as $notification) : ?>
-            <div class="notification <?php echo $notification["Notifications"]["is_viewed"] ? "read" : "new"; ?> <?php echo $notification["Notifications"]["type"]; ?>"> 
+            <div class="notification <?php echo $notification["Notifications"]["is_viewed"] ? "read" : "new"; ?> <?php echo $notification["Notifications"]["type"]; ?>">
 
                 <h3><?php echo $notification["Notifications"]["title"]; ?></h3>
 
@@ -17,30 +25,30 @@
                 <?php if(array_key_exists("Achievement", $notification["Notifications"])) : ?>
                    <p><blockquote><?php echo $notification["Notifications"]["Achievement"]["description"]; ?></blockquote></p>
 
-                <?php elseif(array_key_exists("UserFollower", $notification["Notifications"])) : ?>            
+                <?php elseif(array_key_exists("UserFollower", $notification["Notifications"])) : ?>
                     <p>
                         <?php echo $this->Html->link($notification["Notifications"]["UserFollower"]["firstname"] . " " . $notification["Notifications"]["UserFollower"]["lastname"], array('controller' => 'profiles', 'action' => 'view', $notification["Notifications"]["UserFollower"]["slug"])); ?>
                         <?php echo __("is now following your public activity on the website."); ?>
                     </p>
-                <?php endif; ?>        
+                <?php endif; ?>
             </div>
-        <?php endforeach; ?>    
+        <?php endforeach; ?>
     </div>
-        
+
     <ul class="pagination">
     <?php
         echo $this->Paginator->prev(__('prev'), array('tag' => 'li'), null, array('tag' => 'li','class' => 'disabled','disabledTag' => 'a'));
         echo $this->Paginator->numbers(array('separator' => '','currentTag' => 'a', 'currentClass' => 'active','tag' => 'li','first' => 1));
         echo $this->Paginator->next(__('next'), array('tag' => 'li','currentClass' => 'disabled'), null, array('tag' => 'li','class' => 'disabled','disabledTag' => 'a'));
     ?>
-    </ul>    
+    </ul>
 
     <script>
         $(function(){
             $("button[name=markAsRead]").click(function(){
                 $.getJSON("<?php echo Router::url(array("controller" => "ajax", "action" => "okstfu")); ?>", function(){
                     $('.notifications .notification.new').removeClass("new").addClass("read");
-                }); 
+                });
             });
         });
     </script>

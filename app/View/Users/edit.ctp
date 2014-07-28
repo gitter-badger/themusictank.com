@@ -1,12 +1,21 @@
+<div class="header-wrapper">
+    <section class="jumbotron introduction">
+        <div class="container">
+            <h1><?php echo __("Profile"); ?></h1>
+        </div>
+    </section>
+</div>
+
 <div class="container container-fluid">
     <?php echo $this->Session->flash('auth'); ?>
-
-    <h2><?php echo __("Edit your profile"); ?></h2>
 
     <?php echo $this->Form->create(); ?>
     <?php echo $this->Form->input("id"); ?>
 
+    <h2><?php echo __("Settings"); ?></h2>
+
     <div class="row">
+
         <div class="col-md-6">
 
             <div class="panel panel-default">
@@ -27,28 +36,10 @@
 
             <div class="panel panel-default">
                 <div class="panel-heading">
-                    <h3 class="panel-title"><?php echo __("Player preferences"); ?></h3>
-                </div>
-                <div class="panel-body">
-                    <p><?php echo __("When available, we will use your prefered player to play songs. When your choice is not available, we will give you the option to use mp3 files."); ?></p>
-                    <div class="form-group">
-                        <?php echo $this->Form->input("preferred_player_api", array("options" => $availableApis)); ?>
-                    </div>
-                </div>
-            </div>
-
-        </div>
-    </div>
-
-    <div class="row">
-        <div class="col-md-6">
-
-            <div class="panel panel-default">
-                <div class="panel-heading">
                     <h3 class="panel-title"><?php echo __("Additional information"); ?></h3>
                 </div>
                 <div class="panel-body">
-                    <p><?php echo __("You don't have to fill the following optional fields to review tracks on The Music Tank, but it does make this place a little more lively if you take some time to describe yourself."); ?></p>    
+                    <p><?php echo __("You don't have to fill the following optional fields to review tracks on The Music Tank, but it does make this place a little more lively if you take some time to describe yourself."); ?></p>
                     <div class="form-group">
                         <?php echo $this->Form->input("firstname"); ?>
                         <?php echo $this->Form->input("lastname"); ?>
@@ -58,10 +49,6 @@
             </div>
 
         </div>
-
-        <div class="col-md-6">
-            &nbsp;
-        </div>  
     </div>
 
     <?php echo $this->Form->end(__("Update profile settings")); ?>
@@ -69,7 +56,7 @@
 
 
 <div class="container container-fluid">
-    
+
     <h2><?php echo __("Manage third party services"); ?></h2>
 
     <div class="row">
@@ -80,8 +67,8 @@
                 <div class="panel-heading">
                     <h3 class="panel-title"><?php echo __("Rdio"); ?></h3>
                 </div>
-                <?php if($hasRdio) : ?>   
-                    <div class="panel-body">     
+                <?php if($hasRdio) : ?>
+                    <div class="panel-body">
                         <?php if(!$hasFacebook && !$hasAccount) : ?>
                             <?php echo __("Rdio being your only active authentification method, we cannot revoke it."); ?>
                         <?php else : ?>
@@ -90,7 +77,7 @@
                     </div>
                <?php endif; ?>
 
-                <?php if(!$hasRdio) : ?>  
+                <?php if(!$hasRdio) : ?>
                 <ul class="list-group">
                     <li class="list-group-item"><?php echo $this->Html->link(__("Connect a Rdio account"), array('controller' => 'apis', 'action' => 'connectRdio', '?' => array("rurl" => $redirectUrl)), array("class" => "btn btn-info btn-lg btn-block")); ?></li>
                 </ul>
@@ -104,8 +91,8 @@
                 <div class="panel-heading">
                     <h3 class="panel-title"><?php echo __("Facebook"); ?></h3>
                 </div>
-                <?php if($hasFacebook) : ?>      
-                    <div class="panel-body">             
+                <?php if($hasFacebook) : ?>
+                    <div class="panel-body">
                         <?php if(!$hasRdio && !$hasAccount) : ?>
                             <?php echo __("Facebook being your only active authentification method, we cannot revoke it."); ?>
                         <?php else : ?>
@@ -114,7 +101,7 @@
                     </div>
                 <?php endif; ?>
 
-                <?php if(!$hasFacebook) : ?>  
+                <?php if(!$hasFacebook) : ?>
                 <ul class="list-group">
                     <li class="list-group-item"><?php echo $this->Html->link(__("Connect a Facebook account"), array('controller' => 'apis', 'action' => 'connectFacebook'), array("class" => "btn btn-primary btn-lg btn-block")); ?></li>
                 </ul>

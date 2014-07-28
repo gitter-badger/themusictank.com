@@ -1,4 +1,4 @@
-<section class="jumbotron colored big-user-badge">
+<section class="jumbotron big-user-badge">
 	<div class="container">
 		<div class="row">
 		    <div class="col-md-3">

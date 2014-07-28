@@ -25,18 +25,20 @@ class MetaTagsHelper extends AppHelper {
             '<noscript><meta http-equiv="refresh" content="0; URL=/pages/requirements/" /></noscript>',
             $this->Html->css(array(
                 "styles.min"
+            )),
+            $this->Html->script(array(
+                "vendor/jquery-2.1.1.min",
+                "tmt"
             ))
         );
 
         $scripts = array(
             $this->Html->script(array(
-                "vendor/jquery-2.1.1.min",
                 "vendor/bootstrap.min",
                 "vendor/d3.v3.min",
                 "vendor/typeahead",
                 "vendor/jquery.easing-1.3",
-                "vendor/jquery.royalslider.min",
-                "tmt"
+                "vendor/jquery.royalslider.min"
             ))
         );
 

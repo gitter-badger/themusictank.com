@@ -6,24 +6,29 @@
     $lastHeader = -1;
 ?>
 
+<div class="header-wrapper">
+    <section class="jumbotron introduction">
+        <div class="container">
+            <h1><?php echo __("Dashboard"); ?></h1>
+        </div>
+    </section>
+</div>
+
+
 <div class="container container-fluid">
 
     <div class="row">
 
         <div class="col-md-8">
 
-            <section class="activity-stream">    
+            <section class="activity-stream">
 
-                <header>
-                    <h2><?php echo __("Activity stream"); ?></h2>
-                </header>
-
-                <?php if(count($feed) > 0) : ?>    
+                <?php if(count($feed) > 0) : ?>
                     <?php foreach($feed as $idx => $event) : ?>
-                        <?php 
-                            $currentDay = date("z", (int)Hash::get($event, "UserActivity.created")); 
+                        <?php
+                            $currentDay = date("z", (int)Hash::get($event, "UserActivity.created"));
                         ?>
-                        <?php if($currentDay != $lastHeader) : ?>           
+                        <?php if($currentDay != $lastHeader) : ?>
                             <header class="time-header">
                                 <time datetime="<?php echo $this->Time->i18nFormat(Hash::get($event, "UserActivity.created")); ?>" data-title="true" title="<?php echo $this->Time->niceShort(Hash::get($event, "UserActivity.created")); ?>">
                                     <?php echo $this->Time->timeAgoInWords(Hash::get($event, "UserActivity.created"), array('accuracy' => array('day' => 'day'), 'end' => '1 month')); ?>
@@ -41,9 +46,9 @@
                                     <h3 class="popover-title">
                                         <?php if($event["User"]["id"] === $currentUserId) : ?>
                                             <?php echo sprintf(__("You have unlocked the achievement \"%s\".", Hash::get($event, "UserActivity.Achievement.name"))); ?>
-                                        <?php else : ?>                                
-                                            <?php echo $this->Html->link(sprintf("%s %s", Hash::get($event, "UserActivity.User.firstname"), Hash::get($event, "UserActivity.User.lastname")), array('controller' => 'profiles', 'action' => 'view', Hash::get($event, "UserActivity.UserFollower.slug"))); ?> 
-                                            <?php echo sprintf(__(" has unlocked the achievement \"%s\"."), Hash::get($event, "UserActivity.Achievement.name")); ?>                                
+                                        <?php else : ?>
+                                            <?php echo $this->Html->link(sprintf("%s %s", Hash::get($event, "UserActivity.User.firstname"), Hash::get($event, "UserActivity.User.lastname")), array('controller' => 'profiles', 'action' => 'view', Hash::get($event, "UserActivity.UserFollower.slug"))); ?>
+                                            <?php echo sprintf(__(" has unlocked the achievement \"%s\"."), Hash::get($event, "UserActivity.Achievement.name")); ?>
                                         <?php endif; ?>
                                     </h3>
                                     <div class="popover-content">
@@ -52,7 +57,7 @@
                                 </div>
                             </div>
 
-                        <?php elseif(Hash::check($event, "UserActivity.UserFollower")) : 
+                        <?php elseif(Hash::check($event, "UserActivity.UserFollower")) :
                             $fullname = Hash::get($event, "UserActivity.UserFollower.firstname") . " " . Hash::get($event, "UserActivity.UserFollower.lastname"); ?>
 
                             <div class="popoverbox subscription">
@@ -61,10 +66,10 @@
                                     <h3 class="popover-title">
                                         <?php if($event["User"]["id"] === $currentUserId) : ?>
                                             <?php echo __("You have subscribed to "); ?>
-                                            <?php echo $this->Html->link($fullname, array('controller' => 'profiles', 'action' => 'view', $event["UserActivity"]["UserFollower"]["slug"])); ?>                            
+                                            <?php echo $this->Html->link($fullname, array('controller' => 'profiles', 'action' => 'view', $event["UserActivity"]["UserFollower"]["slug"])); ?>
                                         <?php else : ?>
                                             <?php echo $this->Html->link($fullname, array('controller' => 'profiles', 'action' => 'view', $event["UserActivity"]["UserFollower"]["slug"])); ?>
-                                            <?php echo __(" has subscribed to "); ?>                            
+                                            <?php echo __(" has subscribed to "); ?>
                                             <?php if($event["UserActivity"]["UserFollower"]["id"] === $currentUserId) : ?>
                                                 <?php echo __("you."); ?>
                                             <?php else : ?>
@@ -78,7 +83,7 @@
                                             <div class="panel-heading">
                                                 <h3 class="panel-title"><?php echo $this->Html->link($fullname, array('controller' => 'profiles', 'action' => 'view', Hash::get($event, "UserActivity.UserFollower.slug"))); ?></h3>
                                             </div>
-                                            <div class="panel-body"> 
+                                            <div class="panel-body">
                                                 <?php  echo $this->Html->link(
                                                         $this->Html->image($this->App->getImageUrl(Hash::get($event, "UserActivity.UserFollower")), array("class" => "img-circle", "alt" => $fullname, "title" => $fullname)),
                                                         array('controller' => 'profiles', 'action' => 'view', Hash::get($event, "UserActivity.UserFollower.slug")),
@@ -91,7 +96,7 @@
                                 </div>
                             </div>
 
-                
+
                         <?php elseif(Hash::check($event, "UserActivity.ReviewedTrack")) : ?>
 
                             <div class="popoverbox review">
@@ -100,11 +105,11 @@
                                     <h3 class="popover-title">
                                         <?php if($event["User"]["id"] === $currentUserId) : ?>
                                             <?php echo __("You have reviewed "); ?>
-                                            <?php echo $this->Html->link($event["UserActivity"]["ReviewedTrack"]["title"], array('controller' => 'tracks', 'action' => 'by_user', $event["UserActivity"]["ReviewedTrack"]["slug"], $currentUserSlug)); ?>                            
+                                            <?php echo $this->Html->link($event["UserActivity"]["ReviewedTrack"]["title"], array('controller' => 'tracks', 'action' => 'by_user', $event["UserActivity"]["ReviewedTrack"]["slug"], $currentUserSlug)); ?>
                                         <?php else : ?>
                                             <?php echo $this->Html->link($event["UserActivity"]["UserFollower"]["firstname"] . " " . $event["UserActivity"]["UserFollower"]["lastname"], array('controller' => 'profiles', 'action' => 'view', $event["UserActivity"]["UserFollower"]["slug"])); ?>
-                                            <?php echo __(" has reviewed to "); ?>                            
-                                            <?php echo $this->Html->link($event["UserActivity"]["ReviewedTrack"]["title"], array('controller' => 'tracks', 'action' => 'by_user', $event["UserActivity"]["ReviewedTrack"]["slug"], $event["UserActivity"]["UserFollower"]["slug"])); ?>                                                       
+                                            <?php echo __(" has reviewed to "); ?>
+                                            <?php echo $this->Html->link($event["UserActivity"]["ReviewedTrack"]["title"], array('controller' => 'tracks', 'action' => 'by_user', $event["UserActivity"]["ReviewedTrack"]["slug"], $event["UserActivity"]["UserFollower"]["slug"])); ?>
                                         <?php endif; ?>
                                     </h3>
                                     <div class="popover-content">
@@ -114,19 +119,19 @@
                                                     array('escape' => false)
                                             ); ?>
                                         <p>
-                                            <?php echo $this->Html->link(Hash::get($event, "UserActivity.ReviewedTrack.title"), array('controller' => 'tracks', 'action' => 'view', Hash::get($event, "UserActivity.ReviewedTrack.slug"))); ?>                
+                                            <?php echo $this->Html->link(Hash::get($event, "UserActivity.ReviewedTrack.title"), array('controller' => 'tracks', 'action' => 'view', Hash::get($event, "UserActivity.ReviewedTrack.slug"))); ?>
                                             <?php echo __("can be found on"); ?> <?php echo $this->Html->link(Hash::get($event, "UserActivity.ReviewedTrackAlbum.name"), array('controller' => 'albums', 'action' => 'view', Hash::get($event, "UserActivity.ReviewedTrackAlbum.slug"))); ?>
                                             <?php echo __("by"); ?> <?php echo $this->Html->link(Hash::get($event, "UserActivity.ReviewedTrackArtist.name"), array('controller' => 'artists', 'action' => 'view', Hash::get($event, "UserActivity.ReviewedTrackArtist.slug"))); ?>
                                         </p>
                                     </div>
                                 </div>
                             </div>
-                        <?php endif; ?>   
-                        </div>   
+                        <?php endif; ?>
+                        </div>
                     <?php endforeach; ?>
-                <?php else : ?>    
-                    <p><?php echo __("Nothing is happening."); ?></p>    
-                <?php endif; ?>    
+                <?php else : ?>
+                    <p><?php echo __("Nothing is happening."); ?></p>
+                <?php endif; ?>
 
                 <div class="clearfix"></div>
             </section>
@@ -149,7 +154,7 @@
                         <?php echo __("Found on"); ?> <?php echo $this->Html->link($dailyChallenge["Album"]["name"], array('controller' => 'albums', 'action' => 'view', $dailyChallenge["Album"]["slug"])); ?>
                         <?php echo __("by"); ?> <?php echo $this->Html->link($dailyChallenge["Album"]["Artist"]["name"], array('controller' => 'artists', 'action' => 'view', $dailyChallenge["Album"]["Artist"]["slug"])); ?>
                     </p>
-                    <p><?php echo $this->Html->link(__("Let's do this"), array('controller' => 'player', 'action' => 'play', $dailyChallenge["Track"]["slug"]), array("class" => "btn btn-primary")); ?></p>        
+                    <p><?php echo $this->Html->link(__("Let's do this"), array('controller' => 'player', 'action' => 'play', $dailyChallenge["Track"]["slug"]), array("class" => "btn btn-primary")); ?></p>
                 </div>
             </div>
         <?php endif; ?>
@@ -164,5 +169,5 @@
         </div>
 
     </aside>
-    
+
 </div>

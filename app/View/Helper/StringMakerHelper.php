@@ -233,7 +233,7 @@ class StringMakerHelper extends AppHelper {
 			}
 		}
 
-	    return sprintf(__("%s make music."), $artist["name"]);
+	    return "N/A";//sprintf(__("%s make music."), $artist["name"]);
 	}
 
 	public function composeTrackHighlight($trackReviewSnapshot)

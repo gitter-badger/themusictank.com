@@ -119,7 +119,6 @@ if(!isset($_SERVER['SERVER_NAME']))
 	$_SERVER['SERVER_NAME'] = $_SERVER['argv'][count($_SERVER['argv'])-1];
 }
 
-
 if(preg_match('/themusictank\.com/', $_SERVER['SERVER_NAME']))
 {
     Configure::write('RdioApiConfig', array("wfxhgzqruegeg3cksvfuw648", "B9ADDnXtBv"));
@@ -136,7 +135,8 @@ if(preg_match('/themusictank\.com/', $_SERVER['SERVER_NAME']))
         "secret" => "6b8ba6118181a36041f88b8ae4616c4c"
     ));
 
-    Configure::write('VLC', "VLC");
+    Configure::write('VLC', "VLC"); // requires VLC
+    Configure::write('ConvertCMD', "convert"); // requires imagemagik installed
 }
 
 elseif(preg_match('/tmt\.dev/', $_SERVER['SERVER_NAME']))
@@ -148,6 +148,7 @@ elseif(preg_match('/tmt\.dev/', $_SERVER['SERVER_NAME']))
     ));
 
     Configure::write('VLC', null);
+    Configure::write('ConvertCMD', null);
 }
 elseif(preg_match('/themusictank\.nvi/', $_SERVER['SERVER_NAME']))
 {
@@ -162,4 +163,5 @@ elseif(preg_match('/themusictank\.nvi/', $_SERVER['SERVER_NAME']))
     ));
 
     Configure::write('VLC', "/Applications/VLC.app/Contents/MacOS/VLC");
+    Configure::write('ConvertCMD', null);
 }

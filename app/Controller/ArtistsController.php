@@ -38,7 +38,7 @@ class ArtistsController extends AppController {
      *
      * @param string $artistSlug Artist slug
      */
-    public function view($artistSlug)
+    public function view($artistSlug = "")
     {
         $isLoggedIn = $this->userIsLoggedIn();
         $data       = $this->Artist->getBySlug($artistSlug);
@@ -84,7 +84,7 @@ class ArtistsController extends AppController {
      *
      * @param string $letter A supported letter
      */
-    public function browse($letter)
+    public function browse($letter = "a")
     {
         $this->set('artists', $this->Paginator->paginate('Artist', array('Artist.name LIKE' => trim($letter)."%")));
         $this->set("artistCategories",  $this->Artist->getCategories());

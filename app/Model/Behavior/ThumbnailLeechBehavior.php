@@ -9,6 +9,7 @@ class ThumbnailLeechBehavior extends ModelBehavior {
 
     public function getImageFromUrl($model, $remoteUrl, $previousUrl = null)
     {
+
         ini_set('memory_limit', '64M');
 
         $ds             = DIRECTORY_SEPARATOR;
@@ -19,6 +20,10 @@ class ThumbnailLeechBehavior extends ModelBehavior {
         $subfolder      = substr($newname, 0, 1);
         $imagesRoot     = WWW_ROOT . "img" . $ds . "cache";
         $path           = $imagesRoot . $ds . $objTypeFolder . $ds . $subfolder;
+
+        if(is_null(Configure::read('ConvertCMD'))) {
+            return $objTypeFolder . $ds . $subfolder . $ds . $newname;
+        }
 
         // Create the full folder path if it does not already exist.
         if(!file_exists($path))

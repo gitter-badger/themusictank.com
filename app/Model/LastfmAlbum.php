@@ -41,27 +41,30 @@ class LastfmAlbum extends AppModel
         $lastfmAlbumId  = $this->getData("LastfmAlbum.id");
         $image          = Hash::get($this->data, "LastfmAlbum.image");
 
-        $this->saveMany(array(
-            "LastfmAlbum" => array(
-                "id"        => $lastfmAlbumId,
-                "mbid" => $infos->mbid,
-                "lastsync"  => time(),
-                "wiki"      => empty($infos->wiki->content) ? null : $this->cleanLastFmWikiText($infos->wiki->content),
-	            "Album" => array(
-	                "id"  => $albumId,
-	                "slug"  => $this->getData("Album.slug"),
-	                "release_date" => strtotime(trim($infos->releasedate)),
-	                "release_date_text" => $infos->releasedate,
-		            "image"     => empty($infos->image[4]->{'#text'}) ? null : $this->getImageFromUrl($infos->image[4]->{'#text'}, $image),
-		            "image_src" => empty($infos->image[4]->{'#text'}) ? null : $infos->image[4]->{'#text'}
-	            )
-            )
-        ), array("deep" => true));
+        if(trim($infos->mbid) != "")
+        {
+            $this->saveMany(array(
+                "LastfmAlbum" => array(
+                    "id"        => $lastfmAlbumId,
+                    "mbid" => $infos->mbid,
+                    "lastsync"  => time(),
+                    "wiki"      => empty($infos->wiki->content) ? null : $this->cleanLastFmWikiText($infos->wiki->content),
+    	            "Album" => array(
+    	                "id"  => $albumId,
+    	                "slug"  => $this->getData("Album.slug"),
+    	                "release_date" => strtotime(trim($infos->releasedate)),
+    	                "release_date_text" => $infos->releasedate,
+    		            "image"     => empty($infos->image[4]->{'#text'}) ? null : $this->getImageFromUrl($infos->image[4]->{'#text'}, $image),
+    		            "image_src" => empty($infos->image[4]->{'#text'}) ? null : $infos->image[4]->{'#text'}
+    	            )
+                )
+            ), array("deep" => true));
 
-        $Track = new Track();
-        $Track->data = $this->data;
-        $Track->data["Album"] = array("id" => $albumId);
-        $Track->importFromLastFm($infos);
+            $Track = new Track();
+            $Track->data = $this->data;
+            $Track->data["Album"] = array("id" => $albumId);
+            $Track->importFromLastFm($infos);
+        }
     }
 
     public function listCurrentCollection()

@@ -23,3 +23,8 @@ img/cache/lastf/*
 app/tmp/cache/persistent/tmt_cake_core_cake_dev_en-us
 app/tmp/cache/persistent/tmt_cake_core_cake_console_eng
 app/tmp/cache/persistent/tmt_cake_core_cake_dev_eng
+app/webroot/img/cache/ca6fd
+app/webroot/img/cache/95638
+app/tmp/cache/models/tmt_cake_model_default_themusictank_lastfm_albums
+app/tmp/cache/models/tmt_cake_model_default_themusictank_lastfm_artists
+app/tmp/cache/models/tmt_cake_model_default_themusictank_lastfm_tracks

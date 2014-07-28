@@ -18,7 +18,7 @@ class TracksController extends AppController {
      * @param string $albumSlug Artist slug
      * @param string $trackSlug Album slug
      */
-    public function view($trackSlug)
+    public function view($trackSlug = "")
     {
         $isLoggedIn = $this->userIsLoggedIn();
         $data       = $this->Track->getBySlugContained($trackSlug);
@@ -68,7 +68,7 @@ class TracksController extends AppController {
      * @param string $artistSlug Artist slug (unused)
      * @param string $trackSlug Album slug
      */
-    public function embed($trackSlug)
+    public function embed($trackSlug = "")
     {
         $this->layout = "blank";
 
@@ -103,7 +103,7 @@ class TracksController extends AppController {
         $this->set("oembedLink", 	$this->Track->getOEmbedUrl());
     }
 
-    public function by_user($trackSlug, $userSlug)
+    public function by_user($trackSlug = "", $userSlug = "")
     {
         $userData = $this->User->findBySlug($userSlug, array("fields" => "User.*"));
         if(!$userData) throw new NotFoundException(sprintf(__("Could not find the user %s"), $userSlug));
@@ -145,7 +145,7 @@ class TracksController extends AppController {
         ));
     }
 
-    public function by_subscriptions($trackSlug)
+    public function by_subscriptions($trackSlug = "")
     {
         $data = $this->Track->getBySlugContained($trackSlug);
         if(!$data) throw new NotFoundException(sprintf(__("Could not find the track %s"), $trackSlug));

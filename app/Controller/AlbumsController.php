@@ -17,7 +17,7 @@ class AlbumsController extends AppController {
      * @param string $artistSlug Artist slug (unused)
      * @param string $albumSlug Album slug
      */
-    public function view($albumSlug)
+    public function view($albumSlug = "")
     {
         $isLoggedIn = $this->userIsLoggedIn();
         $data       = $this->Album->getFirstBySlug($albumSlug);
@@ -65,7 +65,7 @@ class AlbumsController extends AppController {
      * @param string $artistSlug Artist slug (unused)
      * @param string $albumSlug Album slug
      */
-    public function embed($albumSlug)
+    public function embed($albumSlug = "")
     {
         $this->usesPlayer();
         $this->layout = "blank";

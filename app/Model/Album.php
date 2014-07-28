@@ -97,7 +97,7 @@ class Album extends AppModel
                         ),
                         "Album" => array(
                             "artist_id" => $artistId,
-                            "name" => utf8_encode($album->name),
+                            "name" => $album->name,//utf8_encode($album->name),
                             "mbid" => $album->mbid,
                             "slug" => null,
                             "release_date" => 0,

@@ -5,6 +5,7 @@ class MetaTagsHelper extends AppHelper {
     var $helpers = array('Html');
     // Metas are values that can be printed right on the page
     private $_metas = null;
+    private $_scripts = null;
     // Layout metas are array of information that need to be converted into regular meta
     private $_layoutMetas = null;
 
@@ -20,26 +21,27 @@ class MetaTagsHelper extends AppHelper {
             $this->Html->meta('canonical', $this->Html->url( null, true ), array('rel'=>'canonical', 'type'=>null, 'title'=>null)),
             '<link href="https://plus.google.com/117543200043480372792" rel="publisher" />',
             '<link rel="author" type="text/plain" href="'.$domain.'humans.txt" />',
+            '<meta name=viewport content="width=device-width, initial-scale=1">',
             '<noscript><meta http-equiv="refresh" content="0; URL=/pages/requirements/" /></noscript>',
             $this->Html->css(array(
                 "styles.min"
-            )),
+            ))
+        );
 
+        $scripts = array(
             $this->Html->script(array(
                 "vendor/jquery-2.1.1.min",
                 "vendor/bootstrap.min",
                 "vendor/d3.v3.min",
-               // "vendor/video",
-               // "vendor/videojs.youtube",
                 "vendor/typeahead",
                 "vendor/jquery.easing-1.3",
                 "vendor/jquery.royalslider.min",
-                "vendor/sjsi",
                 "tmt"
             ))
         );
 
         $this->_metas = $metas;
+        $this->_scripts = $scripts;
     }
 
     public function add($metas)
@@ -60,7 +62,12 @@ class MetaTagsHelper extends AppHelper {
         }
     }
 
-    public function compile()
+    public function compileScripts()
+    {
+        return implode("\n\t", array_filter($this->_scripts));
+    }
+
+    public function compileMetas()
     {
         if(isset($this->_layoutMetas))
         {
@@ -70,7 +77,7 @@ class MetaTagsHelper extends AppHelper {
 
         return implode("\n\t", array_filter($this->_metas));
     }
-
+/*
     public function addPlayerMeta($preferredPlayer)
     {
         switch($preferredPlayer)
@@ -85,7 +92,7 @@ class MetaTagsHelper extends AppHelper {
         {
             $this->_metas[] = $this->Html->script('player/reviewer');
         }
-    }
+    }*/
 
     public function addOEmbedMeta($oembedLink)
     {

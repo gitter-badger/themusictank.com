@@ -28,3 +28,5 @@ app/webroot/img/cache/95638
 app/tmp/cache/models/tmt_cake_model_default_themusictank_lastfm_albums
 app/tmp/cache/models/tmt_cake_model_default_themusictank_lastfm_artists
 app/tmp/cache/models/tmt_cake_model_default_themusictank_lastfm_tracks
+app/tmp/cache/models/tmt_cake_model_default_themusictank_album_review_snapshots
+app/tmp/cache/models/tmt_cake_model_default_themusictank_artist_review_snapshots

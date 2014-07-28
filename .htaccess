@@ -9,18 +9,20 @@ AddOutputFilterByType DEFLATE application/rss+xml
 AddOutputFilterByType DEFLATE application/javascript
 AddOutputFilterByType DEFLATE application/x-javascript
 
-#Set caching on image files for 11 months
-#<filesMatch "\.(ico|gif|jpg|png)$">
-#  ExpiresActive On
-#  ExpiresDefault "access plus 11 month"
-#  Header append Cache-Control "public"
-#</filesMatch>
+# 480 weeks
+<FilesMatch "\.(ico|pdf|flv|jpg|jpeg|png|gif|js|css|swf)$">
+Header set Cache-Control "max-age=290304000, public"
+</FilesMatch>
 
-#<filesMatch "\.(css|js)$">
-#  ExpiresActive On
-#  ExpiresDefault "access plus 1 week"
-#  Header append Cache-Control "public"
-#</filesMatch>
+# 2 DAYS
+<FilesMatch "\.(xml|txt)$">
+Header set Cache-Control "max-age=172800, public, must-revalidate"
+</FilesMatch>
+
+# 2 HOURS
+<FilesMatch "\.(html|htm)$">
+Header set Cache-Control "max-age=7200, must-revalidate"
+</FilesMatch>
 
 <IfModule mod_rewrite.c>
    RewriteEngine on

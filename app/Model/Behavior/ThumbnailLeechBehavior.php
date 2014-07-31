@@ -3,8 +3,8 @@
 class ThumbnailLeechBehavior extends ModelBehavior {
 
     private $_thumbnailTypes = array(
-        "_big.jpg" => 600,
-        "_thumb.jpg" => 250
+        "_big.jpg" => 800,
+        "_thumb.jpg" => 300
     );
 
     public function getImageFromUrl($model, $remoteUrl, $previousUrl = null)
@@ -46,6 +46,7 @@ class ThumbnailLeechBehavior extends ModelBehavior {
                     unlink($path . $ds . $previousname . $key);
                 }
             }
+            unlink($path . $ds . $previousname . "_blur.jpg");
         }
 
         // Save new pic
@@ -70,6 +71,8 @@ class ThumbnailLeechBehavior extends ModelBehavior {
                 // Run imagemagik in the command line as to stay more efficient resources wize.
                 exec(sprintf("convert %s -resize %d %s", $path . $ds . $newname . ".jpg", $size, $path . $ds . $newname . $key ) );
             }
+
+            exec(sprintf("convert %s -channel RGBA -blur 0x8 %s ",  $path . $ds . $newname . "_big.jpg",  $path . $ds . $newname . "_blur.jpg"));
 
             // Delete the file downloaded as to not take too much space
             unlink($path . $ds . $newname . ".jpg");

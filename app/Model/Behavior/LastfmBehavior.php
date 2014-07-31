@@ -22,7 +22,7 @@ class LastfmBehavior extends ModelBehavior {
     public function getLastFmTrackDetails($model, $trackName, $artistName)
     {
         $data = $this->_post(array("method" => "track.getinfo", "artist" => $artistName, "track" => $trackName));
-        return (!is_null($data) && $data->track) ? $data->track : null;
+        return (!is_null($data) && property_exists($data, "track") && $data->track) ? $data->track : null;
     }
 
     public function getLastFmAlbumDetails($model, $artistName, $albumName)
@@ -52,7 +52,7 @@ class LastfmBehavior extends ModelBehavior {
     public function getArtistInfo($model, $artistName)
     {
         $data = $this->_post(array("method" => "artist.getinfo", "artist" => $artistName));
-        return (!is_null($data) && $data->artist) ? $data->artist : null;
+        return (!is_null($data) && property_exists($data, "artist") && $data->artist) ? $data->artist : null;
     }
 
     public function getArtistTopAlbums($model, $artistName)

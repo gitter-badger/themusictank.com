@@ -47,6 +47,24 @@ class AlbumsController extends AppController {
         $this->Album->addTracksSnapshots();
         $this->set("tracks", $this->Album->data["Tracks"]);
 
+        $bestRated = $this->Album->data["Tracks"][0];
+        $worstRated = $this->Album->data["Tracks"][0];
+
+        foreach($this->Album->data["Tracks"] as $track)
+        {
+            if($track["TrackReviewSnapshot"]["score"] > $bestRated["TrackReviewSnapshot"]["score"])
+            {
+                $bestRated = $track;
+            }
+            if($track["TrackReviewSnapshot"]["score"] < $worstRated["TrackReviewSnapshot"]["score"])
+            {
+                $worstRated = $track;
+            }
+        }
+        $this->set("bestTrack", $bestRated);
+        $this->set("worstTrack", $worstRated);
+
+
         // Set meta information
         $this->setPageTitle(array($data["Album"]["name"], $data["Artist"]["name"]));
         $this->setPageMeta(array(

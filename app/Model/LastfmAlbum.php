@@ -43,7 +43,11 @@ class LastfmAlbum extends AppModel
         {
             $this->save(array(
                 "id"        => $lastfmAlbumId,
-                "lastsync"  => time()
+                "lastsync"  => time(),
+                "Album" => array(
+                    "id"  => $albumId,
+                    "slug"  => $this->getData("Album.slug")
+                )
             ));
             return;
         }

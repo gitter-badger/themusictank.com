@@ -28,22 +28,55 @@ $(function() {
 		});
 	}
 
-	if($('.header-wrapper').length) {
-		$(window).scroll(function(e){
-			var scrolled = $(window).scrollTop() * .9,
-				wrapHeight = $('.header-wrapper').innerHeight(),
-				buffer = 5;
 
-			if(scrolled > buffer && scrolled < wrapHeight) {
-				$('.header-wrapper .cover-image').css('background-position-y', -(scrolled - buffer) +'px'  );
-				$('.header-wrapper').css('background-position-y', -((scrolled*.5) - buffer) +'px'  );
-			}
-			else if(scrolled <= buffer) {
-				$('.header-wrapper .cover-image').css('background-position-y', '0px');
-				$('.header-wrapper').css('background-position-y', '0px'  );
-			}
-		});
+
+	function debounce(func, wait) {
+	    var timeout;
+	    return function() {
+	        var context = this,
+	            args = arguments,
+	            later = function() {
+	                timeout = null;
+	                func.apply(context, args);
+	            };
+	        clearTimeout(timeout);
+	        timeout = setTimeout(later, wait);
+	    };
 	}
+
+$(window).scroll(debounce(function(e) {
+
+		if($(window).scrollTop() > 70) {
+			$('.navbar').addClass('opaque');
+		} else {
+			$('.navbar').removeClass('opaque');
+		}
+
+		if($('.header-wrapper').length) {
+				var scrolled = $(window).scrollTop() * .7,
+					wrapHeight = $('.header-wrapper').innerHeight(),
+					buffer = 5;
+
+			 var s = $(window).scrollTop(),
+			        opacityVal = 1 - (s / 150.0);
+
+				if(scrolled > buffer && scrolled < wrapHeight) {
+					$('.header-wrapper .cover-image').css('background-position-y', -(scrolled - buffer) +'px'  );
+					$('.header-wrapper').css('background-position-y', -((scrolled*.5) - buffer) +'px'  );
+					$('.header-wrapper .cover-image.clean').css("opacity", opacityVal);
+				}
+				else if(scrolled <= buffer) {
+					$('.header-wrapper .cover-image').css('background-position-y', '0px');
+					$('.header-wrapper').css('background-position-y', '0px');
+					$('.header-wrapper .cover-image.clean').css("opacity", 1)
+				}
+		}
+
+}, 10));
+
+
+
+
 
 	// Add remove follower
 	var onFollowClick = function(event){
@@ -339,6 +372,9 @@ $(function() {
 				location = el.attr("data-location"),
 				userId = el.attr("data-user");
 
+
+			$("body").addClass("dialog-open");
+
 			if($("#bugreport").length > 0) {
 				$("#bugreport .modal-content").html("<div class=\"loading-wrap\"><i class=\"fa fa-refresh fa-spin fa-fw\"></i></div>");
 				$("#bugreport").modal("show");
@@ -356,6 +392,8 @@ $(function() {
 					var id = parseInt(form.find("input[name=id]").val(), 10),
 						details = form.find("textarea").val().trim();
 
+					$("body").removeClass("dialog-open");
+
 					if(details.length > 0) {
 						$.post('/ajax/bugreport/', {'id' : id, 'details' : details});
 					}
@@ -365,26 +403,21 @@ $(function() {
 	});
 
 
-	tmt.waveform = function(svg, data) {
-		if(data && data.length > 0) {
+	tmt.waveform = function(svg, jsonData, details) {
+		if(jsonData && jsonData.length > 0) {
 			var margin = {top: 20, right: 20, bottom: 30, left: 40},
 				width = svg[0][0].offsetWidth  - margin.left - margin.right,
 				height = svg[0][0].offsetHeight  - margin.top - margin.bottom;
 
-			var boxWidth = 	parseInt(width / data.length, 10);
+			var boxWidth = 	width / jsonData.length;
 			var pctData = [];
 
-			for(var i = 0, len = data.length; i < len; i++) {
-
-				var barPct = data[i] / 255;
-				var barheight = ((height - 30) * barPct) * .8;
-
-			var rectangle = svg.append("rect")
-	                .attr("x", parseInt(i * boxWidth, 10))
-	                .attr("y", parseInt((height / 2 )- (barheight / 2), 10))
-	                .attr("width", boxWidth)
-	                .attr("height", barheight)
-	                .attr("class", "waveform");
+			for(var i = 0, len = jsonData.length; i < len; i++) {
+				svg.append("line")
+					.attr("x1", boxWidth*i)
+					.attr("y1", height * jsonData[i][0] / 100)
+					.attr("x2", boxWidth*i)
+					.attr("y2", height * jsonData[i][1] / 100);
 			}
 		}
 	};
@@ -397,6 +430,11 @@ $(function() {
 		color = d3.scale.category20c();     //builtin range of colors
 
 	data = jsonData;
+
+
+	if(jsonData.length === 0) {
+return;
+	}
 
 var vis = d3.select(whereClass)
 		.append("svg:svg")              //create the SVG element inside the <body>
@@ -441,6 +479,11 @@ var vis = d3.select(whereClass)
 			width = svg[0][0].offsetWidth  - margin.left - margin.right,
 			height = svg[0][0].offsetHeight  - margin.top - margin.bottom;
 
+
+	if(jsonData.length === 0) {
+return;
+	}
+
 		var data = d3.range(details.total).map(function(i) {
 
 			if (jsonData[i]) {
@@ -476,6 +519,13 @@ var vis = d3.select(whereClass)
 	};
 
 	tmt.createRange = function (svg, jsonData, details) {
+
+
+	if(jsonData.length === 0) {
+return;
+	}
+
+
 		var data = d3.range(details.total).map(function(i) {
 			if(jsonData[i]) {
 				return {x: i, y: parseFloat(jsonData[i].min), x1: i, y1 : parseFloat(jsonData[i].max)};

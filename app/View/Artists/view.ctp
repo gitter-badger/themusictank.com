@@ -1,53 +1,34 @@
 <div class="header-wrapper">
-	<?php if(!is_null($lastfmArtist)) : ?>
-		<div class="cover-image" style="background-image:url(<?php echo $this->App->getImageUrl($lastfmArtist, "big"); ?>);"></div>
-	<?php endif; ?>
-	<section class="jumbotron introduction">
-		<div class="container container-fluid" >
-			<div class="row">
-				<div class="col-xs-12 col-sm-6 col-md-3 mugshot">
-		            <?php echo $this->Html->image($this->App->getImageUrl($lastfmArtist), array("alt" => $artist["name"], "class" => "thumbnail")); ?>
-		        </div>
-		        <div class="col-xs-12 col-sm-6 col-md-9 description">
-	           		<h1><?php echo $artist["name"]; ?></h1>
-		            <section>
-						<p><?php echo $this->StringMaker->composeArtistPresentation($lastfmArtist, $artist); ?></p>
-		        	</section>
-		        	<small class="report-bug" data-bug-type="artist wiki" data-location="artist/<?php echo $artist["slug"]; ?>" data-user="<?php echo $this->Session->read('Auth.User.User.id'); ?>"><i class="fa fa-bug"></i> <?php echo __("Wrong/weird bio?"); ?></small>
-		        </div>
+    <?php if(!is_null($album["image"])) : ?>
+        <div class="cover-image blurred" style="background-image:url(<?php echo $this->App->getImageUrl($lastfmArtist, "blur"); ?>);"></div>
+        <div class="cover-image clean" style="background-image:url(<?php echo $this->App->getImageUrl($lastfmArtist, "big"); ?>);"></div>
+    <?php endif; ?>
+</div>
+
+<article class="container container-fluid">
+
+    <header>
+        <?php echo $this->Html->image( $this->App->getImageUrl($artist), array("alt" => $artist["name"], "class" => "thumbnail")); ?>
+        <h1><?php echo $this->Html->link($artist["name"], array('controller' => 'artists', 'action' => 'view', $artist["slug"])); ?></h1>
+        <div class="everyone piechart"></div>
+        <div class="lead"></div>
+    </header>
+
+    <div class="content">
+    	<small class="report-bug" data-bug-type="artist wiki" data-location="artist/<?php echo $artist["slug"]; ?>" data-user="<?php echo $this->Session->read('Auth.User.User.id'); ?>"><i class="fa fa-bug"></i> <?php echo __("Wrong/weird bio?"); ?></small>
+
+			<p><?php echo $this->StringMaker->composeArtistPresentation($lastfmArtist, $artist); ?></p>
+
+		<h2><?php echo __("Discography"); ?></h2>
+	    <?php if(count($albums) > 0) : ?>
+	        <?php echo $this->element('albumTiledList', array("albums" => $albums)); ?>
+	    <?php else : ?>
+	        <div class="loading-wrap" data-post-load="/ajax/getdiscography/<?php echo $artist['slug']; ?>/">
+	        	<i class="fa fa-refresh fa-spin fa-fw"></i>
 	        </div>
-	    </div>
-	</section>
-</div>
-
-<nav class="sub-menu">
-	<div class="container container-fluid">
-		<div class="row">
-		    <ol class="breadcrumb">
-		        <li><?php echo $this->Html->link(__("Artists"), array('controller' => 'artists', 'action' => 'index')); ?></li>
-		        <li class="active"><?php echo $this->Html->link($artist["name"], array('controller' => 'artists', 'action' => 'view', $artist["slug"])); ?></li>
-		    </ol>
-	    </div>
+	    <?php endif; ?>
     </div>
-</nav>
-
-<div class="discography odd">
-	<div class="container container-fluid">
-		<div class="row">
-			<div class="col-md-12">
-				<h2><?php echo __("Discography"); ?></h2>
-			    <?php if(count($albums) > 0) : ?>
-			        <?php echo $this->element('albumTiledList', array("albums" => $albums)); ?>
-			    <?php else : ?>
-			        <div class="loading-wrap" data-post-load="/ajax/getdiscography/<?php echo $artist['slug']; ?>/">
-			        	<i class="fa fa-refresh fa-spin fa-fw"></i>
-			        </div>
-			    <?php endif; ?>
-			</div>
-		</div>
-	</div>
-</div>
-
+</article>
 <section class="credits">
     <div class="container container-fluid">
         <p>

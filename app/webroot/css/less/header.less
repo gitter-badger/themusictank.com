@@ -1,26 +1,76 @@
 body {
 	.noPad;
-	background:		#fff url(/img/triangles-2.png) top left repeat;
+	background:		#e7e2e7 url(/img/triangles-2.png) top left repeat;
 	color:			@themeColorDark;
+
+	&.dialog-open .website {
+		-webkit-filter: blur(5px);
+		-ms-filter: blur(5px);
+		-moz-filter: blur(5px);
+		-o-filter: blur(5px);
+		filter: blur(5px);
+	}
 }
+
+* {
+    transition: all 120ms linear;
+}
+
 
 // The top header containing the branding
 .navbar {
-	background:		rgba(48, 62, 70, .95);//@themeColorDark;
-	border-bottom:	1px solid @themeColorDark;
-	border-top:		3px solid @themeColorHighlight;
-	box-shadow: 	0 1px 5px rgba(0,0,0,.5);
+	//background:		@themeColorDark;
+	//border-bottom:	1px solid darken(@themeColorDark, 10%);
+	//border-top:		3px solid @themeColorHighlight;
+	//box-shadow: 	0 1px 5px rgba(0,0,0,.5);
     color:			#fff;
-    height: 		@navbarHeight;
+    height: 		70px;//@navbarHeight;
     line-height: 	@navbarHeight;
     z-index: 		3;
+	background: transparent url(/img/bg-header-mask.png) repeat-x top left;
+
+	&.opaque {
+		background:@themeColorDark;
+		box-shadow: 0 0 10px #000;
+    	height: 	@navbarHeight;
+	}
+
+	.navbar-toggle {
+		background:@themeColorDark;
+		border:1px solid #ddd;
+		.icon-bar {
+			background:#fff;
+		}
+	}
+
 
     .navbar-brand {
-		background:		transparent url(/img/tmt.png) 50% 50% no-repeat;
-		text-indent:    -999px;
-		overflow: 		hidden;
-		display:		inline-block;
-		width:			84px;
+		font-family: arial, sans;
+		font-size: 18px;
+		color:#fff;
+    }
+
+
+	 // The search top container bar
+	.searchbar {
+		line-height:30px;
+		padding-top: 3px;
+
+	    input[type="submit"] {
+	    	display:none;
+	    	visibility:	hidden;
+		}
+
+	    input[type="text"] {
+			border:1px solid @themeColorDark;
+	        display:block;
+	      	width:300px;
+	   	}
+	}
+
+
+    ul.nav {
+    	float: right;
     }
 
     li > a {
@@ -53,24 +103,8 @@ body {
 	        width: 	@navbarHeight;
 	    }
     }
-
-    // The search top container bar
-	.searchbar {
-		line-height:30px;
-		padding-top: 3px;
-
-	    input[type="submit"] {
-	    	visibility:	hidden;
-		}
-
-	    input[type="text"] {
-	        width: 		350px;
-	        -webkit-border-radius: 3px;
-	         -moz-border-radius: 3px;
-	              border-radius: 3px;
-	   	}
-	}
 }
+
 
 
 // Location menu
@@ -100,44 +134,25 @@ body {
 
 // Big themed header
 .header-wrapper {
-	background:@themeColorNeutral  url(/img/triangles.png) top left repeat;
+	background: #fff  url(/img/triangles.png) top left repeat;
 	position: 	relative;
 	overflow: 	hidden;
-	padding-top:50px;
+	min-height: 800px;
+	border-bottom:1px solid #dedede;
+	box-shadow: @lightBoxShadow;
 
 	.cover-image {
-		.opacity(.4);
 		.stretchFill;
-
 		background-size: 		cover;
 		background-position-y:	0;
         background-repeat: 		no-repeat;
-	}
 
-	.jumbotron {
-		background-color: 		transparent;
-		color:					lighten(@themeColorNeutral, 80%);
-		padding-bottom: 		0;
-		padding-top: 			30px;
-		h1 {
-			margin-top:0;
-		}
-	}
 
-	// accompaning image
-	.mugshot {
-		img {
-			max-height: 40%;
-			max-width: 	100%;
-			width:		100%;
-		}
-	}
-
-	.description section {
-		overflow: auto;
-		height: 195px;
+    	transition: background-position 100ms linear;
+    	transition: opacity 120ms linear;
 	}
 }
+
 
 // User links
 nav.dashboard {

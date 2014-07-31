@@ -9,23 +9,23 @@
         if(isset($customMetas))     $this->MetaTags->add($customMetas);
         echo $this->MetaTags->compileMetas();
      ?>
-    <!-- HTML5 shim and Respond.js IE8 support of HTML5 elements and media queries -->
+    <?php // HTML5 shim and Respond.js IE8 support of HTML5 elements and media queries ?>
+
     <!--[if lt IE 9]>
       <script src="https://oss.maxcdn.com/libs/html5shiv/3.7.0/html5shiv.js"></script>
       <script src="https://oss.maxcdn.com/libs/respond.js/1.4.2/respond.min.js"></script>
     <![endif]-->
 </head>
 <body class="<?php echo $this->App->contextToClassNames(); ?>">
-
-    <?php echo $this->element('header'); ?>
-    <section class="container container-fluid site-main">
+    <div class="website">
+        <?php echo $this->element('header'); ?>
         <?php echo $this->Session->flash(); ?>
-    </section>
-    <?php echo $this->fetch('content'); ?>
-    <?php echo $this->element('foot'); ?>
-    <?php echo $this->MetaTags->compileScripts(); ?>
-    <?php echo $this->element('analytics'); ?>
-    <?php echo $this->element('sql_dump'); ?>
+        <?php echo $this->fetch('content'); ?>
+        <?php echo $this->element('foot'); ?>
+        <?php echo $this->MetaTags->compileScripts(); ?>
+        <?php echo $this->element('analytics'); ?>
+        <?php echo $this->element('sql_dump'); ?>
+    </div>
 </body>
 </html>
 

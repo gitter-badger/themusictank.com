@@ -1,14 +1,13 @@
 <div class="header-wrapper">
-    <?php if(!is_null($album["image"])) : ?>
-        <div class="cover-image blurred" style="background-image:url(<?php echo $this->App->getImageUrl($lastfmArtist, "blur"); ?>);"></div>
-        <div class="cover-image clean" style="background-image:url(<?php echo $this->App->getImageUrl($lastfmArtist, "big"); ?>);"></div>
-    <?php endif; ?>
+    <div class="cover-image blurred" style="background-image:url(<?php echo $this->App->getImageUrl($lastfmArtist, "blur"); ?>);"></div>
+    <div class="cover-image clean" style="background-image:url(<?php echo $this->App->getImageUrl($lastfmArtist, "big"); ?>);"></div>
+    <i class="mask"></i>
 </div>
 
 <article class="container container-fluid">
 
     <header>
-        <?php echo $this->Html->image( $this->App->getImageUrl($artist), array("alt" => $artist["name"], "class" => "thumbnail")); ?>
+        <?php echo $this->Html->image( $this->App->getImageUrl($lastfmArtist), array("alt" => $artist["name"], "class" => "thumbnail")); ?>
         <h1><?php echo $this->Html->link($artist["name"], array('controller' => 'artists', 'action' => 'view', $artist["slug"])); ?></h1>
         <div class="everyone piechart"></div>
         <div class="lead"></div>

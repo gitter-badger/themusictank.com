@@ -1,15 +1,18 @@
+<?php
+    $isLogged = $this->Session->check('Auth.User.User.id');
+?>
 <div class="header-wrapper">
-    <?php if(!is_null($album["image"])) : ?>
-        <div class="cover-image blurred" style="background-image:url(<?php echo $this->App->getImageUrl($album, "blur"); ?>);"></div>
-        <div class="cover-image clean" style="background-image:url(<?php echo $this->App->getImageUrl($album, "big"); ?>);"></div>
-    <?php endif; ?>
+    <div class="cover-image blurred" style="background-image:url(<?php echo $this->App->getImageUrl($album, "blur"); ?>);"></div>
+    <div class="cover-image clean" style="background-image:url(<?php echo $this->App->getImageUrl($album, "big"); ?>);"></div>
+    <i class="mask"></i>
 </div>
 
 <article class="container container-fluid">
 
     <header>
 
-        <?php echo $this->Html->image( $this->App->getImageUrl($album), array("alt" => $album["name"], "class" => "thumbnail")); ?>
+        <?php $img = $this->Html->image( $this->App->getImageUrl($album), array("alt" => $album["name"], "class" => "thumbnail")); ?>
+        <?php echo $this->Html->link($img, array('controller' => 'albums', 'action' => 'view', $album["slug"]), array("escape" => false)); ?>
 
         <h1><?php echo $this->Html->link($album["name"], array('controller' => 'albums', 'action' => 'view', $album["slug"])); ?></h1>
 
@@ -35,6 +38,7 @@
         <div class="everyone piechart"></div>
 
         <div class="row stats">
+
             <div class="col-md-2 enjoyment">
             	<span><?php echo __("Enjoyed"); ?></span>
             	<em>
@@ -59,101 +63,153 @@
         	<?php if(isset($bestTrack)) : ?>
             <div class="col-md-4 best-track">
             	<span><?php echo __("Best track"); ?></span>
-        		<em><?php echo $this->Html->link($bestTrack["title"], array('controller' => 'tracks', 'action' => 'view', $bestTrack["slug"])); ?> <?php echo (int)$bestTrack["TrackReviewSnapshot"]["liking_pct"]; ?>%</em>
+        		<em><?php echo $this->Html->link($bestTrack["title"], array('controller' => 'tracks', 'action' => 'view', $bestTrack["slug"])); ?>&nbsp;<?php echo (int)$bestTrack["TrackReviewSnapshot"]["liking_pct"]; ?>%</em>
             </div>
     		<?php endif; ?>
 
         	<?php if(isset($worstTrack)) : ?>
             <div class="col-md-4 worst-track">
             	<span><?php echo __("Worst track"); ?></span>
-        		<em><?php echo $this->Html->link($worstTrack["title"], array('controller' => 'tracks', 'action' => 'view', $worstTrack["slug"])); ?> <?php echo (int)$worstTrack["TrackReviewSnapshot"]["liking_pct"]; ?>%</em>
+        		<em><?php echo $this->Html->link($worstTrack["title"], array('controller' => 'tracks', 'action' => 'view', $worstTrack["slug"])); ?>&nbsp;<?php echo (int)$worstTrack["TrackReviewSnapshot"]["liking_pct"]; ?>%</em>
             </div>
     		<?php endif; ?>
+
+    		<div class="col-md-12 social">
+
+		        <?php if($isLogged) : ?>
+		        	<div class="col-md-3">
+			        	<h3><?php echo __("Your subscription"); ?></h3>
+					    <?php if(isset($userAlbumReviewSnapshot) && !is_null($userAlbumReviewSnapshot["score"])) : ?>
+			                <?php echo (int)($userAlbumReviewSnapshot["score"] * 100); ?>%
+			            <?php else : ?>
+			                N/A
+			            <?php endif; ?>
+			            <span><?php echo __("Score"); ?></span>
+		            </div>
+		            <div class="col-md-3">
+		            	<div class="piechart subscriptions"></div>
+				    </div>
+
+				    <div class="col-md-3">
+			        	<h3><?php echo __("You"); ?></h3>
+			        	<?php if(isset($profileAlbumReviewSnapshot) && !is_null($profileAlbumReviewSnapshot["score"])) : ?>
+			                <?php echo (int)($profileAlbumReviewSnapshot["score"] * 100); ?>%
+			            <?php else : ?>
+			                N/A
+			            <?php endif; ?>
+			            <span><?php echo __("Score"); ?></span>
+				    </div>
+		            <div class="col-md-3">
+		            	<div class="piechart you"></div>
+				    </div>
+		    	<?php else : ?>
+					<?php $login = $this->Html->link(__("Login"), array('controller' => 'users', 'action' => 'login', '?' => array("rurl" => '/albums/view/' . $album['slug'])), array("class" => "btn btn-primary")); ?>
+					<p><?php echo sprintf(__("%s to see how you and your friends have rated  \"%s\"."), $login, $album["name"]); ?></p>
+		    	<?php endif; ?>
+
+    		</div>
         </div>
     </header>
 
-    <div class="content">
-
-        <p><small class="report-bug" data-bug-type="album wiki" data-location="album/<?php echo $album["slug"]; ?>" data-user="<?php echo $this->Session->read('Auth.User.User.id'); ?>"><i class="fa fa-bug"></i> <?php echo __("Wrong/weird bio?"); ?></small></p>
-
-    	<div class="biography">
-            <p><?php echo $this->StringMaker->composeAlbumPresentation($lastfmAlbum, $album, $artist); ?></p>
-        </div>
-
-        <?php if ((int)$lastfmAlbum["lastsync"] > 0) : ?>
-
-            <div class="big-graph"></div>
-
-            <h3><?php echo __("Tracks"); ?></h3>
-            <?php if(count($tracks)) : ?>
-                <ol>
-                <?php foreach ($tracks as $track) : ?>
-                    <li>
-                        <?php echo $this->Html->link($track["title"], array('controller' => 'tracks', 'action' => 'view', $track["slug"])); ?>
-                    </li>
-                <?php endforeach; ?>
-                </ol>
-            <?php else : ?>
-                <p><?php echo __("We could not fetch the album's tracks from the API for the moment."); ?></p>
-            <?php endif; ?>
-
-
-            <h2><?php echo __("Recent Reviewers"); ?></h2>
-
-            <?php if(count($usersWhoReviewed) > 0) : ?>
-                <ul>
-                    <?php foreach($usersWhoReviewed as $user) : ?>
-                    <li>
-                        <img src="<?php echo $this->App->getImageUrl($user["User"], true); ?>" alt="<?php $user["User"]["firstname"] . " " . $user["User"]["lastname"]; ?>" />
-                    </li>
-                    <?php endforeach; ?>
-                </ul>
-            <?php else : ?>
-                <p><?php echo __("Be the first to review a track off this album."); ?></p>
-            <?php endif; ?>
-
-
-            <?php if(isset($subsWhoReviewed) && count($subsWhoReviewed > 0)) : ?>
-                <?php if(count($subsWhoReviewed) > 0) : ?>
-                    <ul>
-                        <?php foreach($subsWhoReviewed as $idx => $user) : ?>
-                        <li>
-                            <?php
-                            $name = $user["User"]["firstname"] . " " . $user["User"]["lastname"];
-                            echo $this->Html->link(
-                                    array_key_exists("image", $user["User"]) && !is_null($user["User"]["image"]) ?
-                                        $this->Html->image($user["User"]["image"], array("alt" => $name))
-                                        : $name
-                                    ,
-                                    array('controller' => 'tracks', 'action' => 'by_user', $album["slug"], $user["User"]["slug"]),
-                                    array("escape" => false)
-                            ); ?>
-                        </li>
-                        <?php if($idx >= 3 && (count($subsWhoReviewed) - 4 > 0)) :  ?>
-                            <li class="others"><?php echo sprintf(__("+ %s others"), count($subsWhoReviewed) - 4); ?></li>
-                        <?php break; endif; ?>
-                        <?php endforeach; ?>
-                    </ul>
-                    <p>
-                        <?php echo $this->Html->link(sprintf(__("%s of the people you are subscribed to reviewed %s."), count($subsWhoReviewed), $track["title"]),
-                            array('controller' => 'tracks', 'action' => 'by_subscriptions', $track["slug"]));
-                        ?>
-                    </p>
-                <?php else : ?>
-                    <p><?php echo __("None of your subscriptions have reviewed a track on this album."); ?></p>
-                <?php endif; ?>
-            <?php endif; ?>
-
-        <?php else : ?>
-
-            <p><?php echo __("Sorry for the inconvenience. The track and album details are currently being processed..."); ?></p>
-            <div class="loading-wrap">
-                <i class="fa fa-refresh fa-spin fa-fw"></i>
+	<?php $wiki = $this->StringMaker->composeAlbumPresentation($lastfmAlbum, $album, $artist); ?>
+	<?php if(strlen($wiki) > 0) : ?>
+	<div class="row wiki <?php echo strlen($wiki) <= 800 ? "full" : ""; ?>">
+		<div class="col-md-12 lead">
+			<?php echo substr($wiki, 0, 800); ?></p>
+        	<i class="mask"></i>
+		</div>
+        <?php if(strlen($wiki) > 800) : ?>
+            <div class="col-md-4 lastfm"><a href="http://www.last.fm/"><img src="/img/icon-lastfm.png" alt="Last.fm" title="Last.fm" /></a></div>
+            <div class="col-md-4 bug"><span class="report-bug" data-bug-type="album wiki" data-location="album/<?php echo $album["slug"]; ?>" data-user="<?php echo $this->Session->read('Auth.User.User.id'); ?>"><i class="fa fa-bug"></i> <?php echo __("Wrong/weird bio?"); ?></span></div>
+            <div class="col-md-4 readmore">
+            	<?php echo $this->Html->link("Read more", array('controller' => 'albums', 'action' => 'wiki', $album["slug"]), array("class" => "btn btn-default")); ?>
             </div>
-
+        <?php else : ?>
+        	<div class="col-md-6 lastfm"><a href="http://www.last.fm/"><img src="/img/icon-lastfm.png" alt="Last.fm" title="Last.fm" /></a></div>
+            <div class="col-md-6 bug"><span class="report-bug" data-bug-type="album wiki" data-location="album/<?php echo $album["slug"]; ?>" data-user="<?php echo $this->Session->read('Auth.User.User.id'); ?>"><i class="fa fa-bug"></i> <?php echo __("Wrong/weird bio?"); ?></span></div>
         <?php endif; ?>
-
     </div>
+	<?php endif; ?>
+
+	<div class="row content">
+
+        <?php if(count($tracks)) : ?>
+        	<h2><?php echo __("Overview"); ?></h2>
+        	<div class="row">
+		    	<div class="col-md-3">
+		            <ul class="tracklisting">
+		            <?php foreach ($tracks as $idx => $track) : ?>
+		                <li>
+	                    	<?php echo $this->Html->link($track["title"], array('controller' => 'tracks', 'action' => 'view', $track["slug"])); ?>
+	                    	<div class="piechart track-<?php echo $idx; ?>"></div>
+		                </li>
+		            <?php endforeach; ?>
+		            </ul>
+		        </div>
+		        <div class="col-md-9 big-graph"></div>
+			</div>
+
+	 		<h2><?php echo __("Recent Reviewers"); ?></h2>
+	 		<div class="col-md-6">
+		        <?php if(count($usersWhoReviewed) > 0) : ?>
+		            <ul>
+		                <?php foreach($usersWhoReviewed as $user) : ?>
+		                <li>
+		                    <img src="<?php echo $this->App->getImageUrl($user["User"], true); ?>" alt="<?php $user["User"]["firstname"] . " " . $user["User"]["lastname"]; ?>" />
+		                </li>
+		                <?php endforeach; ?>
+		            </ul>
+		        <?php elseif(count($tracks)) : ?>
+		        	<?php $login = $this->Html->link(__("Review"), array('controller' => 'tracks', 'action' => 'review', $tracks[0]['slug']), array("class" => "btn btn-primary")); ?>
+		            <p><?php echo sprintf(__("Be the first to %s a track off \"%s\"."), $login, $album["name"]); ?></p>
+		        <?php endif; ?>
+		        </div>
+
+	 		<div class="col-md-6">
+	        <?php if(isset($subsWhoReviewed) && count($subsWhoReviewed > 0)) : ?>
+	            <?php if(count($subsWhoReviewed) > 0) : ?>
+	                <ul>
+	                    <?php foreach($subsWhoReviewed as $idx => $user) : ?>
+	                    <li>
+	                        <?php
+	                        $name = $user["User"]["firstname"] . " " . $user["User"]["lastname"];
+	                        echo $this->Html->link(
+	                                array_key_exists("image", $user["User"]) && !is_null($user["User"]["image"]) ?
+	                                    $this->Html->image($user["User"]["image"], array("alt" => $name))
+	                                    : $name
+	                                ,
+	                                array('controller' => 'tracks', 'action' => 'by_user', $album["slug"], $user["User"]["slug"]),
+	                                array("escape" => false)
+	                        ); ?>
+	                    </li>
+	                    <?php if($idx >= 3 && (count($subsWhoReviewed) - 4 > 0)) :  ?>
+	                        <li class="others"><?php echo sprintf(__("+ %s others"), count($subsWhoReviewed) - 4); ?></li>
+	                    <?php break; endif; ?>
+	                    <?php endforeach; ?>
+	                </ul>
+	                <p>
+	                    <?php echo $this->Html->link(sprintf(__("%s of the people you are subscribed to reviewed %s."), count($subsWhoReviewed), $track["title"]),
+	                        array('controller' => 'tracks', 'action' => 'by_subscriptions', $track["slug"]));
+	                    ?>
+	                </p>
+	            <?php else : ?>
+	                <p><?php echo __("None of your subscriptions have reviewed a track on this album."); ?></p>
+	            <?php endif; ?>
+	        <?php else : ?>
+	    		<?php $login = $this->Html->link(__("Login"), array('controller' => 'users', 'action' => 'login', '?' => array("rurl" => '/albums/view/' . $album['slug'])), array("class" => "btn btn-primary")); ?>
+				<p><?php echo sprintf(__("%s to see which of your friends have rated  \"%s\"."), $login, $album["name"]); ?></p>
+	        <?php endif; ?>
+
+	        <?php else : ?>
+	        	<div class="col-md-12">
+	            	<p class="lead"><?php echo __("We could not fetch the album's tracks from the API for the moment."); ?></p>
+	            	 <div class="loading-wrap">
+			            <i class="fa fa-cog fa-spin fa-fw"></i>
+			        </div>
+            	</div>
+	        <?php endif; ?>
+        </div>
+	</div>
 </article>
 
 <section class="credits">
@@ -165,7 +221,6 @@
         </p>
     </div>
 </section>
-
 
 <?php if ((int)$lastfmAlbum["lastsync"] > 0) : ?>
 <script>$(function(){

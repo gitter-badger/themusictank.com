@@ -134,7 +134,7 @@ body {
 
 // Big themed header
 .header-wrapper {
-	background: #fff  url(/img/triangles.png) top left repeat;
+	background: #fff;
 	position: 	relative;
 	overflow: 	hidden;
 	min-height: 800px;
@@ -151,6 +151,11 @@ body {
     	transition: background-position 100ms linear;
     	transition: opacity 120ms linear;
 	}
+
+    .mask {
+        .stretchFill;
+        background: transparent url(/img/triangles.png) top left repeat;
+    }
 }
 
 

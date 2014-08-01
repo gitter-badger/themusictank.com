@@ -21,46 +21,24 @@ class ThumbnailLeechBehavior extends ModelBehavior {
         $imagesRoot     = WWW_ROOT . "img" . $ds . "cache";
         $path           = $imagesRoot . $ds . $objTypeFolder . $ds . $subfolder;
 
-        if(is_null(Configure::read('ConvertCMD'))) {
-            return $objTypeFolder . $ds . $subfolder . $ds . $newname;
+        // When the converter is not available, assume we are in dev and pull
+        // the image right from tmt.com
+        if(is_null(Configure::read('ConvertCMD')))
+        {
+            return $objTypeFolder ."/". $subfolder . "/" . $newname;
         }
 
         // Create the full folder path if it does not already exist.
-        if(!file_exists($path))
-        {
-            mkdir($path, 0776, true);
-        }
+        $this->_proofPath($path);
 
         // If we have a previous thumbnail, try and erase it.
         if(!is_null($previousUrl))
         {
-            if (file_exists($path . $ds . $previousname . ".jpg"))
-            {
-                unlink($path . $ds . $previousname . ".jpg");
-            }
-
-            foreach($this->_thumbnailTypes as $key => $size)
-            {
-                if (file_exists($path . $ds . $previousname . $key))
-                {
-                    unlink($path . $ds . $previousname . $key);
-                }
-            }
-            unlink($path . $ds . $previousname . "_blur.jpg");
+            $this->_deletePreviousVersions($path . $ds . $previousname);
         }
 
         // Save new pic
-        $ch = curl_init($remoteUrl);
-        curl_setopt($ch, CURLOPT_HEADER, 0);
-        curl_setopt ($ch, CURLOPT_FOLLOWLOCATION, 1);
-        curl_setopt($ch, CURLOPT_RETURNTRANSFER, 1);
-        curl_setopt($ch, CURLOPT_BINARYTRANSFER, 1);
-        $rawdata = curl_exec($ch);
-        curl_close($ch);
-
-        $fp = fopen($path . $ds . $newname . ".jpg", 'w');
-        fwrite($fp, $rawdata);
-        fclose($fp);
+        $this->_downloadRemoteImage($remoteUrl, $path . $ds . $newname . ".jpg");
 
 
         if(file_exists($path . $ds . $newname . ".jpg"))
@@ -78,9 +56,34 @@ class ThumbnailLeechBehavior extends ModelBehavior {
             unlink($path . $ds . $newname . ".jpg");
         }
 
-        return $objTypeFolder . $ds . $subfolder . $ds . $newname;
+        return $objTypeFolder ."/". $subfolder . "/" . $newname;
     }
 
+    private function _proofPath($path)
+    {
+        if(!file_exists($path))
+        {
+            return mkdir($path, 0776, true);
+        }
+        return false;
+    }
+
+    private function _deletePreviousVersions($path)
+    {
+        if (file_exists($path . ".jpg"))
+        {
+            unlink($path . ".jpg");
+        }
+
+        foreach($this->_thumbnailTypes as $key => $size)
+        {
+            if (file_exists($path . $key))
+            {
+                unlink($path . $key);
+            }
+        }
+        unlink($path . "_blur.jpg");
+    }
 
     private function _imageCreateFromAny($filepath)
     {
@@ -98,6 +101,21 @@ class ThumbnailLeechBehavior extends ModelBehavior {
             case 3 : return imageCreateFromPng($filepath);
             case 6 : return imageCreateFromBmp($filepath);
         }
+    }
+
+    private function _downloadRemoteImage($remoteUrl, $path)
+    {
+        $ch = curl_init($remoteUrl);
+        curl_setopt($ch, CURLOPT_HEADER, 0);
+        curl_setopt ($ch, CURLOPT_FOLLOWLOCATION, 1);
+        curl_setopt($ch, CURLOPT_RETURNTRANSFER, 1);
+        curl_setopt($ch, CURLOPT_BINARYTRANSFER, 1);
+        $rawdata = curl_exec($ch);
+        curl_close($ch);
+
+        $fp = fopen($path, 'w');
+        fwrite($fp, $rawdata);
+        fclose($fp);
     }
 
 }

@@ -61,13 +61,13 @@ $(window).scroll(debounce(function(e) {
 			        opacityVal = 1 - (s / 150.0);
 
 				if(scrolled > buffer && scrolled < wrapHeight) {
+					$('.header-wrapper .mask').css('background-position-y', -((scrolled*.5) - buffer) +'px'  );
 					$('.header-wrapper .cover-image').css('background-position-y', -(scrolled - buffer) +'px'  );
-					$('.header-wrapper').css('background-position-y', -((scrolled*.5) - buffer) +'px'  );
 					$('.header-wrapper .cover-image.clean').css("opacity", opacityVal);
 				}
 				else if(scrolled <= buffer) {
+					$('.header-wrapper .mask').css('background-position-y', '0px');
 					$('.header-wrapper .cover-image').css('background-position-y', '0px');
-					$('.header-wrapper').css('background-position-y', '0px');
 					$('.header-wrapper .cover-image.clean').css("opacity", 1)
 				}
 		}

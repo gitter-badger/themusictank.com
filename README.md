@@ -9,6 +9,8 @@ Applying the db schema
 
 Running cron tasks
 
+C:\MAMP\bin\php\php5.5.7 app/Console/cake.php App daily themusictank.nvi
+php app/Console/cake.php App daily themusictank.nvi
  /Applications/MAMP/bin/php/php5.5.10/bin/php app/Console/cake.php App daily themusictank.nvi
  php app/Console/cake.php App daily themusictank.com
 

@@ -48,12 +48,20 @@ class AppHelper extends Helper {
 		$imgsrc = "";
 		$ds = DIRECTORY_SEPARATOR;
 
+		// When the converter is not available, assume we are in dev and pull
+        // the image right from tmt.com
+        if(is_null(Configure::read('ConvertCMD')))
+        {
+            return "//themusictank.com/img/cache/" . $image . "_" . $type . ".jpg";
+        }
+
 		if($image && file_exists(WWW_ROOT . "img" . $ds . "cache" . $ds . $image . "_" . $type . ".jpg")) {
 			$imgsrc = "/img/cache/" . $image . "_" . $type . ".jpg";
 		}
 		else {
 			$imgsrc = "/img/placeholder.png";
 		}
+
 
 		return $imgsrc;
 	}

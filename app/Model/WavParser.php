@@ -12,7 +12,7 @@ class WavParser
 
 
     // https://github.com/afreiday/php-waveform-svg/blob/master/php-waveform-svg.php
-    public function parse($filename, $resolution = 100)
+    public function parse($filename, $resolution = 40)
     {
         $waveform = array();
 
@@ -76,8 +76,10 @@ class WavParser
 
               // draw this data point
               // data values can range between 0 and 255
-              $waveform[] = $data;
-              //$waveform[] = number_format($data_point / $data_size * 100, 2);
+              $x1 = $x2 = number_format($data_point / $data_size * 100, 2);
+              $y1 = number_format($data / 255 * 100, 2);
+              $y2 = 100 - $y1;
+              $waveform[] = array($y1, $y2);
 
             } else {
               // skip this one due to lack of detail

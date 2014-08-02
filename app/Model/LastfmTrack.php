@@ -21,11 +21,7 @@ class LastfmTrack extends AppModel
 	            $artistName = $this->getData("Artist.name");
 
 	            $infos = $this->getLastFmTrackDetails($trackTitle, $artistName);
-
-	            if($infos)
-	            {
-	           		$syncData[$this->alias] = $this->_saveDetails($infos);
-	            }
+           		$syncData[$this->alias] = $this->_saveDetails($infos);
 	        }
 	    }
         return $syncData;
@@ -41,6 +37,16 @@ class LastfmTrack extends AppModel
     {
         $trackId       = $this->getData("Track.id");
         $lastfmTrackId = $this->getData("LastfmTrack.id");
+
+        if(is_null($infos))
+        {
+            // Save the latest updated timestamp as to not query all the time
+            $this->save(array(
+                "id"        => $lastfmTrackId,
+                "lastsync"  => time()
+            ));
+            return array();
+        }
 
         $newRow         = array(
             "id"        => $lastfmTrackId,

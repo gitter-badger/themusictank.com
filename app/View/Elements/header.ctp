@@ -16,17 +16,14 @@
 		</div>
 		<div class="collapse navbar-collapse">
 			<ul class="nav navbar-nav">
-				<li><?php echo $this->Html->link(__("Artists"), array('controller' => 'artists', 'action' => 'index')); ?></li>
-				<li><?php echo $this->Html->link(__("Community"), array('controller' => 'pages', 'action' => 'community')); ?></li>
 				<li class="searchbar">
 					<form action="/search/" method="get">
 						<input class="typeahead" type="text" name="q" value="" placeholder="Search across everything" />
 						<input type="submit" />
 					</form>
 				</li>
-			</ul>
-
-			<ul class="nav navbar-nav navbar-right">
+				<li><?php echo $this->Html->link(__("Artists"), array('controller' => 'artists', 'action' => 'index')); ?></li>
+				<li><?php echo $this->Html->link(__("Community"), array('controller' => 'pages', 'action' => 'community')); ?></li>
 				<?php if($isLogged) : ?>
 					<li class="picture">
 						<?php echo $this->Html->link(
@@ -64,5 +61,6 @@
 				<?php endif; ?>
 			</ul>
 		</div>
+
 	</div>
 </div>

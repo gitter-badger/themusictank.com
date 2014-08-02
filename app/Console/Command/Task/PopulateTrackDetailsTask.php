@@ -13,7 +13,7 @@ class PopulateTrackDetailsTask extends Shell {
 				)
 			),
             "contain" 		=> array("LastfmTrack", "Album" => array("Artist")),
-            "limit"			=> 200
+            "limit"			=> 400
         ));
 
 		$this->out(sprintf("Found <comment>%s tracks</comment> that are out of sync.", count($expired)));

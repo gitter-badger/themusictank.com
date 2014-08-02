@@ -17,7 +17,7 @@ class AlbumsController extends AppController {
      * @param string $artistSlug Artist slug (unused)
      * @param string $albumSlug Album slug
      */
-    public function view($albumSlug)
+    public function view($albumSlug = "")
     {
         $isLoggedIn = $this->userIsLoggedIn();
         $data       = $this->Album->getFirstBySlug($albumSlug);
@@ -25,6 +25,12 @@ class AlbumsController extends AppController {
         if(!$data)
         {
             throw new NotFoundException(sprintf(__("Could not find the album %s"), $albumSlug));
+        }
+
+        if(is_null($data["LastfmAlbum"]["lastsync"]))
+        {
+            $this->redirect(array("controller" => "albums", "action" => "processing", $albumSlug));
+            return;
         }
 
         // Build general objects
@@ -47,6 +53,98 @@ class AlbumsController extends AppController {
         $this->Album->addTracksSnapshots();
         $this->set("tracks", $this->Album->data["Tracks"]);
 
+        if(count($this->Album->data["Tracks"]))
+        {
+            $bestRated = $this->Album->data["Tracks"][0];
+            $worstRated = $this->Album->data["Tracks"][0];
+
+            foreach($this->Album->data["Tracks"] as $track)
+            {
+                if($track["TrackReviewSnapshot"]["score"] > $bestRated["TrackReviewSnapshot"]["score"])
+                {
+                    $bestRated = $track;
+                }
+                if($track["TrackReviewSnapshot"]["score"] < $worstRated["TrackReviewSnapshot"]["score"])
+                {
+                    $worstRated = $track;
+                }
+            }
+            $this->set("bestTrack", $bestRated);
+            $this->set("worstTrack", $worstRated);
+        }
+
+
+        // Set meta information
+        $this->setPageTitle(array($data["Album"]["name"], $data["Artist"]["name"]));
+        $this->setPageMeta(array(
+            "keywords" => array($data["Album"]["name"], $data["Artist"]["name"], __("Review"), __("Statistics")),
+            "description" => sprintf(
+                __("View the reviewing statistics of %s, an album by %s that was released %s."),
+                $data["Album"]["name"],
+                $data["Artist"]["name"],
+                date("F j Y", $data["Album"]["release_date"])
+            )
+        ));
+    }
+
+    public function wiki($albumSlug = "")
+    {
+        $isLoggedIn = $this->userIsLoggedIn();
+        $data       = $this->Album->getFirstBySlug($albumSlug);
+
+        if(!$data)
+        {
+            throw new NotFoundException(sprintf(__("Could not find the album %s"), $albumSlug));
+        }
+
+        if(is_null($data["LastfmAlbum"]["lastsync"]))
+        {
+            $this->redirect(array("controller" => "albums", "action" => "processing", $albumSlug));
+            return;
+        }
+
+        // Build general objects
+        $this->set("album",         $data["Album"]);
+        $this->set("lastfmAlbum",   $data["LastfmAlbum"]);
+        $this->set("artist",        $data["Artist"]);
+        $this->set("oembedLink",    $this->Album->getOEmbedUrl());
+        $this->set("albumReviewSnapshot",   $data["AlbumReviewSnapshot"]);
+
+        // Set meta information
+        $this->setPageTitle(array($data["Album"]["name"], $data["Artist"]["name"]));
+        $this->setPageMeta(array(
+            "keywords" => array($data["Album"]["name"], $data["Artist"]["name"], __("Review"), __("Statistics")),
+            "description" => sprintf(
+                __("View the reviewing statistics of %s, an album by %s that was released %s."),
+                $data["Album"]["name"],
+                $data["Artist"]["name"],
+                date("F j Y", $data["Album"]["release_date"])
+            )
+        ));
+    }
+
+    public function processing($albumSlug = "")
+    {
+        $isLoggedIn = $this->userIsLoggedIn();
+        $data       = $this->Album->getFirstBySlug($albumSlug);
+
+        if(!$data)
+        {
+            throw new NotFoundException(sprintf(__("Could not find the album %s"), $albumSlug));
+        }
+
+        if((int)$data["LastfmAlbum"]["lastsync"] > 0)
+        {
+            $this->redirect(array("controller" => "albums", "action" => "view", $albumSlug));
+            return;
+        }
+
+        // Build general objects
+        $this->set("album",         $data["Album"]);
+        $this->set("lastfmAlbum",   $data["LastfmAlbum"]);
+        $this->set("artist",        $data["Artist"]);
+        $this->set("oembedLink",    $this->Album->getOEmbedUrl());
+
         // Set meta information
         $this->setPageTitle(array($data["Album"]["name"], $data["Artist"]["name"]));
         $this->setPageMeta(array(
@@ -65,7 +163,7 @@ class AlbumsController extends AppController {
      * @param string $artistSlug Artist slug (unused)
      * @param string $albumSlug Album slug
      */
-    public function embed($albumSlug)
+    public function embed($albumSlug = "")
     {
         $this->usesPlayer();
         $this->layout = "blank";
@@ -76,6 +174,12 @@ class AlbumsController extends AppController {
         if(!$data)
         {
             throw new NotFoundException(sprintf(__("Could not find the album %s"), $albumSlug));
+        }
+
+        if(is_null($data["LastfmAlbum"]["lastsync"]))
+        {
+            $this->redirect(array("controller" => "albums", "action" => "processing", $albumSlug));
+            return;
         }
 
         // Build general objects

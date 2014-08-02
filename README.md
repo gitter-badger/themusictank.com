@@ -16,3 +16,8 @@ php app/Console/cake.php App daily themusictank.nvi
 
  /Applications/MAMP/bin/php/php5.5.10/bin/php app/Console/cake.php App twohours themusictank.nvi
  php app/Console/cake.php App twohours themusictank.com
+
+
+## Problematic areas  ##
+
+There are no problematic areas at the moment.

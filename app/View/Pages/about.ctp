@@ -1,25 +1,22 @@
-<div class="header-wrapper">
+<div class="header-wrapper map">
     <div id="mapCanvas" class="cover-image"></div>
+    <i class="mask"></i>
+    <article>
+        * Based in <a href="https://goo.gl/maps/7NQ1r" rel="nofollow" target="_blank">Montreal</a>
+    </article>
 </div>
 
 <article class="container container-fluid static">
 
-    <header class="collapsed">
- 		<h1><?php echo __("About Us"); ?></h1>
-    </header>
+    <header class="collapsed"></header>
 
     <div class="row content headerless">
-        <div class="col-md-12">
-           <p class="lead">We want to give you an easy and fun way to rate tracks and albums accurately. By integrating with various music streaming service, we aspire to collect opinions on the music you listen to.</p>
-		   <p>First launched on the 30th of December 1999, The Music Tank has always been around under a form or another</p>
-		   <p>The Music Tank is a team of 2 music enthusiasts who work together during our free time to build a place where people come hang out and discuss music.</p>
+        <div class="col-md-12 lead introduction">
+ 			<h1><?php echo __("About Us"); ?></h1>
+			<p>We want to give you an easy and fun way to rate tracks and albums accurately. By integrating with various music streaming service, we aspire to collect opinions on the music you listen to.</p>
+			<p>First launched on the 30th of December 1999, The Music Tank has always been around under a form or another</p>
+			<p>The Music Tank is a team of 2 music enthusiasts who work together during our free time to build a place where people come hang out and discuss music.</p>
         </div>
-
-		<section class="map">
-		    <article>
-		        * Based in <a href="https://goo.gl/maps/7NQ1r" rel="nofollow" target="_blank">Montreal</a>
-		    </article>
-		</section>
 
 		<section class="team">
 
@@ -39,7 +36,7 @@
 			        sandbox where I could play and learn how to build websites. How have things changed since then,
 			        whether in our personal lives, in the music industry or on the Internet itself.</p>
 
-			        <p>TMT had many lives along the way, but there is one moment that I remember particularly fondly.
+			        <p>TMT has had many lives along the way, but there is one moment that I remember particularly fondly.
 			        <a href="http://web.archive.org/web/20030128044725/http://www.themusictank.com/" target="_blank">In 2003</a>,
 			        the website became a place where people would hang out and became less content focused. We didn't have
 			        any pretension of being able to compete in quality and quantity of content against the myriad of other music

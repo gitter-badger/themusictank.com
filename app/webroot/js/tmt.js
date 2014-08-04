@@ -3,6 +3,82 @@ var tmt = window.tmt || {};
 
 $(function() {
 
+	// Frequent calls of DOM objects should be cached here
+	var _domcache = {
+		"window" : $(window),
+		".navbar" : $('.navbar'),
+		".header-wrapper" : $('.header-wrapper'),
+		".header-wrapper .mask" : $('.header-wrapper .mask'),
+		".header-wrapper .cover-image" : $('.header-wrapper .cover-image'),
+		".header-wrapper .cover-image.clean" : $('.header-wrapper .cover-image.clean')
+	}
+
+
+
+	// private
+
+	function _debounce(func, wait)
+	{
+	    var timeout;
+	    return function() {
+	        var context = this,
+	            args = arguments,
+	            later = function() {
+	                timeout = null;
+	                func.apply(context, args);
+	            };
+	        clearTimeout(timeout);
+	        timeout = setTimeout(later, wait);
+	    };
+	}
+
+	// Events
+
+	function _window_onScroll(event)
+	{
+		// Handle the fixed navigation bar
+		_domcache["window"].scrollTop() > 70 ?
+			_domcache['.navbar'].addClass('opaque'):
+			_domcache['.navbar'].removeClass('opaque');
+
+		// Handle the blurring of the header image
+		if(_domcache['.header-wrapper'].length) {
+			var scrollTop = _domcache["window"].scrollTop(),
+				scrolledDistance = scrollTop * .7,
+				wrapHeight = _domcache['.header-wrapper'].innerHeight(),
+			 	opacityVal = 1 - (scrollTop / 150.0)
+				buffer = 5;
+
+			if(scrolledDistance > buffer && scrolledDistance < wrapHeight) {
+				_domcache['.header-wrapper .mask'].css('background-position-y', -((scrolledDistance*.5) - buffer) +'px'  );
+				_domcache['.header-wrapper .cover-image'].css('background-position-y', -(scrolledDistance - buffer) +'px'  );
+				_domcache['.header-wrapper .cover-image.clean'].css("opacity", opacityVal);
+			}
+			else if(scrolledDistance <= buffer) {
+				_domcache['.header-wrapper .mask'].css('background-position-y', '0px');
+				_domcache['.header-wrapper .cover-image'].css('background-position-y', '0px');
+				_domcache['.header-wrapper .cover-image.clean'].css("opacity", 1)
+			}
+		}
+	}
+	_domcache['window'].scroll(_debounce(_window_onScroll, 10));
+
+	// Follow / unfollow subscription buttons
+	function _follow_onClick(event)
+	{
+		var $el = $(this);
+		event.preventDefault();
+		$.ajax($el.attr("href")).done(function(data)
+		{
+			var parent = $el.parent();
+			parent.html(data);
+			parent.find("a.follow, a.unfollow").on("click", _follow_onClick);
+		});
+	}
+	$("a.follow, a.unfollow").on("click", _follow_onClick);
+
+
+	/* Demoted.
 	// initialize Royal Slider
 	if($(".royalSlider").length){
 
@@ -27,69 +103,9 @@ $(function() {
 			}
 		});
 	}
+	*/
 
 
-
-	function debounce(func, wait) {
-	    var timeout;
-	    return function() {
-	        var context = this,
-	            args = arguments,
-	            later = function() {
-	                timeout = null;
-	                func.apply(context, args);
-	            };
-	        clearTimeout(timeout);
-	        timeout = setTimeout(later, wait);
-	    };
-	}
-
-$(window).scroll(debounce(function(e) {
-
-		if($(window).scrollTop() > 70) {
-			$('.navbar').addClass('opaque');
-		} else {
-			$('.navbar').removeClass('opaque');
-		}
-
-		if($('.header-wrapper').length) {
-				var scrolled = $(window).scrollTop() * .7,
-					wrapHeight = $('.header-wrapper').innerHeight(),
-					buffer = 5;
-
-			 var s = $(window).scrollTop(),
-			        opacityVal = 1 - (s / 150.0);
-
-				if(scrolled > buffer && scrolled < wrapHeight) {
-					$('.header-wrapper .mask').css('background-position-y', -((scrolled*.5) - buffer) +'px'  );
-					$('.header-wrapper .cover-image').css('background-position-y', -(scrolled - buffer) +'px'  );
-					$('.header-wrapper .cover-image.clean').css("opacity", opacityVal);
-				}
-				else if(scrolled <= buffer) {
-					$('.header-wrapper .mask').css('background-position-y', '0px');
-					$('.header-wrapper .cover-image').css('background-position-y', '0px');
-					$('.header-wrapper .cover-image.clean').css("opacity", 1)
-				}
-		}
-
-}, 10));
-
-
-
-
-
-	// Add remove follower
-	var onFollowClick = function(event){
-		var $el = $(this);
-		event.preventDefault();
-		$.ajax($el.attr("href")).done(function(data)
-		{
-			var parent = $el.parent();
-			parent.html(data);
-			parent.find("a.follow, a.unfollow").on("click", onFollowClick);
-		});
-	};
-	$("a.follow, a.unfollow").on("click", onFollowClick);
 
 	// search box
 	var artistsSearch = new Bloodhound({
@@ -218,13 +234,14 @@ $(window).scroll(debounce(function(e) {
 	if(box.length > 0)
 	{
 		var mapOptions = {
-			center: new google.maps.LatLng(45.5000, -73.5667),
+			center: new google.maps.LatLng(45.4516675, -73.5904749),
 			zoom: 8,
 			disableDefaultUI: true,
 			draggable: false,
 			disableDoubleClickZoom: false,
 			scrollwheel : false,
-			mapTypeId: google.maps.MapTypeId.ROADMAP
+			mapTypeId: google.maps.MapTypeId.ROADMAP,
+			styles : [{"featureType":"water","elementType":"geometry","stylers":[{"color":"#193341"}]},{"featureType":"landscape","elementType":"geometry","stylers":[{"color":"#2c5a71"}]},{"featureType":"road","elementType":"geometry","stylers":[{"color":"#29768a"},{"lightness":-37}]},{"featureType":"poi","elementType":"geometry","stylers":[{"color":"#406d80"}]},{"featureType":"transit","elementType":"geometry","stylers":[{"color":"#406d80"}]},{"elementType":"labels.text.stroke","stylers":[{"visibility":"on"},{"color":"#3e606f"},{"weight":2},{"gamma":0.84}]},{"elementType":"labels.text.fill","stylers":[{"color":"#ffffff"}]},{"featureType":"administrative","elementType":"geometry","stylers":[{"weight":0.6},{"color":"#1a3541"}]},{"elementType":"labels.icon","stylers":[{"visibility":"off"}]},{"featureType":"poi.park","elementType":"geometry","stylers":[{"color":"#2c5a71"}]}]
 		},
 		map = new google.maps.Map(box.get(0), mapOptions);
 

@@ -1,20 +1,22 @@
 <?php echo $this->element('header'); ?>
 
-<div class="header-wrapper">
-	<section class="jumbotron introduction">
-		<div class="container">
-		    <h1><?php echo __("Console"); ?></h1>
-	    </div>
-	</section>
+<div class="header-wrapper plain">
+    <i class="mask"></i>
 </div>
 
-<div class="container container-fluid">
-	<div class="row">
+<article class="container container-fluid static">
+
+    <header class="collapsed"></header>
+
+    <div class="row content headerless">
+        <h1><?php echo __("Console"); ?></h1>
+
 		<div id="refresher" class="loading-wrap">
         	<i class="fa fa-refresh fa-spin fa-fw"></i>
         </div>
 	</div>
-</div>
+</article>
+
 
 <style type="text/css">
 	.log {

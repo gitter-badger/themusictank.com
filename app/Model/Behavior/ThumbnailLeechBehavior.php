@@ -3,13 +3,12 @@
 class ThumbnailLeechBehavior extends ModelBehavior {
 
     private $_thumbnailTypes = array(
-        "_big.jpg" => 800,
+        "_big.jpg" => 900,
         "_thumb.jpg" => 300
     );
 
     public function getImageFromUrl($model, $remoteUrl, $previousUrl = null)
     {
-
         ini_set('memory_limit', '64M');
 
         $ds             = DIRECTORY_SEPARATOR;

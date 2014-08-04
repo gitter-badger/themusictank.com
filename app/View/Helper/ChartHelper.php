@@ -22,6 +22,9 @@ class ChartHelper extends AppHelper {
         return (int)$album["notability"] < 3;
     }
 
+    public function hasScore($obj) {
+        return !is_null($obj) && array_key_exists("score", $obj) && !is_null($obj["score"]);
+    }
 
     public function formatScore($score)
     {

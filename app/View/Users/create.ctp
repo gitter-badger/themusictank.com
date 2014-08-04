@@ -1,13 +1,14 @@
-<div class="header-wrapper">
-    <section class="jumbotron introduction">
-        <div class="container">
-            <h1><?php echo __("Tanker Profiles"); ?></h1>
-        </div>
-    </section>
+<div class="header-wrapper plain">
+    <i class="mask"></i>
 </div>
 
-<div class="container container-fluid">
-    <div class="row">
+<article class="container container-fluid static">
+
+    <header class="collapsed"></header>
+
+    <div class="row content headerless">
+        <h1><?php echo __("Profiles"); ?></h1>
+
         <div class="col-md-12">
 
             <h2><?php echo __("Create a new account"); ?></h2>
@@ -21,5 +22,6 @@
             <?php echo $this->Form->end(__('Create')); ?>
 
         </div>
+
     </div>
-</div>
+</article>

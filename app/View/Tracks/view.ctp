@@ -2,16 +2,17 @@
     $isLogged = $this->Session->check('Auth.User.User.id');
 ?>
 <div class="header-wrapper">
-    <?php if(!is_null($album["image"])) : ?>
-        <div class="cover-image blurred" style="background-image:url(<?php echo $this->App->getImageUrl($album, "blur"); ?>);"></div>
-        <div class="cover-image clean" style="background-image:url(<?php echo $this->App->getImageUrl($album, "big"); ?>);"></div>
-    <?php endif; ?>
+    <div class="cover-image blurred" style="background-image:url(<?php echo $this->App->getImageUrl($album, "blur"); ?>);"></div>
+    <div class="cover-image clean" style="background-image:url(<?php echo $this->App->getImageUrl($album, "big"); ?>);"></div>
+    <i class="mask"></i>
 </div>
 
 <article class="container container-fluid">
 
     <header>
-        <?php echo $this->Html->image( $this->App->getImageUrl($album), array("alt" => $album["name"], "class" => "thumbnail")); ?>
+
+        <?php $img = $this->Html->image( $this->App->getImageUrl($album), array("alt" => $album["name"], "class" => "thumbnail")); ?>
+        <?php echo $this->Html->link($img, array('controller' => 'albums', 'action' => 'view', $album["slug"]), array("escape" => false)); ?>
 
         <h1><?php echo $this->Html->link($track["title"], array('controller' => 'tracks', 'action' => 'view', $track["slug"])); ?></h1>
 
@@ -32,15 +33,104 @@
 
         <div class="everyone piechart"></div>
 
-        <div class="lead">
+		<div class="row stats">
+
+            <div class="col-md-2 enjoyment">
+            	<span><?php echo __("Enjoyed"); ?></span>
+            	<em>
+            		<?php if($this->Chart->isNotAvailable($trackReviewSnapshot)) : ?>
+            			N/A
+            		<?php else : ?>
+            			<?php echo (int)$trackReviewSnapshot["liking_pct"]; ?>%
+            		<?php endif; ?>
+            	</em>
+        	</div>
+            <div class="col-md-2 dislike">
+            	<span><?php echo __("Disliked"); ?></span>
+            	<em>
+            		<?php if($this->Chart->isNotAvailable($trackReviewSnapshot)) : ?>
+            			N/A
+            		<?php else : ?>
+            			<?php echo (int)$trackReviewSnapshot["disliking_pct"]; ?>%
+            		<?php endif; ?>
+            	</em>
+        	</div>
+
+        	<?php if(isset($bestArea)) : ?>
+            <div class="col-md-4 best best-part">
+            	<span><?php echo __("Best area"); ?></span>
+        		--
+            </div>
+    		<?php endif; ?>
+
+        	<?php if(isset($worstArea)) : ?>
+            <div class="col-md-4 worst worst-area">
+            	<span><?php echo __("Worst area"); ?></span>
+        		--
+            </div>
+    		<?php endif; ?>
+
+    		<div class="col-md-12 social">
+
+		        <?php if($isLogged) : ?>
+		        	<div class="col-md-3">
+			        	<h3><?php echo __("Your subscription"); ?></h3>
+					    <?php if(isset($userTrackReviewSnapshot) && !is_null($userTrackReviewSnapshot["score"])) : ?>
+			                <?php echo (int)($userTrackReviewSnapshot["score"] * 100); ?>%
+			            <?php else : ?>
+			                N/A
+			            <?php endif; ?>
+			            <span><?php echo __("Score"); ?></span>
+		            </div>
+		            <div class="col-md-3">
+		            	<div class="piechart subscriptions"></div>
+				    </div>
+
+				    <div class="col-md-3">
+			        	<h3><?php echo __("You"); ?></h3>
+			        	<?php if(isset($profileTrackReviewSnapshot) && !is_null($profileTrackReviewSnapshot["score"])) : ?>
+			                <?php echo (int)($profileTrackReviewSnapshot["score"] * 100); ?>%
+			            <?php else : ?>
+			                N/A
+			            <?php endif; ?>
+			            <span><?php echo __("Score"); ?></span>
+				    </div>
+		            <div class="col-md-3">
+		            	<div class="piechart you"></div>
+				    </div>
+		    	<?php else : ?>
+					<?php $login = $this->Html->link(__("Login"), array('controller' => 'users', 'action' => 'login', '?' => array("rurl" => '/albums/view/' . $track['slug'])), array("class" => "btn btn-primary")); ?>
+					<p><?php echo sprintf(__("%s to see how you and your friends have rated  \"%s\"."), $login, $track["title"]); ?></p>
+		    	<?php endif; ?>
+
+    		</div>
         </div>
     </header>
 
-    <div class="content">
+	<?php $wiki = $this->StringMaker->composeTrackPresentation($lastfmTrack, $track, $album, $artist); ?>
+	<?php if(strlen($wiki) > 0) : ?>
+	<div class="row wiki <?php echo strlen($wiki) <= 800 ? "full" : ""; ?>">
+		<div class="col-md-12 lead">
+			<?php echo substr($wiki, 0, 800); ?></p>
+        	<i class="mask"></i>
+		</div>
+		<div class="col-md-4 lastfm"><a href="http://www.last.fm/"><img src="/img/icon-lastfm.png" alt="Last.fm" title="Last.fm" /></a></div>
+        <div class="col-md-4 bug"><span class="report-bug" data-bug-type="track wiki" data-location="album/<?php echo $album["slug"]; ?>" data-user="<?php echo $this->Session->read('Auth.User.User.id'); ?>"><i class="fa fa-bug"></i> <?php echo __("Wrong/weird bio?"); ?></span></div>
+        <div class="col-md-4 readmore">
+        	<?php if(strlen($wiki) > 800) : ?>
+            	<?php echo $this->Html->link("Read more", array('controller' => 'track', 'action' => 'wiki', $album["slug"]), array("class" => "btn btn-primary")); ?>
+        	<?php endif; ?>
+        </div>
+    </div>
+	<?php endif; ?>
 
-		<p><?php echo $this->StringMaker->composeTrackPresentation($lastfmTrack, $track, $album, $artist); ?></p>
+
+    <div class="row content">
 
 		<div class="big-graph"></div>
+
+
+
 		<div class="streamer" <?php echo $this->App->getTrackPlayerAttributes($artist, $track, $trackYoutube); ?>>
 
 			<div class="progress-wrap">
@@ -56,7 +146,6 @@
 			<div class="duration"></div>
 
 			<small class="report-bug" data-bug-type="track player" data-location="artist/<?php echo $artist["slug"]; ?>|album/<?php echo $album["slug"]; ?>|track<?php echo $track["slug"]; ?>" data-user="<?php echo $this->Session->read('Auth.User.User.id'); ?>"><i class="fa fa-bug"></i> <?php echo __("Wrong song?"); ?></small>
-
 		</div>
 
 
@@ -94,7 +183,6 @@
         			<div class="rsCaption"><?php echo __("You"); ?></div>
 				</section>
 			<?php endif; ?>
-
 
 			<?php if(array_key_exists("top", $trackReviewSnapshot)) : ?>
 				<?php if(count($trackReviewSnapshot["top"]) > 1 && count($trackReviewSnapshot["bottom"] > 1)) : ?>

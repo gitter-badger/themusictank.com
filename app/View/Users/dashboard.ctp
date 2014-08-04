@@ -6,20 +6,18 @@
     $lastHeader = -1;
 ?>
 
-<div class="header-wrapper">
-    <section class="jumbotron introduction">
-        <div class="container">
-            <h1><?php echo __("Dashboard"); ?></h1>
-        </div>
-    </section>
+<div class="header-wrapper plain">
+    <i class="mask"></i>
 </div>
 
+<article class="container container-fluid static">
 
-<div class="container container-fluid">
+    <header class="collapsed"></header>
 
-    <div class="row">
+    <div class="row content headerless">
+        <h1><?php echo __("Dashboard"); ?></h1>
 
-        <div class="col-md-8">
+       <div class="col-md-8">
 
             <section class="activity-stream">
 
@@ -166,8 +164,7 @@
             --- users<br>
 
                 */ ?>
-        </div>
 
-    </aside>
-
-</div>
+        </aside>
+    </div>
+</article>

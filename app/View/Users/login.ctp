@@ -1,27 +1,18 @@
-<div class="header-wrapper">
-	<section class="jumbotron introduction">
-		<div class="container">
-		    <h1><?php echo __("Tanker Profiles"); ?></h1>
-	    </div>
-	</section>
+<div class="header-wrapper plain">
+    <i class="mask"></i>
 </div>
 
-<nav class="sub-menu">
-	<div class="container container-fluid">
-		<div class="row">
-		    <ol class="breadcrumb">
-		        <li class="active"><?php echo $this->Html->link(__("User login"), array('controller' => 'users', 'action' => 'login')); ?></li>
-		    </ol>
-	    </div>
-    </div>
-</nav>
+<article class="container container-fluid static">
 
-<div class="container container-fluid">
-    <?php echo $this->Session->flash('auth'); ?>
+    <header class="collapsed"></header>
 
-    <h2><?php echo __("Access your account"); ?></h2>
+    <div class="row content headerless">
 
-    <div class="row">
+        <h1><?php echo __("Profiles"); ?></h1>
+
+        <?php echo $this->Session->flash('auth'); ?>
+         <h2><?php echo __("Access your account"); ?></h2>
+
         <div class="col-md-7">
 
             <div class="panel panel-default">
@@ -64,6 +55,6 @@
             </div>
 
         </div>
-    </div>
 
-</div>
+    </div>
+</article>

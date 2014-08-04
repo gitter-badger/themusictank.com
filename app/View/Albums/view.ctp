@@ -78,9 +78,9 @@
 
 		        <?php if($isLogged) : ?>
 		        	<div class="col-md-3">
-			        	<h3><?php echo __("Your subscription"); ?></h3>
-					    <?php if(isset($userAlbumReviewSnapshot) && !is_null($userAlbumReviewSnapshot["score"])) : ?>
-			                <?php echo (int)($userAlbumReviewSnapshot["score"] * 100); ?>%
+			        	<h3><?php echo __("Your subscriptions"); ?></h3>
+            			<?php if($this->Chart->hasScore($subsAlbumReviewSnapshot)) : ?>
+			                <?php echo (int)($subsAlbumReviewSnapshot["score"] * 100); ?>%
 			            <?php else : ?>
 			                N/A
 			            <?php endif; ?>
@@ -92,8 +92,8 @@
 
 				    <div class="col-md-3">
 			        	<h3><?php echo __("You"); ?></h3>
-			        	<?php if(isset($profileAlbumReviewSnapshot) && !is_null($profileAlbumReviewSnapshot["score"])) : ?>
-			                <?php echo (int)($profileAlbumReviewSnapshot["score"] * 100); ?>%
+            			<?php if($this->Chart->hasScore($userAlbumReviewSnapshot)) : ?>
+			                <?php echo (int)($userAlbumReviewSnapshot["score"] * 100); ?>%
 			            <?php else : ?>
 			                N/A
 			            <?php endif; ?>
@@ -118,16 +118,13 @@
 			<?php echo substr($wiki, 0, 800); ?></p>
         	<i class="mask"></i>
 		</div>
-        <?php if(strlen($wiki) > 800) : ?>
-            <div class="col-md-4 lastfm"><a href="http://www.last.fm/"><img src="/img/icon-lastfm.png" alt="Last.fm" title="Last.fm" /></a></div>
-            <div class="col-md-4 bug"><span class="report-bug" data-bug-type="album wiki" data-location="album/<?php echo $album["slug"]; ?>" data-user="<?php echo $this->Session->read('Auth.User.User.id'); ?>"><i class="fa fa-bug"></i> <?php echo __("Wrong/weird bio?"); ?></span></div>
-            <div class="col-md-4 readmore">
-            	<?php echo $this->Html->link("Read more", array('controller' => 'albums', 'action' => 'wiki', $album["slug"]), array("class" => "btn btn-default")); ?>
-            </div>
-        <?php else : ?>
-        	<div class="col-md-6 lastfm"><a href="http://www.last.fm/"><img src="/img/icon-lastfm.png" alt="Last.fm" title="Last.fm" /></a></div>
-            <div class="col-md-6 bug"><span class="report-bug" data-bug-type="album wiki" data-location="album/<?php echo $album["slug"]; ?>" data-user="<?php echo $this->Session->read('Auth.User.User.id'); ?>"><i class="fa fa-bug"></i> <?php echo __("Wrong/weird bio?"); ?></span></div>
-        <?php endif; ?>
+		<div class="col-md-4 lastfm"><a href="http://www.last.fm/"><img src="/img/icon-lastfm.png" alt="Last.fm" title="Last.fm" /></a></div>
+        <div class="col-md-4 bug"><span class="report-bug" data-bug-type="album wiki" data-location="album/<?php echo $album["slug"]; ?>" data-user="<?php echo $this->Session->read('Auth.User.User.id'); ?>"><i class="fa fa-bug"></i> <?php echo __("Wrong/weird bio?"); ?></span></div>
+        <div class="col-md-4 readmore">
+        	<?php if(strlen($wiki) > 800) : ?>
+            	<?php echo $this->Html->link("Read more", array('controller' => 'albums', 'action' => 'wiki', $album["slug"]), array("class" => "btn btn-primary")); ?>
+        	<?php endif; ?>
+        </div>
     </div>
 	<?php endif; ?>
 

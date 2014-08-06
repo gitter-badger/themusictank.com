@@ -9,6 +9,14 @@ a {
 	color:@themeColorHighlight;
 }
 
+li {
+	margin-bottom: 15px;
+}
+
+h1 {
+	font-size:50px;
+}
+
 
 .card {
 	background:#fff;
@@ -27,7 +35,7 @@ article {
 		margin-top: -650px;
 
 		h1 {
-				color:#fff;
+			color:#fff;
 			text-shadow: 3px 3px rgba(0,0,0,0.4);
 			font-size:50px;
 			margin:0;
@@ -180,12 +188,12 @@ article {
 		box-shadow: 0 5px 10px 0px rgba(0,0,0,.3);
 		padding: 20px;
 		background: #e7e7e2;
-		filter: progid:DXImageTransform.Microsoft.gradient(gradientType=0,startColorstr='#FFFFFFFF',endColorstr='#FFE7E7E2');
-		background-image: -webkit-gradient(linear,50% 0,50% 100%,color-stop(0,#fff),color-stop(75%,#e7e7e2));
-		background-image: -webkit-linear-gradient(top,#fff 0,#e7e7e2 75%);
-		background-image: -moz-linear-gradient(top,#fff 0,#e7e7e2 75%);
-		background-image: -o-linear-gradient(top,#fff 0,#e7e7e2 75%);
-		background-image: linear-gradient(top,#fff 0,#e7e7e2 75%);
+		filter: progid:DXImageTransform.Microsoft.gradient(gradientType=0,startColorstr='#FFE7E7E2',endColorstr='#FFFFFFFF');
+		background-image: -webkit-gradient(linear,50% 0,50% 100%,color-stop(0,#e7e7e2),color-stop(75%,#fff));
+		background-image: -webkit-linear-gradient(top,#e7e7e2 0,#fff 75%);
+		background-image: -moz-linear-gradient(top,#e7e7e2 0,#fff 75%);
+		background-image: -o-linear-gradient(top,#e7e7e2 0,#fff 75%);
+		background-image: linear-gradient(top,#e7e7e2 0,#fff 75%);
 
 		.report-bug {
 			display:block;
@@ -232,7 +240,88 @@ article {
 			font-size: 21px;
 			font-weight: 200;
 			line-height: 29.399999618530273px;
+			margin-bottom: 21px;
 		}
+	}
+}
+
+// About Page
+.about {
+
+	.header-wrapper.map {
+		height:800px;
+
+		article {
+			background:#000;
+			color:#fff;
+			margin:25% 80%;
+			padding-top:39px;
+			width:150px;
+			height:150px;
+			z-index: 1;
+			font-size:2em;
+			text-align:center;
+			border-radius: 120px;
+			border:1px solid #eee;
+			position:absolute;
+			box-shadow:0 1px 4px rgba(0,0,0,.5);
+			transform:rotate(2deg);
+			-ms-transform:rotate(2deg);
+			-webkit-transform:rotate(2deg);
+		}
+
+		#mapCanvas {
+			width: 100%;
+			height:830px;
+			background-color: #CCC;
+			border-radius: 3px;
+			border:1px solid #dedede;
+			z-index: 0;
+
+			// Reset the image rules for the google underlay
+			img {
+		        position: static;
+		        min-width:0;
+		        width:auto;
+		        height:auto;
+			}
+		}
+	}
+
+	.introduction {
+		border-bottom: 1px solid #eee;
+		padding-bottom: 30px;
+		margin-bottom: 30px;
+	}
+	.team {
+		.col-md-2 {
+			text-align:center;
+		}
+		img {
+			height:100px;
+			width:100px;
+		}
+	}
+	h4 {
+		font-size: 1.7em;
+	}
+	blockquote {
+		font-size:1em;
+		border:none;
+		margin-top:1em;
+	}
+}
+
+// artist/index splash
+.popular-artists {
+	header {
+		margin-top: -50%;
+		margin-bottom: 30%;
+	}
+
+	.more-popular-artists {
+		margin-top: -800px;
+		float:right;
 	}
 }
 
@@ -372,66 +461,6 @@ time {
 }
 
 
-// About Page
-.about {
-
-	.header-wrapper.map {
-		height:800px;
-
-		article {
-			background:#000;
-			color:#fff;
-			margin:25% 80%;
-			padding-top:39px;
-			width:150px;
-			height:150px;
-			z-index: 1;
-			font-size:2em;
-			text-align:center;
-			border-radius: 120px;
-			border:1px solid #eee;
-			position:absolute;
-			box-shadow:0 1px 4px rgba(0,0,0,.5);
-			transform:rotate(2deg);
-			-ms-transform:rotate(2deg);
-			-webkit-transform:rotate(2deg);
-		}
-
-		#mapCanvas {
-			width: 100%;
-			height:830px;
-			background-color: #CCC;
-			border-radius: 3px;
-			border:1px solid #dedede;
-			z-index: 0;
-		}
-
-	}
-
-	.introduction {
-		border-bottom: 1px solid #eee;
-		padding-bottom: 30px;
-		margin-bottom: 30px;
-
-	}
-	.team {
-		.col-md-2 {
-			text-align:center;
-		}
-		img {
-			height:100px;
-			width:100px;
-		}
-	}
-	h4 {
-		font-size: 1.7em;
-	}
-	blockquote {
-		font-size:1em;
-		border:none;
-		margin-top:1em;
-	}
-}
 
 .popoverbox .popover {
 	position: relative;
@@ -479,14 +508,6 @@ time {
 	}
 }
 
-/*
-.notifications .new, .jumbotron {
-	background:@themeColorNeutral  url(/img/triangles.png) top left repeat;
-	border-radius: 0;
-	border-bottom:1px solid darken(@themeColorNeutral, 50%);
-	color:#fff;
-	margin-bottom:0;
-}*/
 
 .user-badge {
 	text-align: center;
@@ -508,10 +529,19 @@ time {
 	}
 }
 
-/*
+
 .introduction {
-	text-shadow:-1px -1px 0 @themeColorDark;
-}*/
+	background: transparent url(/img/bg-intro-bottom.png) left bottom repeat-x;
+	margin-bottom: 30px;
+	padding-bottom: 30px;
+	font-size: 28px;
+	text-shadow:0 1px 0 #fff;
+	p {
+		color: @themeColorDark;
+		line-height: 1.5;
+		font-weight: 200;
+	}
+}
 
 .score {
 	background:#000;

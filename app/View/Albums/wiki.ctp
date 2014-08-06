@@ -2,10 +2,8 @@
     $isLogged = $this->Session->check('Auth.User.User.id');
 ?>
 <div class="header-wrapper">
-    <?php if(!is_null($album["image"])) : ?>
-        <div class="cover-image blurred" style="background-image:url(<?php echo $this->App->getImageUrl($album, "blur"); ?>);"></div>
-        <div class="cover-image clean" style="background-image:url(<?php echo $this->App->getImageUrl($album, "big"); ?>);"></div>
-    <?php endif; ?>
+    <?php echo $this->Html->image( $this->App->getImageUrl($album, "blur"), array("alt" => $album["name"], "class" => "blurred"));  ?>
+    <?php echo $this->Html->image( $this->App->getImageUrl($album, "big"), array("alt" => $album["name"], "class" => "clean"));  ?>
     <i class="mask"></i>
 </div>
 

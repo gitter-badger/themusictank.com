@@ -1,15 +1,13 @@
-<nav class="sub-menu">
-	<div class="container container-fluid">
-		<div class="row">
-		    <ol class="breadcrumb">
-		        <li class="active"><?php echo $this->Html->link(__("Artists"), array('controller' => 'artists', 'action' => 'index')); ?></li>
-		    </ol>
-	    </div>
-    </div>
-</nav>
+<div class="header-wrapper plain">
+    <i class="mask"></i>
+</div>
 
-<div class="container container-fluid">
-	<div class="row">
+<article class="container container-fluid static">
+
+    <header class="collapsed"></header>
+
+    <div class="row content headerless">
+
 		<h2><?php echo __("Tracks"); ?></h2>
 		<h3><?php echo $title; ?></h3>
 
@@ -27,4 +25,4 @@
 		    ?>
 		</ul>
     </div>
-</div>
+</article>

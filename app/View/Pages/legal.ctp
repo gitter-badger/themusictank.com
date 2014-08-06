@@ -7,9 +7,9 @@
     <header class="collapsed"></header>
 
     <div class="row content headerless">
-        <div class="col-md-12 lead introduction">
+        <div class="col-md-12 introduction">
 		    <h1><?php echo __("Legalities"); ?></h1>
-			<p>we are not a business and we do not impose or abide any obscure legal guidelines.</p>
+			<p>We are not a business and we do not impose or abide any obscure legal guidelines. We don't act like douchebags and in turn ask for you to do the same.</p>
         </div>
 
 		<div class="col-md-12 ">

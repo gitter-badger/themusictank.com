@@ -32,8 +32,8 @@
 								array('escape' => false)
 						); ?>
 					</li>
+					<li><?php echo $this->Html->link(__("You"), array('controller' => 'profiles', 'action' => 'view', $userSession['slug'])); ?></li>
 					<li><?php echo $this->Html->link("<i class=\"fa fa-bell-o\"></i>", array('controller' => 'users', 'action' => 'notifications'), array("escape" => false)); ?></li>
-					<li><?php echo $this->Html->link(__("Profile"), array('controller' => 'profiles', 'action' => 'view', $userSession['slug'])); ?></li>
 					<li class="dropdown">
 						<a href="#" id="btnSettings" class="dropdown-toggle" data-toggle="dropdown">
 						  <i class="fa fa-cog"></i>

@@ -22,7 +22,7 @@ class ArtistsController extends AppController {
      */
     public function index()
     {
-        $this->set("popularArtists",    $this->Artist->findPopular(12));
+        $this->set("popularArtists",    $this->Artist->findPopular(9));
         $this->set("artistCategories",  $this->Artist->getCategories());
         $this->set("newReleases",       $this->Artist->Albums->getNewReleases(8));
 

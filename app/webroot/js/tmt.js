@@ -9,10 +9,9 @@ $(function() {
 		".navbar" : $('.navbar'),
 		".header-wrapper" : $('.header-wrapper'),
 		".header-wrapper .mask" : $('.header-wrapper .mask'),
-		".header-wrapper .cover-image" : $('.header-wrapper .cover-image'),
-		".header-wrapper .cover-image.clean" : $('.header-wrapper .cover-image.clean')
+		".header-wrapper img" : $('.header-wrapper img'),
+		".header-wrapper img.clean" : $('.header-wrapper img.clean')
 	}
-
 
 
 	// private
@@ -43,25 +42,46 @@ $(function() {
 
 		// Handle the blurring of the header image
 		if(_domcache['.header-wrapper'].length) {
-			var scrollTop = _domcache["window"].scrollTop(),
-				scrolledDistance = scrollTop * .7,
-				wrapHeight = _domcache['.header-wrapper'].innerHeight(),
-			 	opacityVal = 1 - (scrollTop / 150.0)
-				buffer = 5;
 
-			if(scrolledDistance > buffer && scrolledDistance < wrapHeight) {
-				_domcache['.header-wrapper .mask'].css('background-position-y', -((scrolledDistance*.5) - buffer) +'px'  );
-				_domcache['.header-wrapper .cover-image'].css('background-position-y', -(scrolledDistance - buffer) +'px'  );
-				_domcache['.header-wrapper .cover-image.clean'].css("opacity", opacityVal);
+			var wHeight = _domcache["window"].height(),
+				wWidth = _domcache["window"].width(),
+    			aspectRatio      = _domcache['.header-wrapper'].innerWidth() / _domcache['.header-wrapper'].innerHeight()
+    			scrollTop = _domcache["window"].scrollTop(),
+				scrolledDistance = scrollTop / 5,
+				wrapHeight = _domcache['.header-wrapper'].innerHeight(),
+				imgHeight = _domcache['.header-wrapper img.clean'].height(),
+			 	opacityVal = 1 - (scrollTop / 150.0),
+			 	threshold = 5;
+
+
+			// Ensure the image is always in cover mode
+			if ( (wWidth / wHeight) < aspectRatio ) {
+				if(!_domcache['.header-wrapper'].hasClass("vertical")) {
+					_domcache['.header-wrapper'].addClass("vertical");
+				}
+			} else {
+				if(_domcache['.header-wrapper'].hasClass("vertical")) {
+					_domcache['.header-wrapper'].removeClass("vertical");
+				}
 			}
-			else if(scrolledDistance <= buffer) {
+
+			if(scrolledDistance > threshold && scrolledDistance < wrapHeight) {
+				_domcache['.header-wrapper img.clean'].css("opacity", opacityVal);
+				// Mask moves slower because it kewl as shiat
+				_domcache['.header-wrapper .mask'].css('background-position-y', -(scrolledDistance * .2) +'px'  );
+				// Parallax the image only if it's still big enough
+				if(scrolledDistance < imgHeight - wrapHeight) {
+					_domcache['.header-wrapper img'].css('top', (-scrolledDistance) +'px'  );
+				}
+			}
+			else if(scrolledDistance <= threshold) {
 				_domcache['.header-wrapper .mask'].css('background-position-y', '0px');
-				_domcache['.header-wrapper .cover-image'].css('background-position-y', '0px');
-				_domcache['.header-wrapper .cover-image.clean'].css("opacity", 1)
+				_domcache['.header-wrapper img'].css('top', '0px'  );
+				_domcache['.header-wrapper img.clean'].css("opacity", 1)
 			}
 		}
 	}
-	_domcache['window'].scroll(_debounce(_window_onScroll, 10));
+	_domcache['window'].scroll(_debounce(_window_onScroll, 60));
 
 	// Follow / unfollow subscription buttons
 	function _follow_onClick(event)
@@ -140,13 +160,15 @@ $(function() {
 	});
 
 	searchBox.typeahead({
-		  minLength: 3,
-		  highlight: true,
+			minLength: 3,
+			highlight: true,
+    		cache: true,
 		},
 		[{
 			name: 'artists',
 			displayKey: 'artist',
 			source: artistsSearch.ttAdapter(),
+    		cache: true,
 			templates: {
 				header: '<h3>Artists</h3>',
 				suggestion: function(data) { return ["<p>", data.artist, "</p>"].join(""); }
@@ -156,6 +178,7 @@ $(function() {
 			name: 'albums',
 			displayKey: 'album',
 			source: albumsSearch.ttAdapter(),
+    		cache: true,
 			templates: {
 				header: '<h3>Albums</h3>',
 				suggestion: function(data) { return ["<p>", data.album, " by ", data.artist, "</p>"].join(""); }
@@ -165,6 +188,7 @@ $(function() {
 			name: 'tracks',
 			displayKey: 'track',
 			source: tracksSearch.ttAdapter(),
+    		cache: true,
 			templates: {
 				header: '<h3>Tracks</h3>',
 				suggestion: function(data) { return ["<p>", data.track, " from ", data.album, "</p>"].join(""); }

@@ -2,8 +2,8 @@
     $isLogged = $this->Session->check('Auth.User.User.id');
 ?>
 <div class="header-wrapper">
-    <div class="cover-image blurred" style="background-image:url(<?php echo $this->App->getImageUrl($album, "blur"); ?>);"></div>
-    <div class="cover-image clean" style="background-image:url(<?php echo $this->App->getImageUrl($album, "big"); ?>);"></div>
+    <?php echo $this->Html->image( $this->App->getImageUrl($album, "blur"), array("alt" => $album["name"], "class" => "blurred"));  ?>
+    <?php echo $this->Html->image( $this->App->getImageUrl($album, "big"), array("alt" => $album["name"], "class" => "clean"));  ?>
     <i class="mask"></i>
 </div>
 
@@ -128,8 +128,6 @@
     <div class="row content">
 
 		<div class="big-graph"></div>
-
-
 
 		<div class="streamer" <?php echo $this->App->getTrackPlayerAttributes($artist, $track, $trackYoutube); ?>>
 

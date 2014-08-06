@@ -43,13 +43,11 @@ body {
 		}
 	}
 
-
     .navbar-brand {
 		font-family: arial, sans;
 		font-size: 18px;
 		color:#fff;
     }
-
 
 	 // The search top container bar
 	.searchbar {
@@ -134,23 +132,27 @@ body {
 
 // Big themed header
 .header-wrapper {
+
+
     background-color: @themeColorDark;
 	position: 	relative;
 	overflow: 	hidden;
-	min-height: 800px;
-	border-bottom:1px solid #dedede;
-	box-shadow: @lightBoxShadow;
+    height: 800px;
+    border-bottom:1px solid #dedede;
+    box-shadow: @lightBoxShadow;
 
-	.cover-image {
-		.stretchFill;
-		background-size: 		cover;
-		background-position-y:	0;
-        background-repeat: 		no-repeat;
+    img {
+        position: absolute;
+        top: 0;
+        left: 0;
+        min-width:800px;
+        width:100%;
 
-
-    	transition: background-position 100ms linear;
-    	transition: opacity 120ms linear;
-	}
+        &.vertical {
+            height:100%;
+            width:auto;
+        }
+    }
 
     .mask {
         .stretchFill;
@@ -158,7 +160,7 @@ body {
     }
 
     &.plain {
-        min-height: 500px;
+        height: 500px;
     }
 }
 

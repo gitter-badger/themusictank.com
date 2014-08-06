@@ -11,17 +11,17 @@
     <header class="collapsed"></header>
 
     <div class="row content headerless">
-        <div class="col-md-12 lead introduction">
+        <div class="col-md-12 introduction">
  			<h1><?php echo __("About Us"); ?></h1>
 			<p>We want to give you an easy and fun way to rate tracks and albums accurately. By integrating with various music streaming service, we aspire to collect opinions on the music you listen to.</p>
-			<p>First launched on the 30th of December 1999, The Music Tank has always been around under a form or another</p>
-			<p>The Music Tank is a team of 2 music enthusiasts who work together during our free time to build a place where people come hang out and discuss music.</p>
+			<p>First launched on the 30th of December 1999, The Music Tank has always been around under a form or another.</p>
         </div>
 
 		<section class="team">
 
 		    <h2><?php echo __("Meet the team"); ?></h2>
-		    <p class="lead">Follow us on TMT to have an idea of our musical taste.</p>
+
+			<p class="lead">We are a team of 2 music enthusiasts who work together during our free time to build a place where people come hang out and discuss music.</p>
 
 			<?php if(isset($francois) && count($francois)) : ?>
 		    <div class="row">

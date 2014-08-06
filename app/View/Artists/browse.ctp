@@ -1,25 +1,17 @@
-
-<div class="header-wrapper">
-	<section class="jumbotron introduction">
-		<div class="container">
-		    <h1><?php echo __("Artist search"); ?></h1>
-	    </div>
-	</section>
+<div class="header-wrapper plain">
+    <i class="mask"></i>
 </div>
 
-<nav class="sub-menu">
-	<div class="container container-fluid">
-		<div class="row">
-		    <ol class="breadcrumb">
-		        <li class="active"><?php echo $this->Html->link(__("Artists"), array('controller' => 'artists', 'action' => 'index')); ?></li>
-		    </ol>
-	    </div>
-    </div>
-</nav>
+<article class="container container-fluid static">
 
-<div class="container container-fluid">
-	<div class="row">
+    <header class="collapsed"></header>
+
+    <div class="row content headerless">
+
+	    <h1><?php echo __("Artist search"); ?></h1>
+
 		<h2><?php echo $title; ?></h2>
+
 		<?php echo $this->element('artistTiledList', array("artists" => $artists)); ?>
 
 		 <ul class="pagination">
@@ -30,4 +22,4 @@
 		    ?>
 		</ul>
     </div>
-</div>
+</article>

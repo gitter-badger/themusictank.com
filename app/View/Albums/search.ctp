@@ -1,25 +1,14 @@
-
-<div class="header-wrapper">
-	<section class="jumbotron introduction">
-		<div class="container">
-		    <h1><?php echo __("Album search"); ?></h1>
-	    </div>
-	</section>
+<div class="header-wrapper plain">
+    <i class="mask"></i>
 </div>
 
-<nav class="sub-menu">
-	<div class="container container-fluid">
-		<div class="row">
-		    <ol class="breadcrumb">
-		        <li class="active"><?php echo $this->Html->link(__("Artists"), array('controller' => 'artists', 'action' => 'index')); ?></li>
-		    </ol>
-	    </div>
-    </div>
-</nav>
+<article class="container container-fluid static">
 
-<div class="container container-fluid">
-	<div class="row">
-		<h2><?php echo __("Albums"); ?></h2>
+    <header class="collapsed"></header>
+
+    <div class="row content headerless">
+
+	    <h1><?php echo __("Album search"); ?></h1>
 		<h3><?php echo $title; ?></h3>
 
 		<?php if(count($albums) > 0): ?>
@@ -36,4 +25,4 @@
 		    ?>
 		</ul>
     </div>
-</div>
+</article>

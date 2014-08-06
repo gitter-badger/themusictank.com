@@ -1,6 +1,6 @@
 <div class="header-wrapper">
-    <div class="cover-image blurred" style="background-image:url(<?php echo $this->App->getImageUrl($lastfmArtist, "blur"); ?>);"></div>
-    <div class="cover-image clean" style="background-image:url(<?php echo $this->App->getImageUrl($lastfmArtist, "big"); ?>);"></div>
+    <?php echo $this->Html->image( $this->App->getImageUrl($lastfmArtist, "blur"), array("alt" => $artist["name"], "class" => "blurred"));  ?>
+    <?php echo $this->Html->image( $this->App->getImageUrl($lastfmArtist, "big"), array("alt" => $artist["name"], "class" => "clean"));  ?>
     <i class="mask"></i>
 </div>
 

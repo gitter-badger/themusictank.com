@@ -1,0 +1,66 @@
+// About Page
+.about {
+
+    .header-wrapper.map {
+        height:800px;
+
+        article {
+            background:#000;
+            color:#fff;
+            margin:25% 80%;
+            padding-top:39px;
+            width:150px;
+            height:150px;
+            z-index: 1;
+            font-size:2em;
+            text-align:center;
+            border-radius: 120px;
+            border:1px solid #eee;
+            position:absolute;
+            box-shadow:0 1px 4px rgba(0,0,0,.5);
+            transform:rotate(2deg);
+            -ms-transform:rotate(2deg);
+            -webkit-transform:rotate(2deg);
+        }
+
+        #mapCanvas {
+            width: 100%;
+            height:830px;
+            background-color: #CCC;
+            border-radius: 3px;
+            border:1px solid #dedede;
+            z-index: 0;
+
+            // Reset the image rules for the google underlay
+            img {
+                position: static;
+                min-width:0;
+                width:auto;
+                height:auto;
+            }
+        }
+    }
+
+    .introduction {
+        border-bottom: 1px solid #eee;
+        padding-bottom: 30px;
+        margin-bottom: 30px;
+    }
+    .team {
+        .col-md-2 {
+            text-align:center;
+        }
+        img {
+            height:100px;
+            width:100px;
+        }
+    }
+    h4 {
+        font-size: 1.7em;
+    }
+    blockquote {
+        font-size:1em;
+        border:none;
+        margin-top:1em;
+    }
+}

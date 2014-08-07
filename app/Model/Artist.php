@@ -1,6 +1,5 @@
 <?php
 
-App::uses('ArtistReviewSnapshot', 'Model');
 
 class Artist extends AppModel
 {
@@ -42,8 +41,7 @@ class Artist extends AppModel
     public function getBySlug($slug)
     {
     	$this->data = $this->find("first", array(
-            "conditions" => array("Artist.slug" => $slug),
-            "fields"    => array("Artist.*", "LastfmArtist.*")
+            "conditions" => array("Artist.slug" => $slug)
         ));
 
         return $this->data;
@@ -51,14 +49,13 @@ class Artist extends AppModel
 
     public function getSnapshot()
     {
-        $reviews = new ArtistReviewSnapshot();
-        $reviews->data = array(
+        $this->ArtistReviewSnapshot->data = array(
             "Artist" => array(
                 "id" => $this->getData("Artist.id"),
                 "name" => $this->getData("Artist.name")
             )
         );
-        return $reviews->fetch($this->getData("Artist.id"));
+        return $this->ArtistReviewSnapshot->fetch($this->getData("Artist.id"));
     }
 
     public function getUserSnapshot($userId)

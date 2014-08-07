@@ -41,9 +41,15 @@
             <?php if((int)$albumData["release_date"] > 0) : ?>
             <time datetime="<?php echo date("c", $albumData["release_date"]); ?>"><?php echo date("F j Y", $albumData["release_date"]); ?></time>
             <?php endif; ?>
-			<?php if(!is_null($albumScoreData) && !is_null($albumScoreData["score"])) :  ?>
-                <strong><?php echo $albumScoreData["score"]; ?>%</strong>
-        	<?php endif; ?>
+
+            <div class="score">
+                <?php if(!is_null($albumScoreData["score"])) : ?>
+                    <?php echo (int)($albumScoreData["score"] * 100); ?>%
+                <?php else : ?>
+                    N/A
+                <?php endif; ?>
+                <span><?php echo __("Score"); ?></span>
+            </div>
         </div>
     <?php endforeach; ?>
 </div>

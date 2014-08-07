@@ -61,9 +61,51 @@ class ArtistsController extends AppController {
         $this->set("artist",        $data["Artist"]);
         $this->set("lastfmArtist",  $data["LastfmArtist"]);
         $this->set("albums",        $data["Albums"]);
+        $this->set("artistReviewSnapshot", $data["ArtistReviewSnapshot"]);
 
-        $artistSnapshot = Hash::extract($this->Artist->getSnapshot(), "artistReviewSnapshot");
-        $this->set("artistReviewSnapshot", $artistSnapshot);
+        if($isLoggedIn)
+        {
+            //$this->set("userArtistReviewSnapshot",  Hash::extract($this->Artist->getUserSnapshot($this->getAuthUserId()), "UserArtistReviewSnapshot"));
+            //$this->set("subsArtistReviewSnapshot", Hash::extract($this->Artist->getUserSubscribersSnapshot($this->getAuthUserId()), "SubscribersArtistReviewSnapshot"));
+            //$this->set("subsWhoReviewed", $this->User->getCommonSubscriberAlbumReview($this->getAuthUserId(), $data["Album"]["id"]));
+        }
+
+        $this->setPageTitle(array($data["Artist"]["name"]));
+        $this->setPageMeta(array(
+            "keywords" => array($data["Artist"]["name"]),
+            "description" => __("Listening statistics of ") . $data["Artist"]["name"] . __("'s discography.")
+        ));
+    }
+
+    /**
+     * Artist discography page.
+     *
+     * @param string $artistSlug Artist slug
+     */
+    public function discography($artistSlug = "")
+    {
+        $isLoggedIn = $this->userIsLoggedIn();
+        $data       = $this->Artist->getBySlug($artistSlug);
+
+        if(!$data)
+        {
+            // query LastFm before 404-ing
+            if ($this->Artist->LastfmArtist->search($artistSlug,3)) {
+                // if we saved something, assume it's loadable.
+                $data = $this->Artist->getBySlug($artistSlug);
+                if(!$data) {
+                    throw new NotFoundException(sprintf(__("Could not find the artist %s"), $artistSlug));
+                }
+            }
+            else {
+                throw new NotFoundException(sprintf(__("Could not find the artist %s"), $artistSlug));
+            }
+        }
+
+        $this->set("artist",        $data["Artist"]);
+        $this->set("lastfmArtist",  $data["LastfmArtist"]);
+        $this->set("albums",        $data["Albums"]);
+        $this->set("artistReviewSnapshot", $data["ArtistReviewSnapshot"]);
 
         if($isLoggedIn)
         {

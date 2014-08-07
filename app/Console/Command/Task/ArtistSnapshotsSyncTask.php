@@ -49,6 +49,33 @@ class ArtistSnapshotsSyncTask extends Shell {
 	    	}
 		}
 
+        $expiredIds = $this->ArtistReviewSnapshot->find("list", array(
+            'fields' => array('ArtistReviewSnapshot.artist_id'),
+            "conditions" => array(
+                "or" => array(
+                    "ArtistReviewSnapshot.lastsync IS NULL",
+                    "ArtistReviewSnapshot.lastsync < " . $this->ArtistReviewSnapshot->getExpiredRange()
+                )
+            )
+        ));
+        if($expiredIds) {
+            $artistIdsToSync = array_merge($artistIdsToSync, Hash::extract($expiredIds, "{n}.ArtistReviewSnapshot.artist_id"));
+        }
+
+        if(count($artistIdsToSync))
+        {
+            $expired = $this->LastfmArtist->Artist->find("all", array(
+                "conditions" => array("Artist.id" => $artistIdsToSync),
+                "fields"    => array("Artist.*", "LastfmArtist.*")
+            ));
+
+            $this->out(sprintf("Found %s snapshots that are out of sync or new.", count($expired)));
+            foreach ($expired as $artist) {
+                $this->ArtistReviewSnapshot->data = $artist;
+                $this->out(sprintf("\t<info>%d\t%s</info>", $this->ArtistReviewSnapshot->getData("Artist.id"), $this->ArtistReviewSnapshot->getData("Artist.name")));
+                $this->ArtistReviewSnapshot->fetch($this->ArtistReviewSnapshot->getData("Artist.id"));
+            }
+        }
 
 		$this->out("\t<info>Completed</info>");
     }

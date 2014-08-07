@@ -9,9 +9,7 @@
 
 <article class="container container-fluid">
 
-
     <header>
-
         <?php $img = $this->Html->image( $this->App->getImageUrl($lastfmArtist), array("alt" => $artist["name"], "class" => "thumbnail")); ?>
         <?php echo $this->Html->link($img, array('controller' => 'albums', 'action' => 'view', $artist["slug"]), array("escape" => false)); ?>
 
@@ -102,36 +100,16 @@
         </div>
     </header>
 
-    <?php $wiki = $this->StringMaker->composeArtistPresentation($lastfmArtist, $artist); ?>
-    <?php if(strlen($wiki) > 0) : ?>
-    <div class="row wiki <?php echo strlen($wiki) <= 800 ? "full" : ""; ?>">
-        <div class="col-md-12 lead">
-            <?php echo substr($wiki, 0, 800); ?></p>
-            <i class="mask"></i>
-        </div>
-        <div class="col-md-4 lastfm"><a href="http://www.last.fm/"><img src="/img/icon-lastfm.png" alt="Last.fm" title="Last.fm" /></a></div>
-        <div class="col-md-4 bug"><span class="report-bug" data-bug-type="artist wiki" data-location="artist/<?php echo $artist["slug"]; ?>" data-user="<?php echo $this->Session->read('Auth.User.User.id'); ?>"><i class="fa fa-bug"></i> <?php echo __("Wrong/weird bio?"); ?></span></div>
-        <div class="col-md-4 readmore">
-            <?php if(strlen($wiki) > 800) : ?>
-                <?php echo $this->Html->link("Read more", array('controller' => 'albums', 'action' => 'wiki', $artist["slug"]), array("class" => "btn btn-primary")); ?>
-            <?php endif; ?>
-        </div>
-    </div>
-    <?php endif; ?>
-
     <div class="row content">
 
-		<h2><?php echo __("Discography"); ?></h2>
-	    <?php if(count($albums) > 0) : ?>
-	        <?php echo $this->element('albumTiledList', array("albums" => array_slice($albums, 0, 4))); ?>
-            <?php if(count($albums) > 4) : ?>
-                <p><?php echo $this->Html->link("View more", array('controller' => 'artists', 'action' => 'discography', $artist["slug"]), array("class" => "btn btn-primary")); ?></p>
-            <?php endif; ?>
-	    <?php else : ?>
-	        <div class="loading-wrap" data-post-load="/ajax/getdiscography/<?php echo $artist['slug']; ?>/">
-	        	<i class="fa fa-refresh fa-spin fa-fw"></i>
-	        </div>
-	    <?php endif; ?>
+        <h2><?php echo __("Discography"); ?></h2>
+        <?php if(count($albums) > 0) : ?>
+            <?php echo $this->element('albumTiledList', array("albums" => $albums)); ?>
+        <?php else : ?>
+            <div class="loading-wrap" data-post-load="/ajax/getdiscography/<?php echo $artist['slug']; ?>/">
+                <i class="fa fa-refresh fa-spin fa-fw"></i>
+            </div>
+        <?php endif; ?>
     </div>
 </article>
 <section class="credits">

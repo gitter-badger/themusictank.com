@@ -10,23 +10,20 @@
 </div>
 
 <article class="container container-fluid popular-artists">
-
     <header class="featured">
 
-        <h2>Artist Spotlight</h2>
-
-        <?php echo $this->Html->image( $this->App->getImageUrl($mainPopular["LastfmArtist"]), array("alt" => $mainPopular["Artist"]["name"], "class" => "thumbnail")); ?>
         <h1><?php echo $this->Html->link($mainPopular["Artist"]["name"], array('controller' => 'artists', 'action' => 'view', $mainPopular["Artist"]["slug"])); ?></h1>
         <div class="everyone piechart"></div>
 
         <?php if(count($mainPopular["Albums"])) : ?>
-        <ul class="recent-albums">
-            <?php foreach($mainPopular["Albums"] as $i => $album) : if($i >= 3) break;?>
-            <li>
-                <?php echo $this->Html->link($this->Html->image($this->App->getImageUrl($album), array("alt" => $album["name"])), array('controller' => 'albums', 'action' => 'view', $album["slug"]), array('escape' => false)); ?>
-                <?php echo $this->Html->link($album["name"], array('controller' => 'albums', 'action' => 'view', $album["slug"])); ?>
-
-                <div class="everyone <?php echo $album["slug"]; ?> piechart"></div>
+        <section class="row stats tiles albums">
+            <?php foreach($mainPopular["Albums"] as $i => $album) : if($i >= 4) break;?>
+            <div class="col-xs-3 col-md-3 album">
+                <?php echo $this->Html->link($this->Html->image($this->App->getImageUrl($album), array("alt" => $album["name"])), array('controller' => 'albums', 'action' => 'view', $album["slug"]), array('escape' => false, "class" => "thumbnail")); ?>
+                <h3><?php echo $this->Html->link($album["name"], array('controller' => 'albums', 'action' => 'view', $album["slug"])); ?></h3>
+                <?php if((int)$album["release_date"] > 0) : ?>
+                <time datetime="<?php echo date("c", $album["release_date"]); ?>"><?php echo date("F j Y", $album["release_date"]); ?></time>
+                <?php endif; ?>
 
                 <div class="score">
                     <?php if(!is_null($mainPopular["ArtistReviewSnapshot"]["score"])) : ?>
@@ -36,17 +33,16 @@
                     <?php endif; ?>
                     <span><?php echo __("Score"); ?></span>
                 </div>
-            </li>
+            </div>
             <?php endforeach; ?>
-        </ul>
+        </section>
         <?php endif; ?>
     </header>
 
     <div class="row content">
 
-        <section class="col-md-7 more-popular-artists">
-            <h2><?php echo __('Popular right now'); ?></h2>
-            <p class="lead"><?php echo __("A list of some of the artists currently popular."); ?></p>
+        <section class="col-xs-12 col-md-12 more-popular-artists">
+            <h2><?php echo __('Also popular right now'); ?></h2>
             <?php echo $this->element('artistTiledList', array("artists" => $popularArtists)); ?>
         </section>
 

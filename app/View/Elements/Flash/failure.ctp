@@ -1,1 +1,0 @@
-<p class="flash error"><?php echo $message ?></p>

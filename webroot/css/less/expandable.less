@@ -1,0 +1,31 @@
+.expandable {
+	.expander {
+
+		.more {
+			display:none;
+		}
+
+		.less {
+    		display:inline-block;    
+		}
+	}
+
+	&.collapsed  {
+		.wrapper {
+		    max-height:200px;
+		    overflow:hidden;
+		    border-bottom:2px solid #dedede;
+		}
+
+		.expander {
+
+			.more {
+	    		display:inline-block;    
+			}
+
+			.less {
+				display:none;
+			}
+		}
+	}
+}

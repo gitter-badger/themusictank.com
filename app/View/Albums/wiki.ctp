@@ -31,14 +31,6 @@
             <?php echo $this->StringMaker->composeAlbumPresentation($lastfmAlbum, $album, $artist); ?>
         </div>
         <div class="col-md-12 lastfm"><a href="http://www.last.fm/"><img src="/img/icon-lastfm.png" alt="Last.fm" title="Last.fm" /></a></div>
-
     </div>
-</article>
 
-<?php if ((int)$lastfmAlbum["lastsync"] > 0) : ?>
-<script>$(function(){
-    <?php if(isset($albumReviewSnapshot)) : ?>
-        tmt.createPie(".everyone.piechart", [{"type" : "smile", "value" : <?php echo (int)$albumReviewSnapshot["liking_pct"]; ?>}, {"type" : "meh", "value" : <?php echo (int)$albumReviewSnapshot["neutral_pct"]; ?>}, {"type" : "frown", "value" : <?php echo (int)$albumReviewSnapshot["disliking_pct"]; ?>}], {key: "tanker chart-tanker"});
-    <?php endif; ?>
-});</script>
-<?php endif; ?>
+</article>

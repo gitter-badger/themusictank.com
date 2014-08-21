@@ -1,0 +1,9 @@
+User-agent: *
+
+Disallow: /img
+Disallow: /js
+Disallow: /css
+Disallow: /fonts
+
+Disallow: /apis
+Disallow: /oembed

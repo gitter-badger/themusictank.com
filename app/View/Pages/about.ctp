@@ -82,7 +82,7 @@
 				    <h2><?php echo __("Thanks"); ?></h2>
 				    <p class="lead">Check out the following services which have, in some way, helped us get up and running.</p>
 					<ul>
-						<li><a href="http://gethiphop.net/">Hip Hop</a></li>
+						<li><a href="https://github.com/Atraci/Atraci">Atraci</a></li>
 						<li><a href="http://last.fm/">Last.fm</a></li>
 					</ul>
 				</div>

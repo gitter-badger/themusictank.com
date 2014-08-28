@@ -6,9 +6,8 @@ $vendorDir = dirname(dirname(__FILE__));
 $baseDir = dirname($vendorDir);
 
 return array(
-    'DebugKit\\Test\\' => array($baseDir . '/plugins/DebugKit/tests'),
-    'DebugKit\\' => array($baseDir . '/plugins/DebugKit/src'),
     'Cake\\' => array($vendorDir . '/cakephp/cakephp/src'),
+    'Aura\\Intl\\_Config\\' => array($vendorDir . '/aura/intl/config'),
     'App\\Test\\' => array($baseDir . '/tests'),
     'App\\' => array($baseDir . '/src'),
 );

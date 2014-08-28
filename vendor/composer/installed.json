@@ -43,72 +43,6 @@
         ]
     },
     {
-        "name": "aura/intl",
-        "version": "1.1.0",
-        "version_normalized": "1.1.0.0",
-        "source": {
-            "type": "git",
-            "url": "https://github.com/auraphp/Aura.Intl.git",
-            "reference": "e6c84d52ae8749f5a346918f20d9027353f1f5bc"
-        },
-        "dist": {
-            "type": "zip",
-            "url": "https://api.github.com/repos/auraphp/Aura.Intl/zipball/e6c84d52ae8749f5a346918f20d9027353f1f5bc",
-            "reference": "e6c84d52ae8749f5a346918f20d9027353f1f5bc",
-            "shasum": ""
-        },
-        "require": {
-            "aura/installer-default": "1.0.*",
-            "php": ">=5.4.0"
-        },
-        "time": "2014-07-29 00:00:00",
-        "type": "aura-package",
-        "installation-source": "dist",
-        "autoload": {
-            "psr-0": {
-                "Aura\\Intl": "src/"
-            }
-        },
-        "notification-url": "https://packagist.org/downloads/",
-        "license": [
-            "BSD-2-Clause"
-        ],
-        "authors": [
-            {
-                "name": "Paul M. Jones",
-                "email": "pmjones88@gmail.com",
-                "homepage": "http://paul-m-jones.com"
-            },
-            {
-                "name": "Aura.Intl Contributors",
-                "homepage": "https://github.com/auraphp/Aura.Intl/contributors"
-            },
-            {
-                "name": "Pascal Borreli",
-                "email": "pascal@borreli.com"
-            },
-            {
-                "name": "Mapthegod",
-                "email": "mapthegod@gmail.com"
-            },
-            {
-                "name": "José Lorenzo Rodríguez",
-                "email": "jose.zap@gmail.com"
-            }
-        ],
-        "description": "The Aura.Intl package provides internationalization (I18N) tools, specifically\npackage-oriented per-locale message translation.",
-        "homepage": "http://auraphp.com/Aura.Intl",
-        "keywords": [
-            "g11n",
-            "globalization",
-            "i18n",
-            "internationalization",
-            "intl",
-            "l10n",
-            "localization"
-        ]
-    },
-    {
         "name": "ircmaxell/password-compat",
         "version": "1.0.3",
         "version_normalized": "1.0.3.0",
@@ -198,60 +132,6 @@
         ]
     },
     {
-        "name": "mobiledetect/mobiledetectlib",
-        "version": "2.8.3",
-        "version_normalized": "2.8.3.0",
-        "source": {
-            "type": "git",
-            "url": "https://github.com/serbanghita/Mobile-Detect.git",
-            "reference": "f5753e4b90daffe50c902e99df5ce3c58fca3fee"
-        },
-        "dist": {
-            "type": "zip",
-            "url": "https://api.github.com/repos/serbanghita/Mobile-Detect/zipball/f5753e4b90daffe50c902e99df5ce3c58fca3fee",
-            "reference": "f5753e4b90daffe50c902e99df5ce3c58fca3fee",
-            "shasum": ""
-        },
-        "require": {
-            "php": ">=5.0.0"
-        },
-        "require-dev": {
-            "phpunit/phpunit": "*"
-        },
-        "time": "2014-07-10 20:00:25",
-        "type": "library",
-        "installation-source": "dist",
-        "autoload": {
-            "classmap": [
-                "Mobile_Detect.php"
-            ],
-            "psr-0": {
-                "Detection": "namespaced/"
-            }
-        },
-        "notification-url": "https://packagist.org/downloads/",
-        "license": [
-            "MIT"
-        ],
-        "authors": [
-            {
-                "name": "Serban Ghita",
-                "email": "serbanghita@gmail.com",
-                "homepage": "http://ghita.org",
-                "role": "Developer"
-            }
-        ],
-        "description": "Mobile_Detect is a lightweight PHP class for detecting mobile devices. It uses the User-Agent string combined with specific HTTP headers to detect the mobile environment.",
-        "homepage": "https://github.com/serbanghita/Mobile-Detect",
-        "keywords": [
-            "detect mobile devices",
-            "mobile",
-            "mobile detect",
-            "mobile detector",
-            "php mobile detect"
-        ]
-    },
-    {
         "name": "d11wtq/boris",
         "version": "v1.0.8",
         "version_normalized": "1.0.8.0",
@@ -288,153 +168,137 @@
         "notification-url": "https://packagist.org/downloads/"
     },
     {
-        "name": "composer/installers",
-        "version": "v1.0.17",
-        "version_normalized": "1.0.17.0",
+        "name": "mobiledetect/mobiledetectlib",
+        "version": "2.8.4",
+        "version_normalized": "2.8.4.0",
         "source": {
             "type": "git",
-            "url": "https://github.com/composer/installers.git",
-            "reference": "f22820dd0854a406f86e2fc29b81c1898d68e5fb"
+            "url": "https://github.com/serbanghita/Mobile-Detect.git",
+            "reference": "58754ad5562d730e9ff64654494165a3dafe10cb"
         },
         "dist": {
             "type": "zip",
-            "url": "https://api.github.com/repos/composer/installers/zipball/f22820dd0854a406f86e2fc29b81c1898d68e5fb",
-            "reference": "f22820dd0854a406f86e2fc29b81c1898d68e5fb",
+            "url": "https://api.github.com/repos/serbanghita/Mobile-Detect/zipball/58754ad5562d730e9ff64654494165a3dafe10cb",
+            "reference": "58754ad5562d730e9ff64654494165a3dafe10cb",
             "shasum": ""
         },
-        "replace": {
-            "roundcube/plugin-installer": "*",
-            "shama/baton": "*"
+        "require": {
+            "php": ">=5.0.0"
         },
         "require-dev": {
-            "composer/composer": "1.0.*@dev",
-            "phpunit/phpunit": "4.1.*"
+            "phpunit/phpunit": "*"
         },
-        "time": "2014-08-17 18:19:30",
-        "type": "composer-installer",
+        "time": "2014-08-25 07:57:48",
+        "type": "library",
+        "installation-source": "dist",
+        "autoload": {
+            "classmap": [
+                "Mobile_Detect.php"
+            ],
+            "psr-0": {
+                "Detection": "namespaced/"
+            }
+        },
+        "notification-url": "https://packagist.org/downloads/",
+        "license": [
+            "MIT"
+        ],
+        "authors": [
+            {
+                "name": "Serban Ghita",
+                "email": "serbanghita@gmail.com",
+                "homepage": "http://mobiledetect.net",
+                "role": "Developer"
+            }
+        ],
+        "description": "Mobile_Detect is a lightweight PHP class for detecting mobile devices. It uses the User-Agent string combined with specific HTTP headers to detect the mobile environment.",
+        "homepage": "https://github.com/serbanghita/Mobile-Detect",
+        "keywords": [
+            "detect mobile devices",
+            "mobile",
+            "mobile detect",
+            "mobile detector",
+            "php mobile detect"
+        ]
+    },
+    {
+        "name": "aura/intl",
+        "version": "1.1.1",
+        "version_normalized": "1.1.1.0",
+        "source": {
+            "type": "git",
+            "url": "https://github.com/auraphp/Aura.Intl.git",
+            "reference": "c5fe620167550ad6fa77dd3570fba2efc77a2a21"
+        },
+        "dist": {
+            "type": "zip",
+            "url": "https://api.github.com/repos/auraphp/Aura.Intl/zipball/c5fe620167550ad6fa77dd3570fba2efc77a2a21",
+            "reference": "c5fe620167550ad6fa77dd3570fba2efc77a2a21",
+            "shasum": ""
+        },
+        "require": {
+            "aura/installer-default": "1.0.*",
+            "php": ">=5.4.0"
+        },
+        "time": "2014-08-24 00:00:00",
+        "type": "aura-package",
         "extra": {
-            "class": "Composer\\Installers\\Installer",
+            "aura": {
+                "type": "library",
+                "config": {
+                    "common": "Aura\\Intl\\_Config\\Common"
+                }
+            },
             "branch-alias": {
-                "dev-master": "1.0-dev"
+                "dev-develop": "1.1.x-dev"
             }
         },
         "installation-source": "dist",
         "autoload": {
             "psr-0": {
-                "Composer\\Installers\\": "src/"
-            }
-        },
-        "notification-url": "https://packagist.org/downloads/",
-        "license": [
-            "MIT"
-        ],
-        "authors": [
-            {
-                "name": "Kyle Robinson Young",
-                "email": "kyle@dontkry.com",
-                "homepage": "https://github.com/shama"
-            }
-        ],
-        "description": "A multi-framework Composer library installer",
-        "homepage": "http://composer.github.com/installers/",
-        "keywords": [
-            "Craft",
-            "Dolibarr",
-            "Hurad",
-            "MODX Evo",
-            "OXID",
-            "WolfCMS",
-            "agl",
-            "annotatecms",
-            "bitrix",
-            "cakephp",
-            "chef",
-            "codeigniter",
-            "concrete5",
-            "croogo",
-            "drupal",
-            "elgg",
-            "fuelphp",
-            "installer",
-            "joomla",
-            "kohana",
-            "laravel",
-            "lithium",
-            "magento",
-            "mako",
-            "mediawiki",
-            "modulework",
-            "moodle",
-            "phpbb",
-            "piwik",
-            "ppi",
-            "puppet",
-            "roundcube",
-            "shopware",
-            "silverstripe",
-            "symfony",
-            "typo3",
-            "wordpress",
-            "zend",
-            "zikula"
-        ]
-    },
-    {
-        "name": "cakephp/debug_kit",
-        "version": "3.0.x-dev",
-        "version_normalized": "3.0.9999999.9999999-dev",
-        "source": {
-            "type": "git",
-            "url": "https://github.com/cakephp/debug_kit.git",
-            "reference": "1d7398c603daefaf3338bc27f03d8408f7359674"
-        },
-        "dist": {
-            "type": "zip",
-            "url": "https://api.github.com/repos/cakephp/debug_kit/zipball/1d7398c603daefaf3338bc27f03d8408f7359674",
-            "reference": "1d7398c603daefaf3338bc27f03d8408f7359674",
-            "shasum": ""
-        },
-        "require": {
-            "composer/installers": "*",
-            "php": ">=5.3.0"
-        },
-        "require-dev": {
-            "cakephp/cakephp": "3.0.*-dev",
-            "phpunit/phpunit": "4.1.*"
-        },
-        "time": "2014-08-15 21:24:39",
-        "type": "cakephp-plugin",
-        "extra": {
-            "installer-name": "DebugKit"
-        },
-        "installation-source": "source",
-        "autoload": {
+                "Aura\\Intl": "src/"
+            },
             "psr-4": {
-                "DebugKit\\": "src",
-                "DebugKit\\Test\\": "tests"
+                "Aura\\Intl\\_Config\\": "config/"
             }
         },
         "notification-url": "https://packagist.org/downloads/",
         "license": [
-            "MIT"
+            "BSD-2-Clause"
         ],
         "authors": [
             {
-                "name": "Mark Story",
-                "homepage": "http://mark-story.com",
-                "role": "Author"
+                "name": "Paul M. Jones",
+                "email": "pmjones88@gmail.com",
+                "homepage": "http://paul-m-jones.com"
             },
             {
-                "name": "CakePHP Community",
-                "homepage": "https://github.com/cakephp/debug_kit/graphs/contributors"
+                "name": "Aura.Intl Contributors",
+                "homepage": "https://github.com/auraphp/Aura.Intl/contributors"
+            },
+            {
+                "name": "Pascal Borreli",
+                "email": "pascal@borreli.com"
+            },
+            {
+                "name": "Mapthegod",
+                "email": "mapthegod@gmail.com"
+            },
+            {
+                "name": "José Lorenzo Rodríguez",
+                "email": "jose.zap@gmail.com"
             }
         ],
-        "description": "CakePHP Debug Kit",
-        "homepage": "https://github.com/cakephp/debug_kit",
+        "description": "The Aura.Intl package provides internationalization (I18N) tools, specifically\npackage-oriented per-locale message translation.",
+        "homepage": "http://auraphp.com/Aura.Intl",
         "keywords": [
-            "cakephp",
-            "debug",
-            "kit"
+            "g11n",
+            "globalization",
+            "i18n",
+            "internationalization",
+            "intl",
+            "l10n",
+            "localization"
         ]
     },
     {
@@ -444,12 +308,12 @@
         "source": {
             "type": "git",
             "url": "https://github.com/cakephp/cakephp.git",
-            "reference": "c0883c9c13133f920bac9b1c17ec0d365e954ba9"
+            "reference": "ce94b81523c878827ec920d0222b111f46bd0918"
         },
         "dist": {
             "type": "zip",
-            "url": "https://api.github.com/repos/cakephp/cakephp/zipball/c0883c9c13133f920bac9b1c17ec0d365e954ba9",
-            "reference": "c0883c9c13133f920bac9b1c17ec0d365e954ba9",
+            "url": "https://api.github.com/repos/cakephp/cakephp/zipball/ce94b81523c878827ec920d0222b111f46bd0918",
+            "reference": "ce94b81523c878827ec920d0222b111f46bd0918",
             "shasum": ""
         },
         "require": {
@@ -461,10 +325,15 @@
             "nesbot/carbon": "1.8.*",
             "php": ">=5.4.19"
         },
+        "replace": {
+            "cakephp/collection": "self.version",
+            "cakephp/event": "self.version",
+            "cakephp/validation": "self.version"
+        },
         "require-dev": {
             "phpunit/phpunit": "*"
         },
-        "time": "2014-08-21 20:29:57",
+        "time": "2014-08-28 17:34:31",
         "type": "library",
         "installation-source": "source",
         "autoload": {

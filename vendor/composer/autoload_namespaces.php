@@ -7,7 +7,6 @@ $baseDir = dirname($vendorDir);
 
 return array(
     'Detection' => array($vendorDir . '/mobiledetect/mobiledetectlib/namespaced'),
-    'Composer\\Installers\\' => array($vendorDir . '/composer/installers/src'),
     'Carbon' => array($vendorDir . '/nesbot/carbon/src'),
     'Boris' => array($vendorDir . '/d11wtq/boris/lib'),
     'Aura\\Intl' => array($vendorDir . '/aura/intl/src'),

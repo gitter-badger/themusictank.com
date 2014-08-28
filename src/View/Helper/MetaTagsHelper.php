@@ -34,20 +34,10 @@ class MetaTagsHelper extends AppHelper {
             '<meta name="og:locale" description="en_CA" />',
             '<meta name="twitter:card" description="summary" />',
             '<meta name="twitter:image" description="'.$domain.'img/social-share.png" />',
-            $this->Html->css(["styles.min"])
+            $this->Html->css(["vendor.min", "tmt.min"])
         ];
 
-        $scripts = [
-            $this->Html->script([
-                "vendor/jquery-2.1.1.min",
-                "vendor/bootstrap.min",
-                "vendor/d3.v3.min",
-                "vendor/typeahead",
-                "vendor/jquery.easing-1.3",
-                "vendor/jquery.royalslider.min",
-                "tmt"
-            ])
-        ];
+        $scripts = [$this->Html->script(["vendor.min", "tmt.min"])];
 
         $this->_metas = $metas;
         $this->_scripts = $scripts;

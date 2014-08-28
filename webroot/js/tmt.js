@@ -45,7 +45,6 @@ $(function() {
 			_domcache['.breadcrumbs'].removeClass('opaque');
 		}
 
-
 		// Handle the blurring of the header image
 		if(_domcache['.header-wrapper'].length) {
 

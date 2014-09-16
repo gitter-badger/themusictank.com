@@ -43,13 +43,23 @@ article {
 	position: relative;
 
 	header {
-		margin-top: -650px;
+		min-height: 160px;
+		margin-top: -500px;
+
+		.details {
+			height:250px;
+			margin-bottom: -75px;
+		}
+
+		h1,h2,img,time,.picture {
+			float:left;
+		}
 
 		h1 {
 			color:#fff;
 			text-shadow: 3px 3px rgba(0,0,0,0.4);
 			font-size:50px;
-			margin:0;
+			margin: 0;
 			width:70%;
 			a {
 				color:#fff;
@@ -74,22 +84,35 @@ article {
 			margin:0 0 0 5px;
 		}
 
-		.thumbnail {
+		.picture {
 			box-shadow: @lightBoxShadow;
-			display: inline-block;
-			width:250px;
+			margin-right:20px;
+			overflow: hidden;
+			a {
+				background-size: cover;
+				display: block;
+				height:250px;
+				width:250px;
+				min-width: 100%;
+			}
 		}
 
 		.stats {
 			background-color: #FFF;
 			border-top:1px solid #fff;
+			border-top-left-radius: 5px;
+			border-top-right-radius: 5px;
 			border-bottom: 1px solid #eee;
-			padding: 20px;
-			margin-top:70px;
+			padding: 70px 20px 20px 20px; // make room for the overlap on top
 			min-height:200px;
 			box-shadow: 0 5px 10px 0px rgba(0,0,0,.3);
 
 			div {
+
+				&:first-child {
+					clear:left;
+				}
+
 				em {
 					color:#222;
 					font-style: normal;
@@ -122,14 +145,14 @@ article {
 
 		.score {
 			float:right;
-			margin-top:-350px;
+			margin-top:-250px;
 			margin-right:20px;
 			position:relative;
 		}
 
 		.notable {
 			float:left;
-			margin-top:-440px;
+			margin-top:-432px;
 			margin-left:220px;
 			position:relative;
 		}
@@ -154,6 +177,7 @@ article {
 			overflow: hidden;
 			margin-bottom:-30px;
 			min-height: 100px;
+			max-height: 230px;
 
 			.mask {
 				position: absolute;
@@ -214,7 +238,7 @@ article {
 			border:1px solid #dedede;
 		}
 	}
-
+/*
 	header.collapsed {
 		padding:30px;
 		min-height: 160px;
@@ -227,7 +251,7 @@ article {
 		h1,h2,img,time {
 			float:left;
 		}
-	}
+	}*/
 
 	.content.headerless {
 		margin-top:0;
@@ -494,14 +518,14 @@ time {
 	background:@themeColorMedium;
 	color: lighten(@themeColorMedium, 10%);
 	color:#fff;
-	width:80px;
-	height:80px;
+	width:75px;
+	height:75px;
 	z-index: 1;
 	padding-top:20px;
 	text-align:center;
 	border-radius: 60px;
-	border:3px solid lighten(@themeColorMedium, 10%);
-	box-shadow:0 1px 15px rgba(233,197,111,.8);
+	border:3px solid #fff;
+	box-shadow:0 1px 15px @themeColorMedium;
 
 	font-size:13px;
 	display: block;

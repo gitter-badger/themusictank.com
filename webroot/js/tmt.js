@@ -415,9 +415,8 @@ $(function() {
 		$(this).click(function(){
 			var el = $(this),
 				type = el.attr("data-bug-type"),
-				location = el.attr("data-location"),
+				loc = el.attr("data-location"),
 				userId = el.attr("data-user");
-
 
 			$("body").addClass("dialog-open");
 
@@ -426,11 +425,14 @@ $(function() {
 				$("#bugreport").modal("show");
 			} else {
 				// Prepare the box
-				$("<div id=\"bugreport\" class=\"modal fade\"><div class=\"modal-dialog\"><div class=\"modal-content\"><div class=\"loading-wrap\"><i class=\"fa fa-refresh fa-spin fa-fw\"></i></div></div></div></div>").modal();
+				$("<div id=\"bugreport\" class=\"modal fade\"><div class=\"modal-dialog\"><div class=\"modal-content\"><div class=\"loading-wrap\"><i class=\"fa fa-refresh fa-spin fa-fw\"></i></div></div></div></div>").modal().on('hidden.bs.modal', function () {
+					$("body").removeClass("dialog-open");
+				});;
 			}
 
+
 			// Dump the server side response, but hook in the form post logic
-			$.post('/ajax/bugreport/', {'type': type, 'where': location, 'user_id': userId}, function(response) {
+			$.post('/ajax/bugreport/', { 'type': type, 'location': loc, 'user_id': userId }, function(response) {
 
 				var form = $("#bugreport .modal-content");
 				form.html(response);
@@ -438,9 +440,8 @@ $(function() {
 					var id = parseInt(form.find("input[name=id]").val(), 10),
 						details = form.find("textarea").val().trim();
 
-					$("body").removeClass("dialog-open");
-
 					if(details.length > 0) {
+						//$.post('/ajax/bugreport/', {'id' : id, 'details' : details});
 						$.post('/ajax/bugreport/', {'id' : id, 'details' : details});
 					}
 				});

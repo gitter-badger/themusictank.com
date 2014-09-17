@@ -216,7 +216,7 @@ $config = [
 			'timezone' => 'UTC',
 			'cacheMetadata' => true,
 			'quoteIdentifiers' => false,
-			'init' => ['SET GLOBAL innodb_stats_on_metadata = 0'],
+			//'init' => ['SET GLOBAL innodb_stats_on_metadata = 0'],
 		],
 
 		/*

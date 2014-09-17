@@ -95,7 +95,6 @@ class Track extends Entity
         return null;
     }
 
-
     public function fetchSong()
     {
         // Since this is updated in a  just in time

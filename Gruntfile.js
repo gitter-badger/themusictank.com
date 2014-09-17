@@ -55,7 +55,8 @@ module.exports = function(grunt) {
 			},
 			js: {
 				files: [
-					'<%= jshint.all %>'
+					'<%= jshint.all %>',
+					'webroot/js/tmt.js'
 				],
 				tasks: ['jshint', 'uglify']
 			}

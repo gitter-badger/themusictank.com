@@ -7,4 +7,5 @@ $baseDir = dirname($vendorDir);
 
 return array(
     $vendorDir . '/ircmaxell/password-compat/lib/password.php',
+    $vendorDir . '/cakephp/cakephp/src/Core/functions.php',
 );

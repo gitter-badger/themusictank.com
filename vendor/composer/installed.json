@@ -308,12 +308,12 @@
         "source": {
             "type": "git",
             "url": "https://github.com/cakephp/cakephp.git",
-            "reference": "ce94b81523c878827ec920d0222b111f46bd0918"
+            "reference": "6e8f607515c410e457e3dd5704155c3c913a8abc"
         },
         "dist": {
             "type": "zip",
-            "url": "https://api.github.com/repos/cakephp/cakephp/zipball/ce94b81523c878827ec920d0222b111f46bd0918",
-            "reference": "ce94b81523c878827ec920d0222b111f46bd0918",
+            "url": "https://api.github.com/repos/cakephp/cakephp/zipball/6e8f607515c410e457e3dd5704155c3c913a8abc",
+            "reference": "6e8f607515c410e457e3dd5704155c3c913a8abc",
             "shasum": ""
         },
         "require": {
@@ -323,23 +323,28 @@
             "ext-mcrypt": "*",
             "ircmaxell/password-compat": "1.0.*",
             "nesbot/carbon": "1.8.*",
-            "php": ">=5.4.19"
+            "php": ">=5.4.16"
         },
         "replace": {
             "cakephp/collection": "self.version",
+            "cakephp/core": "self.version",
             "cakephp/event": "self.version",
+            "cakephp/utility": "self.version",
             "cakephp/validation": "self.version"
         },
         "require-dev": {
             "phpunit/phpunit": "*"
         },
-        "time": "2014-08-28 17:34:31",
+        "time": "2014-09-16 12:01:29",
         "type": "library",
         "installation-source": "source",
         "autoload": {
             "psr-4": {
                 "Cake\\": "src"
-            }
+            },
+            "files": [
+                "src/Core/functions.php"
+            ]
         },
         "notification-url": "https://packagist.org/downloads/",
         "license": [

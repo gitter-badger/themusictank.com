@@ -54,4 +54,18 @@ class AlbumsTable extends Table {
             ->contain(['AlbumReviewSnapshots', 'Artists']);
     }
 
+    public function getOEmbedDataBySlug($slug)
+    {
+        return $this->find()
+            ->select([
+                'Albums.name', 'Albums.slug',
+                'AlbumReviewSnapshots.total', 'AlbumReviewSnapshots.liking', 'AlbumReviewSnapshots.liking_pct',
+                'AlbumReviewSnapshots.disliking', 'AlbumReviewSnapshots.disliking_pct','AlbumReviewSnapshots.neutral', 'AlbumReviewSnapshots.neutral_pct',
+                'AlbumReviewSnapshots.disliking', 'AlbumReviewSnapshots.disliking_pct','AlbumReviewSnapshots.neutral', 'AlbumReviewSnapshots.neutral_pct',
+                'AlbumReviewSnapshots.curve', 'AlbumReviewSnapshots.ranges','AlbumReviewSnapshots.score', 'AlbumReviewSnapshots.top', 'AlbumReviewSnapshots.bottom'
+            ])
+            ->where(["slug" => $slug])
+            ->contain(['AlbumReviewSnapshots']);
+    }
+
 }

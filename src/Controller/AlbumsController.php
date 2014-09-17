@@ -1,6 +1,8 @@
 <?php
 namespace App\Controller;
 
+use Cake\Network\Exception\NotFoundException;
+
 use App\Controller\AppController;
 
 class AlbumsController extends AppController {
@@ -35,13 +37,13 @@ class AlbumsController extends AppController {
      */
     public function view($albumSlug = "")
     {
-        $album = $this->Album->getBySlug($albumSlug)->first();
+        $album = $this->Albums->getBySlug($albumSlug)->first();
 
         if (!$album) {
             throw new NotFoundException(sprintf(__("Could not find the album %s"), $albumSlug));
         }
 
-        if(!$album->lastfm->hasSyncDate()) {
+        if(!$album->lastfm || !$album->lastfm->hasSyncDate()) {
             $this->redirect(["controller" => "albums", "action" => "processing", $albumSlug]);
         }
 
@@ -60,12 +62,12 @@ class AlbumsController extends AppController {
 
     public function wiki($albumSlug = "")
     {
-        $album = $this->Album->getBySlug($albumSlug)->first();
+        $album = $this->Albums->getBySlug($albumSlug)->first();
         if (!$album) {
             throw new NotFoundException(sprintf(__("Could not find the album %s"), $albumSlug));
         }
 
-        if (!$album->lastfm->hasSyncDate()) {
+        if (!$album->lastfm || !$album->lastfm->hasSyncDate()) {
             $this->redirect(["controller" => "albums", "action" => "processing", $albumSlug]);
         }
 
@@ -84,7 +86,7 @@ class AlbumsController extends AppController {
 
     public function processing($albumSlug = "")
     {
-        $album = $this->Album->getBySlug($albumSlug)->first();
+        $album = $this->Albums->getBySlug($albumSlug)->first();
 
         if (!$album) {
             throw new NotFoundException(sprintf(__("Could not find the album %s"), $albumSlug));
@@ -110,13 +112,13 @@ class AlbumsController extends AppController {
      */
     public function embed($albumSlug = "")
     {
-        $album = $this->Album->getBySlug($albumSlug)->first();
+        $album = $this->Albums->getBySlug($albumSlug)->first();
 
         if(!$album) {
             throw new NotFoundException(sprintf(__("Could not find the album %s"), $albumSlug));
         }
 
-        if (!$album->lastfm->hasSyncDate()) {
+        if (!$album->lastfm || !$album->lastfm->hasSyncDate()) {
             $this->redirect(["controller" => "albums", "action" => "processing", $albumSlug]);
         }
 

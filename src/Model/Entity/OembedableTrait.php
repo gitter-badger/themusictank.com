@@ -1,34 +1,40 @@
 <?php
 namespace App\Model\Entity;
 
+use Cake\Utility\Hash;
+
 trait OembedableTrait {
 
-    public function toOEmbed($model, $data)
+    public function toOEmbed($additionalData = [])
     {
-        $serverUrl = $_SERVER['SERVER_NAME'];
-        $slug = Hash::get($data, $model->alias.".slug");
-        $iframeUrl = sprintf("http://%s/%ss/embed/%s/", $serverUrl, strtolower($model->alias), $slug);
-        $url = sprintf("http://%s/%ss/view/%s/", $serverUrl, strtolower($model->alias), $slug);
+        $className  = $this->_getFormattedClassName();
+        $iframeUrl  = sprintf("http://%s/%ss/embed/%s/", $_SERVER['SERVER_NAME'], $className, $this->slug);
+        $url        = sprintf("http://%s/%ss/view/%s/", $_SERVER['SERVER_NAME'], $className, $this->slug);
 
-        return array(
+        return json_encode([
             "version"   => "1.0",
             "type"      => "rich",
             "provider_name" => "The Music Tank",
-            "provider_url"  => sprintf("http://%s/", $serverUrl),
             "url"       => $url,
-            "title"     => $model->title,
-            "data"      => $data,
+            "title"     => $this->name ? $this->name : $this->title,
             "width"     => 500,
             "height"    => 350,
-            "html"      => '<iframe width="500" height="350" src="'.$iframeUrl.'" frameborder="0"></iframe>'
-        );
+            "html"      => '<iframe width="500" height="350" src="'.$iframeUrl.'" frameborder="0"></iframe>',
+            "data"      => ["$className" => $this]
+        ]);
     }
 
     public function getOembedUrl()
     {
         $serverUrl = $_SERVER['SERVER_NAME'];
-        $destination = sprintf("http://%s/%ss/view/%s/", $serverUrl, strtolower($this->alias), $this->slug);
+        $destination = sprintf("http://%s/%ss/view/%s/", $serverUrl, $this->_getFormattedClassName(), $this->slug);
         return sprintf("http://%s/oembed?url=%s", $serverUrl, urlencode($destination));
+    }
+
+    private function _getFormattedClassName()
+    {
+        $namespace = explode('\\', strtolower(get_class($this)));
+        return array_pop($namespace);
     }
 
 }

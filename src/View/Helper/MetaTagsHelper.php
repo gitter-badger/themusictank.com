@@ -3,7 +3,6 @@
 namespace App\View\Helper;
 
 use App\View\Helper\AppHelper;
-use Cake\Utility\Hash;
 use Cake\Routing\Router;
 
 class MetaTagsHelper extends AppHelper {
@@ -62,8 +61,8 @@ class MetaTagsHelper extends AppHelper {
             $this->_metas[] = '<meta name="twitter:description" description="'.h($metas["description"]).'" />';
         }
 
-        if(array_key_exists("oembed", $metas)) {
-            $this->_metas[] = '<link rel="alternate" type="application/json+oembed" href="'.$metas['oembed'].'" title="oEmbed Profile" />';
+        if(array_key_exists("oembedLink", $metas)) {
+            $this->_metas[] = '<link rel="alternate" type="application/json+oembed" href="'.h($metas['oembedLink']).'" title="oEmbed Profile" />';
         }
     }
 

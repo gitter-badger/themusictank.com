@@ -59,7 +59,6 @@ class Artist extends Entity {
             ->first();
     }
 
-
     public function fetchDiscography()
     {
         if($this->isExpired()) {

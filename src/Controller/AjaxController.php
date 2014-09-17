@@ -2,9 +2,12 @@
 
 namespace App\Controller;
 
+use App\Controller\AppController;
+use App\Model\Entity\Bug;
+
 use Cake\Event\Event;
 use Cake\ORM\TableRegistry;
-use App\Controller\AppController;
+use Cake\Network\Exception\NotFoundException;
 
 class AjaxController extends AppController {
 
@@ -120,6 +123,20 @@ class AjaxController extends AppController {
         $this->render('index');
     }
 
+    public function bugreport()
+    {
+        if ($this->request->is('post'))
+        {
+            $BugsTable = TableRegistry::get('Bugs');
+            $bug = $BugsTable->newEntity($this->request->data);
+
+            if ($BugsTable->save($bug)) {
+                $this->set("bug", $bug);
+            }
+            $this->render("bugreport");
+        }
+    }
+
 
 // to be refactored ->
 
@@ -139,47 +156,6 @@ class AjaxController extends AppController {
         $relationExists = $this->userIsLoggedIn() && !$this->User->UserFollowers->removeRelation($this->getAuthUserId(), $userSlug);
         $this->set("user", array("slug" => $userSlug, "currently_followed" => $relationExists));
         $this->render("followbutton");
-    }
-
-    public function bugreport()
-    {
-        if ($this->request->is('post'))
-        {
-            $this->loadModel("Bug");
-
-            $postData = $this->request->data;
-            $notificationData = null;
-            $bug = new Bug();
-
-            if(Hash::check($postData, "id")) {
-                $bug->updateReport((int)Hash::get($postData, "id"), Hash::get($postData, "details"));
-            }
-            else {
-                $bugId = $bug->createReport(Hash::get($postData, "type"), Hash::get($postData, "where"), (int)Hash::get($postData, "user_id"));
-                $this->set("bugId", $bugId);
-            }
-            $this->render("bugreport");
-        }
-    }
-
-    public function oembed()
-    {
-        $this->response->type('application/json');
-
-        if(!array_key_exists("url", $this->request->query))
-        {
-            throw new NotFoundException();
-        }
-
-        $instance = $this->_loadObjectFromOEmbededUrl($this->request->query["url"]);
-
-        if(!$instance->data)
-        {
-            throw new NotFoundException();
-        }
-
-        $this->set("jsonOutput", $instance->toOEmbed());
-        $this->render('index');
     }
 
     /**
@@ -237,34 +213,5 @@ class AjaxController extends AppController {
         $this->render('index');
     }
 
-    private function _loadObjectFromOEmbededUrl($url)
-    {
-        $pattern = explode("/", preg_replace('/http:\/\//', "", $url));
-
-        if(count($pattern) < 3 && count($pattern) > 4)
-        {
-            throw new NotFoundException();
-        }
-
-        $model = $pattern[1];
-        $slug = $pattern[3];
-
-        if(!preg_match('/albums|tracks/i', $model))
-        {
-            throw new NotFoundException();
-        }
-
-        $modelName = substr(ucfirst($model), 0, -1);
-        $this->loadModel($modelName);
-
-        if($modelName == "Album") {
-            $this->Album->getFirstBySlug($slug);
-            return $this->Album;
-        }
-        else {
-            $this->Track->getBySlugContained($slug);
-            return $this->Track;
-        }
-    }
 
 }

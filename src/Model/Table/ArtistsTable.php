@@ -67,4 +67,18 @@ class ArtistsTable extends Table {
             ->contain(['LastfmArtists', 'Albums' => ['AlbumReviewSnapshots'], 'ArtistReviewSnapshots']);
     }
 
+    public function getOEmbedDataBySlug($slug)
+    {
+        return $this->find()
+            ->select([
+                'Artists.name', 'Artists.slug',
+                'ArtistReviewSnapshots.total', 'ArtistReviewSnapshots.liking', 'ArtistReviewSnapshots.liking_pct',
+                'ArtistReviewSnapshots.disliking', 'ArtistReviewSnapshots.disliking_pct','ArtistReviewSnapshots.neutral', 'ArtistReviewSnapshots.neutral_pct',
+                'ArtistReviewSnapshots.disliking', 'ArtistReviewSnapshots.disliking_pct','ArtistReviewSnapshots.neutral', 'ArtistReviewSnapshots.neutral_pct',
+                'ArtistReviewSnapshots.curve', 'ArtistReviewSnapshots.ranges','ArtistReviewSnapshots.score', 'ArtistReviewSnapshots.top', 'ArtistReviewSnapshots.bottom'
+            ])
+            ->where(["slug" => $slug])
+            ->contain(['ArtistReviewSnapshots']);
+    }
+
 }

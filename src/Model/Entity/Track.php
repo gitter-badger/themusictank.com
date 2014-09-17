@@ -80,21 +80,6 @@ class Track extends Entity
         return sprintf('data-song="%s/%s"', $this->album->artist->slug, $this->slug);
     }
 
-    public function toOEmbed($additionalData = array())
-    {
-        /*
-
-        $data = Hash::extract($this->TrackReviewSnapshot->fetch($this->getData("Track.id")), "TrackReviewSnapshot");
-        unset($data["id"]);
-        unset($data["track_id"]);
-        unset($data["snapshot_ppf"]);
-
-        $data = Hash::insert($data, "Track.title", $this->getData("Track.title"));
-        $data = Hash::insert($data, "Track.slug", $this->getData("Track.slug"));
-*/
-        return parent::toOEmbed(array_merge($additionalData, $data));
-    }
-
     public function getContextualNames()
     {
         return [$this->title, $this->album->name, $this->album->artist->name];

@@ -45,4 +45,18 @@ class TracksTable extends Table {
             ->contain(['LastfmTracks', 'Albums', 'TrackReviewSnapshots']);
     }
 
+    public function getOEmbedDataBySlug($slug)
+    {
+        return $this->find()
+            ->select([
+                'Tracks.title', 'Tracks.slug',
+                'TrackReviewSnapshots.total', 'TrackReviewSnapshots.liking', 'TrackReviewSnapshots.liking_pct',
+                'TrackReviewSnapshots.disliking', 'TrackReviewSnapshots.disliking_pct','TrackReviewSnapshots.neutral', 'TrackReviewSnapshots.neutral_pct',
+                'TrackReviewSnapshots.disliking', 'TrackReviewSnapshots.disliking_pct','TrackReviewSnapshots.neutral', 'TrackReviewSnapshots.neutral_pct',
+                'TrackReviewSnapshots.curve', 'TrackReviewSnapshots.ranges','TrackReviewSnapshots.score', 'TrackReviewSnapshots.top', 'TrackReviewSnapshots.bottom'
+            ])
+            ->where(["slug" => $slug])
+            ->contain(['TrackReviewSnapshots']);
+    }
+
 }

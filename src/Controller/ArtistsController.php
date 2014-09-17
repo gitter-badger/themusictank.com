@@ -2,7 +2,9 @@
 namespace App\Controller;
 
 use App\Controller\AppController;
+
 use Cake\Event\Event;
+use Cake\Network\Exception\NotFoundException;
 
 class ArtistsController extends AppController {
 
@@ -14,10 +16,10 @@ class ArtistsController extends AppController {
      */
     public function index()
     {
-        $popularArtists = $this->Artist->findPopular(9)->toArray();
+        $popularArtists = $this->Artists->findPopular(9)->toArray();
         $featuredArtist = array_shift($popularArtists);
-        $letters        = $this->Artist->getAvaillableFirstLetters();
-        $newReleases    = $this->Artist->Albums->getNewReleases(8);
+        $letters        = $this->Artists->getAvaillableFirstLetters();
+        $newReleases    = $this->Artists->Albums->getNewReleases(8);
 
         $this->set([
             'featuredArtist'    => $featuredArtist,
@@ -40,8 +42,7 @@ class ArtistsController extends AppController {
      */
     public function view($artistSlug = "")
     {
-
-        $artist     = $this->Artist->getBySlug($artistSlug)->first();
+        $artist     = $this->Artists->getBySlug($artistSlug)->first();
 
         if(!$artist)
         {
@@ -78,7 +79,7 @@ class ArtistsController extends AppController {
      */
     public function discography($artistSlug = "")
     {
-        $artist = $this->Artist->getBySlug($artistSlug)->first();
+        $artist = $this->Artists->getBySlug($artistSlug)->first();
 
         if (!$artist) {
             throw new NotFoundException(sprintf(__("Could not find the artist %s"), $artistSlug));
@@ -102,7 +103,7 @@ class ArtistsController extends AppController {
      */
     public function wiki($artistSlug = "")
     {
-        $artist = $this->Artist->getBySlug($artistSlug)->first();
+        $artist = $this->Artists->getBySlug($artistSlug)->first();
 
         if (!$artist) {
             throw new NotFoundException(sprintf(__("Could not find the artist %s"), $artistSlug));
@@ -126,9 +127,9 @@ class ArtistsController extends AppController {
      */
     public function browse($letter = "a")
     {
-        $letters    = $this->Artist->getAvaillableFirstLetters();
+        $letters    = $this->Artists->getAvaillableFirstLetters();
         $searchStr  = trim($letter);
-        $query      = $this->Artist->browse($searchStr);
+        $query      = $this->v->browse($searchStr);
         $results    = $this->Paginator->paginate($query);
         $title      = sprintf(__("Browsing: \"%s\""), $searchStr);
 
@@ -152,7 +153,7 @@ class ArtistsController extends AppController {
 
         if(!is_null($this->request->query('name'))) {
             $searchStr = trim($this->request->query('name'));
-            $query = $this->Artist->searchCriteria($searchStr);
+            $query = $this->Artists->searchCriteria($searchStr);
             $results = $this->Paginator->paginate($query);
             $title = sprintf(__("Searching for: \"%s\""), $searchStr);
         }

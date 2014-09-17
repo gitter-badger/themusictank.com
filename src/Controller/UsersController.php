@@ -2,9 +2,12 @@
 namespace App\Controller;
 
 use App\Controller\AppController;
+
 use Cake\Event\Event;
 use Cake\Core\Configure;
 use Cake\Utility\Hash;
+use Cake\Network\Exception\NotFoundException;
+
 
 class UsersController extends AppController {
 

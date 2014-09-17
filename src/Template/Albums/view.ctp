@@ -47,76 +47,81 @@
             <div class="everyone piechart"></div>
         </div>
 
-        <div class="row stats">
+        <div class="stats">
 
-            <div class="col-md-2 enjoyment">
-                <span><?= __("Enjoyed"); ?></span>
-                <em>
-                    <?php if($album->snapshot->isNotAvailable()) : ?>
-                        N/A
-                    <?php else : ?>
-                        <?= (int)$album->snapshot->liking_pct; ?>%
-                    <?php endif; ?>
-                </em>
-            </div>
-            <div class="col-md-2 dislike">
-                <span><?= __("Disliked"); ?></span>
-                <em>
-                    <?php if($album->snapshot->isNotAvailable()) : ?>
-                        N/A
-                    <?php else : ?>
-                        <?= (int)$album->snapshot->disliking_pct; ?>%
-                    <?php endif; ?>
-                </em>
-            </div>
+            <div class="row">
 
-            <?php $bestTrack  = $album->getBestTrack(); ?>
-            <?php if(isset($bestTrack)) : ?>
-            <div class="col-md-4 best-track">
-                <span><?=__("Best track"); ?></span>
-                <em><?= $this->Html->link($bestTrack->title, array('controller' => 'tracks', 'action' => 'view', $bestTrack->slug)); ?>&nbsp;<?= (int)$bestTrack["TrackReviewSnapshot"]["liking_pct"]; ?>%</em>
-            </div>
-            <?php endif; ?>
-
-            <?php $worstTrack  = $album->getWorstTrack(); ?>
-            <?php if(isset($worstTrack)) : ?>
-            <div class="col-md-4 worst-track">
-                <span><?= __("Worst track"); ?></span>
-                <em><?= $this->Html->link($worstTrack->title, array('controller' => 'tracks', 'action' => 'view', $worstTrack->slug)); ?>&nbsp;<?= (int)$worstTrack["TrackReviewSnapshot"]["liking_pct"]; ?>%</em>
-            </div>
-            <?php endif; ?>
-
-            <div class="col-md-12 social">
-                <?php if($isLogged) : ?>
-                    <div class="col-md-3">
-                        <h3><?= __("Your subscriptions"); ?></h3>
-                        <?php if($album->subsciptionsSnapshot->isNotAvailable()) : ?>
+                <div class="col-md-2 enjoyment">
+                    <span><?= __("Enjoyed"); ?></span>
+                    <em>
+                        <?php if($album->snapshot->isNotAvailable()) : ?>
                             N/A
                         <?php else : ?>
-                            <?= (int)($album->subsciptionsSnapshot->score * 100); ?>%
+                            <?= (int)$album->snapshot->liking_pct; ?>%
                         <?php endif; ?>
-                        <span><?= __("Score"); ?></span>
-                    </div>
-                    <div class="col-md-3">
-                        <div class="piechart subscriptions"></div>
-                    </div>
-
-                    <div class="col-md-3">
-                        <h3><?= __("You"); ?></h3>
-                        <?php if($album->userSnapshot->isNotAvailable()) : ?>
+                    </em>
+                </div>
+                <div class="col-md-2 dislike">
+                    <span><?= __("Disliked"); ?></span>
+                    <em>
+                        <?php if($album->snapshot->isNotAvailable()) : ?>
                             N/A
                         <?php else : ?>
-                            <?= (int)($album->userSnapshot->score * 100); ?>%
+                            <?= (int)$album->snapshot->disliking_pct; ?>%
                         <?php endif; ?>
-                        <span><?= __("Score"); ?></span>
-                    </div>
-                    <div class="col-md-3">
-                        <div class="piechart you"></div>
-                    </div>
-                <?php else : ?>
-                    <?php $login = $this->Html->link(__("Login"), ['controller' => 'users', 'action' => 'login', '?' => ["rurl" => '/albums/view/' . $album->slug]], ["class" => "btn btn-primary"]); ?>
-                    <p><?= sprintf(__("%s to see how you and your friends have rated  \"%s\"."), $login, $album->name); ?></p>
+                    </em>
+                </div>
+
+                <?php $bestTrack  = $album->getBestTrack(); ?>
+                <?php if(isset($bestTrack)) : ?>
+                <div class="col-md-4 best-track">
+                    <span><?=__("Best track"); ?></span>
+                    <em><?= $this->Html->link($bestTrack->title, array('controller' => 'tracks', 'action' => 'view', $bestTrack->slug)); ?>&nbsp;<?= (int)$bestTrack["TrackReviewSnapshot"]["liking_pct"]; ?>%</em>
+                </div>
                 <?php endif; ?>
+
+                <?php $worstTrack  = $album->getWorstTrack(); ?>
+                <?php if(isset($worstTrack)) : ?>
+                <div class="col-md-4 worst-track">
+                    <span><?= __("Worst track"); ?></span>
+                    <em><?= $this->Html->link($worstTrack->title, array('controller' => 'tracks', 'action' => 'view', $worstTrack->slug)); ?>&nbsp;<?= (int)$worstTrack["TrackReviewSnapshot"]["liking_pct"]; ?>%</em>
+                </div>
+                <?php endif; ?>
+            </div>
+
+            <div class="row">
+                <div class="col-md-12 social">
+                    <?php if($isLogged) : ?>
+                        <div class="col-md-3">
+                            <h3><?= __("Your subscriptions"); ?></h3>
+                            <?php if($album->subsciptionsSnapshot->isNotAvailable()) : ?>
+                                N/A
+                            <?php else : ?>
+                                <?= (int)($album->subsciptionsSnapshot->score * 100); ?>%
+                            <?php endif; ?>
+                            <span><?= __("Score"); ?></span>
+                        </div>
+                        <div class="col-md-3">
+                            <div class="piechart subscriptions"></div>
+                        </div>
+
+                        <div class="col-md-3">
+                            <h3><?= __("You"); ?></h3>
+                            <?php if($album->userSnapshot->isNotAvailable()) : ?>
+                                N/A
+                            <?php else : ?>
+                                <?= (int)($album->userSnapshot->score * 100); ?>%
+                            <?php endif; ?>
+                            <span><?= __("Score"); ?></span>
+                        </div>
+                        <div class="col-md-3">
+                            <div class="piechart you"></div>
+                        </div>
+                    <?php else : ?>
+                        <?php $login = $this->Html->link(__("Login"), ['controller' => 'users', 'action' => 'login', '?' => ["rurl" => '/albums/view/' . $album->slug]], ["class" => "btn btn-primary"]); ?>
+                        <p><?= sprintf(__("%s to see how you and your friends have rated  \"%s\"."), $login, $album->name); ?></p>
+                    <?php endif; ?>
+                </div>
             </div>
 
         </div>

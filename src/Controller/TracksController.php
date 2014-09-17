@@ -1,7 +1,10 @@
 <?php
 namespace App\Controller;
 
-use App\Controller\AppController, Cake\Event\Event;
+use App\Controller\AppController;
+
+use Cake\Event\Event;
+use Cake\Network\Exception\NotFoundException;
 
 class TracksController extends AppController {
 

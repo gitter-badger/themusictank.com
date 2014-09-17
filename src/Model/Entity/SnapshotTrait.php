@@ -12,5 +12,4 @@ trait SnapshotTrait
     {
         return !is_null($this->score) && $this->total > 1;
     }
-
 }

@@ -18,7 +18,7 @@ class TracksTable extends Table {
     {
         return $this->find()
             ->where(['Tracks.slug' => $slug])
-            ->contain(['Albums' => ['Artists'], 'LastfmTracks', 'TrackReviewSnapshots', 'TrackYoutubes']);
+            ->contain(['Albums' => ['Artists' => ['LastfmArtists']], 'LastfmTracks', 'TrackReviewSnapshots', 'TrackYoutubes']);
     }
 
     public function getByAlbumIds($albumIds)
@@ -42,7 +42,7 @@ class TracksTable extends Table {
             ->limit($limit)
             ->order("LOCATE('".$criteria."', title)", "ASC")
             ->order("title", "ASC")
-            ->contain(['LastfmTracks', 'Albums', 'TrackReviewSnapshots']);
+            ->contain(['LastfmTracks', 'Albums' => ['Artists'], 'TrackReviewSnapshots']);
     }
 
     public function getOEmbedDataBySlug($slug)

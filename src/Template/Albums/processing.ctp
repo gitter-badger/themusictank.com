@@ -10,11 +10,7 @@
 <article class="container container-fluid">
 
     <header>
-        <div class="picture img-circle">
-            <?= $this->Html->link("", ['controller' => 'artists', 'action' => 'view', $album->slug], ['escape' => false, 'style' => sprintf("background-image:url(%s)", $album->getImageUrl())]); ?>
-        </div>
-        <h1><?= $this->Html->link($album->name, ['controller' => 'albums', 'action' => 'view', $album->slug]); ?></h1>
-        <h2><?= $this->Html->link($album->artist->name, ['controller' => 'artists', 'action' => 'view', $album->artist->slug]); ?></h2>
+        <?= $this->element('headers/albumDetails'); ?>
     </header>
 
     <div class="row content headerless">

@@ -2,7 +2,7 @@
         $this->Html->link(__("Artists"), ['controller' => 'artists', 'action' => 'index']),
         $this->Html->link($album->artist->name, ['controller' => 'artists', 'action' => 'view',  $album->artist->slug]),
         $this->Html->link($album->name, ['controller' => 'albums', 'action' => 'view', $album->slug]),
-        $this->Html->link(__("Description"), ['controller' => 'artists', 'action' => 'wiki', $album->slug])
+        $this->Html->link(__("Description"), ['controller' => 'albums', 'action' => 'wiki', $album->slug])
     ]]);
 ?>
 
@@ -14,17 +14,8 @@
 
 <article class="container container-fluid">
 
-    <header class="collapsed">
-        <?php $img = $this->Html->image( $album->getImageUrl(), ["alt" => $album->name, "class" => "thumbnail"]); ?>
-        <?= $this->Html->link($img, ['controller' => 'albums', 'action' => 'view', $album->slug], ["escape" => false]); ?>
-
-        <h1><?= $this->Html->link($album->name, ['controller' => 'albums', 'action' => 'view', $album->slug]); ?></h1>
-
-        <h2><?= $this->Html->link($album->artist->name, ['controller' => 'artists', 'action' => 'view', $album->artist->slug]); ?></h2>
-
-        <?php if ($album->hasReleaseDate()) : ?>
-            <time datetime="<?= $album->getFormatedReleaseDate("c"); ?>"><?= $album->getFormatedReleaseDate(); ?></time>
-        <?php endif; ?>
+    <header>
+        <?= $this->element('headers/albumDetails'); ?>
     </header>
 
     <div class="row content headerless">

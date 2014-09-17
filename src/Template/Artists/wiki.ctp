@@ -13,11 +13,8 @@
 
 <article class="container container-fluid">
 
-    <header class="collapsed">
-        <?php $img = $this->Html->image($artist->lastfm->getImageUrl(), ['alt' => $artist->name, 'class' => "thumbnail"]); ?>
-        <?= $this->Html->link($img, ['controller' => 'artists', 'action' => 'view', $artist->slug], ['escape' => false]); ?>
-
-        <h1><?= $this->Html->link($artist->name, ['controller' => 'artists', 'action' => 'view', $artist->slug]); ?></h1>
+    <header>
+        <?= $this->element('headers/artistDetails'); ?>
     </header>
 
     <div class="row content headerless">

@@ -87,7 +87,9 @@ article {
 		.picture {
 			box-shadow: @lightBoxShadow;
 			margin-right:20px;
+			margin-bottom: 10px;
 			overflow: hidden;
+
 			a {
 				background-size: cover;
 				display: block;
@@ -95,9 +97,20 @@ article {
 				width:250px;
 				min-width: 100%;
 			}
+
+			&.secondary {
+				position:absolute;
+				top: -530px;
+				left: -15px;
+				a {
+					height:80px;
+					width:80px;
+				}
+			}
 		}
 
 		.stats {
+			.row;
 			background-color: #FFF;
 			border-top:1px solid #fff;
 			border-top-left-radius: 5px;
@@ -229,6 +242,18 @@ article {
 		background-image: -moz-linear-gradient(top,#e7e7e2 0,#fff 75%);
 		background-image: -o-linear-gradient(top,#e7e7e2 0,#fff 75%);
 		background-image: linear-gradient(top,#e7e7e2 0,#fff 75%);
+
+
+		p {
+			font-size:16px;
+            margin-bottom: 21px;
+			line-height:1.5;
+		}
+
+		p:first-of-type {
+			font-size:22px;
+			color:#214c64;
+		}
 
 		.report-bug {
 			display:block;
@@ -370,24 +395,6 @@ time {
     color:#666;
 }
 
-/*
-.discography,
-.new-album-releases {
-	h2 {
-
-		a {
-			font-weight: normal;
-			font-size:60%;
-			text-transform: uppercase;
-			color:#fff;
-		}
-	}
-	h3 {
-		margin-top:10px;
-		font-size:18px;
-	}
-}*/
-
 .track-details {
 	ol li {
 		margin-bottom: 1em;
@@ -407,7 +414,6 @@ time {
 #disqus_thread {
 	margin:2em 0;
 }
-
 
 
 .popoverbox .popover {

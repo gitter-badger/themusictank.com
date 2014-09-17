@@ -216,7 +216,6 @@ $config = [
 			'timezone' => 'UTC',
 			'cacheMetadata' => true,
 			'quoteIdentifiers' => false,
-			//'init' => ['SET GLOBAL innodb_stats_on_metadata = 0'],
 		],
 
 		/*
@@ -236,7 +235,7 @@ $config = [
 		* mysql configuration directive 'innodb_stats_on_metadata = 0'
 		* which is the recommended value in production enviroments
 		*/
-		//'init' => ['SET GLOBAL innodb_stats_on_metadata = 0'],
+		'init' => ['SET GLOBAL innodb_stats_on_metadata = 0'],
 		'tmt.com' => [
 			'className' => 'Cake\Database\Connection',
 			'driver' => 'Cake\Database\Driver\Mysql',

@@ -20,27 +20,7 @@
 
     <header>
 
-        <?php $img = $this->Html->image( $track->album->getImageUrl(), ["alt" => $track->album->name, "class" => "thumbnail"]); ?>
-        <?= $this->Html->link($img, ['controller' => 'albums', 'action' => 'view', $track->album->slug], ["escape" => false]); ?>
-
-        <h1><?php echo $this->Html->link($track->title, ['controller' => 'tracks', 'action' => 'view', $track->slug]); ?></h1>
-
-        <h2><?php echo $this->Html->link($track->album->name, ['controller' => 'albums', 'action' => 'view', $track->album->slug]); ?> &dash; <?php echo $this->Html->link($track->album->artist->name, ['controller' => 'artists', 'action' => 'view', $track->album->artist->slug]); ?></h2>
-
-        <?php if ($track->album->hasReleaseDate()) : ?>
-            <time datetime="<?= $track->album->getFormatedReleaseDate("c"); ?>"><?= $track->album->getFormatedReleaseDate(); ?></time>
-        <?php endif; ?>
-
-        <div class="score">
-            <?php if($track->snapshot->isNotAvailable()) : ?>
-                N/A
-            <?php else : ?>
-                <?= (int)($track->snapshot->score * 100); ?>%
-            <?php endif; ?>
-            <span><?= __("Score"); ?></span>
-        </div>
-
-        <div class="everyone piechart"></div>
+        <?= $this->element('headers/trackDetails'); ?>
 
         <div class="row stats">
 

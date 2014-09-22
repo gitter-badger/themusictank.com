@@ -1,8 +1,10 @@
+<?php if (isset($featuredArtist)) : ?>
 <div class="header-wrapper">
     <?= $this->Html->image($featuredArtist->lastfm->getImageUrl("blur"), ['alt' => $featuredArtist->name, 'class' => "blurred"]);  ?>
     <?= $this->Html->image($featuredArtist->lastfm->getImageUrl("big"), ['alt' => $featuredArtist->name, 'class' => "clean"]);  ?>
     <i class="mask"></i>
 </div>
+<?php endif; ?>
 
 <article class="container container-fluid popular-artists">
     <header class="featured">
@@ -47,7 +49,6 @@
             <h2><?= __('Also popular right now'); ?></h2>
             <?= $this->element('tiledlists/artists', ['artists' => $popularArtists]); ?>
         </section>
-
     </div>
 
     <div class="row content">

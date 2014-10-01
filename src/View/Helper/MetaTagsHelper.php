@@ -36,7 +36,8 @@ class MetaTagsHelper extends AppHelper {
             $this->Html->css(["vendor.min", "tmt.min"])
         ];
 
-        $scripts = [$this->Html->script(["vendor.min", "tmt.min"])];
+        //$scripts = [$this->Html->script(["vendor.min", "tmt.min"])];
+        $scripts = [$this->Html->script(["vendor.min", "tmt"])];
 
         $this->_metas = $metas;
         $this->_scripts = $scripts;

@@ -19,7 +19,7 @@ class AlbumsTable extends Table {
     {
         return $this->find()
             ->where(['Albums.slug' => $slug])
-            ->contain(['Artists' => ['LastfmArtists'], 'LastfmAlbums', 'AlbumReviewSnapshots', 'Tracks']);
+            ->contain(['Artists' => ['LastfmArtists'], 'LastfmAlbums', 'AlbumReviewSnapshots', 'Tracks' => ['TrackYoutubes', 'TrackReviewSnapshots']]);
     }
 
     public function getNewReleases($limit = 1)

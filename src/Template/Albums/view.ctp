@@ -1,5 +1,6 @@
 <?php
     $isLogged = $this->Session->check('Auth.User.User.id');
+    $albumDuration = $album->getTrackDuration();
 ?>
 
 <?= $this->element('breadcrumbs', ['links' => [
@@ -101,7 +102,7 @@
         </div>
     </header>
 
-    <?php $wiki =  $album->getIntroduction(); ?>
+    <?php /*$wiki =  $album->getIntroduction(); ?>
     <?php if(strlen($wiki) > 0) : ?>
     <div class="row wiki <?= strlen($wiki) <= 800 ? "full" : ""; ?>">
         <div class="col-md-12 lead">
@@ -116,24 +117,29 @@
             <?php endif; ?>
         </div>
     </div>
-    <?php endif; ?>
+    <?php endif; */ ?>
 
     <div class="row content">
 
         <?php if(count($album->tracks)) : ?>
-            <h2><?= __("Overview"); ?></h2>
-            <div class="row">
-                <div class="col-md-3">
-                    <ul class="tracklisting">
+            <div class="timeline album-timeline">
+                <ol start="1">
                     <?php foreach ($album->tracks as $idx => $track) : ?>
-                        <li>
-                            <?= $this->Html->link($track->title, ['controller' => 'tracks', 'action' => 'view', $track->slug]); ?>
-                            <div class="piechart track-<?= $idx; ?>"></div>
-                        </li>
+                    <li class="track-<?= $track->id; ?>">
+                        <canvas class="graph" data-track="track-<?= $track->id; ?>"></canvas>
+                        <div class="piechart track-<?= $track->id; ?>"></div>
+                        <div class="score">
+                            <?php if($track->snapshot->isNotAvailable()) : ?>
+                                N/A
+                            <?php else : ?>
+                                <?= (int)($track->snapshot->score * 100); ?>%
+                            <?php endif; ?>
+                            <span><?= __("Score"); ?></span>
+                        </div>
+                        <?= $this->Html->link($track->title, ['controller' => 'tracks', 'action' => 'view', $track->slug]); ?>
+                    </li>
                     <?php endforeach; ?>
-                    </ul>
-                </div>
-                <div class="col-md-9 big-graph"></div>
+                </ol>
             </div>
 
             <h2><?= __("Recent Reviewers"); ?></h2>
@@ -202,24 +208,33 @@
 </section>
 
 
-<?php $this->start('bottom-extra'); ?>
+<?php $this->start('header-extra'); ?>
 <?php if($album->lastfm->hasSyncDate()) : ?>
+<style type="text/css">
+    .timeline ol { min-width: <?= count($album->tracks) * 250 * 1.5 ?>px; }
+    <?php foreach($album->tracks as $track) : ?>
+    .timeline ol .track-<?= $track->id ?> { width:<?= ($track->duration * 100) / $albumDuration; ?>%; }
+    <?php endforeach; ?>
+</style>
+<?php $this->end(); ?>
+
+<?php $this->start('bottom-extra'); ?>
 <script>$(function(){
-    var svg = d3.select(".big-graph").append("svg");
-    <?php if(isset($album->snapshot)) : ?>
-        tmt.createRange(svg, <?php echo json_encode($album->snapshot->ranges); ?>, {key: "everyone range-everyone", total: <?php echo (int)$album->duration; ?>});
-        tmt.createLine(svg, <?php echo json_encode($album->snapshot->curve); ?>, {key: "everyone line-everyone", total: <?php echo (int)$album->duration; ?>});
-        tmt.createPie(".everyone.piechart", [{"type" : "smile", "value" : <?php echo (int)$album->snapshot->liking_pct; ?>}, {"type" : "meh", "value" : <?php echo (int)$album->snapshot->neutral_pct; ?>}, {"type" : "frown", "value" : <?php echo (int)$album->snapshot->disliking_pct; ?>}], {key: "tanker chart-tanker"});
-    <?php endif; ?>
-    <?php /* if(isset($album->subscriptionsSnaption)) : ?>
-        tmt.createRange(svg, <?php echo json_encode($userAlbumReviewSnapshot["ranges"]); ?>, {key: "user range-user", total: <?php echo (int)$album["duration"]; ?>});
-        tmt.createLine(svg, <?php echo json_encode($userAlbumReviewSnapshot["curve"]); ?>, {key: "user line-user", total: <?php echo (int)$album["duration"]; ?>});
-        tmt.createPie(".uars.piechart", [{"type" : "smile", "value" : <?php echo (int)$userAlbumReviewSnapshot["liking_pct"]; ?>}, {"type" : "meh", "value" : <?php echo (int)$userAlbumReviewSnapshot["neutral_pct"]; ?>}, {"type" : "frown", "value" : <?php echo (int)$userAlbumReviewSnapshot["disliking_pct"]; ?>}], {key: "tanker chart-tanker"});
-    <?php endif; ?>
-    <?php if(isset($profileAlbumReviewSnapshot)) : ?>
-        tmt.createRange(svg, <?php echo json_encode($profileAlbumReviewSnapshot["ranges"]); ?>, {key: "profile range-profile", total: <?php echo (int)$album["duration"]; ?>});
-        tmt.createLine(svg, <?php echo json_encode($profileAlbumReviewSnapshot["curve"]); ?>, {key: "profile line-profile", total: <?php echo (int)$album["duration"]; ?>});
-    <?php endif; */ ?>
+    var data = {
+        <?php foreach($album->tracks as $track) : ?>
+        'track-<?= $track->id ?>' : <?= json_encode($track->snapshot); ?>,
+        <?php endforeach; ?>
+        'album-<?= $album->id ?>' : <?= json_encode($album->snapshot); ?>
+    };
+    tmt.pieGraph('album-<?= $album->id ?>', data['album-<?= $album->id ?>']);
+    for(var i in data) {
+        tmt.pieGraph(i, data[i]);
+        <?php if (!is_null($track->youtube)) : ?>
+        tmt.waveform(i, <?= json_encode($track->youtube->waveform); ?>);
+        <?php endif; ?>
+        tmt.rangeGraph(i, data[i]);
+        tmt.lineGraph(i, data[i]);
+    }
 });</script>
 <?php endif; ?>
 <?php $this->end(); ?>

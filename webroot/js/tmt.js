@@ -441,7 +441,6 @@ $(function() {
 						details = form.find("textarea").val().trim();
 
 					if(details.length > 0) {
-						//$.post('/ajax/bugreport/', {'id' : id, 'details' : details});
 						$.post('/ajax/bugreport/', {'id' : id, 'details' : details});
 					}
 				});
@@ -449,7 +448,116 @@ $(function() {
 		});
 	});
 
+	tmt.pieGraph = function(key, jsonData) {
+		$('.piechart.' + key).each(function(){
+			_pie($(this).append("<canvas>"), jsonData);
+		});
+	};
 
+	tmt.lineGraph = function(key, jsonData) {
+		$('.timeline .' + key + ' canvas.graph').each(function(){
+			_line($(this), jsonData);
+		});
+	};
+
+	tmt.rangeGraph = function(key, jsonData) {
+		$('.timeline .' + key + ' canvas.graph').each(function(){
+			_range($(this), jsonData);
+		});
+	};
+
+	tmt.waveform = function(key, jsonData) {
+		$('.timeline .' + key + ' canvas.graph').each(function(){
+			_wave($(this), jsonData);
+		});
+	}
+
+	function _pie(el, data) {
+		var canvas = el.find("canvas").get(0),
+			context = canvas.getContext("2d"),
+			height = el.height(),
+			width = el.width();
+
+		canvas.width = width;
+		canvas.height = height;
+
+		// Start by drawing a full neutral area. It will also be used
+		// as the basis of the circle background. The other areas will overlap
+		// and all will be fine.
+		context.beginPath();
+		context.arc(height / 2, width / 2, width, 0, 2 * Math.PI, false);
+		context.fillStyle = '#000000';
+		context.fill();
+
+		var startAngle = 0;
+		if (data.liking_pct > 0) {
+			context.beginPath();
+			context.arc(height / 2, width / 2, width, 0, 360 * data.liking_pct, false);
+			context.fillStyle = 'green';
+			context.fill();
+			startAngle = 360 * data.liking_pct;
+		}
+
+		if (data.disliking_pct > 0) {
+			context.beginPath();
+			context.arc(height / 2, width / 2, width, startAngle, 360 * data.disliking_pct, false);
+			context.fillStyle = 'red';
+			context.fill();
+		}
+
+	};
+
+	function _line(el, data) {
+		var canvas = el.get(0),
+			context = canvas.getContext("2d"),
+			height = el.height(),
+			width = el.width();
+
+		canvas.width = width;
+		canvas.height = height;
+
+		context.beginPath();
+		context.moveTo(0, height / 2);
+
+		for(var i = 0, len = data.length; i < len; i++) {
+			// i forgot the data structure.
+		}
+
+		// Stick it to the right and stroke the line.
+		context.lineTo(width, height / 2);
+		context.strokeStyle = '#333';
+		context.strokeWidth = '1.2';
+		context.stroke();
+	};
+
+	function _wave(el, data) {
+		var canvas = el.get(0),
+			context = canvas.getContext("2d"),
+			height = el.height(),
+			width = el.width();
+
+		canvas.width = width;
+		canvas.height = height;
+
+		for(var i = 0, len = data.length, boxWidth = width / len, wave = 128 ; i < len; i++) {
+			wave =  Math.abs(128 - parseInt(data[i], 10));
+
+console.log(wave);
+
+			context.beginPath();
+			// x, y, width, height
+			context.rect(i * boxWidth, wave, boxWidth, -wave);
+			context.fillStyle = 'rgba(0,0,0.4)';
+			context.fill();
+		}
+	}
+
+	function _range(el, data) {
+
+	}
+
+
+/*
 	tmt.waveform = function(svg, jsonData, details) {
 		if(jsonData && jsonData.length > 0) {
 			var margin = {top: 20, right: 20, bottom: 30, left: 40},
@@ -470,55 +578,6 @@ $(function() {
 	};
 
 
-	tmt.createPie = function(whereClass, jsonData, details) {
-	 var w = 200,                        //width
-		h = 200,                            //height
-		r = 100,                            //radius
-		color = d3.scale.category20c();     //builtin range of colors
-
-	data = jsonData;
-
-
-	if(jsonData.length === 0) {
-return;
-	}
-
-var vis = d3.select(whereClass)
-		.append("svg:svg")              //create the SVG element inside the <body>
-		.data([data])                   //associate our data with the document
-			.attr("width", w)           //set the width and height of our visualization (these will be attributes of the <svg> tag
-			.attr("height", h)
-		.append("svg:g")                //make a group to hold our pie chart
-			.attr("transform", "translate(" + r + "," + r + ")")    //move the center of the pie chart from 0, 0 to radius, radius
-
-	var arc = d3.svg.arc()              //this will create <path> elements for us using arc data
-		.outerRadius(r);
-
-
-	var pie = d3.layout.pie()           //this will create arc data for us given a list of values
-		.value(function(d) {return d.value; });    //we must tell it out to access the value of each element in our data array
-
-	var arcs = vis.selectAll("g.slice")     //this selects all <g> elements with class slice (there aren't any yet)
-		.data(pie)                          //associate the generated pie data (an array of arcs, each having startAngle, endAngle and value properties)
-		.enter()                            //this will create <g> elements for every "extra" data element that should be associated with a selection. The result is creating a <g> for every object in the data array
-			.append("svg:g")                //create a group to hold each slice (we will have a <path> and a <text> element associated with each slice)
-				.attr("class", "slice");    //allow us to style things in the slices (like text)
-
-		arcs.append("svg:path")
-				.attr("fill", function(d, i) { return color(i); } ) //set the color for each slice to be chosen from the color function defined above
-				.attr("d", arc);                                    //this creates the actual SVG path using the associated data (pie) with the arc drawing function
-
-			arcs.append("svg:text")                                            //add a label to each slice
-				.attr("transform", function(d) {                    //set the label's origin to the center of the arc
-				//we have to make sure to set these before calling arc.centroid
-				d.innerRadius = 0;
-				d.outerRadius = r;
-				return "translate(" + arc.centroid(d) + ")";        //this gives us a pair of coordinates like [50, 50]
-			})
-			.attr("text-anchor", "middle")                          //center the text on it's origin
-			.text(function(d, i) { return data[i].type; });        //get the label from our original data array
-
-	};
 
 
 	tmt.createLine = function (svg, jsonData, details) {
@@ -651,7 +710,7 @@ var formatCount = d3.format(",.0f"),
 			.attr("d", bLine);
 
 	};
-
+*/
 
 });
 

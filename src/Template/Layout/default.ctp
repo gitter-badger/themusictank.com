@@ -6,6 +6,7 @@
    	<?= $this->MetaTags->compileMetas();  ?>
    	<?= $this->fetch('meta') ?>
 	<?= $this->fetch('css') ?>
+    <?= $this->fetch('header-extra') ?>
 </head>
 <body class="<?= $this->Tmt->contextToClassNames(); ?>">
     <div class="website">

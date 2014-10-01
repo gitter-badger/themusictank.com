@@ -27,6 +27,6 @@
         <div class="notable"><?= __("Notable Album"); ?></div>
     <?php endif; ?>
 
-    <div class="everyone piechart"></div>
+    <div class="piechart album-<?= $album->id; ?>"></div>
 
 </div>

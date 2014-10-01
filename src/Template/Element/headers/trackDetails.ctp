@@ -24,5 +24,5 @@
         <span><?= __("Score"); ?></span>
     </div>
 
-    <div class="everyone piechart"></div>
+    <div class="piechart track-<?= $track->id; ?>"></div>
 </div>

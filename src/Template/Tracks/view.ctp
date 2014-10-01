@@ -96,7 +96,7 @@
         </div>
     </header>
 
-    <?php $wiki =  $track->getIntroduction(); ?>
+    <?php /* $wiki =  $track->getIntroduction(); ?>
     <?php if(strlen($wiki) > 0) : ?>
     <div class="row wiki <?= strlen($wiki) <= 800 ? "full" : ""; ?>">
         <div class="col-md-12 lead">
@@ -111,12 +111,25 @@
             <?php endif; ?>
         </div>
     </div>
-    <?php endif; ?>
-
+    <?php endif; */ ?>
 
     <div class="row content">
-
-        <div class="big-graph"></div>
+        <div class="timeline track-timeline">
+            <ol start="1">
+                <li class="track-<?= $track->id; ?>">
+                    <canvas class="graph" data-track="track-<?= $track->id; ?>"></canvas>
+                    <div class="piechart track-<?= $track->id; ?>"></div>
+                    <div class="score">
+                        <?php if($track->snapshot->isNotAvailable()) : ?>
+                            N/A
+                        <?php else : ?>
+                            <?= (int)($track->snapshot->score * 100); ?>%
+                        <?php endif; ?>
+                        <span><?= __("Score"); ?></span>
+                    </div>
+                </li>
+            </ol>
+        </div>
 
         <div class="streamer" <?= $track->getPlayerAttributes(); ?>>
 
@@ -135,6 +148,7 @@
             <small class="report-bug" data-bug-type="track player" data-location="artist: <?= $track->album->artist->slug; ?>, album: <?= $track->album->slug; ?>, track: <?= $track->slug; ?>" data-user="<?= $this->Session->read('Auth.User.User.id'); ?>"><i class="fa fa-bug"></i> <?= __("Wrong song?"); ?></small>
         </div>
 
+    </div>
 
             <?php /*if($isLogged) :  ?>
                 <?php if(isset($subsTrackReviewSnapshot)) : ?>
@@ -250,7 +264,20 @@
 
 
 
+
 <?php $this->start('bottom-extra'); ?>
+<script>$(function(){
+    var data = <?= json_encode($track->snapshot); ?>;
+    tmt.pieGraph('track-<?= $track->id ?>', data);
+    <?php if (!is_null($track->youtube)) : ?>
+    tmt.waveform('track-<?= $track->id ?>', <?= json_encode($track->youtube->waveform); ?>);
+    <?php endif; ?>
+    tmt.rangeGraph('track-<?= $track->id ?>', data);
+    tmt.lineGraph('track-<?= $track->id ?>', data);
+});</script>
+<?php $this->end(); ?>
+
+<?php /* $this->start('bottom-extra'); ?>
 <script>$(function(){
 var svg = d3.select(".big-graph").append("svg");
 
@@ -302,4 +329,4 @@ tmt.createPie(".prevtrack.piechart", [{"type" : "smile", "value" : <?php echo (i
 tmt.createPie(".nexttrack.piechart", [{"type" : "smile", "value" : <?php echo (int)$nextTrack["TrackReviewSnapshot"]["liking_pct"]; ?>}, {"type" : "meh", "value" : <?php echo (int)$nextTrack["TrackReviewSnapshot"]["neutral_pct"]; ?>}, {"type" : "frown", "value" : <?php echo (int)$nextTrack["TrackReviewSnapshot"]["disliking_pct"]; ?>}], {key: "next chart-tanker"});
 <?php endif; ?>
 });</script>
-<?php $this->end(); ?>
+<?php $this->end(); */?>

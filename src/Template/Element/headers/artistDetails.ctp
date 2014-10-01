@@ -13,5 +13,5 @@
         <span><?= __("Score"); ?></span>
     </div>
 
-    <div class="everyone piechart"></div>
+    <div class="piechart artist-<?= $artist->id; ?>"></div>
 </div>

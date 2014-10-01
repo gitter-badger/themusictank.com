@@ -28,6 +28,17 @@ class Album extends Entity
         return (int)$this->release_date > 0;
     }
 
+    public function getTrackDuration()
+    {
+        $total = 0;
+
+        foreach ($this->tracks as $track) {
+            $total += $track->duration;
+        }
+
+        return $total;
+    }
+
     public function getFormatedReleaseDate($datePattern = "F j Y")
     {
         return date($datePattern, (int)$this->release_date);

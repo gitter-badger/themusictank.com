@@ -21,19 +21,29 @@
 	overflow: auto;
 	border:1px solid #dedede;
 
+	&.album-timeline {
+		li {
+			width: @timelineHeight * .75;
+		}
+	}
+
+	&.track-timeline {
+		li {
+			width: 100%;
+		}
+	}
+
 	ol {
 		height: @timelineHeight;
 		list-style-type: none;
 		padding:0;
 	}
 
-	.track {
+	li {
 		display: block;
 		float: left;
 		height: @timelineHeight;
 		position: relative;
-		top: 0;
-		width: @timelineHeight * .75;
 
 		&:nth-child(even) {
 			background:rgba(255,255,255,.5);
@@ -46,6 +56,8 @@
 			left: 10px;
 			top: auto;
 			padding-top: 11px;
+			font-size: 18px;
+			position: absolute;
 			height: 50px;
 			width: 50px;
 		}

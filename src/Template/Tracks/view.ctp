@@ -270,7 +270,7 @@
     var data = <?= json_encode($track->snapshot); ?>;
     tmt.pieGraph('track-<?= $track->id ?>', data);
     <?php if (!is_null($track->youtube)) : ?>
-    tmt.waveform('track-<?= $track->id ?>', <?= json_encode($track->youtube->waveform); ?>);
+    tmt.waveform('track-<?= $track->id ?>', <?= json_encode(json_decode($track->youtube->waveform)); ?>);
     <?php endif; ?>
     tmt.rangeGraph('track-<?= $track->id ?>', data);
     tmt.lineGraph('track-<?= $track->id ?>', data);

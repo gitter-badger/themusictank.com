@@ -510,8 +510,8 @@ $(function() {
 	function _line(el, data) {
 		var canvas = el.get(0),
 			context = canvas.getContext("2d"),
-			height = el.height(),
-			width = el.width();
+			height = el.parent().height(),
+			width = el.parent().width();
 
 		canvas.width = width;
 		canvas.height = height;
@@ -540,14 +540,20 @@ $(function() {
 		canvas.height = height;
 
 		for(var i = 0, len = data.length, boxWidth = width / len, wave = 128 ; i < len; i++) {
-			wave =  Math.abs(128 - parseInt(data[i], 10));
-
-console.log(wave);
+			//wave =  Math.abs(128 - parseInt(data[i], 10));
 
 			context.beginPath();
 			// x, y, width, height
-			context.rect(i * boxWidth, wave, boxWidth, -wave);
-			context.fillStyle = 'rgba(0,0,0.4)';
+
+
+			var top = (128 - data[i]) * (height / 2) / 128;
+			var bottom = (128 - data[i]) * (height / 2) / 128;
+
+console.log(i * boxWidth);
+console.log(boxWidth);
+			//context.rect(i * boxWidth, top, boxWidth, (height / 2) + bottom);
+			context.rect(i * boxWidth, 10, boxWidth, 150);
+			context.fillStyle = 'red';
 			context.fill();
 		}
 	}

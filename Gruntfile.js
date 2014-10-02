@@ -15,7 +15,8 @@ module.exports = function(grunt) {
 			dist: {
 				files: {
 					'webroot/css/vendor.min.css': [
-						'webroot/vendor/bower_components/bootstrap/dist/css/bootstrap.css'
+						'webroot/vendor/bower_components/bootstrap/dist/css/bootstrap.css',
+						'webroot/vendor/bower_components/font-awesome/css/font-awesome.min.css'
 					],
 					'webroot/css/tmt.min.css': [
 						'webroot/css/less/styles.less'
@@ -52,14 +53,14 @@ module.exports = function(grunt) {
 					'webroot/css/less/*.less',
 				],
 				tasks: ['less']
-			},
+			}/*,
 			js: {
 				files: [
 					'<%= jshint.all %>',
 					'webroot/js/tmt.js'
 				],
 				tasks: ['jshint', 'uglify']
-			}
+			}*/
 		},
 		clean: {
 			dist: [

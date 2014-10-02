@@ -114,39 +114,39 @@
     <?php endif; */ ?>
 
     <div class="row content">
+
+        <div class="piechart track-<?= $track->id; ?>"></div>
+        <div class="score">
+            <?php if($track->snapshot->isNotAvailable()) : ?>
+                N/A
+            <?php else : ?>
+                <?= (int)($track->snapshot->score * 100); ?>%
+            <?php endif; ?>
+            <span><?= __("Score"); ?></span>
+        </div>
+
         <div class="timeline track-timeline">
             <ol start="1">
                 <li class="track-<?= $track->id; ?>">
                     <canvas class="graph" data-track="track-<?= $track->id; ?>"></canvas>
-                    <div class="piechart track-<?= $track->id; ?>"></div>
-                    <div class="score">
-                        <?php if($track->snapshot->isNotAvailable()) : ?>
-                            N/A
-                        <?php else : ?>
-                            <?= (int)($track->snapshot->score * 100); ?>%
-                        <?php endif; ?>
-                        <span><?= __("Score"); ?></span>
-                    </div>
                 </li>
             </ol>
         </div>
 
         <div class="streamer" <?= $track->getPlayerAttributes(); ?>>
-
             <div class="progress-wrap">
                 <div class="progress">
                   <div class="progress-bar loaded-bar" role="progressbar" aria-valuenow="0" aria-valuemin="0" aria-valuemax="<?= $track->duration; ?>" style="width: 0%;"></div>
                   <div class="progress-bar playing-bar" role="progressbar" aria-valuenow="0" aria-valuemin="0" aria-valuemax="<?= $track->duration; ?>" style="width: 0%;"></div>
                 </div>
                <div class="cursor"></div>
-           </div>
-
-            <div class="position">0</div>
+            </div>
             <i class="play fa fa-stop"></i>
-            <div class="duration"></div>
-
-            <small class="report-bug" data-bug-type="track player" data-location="artist: <?= $track->album->artist->slug; ?>, album: <?= $track->album->slug; ?>, track: <?= $track->slug; ?>" data-user="<?= $this->Session->read('Auth.User.User.id'); ?>"><i class="fa fa-bug"></i> <?= __("Wrong song?"); ?></small>
+            <div class="times">
+                <span class="position"> -:--</span> / <span class="duration"> -:--</span>
+            </div>
         </div>
+        <small class="report-bug" data-bug-type="track player" data-location="artist: <?= $track->album->artist->slug; ?>, album: <?= $track->album->slug; ?>, track: <?= $track->slug; ?>" data-user="<?= $this->Session->read('Auth.User.User.id'); ?>"><i class="fa fa-bug"></i> <?= __("Wrong song?"); ?></small>
 
     </div>
 
@@ -270,7 +270,7 @@
     var data = <?= json_encode($track->snapshot); ?>;
     tmt.pieGraph('track-<?= $track->id ?>', data);
     <?php if (!is_null($track->youtube)) : ?>
-    tmt.waveform('track-<?= $track->id ?>', <?= json_encode(json_decode($track->youtube->waveform)); ?>);
+    tmt.waveform('track-<?= $track->id ?>', <?= json_encode($track->youtube->waveform); ?>);
     <?php endif; ?>
     tmt.rangeGraph('track-<?= $track->id ?>', data);
     tmt.lineGraph('track-<?= $track->id ?>', data);

@@ -134,7 +134,6 @@
                             <?php else : ?>
                                 <?= (int)($track->snapshot->score * 100); ?>%
                             <?php endif; ?>
-                            <span><?= __("Score"); ?></span>
                         </div>
                         <?= $this->Html->link($track->title, ['controller' => 'tracks', 'action' => 'view', $track->slug]); ?>
                     </li>
@@ -208,33 +207,34 @@
 </section>
 
 
+<?php $this->start('header-extra'); ?>
+<?= $this->fetch('header-extra'); ?>
 <?php if($album->lastfm->hasSyncDate()) : ?>
-    <?php $this->start('header-extra'); ?>
-    <style type="text/css">
-        .timeline ol { min-width: <?= count($album->tracks) * 250 * 1.5 ?>px; }
-        <?php foreach($album->tracks as $track) : ?>
-        .timeline ol li.track-<?= $track->id ?> { width:<?= ($track->duration * 100) / $albumDuration; ?>%; }
-        <?php endforeach; ?>
-    </style>
-    <?php $this->end(); ?>
+<style type="text/css">
+    .timeline ol { min-width: <?= count($album->tracks) * 250 * 1.5 ?>px; }
+    <?php foreach($album->tracks as $track) : ?>
+    .timeline ol li.track-<?= $track->id ?> { width:<?= ($track->duration * 100) / $albumDuration; ?>%; }
+    <?php endforeach; ?>
+</style>
+<?php $this->end(); ?>
 
-    <?php $this->start('bottom-extra'); ?>
-    <script>$(function(){
-        var data = {
-            <?php foreach($album->tracks as $track) : ?>
-            'track-<?= $track->id ?>' : <?= json_encode($track->snapshot); ?>,
-            <?php endforeach; ?>
-            'album-<?= $album->id ?>' : <?= json_encode($album->snapshot); ?>
-        };
-        tmt.pieGraph('album-<?= $album->id ?>', data['album-<?= $album->id ?>']);
-        for(var i in data) {
-            tmt.pieGraph(i, data[i]);
-            <?php if (!is_null($track->youtube)) : ?>
-            tmt.waveform(i, <?= json_encode(json_decode($track->youtube->waveform)); ?>);
-            <?php endif; ?>
-            tmt.rangeGraph(i, data[i]);
-            tmt.lineGraph(i, data[i]);
-        }
-    });</script>
-    <?php $this->end(); ?>
+<?php $this->start('bottom-extra'); ?>
+<script>$(function(){
+    var data = {
+        <?php foreach($album->tracks as $track) : ?>
+        'track-<?= $track->id ?>' : <?= json_encode($track->snapshot); ?>,
+        <?php endforeach; ?>
+        'album-<?= $album->id ?>' : <?= json_encode($album->snapshot); ?>
+    };
+    tmt.pieGraph('album-<?= $album->id ?>', data['album-<?= $album->id ?>']);
+    for(var i in data) {
+        tmt.pieGraph(i, data[i]);
+        <?php if (!is_null($track->youtube)) : ?>
+        tmt.waveform(i, <?= json_encode($track->youtube->waveform); ?>);
+        <?php endif; ?>
+        tmt.rangeGraph(i, data[i]);
+        tmt.lineGraph(i, data[i]);
+    }
+});</script>
 <?php endif; ?>
+<?php $this->end(); ?>

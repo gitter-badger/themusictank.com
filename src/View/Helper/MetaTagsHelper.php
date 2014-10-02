@@ -4,6 +4,7 @@ namespace App\View\Helper;
 
 use App\View\Helper\AppHelper;
 use Cake\Routing\Router;
+use Cake\Core\Configure;
 
 class MetaTagsHelper extends AppHelper {
 

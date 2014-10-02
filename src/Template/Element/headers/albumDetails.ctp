@@ -1,10 +1,11 @@
 <div class="details">
 
     <div class="picture secondary img-circle">
-        <?= $this->Html->link("", ['controller' => 'artists', 'action' => 'view', $album->artist->slug], ['escape' => false, 'style' => sprintf("background-image:url(%s)", $album->artist->lastfm->getImageUrl())]); ?>
+        <?= $this->Html->link("", ['controller' => 'artists', 'action' => 'view', $album->artist->slug], ['escape' => false]); ?>
     </div>
-    <div class="picture ">
-        <?= $this->Html->link("", ['controller' => 'albums', 'action' => 'view', $album->slug], ['escape' => false, 'style' => sprintf("background-image:url(%s)", $album->getImageUrl())]); ?>
+
+    <div class="picture primary">
+        <?= $this->Html->link("", ['controller' => 'albums', 'action' => 'view', $album->slug], ['escape' => false]); ?>
     </div>
 
     <h2><?= $this->Html->link($album->artist->name, ['controller' => 'artists', 'action' => 'view', $album->artist->slug]); ?></h2>
@@ -30,3 +31,11 @@
     <div class="piechart album-<?= $album->id; ?>"></div>
 
 </div>
+
+
+<?php $this->start('header-extra'); ?>
+<style type="text/css">
+    .details .primary a { background-image:url(<?= $album->getImageUrl(); ?>); }
+    .details .secondary a { background-image:url(<?= $album->artist->lastfm->getImageUrl(); ?>); }
+</style>
+<?php $this->end(); ?>

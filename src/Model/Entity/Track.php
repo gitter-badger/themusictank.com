@@ -77,7 +77,7 @@ class Track extends Entity
                 return sprintf('data-song-vid="%s"', $this->youtube->youtube_key);
             }
         }
-        return sprintf('data-song="%s/%s"', $this->album->artist->slug, $this->slug);
+        return sprintf('data-song="%s"', $this->slug);
     }
 
     public function getContextualNames()
@@ -112,6 +112,7 @@ class Track extends Entity
             // we have to save the last sync timestamp.
             $this->youtube->lastsync = time();
             $this->youtube->youtube_key = $videoId;
+            $this->youtube->track_id = $this->id;
 
             return TableRegistry::get('TrackYoutubes')->save($this->youtube);
         }

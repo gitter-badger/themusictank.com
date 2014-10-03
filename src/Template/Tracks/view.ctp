@@ -262,9 +262,6 @@
     </div>
 </section>
 
-
-
-
 <?php $this->start('bottom-extra'); ?>
 <script>$(function(){
     var data = <?= json_encode($track->snapshot); ?>;

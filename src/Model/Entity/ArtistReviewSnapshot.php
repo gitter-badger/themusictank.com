@@ -1,10 +1,13 @@
 <?php
 namespace App\Model\Entity;
 
-use Cake\ORM\Entity;
-use App\Model\Entity\SnapshotTrait;
+use App\Model\Entity\ReviewSnapshot;
 
-class ArtistReviewSnapshot extends Entity
+class ArtistReviewSnapshot extends ReviewSnapshot
 {
-    use SnapshotTrait;
+
+    public function fetch()
+    {
+        return parent::updateCache(["ReviewFrames.artist_id" => $this->artist_id]);
+    }
 }

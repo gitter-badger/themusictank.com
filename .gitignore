@@ -3,3 +3,5 @@
 /tmp/*
 logs
 webroot/img/cache
+.DS_Store
+._.DS_Store

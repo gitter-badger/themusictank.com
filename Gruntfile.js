@@ -2,7 +2,7 @@
 module.exports = function(grunt) {
 
 	grunt.initConfig({
-		jshint: {
+		/*jshint: {
 			options: {
 				jshintrc: '.jshintrc'
 			},
@@ -10,13 +10,12 @@ module.exports = function(grunt) {
 				'Gruntfile.js',
 				'!webroot/js/tmt.min.js'
 			]
-		},
+		},*/
 		less: {
 			dist: {
 				files: {
 					'webroot/css/vendor.min.css': [
-						'webroot/vendor/bower_components/bootstrap/dist/css/bootstrap.css',
-						'webroot/vendor/bower_components/font-awesome/css/font-awesome.min.css'
+						'webroot/css/less/vendor.less'
 					],
 					'webroot/css/tmt.min.css': [
 						'webroot/css/less/styles.less'
@@ -41,9 +40,9 @@ module.exports = function(grunt) {
 					]
 				},
 				options: {
-					//compress: true,
-					//beautify: false,
-					//mangle: true
+					compress: true,
+					beautify: false,
+					mangle: true
 				}
 			}
 		},

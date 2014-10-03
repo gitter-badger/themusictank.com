@@ -35,6 +35,25 @@ class TracksTable extends Table {
             ->contain(['TrackReviewSnapshots']);
     }
 
+    public function findNewDailyChallenger()
+    {
+        $newFeatured = $this->find()
+            ->where(['is_challenge' => false])
+            ->order(['rand()'])
+            ->limit(1)->first();
+
+        $this->query()->update()
+            ->set(['is_challenge' => false])
+            ->where(['is_challenge' => true])
+            ->execute();
+
+        $newFeatured->is_challenge = true;
+        $this->save($newFeatured);
+
+        return $newFeatured;
+    }
+
+
     public function searchCriteria($criteria, $limit = 10)
     {
         return $this->find()

@@ -131,12 +131,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/cakephp/cakephp.git",
-                "reference": "6e8f607515c410e457e3dd5704155c3c913a8abc"
+                "reference": "b1ca01ddafe7dab9b2977d92488b9debbab09b3f"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/cakephp/cakephp/zipball/6e8f607515c410e457e3dd5704155c3c913a8abc",
-                "reference": "6e8f607515c410e457e3dd5704155c3c913a8abc",
+                "url": "https://api.github.com/repos/cakephp/cakephp/zipball/b1ca01ddafe7dab9b2977d92488b9debbab09b3f",
+                "reference": "b1ca01ddafe7dab9b2977d92488b9debbab09b3f",
                 "shasum": ""
             },
             "require": {
@@ -146,16 +146,21 @@
                 "ext-mcrypt": "*",
                 "ircmaxell/password-compat": "1.0.*",
                 "nesbot/carbon": "1.8.*",
-                "php": ">=5.4.16"
+                "php": ">=5.4.16",
+                "psr/log": "1.0"
             },
             "replace": {
+                "cakephp/cache": "self.version",
                 "cakephp/collection": "self.version",
                 "cakephp/core": "self.version",
+                "cakephp/datasource": "self.version",
                 "cakephp/event": "self.version",
+                "cakephp/log": "self.version",
                 "cakephp/utility": "self.version",
                 "cakephp/validation": "self.version"
             },
             "require-dev": {
+                "cakephp/cakephp-codesniffer": "*",
                 "phpunit/phpunit": "*"
             },
             "type": "library",
@@ -164,7 +169,8 @@
                     "Cake\\": "src"
                 },
                 "files": [
-                    "src/Core/functions.php"
+                    "src/Core/functions.php",
+                    "src/Collection/functions.php"
                 ]
             },
             "notification-url": "https://packagist.org/downloads/",
@@ -182,7 +188,7 @@
             "keywords": [
                 "framework"
             ],
-            "time": "2014-09-16 12:01:29"
+            "time": "2014-10-03 07:56:59"
         },
         {
             "name": "ircmaxell/password-compat",
@@ -320,6 +326,44 @@
                 "time"
             ],
             "time": "2014-01-07 05:10:44"
+        },
+        {
+            "name": "psr/log",
+            "version": "1.0.0",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/php-fig/log.git",
+                "reference": "fe0936ee26643249e916849d48e3a51d5f5e278b"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/php-fig/log/zipball/fe0936ee26643249e916849d48e3a51d5f5e278b",
+                "reference": "fe0936ee26643249e916849d48e3a51d5f5e278b",
+                "shasum": ""
+            },
+            "type": "library",
+            "autoload": {
+                "psr-0": {
+                    "Psr\\Log\\": ""
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "authors": [
+                {
+                    "name": "PHP-FIG",
+                    "homepage": "http://www.php-fig.org/"
+                }
+            ],
+            "description": "Common interface for logging libraries",
+            "keywords": [
+                "log",
+                "psr",
+                "psr-3"
+            ],
+            "time": "2012-12-21 11:40:51"
         }
     ],
     "packages-dev": [
@@ -358,9 +402,7 @@
             "time": "2014-01-17 12:21:18"
         }
     ],
-    "aliases": [
-
-    ],
+    "aliases": [],
     "minimum-stability": "stable",
     "stability-flags": {
         "cakephp/cakephp": 20
@@ -369,7 +411,5 @@
     "platform": {
         "php": ">=5.4.19"
     },
-    "platform-dev": [
-
-    ]
+    "platform-dev": []
 }

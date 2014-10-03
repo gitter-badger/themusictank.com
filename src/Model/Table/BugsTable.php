@@ -10,7 +10,8 @@ class BugsTable extends Table {
         $this->addBehavior('Timestamp', [
             'events' => [
                 'Model.beforeSave' => [
-                    'created' => 'new'
+                    'created' => 'new',
+                    'modified' => 'always'
                 ]
             ]
         ]);

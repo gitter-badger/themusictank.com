@@ -1,6 +1,12 @@
 .streamer {
 
+	background:#eee;
+	border:1px solid #dedede;
+	border-top:1px solid #fff;
+	position: relative;
 	height:70px;
+	font-size: 11px;
+	color:#333;
 
 	iframe {
 		width:1px;
@@ -9,23 +15,33 @@
 		left:-100px;
 	}
 
-
 	.play {
 		position:absolute;
-		left:50%;
+		left:1%;
 		top:10px;
+		background:#000;
+		color:#fff;
+		width:40px;
+		height:40px;
+		z-index: 1;
+		font-size:24px;
+		text-align:center;
+		border-radius: 20px;
+		border:1px solid #eee;
+		box-shadow:0 1px 5px rgba(0,0,0,.6);
+		padding: 12px 0 0 3px;
 	}
 
-	.duration {
+	.fa-pause {
+		padding-left:0;
+	}
+
+	.times {
 		position:absolute;
 		right:10px;
-		top:10px;
-	}
-
-	.position {
-		position:absolute;
-		left:10px;
-		top:10px;
+		top:25px;
+		width:60px;
+		text-align: right;
 	}
 
 	.progress {
@@ -34,9 +50,9 @@
 
 	.progress-wrap {
 		position:absolute;
-		top:2px;
-		width:96%;
-		left:2%;
+		top:30px;
+		left:70px;
+		right:70px;
 		cursor:pointer;
 	}
 
@@ -63,40 +79,5 @@
 		top:2px;
 		margin:-10px 0 0 -10px;
 	}
-
-
-	/*
-
-	.progress {
-		position:absolute;
-		top:0;
-		height:10px;
-		width:100%;
-		right:0;
-		background:#333;
-
-		.loaded {
-			@stretchFill;
-			height:10px;
-			width:1px;
-			background:blue;
-		}
-		.played {
-			@stretchFill;
-			height:10px;
-			width:1px;
-			background:green;
-		}
-		.cursor {
-			position:absolute;
-			left:0;
-			top:0;
-			width:10px;
-			height:10px;
-			background:yellow;
-		}
-
-	}*/
-
 
 }

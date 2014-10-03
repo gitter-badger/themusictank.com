@@ -352,12 +352,12 @@ $(function() {
 			streamer = $('.streamer'),
 			play = streamer.find('.play');
 
-		streamer.find(".duration").html( player.getDuration() );
-		streamer.find(".progress").click(function(e){
+		streamer.find(".duration").html( _toReadableTime(player.getDuration()) );
+		streamer.find(".progress-wrap .progress").click(function(e){
 			if(tmt.playerIsPlaying) {
 				var offset = $(this).offset();
 				var relX = e.pageX - offset.left;
-				var pctLocation = relX / $(".streamer .progress").width();
+				var pctLocation = relX / $(".streamer .progress-wrap .progress").width();
 				player.seekTo( pctLocation *  player.getDuration(), true );
 			}
 		});
@@ -386,11 +386,12 @@ $(function() {
 			durationTime = player.getDuration(),
 			currentPositionPct = (currentTime / durationTime) * 100;
 
-		$('.streamer .position').html(parseInt(currentTime, 10));
+		$('.streamer .position').html(_toReadableTime(currentTime));
 
 		$('.streamer .cursor').css("left", currentPositionPct + "%");
 		$('.streamer .progress .loaded-bar').css("width", (player.getVideoLoadedFraction() * 100) + "%");
 		$('.streamer .progress .playing-bar').css("width", currentPositionPct + "%");
+		$('.streamer .progress .playing-bar').attr("aria-valuenow", currentTime);
 
 		if(tmt.playerIsPlaying) {
 
@@ -408,6 +409,14 @@ $(function() {
 			setTimeout(function(){ tmt.playerTick(player) }, 200);
 		}
 	};
+
+	function _toReadableTime(seconds) {
+		var time = new Date(1000*seconds);
+		return
+	    //("0" + time.getHours()).slice(-2)   + ":" +
+		    ("0" + time.getMinutes()).slice(-2) + ":" +
+		    ("0" + time.getSeconds()).slice(-2);
+	}
 
 
 	// Automate bug reporting
@@ -449,27 +458,35 @@ $(function() {
 	});
 
 	tmt.pieGraph = function(key, jsonData) {
-		$('.piechart.' + key).each(function(){
-			_pie($(this).append("<canvas>"), jsonData);
-		});
+		if (jsonData) {
+			$('.piechart.' + key).each(function(){
+				_pie($(this).append("<canvas>"), jsonData);
+			});
+		}
 	};
 
 	tmt.lineGraph = function(key, jsonData) {
-		$('.timeline .' + key + ' canvas.graph').each(function(){
-			_line($(this), jsonData);
-		});
+		if (jsonData) {
+			$('.timeline .' + key + ' canvas.graph').each(function(){
+				_line($(this), jsonData);
+			});
+		}
 	};
 
 	tmt.rangeGraph = function(key, jsonData) {
-		$('.timeline .' + key + ' canvas.graph').each(function(){
-			_range($(this), jsonData);
-		});
+		if (jsonData) {
+			$('.timeline .' + key + ' canvas.graph').each(function(){
+				_range($(this), jsonData);
+			});
+		}
 	};
 
 	tmt.waveform = function(key, jsonData) {
-		$('.timeline .' + key + ' canvas.graph').each(function(){
-			_wave($(this), jsonData);
-		});
+		if (jsonData) {
+			$('.timeline .' + key + ' canvas.graph').each(function(){
+				_wave($(this), jsonData);
+			});
+		}
 	}
 
 	function _pie(el, data) {
@@ -510,8 +527,8 @@ $(function() {
 	function _line(el, data) {
 		var canvas = el.get(0),
 			context = canvas.getContext("2d"),
-			height = el.parent().height(),
-			width = el.parent().width();
+			height = el.height(),
+			width = el.width();
 
 		canvas.width = width;
 		canvas.height = height;
@@ -534,26 +551,20 @@ $(function() {
 		var canvas = el.get(0),
 			context = canvas.getContext("2d"),
 			height = el.height(),
+			half = height / 2,
 			width = el.width();
 
 		canvas.width = width;
 		canvas.height = height;
 
-		for(var i = 0, len = data.length, boxWidth = width / len, wave = 128 ; i < len; i++) {
-			//wave =  Math.abs(128 - parseInt(data[i], 10));
+		for(var i = 0, len = data.length, boxWidth = width / len, wave, waveHeight; i < len; i++) {
+			wave =  Math.abs(128 - data[i]);
+			waveHeight = (wave * 100 / 128) * half;
 
 			context.beginPath();
 			// x, y, width, height
-
-
-			var top = (128 - data[i]) * (height / 2) / 128;
-			var bottom = (128 - data[i]) * (height / 2) / 128;
-
-console.log(i * boxWidth);
-console.log(boxWidth);
-			//context.rect(i * boxWidth, top, boxWidth, (height / 2) + bottom);
-			context.rect(i * boxWidth, 10, boxWidth, 150);
-			context.fillStyle = 'red';
+			context.rect(i * boxWidth, waveHeight - half, boxWidth, half + waveHeight);
+			context.fillStyle = 'rgba(0,0,0.4)';
 			context.fill();
 		}
 	}

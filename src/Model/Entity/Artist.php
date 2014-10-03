@@ -15,6 +15,11 @@ class Artist extends Entity {
     use OembedableTrait;
     use SyncTrait;
 
+    public function hasSnapshot()
+    {
+        return !is_null($this->snapshot) && $this->snapshot->isAvailable();
+    }
+
     public function getIntroduction()
     {
         if (!is_null($this->lastfm->biography_curated)) {

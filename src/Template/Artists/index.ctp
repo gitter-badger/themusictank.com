@@ -28,7 +28,7 @@
                 <?php endif; ?>
 
                 <div class="score">
-                    <?php if($featuredArtist->snapshot->isNotAvailable()) : ?>
+                    <?php if($featuredArtist->hasSnapshot()) : ?>
                         N/A
                     <?php else : ?>
                         <?= (int)($featuredArtist->snapshot->score * 100); ?>%

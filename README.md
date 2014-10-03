@@ -16,6 +16,13 @@ https://www.digitalocean.com/community/tutorials/how-to-use-sshfs-to-mount-remot
 
 sshfs francois@francoisfaubert.com:/home/francois/projects/themusictank.com/ .
 
+## Update cron
+
+./src/Console/cake tank daily
+
 ## Extra
 
 http://www.9lessons.info/2012/08/upload-files-to-amazon-s3-php.html
+
+
+retina.js

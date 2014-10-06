@@ -5,9 +5,8 @@ use App\Model\Entity\ReviewSnapshot;
 
 class ArtistReviewSnapshot extends ReviewSnapshot
 {
-
-    public function fetch()
+    public function customizeQuery($query)
     {
-        return parent::updateCache(["ReviewFrames.artist_id" => $this->artist_id]);
+        return $query->where(['artist_id' => $this->artist_id]);
     }
 }

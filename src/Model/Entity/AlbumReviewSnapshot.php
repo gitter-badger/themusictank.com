@@ -1,10 +1,12 @@
 <?php
 namespace App\Model\Entity;
 
-use Cake\ORM\Entity;
-use App\Model\Entity\SnapshotTrait;
+use App\Model\Entity\ReviewSnapshot;
 
-class AlbumReviewSnapshot extends Entity
+class AlbumReviewSnapshot extends ReviewSnapshot
 {
-    use SnapshotTrait;
+    public function customizeQuery($query)
+    {
+        return $query->where(['album_id' => $this->album_id]);
+    }
 }

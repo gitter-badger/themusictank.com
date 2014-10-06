@@ -1,54 +1,45 @@
 <?php
-class TrackSnapshotsSyncTask extends Shell {
+namespace App\Shell\Task;
 
-    public $uses = array('LastfmTrack', 'TrackReviewSnapshot');
+use App\Model\Entity\TrackReviewSnapshot;
+use Cake\ORM\TableRegistry;
+use Cake\Console\Shell;
+
+class TrackSnapshotsSyncTask extends Shell {
 
     public function execute()
     {
         $trackIdsToSync = array();
+        $tblTrackReviewSnapshot = TableRegistry::get('track_review_snapshots');
 
-        $this->out("Syncing <comment>track</comment> review snapshots");
+        $this->out("Syncing <comment>track</comment> review snapshots...");
 
         // Check whether the new reviews have been taken into account
-        $newIds = $this->TrackReviewSnapshot->query("SELECT distinct track_id FROM review_frames where track_id NOT IN (SELECT track_id FROM track_review_snapshots);");
-        if($newIds) {
-            $trackIdsToSync = array_merge($trackIdsToSync, Hash::extract($newIds, "{n}.review_frames.track_id"));
-        }
+        $trackIdsToSync = array_merge($trackIdsToSync, $tblTrackReviewSnapshot->getIdsWithNoSnapshots());
 
-        // Check whether a default snapshot was not created for a new tracks
-        $newTracks = $this->TrackReviewSnapshot->query("SELECT id FROM tracks where id NOT IN (SELECT track_id FROM track_review_snapshots);");
-        if($newTracks) {
-            $trackIdsToSync = array_merge($trackIdsToSync, Hash::extract($newTracks, "{n}.tracks.id"));
-        }
+        // Check whether a default snapshot was not created for a new artist
+        $trackIdsToSync = array_merge($trackIdsToSync, $tblTrackReviewSnapshot->getMissingIds());
 
-        $expiredIds = $this->TrackReviewSnapshot->find("list", array(
-            'fields' => array('TrackReviewSnapshot.track_id'),
-            "conditions" => array(
-                "or" => array(
-                    "TrackReviewSnapshot.lastsync IS NULL",
-                    "TrackReviewSnapshot.lastsync < " . $this->TrackReviewSnapshot->getExpiredRange()
-                )
-            )
-        ));
-        if($expiredIds) {
-            $trackIdsToSync = array_merge($trackIdsToSync, Hash::extract($expiredIds, "{n}.TrackReviewSnapshot.track_id"));
-        }
+        // Now update the expired snapshots
+        $trackIdsToSync = array_merge($trackIdsToSync, $tblTrackReviewSnapshot->getExpiredIds());
 
-        if(count($trackIdsToSync))
-        {
-            $expired = $this->LastfmTrack->Track->find("all", array(
-                "conditions" => array("Track.id" => $trackIdsToSync),
-                "fields"    => array("Track.*", "LastfmTrack.*")
-            ));
+        if (count($trackIdsToSync)) {
+
+            $expired = TableRegistry::get('track')->find()
+                ->select(['id', 'title'])
+                ->where(['id IN' => $trackIdsToSync])->all();
 
             $this->out(sprintf("Found %s snapshots that are out of sync or new.", count($expired)));
             foreach ($expired as $track) {
-                $this->TrackReviewSnapshot->data = $track;
-                $this->out(sprintf("\t<info>%d\t%s</info>", $this->TrackReviewSnapshot->getData("Track.id"), $this->TrackReviewSnapshot->getData("Track.title")));
-                $this->TrackReviewSnapshot->fetch($this->TrackReviewSnapshot->getData("Track.id"));
+
+                $snapshot = new TrackReviewSnapshot();
+                $snapshot->track_id = $track->id;
+                $snapshot->fetch();
+                $tblTrackReviewSnapshot->save($snapshot);
+
+                $this->out(sprintf("\t<info>%d\t%s</info>", $track->id, $track->title));
             }
         }
-
 
         $this->out("\t<info>Completed</info>");
     }

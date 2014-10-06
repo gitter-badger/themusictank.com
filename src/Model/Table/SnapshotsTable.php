@@ -4,9 +4,51 @@ namespace App\Model\Table;
 use Cake\ORM\Table;
 use Cake\ORM\TableRegistry;
 use Cake\Utility\Inflector;
+use Cake\Event\Event;
+
 use App\Model\Entity\ReviewSnapshot;
 
 class SnapshotsTable extends Table {
+
+    public function initialize(array $config)
+    {
+        $this->addBehavior('Timestamp');
+    }
+
+    private $_jsondFields = ["curve", "ranges", "highs", "lows", "top", "bottom"];
+
+    public function afterFind($results, $primary = false)
+    {
+
+        debug($results);
+/*
+        if(!array_key_exists("id", $results))
+        {
+            foreach($results as $idx => $row)
+            {
+                if(array_key_exists($this->alias, $row))
+                {
+                    foreach ($this->_jsondFields as $field)
+                    {
+                        if(array_key_exists($field, $row[$this->alias]) && is_string($row[$this->alias][$field]))
+                        {
+                            $results[$idx][$this->alias][$field] = json_decode($row[$this->alias][$field]);
+                        }
+                    }
+                }
+            }
+        }*/
+        return $results;
+    }
+
+    public function beforeSave(Event $event, $entity)
+    {
+         foreach ($this->_jsondFields as $field) {
+            if (!is_null($entity->{$field}) && !is_string($entity->{$field})) {
+                $entity->{$field} = json_encode($entity->{$field});
+            }
+        }
+    }
 
     public function getIdsWithNoSnapshots()
     {
@@ -62,8 +104,8 @@ class SnapshotsTable extends Table {
         $returnIds = [];
         $query = $this->find()
             ->select([$colName])
-            ->where(['updated' => null])
-            ->orWhere(['updated <' => ReviewSnapshot::getExpiredRange()]);
+            ->where(['modified' => null])
+            ->orWhere(['modified <' => ReviewSnapshot::getExpiredRange()]);
 
         foreach ($query as $row) {
             $returnIds[] = $row->{$colName};

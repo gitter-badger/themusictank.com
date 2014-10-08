@@ -10,12 +10,30 @@ use App\Model\Entity\ReviewSnapshot;
 
 class SnapshotsTable extends Table {
 
+    private $_jsondFields = ["curve", "ranges", "highs", "lows", "top", "bottom"];
+
     public function initialize(array $config)
     {
         $this->addBehavior('Timestamp');
+        $this->_populateWithDefaults();
     }
 
-    private $_jsondFields = ["curve", "ranges", "highs", "lows", "top", "bottom"];
+    private function _populateWithDefaults()
+    {
+        $this->total = 1;
+        $this->liking = 0;
+        $this->liking_pct = 0;
+        $this->disliking = 0;
+        $this->disliking_pct = 0;
+        $this->neutral = 1;
+        $this->neutral_pct = 1;
+        $this->curve = [];
+        $this->highs = [];
+        $this->lows = [];
+        $this->score = "N/A";
+        $this->top = [0,30];
+        $this->bottom = [0,30];
+    }
 
     public function afterFind($results, $primary = false)
     {

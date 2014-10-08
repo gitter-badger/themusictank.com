@@ -15,6 +15,7 @@ https://www.digitalocean.com/community/tutorials/how-to-use-sshfs-to-mount-remot
 ## Mount on Mac OS
 
 sshfs francois@francoisfaubert.com:/home/francois/projects/themusictank.com/ .
+
 umount .
 
 ## Update cron

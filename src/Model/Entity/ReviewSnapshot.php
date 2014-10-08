@@ -185,7 +185,7 @@ class ReviewSnapshot extends Entity
         $dataset = $query->order(['avg_groove' => 'DESC'])->first();
 
         $start = !is_null($dataset) ? (int)$dataset->area : 0;
-        $this->high = [$start, $start + $nbSeconds];
+        $this->top = [$start, $start + $nbSeconds];
     }
 
     public function updateLowAreaCurve()
@@ -195,6 +195,6 @@ class ReviewSnapshot extends Entity
         $dataset = $query->order(['avg_groove' => 'ASC'])->first();
 
         $end = !is_null($dataset) ? (int)$dataset->area : 0;
-        $this->low = [$end, $end + $nbSeconds];
+        $this->bottom = [$end, $end + $nbSeconds];
     }
 }

@@ -1,10 +1,12 @@
 <?php
 namespace App\Model\Entity;
 
-use Cake\ORM\Entity;
-use App\Model\Entity\SnapshotTrait;
+use App\Model\Entity\ReviewSnapshot;
 
-class TrackReviewSnapshot extends Entity
+class TrackReviewSnapshot extends ReviewSnapshot
 {
-    use SnapshotTrait;
+    public function customizeQuery($query)
+    {
+        return $query->where(['track_id' => $this->track_id]);
+    }
 }

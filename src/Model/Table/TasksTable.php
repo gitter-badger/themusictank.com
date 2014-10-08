@@ -13,12 +13,6 @@ class TasksTable extends Table {
                 'Model.beforeSave' => [
                     'created' => 'new',
                     'modified' => 'always'
-                ],
-                'Task.started' => [
-                    'modified' => 'always'
-                ],
-                'Task.ended' => [
-                    'modified' => 'always'
                 ]
             ]
         ]);
@@ -33,15 +27,11 @@ class TasksTable extends Table {
         return $task;
     }
 
-    public function setCronStart($which)
+    public function touch($which)
     {
         $task = $this->getByName($which);
-        return $this->touch($task, 'Task.started');
-    }
-
-    public function setCronEnd($which)
-    {
-        $task = $this->getByName($which);
-        return $this->touch($task, 'Task.ended');
+        $task->modified = new \DateTime();
+        $this->save($task);
+        return $task;
     }
 }

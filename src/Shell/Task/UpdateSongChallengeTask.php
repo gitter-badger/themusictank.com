@@ -25,6 +25,6 @@ class UpdateSongChallengeTask extends Shell {
             }
         }
 
-        $this->out("\tTask did nothing.");
+        $this->out("\tSong seems already up to date.");
     }
 }

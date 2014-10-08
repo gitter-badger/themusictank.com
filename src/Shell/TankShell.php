@@ -17,7 +17,7 @@ class TankShell extends Shell {
 
     public function main()
     {
-        $this->out("daily, wavescrawl, twohours");
+        $this->out("usage : one of [daily, wavescrawl, twohours]");
     }
 
     public function daily()
@@ -25,24 +25,14 @@ class TankShell extends Shell {
         $this->out("DAILY");
 
         $tracksTbl = TableRegistry::get('Tasks');
-        $tracksTbl->setCronStart("daily");
+        $tracksTbl->touch("daily.start");
 
         $this->UpdateSongChallenge->execute();
         $this->ArtistSnapshotsSync->execute();
         $this->AlbumSnapshotsSync->execute();
         $this->TrackSnapshotsSync->execute();
 
-        $tracksTbl->setCronEnd("daily");
-    }
-
-    public function wavescrawl()
-    {
-        $this->out("WAVES CRAWL");
-        $this->Config->setCronStart("dailycrawl");
-
-        $this->TrackWavesSync->execute();
-
-        $this->Config->setCronEnd("dailycrawl");
+        $tracksTbl->touch("daily.end");
     }
 
     public function twohours()
@@ -50,7 +40,8 @@ class TankShell extends Shell {
         set_time_limit ((HOUR * 2) - 5); // ok bro, you have 1h55 to finish doing your thing
         $this->out("EVERY TWO HOURS");
 
-        $this->Config->setCronStart("twohours");
+        $tracksTbl = TableRegistry::get('Tasks');
+        $tracksTbl->touch("twohours.start");
 
         // These tasks fail often due to Last.fm's api.
         // Until a noticeable increase in successful responses
@@ -60,7 +51,20 @@ class TankShell extends Shell {
         $this->PopulateArtistDetails->execute();
         $this->PopulateAlbumDetails->execute();
         $this->PopulateTrackDetails->execute();
-        $this->Config->setCronEnd("twohours");
+
+        $tracksTbl->touch("twohours.end");
+    }
+
+    public function wavescrawl()
+    {
+        $this->out("WAVES CRAWL");
+
+        $tracksTbl = TableRegistry::get('Tasks');
+        $tracksTbl->touch("wavescrawl.start");
+
+        $this->TrackWavesSync->execute();
+
+        $tracksTbl->touch("wavescrawl.end");
     }
 
 }

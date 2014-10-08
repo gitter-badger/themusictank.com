@@ -1,46 +1,76 @@
 <?php
+
 namespace App\Shell\Task;
 
 use App\Model\Entity\TrackReviewSnapshot;
+
 use Cake\ORM\TableRegistry;
 use Cake\Console\Shell;
 
 class TrackSnapshotsSyncTask extends Shell {
 
-    public function execute()
+
+    public function createNewSnapshots()
     {
-        $trackIdsToSync = array();
-        $tblTrackReviewSnapshot = TableRegistry::get('track_review_snapshots');
+        $tbltrackReviewSnapshots = TableRegistry::get('track_review_snapshots');
 
-        $this->out("Syncing <comment>track</comment> review snapshots...");
+        // These are all new records, create them.
+        $expired = TableRegistry::get('tracks')->find()
+            ->select(['id','title'])
+            ->where(['id IN' => $tbltrackReviewSnapshots->getIdsWithNoSnapshots()])->all();
 
-        // Check whether the new reviews have been taken into account
-        $trackIdsToSync = array_merge($trackIdsToSync, $tblTrackReviewSnapshot->getIdsWithNoSnapshots());
+        $this->out(sprintf("\t   <info>Found %s new snapshots.</info>", count($expired)));
 
-        // Check whether a default snapshot was not created for a new artist
-        $trackIdsToSync = array_merge($trackIdsToSync, $tblTrackReviewSnapshot->getMissingIds());
+        foreach ($expired as $track) {
+            $snapshot = new TrackReviewSnapshot();
+            $snapshot->track_id = $track->id;
+            $snapshot->fetch();
+            $tbltrackReviewSnapshots->save($snapshot);
+
+            $this->out(sprintf("\t\t%d<info>\t%s</info>", $track->id, $track->title));
+        }
+    }
+
+    public function updateExpiredSnapshots()
+    {
+        $tbltrackReviewSnapshots = TableRegistry::get('track_review_snapshots');
 
         // Now update the expired snapshots
-        $trackIdsToSync = array_merge($trackIdsToSync, $tblTrackReviewSnapshot->getExpiredIds());
+        $trackIdsToSync = $tbltrackReviewSnapshots->getExpiredIds();
+
+        $this->out(sprintf("\t   <info>Found %s out of sync snapshots.</info>", count($trackIdsToSync)));
 
         if (count($trackIdsToSync)) {
 
-            $expired = TableRegistry::get('track')->find()
-                ->select(['id', 'title'])
-                ->where(['id IN' => $trackIdsToSync])->all();
+            $expired = $tbltrackReviewSnapshots->find()
+                ->select(['id','tracks.title', 'track_id'])
+                ->contain(['tracks'])
+                ->where(['track_id IN' => $trackIdsToSync])
+                ->limit(1000)
+                ->all();
 
-            $this->out(sprintf("Found %s snapshots that are out of sync or new.", count($expired)));
-            foreach ($expired as $track) {
-
+            foreach ($expired as $expiredSnapshot) {
                 $snapshot = new TrackReviewSnapshot();
-                $snapshot->track_id = $track->id;
+                $snapshot->id = $expiredSnapshot->id;
+                $snapshot->track_id = $expiredSnapshot->track_id;
                 $snapshot->fetch();
-                $tblTrackReviewSnapshot->save($snapshot);
+                $tbltrackReviewSnapshots->save($snapshot);
 
-                $this->out(sprintf("\t<info>%d\t%s</info>", $track->id, $track->title));
+                $this->out(sprintf("\t\t%d<info>\t%s</info>", $expiredSnapshot->track_id, $expiredSnapshot->track->title));
             }
         }
+    }
 
-        $this->out("\t<info>Completed</info>");
+    public function execute()
+    {
+        $this->out("\nSyncing <comment>track</comment> review snapshots...");
+
+        $this->out("\tSyncing new snapshots...");
+        $this->createNewSnapshots();
+
+        $this->out("\tSyncing out-dated review snapshots...");
+        $this->updateExpiredSnapshots();
+
+        $this->out("\tCompleted");
     }
 }

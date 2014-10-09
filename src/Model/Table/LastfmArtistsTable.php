@@ -11,5 +11,9 @@ class LastfmArtistsTable extends Table
         $this->belongsTo('Artists');
     }
 
+    public function demotePopularArtists()
+    {
+        $this->updateAll(['is_popular' => true], ['is_popular' => false]);
+    }
 
 }

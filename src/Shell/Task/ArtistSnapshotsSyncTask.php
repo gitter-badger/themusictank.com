@@ -43,7 +43,7 @@ class ArtistSnapshotsSyncTask extends Shell {
 
             $expired = $tblArtistReviewSnapshots->find()
                 ->select(['id','Artists.name', 'artist_id'])
-                ->contain(['Artists'])
+                ->contain(['artists'])
                 ->where(['artist_id IN' => $artistIdsToSync])->all();
 
             foreach ($expired as $expiredSnapshot) {
@@ -54,7 +54,7 @@ class ArtistSnapshotsSyncTask extends Shell {
                 $snapshot->fetch();
                 $tblArtistReviewSnapshots->save($snapshot);
 
-                $this->out(sprintf("\t\t%d<info>\t%s</info>", $expiredSnapshot->artist_id, $expiredSnapshot->artist->name));
+                $this->out(sprintf("\t\t<warning>%d</warning><info>\t%s</info>", $expiredSnapshot->artist_id, $expiredSnapshot->artist["name"]));
             }
         }
     }

@@ -42,19 +42,18 @@ class AlbumSnapshotsSyncTask extends Shell {
         if (count($albumIdsToSync)) {
 
             $expired = $tblalbumReviewSnapshots->find()
-                ->select(['id', 'album.name', 'album_id'])
+                ->select(['id', 'Albums.name', 'album_id'])
                 ->contain(['albums'])
                 ->where(['album_id IN' => $albumIdsToSync])->all();
 
             foreach ($expired as $expiredSnapshot) {
-
                 $snapshot = new albumReviewSnapshot();
                 $snapshot->id = $expiredSnapshot->id;
                 $snapshot->album_id = $expiredSnapshot->album_id;
                 $snapshot->fetch();
                 $tblalbumReviewSnapshots->save($snapshot);
 
-                $this->out(sprintf("\t\t%d<info>\t%s</info>", $expiredSnapshot->album_id, $expiredSnapshot->album->name));
+                $this->out(sprintf("\t\t<warning>%d</warning><info>\t%s</info>", $expiredSnapshot->album_id, $expiredSnapshot->Albums["name"]));
             }
         }
     }

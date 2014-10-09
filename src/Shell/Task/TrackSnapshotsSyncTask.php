@@ -43,7 +43,7 @@ class TrackSnapshotsSyncTask extends Shell {
         if (count($trackIdsToSync)) {
 
             $expired = $tbltrackReviewSnapshots->find()
-                ->select(['id','tracks.title', 'track_id'])
+                ->select(['id','Tracks.title', 'track_id'])
                 ->contain(['tracks'])
                 ->where(['track_id IN' => $trackIdsToSync])
                 ->limit(1000)
@@ -56,7 +56,7 @@ class TrackSnapshotsSyncTask extends Shell {
                 $snapshot->fetch();
                 $tbltrackReviewSnapshots->save($snapshot);
 
-                $this->out(sprintf("\t\t%d<info>\t%s</info>", $expiredSnapshot->track_id, $expiredSnapshot->track->title));
+                $this->out(sprintf("\t\t<warning>%d</warning><info>\t%s</info>", $expiredSnapshot->track_id, $expiredSnapshot->Track["title"]));
             }
         }
     }

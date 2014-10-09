@@ -36,6 +36,19 @@ class LastfmApi {
         return Hash::extract($data, "topalbums.album.{n}");
     }
 
+    public function getTopArtists()
+    {
+        $data = $this->_postRequest([
+            "method" => "geo.gettopartists",
+            // [Achievement unlocked : Cultural Victory]
+            "country" => "United States",
+            "limit"  => 60
+        ]);
+
+        return Hash::extract($data, "topartists.artist.{n}");
+    }
+
+
 
 /*
     public function getLastFmTrackDetails($model, $trackName, $artistName)

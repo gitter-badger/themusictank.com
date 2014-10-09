@@ -4,9 +4,11 @@ namespace App\Model\Entity;
 
 use Cake\ORM\Entity;
 use Cake\ORM\TableRegistry;
+use Cake\Utility\Hash;
 
 use App\Model\Api\LastfmApi;
 
+use App\Model\Entity\LastfmArtist;
 use App\Model\Entity\SyncTrait;
 use App\Model\Entity\OembedableTrait;
 
@@ -79,4 +81,15 @@ class Artist extends Entity {
         return false;
     }
 
+    public function loadFromLastFm($artistInfo)
+    {
+        $this->name = $artistInfo["name"];
+
+        $this->lastfm = new LastfmArtist();
+        $this->lastfm->mbid = $artistInfo["mbid"];
+        $this->lastfm->url = $artistInfo["url"];
+        $this->lastfm->image_src = $artistInfo['image'][3]['#text'];
+
+        return $this;
+    }
 }

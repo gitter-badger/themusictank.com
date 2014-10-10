@@ -19,8 +19,26 @@ class Task extends Entity
             case 'last_trackchallenge':
             case 'popular_artists':
                 return $time->toUnixString() < (time() - 60*60*23.5);
+
+            case 'artist_details':
+                return $time->toUnixString() < (time() - 60*60*24*14);
+
+            case 'artists_discographies':
+                return $time->toUnixString() < (time() - 60*60*24*2);
         }
 
         return false;
     }
+
+    public function getTimeout() {
+        switch ($this->name) {
+            case 'artist_details':
+                return new Time(time() - 60*60*24*14); // every two weeks
+
+            // should be something like 'every tuesdays'
+            case 'artists_discographies' :
+                return new Time(time() - 60*60*24*2); // every two days
+        }
+    }
+
 }

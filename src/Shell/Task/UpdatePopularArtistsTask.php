@@ -32,14 +32,13 @@ class UpdatePopularArtistsTask extends Shell {
                 TableRegistry::get('LastfmArtists')->demotePopularArtists();
                 TableRegistry::get('Artists')->saveLastFmBatch($artists);
                 $taskTable->touch("popular_artists");
-                $this->out("\t\t<info>Completed</info>");
-                return;
+
             } else {
                 $this->out("\tWe did not receive a list of popular artists.");
             }
 
         } else {
-            $this->out("\tPopular artists already seem up to date.");
+            $this->out("\tPopular artists do not require an update.");
         }
 
         $this->out("\t<info>Completed.</info>");

@@ -15,18 +15,30 @@ class PopulateArtistDiscographyTask extends Shell {
         $this->out("Updating <comment>artist discographies</comment>...");
 
         $taskTable = TableRegistry::get('Tasks');
-        $task = $taskTable->getByName('artists_details');
-
+        $task = $taskTable->getByName('artists_discographies');
 
         if ($task->requiresUpdate()) {
 
             $artistsTbl = TableRegistry::get('Artists');
-            $artistsTbl->saveMany($artistsTbl->getWithExpiredDetails());
-            $taskTable->touch("popular_artists");
-            return;
+            $lsatfmAlbumsTbl = TableRegistry::get('LastfmAlbums');
+            $expiredArtists = $artistsTbl->getWithExpiredDiscographies($task->getTimeout())->all();
+            $lastfmApi = new LastfmApi();
 
+            if (count($expiredArtists)) {
+                $this->out(sprintf("\tFound <comment>%s artists</comment> that are out of sync.", count($expiredArtists)));
+
+                foreach ($expiredArtists as $artist) {
+                    $this->out(sprintf("\t\t%d<info>\t%s</info>...", $artist->id, $artist->name));
+                    $artist->fetchDiscography();
+                    $taskTable->touch('artists_discographies');
+                }
+
+
+            } else {
+                $this->out("\tArtist discographies are up-to-date.");
+            }
         } else {
-            $this->out("\tArtist discography update is not ready to run.");
+            $this->out("\tArtist discographies update is not ready to run.");
         }
 
 /*

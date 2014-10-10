@@ -48,7 +48,35 @@ class LastfmApi {
         return Hash::extract($data, "topartists.artist.{n}");
     }
 
+    public function getArtistInfo(Artist $artist)
+    {
+        $data = $this->_postRequest([
+            "method" => "artist.getInfo",
+            "artist" => $artist->name,
+            "mbid"  => $artist->lastfm->mbid,
+            "autocorrect" => 1
+        ]);
 
+        return Hash::extract($data, "artist");
+    }
+
+    public static function cleanWikiText($text)
+    {
+        $text = trim($text);
+        $text = preg_replace('/Read more about .* on .*/', '', $text);
+        $text = preg_replace('/User-contributed text is available under the Creative Commons By-SA License and may also be available under the GNU FDL./', '', $text);
+        $text = strip_tags($text);
+        $text = str_replace(array("\r\n", "\r"), "\n", $text);
+        $lines = explode("\n", $text);
+        $new_lines = array();
+
+        foreach ($lines as $i => $line) {
+            $data = trim($line);
+            if(!empty($data)) $new_lines[] = $data;
+        }
+
+        return "<p>" . implode("</p>\n<p>", $new_lines) . "</p>";
+    }
 
 /*
     public function getLastFmTrackDetails($model, $trackName, $artistName)

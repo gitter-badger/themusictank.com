@@ -18,8 +18,7 @@ class UpdateSongChallengeTask extends Shell {
             $track = TableRegistry::get('Tracks')->findNewDailyChallenger();
             if ($track) {
                 $this->out(sprintf("\tThe new daily challenger is '%s'.", $track->title));
-                $taskTable->touch($task);
-                $taskTable->save($task);
+                $taskTable->touch("last_trackchallenge");
                 $this->out("\t<info>Completed</info>");
                 return;
             }

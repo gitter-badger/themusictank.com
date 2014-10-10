@@ -2,6 +2,7 @@
 namespace App\Model\Table;
 
 use Cake\ORM\Table;
+use Cake\ORM\TableRegistry;
 
 class ArtistsTable extends Table {
 
@@ -10,6 +11,17 @@ class ArtistsTable extends Table {
         $this->hasOne('ArtistReviewSnapshots', ['className' => 'ArtistReviewSnapshots', 'propertyName' => 'snapshot']);
 
         $this->hasMany('Albums');
+
+        $this->addBehavior('Timestamp', [
+            'events' => [
+                'Model.beforeSave' => [
+                    'created' => 'new'
+                ],
+                'Lastfm.infoUpdated' => [
+                    'modified' => 'always'
+                ]
+            ]
+        ]);
     }
 
     /**
@@ -81,19 +93,23 @@ class ArtistsTable extends Table {
             ->contain(['ArtistReviewSnapshots']);
     }
 
-    public function getWithExpiredDetails()
-    {/*
-        SELECT
-                Artist.id
-            FROM artists as Artist
-            LEFT JOIN lastfm_artists as Lastfm_Artist on Artist.id = Lastfm_Artist.artist_id
-            WHERE
-                Artist.id NOT IN (SELECT artist_id FROM albums)
-                AND Lastfm_Artist.lastsync < " .  $this->Artist->LastfmArtist->getExpiredRange() . "
-            LIMIT 200;
-        ");*/
+    public function getWithExpiredDetails($timeout, $limit = 200)
+    {
+        return $this->find()
+            ->contain(['LastfmArtists'])
+            ->where(['LastfmArtists.modified < ' => $timeout])
+            ->orWhere(['LastfmArtists.modified IS NULL'])
+            ->limit($limit);
     }
 
+    public function getWithExpiredDiscographies($timeout, $limit = 200)
+    {
+        return $this->find()
+            ->contain(['Albums'])
+            ->where(['Artists.modified < ' => $timeout])
+            ->orWhere(['Artists.modified IS NULL'])
+            ->limit($limit);
+    }
 
     /**
      * When saving a batch of entities, ensure the model doesn't already exist before

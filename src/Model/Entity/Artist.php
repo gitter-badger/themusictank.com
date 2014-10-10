@@ -11,11 +11,13 @@ use App\Model\Api\LastfmApi;
 use App\Model\Entity\LastfmArtist;
 use App\Model\Entity\SyncTrait;
 use App\Model\Entity\OembedableTrait;
+use App\Model\Entity\ThumbnailTrait;
 
 class Artist extends Entity {
 
     use OembedableTrait;
     use SyncTrait;
+    use ThumbnailTrait;
 
     public function hasSnapshot()
     {
@@ -75,7 +77,7 @@ class Artist extends Entity {
 
             // Regardless if there were additional albums added to this entity,
             // we have to save the last sync timestamp.
-            $this->lastsync = time();
+            $artist->modified = new \DateTime();
             return TableRegistry::get('Artists')->save($this);
         }
         return false;
@@ -84,12 +86,21 @@ class Artist extends Entity {
     public function loadFromLastFm($artistInfo)
     {
         $this->name = $artistInfo["name"];
+        if (!empty($artistInfo['image'][3]['#text'])) {
+            $this->image_src = $artistInfo['image'][3]['#text'];
 
-        $this->lastfm = new LastfmArtist();
-        $this->lastfm->mbid = $artistInfo["mbid"];
-        $this->lastfm->url = $artistInfo["url"];
-        $this->lastfm->image_src = $artistInfo['image'][3]['#text'];
+            if((int)$this->id > 0)  {
+                // Delete the previous image if it has been modified
+                $this->deleteThumbnails();
+                $this->createThumbnails();
+            }
+        }
 
+        if (is_null($this->lastfm)) {
+            $this->lastfm = new LastfmArtist();
+        }
+
+        $this->lastfm->loadFromLastFm($artistInfo);
         return $this;
     }
 }

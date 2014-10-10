@@ -94,4 +94,25 @@ class Album extends Entity
             ->first();
     }
 
+    public function loadFromLastFm($albumInfo)
+    {
+        $this->name = $artistInfo["name"];
+        if (!empty($artistInfo['image'][3]['#text'])) {
+            $this->image_src = $artistInfo['image'][3]['#text'];
+
+            if((int)$this->id > 0)  {
+                // Delete the previous image if it has been modified
+                $this->deleteThumbnails();
+                $this->createThumbnails();
+            }
+        }
+
+        if (is_null($this->lastfm)) {
+            $this->lastfm = new LastfmArtist();
+        }
+
+        $this->lastfm->loadFromLastFm($artistInfo);
+        return $this;
+    }
+
 }

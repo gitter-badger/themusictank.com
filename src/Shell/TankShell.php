@@ -47,9 +47,12 @@ class TankShell extends Shell {
         // Until a noticeable increase in successful responses
         // query them often to make up for failed attempts
         $this->UpdatePopularArtists->execute();
+        $this->PopulateArtistDetails->execute();
         $this->PopulateArtistDiscography->execute();
 
-       /* $this->PopulateArtistDetails->execute();
+        // OK la tu es rendu a saver les albums.
+
+       /*
         $this->PopulateAlbumDetails->execute();
         $this->PopulateTrackDetails->execute();*/
 

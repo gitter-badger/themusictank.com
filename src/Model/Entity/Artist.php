@@ -24,13 +24,13 @@ class Artist extends Entity {
         return !is_null($this->snapshot) && $this->snapshot->isAvailable();
     }
 
-    public function getIntroduction()
+    protected function _getIntroduction()
     {
-        if (!is_null($this->lastfm->biography_curated)) {
-            return trim($this->lastfm->biography_curated);
+        if (!is_null($this->get("lastfm")->get("biography_curated"))) {
+            return $this->get("lastfm")->get("biography_curated");
         }
-        else if (!is_null($this->lastfm->biography)) {
-            return trim($this->lastfm->biography);
+        elseif (!is_null($this->get("lastfm")->get("biography"))) {
+            return $this->get("lastfm")->get("biography");
         }
 
         return "N/A";
@@ -68,32 +68,12 @@ class Artist extends Entity {
             ->first();
     }
 
-    public function fetchDiscography()
-    {
-        if($this->isExpired()) {
-            $lastfmApi = new LastfmApi();
-            $apiAlbums = $lastfmApi->getArtistTopAlbums($this);
-            TableRegistry::get('LastfmAlbums')->filterNewByArtist($this, $apiAlbums);
-
-            // Regardless if there were additional albums added to this entity,
-            // we have to save the last sync timestamp.
-            $artist->modified = new \DateTime();
-            return TableRegistry::get('Artists')->save($this);
-        }
-        return false;
-    }
-
     public function loadFromLastFm($artistInfo)
     {
         $this->name = $artistInfo["name"];
+
         if (!empty($artistInfo['image'][3]['#text'])) {
             $this->image_src = $artistInfo['image'][3]['#text'];
-
-            if((int)$this->id > 0)  {
-                // Delete the previous image if it has been modified
-                $this->deleteThumbnails();
-                $this->createThumbnails();
-            }
         }
 
         if (is_null($this->lastfm)) {

@@ -1,6 +1,4 @@
-<div class="header-wrapper plain">
-    <i class="mask"></i>
-</div>
+<?= $this->element('headers/backdrop'); ?>
 
 <article class="container container-fluid static">
 

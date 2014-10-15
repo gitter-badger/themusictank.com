@@ -1,11 +1,8 @@
 <?php
     $isLogged = $this->Session->check('Auth.User.User.id');
 ?>
-<div class="header-wrapper">
-    <?= $this->Html->image( $album->getImageUrl("blur"), ["alt" => $album->name, "class" => "blurred"]);  ?>
-    <?= $this->Html->image( $album->getImageUrl("big"), ["alt" => $album->name, "class" => "clean"]);  ?>
-    <i class="mask"></i>
-</div>
+
+<?= $this->element('headers/backdrop', ['entity' => $album]); ?>
 
 <article class="container container-fluid">
 

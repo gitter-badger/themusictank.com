@@ -28,8 +28,15 @@
 </div>
 
 <?php $this->start('header-extra'); ?>
+<?= $this->fetch('header-extra'); ?>
 <style type="text/css">
-    .details .primary a { background-image:url(<?= $track->album->getImageUrl(); ?>); }
-    .details .secondary a { background-image:url(<?= $track->album->artist->lastfm->getImageUrl(); ?>); }
+    @media (min-width: 501px) {
+        .details .primary a { background-image:url(<?= $track->album->getImageUrl(); ?>); }
+        .details .secondary a { background-image:url(<?= $track->album->artist->getImageUrl(); ?>); }
+    }
+    @media (max-width: 500px) {
+        .details .primary a { background-image:url(<?= $album->getImageUrl('mobile_thumb'); ?>); }
+        .details .secondary a { background-image:url(<?= $album->artist->getImageUrl('mobile_thumb'); ?>); }
+    }
 </style>
 <?php $this->end(); ?>

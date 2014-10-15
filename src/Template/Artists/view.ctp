@@ -6,11 +6,8 @@
         $this->Html->link($artist->name, array('controller' => 'artists', 'action' => 'view',  $artist->slug))
     ]]);
 ?>
-<div class="header-wrapper">
-    <?= $this->Html->image($artist->lastfm->getImageUrl("blur"), ['alt' => $artist->name, 'class' => "blurred"]);  ?>
-    <?= $this->Html->image($artist->lastfm->getImageUrl("big"), ['alt' => $artist->name, 'class' => "clean"]);  ?>
-    <i class="mask"></i>
-</div>
+
+<?= $this->element('headers/backdrop', ['entity' => $artist]); ?>
 
 <article class="container container-fluid">
 
@@ -23,7 +20,7 @@
             <div class="col-md-2 enjoyment">
                 <span><?= __("Enjoyed"); ?></span>
                 <em>
-                    <?php if($artist->snapshot->isNotAvailable()) : ?>
+                    <?php if(is_null($artist->snapshot)) : ?>
                         N/A
                     <?php else : ?>
                         <?= (int)$artist->snapshot->liking_pct; ?>%
@@ -33,7 +30,7 @@
             <div class="col-md-2 dislike">
                 <span><?= __("Disliked"); ?></span>
                 <em>
-                    <?php if($artist->snapshot->isNotAvailable()) : ?>
+                    <?php if(is_null($artist->snapshot)) : ?>
                         N/A
                     <?php else : ?>
                         <?= (int)$artist->snapshot->disliking_pct; ?>%
@@ -71,7 +68,7 @@
             <?php if(isset($bestAlbum)) : ?>
             <div class="col-md-4 best-album">
                 <span><?= __("Best Album"); ?></span>
-                <em><?= $this->Html->link($bestAlbum->name, array('controller' => 'albums', 'action' => 'view', $bestAlbum->slug)); ?>&nbsp;<?= (int)$bestAlbum->snapshot->liking_pct; ?>%</em>
+                <em><?= $this->Html->link($bestAlbum->name, array('controller' => 'albums', 'action' => 'view', $bestAlbum->slug)); ?>&nbsp;<?= is_null($bestAlbum->snapshot) ? 0 : (int)$bestAlbum->snapshot->liking_pct; ?>%</em>
             </div>
             <?php endif; ?>
 
@@ -79,7 +76,7 @@
             <?php if(isset($worstAlbum)) : ?>
             <div class="col-md-4 worst-album">
                 <span><?= __("Worst Album"); ?></span>
-                <em><?= $this->Html->link($worstAlbum->name, array('controller' => 'albums', 'action' => 'view', $worstAlbum->slug)); ?>&nbsp;<?= (int)$worstAlbum->snapshot->liking_pct; ?>%</em>
+                <em><?= $this->Html->link($worstAlbum->name, array('controller' => 'albums', 'action' => 'view', $worstAlbum->slug)); ?>&nbsp;<?= is_null($bestAlbum->snapshot) ? 0 : (int)$worstAlbum->snapshot->liking_pct; ?>%</em>
             </div>
             <?php endif; ?>
 
@@ -87,7 +84,7 @@
                 <?php if($isLogged) : ?>
                     <div class="col-md-3">
                         <h3><?= __("Your subscriptions"); ?></h3>
-                        <?php if($artist->subsciptionsSnapshot->isNotAvailable()) : ?>
+                        <?php if(is_null($artist->subsciptionsSnapshot)) : ?>
                             N/A
                         <?php else : ?>
                             <?= (int)($artist->subsciptionsSnapshot->score * 100); ?>%
@@ -100,7 +97,7 @@
 
                     <div class="col-md-3">
                         <h3><?= __("You"); ?></h3>
-                        <?php if($artist->userSnapshot->isNotAvailable()) : ?>
+                        <?php if(is_null($artist->userSnapshot)) : ?>
                             N/A
                         <?php else : ?>
                             <?= (int)($artist->userSnapshot->score * 100); ?>%
@@ -118,7 +115,7 @@
         </div>
     </header>
 
-    <?php $wiki =  $artist->getIntroduction(); ?>
+    <?php $wiki =  $artist->get('introduction'); ?>
     <?php if(strlen(strip_tags($wiki)) > 0) : ?>
     <div class="row wiki <?= strlen($wiki) <= 800 ? "full" : ""; ?>">
         <div class="col-md-12 lead">
@@ -152,8 +149,8 @@
     <div class="container container-fluid">
         <p>
             <?= __("Artist biography and profile image courtesy of"); ?> <?=$this->Html->link("Last.fm", "http://www.last.fm/", ["target" => "_blank"]); ?>.
-            <?php if($artist->lastfm->hasSyncDate()) : ?>
-                <?= __("They were last updated on"); ?> <?= $artist->lastfm->getFormattedSyncDate(); ?>.
+            <?php if($artist->hasSyncDate()) : ?>
+                <?= __("They were last updated"); ?> <?= $artist->getFormattedSyncDate(); ?>.
             <?php endif; ?>
             <?= __("User-contributed text is available under the Creative Commons By-SA License and may also be available under the GNU FDL."); ?>
         </p>

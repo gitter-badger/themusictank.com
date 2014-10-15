@@ -1,10 +1,4 @@
-<?php if (isset($featuredArtist)) : ?>
-<div class="header-wrapper">
-    <?= $this->Html->image($featuredArtist->lastfm->getImageUrl("blur"), ['alt' => $featuredArtist->name, 'class' => "blurred"]);  ?>
-    <?= $this->Html->image($featuredArtist->lastfm->getImageUrl("big"), ['alt' => $featuredArtist->name, 'class' => "clean"]);  ?>
-    <i class="mask"></i>
-</div>
-<?php endif; ?>
+<?= $this->element('headers/backdrop', ['entity' => $featuredArtist]); ?>
 
 <article class="container container-fluid popular-artists">
     <header class="featured">
@@ -28,7 +22,7 @@
                 <?php endif; ?>
 
                 <div class="score">
-                    <?php if($featuredArtist->hasSnapshot()) : ?>
+                    <?php if(is_null($featuredArtist->snapshot)) : ?>
                         N/A
                     <?php else : ?>
                         <?= (int)($featuredArtist->snapshot->score * 100); ?>%

@@ -8,7 +8,6 @@ use App\Model\Entity\Album;
 use App\Model\Entity\LastfmAlbum;
 use App\Model\Api\LastfmApi;
 
-use Cake\ORM\Query;
 use Cake\ORM\TableRegistry;
 
 class LastfmAlbumsTable extends Table
@@ -19,18 +18,34 @@ class LastfmAlbumsTable extends Table
         $this->addBehavior('Syncable');
     }
 
-    public function findListMbids(Query $query, array $options)
-    {
-        if (get_class($options['artist']) !== "App\Model\Entity\Artist") {
-            throw new Error('Missing artist entity.');
-        }
 
-        return $query->select(["mbid"])
-            ->where(["Albums.artist_id" => $options['artist']->id])
-            ->contain(['Albums'])
-            ->extract("mbid")->toArray();
+    // Fetch only the album names. The details will have to be pulled at another time.
+    // This is due to limitations in Lastfm's api data.
+    public function fetchDiscography(Artist $artist)
+    {
+        if ($artist->requiresUpdate()) {
+            $lastfmApi = new LastfmApi();
+            $apiAlbums = $lastfmApi->getArtistTopAlbums($artist);
+            $this->filterNewByArtist($artist, $apiAlbums);
+
+            TableRegistry::get('Artists')->save($artist);
+
+// Ca marche celui la... ca veut tu dire que je dois looper $this->album[i]->isNew dans artist?
+
+
+            TableRegistry::get('Albums')->save($artist->albums[0]);
+            debug($artist);
+        }
+        return false;
     }
 
+    public function getMbidsByArtist(Artist $artist)
+    {
+        return $this->find()
+            ->select(["mbid"])
+            ->where(["Albums.artist_id" => $artist->id])
+            ->contain(['Albums']);
+    }
 
     /**
      *  This is used only when creating empty album shell with no details other than the title (ex: from ajax search)
@@ -43,7 +58,6 @@ class LastfmAlbumsTable extends Table
             if(trim($apiAlbum['mbid']) != "" && !in_array($apiAlbum['mbid'], $currentMbids)) {
                 $artist->albums[] = new Album([
                     'name' => $apiAlbum['name'],
-                    'artist_id' => $artist->id,
                     'LastfmAlbum' => new LastfmAlbum([
                         'mbid' => $apiAlbum['mbid']
                     ])

@@ -14,7 +14,7 @@
             <?php endif; ?>
 
             <div class="score">
-                 <?php if($album->snapshot->isNotAvailable()) : ?>
+                <?php if(is_null($album->snapshot)) : ?>
                     N/A
                 <?php else : ?>
                     <?= (int)($album->snapshot->score * 100); ?>%

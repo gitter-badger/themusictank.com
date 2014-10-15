@@ -21,6 +21,8 @@ class UpdateSongChallengeTask extends Shell {
                 $taskTable->touch("last_trackchallenge");
                 $this->out("\t<info>Completed</info>");
                 return;
+            } else {
+                $this->out("\t<warning>There are no available tracks.</warning>");
             }
         }
 

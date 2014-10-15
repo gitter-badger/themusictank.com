@@ -8,11 +8,7 @@
     ]]);
 ?>
 
-<div class="header-wrapper">
-    <?= $this->Html->image($artist->lastfm->getImageUrl("blur"), ['alt' => $artist->name, 'class' => "blurred"]);  ?>
-    <?= $this->Html->image($artist->lastfm->getImageUrl("big"), ['alt' => $artist->name, 'class' => "clean"]);  ?>
-    <i class="mask"></i>
-</div>
+<?= $this->element('headers/backdrop', ['entity' => $artist]); ?>
 
 <article class="container container-fluid">
 

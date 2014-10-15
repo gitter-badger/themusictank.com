@@ -2,6 +2,10 @@
 namespace App\Model\Table;
 
 use Cake\ORM\Table;
+use Cake\ORM\Query;
+use App\Model\Entity\Artist;
+use App\Model\Api\LastfmApi;
+use Cake\ORM\TableRegistry;
 
 class AlbumsTable extends Table {
 
@@ -9,25 +13,78 @@ class AlbumsTable extends Table {
     {
         $this->belongsTo('Artists');
 
-        $this->hasMany('Tracks');
-
         $this->hasOne('LastfmAlbums', ['propertyName' => 'lastfm']);
         $this->hasOne('AlbumReviewSnapshots', ['propertyName' => 'snapshot']);
+        $this->hasMany('Tracks');
+
+        $this->addBehavior('Sluggable', ['contain' => [
+            'Artists' => ['LastfmArtists'],
+            'LastfmAlbums',
+            'AlbumReviewSnapshots',
+            'Tracks' => ['TrackYoutubes', 'TrackReviewSnapshots']
+        ]]);
+        $this->addBehavior('Syncable');
+        $this->addBehavior('Thumbnail');
     }
 
-    public function getBySlug($slug)
+    /** Fetches only the album names. The details will have to be pulled at another time.
+     *  This is due to limitations in Lastfm's api data.
+     */
+    public function fetchDiscography(Artist $artist)
     {
-        return $this->find()
-            ->where(['Albums.slug' => $slug])
-            ->contain(['Artists' => ['LastfmArtists'], 'LastfmAlbums', 'AlbumReviewSnapshots', 'Tracks' => ['TrackYoutubes', 'TrackReviewSnapshots']]);
+        if ($artist->requiresUpdate()) {
+
+            $lastfmApi = new LastfmApi();
+            $topAlbums = $lastfmApi->getArtistTopAlbums($artist);
+            if ($this->updateArtistAlbums($artist, $topAlbums)) {
+                foreach ($artist->albums as $album) {
+                    // Because the fetchDiscography function is all
+                    // about getting album names, only save new albums.
+                    if($album->isNew()) {
+                        $this->save($album);
+                    }
+                }
+            }
+
+            // Update modified time on artist.
+            $tblArtists = TableRegistry::get('Artists');
+            $tblArtists->touch($artist, 'Lastfm.onUpdate');
+            return $tblArtists->save($artist);
+        }
+
+        return false;
     }
 
-    public function getNewReleases($limit = 1)
+    /**
+     *  This is used only when creating empty album shell with no details other than the title (ex: from ajax search)
+     *  return bool True if there was additions
+     */
+    public function updateArtistAlbums(Artist $artist, array $apiAlbums)
     {
-        return $this->find()
-            ->limit((int)$limit)
-            ->order('release_date', 'DESC')
-            ->contain(['Artists', 'LastfmAlbums', 'AlbumReviewSnapshots', 'Tracks']);
+        $currentMbids = TableRegistry::get('LastfmAlbums')->find('listMbids', ['artist' => $artist]);
+        foreach($apiAlbums as $apiAlbum) {
+            if(trim($apiAlbum['mbid']) != "" && !in_array($apiAlbum['mbid'], $currentMbids)) {
+                $artist->albums[] = $this->newEntity([
+                    'name' => $apiAlbum['name'],
+                    'artist_id' => $artist->id,
+                    'lastfm' => [
+                        'mbid' => $apiAlbum['mbid']
+                    ]
+                ]);;
+            }
+        }
+
+        return count($artist->albums) > count($currentMbids);
+    }
+
+    public function findNewReleases(Query $query, array $options = [])
+    {
+        $options += [
+            'limit' => 1,
+            'contain' => ['Artists', 'LastfmAlbums', 'AlbumReviewSnapshots', 'Tracks']
+        ];
+
+        return $query->order('release_date', 'DESC')->contain($options['contain']);
     }
 
     public function getByArtistId($artistId)
@@ -68,4 +125,12 @@ class AlbumsTable extends Table {
             ->contain(['AlbumReviewSnapshots']);
     }
 
+    public function getExpired($timeout = 0, $limit = 200)
+    {
+        return $this->find()
+            ->where(['LastfmAlbums.modified < ' => $timeout])
+            ->orWhere(['LastfmAlbums.modified IS NULL'])
+            ->contain(['LastfmAlbums', 'Artists', 'Tracks'])
+            ->limit($limit);
+    }
 }

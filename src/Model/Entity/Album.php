@@ -2,30 +2,46 @@
 
 namespace App\Model\Entity;
 
-use Cake\ORM\Entity, App\Model\Entity\ThumbnailTrait, Cake\ORM\TableRegistry;
-
+use App\Model\Api\LastfmApi;
+use App\Model\Entity\Track;
+use App\Model\Entity\ThumbnailTrait;
 use App\Model\Entity\OembedableTrait;
+
+use Cake\I18n\Time;
+use Cake\ORM\TableRegistry;
+use Cake\ORM\Entity;
+use Cake\Utility\Hash;
 
 class Album extends Entity
 {
     use ThumbnailTrait;
     use OembedableTrait;
 
-    public function getIntroduction()
+/*
+    protected function _getIntroduction($title)
     {
-        if (!is_null($this->lastfm->wiki_curated)) {
-            return $this->lastfm->wiki_curated;
+        if (!is_null($this->get("lastfm")->get("wiki_curated"))) {
+            return $this->get("lastfm")->get("wiki_curated");
         }
-        else if (!is_null($this->lastfm->wiki)) {
-            return $this->lastfm->wiki;
+        elseif (!is_null($this->get("lastfm")->get("wiki"))) {
+            return $this->get("lastfm")->get("wiki");
         }
 
         return sprintf(__("This is an album by %s."), $this->artist->name);
+    } */
+
+    protected function _getIsProcessing()
+    {
+        return !($this->get("lastfm") && $this->get("lastfm")->hasSyncDate());
     }
 
     public function hasReleaseDate()
     {
-        return (int)$this->release_date > 0;
+        if (!is_null($this->get("release_date"))) {
+            return $this->get("release_date")->toUnixString() > 0;
+        }
+
+        return false;
     }
 
     public function getTrackDuration()
@@ -39,9 +55,13 @@ class Album extends Entity
         return $total;
     }
 
-    public function getFormatedReleaseDate($datePattern = "F j Y")
+    public function getFormatedReleaseDate()
     {
-        return date($datePattern, (int)$this->release_date);
+        if (!is_null($this->release_date)) {
+            return $this->release_date->timeAgoInWords();
+        }
+
+        return "never actually.";
     }
 
     public function isNotable()
@@ -94,24 +114,63 @@ class Album extends Entity
             ->first();
     }
 
+    public function syncToRemote()
+    {
+        $lastfmApi = new LastfmApi();
+        $this->loadFromLastFm($lastfmApi->getAlbumInfo($this));
+        TableRegistry::get('Albums')->save($this);
+
+        $this->lastfm->modified = new \DateTime();
+        TableRegistry::get('LastfmAlbums')->save($this->lastfm);
+    }
+
+    // Collect references to the track's mbid to lookup more quickly
+    public function getMBIDList()
+    {
+        $map = [];
+        foreach($this->tracks as $track) {
+            $map[$track->mbid] = $track;
+        }
+        return $map;
+    }
+
+
     public function loadFromLastFm($albumInfo)
     {
-        $this->name = $artistInfo["name"];
-        if (!empty($artistInfo['image'][3]['#text'])) {
-            $this->image_src = $artistInfo['image'][3]['#text'];
+        $this->name = $albumInfo["name"];
+        $this->release_date_text = trim($albumInfo["releasedate"]);
+        $this->release_date = new Time($this->release_date_text);
 
-            if((int)$this->id > 0)  {
-                // Delete the previous image if it has been modified
-                $this->deleteThumbnails();
-                $this->createThumbnails();
+        // Try and save a tuumbnail
+        if (!empty($albumInfo['image'][3]['#text'])) {
+            $this->image_src = $albumInfo['image'][3]['#text'];
+        }
+
+        // Save other secondary album information
+        if (is_null($this->lastfm)) {
+            $this->lastfm = new LastfmAlbum();
+        }
+        $this->lastfm->loadFromLastFm($albumInfo);
+
+        // Save tracks
+        $trackInfos = Hash::extract($albumInfo, "tracks.track");
+        if (count($trackInfos)) {
+            // Update matching tracks and append new ones if they don't match
+            $mbids = $this->getMBIDList();
+            foreach ($trackInfos as $trackInfo) {
+                if(is_array($trackInfo) && array_key_exists('mbid', $trackInfo) && empty($trackInfo["mbid"]) != "") {
+                    if(array_key_exists($trackInfo['mbid'], $mbids)) {
+                        $mbids[$trackInfo['mbid']]->loadFromLastFm($trackInfo);
+                    }
+                    else {
+                        $track = new Track();
+                        $track->loadFromLastFm($trackInfo);
+                        $this->tracks[] = $track;
+                    }
+                }
             }
         }
 
-        if (is_null($this->lastfm)) {
-            $this->lastfm = new LastfmArtist();
-        }
-
-        $this->lastfm->loadFromLastFm($artistInfo);
         return $this;
     }
 

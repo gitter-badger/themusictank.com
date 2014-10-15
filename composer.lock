@@ -131,12 +131,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/cakephp/cakephp.git",
-                "reference": "e92e4e526ccc58f4a4993e2d115f4774fd794452"
+                "reference": "591b6ee61aa669309d0e6add39ed9c396a36b5a2"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/cakephp/cakephp/zipball/e92e4e526ccc58f4a4993e2d115f4774fd794452",
-                "reference": "e92e4e526ccc58f4a4993e2d115f4774fd794452",
+                "url": "https://api.github.com/repos/cakephp/cakephp/zipball/591b6ee61aa669309d0e6add39ed9c396a36b5a2",
+                "reference": "591b6ee61aa669309d0e6add39ed9c396a36b5a2",
                 "shasum": ""
             },
             "require": {
@@ -188,7 +188,7 @@
             "keywords": [
                 "framework"
             ],
-            "time": "2014-10-08 04:53:25"
+            "time": "2014-10-15 15:04:38"
         },
         {
             "name": "ircmaxell/password-compat",

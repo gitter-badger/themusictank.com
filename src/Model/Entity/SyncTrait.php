@@ -1,29 +1,34 @@
 <?php
 namespace App\Model\Entity;
+use Cake\I18n\Time;
+use Cake\ORM\TableRegistry;
 
 trait SyncTrait {
+
+    function requiresUpdate()
+    {
+        if (is_null($this->modified)) {
+            return true;
+        }
+
+        $time = new Time($this->modified);
+        return $time->toUnixString() < $this->getExpiredRange();
+    }
 
     public function getExpiredRange()
     {
         return time() - (HOUR * 12);
     }
 
-    public function isExpired()
-    {
-        if($this->hasSyncDate()) {
-            return $this->lastsync < $this->getExpiredRange();
-        }
-        return true;
-    }
-
     public function hasSyncDate()
     {
-        return (int)$this->lastsync > 0;
+        return !is_null($this->modified);
     }
 
     public function getFormattedSyncDate($dateFormat = "F j, g:i a")
     {
-        return date($dateFormat, (int)$this->lastsync);
+        $time = new Time($this->modified);
+        return $time->timeAgoInWords();
+     //   return $time->format($dateFormat);
     }
-
 }

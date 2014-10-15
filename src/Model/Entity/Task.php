@@ -14,20 +14,9 @@ class Task extends Entity
         }
 
         $time = new Time($this->modified);
+        $timeout = $this->getTimeout();
 
-        switch ($this->name) {
-            case 'last_trackchallenge':
-            case 'popular_artists':
-                return $time->toUnixString() < (time() - 60*60*23.5);
-
-            case 'artist_details':
-                return $time->toUnixString() < (time() - 60*60*24*14);
-
-            case 'artists_discographies':
-                return $time->toUnixString() < (time() - 60*60*24*2);
-        }
-
-        return false;
+        return $time->toUnixString() < $time->toUnixString();
     }
 
     public function getTimeout() {
@@ -38,6 +27,9 @@ class Task extends Entity
             // should be something like 'every tuesdays'
             case 'artists_discographies' :
                 return new Time(time() - 60*60*24*2); // every two days
+
+            default :
+                return new Time(time() - 60*60*23.5); // shy of everyday
         }
     }
 

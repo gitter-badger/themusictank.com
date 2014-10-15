@@ -17,7 +17,7 @@ class AlbumsController extends AppController {
         $weekDate       = date("F j Y", mktime(0, 0, 0, date("n"), date("j") - date("N")));
         $title          = sprintf(__("New releases for the week of %s"), $weekDate);
         $limit          = 4*4;
-        $newReleases    = $this->Paginator->paginate($this->Album->getNewReleases($limit), ['limit' => $limit]);
+        $newReleases    = $this->Paginator->paginate( $this->Albums->find('newReleases', ['limit' => $limit]), ['limit' => $limit]);
 
         $this->set([
             'newReleases'   => $newReleases,
@@ -37,13 +37,13 @@ class AlbumsController extends AppController {
      */
     public function view($albumSlug = "")
     {
-        $album = $this->Albums->getBySlug($albumSlug)->first();
+        $album = $this->Albums->find('slug', ['slug' => $albumSlug])->first();
 
         if (!$album) {
             throw new NotFoundException(sprintf(__("Could not find the album %s"), $albumSlug));
         }
 
-        if(!$album->lastfm || !$album->lastfm->hasSyncDate()) {
+        if ($album->get("isProcessing")) {
             $this->redirect(["controller" => "albums", "action" => "processing", $albumSlug]);
         }
 
@@ -86,7 +86,7 @@ class AlbumsController extends AppController {
 
     public function processing($albumSlug = "")
     {
-        $album = $this->Albums->getBySlug($albumSlug)->first();
+        $album = $this->Albums->find('slug', ['slug' => $albumSlug])->first();
 
         if (!$album) {
             throw new NotFoundException(sprintf(__("Could not find the album %s"), $albumSlug));
@@ -112,7 +112,7 @@ class AlbumsController extends AppController {
      */
     public function embed($albumSlug = "")
     {
-        $album = $this->Albums->getBySlug($albumSlug)->first();
+        $album = $this->Albums->find('slug', ['slug' => $albumSlug])->first();
 
         if(!$album) {
             throw new NotFoundException(sprintf(__("Could not find the album %s"), $albumSlug));

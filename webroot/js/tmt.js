@@ -10,8 +10,8 @@ $(function() {
 		".breadcrumbs" : $('.breadcrumbs'),
 		".header-wrapper" : $('.header-wrapper'),
 		".header-wrapper .mask" : $('.header-wrapper .mask'),
-		".header-wrapper img" : $('.header-wrapper img'),
-		".header-wrapper img.clean" : $('.header-wrapper img.clean')
+		".header-wrapper div" : $('.header-wrapper div'),
+		".header-wrapper div.clean" : $('.header-wrapper div.clean')
 	}
 
 
@@ -48,17 +48,17 @@ $(function() {
 		// Handle the blurring of the header image
 		if(_domcache['.header-wrapper'].length) {
 
-			var wHeight = _domcache["window"].height(),
-				wWidth = _domcache["window"].width(),
-    			aspectRatio      = _domcache['.header-wrapper'].innerWidth() / _domcache['.header-wrapper'].innerHeight()
+			var //wHeight = _domcache["window"].height(),
+				//wWidth = _domcache["window"].width(),
+    			//aspectRatio      = _domcache['.header-wrapper'].innerWidth() / _domcache['.header-wrapper'].innerHeight()
     			scrollTop = _domcache["window"].scrollTop(),
 				scrolledDistance = scrollTop / 5,
 				wrapHeight = _domcache['.header-wrapper'].innerHeight(),
-				imgHeight = _domcache['.header-wrapper img.clean'].height(),
+				imgHeight = _domcache['.header-wrapper div.clean'].height(),
 			 	opacityVal = 1 - (scrollTop / 150.0),
 			 	threshold = 5;
 
-
+/*
 			// Ensure the image is always in cover mode
 			if ( (wWidth / wHeight) < aspectRatio ) {
 				if(!_domcache['.header-wrapper'].hasClass("vertical")) {
@@ -68,21 +68,24 @@ $(function() {
 				if(_domcache['.header-wrapper'].hasClass("vertical")) {
 					_domcache['.header-wrapper'].removeClass("vertical");
 				}
-			}
+			}*/
+
+			// To make the thing go parallax again, I'll have to hardcode the height
+			// and and -= the top position i think.
 
 			if(scrolledDistance > threshold && scrolledDistance < wrapHeight) {
-				_domcache['.header-wrapper img.clean'].css("opacity", opacityVal);
+				_domcache['.header-wrapper div.clean'].css("opacity", opacityVal);
 				// Mask moves slower because it kewl as shiat
 				_domcache['.header-wrapper .mask'].css('background-position-y', -(scrolledDistance * .3) +'px'  );
 				// Parallax the image only if it's still big enough
 				if(scrolledDistance < imgHeight - wrapHeight) {
-					_domcache['.header-wrapper img'].css('top', (-scrolledDistance) +'px'  );
+					_domcache['.header-wrapper div'].css('top', (-scrolledDistance) +'px'  );
 				}
 			}
 			else if(scrolledDistance <= threshold) {
 				_domcache['.header-wrapper .mask'].css('background-position-y', '0px');
-				_domcache['.header-wrapper img'].css('top', '0px'  );
-				_domcache['.header-wrapper img.clean'].css("opacity", 1)
+				_domcache['.header-wrapper div'].css('top', '0px'  );
+				_domcache['.header-wrapper div.clean'].css("opacity", 1)
 			}
 		}
 	}

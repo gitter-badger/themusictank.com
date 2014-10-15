@@ -5,7 +5,7 @@
 <?php foreach($artists as $idx => $artist) : ?>
     <div class="col-xs-6 col-md-3">
         <h3>
-            <a class="thumbnail" href="<?= Router::url(['controller' => 'artists', 'action' => 'view', $artist->slug ]); ?>" style="background-image:url(<?php echo $artist->lastfm->getImageUrl(); ?>);">
+            <a class="thumbnail" href="<?= Router::url(['controller' => 'artists', 'action' => 'view', $artist->slug ]); ?>" style="background-image:url(<?php echo $artist->getImageUrl(); ?>);">
                 <span><?= h($artist->name); ?></span>
             </a>
         </h3>

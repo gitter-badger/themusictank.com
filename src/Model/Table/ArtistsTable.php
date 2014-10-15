@@ -1,37 +1,82 @@
 <?php
 namespace App\Model\Table;
 
+use App\Model\Api\LastfmApi;
+use App\Model\Entity\Artist;
+
+use Cake\I18n\Time;
+use Cake\Event\Event;
+use Cake\ORM\Entity;
 use Cake\ORM\Table;
 use Cake\ORM\TableRegistry;
+use Cake\ORM\Query;
 
 class ArtistsTable extends Table {
 
     public function initialize(array $config) {
-        $this->hasOne('LastfmArtists', ['className' => 'LastfmArtists', 'propertyName' => 'lastfm']);
-        $this->hasOne('ArtistReviewSnapshots', ['className' => 'ArtistReviewSnapshots', 'propertyName' => 'snapshot']);
 
+        $this->hasOne('LastfmArtists',          ['propertyName' => 'lastfm', 'dependent' => true]);
+        $this->hasOne('ArtistReviewSnapshots',  ['propertyName' => 'snapshot', 'dependent' => true]);
         $this->hasMany('Albums');
 
-        $this->addBehavior('Timestamp', [
-            'events' => [
-                'Model.beforeSave' => [
-                    'created' => 'new'
-                ],
-                'Lastfm.infoUpdated' => [
-                    'modified' => 'always'
-                ]
-            ]
-        ]);
+        $this->addBehavior('Sluggable', ['contain' => [
+            'LastfmArtists',
+            'Albums' => ['AlbumReviewSnapshots'],
+            'ArtistReviewSnapshots'
+        ]]);
+        $this->addBehavior('Syncable');
+        $this->addBehavior('Thumbnail');
     }
 
-    /**
-     */
-    public function getBySlug($slug)
+    public function findLocalOrRemote($query)
     {
-        return $this->find()
-            ->where(['slug' => $slug])
-            ->contain(['LastfmArtists', 'Albums' => ['AlbumReviewSnapshots'], 'ArtistReviewSnapshots']);
+        $query      = trim($query);
+        $resultSet  = $this->searchCriteria($query, 3)->all();
+
+        // When no matches are found in the table, query Lastfm
+        // for results.
+        if (!count($resultSet)) {
+            $resultSet = [];
+            $lastfmApi = new LastfmApi();
+            foreach ($lastfmApi->searchArtists($query, 10) as $value) {
+                $artist = new Artist();
+                $artist->loadFromLastFm($value);
+                $this->save($artist);
+                $resultSet[] = $artist;
+            }
+        }
+
+        return $resultSet;
     }
+
+    public function syncToRemote(Artist $artist)
+    {
+        $lastfmApi = new LastfmApi();
+        $artist->loadFromLastFm($lastfmApi->getArtistInfo($artist));
+
+        // This is not normal...
+        TableRegistry::get('LastfmArtists')->touch($artist->lastfm, 'Lastfm.onUpdate');
+        TableRegistry::get('LastfmArtists')->save($artist->lastfm);
+
+        return $this->save($artist);
+    }
+
+    public function findExpired(Query $query, array $options = [])
+    {
+        $options += [
+            'timeout' => 0,
+            'limit' => 200,
+            'contain' => ['LastfmArtists']
+        ];
+
+        return $query
+            ->contain($options['contain'])
+            ->where(['LastfmArtists.modified < ' => (int)$options['timeout']])
+            ->orWhere(['LastfmArtists.modified IS NULL'])
+            ->limit((int)$options['limit']);
+    }
+
+
 
     /**
      * Finds all artists that have been flagged as popular.
@@ -93,16 +138,8 @@ class ArtistsTable extends Table {
             ->contain(['ArtistReviewSnapshots']);
     }
 
-    public function getWithExpiredDetails($timeout, $limit = 200)
-    {
-        return $this->find()
-            ->contain(['LastfmArtists'])
-            ->where(['LastfmArtists.modified < ' => $timeout])
-            ->orWhere(['LastfmArtists.modified IS NULL'])
-            ->limit($limit);
-    }
 
-    public function getWithExpiredDiscographies($timeout, $limit = 200)
+    public function getWithExpiredDiscographies($timeout = 0, $limit = 200)
     {
         return $this->find()
             ->contain(['Albums'])

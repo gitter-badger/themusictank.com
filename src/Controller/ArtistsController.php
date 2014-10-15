@@ -19,7 +19,7 @@ class ArtistsController extends AppController {
         $popularArtists = $this->Artists->findPopular(9)->toArray();
         $featuredArtist = array_shift($popularArtists);
         $letters        = $this->Artists->getAvaillableFirstLetters();
-        $newReleases    = $this->Artists->Albums->getNewReleases(8);
+        $newReleases    = $this->Artists->Albums->find('newReleases', ['limit' => 8]);
 
         $this->set([
             'featuredArtist'    => $featuredArtist,
@@ -42,23 +42,20 @@ class ArtistsController extends AppController {
      */
     public function view($artistSlug = "")
     {
-        $artist     = $this->Artists->getBySlug($artistSlug)->first();
-
+        $artist = $this->Artists->find('slug', ['slug' => $artistSlug])->first();
         if(!$artist)
         {
-            /*
             // query LastFm before 404-ing
-            if ($this->Artist->LastfmArtist->search($artistSlug,3)) {
+            if (TableRegistry::get('Artists')->findLocalOrRemote($query, 3)) {
                 // if we saved something, assume it's loadable.
-                $data = $this->Artist->getBySlug($artistSlug);
-                if(!$data) {
+                $artist = $this->Artists->find('slug', ['slug' => $artistSlug])->first();
+                if(!$artist) {
                     throw new NotFoundException(sprintf(__("Could not find the artist %s"), $artistSlug));
                 }
             }
             else {
                 throw new NotFoundException(sprintf(__("Could not find the artist %s"), $artistSlug));
             }
-            */
         }
 
         $this->set([
@@ -79,7 +76,7 @@ class ArtistsController extends AppController {
      */
     public function discography($artistSlug = "")
     {
-        $artist = $this->Artists->getBySlug($artistSlug)->first();
+        $artist = $this->Artists->find('slug', ['slug' => $artistSlug])->first();
 
         if (!$artist) {
             throw new NotFoundException(sprintf(__("Could not find the artist %s"), $artistSlug));
@@ -103,7 +100,7 @@ class ArtistsController extends AppController {
      */
     public function wiki($artistSlug = "")
     {
-        $artist = $this->Artists->getBySlug($artistSlug)->first();
+        $artist = $this->Artists->find('slug', ['slug' => $artistSlug])->first();
 
         if (!$artist) {
             throw new NotFoundException(sprintf(__("Could not find the artist %s"), $artistSlug));

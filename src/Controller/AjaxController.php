@@ -4,6 +4,8 @@ namespace App\Controller;
 
 use App\Controller\AppController;
 use App\Model\Entity\Bug;
+use App\Model\Entity\Artist;
+use App\Model\Api\LastfmApi;
 
 use Cake\Event\Event;
 use Cake\ORM\TableRegistry;
@@ -56,23 +58,21 @@ class AjaxController extends AppController {
 
     public function getdiscography($artistSlug)
     {
-        $artist = TableRegistry::get('Artists')->getBySlug($artistSlug)->first();
+        $artist = TableRegistry::get('Artists')->find('slug', ['slug' => $artistSlug])->first();
 
         if (is_null($artist)) {
             throw new NotFoundException(__("We cannot load this artist."));
         }
 
-        $artist->fetchDiscography();
+        TableRegistry::get('Albums')->fetchDiscography($artist);
         $this->set('artist', $artist);
     }
 
     public function artistsSearch()
     {
-        $results    = array();
+        $results    = [];
         $query      = trim($this->request->query['q']);
-        $resultSet  = TableRegistry::get('Artists')->searchCriteria($query, 3)->all();
-
-        foreach($resultSet as $artist) {
+        foreach(TableRegistry::get('Artists')->findLocalOrRemote($query, 3) as $artist) {
             $results[] = [
                 "slug"      => $artist->slug,
                 "artist"    => $artist->name
@@ -86,7 +86,7 @@ class AjaxController extends AppController {
 
     public function albumsSearch()
     {
-        $results    = array();
+        $results    = [];
         $query      = trim($this->request->query['q']);
         $resultSet  = TableRegistry::get('Albums')->searchCriteria($query, 3);
 
@@ -105,7 +105,7 @@ class AjaxController extends AppController {
 
     public function tracksSearch()
     {
-        $results    = array();
+        $results    = [];
         $query      = trim($this->request->query['q']);
         $resultSet  = TableRegistry::get('Tracks')->searchCriteria($query, 3);
 

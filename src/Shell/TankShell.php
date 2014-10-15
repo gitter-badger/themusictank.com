@@ -49,11 +49,9 @@ class TankShell extends Shell {
         $this->UpdatePopularArtists->execute();
         $this->PopulateArtistDetails->execute();
         $this->PopulateArtistDiscography->execute();
-
-        // OK la tu es rendu a saver les albums.
+        $this->PopulateAlbumDetails->execute();
 
        /*
-        $this->PopulateAlbumDetails->execute();
         $this->PopulateTrackDetails->execute();*/
 
         $tasksTbl->touch("twohours.end");

@@ -2,9 +2,6 @@
 
 namespace App\Shell\Task;
 
-use App\Model\Api\LastfmApi;
-use App\Model\Entity\Artist;
-
 use Cake\ORM\TableRegistry;
 use Cake\Console\Shell;
 
@@ -19,23 +16,15 @@ class PopulateArtistDetailsTask extends Shell {
 
         if ($task->requiresUpdate()) {
 
-            $artistsTbl = TableRegistry::get('Artists');
-            $lastfmArtistTbl = TableRegistry::get('LastfmArtists');
-            $lastfmApi = new LastfmApi();
-            $expiredArtists = $artistsTbl->getWithExpiredDetails($task->getTimeout())->all();
+            $tblArtists = TableRegistry::get('Artists');
+            $expiredArtists = $tblArtists->find('expired')->all();
 
             if (count($expiredArtists)) {
                 $this->out(sprintf("\tFound <comment>%s artist</comment> that are out of sync.", count($expiredArtists)));
 
                 foreach ($expiredArtists as $artist) {
                     $this->out(sprintf("\t\t%d<info>\t%s</info>...", $artist->id, $artist->name));
-                    $artist->loadFromLastFm($lastfmApi->getArtistInfo($artist));
-                    $artistsTbl->save($artist);
-
-                    // Not entirely sure why the previous save statement
-                    // doesn't save the data. Explicitely save lastfm
-                    $artist->lastfm->modified = new \DateTime();
-                    $lastfmArtistTbl->save($artist->lastfm);
+                    $tblArtists->syncToRemote($artist);
                     $taskTable->touch('artists_discographies');
                 }
 
@@ -45,7 +34,6 @@ class PopulateArtistDetailsTask extends Shell {
         } else {
             $this->out("\tArtist details update is not ready to run.");
         }
-
 
         $taskTable->touch('artists_details');
         $this->out("\t<info>Completed.</info>");

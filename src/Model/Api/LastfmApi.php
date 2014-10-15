@@ -4,6 +4,7 @@ namespace App\Model\Api;
 
 use Cake\Core\Configure;
 use App\Model\Entity\Artist;
+use App\Model\Entity\Album;
 use Cake\Network\Http\Client;
 use Cake\Collection\Collection;
 use Cake\Utility\Hash;
@@ -48,6 +49,17 @@ class LastfmApi {
         return Hash::extract($data, "topartists.artist.{n}");
     }
 
+    public function searchArtists($query, $limit = 5)
+    {
+        $data = $this->_postRequest([
+            "method" => "artist.search",
+            "artist" => trim($query),
+            "limit"  => $limit
+        ]);
+
+        return Hash::extract($data, "results.artistmatches.artist");
+    }
+
     public function getArtistInfo(Artist $artist)
     {
         $data = $this->_postRequest([
@@ -58,6 +70,18 @@ class LastfmApi {
         ]);
 
         return Hash::extract($data, "artist");
+    }
+
+    public function getAlbumInfo(Album $album)
+    {
+        $data = $this->_postRequest([
+            "method" => "album.getinfo",
+            "artist" => $album->artist->name,
+            "album" => $album->name,
+            "autocorrect" => 1
+        ]);
+
+        return Hash::extract($data, "album");
     }
 
     public static function cleanWikiText($text)

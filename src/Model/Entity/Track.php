@@ -6,6 +6,7 @@ use Cake\ORM\Entity;
 use Cake\Routing\Router;
 use Cake\ORM\TableRegistry;
 
+use App\Model\Entity\LastfmTrack;
 use App\Model\Entity\OembedableTrait;
 use App\Model\Entity\TrackYoutube;
 use App\Model\Api\YoutubeApi;
@@ -117,6 +118,22 @@ class Track extends Entity
             return TableRegistry::get('TrackYoutubes')->save($this->youtube);
         }
         return false;
+    }
+
+    public function loadFromLastFm($trackInfo)
+    {
+
+        $this->title = trim($trackInfo['name']);
+        $this->duration = (int)$trackInfo['duration'];
+        $this->position = (int)$trackInfo['@attr']['rank'];
+
+        // Save other secondary track information
+        if (is_null($this->lastfm)) {
+            $this->lastfm = new LastfmTrack();
+        }
+        $this->lastfm->loadFromLastFm($trackInfo);
+
+        return $this;
     }
 
 }

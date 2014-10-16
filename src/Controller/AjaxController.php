@@ -64,15 +64,19 @@ class AjaxController extends AppController {
             throw new NotFoundException(__("We cannot load this artist."));
         }
 
-        TableRegistry::get('Albums')->fetchDiscography($artist);
+        TableRegistry::get('Albums')->find('updatedDiscography', ['artist' => $artist]);
         $this->set('artist', $artist);
     }
 
     public function artistsSearch()
     {
         $results    = [];
-        $query      = trim($this->request->query['q']);
-        foreach(TableRegistry::get('Artists')->findLocalOrRemote($query, 3) as $artist) {
+        $list = TableRegistry::get('Artists')->find('localOrRemote', [
+            'criteria' => trim($this->request->query['q']),
+            'limit' => 3
+        ]);
+
+        foreach($list as $artist) {
             $results[] = [
                 "slug"      => $artist->slug,
                 "artist"    => $artist->name

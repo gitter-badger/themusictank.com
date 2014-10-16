@@ -28,12 +28,12 @@ class Album extends Entity
         }
 
         return sprintf(__("This is an album by %s."), $this->artist->name);
-    } */
+    }
 
     protected function _getIsProcessing()
     {
         return !($this->get("lastfm") && $this->get("lastfm")->hasSyncDate());
-    }
+    }*/
 
     public function hasReleaseDate()
     {

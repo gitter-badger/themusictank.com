@@ -1,11 +1,14 @@
 <?php
 namespace App\Model\Table;
 
-use Cake\ORM\Table;
-use Cake\ORM\Query;
 use App\Model\Entity\Artist;
 use App\Model\Api\LastfmApi;
+
+use Cake\ORM\Table;
+use Cake\ORM\Query;
 use Cake\ORM\TableRegistry;
+
+use Exception;
 
 class AlbumsTable extends Table {
 
@@ -30,13 +33,23 @@ class AlbumsTable extends Table {
     /** Fetches only the album names. The details will have to be pulled at another time.
      *  This is due to limitations in Lastfm's api data.
      */
-    public function fetchDiscography(Artist $artist)
+    public function findUpdatedDiscography(Query $query, array $options = [])
     {
+        $options += [
+            'artist' => null
+        ];
+
+        if(is_null($options['artist'])) {
+            throw new Exception("Missing required 'artist' parameter.");
+        }
+
+        $artist = $options['artist'];
         if ($artist->requiresUpdate()) {
 
             $lastfmApi = new LastfmApi();
             $topAlbums = $lastfmApi->getArtistTopAlbums($artist);
-            if ($this->updateArtistAlbums($artist, $topAlbums)) {
+
+            if ($this->_updateArtistAlbums($artist, $topAlbums)) {
                 foreach ($artist->albums as $album) {
                     // Because the fetchDiscography function is all
                     // about getting album names, only save new albums.
@@ -57,9 +70,9 @@ class AlbumsTable extends Table {
 
     /**
      *  This is used only when creating empty album shell with no details other than the title (ex: from ajax search)
-     *  return bool True if there was additions
+     *  @return bool True if there was additions
      */
-    public function updateArtistAlbums(Artist $artist, array $apiAlbums)
+    protected function _updateArtistAlbums(Artist $artist, array $apiAlbums)
     {
         $currentMbids = TableRegistry::get('LastfmAlbums')->find('listMbids', ['artist' => $artist]);
         foreach($apiAlbums as $apiAlbum) {

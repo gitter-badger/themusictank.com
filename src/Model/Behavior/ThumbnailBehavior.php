@@ -36,7 +36,7 @@ class ThumbnailBehavior extends Behavior {
         $config = $this->config();
         // Fetch new thumbnails each time the entity is updated
         if($entity->get($config['image_src'])) {
-            //$this->_deleteThumbnails($entity);
+            $this->_deleteThumbnails($entity);
             $this->_createThumbnails($entity);
         }
     }
@@ -44,7 +44,6 @@ class ThumbnailBehavior extends Behavior {
     protected function _deleteThumbnails(Entity $entity)
     {
         if (!is_null($entity->get('image'))) {
-
             $config = $this->config();
             foreach (array_keys($config['types']) as $type) {
                 $filename = $config['path'] . $entity->get('image') . "_" . $type . ".jpg";
@@ -62,6 +61,7 @@ class ThumbnailBehavior extends Behavior {
 
             $config = $this->config();
             $newFileName = $entity->get('slug');
+            $typeSubfolder = $this->_getFormattedClassName($entity);
             $firstLetterSubfolder = substr($newFileName, 0, 1);
             $secondLetterSubfolder = substr($newFileName, 1, 1);
 
@@ -71,11 +71,11 @@ class ThumbnailBehavior extends Behavior {
                 return $firstLetterSubfolder ."/". $secondLetterSubfolder . "/" . $newFileName;
             }*/
 
-            $entity->set('image', $firstLetterSubfolder . DS . $secondLetterSubfolder . DS . $newFileName);
+            $entity->set('image', $typeSubfolder . DS . $firstLetterSubfolder . DS . $secondLetterSubfolder . DS . $newFileName);
             $original = $config['path'] . $entity->get('image') . "_original.jpg";
 
-            if(!file_exists($config['path'] . $firstLetterSubfolder . DS . $secondLetterSubfolder)) {
-                mkdir($config['path'] . $firstLetterSubfolder . DS . $secondLetterSubfolder, 0776, true);
+            if(!file_exists($config['path'] . $typeSubfolder . DS . $firstLetterSubfolder . DS . $secondLetterSubfolder)) {
+                mkdir($config['path'] . $typeSubfolder . DS . $firstLetterSubfolder . DS . $secondLetterSubfolder, 0776, true);
             }
 
             ini_set('memory_limit', '64M'); // big files break the code
@@ -110,6 +110,12 @@ class ThumbnailBehavior extends Behavior {
         $fp = fopen($saveLocation, 'w');
         fwrite($fp, $rawdata);
         fclose($fp);
+    }
+
+    private function _getFormattedClassName($obj)
+    {
+        $namespace = explode('\\', strtolower(get_class($obj)));
+        return array_pop($namespace);
     }
 
 }

@@ -11,6 +11,8 @@ use Cake\ORM\Table;
 use Cake\ORM\TableRegistry;
 use Cake\ORM\Query;
 
+use Exception;
+
 class ArtistsTable extends Table {
 
     public function initialize(array $config) {
@@ -28,27 +30,55 @@ class ArtistsTable extends Table {
         $this->addBehavior('Thumbnail');
     }
 
-    public function findLocalOrRemote($query)
+    private function _createFromLastFm(array $data)
     {
-        $query      = trim($query);
-        $resultSet  = $this->searchCriteria($query, 3)->all();
+        $artist = new Artist();
+        $artist->loadFromLastFm($data);
+        $this->save($artist);
+        return $artist;
+    }
+
+    public function findLocalOrRemote(Query $query, array $options = [])
+    {
+        $resultSet  = $this->find('search', $options)->all();
+        if (count($resultSet)) {
+            return $resultSet;
+        }
 
         // When no matches are found in the table, query Lastfm
         // for results.
-        if (!count($resultSet)) {
-            $resultSet = [];
-            $lastfmApi = new LastfmApi();
-            foreach ($lastfmApi->searchArtists($query, 10) as $value) {
-                $artist = new Artist();
-                $artist->loadFromLastFm($value);
-                $this->save($artist);
-                $resultSet[] = $artist;
-            }
+        return $this->find('remote', $options);
+    }
+
+    /**
+     * Todo : This function assumes Lastfm results always generate new records. It proabably should not be the case.
+     */
+    public function findRemote(Query $query, array $options = [])
+    {
+        if(is_null($options['criteria'])) {
+            throw new Exception("Missing 'criteria' query parameter.");
         }
 
+        $lastfmApi = new LastfmApi();
+        $remoteResults = $lastfmApi->searchArtists($options['criteria'], 10);
+
+        $resultSet = [];
+        if (count($remoteResults)) {
+            // Single results do no return a loopable array.
+            if (array_key_exists("name", $remoteResults)) {
+                return [$this->_createFromLastFm($remoteResults)];
+            }
+
+            foreach ($remoteResults as $value) {
+                $resultSet[] = $this->_createFromLastFm($value);
+            }
+        }
         return $resultSet;
     }
 
+    /**
+     * Takes an existing Artist and updates its values with what is returned by the Lastfm API.
+     */
     public function syncToRemote(Artist $artist)
     {
         $lastfmApi = new LastfmApi();
@@ -76,53 +106,78 @@ class ArtistsTable extends Table {
             ->limit((int)$options['limit']);
     }
 
-
-
     /**
      * Finds all artists that have been flagged as popular.
-     * @param int $limit Number of records to fetch (default 1)
      * @return array Dataset of popular Artists.
      */
-    public function findPopular($limit = 1)
+    public function findPopular(Query $query, array $options = [])
     {
-        return $this->find()
+        $options += [
+            'limit' => 1,
+            'order' => ['rand()'],
+            'contain' => ['LastfmArtists', 'Albums', 'ArtistReviewSnapshots']
+        ];
+
+        return $query
+            ->contain($options['contain'])
             ->where(['LastfmArtists.is_popular' => true])
-            ->order(['rand()'])
-            ->limit((int)$limit)
-            ->contain(['LastfmArtists', 'Albums', 'ArtistReviewSnapshots']);
+            ->order($options['order'])
+            ->limit((int)$options['limit']);
     }
 
     /**
      * Fetches a list of possible categories based on the name of all our artists
+     * @TOTO : Validate/remove/merge numbers and signs
      * @return array An array of capitalized letters
      */
-    public function getAvaillableFirstLetters()
+    public function findFirstLetters(Query $query, array $options = [])
     {
-        return $this->find()
+        return $query
             ->select(['letter' => 'UCASE(LEFT(name, 1))'])
             ->distinct(['letter'])
-            ->order(['letter' => 'ASC'])
+            ->order('letter', 'ASC')
             ->extract("letter");
     }
 
-    public function searchCriteria($criteria, $limit = 10)
+    public function findSearch(Query $query, array $options = [])
     {
-        return $this->find()
-            ->where(["name LIKE" => sprintf("%%%s%%", $criteria)])
-            ->limit($limit)
-            ->order("LOCATE('".$criteria."', name)", "ASC")
+        $options += [
+            'limit' => 10,
+            'criteria' => null,
+            'contain' => ['LastfmArtists', 'Albums' => ['AlbumReviewSnapshots'], 'ArtistReviewSnapshots']
+        ];
+
+        if(is_null($options['criteria'])) {
+            throw new Exception("Missing 'criteria' query parameter.");
+        }
+
+        return $query
+            ->where(["name LIKE" => sprintf("%%%s%%", $options['criteria'])])
+            ->limit((int)$options['limit'])
+            ->order(sprintf("LOCATE('%s', name)", $options['criteria']), "ASC")
             ->order("name", "ASC")
-            ->contain(['LastfmArtists', 'Albums' => ['AlbumReviewSnapshots'], 'ArtistReviewSnapshots']);
+            ->contain($options['contain']);
     }
 
-    public function browse($letter, $limit = 10)
+    public function findBrowse(Query $query, array $options = [])
     {
-        return $this->find()
-            ->where(["name LIKE" => sprintf("%s%%", $letter)])
-            ->limit($limit)
+        $options += [
+            'limit' => 10,
+            'letter' => null,
+            'contain' => ['LastfmArtists', 'Albums' => ['AlbumReviewSnapshots'], 'ArtistReviewSnapshots']
+        ];
+
+        if(is_null($options['letter'])) {
+            throw new Exception("Missing 'letter' query parameter.");
+        }
+
+        return $query
+            ->where(["name LIKE" => sprintf("%s%%", $options['letter'])])
+            ->limit((int)$options['limit'])
             ->order("name", "ASC")
-            ->contain(['LastfmArtists', 'Albums' => ['AlbumReviewSnapshots'], 'ArtistReviewSnapshots']);
+            ->contain($options['contain']);
     }
+
 
     public function getOEmbedDataBySlug($slug)
     {

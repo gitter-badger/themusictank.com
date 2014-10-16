@@ -22,8 +22,8 @@ class PopulateArtistDetailsTask extends Shell {
             if (count($expiredArtists)) {
                 $this->out(sprintf("\tFound <comment>%s artist</comment> that are out of sync.", count($expiredArtists)));
 
-                foreach ($expiredArtists as $artist) {
-                    $this->out(sprintf("\t\t%d<info>\t%s</info>...", $artist->id, $artist->name));
+                foreach ($expiredArtists as $idx => $artist) {
+                    $this->out(sprintf("\t\t%d/%d\t%d <info>%s</info>...", $idx+1, count($expiredArtists), $artist->id, $artist->name));
                     $tblArtists->syncToRemote($artist);
                     $taskTable->touch('artists_discographies');
                 }

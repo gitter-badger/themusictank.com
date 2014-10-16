@@ -34,8 +34,8 @@
     <div class="container container-fluid">
         <p>
             <?= __("Artist biography and profile image courtesy of"); ?> <?=$this->Html->link("Last.fm", "http://www.last.fm/", ["target" => "_blank"]); ?>.
-            <?php if($artist->lastfm->hasSyncDate()) : ?>
-                <?= __("They were last updated on"); ?> <?= $artist->lastfm->getFormattedSyncDate(); ?>.
+            <?php if($artist->hasSyncDate()) : ?>
+                <?= __("They were last updated on"); ?> <?= $artist->getFormattedSyncDate(); ?>.
             <?php endif; ?>
             <?= __("User-contributed text is available under the Creative Commons By-SA License and may also be available under the GNU FDL."); ?>
         </p>

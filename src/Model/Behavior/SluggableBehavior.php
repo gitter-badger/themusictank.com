@@ -7,6 +7,7 @@ use Cake\ORM\Behavior;
 use Cake\ORM\Entity;
 use Cake\ORM\Query;
 use Cake\Utility\Inflector;
+use Exception;
 
 class SluggableBehavior extends Behavior {
 
@@ -37,7 +38,7 @@ class SluggableBehavior extends Behavior {
         $value = $entity->get($config['field']);
 
         if(empty(trim($value))) {
-            throw new Error("Cannot create an entity with no key.");
+            throw new Exception("Cannot create an entity with no key.");
         }
 
         $entity->set($config['slug'], strtolower(Inflector::slug($value, $config['replacement'])));

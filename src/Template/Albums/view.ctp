@@ -25,7 +25,7 @@
                 <div class="col-md-2 enjoyment">
                     <span><?= __("Enjoyed"); ?></span>
                     <em>
-                        <?php if($album->snapshot->isNotAvailable()) : ?>
+                        <?php if(!is_null($album->snapshot) && $album->snapshot->isNotAvailable()) : ?>
                             N/A
                         <?php else : ?>
                             <?= (int)$album->snapshot->liking_pct; ?>%
@@ -35,7 +35,7 @@
                 <div class="col-md-2 dislike">
                     <span><?= __("Disliked"); ?></span>
                     <em>
-                        <?php if($album->snapshot->isNotAvailable()) : ?>
+                        <?php if(!is_null($album->snapshot) && $album->snapshot->isNotAvailable()) : ?>
                             N/A
                         <?php else : ?>
                             <?= (int)$album->snapshot->disliking_pct; ?>%
@@ -125,7 +125,7 @@
                         <canvas class="graph" data-track="track-<?= $track->id; ?>"></canvas>
                         <div class="piechart track-<?= $track->id; ?>"></div>
                         <div class="score">
-                            <?php if($track->snapshot->isNotAvailable()) : ?>
+                            <?php if(!is_null($track->snapshot) && $track->snapshot->isNotAvailable()) : ?>
                                 N/A
                             <?php else : ?>
                                 <?= (int)($track->snapshot->score * 100); ?>%

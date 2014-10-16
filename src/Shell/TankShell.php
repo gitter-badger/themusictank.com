@@ -20,22 +20,22 @@ class TankShell extends Shell {
         $this->out("usage : one of [daily, wavescrawl, twohours]");
     }
 
-    public function daily()
+    public function daily($forceUpdate = false)
     {
         $this->out("DAILY");
 
         $tasksTbl = TableRegistry::get('Tasks');
         $tasksTbl->touch("daily.start");
 
-        $this->UpdateSongChallenge->execute();
-        $this->ArtistSnapshotsSync->execute();
-        $this->AlbumSnapshotsSync->execute();
-        $this->TrackSnapshotsSync->execute();
+        $this->UpdateSongChallenge->execute($forceUpdate);
+        $this->ArtistSnapshotsSync->execute($forceUpdate);
+        $this->AlbumSnapshotsSync->execute($forceUpdate);
+        $this->TrackSnapshotsSync->execute($forceUpdate);
 
         $tasksTbl->touch("daily.end");
     }
 
-    public function twohours()
+    public function twohours($forceUpdate = false)
     {
         set_time_limit ((HOUR * 2) - 5); // ok bro, you have 1h55 to finish doing your thing
         $this->out("EVERY TWO HOURS");
@@ -46,10 +46,10 @@ class TankShell extends Shell {
         // These tasks fail often due to Last.fm's api.
         // Until a noticeable increase in successful responses
         // query them often to make up for failed attempts
-        $this->UpdatePopularArtists->execute();
-        $this->PopulateArtistDetails->execute();
-        $this->PopulateArtistDiscography->execute();
-        $this->PopulateAlbumDetails->execute();
+        $this->UpdatePopularArtists->execute($forceUpdate);
+        $this->PopulateArtistDetails->execute($forceUpdate);
+        $this->PopulateArtistDiscography->execute($forceUpdate);
+        $this->PopulateAlbumDetails->execute($forceUpdate);
 
        /*
         $this->PopulateTrackDetails->execute();*/

@@ -9,6 +9,10 @@ class Task extends Entity
 {
     public function requiresUpdate()
     {
+        // When testing, uncomment the following to allow
+        // fresh results
+        return true;
+
         if (is_null($this->modified)) {
             return true;
         }

@@ -12,7 +12,6 @@ class UpdatePopularArtistsTask extends Shell {
 
     public function execute()
     {
-
         $this->out("Updating <comment>popular artists</comment>...");
 
         $taskTable = TableRegistry::get('Tasks');
@@ -20,19 +19,14 @@ class UpdatePopularArtistsTask extends Shell {
 
         if ($task->requiresUpdate()) {
 
+            $taskTable->touch("popular_artists");
             $lastfmApi = new LastfmApi();
-            $artists = [];
-            foreach ($lastfmApi->getTopArtists() as $artistInfo) {
-                $artist = new Artist();
-                $artists[] = $artist->loadFromLastFm($artistInfo);
-                $artist->lastfm->is_popular = true;
-            }
+            $topArtistsData = $lastfmApi->getTopArtists();
 
-            if (count($artists)) {
+            if (count($topArtistsData)) {
+                $artistList = TableRegistry::get('Artists')->saveLastFmBatch($topArtistsData, true);
                 TableRegistry::get('LastfmArtists')->demotePopularArtists();
-                TableRegistry::get('Artists')->saveLastFmBatch($artists);
-                $taskTable->touch("popular_artists");
-
+                TableRegistry::get('LastfmArtists')->promotePopularArtists($artistList);
             } else {
                 $this->out("\tWe did not receive a list of popular artists.");
             }

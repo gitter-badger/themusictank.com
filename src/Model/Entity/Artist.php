@@ -68,19 +68,34 @@ class Artist extends Entity {
             ->first();
     }
 
-    public function loadFromLastFm($artistInfo)
+    /**
+     * Compare this version of the entity with the one passed in parameter.
+     * The one in parameter is considered the new copy; 'this' is the one from the DB.
+     */
+    public function compareData(array $artistInfo)
     {
-        $this->name = $artistInfo["name"];
+        $name = trim(Hash::get($artistInfo, "name"));
+        if (!empty($name) && $this->get("name") !== $name) {
+            $this->set("name", $name);
+        }
 
-        if (!empty($artistInfo['image'][3]['#text'])) {
-            $this->image_src = $artistInfo['image'][3]['#text'];
+        $thumbnail = Hash::check($artistInfo, 'image') ? $artistInfo['image'][3]['#text'] : "";
+        if (!empty($thumbnail) && $this->get("image_src") !== $thumbnail) {
+            $this->set("image_src", $thumbnail);
         }
 
         if (is_null($this->lastfm)) {
             $this->lastfm = new LastfmArtist();
         }
 
-        $this->lastfm->loadFromLastFm($artistInfo);
+        $this->lastfm->compareData($artistInfo);
+
         return $this;
+    }
+
+    public function loadFromLastFm($artistInfo)
+    {
+        // Loading against null values will just populate the entity.
+        return $this->compareData($artistInfo);
     }
 }

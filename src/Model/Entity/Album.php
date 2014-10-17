@@ -17,24 +17,6 @@ class Album extends Entity
     use ThumbnailTrait;
     use OembedableTrait;
 
-/*
-    protected function _getIntroduction($title)
-    {
-        if (!is_null($this->get("lastfm")->get("wiki_curated"))) {
-            return $this->get("lastfm")->get("wiki_curated");
-        }
-        elseif (!is_null($this->get("lastfm")->get("wiki"))) {
-            return $this->get("lastfm")->get("wiki");
-        }
-
-        return sprintf(__("This is an album by %s."), $this->artist->name);
-    }
-
-    protected function _getIsProcessing()
-    {
-        return !($this->get("lastfm") && $this->get("lastfm")->hasSyncDate());
-    }*/
-
     public function hasReleaseDate()
     {
         if (!is_null($this->get("release_date"))) {
@@ -72,6 +54,43 @@ class Album extends Entity
     public function getContextualNames()
     {
         return [$this->name, $this->artist->name];
+    }
+
+
+    /**
+     * Compare this version of the entity with the one passed in parameter.
+     * The one in parameter is considered the new copy; 'this' is the one from the DB.
+     */
+    public function compareData(array $albumInfo)
+    {
+        $name = trim(Hash::get($albumInfo, "name"));
+        if (!empty($name) && $this->get("name") !== $name) {
+            $this->set("name", $name);
+        }
+
+        $releaseDate = trim(Hash::get($albumInfo, "releasedate"));
+        if (!empty($releaseDate) && $this->get("release_date_text") !== $releaseDate) {
+            $this->set("release_date_text", $releaseDate);
+            $this->set("release_date", new Time($releaseDate));
+        }
+
+        $thumbnail = Hash::check($albumInfo, 'image') ? $albumInfo['image'][3]['#text'] : "";
+        if (!empty($thumbnail) && $this->get("image_src") !== $thumbnail) {
+            $this->set("image_src", $thumbnail);
+        }
+
+        if (is_null($this->lastfm)) {
+            $this->lastfm = new LastfmAlbum();
+        }
+        $this->lastfm->compareData($albumInfo);
+
+        return $this;
+    }
+
+    public function loadFromLastFm($artistInfo)
+    {
+        // Loading against null values will just populate the entity.
+        return $this->compareData($artistInfo);
     }
 
     // @todo : There should be a review date field availlable here
@@ -132,46 +151,6 @@ class Album extends Entity
             $map[$track->mbid] = $track;
         }
         return $map;
-    }
-
-
-    public function loadFromLastFm($albumInfo)
-    {
-        $this->name = $albumInfo["name"];
-        $this->release_date_text = trim($albumInfo["releasedate"]);
-        $this->release_date = new Time($this->release_date_text);
-
-        // Try and save a tuumbnail
-        if (!empty($albumInfo['image'][3]['#text'])) {
-            $this->image_src = $albumInfo['image'][3]['#text'];
-        }
-
-        // Save other secondary album information
-        if (is_null($this->lastfm)) {
-            $this->lastfm = new LastfmAlbum();
-        }
-        $this->lastfm->loadFromLastFm($albumInfo);
-
-        // Save tracks
-        $trackInfos = Hash::extract($albumInfo, "tracks.track");
-        if (count($trackInfos)) {
-            // Update matching tracks and append new ones if they don't match
-            $mbids = $this->getMBIDList();
-            foreach ($trackInfos as $trackInfo) {
-                if(is_array($trackInfo) && array_key_exists('mbid', $trackInfo) && empty($trackInfo["mbid"]) != "") {
-                    if(array_key_exists($trackInfo['mbid'], $mbids)) {
-                        $mbids[$trackInfo['mbid']]->loadFromLastFm($trackInfo);
-                    }
-                    else {
-                        $track = new Track();
-                        $track->loadFromLastFm($trackInfo);
-                        $this->tracks[] = $track;
-                    }
-                }
-            }
-        }
-
-        return $this;
     }
 
 }

@@ -10,15 +10,36 @@ class LastfmAlbum extends Entity
 {
     use SyncTrait;
 
-    public function loadFromLastFm($albumInfo)
+    /**
+     * Compare this version of the entity with the one passed in parameter.
+     * The one in parameter is considered the new copy; 'this' is the one from the DB.
+     */
+    public function compareData(array $albumInfo)
     {
-        $this->mbid = $albumInfo["mbid"];
-        $this->url = $albumInfo["url"];
-
-        $this->wiki = __("Biography is not available at this time.");
-        if (!empty($albumInfo['wiki']['summary'])) {
-            $this->wiki = LastfmApi::cleanWikiText($albumInfo['wiki']['summary']);
+        $mbid = trim(Hash::get($artistInfo, "mbid"));
+        if (!empty($mbid) && $this->get("mbid") !== $mbid) {
+            $this->set("mbid", $mbid);
         }
+
+        $url = trim(Hash::get($artistInfo, "url"));
+        if (!empty($url) && $this->get("url") !== $url) {
+            $this->set("url", $url);
+        }
+
+        $biography = Hash::check($artistInfo, 'wiki') ? trim($artistInfo['wiki']['summary']) : '';
+        if (!empty($biography)) {
+            $biography = LastfmApi::cleanWikiText($artistInfo['wiki']['summary']);
+            if ($this->get("wiki") !== $biography) {
+                $this->set("wiki", $biography);
+            }
+        }
+
+        return $this;
     }
 
+    public function loadFromLastFm(array $artistInfo)
+    {
+        // Loading against null values will just populate the entity.
+        return $this->compareData($artistInfo);
+    }
 }

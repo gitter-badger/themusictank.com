@@ -10,6 +10,7 @@ use Cake\ORM\Entity;
 use Cake\ORM\Table;
 use Cake\ORM\TableRegistry;
 use Cake\ORM\Query;
+use Cake\Utility\Hash;
 
 use Exception;
 
@@ -34,7 +35,6 @@ class ArtistsTable extends Table {
     {
         $artist = new Artist();
         $artist->loadFromLastFm($data);
-        $this->save($artist);
         return $artist;
     }
 
@@ -51,7 +51,7 @@ class ArtistsTable extends Table {
     }
 
     /**
-     * Todo : This function assumes Lastfm results always generate new records. It proabably should not be the case.
+     *
      */
     public function findRemote(Query $query, array $options = [])
     {
@@ -61,18 +61,20 @@ class ArtistsTable extends Table {
 
         $lastfmApi = new LastfmApi();
         $remoteResults = $lastfmApi->searchArtists($options['criteria'], 10);
-
         $resultSet = [];
+
         if (count($remoteResults)) {
             // Single results do no return a loopable array.
             if (array_key_exists("name", $remoteResults)) {
-                return [$this->_createFromLastFm($remoteResults)];
-            }
-
-            foreach ($remoteResults as $value) {
-                $resultSet[] = $this->_createFromLastFm($value);
+                $resultSet[] = $this->_createFromLastFm($remoteResults);
+            } else {
+                foreach ($remoteResults as $value) {
+                    $resultSet[] = $this->_createFromLastFm($value);
+                }
             }
         }
+
+        $this->saveLastFmBatch($resultSet);
         return $resultSet;
     }
 
@@ -84,10 +86,9 @@ class ArtistsTable extends Table {
         $lastfmApi = new LastfmApi();
         $artist->loadFromLastFm($lastfmApi->getArtistInfo($artist));
 
-        // This is not normal...
         TableRegistry::get('LastfmArtists')->touch($artist->lastfm, 'Lastfm.onUpdate');
+        // @todo : This is not normal, saving should cascade...
         TableRegistry::get('LastfmArtists')->save($artist->lastfm);
-
         return $this->save($artist);
     }
 
@@ -178,6 +179,26 @@ class ArtistsTable extends Table {
             ->contain($options['contain']);
     }
 
+    /**
+     * Fetches the artists having the same mbid or no mbids and the exact name.
+     */
+    public function findMatchingKeys(Query $query, array $options = [])
+    {
+        $options += [
+            'keys' => null,
+            'contain' => ['LastfmArtists']
+        ];
+
+        if (is_null($options['keys'])) {
+            throw new Exception("Missing 'values' parameter.");
+        }
+
+        return $query
+            ->where(['LastfmArtists.mbid IN' => $options['keys']])
+            ->orWhere(['name IN' => $options['keys'], 'LastfmArtists.mbid' => null])
+            ->limit(count($options['keys']))
+            ->contain($options['contain']);
+    }
 
     public function getOEmbedDataBySlug($slug)
     {
@@ -193,7 +214,6 @@ class ArtistsTable extends Table {
             ->contain(['ArtistReviewSnapshots']);
     }
 
-
     public function getWithExpiredDiscographies($timeout = 0, $limit = 200)
     {
         return $this->find()
@@ -207,50 +227,62 @@ class ArtistsTable extends Table {
      * When saving a batch of entities, ensure the model doesn't already exist before
      * sending the data
      */
-    public function saveLastFmBatch($artists)
+    public function saveLastFmBatch(array $artistData)
     {
-        // The only unique key we have is the mbid sent in by Last.fm. Collect it
-        // and test against this to check for possible duplicates.
-        $mbids = [];
-        foreach ($artists as $artist) {
-            if (trim($artist->lastfm->mbid) != "") {
-                $mbids[] = $artist->lastfm->mbid;
+        $map = $this->_createLastFmMap($artistData);
+        $artistList = $this->find('matchingKeys', [ 'keys' => array_keys($map) ])->toArray();
+
+        // Update/compare existing records
+        foreach ($artistList as $artist) {
+            $data = null;
+            if (!is_null($artist->lastfm->mbid)) {
+                $data = $map[$artist->lastfm->mbid];
+                unset($map[$artist->lastfm->mbid]);
+            } else {
+                $data = $map[$artist->name];
+                unset($map[$artist->name]);
+            }
+
+            if (!is_null($data)) {
+                $artist->compareData($data);
             }
         }
 
-        // Get existing records
-        $existing = $this->find()
-            ->select(['id', 'LastfmArtists.id', 'LastfmArtists.artist_id', 'LastfmArtists.mbid'])
-            ->contain(['LastfmArtists'])
-            ->where(['LastfmArtists.mbid IN' => array_unique($mbids)])
-            ->limit(count($artists))
-            ->all();
+        // Create the new ones from the left-overs
+        foreach ($map as $values) {
+            $artist = new Artist();
+            $artist->loadFromLastFm($values);
+            $artistList[] = $artist;
+        }
 
-        if (count($existing)) {
-            // Create an indexed pointer map to associate more easily
-            $map = [];
-            foreach($existing as $record) {
-                $map[$record->lastfm->mbid] = $record;
-            }
+        // Finally, save the whole batch.
+        foreach ($artistList as $artist) {
+            $this->save($artist);
+        }
 
-            // Preserve association of existing data over lastfm's information.
-            foreach ($artists as $artist) {
-                if(array_key_exists($artist->lastfm->mbid, $map)) {
-                    $entity = $map[$artist->lastfm->mbid];
-                    $artist->id = $entity->id;
-                    $artist->lastfm->id = $entity->lastfm->id;
-                    $artist->lastfm->artist_id = $entity->lastfm->artist_id;
+        return $artistList;
+    }
+
+    /**
+     *  Creates a pointer map of the data sent to sort the results
+     *  more quickly.
+     */
+    protected function _createLastFmMap(array $artistData)
+    {
+        $map = [];
+
+        foreach ($artistData as $artist) {
+            // Check valid key values for unique matches.
+            foreach (['mbid', 'name'] as $property) {
+                $uniqueKeyValue = trim($artist[$property]);
+                if (!empty($uniqueKeyValue)) {
+                    $map[$uniqueKeyValue] = $artist;
+                    break;
                 }
             }
         }
 
-        // Finally, save the whole batch.
-        foreach ($artists as $artist) {
-            // @todo : This prevents Jay-Z from appearing. I should consider another filter.
-            if (trim($artist->lastfm->mbid) != "") {
-                $this->save($artist);
-            }
-        }
+        return $map;
     }
 
 }

@@ -16,6 +16,7 @@ class PopulateArtistDetailsTask extends Shell {
 
         if ($task->requiresUpdate()) {
 
+            $taskTable->touch('artists_details');
             $tblArtists = TableRegistry::get('Artists');
             $expiredArtists = $tblArtists->find('expired')->all();
 
@@ -25,9 +26,7 @@ class PopulateArtistDetailsTask extends Shell {
                 foreach ($expiredArtists as $idx => $artist) {
                     $this->out(sprintf("\t\t%d/%d\t%d <info>%s</info>...", $idx+1, count($expiredArtists), $artist->id, $artist->name));
                     $tblArtists->syncToRemote($artist);
-                    $taskTable->touch('artists_discographies');
                 }
-
             } else {
                 $this->out("\tArtist details are up-to-date.");
             }
@@ -35,7 +34,6 @@ class PopulateArtistDetailsTask extends Shell {
             $this->out("\tArtist details update is not ready to run.");
         }
 
-        $taskTable->touch('artists_details');
         $this->out("\t<info>Completed.</info>");
     }
 }

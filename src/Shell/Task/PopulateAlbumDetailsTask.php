@@ -17,6 +17,7 @@ class PopulateAlbumDetailsTask extends Shell {
 
         if ($task->requiresUpdate()) {
 
+            $taskTable->touch('album_details');
             $albumsTbl = TableRegistry::get('Albums');
             $expiredAlbums = $albumsTbl->getExpired($task->getTimeout())->all();
 
@@ -27,7 +28,6 @@ class PopulateAlbumDetailsTask extends Shell {
                     $this->out(sprintf("\t\t%d/%d\t%d <info>\t%s</info>...", $idx+1, count($expiredAlbums), $album->id, $album->name));
                     $album->syncToRemote();
                 }
-                $taskTable->touch('album_details');
 
             } else {
                 $this->out("\tAlbum details are up-to-date.");

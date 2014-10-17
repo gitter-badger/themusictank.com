@@ -35,7 +35,7 @@ class ThumbnailBehavior extends Behavior {
     {
         $config = $this->config();
         // Fetch new thumbnails each time the entity is updated
-        if($entity->get($config['image_src'])) {
+        if($entity->dirty($config['image_src'])) {
             $this->_deleteThumbnails($entity);
             $this->_createThumbnails($entity);
         }

@@ -15,10 +15,10 @@ class UpdateSongChallengeTask extends Shell {
         $task = $taskTable->getByName("last_trackchallenge");
 
         if ($task->requiresUpdate()) {
+            $taskTable->touch("last_trackchallenge");
             $track = TableRegistry::get('Tracks')->findNewDailyChallenger();
             if ($track) {
                 $this->out(sprintf("\tThe new daily challenger is '%s'.", $track->title));
-                $taskTable->touch("last_trackchallenge");
                 $this->out("\t<info>Completed</info>");
                 return;
             } else {

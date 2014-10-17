@@ -30,6 +30,27 @@ class AlbumsTable extends Table {
         $this->addBehavior('Thumbnail');
     }
 
+    /**
+     * Fetches the artists having the same mbid or no mbids and the exact name.
+     */
+    public function findMatchingKeys(Query $query, array $options = [])
+    {
+        $options += [
+            'keys' => null,
+            'contain' => ['LastfmAlbums']
+        ];
+
+        if (is_null($options['keys'])) {
+            throw new Exception("Missing 'values' parameter.");
+        }
+
+        return $query
+            ->where(['LastfmAlbums.mbid IN' => $options['keys']])
+            ->orWhere(['name IN' => $options['keys'], 'LastfmAlbums.mbid' => null])
+            ->limit(count($options['keys']))
+            ->contain($options['contain']);
+    }
+
     /** Fetches only the album names. The details will have to be pulled at another time.
      *  This is due to limitations in Lastfm's api data.
      */
@@ -45,49 +66,74 @@ class AlbumsTable extends Table {
 
         $artist = $options['artist'];
         if ($artist->requiresUpdate()) {
-
             $lastfmApi = new LastfmApi();
-            $topAlbums = $lastfmApi->getArtistTopAlbums($artist);
-
-            if ($this->_updateArtistAlbums($artist, $topAlbums)) {
-                foreach ($artist->albums as $album) {
-                    // Because the fetchDiscography function is all
-                    // about getting album names, only save new albums.
-                    if($album->isNew()) {
-                        $this->save($album);
-                    }
-                }
-            }
-
-            // Update modified time on artist.
-            $tblArtists = TableRegistry::get('Artists');
-            $tblArtists->touch($artist, 'Lastfm.onUpdate');
-            return $tblArtists->save($artist);
+            return $this->saveLastFmBatch($lastfmApi->getArtistTopAlbums($artist));
         }
-
-        return false;
     }
 
     /**
-     *  This is used only when creating empty album shell with no details other than the title (ex: from ajax search)
-     *  @return bool True if there was additions
+     * When saving a batch of entities, ensure the model doesn't already exist before
+     * sending the data
      */
-    protected function _updateArtistAlbums(Artist $artist, array $apiAlbums)
+    public function saveLastFmBatch(array $albumData)
     {
-        $currentMbids = TableRegistry::get('LastfmAlbums')->find('listMbids', ['artist' => $artist]);
-        foreach($apiAlbums as $apiAlbum) {
-            if(trim($apiAlbum['mbid']) != "" && !in_array($apiAlbum['mbid'], $currentMbids)) {
-                $artist->albums[] = $this->newEntity([
-                    'name' => $apiAlbum['name'],
-                    'artist_id' => $artist->id,
-                    'lastfm' => [
-                        'mbid' => $apiAlbum['mbid']
-                    ]
-                ]);;
+        $map = $this->_createLastFmMap($albumData);
+        $albumList = $this->find('matchingKeys', [ 'keys' => array_keys($map) ])->toArray();
+
+        // Update/compare existing records
+        foreach ($albumList as $album) {
+            $data = null;
+            if (!is_null($album->lastfm->mbid)) {
+                $data = $map[$album->lastfm->mbid];
+                unset($map[$album->lastfm->mbid]);
+            } else {
+                $data = $map[$album->name];
+                unset($map[$album->name]);
+            }
+
+            if (!is_null($data)) {
+                $album->compareData($data);
             }
         }
 
-        return count($artist->albums) > count($currentMbids);
+        // Create the new ones from the left-overs
+        foreach ($map as $values) {
+            $album = new Album();
+            $album->loadFromLastFm($values);
+            TableRegistry::get('Tracks')->saveLastFmBatch($values['tracks'], $album)
+
+
+            $albumList[] = $album;
+        }
+
+        // Finally, save the whole batch.
+        foreach ($albumList as $album) {
+            $this->save($album);
+        }
+
+        return $albumList;
+    }
+
+    /**
+     *  Creates a pointer map of the data sent to sort the results
+     *  more quickly.
+     */
+    protected function _createLastFmMap(array $albumData)
+    {
+        $map = [];
+
+        foreach ($albumData as $album) {
+            // Check valid key values for unique matches.
+            foreach (['mbid', 'name'] as $property) {
+                $uniqueKeyValue = trim($album[$property]);
+                if (!empty($uniqueKeyValue)) {
+                    $map[$uniqueKeyValue] = $album;
+                    break;
+                }
+            }
+        }
+
+        return $map;
     }
 
     public function findNewReleases(Query $query, array $options = [])
@@ -114,14 +160,24 @@ class AlbumsTable extends Table {
             ->where(["artist_id" => $artistId]);
     }
 
-    public function searchCriteria($criteria, $limit = 10)
+    public function findSearch(Query $query, array $options = [])
     {
-        return $this->find()
-            ->where(["Albums.name LIKE" => sprintf("%%%s%%", $criteria)])
-            ->limit($limit)
-            ->order("LOCATE('".$criteria."', Albums.name)", "ASC")
-            ->order("Albums.name", "ASC")
-            ->contain(['AlbumReviewSnapshots', 'Artists']);
+        $options += [
+            'limit' => 10,
+            'criteria' => null,
+            'contain' => ['AlbumReviewSnapshots', 'Artists']
+        ];
+
+        if(is_null($options['criteria'])) {
+            throw new Exception("Missing 'criteria' query parameter.");
+        }
+
+        return $query
+            ->where(["name LIKE" => sprintf("%%%s%%", $options['criteria'])])
+            ->limit((int)$options['limit'])
+            ->order(sprintf("LOCATE('%s', name)", $options['criteria']), "ASC")
+            ->order("name", "ASC")
+            ->contain($options['contain']);
     }
 
     public function getOEmbedDataBySlug($slug)
@@ -136,14 +192,5 @@ class AlbumsTable extends Table {
             ])
             ->where(["slug" => $slug])
             ->contain(['AlbumReviewSnapshots']);
-    }
-
-    public function getExpired($timeout = 0, $limit = 200)
-    {
-        return $this->find()
-            ->where(['LastfmAlbums.modified < ' => $timeout])
-            ->orWhere(['LastfmAlbums.modified IS NULL'])
-            ->contain(['LastfmAlbums', 'Artists', 'Tracks'])
-            ->limit($limit);
     }
 }

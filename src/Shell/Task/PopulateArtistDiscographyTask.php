@@ -16,17 +16,21 @@ class PopulateArtistDiscographyTask extends Shell {
 
         if ($task->requiresUpdate()) {
 
-            $albumsTbl = TableRegistry::get('Albums');
-            $expiredArtists = $albumsTbl->getExpired($task->getTimeout())->all();
+            //$taskTable->touch('artists_discographies');
 
-            if (count($expiredArtists)) {
-                $this->out(sprintf("\tFound <comment>%s artists</comment> that are out of sync.", count($expiredArtists)));
+            $tblLastFmAlbums = TableRegistry::get('LastfmAlbums');
+            $tblLastFmAlbums->find('expired', ['timeout' => $task->getTimeout()])->toArray();
+            $missing = TableRegistry::get('Artists')->find()->where(['id NOT IN ' => $tblLastFmAlbums->find('listArtistIds')])->toArray();
+            $count = count($expired) + count($missing);
 
-                foreach ($expiredArtists as $idx => $artist) {
-                    $this->out(sprintf("\t\t%d/%d\t%d <info>%s</info>...", $idx+1, count($expiredArtists), $artist->id, $artist->name));
-                    $artist->fetchDiscography();
+            if ($count) {
+                $this->out(sprintf("\tFound <comment>%s artists</comment> that are out of sync.", count($expired)));
+                $this->out(sprintf("\tFound <comment>%s artists</comment> that are missing a discography.", count($missing)));
+
+                foreach (array_merge($expired, $missing) as $idx => $artist) {
+                    $this->out(sprintf("\t\t%d/%d\t%d <info>%s</info>...", $idx+1, $count, $artist->id, $artist->name));
+                    TableRegistry::get('Albums')->find('updatedDiscography', ['artist' => $artist]);
                 }
-                $taskTable->touch('artists_discographies');
 
             } else {
                 $this->out("\tArtist discographies are up-to-date.");

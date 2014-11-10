@@ -207,10 +207,10 @@ $config = [
     		'className' => 'Cake\Database\Connection',
 			'driver' => 'Cake\Database\Driver\Mysql',
 			'persistent' => false,
-			'host' => 'localhost',
-			'login' => 'root',
-			'password' => 'nvi',
-			'database' => 'themusictank',
+			'host' => getenv('DB_HOST'),
+			'login' => getenv('DB_LOGIN'),
+			'password' => getenv('DB_PASSWORD'),
+			'database' => getenv('DB_NAME'),
 			'prefix' => false,
 			'encoding' => 'utf8',
 			'timezone' => 'UTC',
@@ -236,66 +236,7 @@ $config = [
 		* which is the recommended value in production enviroments
 		*/
 		'init' => ['SET GLOBAL innodb_stats_on_metadata = 0'],
-		'tmt.com' => [
-			'className' => 'Cake\Database\Connection',
-			'driver' => 'Cake\Database\Driver\Mysql',
-			'persistent' => false,
-			'host' => 'localhost',
-			'login' => 'tmtdb',
-			'password' => '7m7dat4u9ser',
-			'database' => 'themusictank',
-			'prefix' => false,
-			'encoding' => 'utf8',
-			'timezone' => 'UTC',
-			'cacheMetadata' => true,
-			'quoteIdentifiers' => false,
-		],
-
-    	'tmt.ff.com' => [
-    		'className' => 'Cake\Database\Connection',
-			'driver' => 'Cake\Database\Driver\Mysql',
-			'persistent' => false,
-			'host' => 'localhost',
-			'login' => 'tmtdb',
-			'password' => '7m7dat4u9ser',
-			'database' => 'devthemusictank',
-			'prefix' => false,
-			'encoding' => 'utf8',
-			'timezone' => 'UTC',
-			'cacheMetadata' => true,
-			'quoteIdentifiers' => false,
-    	],
-
-    	'nvi' => [
-    		'className' => 'Cake\Database\Connection',
-			'driver' => 'Cake\Database\Driver\Mysql',
-			'persistent' => false,
-			'host' => 'localhost',
-			'login' => 'root',
-			'password' => 'nvi',
-			'database' => 'themusictank',
-			'prefix' => false,
-			'encoding' => 'utf8',
-			'timezone' => 'UTC',
-			'cacheMetadata' => true,
-			'quoteIdentifiers' => false,
-    	],
-
-    	'laptop' => [
-    		'className' => 'Cake\Database\Connection',
-			'driver' => 'Cake\Database\Driver\Mysql',
-			'persistent' => false,
-			'host' => 'localhost',
-			'login' => 'root',
-			'password' => 'root',
-			'database' => 'themusictank',
-			'prefix' => false,
-			'encoding' => 'utf8',
-			'timezone' => 'UTC',
-			'cacheMetadata' => true,
-			'quoteIdentifiers' => false,
-    	],
-
+		
 		/**
 		 * The test connection is used during the test suite.
 		 */
@@ -303,10 +244,10 @@ $config = [
 			'className' => 'Cake\Database\Connection',
 			'driver' => 'Cake\Database\Driver\Mysql',
 			'persistent' => false,
-			'host' => 'localhost',
-			'login' => 'root',
-			'password' => 'nvi',
-			'database' => 'themusictank',
+			'host' => getenv('DB_HOST'),
+			'login' => getenv('DB_LOGIN'),
+			'password' => getenv('DB_PASSWORD'),
+			'database' => getenv('DB_NAME'),
 			'prefix' => false,
 			'encoding' => 'utf8',
 			'timezone' => 'UTC',
@@ -376,53 +317,16 @@ $config = [
 
 	'Apis' => [
 		'facebook' => [
-			"key" => "497725690321176",
-	        "secret" => "6b8ba6118181a36041f88b8ae4616c4c"
+			"key" => getenv('FB_KEY'),
+	        "secret" => getenv('FB_SECRET')
 		],
 
 		'lastfm' => [
-	        "key" => "ea2c81ee8d32aece42eb04671ede64c6",
-	        "secret" => "6b8ba6118181a36041f88b8ae4616c4c"
+	        "key" => getenv('LASTFM_KEY'),
+	        "secret" => getenv('LASTFM_SECRET')
 		],
 
 		'VLC' => "VLC",
 		'ConvertCMD' => 'convert'
 	]
 ];
-
-
-if(array_key_exists('SERVER_NAME', $_SERVER)) {
-	if(preg_match('/tmt\.dev/', $_SERVER['SERVER_NAME'])) {
-		$config['Apis'] = [
-			'facebook' => [
-				"key" => null,
-		        "secret" => null
-			],
-
-			'lastfm' => [
-		        "key" => "145252e0c4a971f072e0fed4fa55a2bb",
-		        "secret" => "6bbc4a7eeada3b668a6fbbfbb1d87aa0"
-			],
-
-			'VLC' => null,
-			'ConvertCMD' => null
-		];
-	}
-	elseif(preg_match('/themusictank\.nvi/', $_SERVER['SERVER_NAME'])) {
-		$config['Apis'] = [
-			'facebook' => [
-				"key" => "522261501194592",
-		        "secret" => "95108b5db25d647a570cb677cb4bd4b6"
-			],
-
-			'lastfm' => [
-		        "key" => "9014609ad7074beda4be38b3011fec17",
-		        "secret" => "a15fa4e5a198c77683eaa24374b24740"
-			],
-
-			'VLC' => "/Applications/VLC.app/Contents/MacOS/VLC",
-			'ConvertCMD' => null
-		];
-	}
-}
-

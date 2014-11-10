@@ -72,9 +72,9 @@ class DATABASE_CONFIG {
 		'datasource' => 'Database/Mysql',
 		'persistent' => false,
 		'host' => 'localhost',
-		'login' => 'root',
-		'password' => 'nvi',
-		'database' => 'themusictank',
+		'login' => '',
+		'password' => '',
+		'database' => '',
 		'prefix' => '',
 		'encoding' => 'utf8',
 	);

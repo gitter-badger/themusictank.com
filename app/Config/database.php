@@ -60,9 +60,9 @@ class DATABASE_CONFIG {
         'datasource' => 'Database/Mysql',
 		'persistent' => false,
 		'host' => 'localhost',
-		'login' => 'tmtdb',
-		'password' => '7m7dat4u9ser',
-		'database' => 'themusictank',
+		'login' => '',
+		'password' => '',
+		'database' => '',
 		'prefix' => '',
 		'encoding' => 'utf8'
 	);
@@ -83,9 +83,9 @@ class DATABASE_CONFIG {
 		'datasource' => 'Database/Mysql',
 		'persistent' => false,
 		'host' => 'localhost',
-		'login' => 'tmtdb',
-		'password' => '7m7dat4u9ser',
-		'database' => 'devthemusictank',
+		'login' => '',
+		'password' => '',
+		'database' => '',
 		'prefix' => '',
 		'encoding' => 'utf8',
 	);
@@ -94,9 +94,9 @@ class DATABASE_CONFIG {
 		'datasource' => 'Database/Mysql',
 		'persistent' => false,
 		'host' => 'localhost',
-		'login' => 'root',
-		'password' => 'root',
-		'database' => 'themusictank',
+		'login' => '',
+		'password' => '',
+		'database' => '',
 		'prefix' => '',
 		'encoding' => 'utf8',
 	);
@@ -105,18 +105,10 @@ class DATABASE_CONFIG {
 
     function __construct ()
 	{
-        if(preg_match('/themusictank\.nvi/', $_SERVER['SERVER_NAME']))
-        {
-            $this->default = $this->nvi;
-        }
-        elseif(preg_match('/tmt\.francoisfaubert\.com/', $_SERVER['SERVER_NAME']))
-        {
-            $this->default = $this->tmt_francoisfaubert_com;
-        }
-        elseif(preg_match('/tmt\.dev/', $_SERVER['SERVER_NAME']))
-        {
-            $this->default = $this->tmt_dev;
-        }
+	        if(preg_match('/tmt\.dev/', $_SERVER['SERVER_NAME']))
+	        {
+	            $this->default = $this->tmt_dev;
+	        }
 	}
 
 }

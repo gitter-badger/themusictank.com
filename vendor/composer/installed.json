@@ -168,60 +168,6 @@
         "notification-url": "https://packagist.org/downloads/"
     },
     {
-        "name": "mobiledetect/mobiledetectlib",
-        "version": "2.8.4",
-        "version_normalized": "2.8.4.0",
-        "source": {
-            "type": "git",
-            "url": "https://github.com/serbanghita/Mobile-Detect.git",
-            "reference": "58754ad5562d730e9ff64654494165a3dafe10cb"
-        },
-        "dist": {
-            "type": "zip",
-            "url": "https://api.github.com/repos/serbanghita/Mobile-Detect/zipball/58754ad5562d730e9ff64654494165a3dafe10cb",
-            "reference": "58754ad5562d730e9ff64654494165a3dafe10cb",
-            "shasum": ""
-        },
-        "require": {
-            "php": ">=5.0.0"
-        },
-        "require-dev": {
-            "phpunit/phpunit": "*"
-        },
-        "time": "2014-08-25 07:57:48",
-        "type": "library",
-        "installation-source": "dist",
-        "autoload": {
-            "classmap": [
-                "Mobile_Detect.php"
-            ],
-            "psr-0": {
-                "Detection": "namespaced/"
-            }
-        },
-        "notification-url": "https://packagist.org/downloads/",
-        "license": [
-            "MIT"
-        ],
-        "authors": [
-            {
-                "name": "Serban Ghita",
-                "email": "serbanghita@gmail.com",
-                "homepage": "http://mobiledetect.net",
-                "role": "Developer"
-            }
-        ],
-        "description": "Mobile_Detect is a lightweight PHP class for detecting mobile devices. It uses the User-Agent string combined with specific HTTP headers to detect the mobile environment.",
-        "homepage": "https://github.com/serbanghita/Mobile-Detect",
-        "keywords": [
-            "detect mobile devices",
-            "mobile",
-            "mobile detect",
-            "mobile detector",
-            "php mobile detect"
-        ]
-    },
-    {
         "name": "aura/intl",
         "version": "1.1.1",
         "version_normalized": "1.1.1.0",
@@ -302,18 +248,112 @@
         ]
     },
     {
+        "name": "mobiledetect/mobiledetectlib",
+        "version": "2.8.5",
+        "version_normalized": "2.8.5.0",
+        "source": {
+            "type": "git",
+            "url": "https://github.com/serbanghita/Mobile-Detect.git",
+            "reference": "891324bde48a245be2213df82887dd7b1ea69dec"
+        },
+        "dist": {
+            "type": "zip",
+            "url": "https://api.github.com/repos/serbanghita/Mobile-Detect/zipball/891324bde48a245be2213df82887dd7b1ea69dec",
+            "reference": "891324bde48a245be2213df82887dd7b1ea69dec",
+            "shasum": ""
+        },
+        "require": {
+            "php": ">=5.0.0"
+        },
+        "require-dev": {
+            "phpunit/phpunit": "*"
+        },
+        "time": "2014-10-20 20:39:23",
+        "type": "library",
+        "installation-source": "dist",
+        "autoload": {
+            "classmap": [
+                "Mobile_Detect.php"
+            ],
+            "psr-0": {
+                "Detection": "namespaced/"
+            }
+        },
+        "notification-url": "https://packagist.org/downloads/",
+        "license": [
+            "MIT"
+        ],
+        "authors": [
+            {
+                "name": "Serban Ghita",
+                "email": "serbanghita@gmail.com",
+                "homepage": "http://mobiledetect.net",
+                "role": "Developer"
+            }
+        ],
+        "description": "Mobile_Detect is a lightweight PHP class for detecting mobile devices. It uses the User-Agent string combined with specific HTTP headers to detect the mobile environment.",
+        "homepage": "https://github.com/serbanghita/Mobile-Detect",
+        "keywords": [
+            "detect mobile devices",
+            "mobile",
+            "mobile detect",
+            "mobile detector",
+            "php mobile detect"
+        ]
+    },
+    {
+        "name": "psr/log",
+        "version": "1.0.0",
+        "version_normalized": "1.0.0.0",
+        "source": {
+            "type": "git",
+            "url": "https://github.com/php-fig/log.git",
+            "reference": "fe0936ee26643249e916849d48e3a51d5f5e278b"
+        },
+        "dist": {
+            "type": "zip",
+            "url": "https://api.github.com/repos/php-fig/log/zipball/fe0936ee26643249e916849d48e3a51d5f5e278b",
+            "reference": "fe0936ee26643249e916849d48e3a51d5f5e278b",
+            "shasum": ""
+        },
+        "time": "2012-12-21 11:40:51",
+        "type": "library",
+        "installation-source": "dist",
+        "autoload": {
+            "psr-0": {
+                "Psr\\Log\\": ""
+            }
+        },
+        "notification-url": "https://packagist.org/downloads/",
+        "license": [
+            "MIT"
+        ],
+        "authors": [
+            {
+                "name": "PHP-FIG",
+                "homepage": "http://www.php-fig.org/"
+            }
+        ],
+        "description": "Common interface for logging libraries",
+        "keywords": [
+            "log",
+            "psr",
+            "psr-3"
+        ]
+    },
+    {
         "name": "cakephp/cakephp",
         "version": "3.0.x-dev",
         "version_normalized": "3.0.9999999.9999999-dev",
         "source": {
             "type": "git",
             "url": "https://github.com/cakephp/cakephp.git",
-            "reference": "6e8f607515c410e457e3dd5704155c3c913a8abc"
+            "reference": "5eeb5cbeab8dc80385f6ebb9f9209c410f719db2"
         },
         "dist": {
             "type": "zip",
-            "url": "https://api.github.com/repos/cakephp/cakephp/zipball/6e8f607515c410e457e3dd5704155c3c913a8abc",
-            "reference": "6e8f607515c410e457e3dd5704155c3c913a8abc",
+            "url": "https://api.github.com/repos/cakephp/cakephp/zipball/5eeb5cbeab8dc80385f6ebb9f9209c410f719db2",
+            "reference": "5eeb5cbeab8dc80385f6ebb9f9209c410f719db2",
             "shasum": ""
         },
         "require": {
@@ -323,19 +363,24 @@
             "ext-mcrypt": "*",
             "ircmaxell/password-compat": "1.0.*",
             "nesbot/carbon": "1.8.*",
-            "php": ">=5.4.16"
+            "php": ">=5.4.16",
+            "psr/log": "1.0"
         },
         "replace": {
+            "cakephp/cache": "self.version",
             "cakephp/collection": "self.version",
             "cakephp/core": "self.version",
+            "cakephp/datasource": "self.version",
             "cakephp/event": "self.version",
+            "cakephp/log": "self.version",
             "cakephp/utility": "self.version",
             "cakephp/validation": "self.version"
         },
         "require-dev": {
+            "cakephp/cakephp-codesniffer": "*",
             "phpunit/phpunit": "*"
         },
-        "time": "2014-09-16 12:01:29",
+        "time": "2014-11-09 22:43:02",
         "type": "library",
         "installation-source": "source",
         "autoload": {
@@ -343,7 +388,8 @@
                 "Cake\\": "src"
             },
             "files": [
-                "src/Core/functions.php"
+                "src/Core/functions.php",
+                "src/Collection/functions.php"
             ]
         },
         "notification-url": "https://packagist.org/downloads/",

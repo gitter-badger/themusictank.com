@@ -204,18 +204,18 @@ $config = [
 	'Datasources' => [
 
 		'default' => [
-    		'className' => 'Cake\Database\Connection',
-			'driver' => 'Cake\Database\Driver\Mysql',
-			'persistent' => false,
-			'host' => getenv('DB_HOST'),
-			'login' => getenv('DB_LOGIN'),
-			'password' => getenv('DB_PASSWORD'),
-			'database' => getenv('DB_NAME'),
-			'prefix' => false,
-			'encoding' => 'utf8',
-			'timezone' => 'UTC',
-			'cacheMetadata' => true,
-			'quoteIdentifiers' => false,
+                        'className' => 'Cake\Database\Connection',
+                        'driver' => 'Cake\Database\Driver\Sqlite',
+                        'persistent' => false,
+                        'host' => 'localhost',
+                        'login' => null,
+                        'password' => null,
+                        'database' => 'tmp/themusictank.dev.db',
+                        'prefix' => false,
+                        'encoding' => 'utf8',
+                        'timezone' => 'UTC',
+                        'cacheMetadata' => true,
+                        'quoteIdentifiers' => false,
 		],
 
 		/*

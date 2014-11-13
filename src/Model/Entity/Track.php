@@ -5,15 +5,29 @@ namespace App\Model\Entity;
 use Cake\ORM\Entity;
 use Cake\Routing\Router;
 use Cake\ORM\TableRegistry;
+use Cake\Utility\Hash;
 
 use App\Model\Entity\LastfmTrack;
 use App\Model\Entity\OembedableTrait;
 use App\Model\Entity\TrackYoutube;
+
 use App\Model\Api\YoutubeApi;
+use App\Model\Api\LastfmApi;
 
 class Track extends Entity
 {
     use OembedableTrait;
+
+    public function assignUniqueSlug()
+    {
+        if(!is_null($this->get("title"))) {
+            $slug = TableRegistry::get("Tracks")->find('uniqueSlug', ['slug' => $this->get("title")]);
+            $this->set('slug', $slug);
+            return true;
+        }
+        return false;
+    }
+
 
     // @todo : There should be a review date field availlable here
     // to allow sorting
@@ -120,18 +134,53 @@ class Track extends Entity
         return false;
     }
 
+    public function syncToRemote()
+    {
+        $lastfmApi = new LastfmApi();
+        $this->loadFromLastFm($lastfmApi->getTrackInfo($this));
+        TableRegistry::get('Tracks')->save($this);
+
+        $this->lastfm->modified = new \DateTime();
+        TableRegistry::get('LastfmTracks')->save($this->lastfm);
+    }
+
     public function loadFromLastFm($trackInfo)
     {
+        // Loading against null values will just populate the entity.
+        return $this->compareData($trackInfo);
+    }
 
-        $this->title = trim($trackInfo['name']);
-        $this->duration = (int)$trackInfo['duration'];
-        $this->position = (int)$trackInfo['@attr']['rank'];
+    /**
+     * Compare this version of the entity with the one passed in parameter.
+     * The one in parameter is considered the new copy; 'this' is the one from the DB.
+     */
+    public function compareData(array $trackInfo)
+    {
+        $name = trim(Hash::get($trackInfo, "name"));
+        if (!empty($name) && $this->get("title") !== $name) {
+            $this->set("title", $name);
+        }
 
-        // Save other secondary track information
+        $duration = (int)Hash::get($trackInfo, "duration");
+        if ($this->get("duration") !== $duration) {
+            $this->set("duration", $duration);
+        }
+
+        // This is when fetching albums details.
+        $position = Hash::check($trackInfo, '@attr.rank') ? (int)$trackInfo['@attr']['rank'] : "";
+        if ($this->get("track_num") !== $position) {
+            $this->set("track_num", $position);
+        }
+        // This is when fetching track details.
+        $position = Hash::check($trackInfo, 'album.@attr.position') ? (int)$trackInfo['album']['@attr']['position'] : "";
+        if ($this->get("track_num") !== $position) {
+            $this->set("track_num", $position);
+        }
+
         if (is_null($this->lastfm)) {
             $this->lastfm = new LastfmTrack();
         }
-        $this->lastfm->loadFromLastFm($trackInfo);
+        $this->lastfm->compareData($trackInfo);
 
         return $this;
     }

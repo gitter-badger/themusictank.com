@@ -17,68 +17,75 @@
 
         <div class="row stats">
 
-            <div class="col-md-2 enjoyment">
-                <span><?= __("Enjoyed"); ?></span>
-                <em>
-                    <?php if(is_null($artist->snapshot)) : ?>
+            <div class="col-md-6 enjoyment">
+                <div class="col-md-4 enjoyment">
+                    <span><?= __("Enjoyed"); ?></span>
+                    <em>
+                        <?php if(is_null($artist->snapshot)) : ?>
+                            N/A
+                        <?php else : ?>
+                            <?= (int)$artist->snapshot->liking_pct; ?>%
+                        <?php endif; ?>
+                    </em>
+                </div>
+                <div class="col-md-4 dislike">
+                    <span><?= __("Disliked"); ?></span>
+                    <em>
+                        <?php if(is_null($artist->snapshot)) : ?>
+                            N/A
+                        <?php else : ?>
+                            <?= (int)$artist->snapshot->disliking_pct; ?>%
+                        <?php endif; ?>
+                    </em>
+                </div>
+
+                <div class="col-md-4 achievements">
+                    <span><?= __("Achievements given"); ?></span>
+                    <em>
                         N/A
-                    <?php else : ?>
-                        <?= (int)$artist->snapshot->liking_pct; ?>%
-                    <?php endif; ?>
-                </em>
+                    </em>
+                </div>
             </div>
-            <div class="col-md-2 dislike">
-                <span><?= __("Disliked"); ?></span>
-                <em>
-                    <?php if(is_null($artist->snapshot)) : ?>
+            <div class="col-md-6 enjoyment">
+                <div class="col-md-6 best-track">
+                    <span><?=__("Best track"); ?></span>
+                    <?php $bestTrack  = $artist->getBestTrack(); ?>
+                    <?php if(isset($bestTrack)) : ?>
+                        <em><?= $this->Html->link($bestTrack->title, array('controller' => 'tracks', 'action' => 'view', $bestTrack->slug)); ?>&nbsp;<?= (int)$bestTrack["TrackReviewSnapshot"]["liking_pct"]; ?>%</em>
+                    <?php else : ?>
+                            N/A
+                    <?php endif; ?>
+                </div>
+                <div class="col-md-36worst-track">
+                    <span><?= __("Worst track"); ?></span>
+                    <?php $worstTrack  = $artist->getWorstTrack(); ?>
+                    <?php if(isset($worstTrack)) : ?>
+                        <em><?= $this->Html->link($worstTrack->title, array('controller' => 'tracks', 'action' => 'view', $worstTrack->slug)); ?>&nbsp;<?= (int)$worstTrack["TrackReviewSnapshot"]["liking_pct"]; ?>%</em>
+                    <?php else : ?>
+                            N/A
+                    <?php endif; ?>
+                </div>
+
+                <div class="col-md-6 best-album">
+                    <span><?= __("Best Album"); ?></span>
+                    <?php $bestAlbum  = $artist->getBestAlbum(); ?>
+                    <?php if(isset($bestAlbum)) : ?>
+                        <em><?= $this->Html->link($bestAlbum->name, array('controller' => 'albums', 'action' => 'view', $bestAlbum->slug)); ?>&nbsp;<?= is_null($bestAlbum->snapshot) ? 0 : (int)$bestAlbum->snapshot->liking_pct; ?>%</em>
+                    <?php else : ?>
                         N/A
-                    <?php else : ?>
-                        <?= (int)$artist->snapshot->disliking_pct; ?>%
                     <?php endif; ?>
-                </em>
-            </div>
+                </div>
 
-            <?php $bestTrack  = $artist->getBestTrack(); ?>
-            <?php if(isset($bestTrack)) : ?>
-            <div class="col-md-4 best-track">
-                <span><?=__("Best track"); ?></span>
-                <em><?= $this->Html->link($bestTrack->title, array('controller' => 'tracks', 'action' => 'view', $bestTrack->slug)); ?>&nbsp;<?= (int)$bestTrack["TrackReviewSnapshot"]["liking_pct"]; ?>%</em>
+                <div class="col-md-6 worst-album">
+                    <span><?= __("Worst Album"); ?></span>
+                    <?php $worstAlbum  = $artist->getWorstAlbum(); ?>
+                    <?php if(isset($worstAlbum)) : ?>
+                        <em><?= $this->Html->link($worstAlbum->name, array('controller' => 'albums', 'action' => 'view', $worstAlbum->slug)); ?>&nbsp;<?= is_null($bestAlbum->snapshot) ? 0 : (int)$worstAlbum->snapshot->liking_pct; ?>%</em>
+                    <?php else : ?>
+                        N/A
+                    <?php endif; ?>
+                </div>
             </div>
-            <?php endif; ?>
-
-            <?php $worstTrack  = $artist->getWorstTrack(); ?>
-            <?php if(isset($worstTrack)) : ?>
-            <div class="col-md-4 worst-track">
-                <span><?= __("Worst track"); ?></span>
-                <em><?= $this->Html->link($worstTrack->title, array('controller' => 'tracks', 'action' => 'view', $worstTrack->slug)); ?>&nbsp;<?= (int)$worstTrack["TrackReviewSnapshot"]["liking_pct"]; ?>%</em>
-            </div>
-            <?php endif; ?>
-
-            <div class="col-md-2 achievements">
-                <span><?= __("Achievements given"); ?></span>
-                <em>
-                    N/A
-                </em>
-            </div>
-            <div class="col-md-2">
-
-            </div>
-
-            <?php $bestAlbum  = $artist->getBestAlbum(); ?>
-            <?php if(isset($bestAlbum)) : ?>
-            <div class="col-md-4 best-album">
-                <span><?= __("Best Album"); ?></span>
-                <em><?= $this->Html->link($bestAlbum->name, array('controller' => 'albums', 'action' => 'view', $bestAlbum->slug)); ?>&nbsp;<?= is_null($bestAlbum->snapshot) ? 0 : (int)$bestAlbum->snapshot->liking_pct; ?>%</em>
-            </div>
-            <?php endif; ?>
-
-            <?php $worstAlbum  = $artist->getWorstAlbum(); ?>
-            <?php if(isset($worstAlbum)) : ?>
-            <div class="col-md-4 worst-album">
-                <span><?= __("Worst Album"); ?></span>
-                <em><?= $this->Html->link($worstAlbum->name, array('controller' => 'albums', 'action' => 'view', $worstAlbum->slug)); ?>&nbsp;<?= is_null($bestAlbum->snapshot) ? 0 : (int)$worstAlbum->snapshot->liking_pct; ?>%</em>
-            </div>
-            <?php endif; ?>
 
             <div class="col-md-12 social">
                 <?php if($isLogged) : ?>

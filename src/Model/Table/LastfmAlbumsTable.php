@@ -47,10 +47,4 @@ class LastfmAlbumsTable extends Table
             ->limit((int)$options['limit']);
     }
 
-
-    public function findListArtistIds(Query $query, array $options = [])
-    {
-        return [-1] + $query->select(['Albums.artist_id', 'LastfmAlbums.id'])->distinct(['Albums.artist_id'])->contain(['Albums'])->extract('Albums.artist_id')->toArray();
-    }
-
 }

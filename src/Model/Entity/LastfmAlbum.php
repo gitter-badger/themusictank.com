@@ -1,10 +1,11 @@
 <?php
-
 namespace App\Model\Entity;
 
-use Cake\ORM\Entity;
 use App\Model\Api\LastfmApi;
 use App\Model\Entity\SyncTrait;
+
+use Cake\Utility\Hash;
+use Cake\ORM\Entity;
 
 class LastfmAlbum extends Entity
 {
@@ -16,19 +17,19 @@ class LastfmAlbum extends Entity
      */
     public function compareData(array $albumInfo)
     {
-        $mbid = trim(Hash::get($artistInfo, "mbid"));
+        $mbid = trim(Hash::get($albumInfo, "mbid"));
         if (!empty($mbid) && $this->get("mbid") !== $mbid) {
             $this->set("mbid", $mbid);
         }
 
-        $url = trim(Hash::get($artistInfo, "url"));
+        $url = trim(Hash::get($albumInfo, "url"));
         if (!empty($url) && $this->get("url") !== $url) {
             $this->set("url", $url);
         }
 
-        $biography = Hash::check($artistInfo, 'wiki') ? trim($artistInfo['wiki']['summary']) : '';
+        $biography = Hash::check($albumInfo, 'wiki') ? trim($albumInfo['wiki']['summary']) : '';
         if (!empty($biography)) {
-            $biography = LastfmApi::cleanWikiText($artistInfo['wiki']['summary']);
+            $biography = LastfmApi::cleanWikiText($albumInfo['wiki']['summary']);
             if ($this->get("wiki") !== $biography) {
                 $this->set("wiki", $biography);
             }
@@ -37,9 +38,9 @@ class LastfmAlbum extends Entity
         return $this;
     }
 
-    public function loadFromLastFm(array $artistInfo)
+    public function loadFromLastFm(array $albumInfo)
     {
         // Loading against null values will just populate the entity.
-        return $this->compareData($artistInfo);
+        return $this->compareData($albumInfo);
     }
 }

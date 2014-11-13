@@ -11,7 +11,7 @@ class Task extends Entity
     {
         // When testing, uncomment the following to allow
         // fresh results
-        //return true;
+        return true;
 
         if (is_null($this->modified)) {
             return true;

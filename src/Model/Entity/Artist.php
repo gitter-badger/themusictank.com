@@ -24,6 +24,16 @@ class Artist extends Entity {
         return !is_null($this->snapshot) && $this->snapshot->isAvailable();
     }
 
+    public function assignUniqueSlug()
+    {
+        if(!is_null($this->get("name"))) {
+            $slug = TableRegistry::get("Artists")->find('uniqueSlug', ['slug' => $this->get("name")]);
+            $this->set('slug', $slug);
+            return true;
+        }
+        return false;
+    }
+
     protected function _getIntroduction()
     {
         if (!is_null($this->get("lastfm")->get("biography_curated"))) {

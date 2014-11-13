@@ -3,10 +3,13 @@ namespace App\Model\Table;
 
 use App\Model\Entity\Artist;
 use App\Model\Api\LastfmApi;
+use App\Model\Entity\Album;
 
+use Cake\I18n\Time;
 use Cake\ORM\Table;
 use Cake\ORM\Query;
 use Cake\ORM\TableRegistry;
+use Cake\Utility\Inflector;
 
 use Exception;
 
@@ -29,6 +32,55 @@ class AlbumsTable extends Table {
         $this->addBehavior('Syncable');
         $this->addBehavior('Thumbnail');
     }
+
+
+    public function findExpired(Query $query, array $options = [])
+    {
+        $options += [
+            'timeout' => 0,
+            'limit' => 200,
+            'contain' => ['LastfmAlbums', 'Artists', 'Tracks']
+        ];
+
+        return $query
+            ->where(['LastfmAlbums.modified < ' => $options['timeout']])
+            ->orWhere(['LastfmAlbums.modified IS NULL'])
+            ->contain($options['contain'])
+            ->limit((int)$options['limit']);
+    }
+
+    public function findMissingSnapshots(Query $query, array $options = [])
+    {
+        return $query->find()
+            ->select(['id','name'])
+            ->where(['id IN' => TableRegistry::get("AlbumReviewSnapshots")->getIdsWithNoSnapshots()]);
+    }
+
+    public function findUniqueSlug(Query $query, array $options = [])
+    {
+        // I bet this could be improved. For now, loop until we have a unique slug
+        // in the model's table.
+        $i = 0;
+        $slug = strtolower(Inflector::slug($options['slug']));
+
+        while ($this->findBySlug($slug)->count() > 0) {
+            if (!preg_match ('/-{1}[0-9]+$/', $slug )) {
+                $slug .= '-' . ++$i;
+            }
+            else {
+                $slug = preg_replace ('/[0-9]+$/', ++$i, $slug );
+            }
+        }
+
+        return $slug;
+    }
+
+
+    public function findListArtistIds(Query $query, array $options = [])
+    {
+        return [-1] + $query->select(['Albums.artist_id', 'LastfmAlbums.id'])->distinct(['Albums.artist_id'])->contain(['LastfmAlbums'])->extract('Albums.artist_id')->toArray();
+    }
+
 
     /**
      * Fetches the artists having the same mbid or no mbids and the exact name.
@@ -66,16 +118,50 @@ class AlbumsTable extends Table {
 
         $artist = $options['artist'];
         if ($artist->requiresUpdate()) {
+
+            $shell = null;
+            if (array_key_exists("shell", $options)) {
+                $shell = $options['shell'];
+                $shell->out("\t\t\tQuerying LastFm...");
+            }
+
             $lastfmApi = new LastfmApi();
-            return $this->saveLastFmBatch($lastfmApi->getArtistTopAlbums($artist));
+            $this->saveLastFmBatch($lastfmApi->getArtistTopAlbums($artist), $artist, $shell);
+
+            // Save update timestamp on artist.
+            $tblArtists = TableRegistry::get('LastfmArtists');
+            $artist->set("modified_discography", new Time());
+            $tblArtists->save($artist);
         }
     }
+
+
+    /**
+     * Takes an existing Artist and updates its values with what is returned by the Lastfm API.
+     */
+    public function syncToRemote(Album $album)
+    {
+        $lastfmApi = new LastfmApi();
+        $infos = $lastfmApi->getAlbumInfo($album);
+        $album->loadFromLastFm($infos);
+
+        // Preload/modify the tracks too.
+        TableRegistry::get('Tracks')->assignLastFmBatch($album, $infos);
+
+        // @todo : This is not normal, saving should cascade...
+        $tblLastfm = TableRegistry::get('LastfmAlbums');
+        $tblLastfm->touch($album->lastfm, 'Lastfm.onUpdate');
+        $tblLastfm->save($album->lastfm);
+
+        return $this->save($album);
+    }
+
 
     /**
      * When saving a batch of entities, ensure the model doesn't already exist before
      * sending the data
      */
-    public function saveLastFmBatch(array $albumData)
+    public function saveLastFmBatch(array $albumData, Artist $artist, $shell = null)
     {
         $map = $this->_createLastFmMap($albumData);
         $albumList = $this->find('matchingKeys', [ 'keys' => array_keys($map) ])->toArray();
@@ -100,16 +186,18 @@ class AlbumsTable extends Table {
         foreach ($map as $values) {
             $album = new Album();
             $album->loadFromLastFm($values);
-            TableRegistry::get('Tracks')->saveLastFmBatch($values['tracks'], $album)
-
-
+            $album->artist_id = $artist->id;
             $albumList[] = $album;
         }
 
         // Finally, save the whole batch.
         foreach ($albumList as $album) {
+            if (!is_null($shell)) {
+                $shell->out("\t\t\tUpdating <info>" . $album->name ."</info>...");
+            }
             $this->save($album);
         }
+
 
         return $albumList;
     }

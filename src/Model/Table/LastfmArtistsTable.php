@@ -28,4 +28,19 @@ class LastfmArtistsTable extends Table
         $this->updateAll(['is_popular' => true], ['id IN' => $ids]);
     }
 
+    public function findExpired(Query $query, array $options = [])
+    {
+        $options += [
+            'timeout' => 0,
+            'limit' => 200,
+            'contain' => ['LastfmArtists']
+        ];
+
+        return $query
+            ->contain($options['contain'])
+            ->where(['LastfmArtists.modified < ' => (int)$options['timeout']])
+            ->orWhere(['LastfmArtists.modified IS NULL'])
+            ->limit((int)$options['limit']);
+    }
+
 }

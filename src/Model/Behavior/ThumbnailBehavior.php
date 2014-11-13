@@ -31,7 +31,7 @@ class ThumbnailBehavior extends Behavior {
         }
     }
 
-    public function beforeSave(Event $event, Entity $entity)
+    public function beforeSave(Event $event, Entity $entity, $options)
     {
         $config = $this->config();
         // Fetch new thumbnails each time the entity is updated
@@ -78,21 +78,24 @@ class ThumbnailBehavior extends Behavior {
                 mkdir($config['path'] . $typeSubfolder . DS . $firstLetterSubfolder . DS . $secondLetterSubfolder, 0776, true);
             }
 
-            ini_set('memory_limit', '64M'); // big files break the code
-            $this->_downloadRemoteImage($entity->get('image_src'), $original);
+            if(!file_exists($entity->get('image'))) {
+                ini_set('memory_limit', '64M'); // big files break the code
+                $this->_downloadRemoteImage($entity->get('image_src'), $original);
 
-            if (file_exists($original)) {
-                foreach ($config['types'] as $type => $size) {
-                    // Run imagemagik in the command line as to stay more efficient resources wise.
-                    exec(sprintf("convert %s -resize %d %s", $original, $size, $config['path'] . $entity->get('image') . "_" . $type . ".jpg" ) );
+                if (file_exists($original)) {
+
+                    foreach ($config['types'] as $type => $size) {
+                        // Run imagemagik in the command line as to stay more efficient resources wise.
+                        exec(sprintf("convert %s -resize %d %s", $original, $size, $config['path'] . $entity->get('image') . "_" . $type . ".jpg" ) );
+                    }
+
+                    // Run images requiring special effects
+                    exec(sprintf("convert %s -channel RGBA -blur 0x8 %s ", $config['path'] . $entity->get('image') . "_blur.jpg", $config['path'] . $entity->get('image') . "_blur.jpg"));
+                    exec(sprintf("convert %s -channel RGBA -blur 0x8 %s ", $config['path'] . $entity->get('image') . "_mobile_blur.jpg", $config['path'] . $entity->get('image') . "_mobile_blur.jpg"));
+
+                    // remote the bigass image now that we have the sizes we want.
+                    unlink($original);
                 }
-
-                // Run images requiring special effects
-                exec(sprintf("convert %s -channel RGBA -blur 0x8 %s ", $config['path'] . $entity->get('image') . "_blur.jpg", $config['path'] . $entity->get('image') . "_blur.jpg"));
-                exec(sprintf("convert %s -channel RGBA -blur 0x8 %s ", $config['path'] . $entity->get('image') . "_mobile_blur.jpg", $config['path'] . $entity->get('image') . "_mobile_blur.jpg"));
-
-                // remote the bigass image now that we have the sizes we want.
-                unlink($original);
             }
         }
     }

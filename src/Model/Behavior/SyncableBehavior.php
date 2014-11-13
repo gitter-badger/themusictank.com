@@ -23,6 +23,5 @@ class SyncableBehavior extends TimestampBehavior {
         if (!$entity->isNew()) {
             $this->touch($entity, 'Lastfm.onUpdate');
         }
-
     }
 }

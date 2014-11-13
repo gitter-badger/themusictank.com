@@ -6,3 +6,5 @@ webroot/img/cache
 .DS_Store
 ._.DS_Store
 composer.phar
+config/dev.php
+plugins/

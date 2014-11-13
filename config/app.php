@@ -9,7 +9,7 @@ $config = [
  * Development Mode:
  * true: Errors and warnings shown.
  */
-	'debug' => true,
+	'debug' => false,
 
 /**
  * Configure basic information about the application.
@@ -204,18 +204,19 @@ $config = [
 	'Datasources' => [
 
 		'default' => [
-                        'className' => 'Cake\Database\Connection',
-                        'driver' => 'Cake\Database\Driver\Sqlite',
-                        'persistent' => false,
-                        'host' => 'localhost',
-                        'login' => null,
-                        'password' => null,
-                        'database' => 'tmp/themusictank.dev.db',
-                        'prefix' => false,
-                        'encoding' => 'utf8',
-                        'timezone' => 'UTC',
-                        'cacheMetadata' => true,
-                        'quoteIdentifiers' => false,
+			'className' => 'Cake\Database\Connection',
+			'driver' => 'Cake\Database\Driver\Mysql',
+			'persistent' => false,
+			'host' => null,
+			'username' => null,
+			'password' => null,
+			'database' => null,
+			'prefix' => false,
+			'encoding' => 'utf8',
+			'timezone' => 'UTC',
+			'cacheMetadata' => true,
+			'quoteIdentifiers' => false,
+			//'init' => ['SET GLOBAL innodb_stats_on_metadata = 0'],
 		],
 
 		/*
@@ -236,7 +237,7 @@ $config = [
 		* which is the recommended value in production enviroments
 		*/
 		'init' => ['SET GLOBAL innodb_stats_on_metadata = 0'],
-		
+
 		/**
 		 * The test connection is used during the test suite.
 		 */

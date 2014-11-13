@@ -21,6 +21,10 @@ Updating a project
 
   php composer.phar update
 
+Running a migration
+
+./src/Console/cake migrations
+
 Running a server
 
   ./src/Console/cake server -H 0.0.0.0 -p 3000

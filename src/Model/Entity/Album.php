@@ -26,6 +26,16 @@ class Album extends Entity
         return false;
     }
 
+    public function assignUniqueSlug()
+    {
+        if(!is_null($this->get("name"))) {
+            $slug = TableRegistry::get("Albums")->find('uniqueSlug', ['slug' => $this->get("name")]);
+            $this->set('slug', $slug);
+            return true;
+        }
+        return false;
+    }
+
     public function getTrackDuration()
     {
         $total = 0;
@@ -55,7 +65,6 @@ class Album extends Entity
     {
         return [$this->name, $this->artist->name];
     }
-
 
     /**
      * Compare this version of the entity with the one passed in parameter.

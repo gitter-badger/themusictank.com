@@ -11,6 +11,7 @@ use Cake\ORM\Table;
 use Cake\ORM\TableRegistry;
 use Cake\ORM\Query;
 use Cake\Utility\Hash;
+use Cake\Utility\Inflector;
 
 use Exception;
 
@@ -27,8 +28,26 @@ class ArtistsTable extends Table {
             'Albums' => ['AlbumReviewSnapshots'],
             'ArtistReviewSnapshots'
         ]]);
-        $this->addBehavior('Syncable');
         $this->addBehavior('Thumbnail');
+    }
+
+    public function findUniqueSlug(Query $query, array $options = [])
+    {
+        // I bet this could be improved. For now, loop until we have a unique slug
+        // in the model's table.
+        $i = 0;
+        $slug = strtolower(Inflector::slug($options['slug']));
+
+        while ($this->findBySlug($slug)->count() > 0) {
+            if (!preg_match ('/-{1}[0-9]+$/', $slug )) {
+                $slug .= '-' . ++$i;
+            }
+            else {
+                $slug = preg_replace ('/[0-9]+$/', ++$i, $slug );
+            }
+        }
+
+        return $slug;
     }
 
     private function _createFromLastFm(array $data)
@@ -84,27 +103,63 @@ class ArtistsTable extends Table {
     public function syncToRemote(Artist $artist)
     {
         $lastfmApi = new LastfmApi();
-        $artist->loadFromLastFm($lastfmApi->getArtistInfo($artist));
+        $artistInfo = $lastfmApi->getArtistInfo($artist);
+        $artist->compareData($artistInfo);
 
         TableRegistry::get('LastfmArtists')->touch($artist->lastfm, 'Lastfm.onUpdate');
         // @todo : This is not normal, saving should cascade...
         TableRegistry::get('LastfmArtists')->save($artist->lastfm);
+
         return $this->save($artist);
     }
 
     public function findExpired(Query $query, array $options = [])
     {
         $options += [
-            'timeout' => 0,
+            'timeout' => new Time(),
             'limit' => 200,
-            'contain' => ['LastfmArtists']
+            'contain' => ['LastfmArtists', 'Albums' => ['Artists']]
         ];
 
         return $query
             ->contain($options['contain'])
-            ->where(['LastfmArtists.modified < ' => (int)$options['timeout']])
+            ->where(['LastfmArtists.modified < ' => $options['timeout']->toUnixString()])
             ->orWhere(['LastfmArtists.modified IS NULL'])
             ->limit((int)$options['limit']);
+    }
+
+    public function findExpiredDiscographies(Query $query, array $options = [])
+    {
+        $options += [
+            'timeout' => new Time(),
+            'limit' => 200,
+            'contain' => ['LastfmArtists', 'Albums' => ['LastfmAlbums']]
+        ];
+
+        return $this->find()
+            ->contain($options['contain'])
+            ->limit((int)$options['limit'])
+            ->where(['LastfmArtists.modified_discography < ' => $options['timeout']->toUnixString()])
+            ->orWhere(['LastfmArtists.modified_discography IS NULL']);
+    }
+
+    public function findMissingDiscographies(Query $query, array $options = [])
+    {
+        $options += [
+            'timeout' => 0,
+            'limit' => 200,
+            'contain' => ['Albums' => ['LastfmAlbums']]
+        ];
+
+        return $this->find()
+            ->contain($options['contain'])
+            ->where(['id NOT IN ' => TableRegistry::get('Albums')->find('listArtistIds')])
+            ->limit((int)$options['limit']);
+    }
+
+    public function findListIds(Query $query, array $options = [])
+    {
+        return [-1] + $query->select(['id'])->extract('id')->toArray();
     }
 
     /**
@@ -195,7 +250,7 @@ class ArtistsTable extends Table {
 
         return $query
             ->where(['LastfmArtists.mbid IN' => $options['keys']])
-            ->orWhere(['name IN' => $options['keys'], 'LastfmArtists.mbid' => null])
+            ->orWhere(['name IN' => $options['keys']])
             ->limit(count($options['keys']))
             ->contain($options['contain']);
     }
@@ -212,15 +267,6 @@ class ArtistsTable extends Table {
             ])
             ->where(["slug" => $slug])
             ->contain(['ArtistReviewSnapshots']);
-    }
-
-    public function getWithExpiredDiscographies($timeout = 0, $limit = 200)
-    {
-        return $this->find()
-            ->contain(['Albums'])
-            ->where(['Artists.modified < ' => $timeout])
-            ->orWhere(['Artists.modified IS NULL'])
-            ->limit($limit);
     }
 
     /**
@@ -274,10 +320,12 @@ class ArtistsTable extends Table {
         foreach ($artistData as $artist) {
             // Check valid key values for unique matches.
             foreach (['mbid', 'name'] as $property) {
-                $uniqueKeyValue = trim($artist[$property]);
-                if (!empty($uniqueKeyValue)) {
-                    $map[$uniqueKeyValue] = $artist;
-                    break;
+                if(array_key_exists($property, $artist)) {
+                    $uniqueKeyValue = trim($artist[$property]);
+                    if (!empty($uniqueKeyValue)) {
+                        $map[$uniqueKeyValue] = $artist;
+                        break;
+                    }
                 }
             }
         }

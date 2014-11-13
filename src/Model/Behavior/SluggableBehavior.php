@@ -6,8 +6,6 @@ use Cake\Event\Event;
 use Cake\ORM\Behavior;
 use Cake\ORM\Entity;
 use Cake\ORM\Query;
-use Cake\Utility\Inflector;
-use Exception;
 
 class SluggableBehavior extends Behavior {
 
@@ -32,23 +30,10 @@ class SluggableBehavior extends Behavior {
         return $query;
     }
 
-    public function slug(Entity $entity)
-    {
-        $config = $this->config();
-        $value = $entity->get($config['field']);
-
-        if(empty(trim($value))) {
-            throw new Exception("Cannot create an entity with no key.");
-        }
-
-        $entity->set($config['slug'], strtolower(Inflector::slug($value, $config['replacement'])));
-    }
-
     public function beforeSave(Event $event, Entity $entity)
     {
         if ($entity->isNew()) {
-            $this->slug($entity);
+            $entity->assignUniqueSlug();
         }
     }
-
 }

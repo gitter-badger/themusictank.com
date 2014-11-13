@@ -27,10 +27,10 @@ class TankShell extends Shell {
         $tasksTbl = TableRegistry::get('Tasks');
         $tasksTbl->touch("daily.start");
 
-        $this->UpdateSongChallenge->execute($forceUpdate);
-        $this->ArtistSnapshotsSync->execute($forceUpdate);
-        $this->AlbumSnapshotsSync->execute($forceUpdate);
-        $this->TrackSnapshotsSync->execute($forceUpdate);
+        $this->UpdateSongChallenge->execute();
+        $this->ArtistSnapshotsSync->execute();
+        $this->AlbumSnapshotsSync->execute();
+        $this->TrackSnapshotsSync->execute();
 
         $tasksTbl->touch("daily.end");
     }
@@ -46,13 +46,11 @@ class TankShell extends Shell {
         // These tasks fail often due to Last.fm's api.
         // Until a noticeable increase in successful responses
         // query them often to make up for failed attempts
-        $this->UpdatePopularArtists->execute($forceUpdate);
-        $this->PopulateArtistDetails->execute($forceUpdate);
-        $this->PopulateArtistDiscography->execute($forceUpdate);
-        $this->PopulateAlbumDetails->execute($forceUpdate);
-
-       /*
-        $this->PopulateTrackDetails->execute();*/
+        $this->UpdatePopularArtists->execute();
+        $this->PopulateArtistDetails->execute();
+        $this->PopulateArtistDiscography->execute();
+        $this->PopulateAlbumDetails->execute();
+        $this->PopulateTrackDetails->execute();
 
         $tasksTbl->touch("twohours.end");
     }

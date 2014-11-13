@@ -2,12 +2,15 @@
 
 namespace App\Model\Api;
 
-use Cake\Core\Configure;
 use App\Model\Entity\Artist;
 use App\Model\Entity\Album;
+use App\Model\Entity\Track;
+
+use Cake\Core\Configure;
 use Cake\Network\Http\Client;
 use Cake\Collection\Collection;
 use Cake\Utility\Hash;
+use Cake\Utility\Inflector;
 
 class LastfmApi {
 
@@ -82,6 +85,18 @@ class LastfmApi {
         ]);
 
         return Hash::extract($data, "album");
+    }
+
+    public function getTrackInfo(Track $track)
+    {
+        $data = $this->_postRequest([
+            "method" => "track.getinfo",
+            "artist" => $track->album->artist->name,
+            "track" => $track->title,
+            "autocorrect" => 1
+        ]);
+
+        return Hash::extract($data, "track");
     }
 
     public static function cleanWikiText($text)

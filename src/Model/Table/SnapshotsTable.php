@@ -116,6 +116,17 @@ class SnapshotsTable extends Table {
         return $ids;
     }
 
+
+    public function findListExpiredIds(Query $query, array $options = [])
+    {
+        return $query
+            ->select([$colName])
+            ->where(['modified' => null])
+            ->orWhere(['modified <' => ReviewSnapshot::getExpiredRange()])
+            ->extract([$colName])
+            ->toArray();
+    }
+
     public function getExpiredIds()
     {
         $colName = $this->getBelongsToPrefix() . "_id";

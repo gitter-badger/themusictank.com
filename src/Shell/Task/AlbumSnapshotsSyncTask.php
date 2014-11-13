@@ -11,12 +11,8 @@ class AlbumSnapshotsSyncTask extends Shell {
 
     public function createNewSnapshots()
     {
-        $tblalbumReviewSnapshots = TableRegistry::get('album_review_snapshots');
-
         // Check whether the new reviews have been taken into account
-        $expired = TableRegistry::get('albums')->find()
-            ->select(['id','name'])
-            ->where(['id IN' => $tblalbumReviewSnapshots->getIdsWithNoSnapshots()])->all();
+        $expired = TableRegistry::get('albums')->find('missingSnapshots');
 
         $this->out(sprintf("\t   <info>Found %s new snapshots.</info>", count($expired)));
 
@@ -24,7 +20,7 @@ class AlbumSnapshotsSyncTask extends Shell {
             $snapshot = new albumReviewSnapshot();
             $snapshot->album_id = $album->id;
             $snapshot->fetch();
-            $tblalbumReviewSnapshots->save($snapshot);
+            TableRegistry::get('album_review_snapshots')->save($snapshot);
 
             $this->out(sprintf("\t\t%d<info>\t%s</info>", $album->id, $album->name));
         }
@@ -35,7 +31,7 @@ class AlbumSnapshotsSyncTask extends Shell {
         $tblalbumReviewSnapshots = TableRegistry::get('album_review_snapshots');
 
         // Now update the expired snapshots
-        $albumIdsToSync = $tblalbumReviewSnapshots->getExpiredIds();
+        $albumIdsToSync = $tblalbumReviewSnapshots->find('listExpiredIds');
 
         $this->out(sprintf("\t   <info>Found %s out of sync snapshots.</info>", count($albumIdsToSync)));
 

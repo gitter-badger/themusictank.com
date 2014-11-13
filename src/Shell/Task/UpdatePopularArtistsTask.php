@@ -5,6 +5,7 @@ namespace App\Shell\Task;
 use App\Model\Api\LastfmApi;
 use App\Model\Entity\Artist;
 
+use Cake\Utility\Hash;
 use Cake\ORM\TableRegistry;
 use Cake\Console\Shell;
 
@@ -24,6 +25,7 @@ class UpdatePopularArtistsTask extends Shell {
             $topArtistsData = $lastfmApi->getTopArtists();
 
             if (count($topArtistsData)) {
+                $this->out("\tThe following artists will be marked as popular:\n<info>" . implode("</info>, <info>", Hash::extract($topArtistsData, '{n}.name')) . "</info>...");
                 $artistList = TableRegistry::get('Artists')->saveLastFmBatch($topArtistsData, true);
                 TableRegistry::get('LastfmArtists')->demotePopularArtists();
                 TableRegistry::get('LastfmArtists')->promotePopularArtists($artistList);

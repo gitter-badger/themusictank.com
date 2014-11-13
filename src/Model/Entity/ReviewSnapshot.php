@@ -3,6 +3,7 @@ namespace App\Model\Entity;
 
 use Cake\ORM\Entity;
 use Cake\ORM\TableRegistry;
+use Cake\I18n\Time;
 
 class ReviewSnapshot extends Entity
 {
@@ -18,7 +19,7 @@ class ReviewSnapshot extends Entity
 
     static function getExpiredRange()
     {
-        return time() - (HOUR * 12);
+        return new Time(time() - (HOUR * 12));
     }
 
     /**

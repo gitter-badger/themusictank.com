@@ -1,29 +1,41 @@
 <?php
-class PopulateTrackDetailsTask extends Shell {
+namespace App\Shell\Task;
 
-    public $uses = array('LastfmTrack');
+use Cake\ORM\TableRegistry;
+use Cake\Console\Shell;
+
+class PopulateTrackDetailsTask extends Shell {
 
     public function execute()
     {
-        $expired = $this->LastfmTrack->Track->find("all", array(
-            "conditions" => array(
-                "or" => array(
-                    "LastfmTrack.lastsync IS NULL",
-                    "LastfmTrack.lastsync < " . $this->LastfmTrack->getExpiredRange()
-                )
-            ),
-            "contain"       => array("LastfmTrack", "Album" => array("Artist")),
-            "limit"         => 400
-        ));
+        $this->out("Updating <comment>track details</comment>...");
 
-        $this->out(sprintf("Found <comment>%s tracks</comment> that are out of sync.", count($expired)));
-        foreach ($expired as $idx => $track) {
-            $this->LastfmTrack->data = $track;
-            $this->LastfmTrack->data["Album"] = $track["Album"];
-            $this->LastfmTrack->data["Artist"] = $track["Album"]["Artist"];
+        $taskTable = TableRegistry::get('Tasks');
+        $task = $taskTable->getByName('track_details');
 
-            $this->out(sprintf("\t\t%d/%d\t%d <info>%s</info>", $idx+1, count($expired), $this->LastfmTrack->getData("Track.id"), $this->LastfmTrack->getData("Track.title")));
-            $this->LastfmTrack->updateCached();
+        if ($task->requiresUpdate()) {
+
+            $tblTracks = TableRegistry::get('Tracks');
+            $expiredTracks = $tblTracks->find('expired', ['timeout' => $task->getTimeout()])->all();
+
+            if (count($expiredTracks)) {
+                $this->out(sprintf("\tFound <comment>%s tracks</comment> that are out of sync.", count($expiredTracks)));
+
+                foreach ($expiredTracks as $idx => $track) {
+                    $this->out(sprintf("\t\t%d/%d\t%d <info>\t%s</info>...", $idx+1, count($expiredTracks), $track->id, $track->title));
+                    $tblTracks->syncToRemote($track);
+                }
+
+            } else {
+                $this->out("\tTrack details are up-to-date.");
+            }
+
+            $taskTable->touch('track_details');
+
+        } else {
+            $this->out("\tTrack details update is not ready to run.");
         }
+
+        $this->out("\t<info>Completed.</info>");
     }
 }

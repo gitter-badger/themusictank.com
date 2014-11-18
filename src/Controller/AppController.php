@@ -40,7 +40,6 @@ class AppController extends Controller {
     public $components = [
        // 'DebugKit.Toolbar',
         'Flash',
-        'Session',
         'Csrf' => ['secure' => true],
         'Auth' => [
             'loginRedirect' => [
@@ -82,7 +81,7 @@ class AppController extends Controller {
      */
     public function getAuthUser()
     {
-        $userSessionData = $this->Session->read('Auth.User');
+        $userSessionData = $this->request->session()->read('Auth.User');
         if($userSessionData) {
             return new User($userSessionData);
         }

@@ -168,16 +168,17 @@ class ArtistsTable extends Table {
      */
     public function findPopular(Query $query, array $options = [])
     {
+        $nbResults = $this->find()->count();
         $options += [
             'limit' => 1,
-            'order' => ['rand()'],
+            'offset' => rand(0, $nbResults),
             'contain' => ['LastfmArtists', 'Albums', 'ArtistReviewSnapshots']
         ];
 
         return $query
             ->contain($options['contain'])
             ->where(['LastfmArtists.is_popular' => true])
-            ->order($options['order'])
+            ->offset($options['offset'])
             ->limit((int)$options['limit']);
     }
 
@@ -189,7 +190,7 @@ class ArtistsTable extends Table {
     public function findFirstLetters(Query $query, array $options = [])
     {
         return $query
-            ->select(['letter' => 'UCASE(LEFT(name, 1))'])
+            ->select(['letter' => 'SUBSTR(name, 0, 1)'])
             ->distinct(['letter'])
             ->order('letter', 'ASC')
             ->extract("letter");

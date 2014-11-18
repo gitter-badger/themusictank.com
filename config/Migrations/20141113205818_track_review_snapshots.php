@@ -14,7 +14,7 @@ class TrackReviewSnapshots extends AbstractMigration
      */
     public function change()
     {
-        $this->table('user_track_review_snapshots')
+        $this->table('track_review_snapshots')
             ->addColumn('track_id',      'integer')
             ->addColumn('total',          'integer',  ['length' => 11, 'default' => 0]) // unsigned not null
             ->addColumn('liking',         'integer',  ['length' => 11, 'default' => 0]) // unsigned not null

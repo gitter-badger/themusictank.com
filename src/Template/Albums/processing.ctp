@@ -1,5 +1,5 @@
 <?php
-    $isLogged = $this->Session->check('Auth.User.User.id');
+    $isLogged = $request->session()->check('Auth.User.User.id');
 ?>
 
 <?= $this->element('headers/backdrop', ['entity' => $album]); ?>

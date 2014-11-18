@@ -65,9 +65,11 @@ class TracksTable extends Table {
 
     public function findNewDailyChallenger()
     {
+
+        $nbResults = $this->find()->count();
         $newFeatured = $this->find()
             ->where(['is_challenge' => false])
-            ->order(['rand()'])
+            ->offset(rand(0, $nbResults))
             ->limit(1)->first();
 
         if ($newFeatured) {

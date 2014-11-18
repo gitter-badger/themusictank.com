@@ -316,18 +316,30 @@ $config = [
 		'defaults' => 'php',
 	],
 
+
 	'Apis' => [
+		'Amazon' => [
+			's3' => [
+				'key' => null,
+				'secret' => null,
+				'bucket' => null
+			]
+		],
+
 		'facebook' => [
-			"key" => getenv('FB_KEY'),
-	        "secret" => getenv('FB_SECRET')
+			"key" => null,
+	        "secret" => null
 		],
 
 		'lastfm' => [
-	        "key" => getenv('LASTFM_KEY'),
-	        "secret" => getenv('LASTFM_SECRET')
+	        "key" => null,
+	        "secret" => null
 		],
+	],
 
-		'VLC' => "VLC",
-		'ConvertCMD' => 'convert'
+	'Tools' => [
+		'VLC' => null,
+		'imagemagik' => null
 	]
+
 ];

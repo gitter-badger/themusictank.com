@@ -8,3 +8,6 @@ webroot/img/cache
 composer.phar
 config/dev.php
 plugins/
+webroot/img/resized.jpg
+webroot/img/original.jpg
+config/.fuse_hidden0000232800000001

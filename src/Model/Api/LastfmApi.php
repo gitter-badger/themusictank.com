@@ -21,7 +21,6 @@ class LastfmApi {
 
         $http = new Client();
         $results = $http->get('http://ws.audioscrobbler.com/2.0/', $params);
-
         if ($results->isOk())
         {
             return json_decode($results->body(), true);

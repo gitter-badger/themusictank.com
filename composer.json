@@ -1,14 +1,16 @@
 {
-	"name": "cakephp/app",
-	"description": "CakePHP skeleton app",
-	"homepage": "http://cakephp.org",
+	"name": "francoisfaubert/themusictank.com",
+	"description": "The Music Tank.com",
+	"homepage": "http://themusictank.com",
 	"type": "project",
 	"license": "MIT",
 	"require": {
 		"php": ">=5.4.19",
 		"cakephp/cakephp": "3.0.*-dev",
 		"mobiledetect/mobiledetectlib": "2.*",
-    	"cakephp/migrations": "dev-master"
+    	"cakephp/migrations": "dev-master",
+    	"aws/aws-sdk-php":"~2.6",
+        "ext-curl": "*"
 	},
 	"require-dev": {
 		"d11wtq/boris": "1.0.*"

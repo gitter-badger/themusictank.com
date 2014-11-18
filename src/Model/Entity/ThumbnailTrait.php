@@ -10,16 +10,9 @@ trait ThumbnailTrait {
     public function getImageUrl($type = "thumb")
     {
         if (!is_null($this->get("image"))) {
-           /* // When the converter is not available, assume we are in dev and pull
-            // the image right from tmt.com.
-            if (is_null(Configure::read('ConvertCMD'))) {
-                return sprintf("//themusictank.com/img/cache/%s_%s.jpg", $this->image, $type);
-            } */
-
-            // Otherwise, load the requested image if it exists.
-            if (file_exists(WWW_ROOT . "img" . DS . "cache" . DS . $this->get("image") . "_" . $type . ".jpg")) {
-                return "/img/cache/" . $this->get("image"). "_" . $type . ".jpg";
-            }
+            // We could check if the file exists before trying to load it, but I'm pretty
+            // sure it will be way too resource intensive.
+            return "//static.themusictank.com/" . $this->get("image");
         }
 
         return "/img/placeholder.png";

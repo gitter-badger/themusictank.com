@@ -1,5 +1,5 @@
 <?php
-    $isLogged = $this->Session->check('Auth.User.User.id');
+    $isLogged = $this->request->session()->check('Auth.User.User.id');
 ?>
 <?= $this->element('breadcrumbs', ['links' => [
         $this->Html->link(__("Artists"), ['controller' => 'artists', 'action' => 'index']),

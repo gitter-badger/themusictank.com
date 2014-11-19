@@ -58,32 +58,30 @@ class ThumbnailBehavior extends Behavior {
 
             $entity->set('image', $typeSubfolder . DS . $firstLetterSubfolder . DS . $secondLetterSubfolder . DS . $newFileName);
 
-            // When the converter is not available, just pretend to save the paths.
+            // When the converter is not available, just pretend and save the paths.
             if(is_null(Configure::read('Tools.imagemagik'))) {
                 return;
             }
 
-            if (!file_exists($entity->get('image'))) {
-                $original = $this->_downloadRemoteImage($entity->get('image_src'));
-                if (file_exists($original)) {
-                    foreach ($config['types'] as $type => $size) {
-                        $filename = $entity->get('image') . "_" . $type . ".jpg";
-                        $thumbnail = $this->_resize($original, $size);
+            $original = $this->_downloadRemoteImage($entity->get('image_src'));
+            if (file_exists($original)) {
+                foreach ($config['types'] as $type => $size) {
+                    $filename = $entity->get('image') . "_" . $type . ".jpg";
+                    $thumbnail = $this->_resize($original, $size);
 
-                        // Run images requiring special effects
-                        if (strstr($type, "blur")) {
-                            $thumbnail = $this->_blur($thumbnail);
-                        }
-
-                        // Once the file is saved remotly, remove it from this server.
-                        if ($this->_sendToBucket($thumbnail, $filename)) {
-                            unlink($thumbnail);
-                        }
+                    // Run images requiring special effects
+                    if (strstr($type, "blur")) {
+                        $thumbnail = $this->_blur($thumbnail);
                     }
 
-                    // Remove the bigass image as well.
-                    unlink($original);
+                    // Once the file is saved remotly, remove it from this server.
+                    if ($this->_sendToBucket($thumbnail, $filename)) {
+                        unlink($thumbnail);
+                    }
                 }
+
+                // Remove the bigass image as well.
+                unlink($original);
             }
         }
     }
@@ -91,7 +89,7 @@ class ThumbnailBehavior extends Behavior {
     private function _resize($original, $size)
     {
         // Run imagemagik in the command line as to stay more efficient resources wise.
-        $saveLocation = WWW_ROOT . "img" . DS . "resized.jpg";
+        $saveLocation = TMP . "resized.jpg";
         exec(sprintf("convert %s -resize %d %s", $original, $size, $saveLocation));
         return $saveLocation;
     }
@@ -107,11 +105,13 @@ class ThumbnailBehavior extends Behavior {
 
     private function _sendToBucket($thumbnail, $filename)
     {
-        $s3 = S3Client::factory([
-            'key'    =>  Configure::read("Apis.Amazon.s3.key"),
-            'secret' =>  Configure::read("Apis.Amazon.s3.secret")
-        ]);
-        $s3->upload(Configure::read("Apis.Amazon.s3.bucket"), $filename, fopen($thumbnail, 'rb'), 'public-read');
+        if (file_exists($thumbnail)) {
+            $s3 = S3Client::factory([
+                'key'    =>  Configure::read("Apis.Amazon.s3.key"),
+                'secret' =>  Configure::read("Apis.Amazon.s3.secret")
+            ]);
+            return $s3->upload(Configure::read("Apis.Amazon.s3.bucket"), $filename, fopen($thumbnail, 'rb'), 'public-read');
+        }
     }
 
     private function _deleteFromBucket($filename)
@@ -138,7 +138,7 @@ class ThumbnailBehavior extends Behavior {
         $rawdata = curl_exec($ch);
         curl_close($ch);
 
-        $saveLocation = WWW_ROOT . "img" . DS . "original.jpg";
+        $saveLocation = TMP . "original.jpg";
         $fp = fopen($saveLocation, 'w');
         fwrite($fp, $rawdata);
         fclose($fp);

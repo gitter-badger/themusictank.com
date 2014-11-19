@@ -1,42 +1,48 @@
 <?= $this->element('headers/backdrop', ['entity' => $featuredArtist]); ?>
 
 <article class="container container-fluid popular-artists">
-    <header class="featured">
 
-        <span><?php echo __("Featured artist"); ?></span>
-        <h1><?= $this->Html->link($featuredArtist->name, ['controller' => 'artists', 'action' => 'view', $featuredArtist->slug]); ?></h1>
+    <?php if(!is_null($featuredArtist)) : ?>
+        <header class="featured">
 
-        <div class="everyone piechart"></div>
+            <span><?php echo __("Featured artist"); ?></span>
+            <h1><?= $this->Html->link($featuredArtist->name, ['controller' => 'artists', 'action' => 'view', $featuredArtist->slug]); ?></h1>
 
-        <?php if(count($featuredArtist->albums)) : ?>
-        <section class="row stats tiles albums">
-            <?php foreach($featuredArtist->albums as $i => $album) : if($i >= 4) break;?>
-            <div class="col-xs-3 col-md-3 album">
+            <div class="everyone piechart"></div>
 
-                <?= $this->Html->link($this->Html->image($album->getImageUrl(), ['alt' => $album->name]), ['controller' => 'albums', 'action' => 'view', $album->slug], ['escape' => false, 'class' => "thumbnail"]); ?>
+            <section class="row stats tiles albums">
+                <?php if(count($featuredArtist->albums)) : ?>
+                    <?php foreach($featuredArtist->albums as $i => $album) : if($i >= 4) break;?>
+                    <div class="col-xs-3 col-md-3 album">
 
-                <h3><?= $this->Html->link($album->name, ['controller' => 'albums', 'action' => 'view', $album->slug]); ?></h3>
+                        <?= $this->Html->link($this->Html->image($album->getImageUrl(), ['alt' => $album->name]), ['controller' => 'albums', 'action' => 'view', $album->slug], ['escape' => false, 'class' => "thumbnail"]); ?>
 
-                <?php if($album->hasReleaseDate()) : ?>
-                <time datetime="<?= h($album->getFormatedReleaseDate("c")); ?>"><?= h($album->getFormatedReleaseDate()); ?></time>
-                <?php endif; ?>
+                        <h3><?= $this->Html->link($album->name, ['controller' => 'albums', 'action' => 'view', $album->slug]); ?></h3>
 
-                <div class="score">
-                    <?php if(is_null($featuredArtist->snapshot)) : ?>
-                        N/A
-                    <?php else : ?>
-                        <?= (int)($featuredArtist->snapshot->score * 100); ?>%
+                        <?php if($album->hasReleaseDate()) : ?>
+                        <time datetime="<?= h($album->getFormatedReleaseDate("c")); ?>"><?= h($album->getFormatedReleaseDate()); ?></time>
+                        <?php endif; ?>
+
+                        <div class="score">
+                            <?php if(is_null($featuredArtist->snapshot)) : ?>
+                                N/A
+                            <?php else : ?>
+                                <?= (int)($featuredArtist->snapshot->score * 100); ?>%
+                            <?php endif; ?>
+                            <span><?= __("Score"); ?></span>
+                        </div>
+                    </div>
+                    <?php endforeach; ?>
+                    <?php if (count($featuredArtist->albums) > 4) : ?>
+                        <?= $this->Html->link(__("View more"), ['controller' => 'artists', 'action' => 'discography', $featuredArtist->slug], ['class' => "btn btn-primary pull-right"]); ?>
                     <?php endif; ?>
-                    <span><?= __("Score"); ?></span>
-                </div>
-            </div>
-            <?php endforeach; ?>
-            <?php if (count($featuredArtist->albums) > 4) : ?>
-                <?= $this->Html->link(__("View more"), ['controller' => 'artists', 'action' => 'discography', $featuredArtist->slug], ['class' => "btn btn-primary pull-right"]); ?>
-            <?php endif; ?>
-        </section>
-        <?php endif; ?>
-    </header>
+                <?php else : ?>
+                    <?= __("We did not fetch all the albums yet."); ?>
+                    <?= $this->Html->link(__("View"), ['controller' => 'artists', 'action' => 'discography', $featuredArtist->slug], ['class' => "btn btn-primary pull-right"]); ?>
+                <?php endif; ?>
+            </section>
+        </header>
+    <?php endif; ?>
 
     <div class="row content">
         <section class="col-xs-12 col-md-12 more-popular-artists">

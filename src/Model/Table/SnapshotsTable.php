@@ -5,6 +5,7 @@ use Cake\ORM\Table;
 use Cake\ORM\TableRegistry;
 use Cake\Utility\Inflector;
 use Cake\Event\Event;
+use Cake\ORM\Query;
 
 use App\Model\Entity\ReviewSnapshot;
 
@@ -116,14 +117,14 @@ class SnapshotsTable extends Table {
         return $ids;
     }
 
-
     public function findListExpiredIds(Query $query, array $options = [])
     {
+        $colName = $this->getBelongsToPrefix() . "_id";
         return $query
             ->select([$colName])
             ->where(['modified' => null])
             ->orWhere(['modified <' => ReviewSnapshot::getExpiredRange()])
-            ->extract([$colName])
+            ->extract($colName)
             ->toArray();
     }
 

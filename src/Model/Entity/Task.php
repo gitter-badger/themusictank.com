@@ -11,7 +11,8 @@ class Task extends Entity
     {
         // When testing, uncomment the following to allow
         // fresh results
-        //return true;
+        return true;
+
 
         if (is_null($this->modified)) {
             return true;
@@ -20,7 +21,7 @@ class Task extends Entity
         $time = new Time($this->modified);
         $timeout = $this->getTimeout();
 
-        return $time->toUnixString() < $time->toUnixString();
+        return (int)$time->toUnixString() < (int)$timeout->toUnixString();
     }
 
     public function getTimeout() {

@@ -51,7 +51,7 @@ class AlbumsTable extends Table {
 
     public function findMissingSnapshots(Query $query, array $options = [])
     {
-        return $query->find()
+        return $query
             ->select(['id','name'])
             ->where(['id IN' => TableRegistry::get("AlbumReviewSnapshots")->getIdsWithNoSnapshots()]);
     }

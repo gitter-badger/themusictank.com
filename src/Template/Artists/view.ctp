@@ -1,5 +1,5 @@
 <?php
-    $isLogged = $this->Session->check('Auth.User.User.id');
+    $isLogged = $this->request->session()->check('Auth.User.User.id');
 ?>
 <?= $this->element('breadcrumbs', ['links' => [
         $this->Html->link(__("Artists"), array('controller' => 'artists', 'action' => 'index')),
@@ -130,7 +130,7 @@
             <i class="mask"></i>
         </div>
         <div class="col-md-4 lastfm"><a href="http://www.last.fm/"><img src="/img/icon-lastfm.png" alt="Last.fm" title="Last.fm" /></a></div>
-        <div class="col-md-4 bug"><span class="report-bug" data-bug-type="artist wiki" data-location="artist/<?= $artist->slug; ?>" data-user="<?= $this->Session->read('Auth.User.User.id'); ?>"><i class="fa fa-bug"></i> <?= __("Wrong/weird bio?"); ?></span></div>
+        <div class="col-md-4 bug"><span class="report-bug" data-bug-type="artist wiki" data-location="artist/<?= $artist->slug; ?>" data-user="<?= $this->request->session()->read('Auth.User.User.id'); ?>"><i class="fa fa-bug"></i> <?= __("Wrong/weird bio?"); ?></span></div>
         <div class="col-md-4 readmore">
             <?= $this->Html->link(__("Read more"), ['controller' => 'artists', 'action' => 'wiki', $artist->slug], ['class' => "btn btn-primary"]); ?>
         </div>

@@ -16,7 +16,6 @@
     <div class="piechart artist-<?= $artist->id; ?>"></div>
 </div>
 
-
 <?php $this->start('header-extra'); ?>
 <?= $this->fetch('header-extra'); ?>
 <style type="text/css">

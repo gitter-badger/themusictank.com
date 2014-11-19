@@ -1,5 +1,5 @@
 <?php
-    $isLogged = $this->Session->check('Auth.User.User.id');
+    $isLogged = $this->request->session()->check('Auth.User.User.id');
     $albumDuration = $album->getTrackDuration();
 ?>
 
@@ -25,9 +25,10 @@
                 <div class="col-md-2 enjoyment">
                     <span><?= __("Enjoyed"); ?></span>
                     <em>
-                        <?php if(!is_null($album->snapshot) && $album->snapshot->isNotAvailable()) : ?>
+                        <?php if(is_null($album->snapshot) || $album->snapshot->isNotAvailable()) : ?>
                             N/A
                         <?php else : ?>
+                            <?= debug($album); ?>
                             <?= (int)$album->snapshot->liking_pct; ?>%
                         <?php endif; ?>
                     </em>
@@ -35,7 +36,7 @@
                 <div class="col-md-2 dislike">
                     <span><?= __("Disliked"); ?></span>
                     <em>
-                        <?php if(!is_null($album->snapshot) && $album->snapshot->isNotAvailable()) : ?>
+                        <?php if(is_null($album->snapshot) || $album->snapshot->isNotAvailable()) : ?>
                             N/A
                         <?php else : ?>
                             <?= (int)$album->snapshot->disliking_pct; ?>%
@@ -106,7 +107,7 @@
             <i class="mask"></i>
         </div>
         <div class="col-md-4 lastfm"><a href="http://www.last.fm/"><img src="/img/icon-lastfm.png" alt="Last.fm" title="Last.fm" /></a></div>
-        <div class="col-md-4 bug"><span class="report-bug" data-bug-type="album wiki" data-location="album/<?= $album->slug; ?>" data-user="<?= $this->Session->read('Auth.User.User.id'); ?>"><i class="fa fa-bug"></i> <?= __("Wrong/weird bio?"); ?></span></div>
+        <div class="col-md-4 bug"><span class="report-bug" data-bug-type="album wiki" data-location="album/<?= $album->slug; ?>" data-user="<?= $this->request->session()->read('Auth.User.User.id'); ?>"><i class="fa fa-bug"></i> <?= __("Wrong/weird bio?"); ?></span></div>
         <div class="col-md-4 readmore">
             <?php if(strlen($wiki) > 800) : ?>
                 <?= $this->Html->link(__("Read more"), ['controller' => 'albums', 'action' => 'wiki', $album->slug], ["class" => "btn btn-primary"]); ?>
@@ -125,7 +126,7 @@
                         <canvas class="graph" data-track="track-<?= $track->id; ?>"></canvas>
                         <div class="piechart track-<?= $track->id; ?>"></div>
                         <div class="score">
-                            <?php if(!is_null($track->snapshot) && $track->snapshot->isNotAvailable()) : ?>
+                            <?php if(is_null($track->snapshot) || $track->snapshot->isNotAvailable()) : ?>
                                 N/A
                             <?php else : ?>
                                 <?= (int)($track->snapshot->score * 100); ?>%
@@ -155,7 +156,7 @@
             <div class="col-md-6">
 
             <?php if ($isLogged) : ?>
-                <?php $subscriptions = $album->getRecentSubscriptionsReviewers($this->Session->get('Auth.User.User.id')); ?>
+                <?php $subscriptions = $album->getRecentSubscriptionsReviewers($this->request->session()->get('Auth.User.User.id')); ?>
                 <?php if(count($subscriptions) > 0) : ?>
                     <ul>
                         <?php foreach($subscriptions as $idx => $subscription) : ?>

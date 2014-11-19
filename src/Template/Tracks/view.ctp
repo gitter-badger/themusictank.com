@@ -1,5 +1,5 @@
 <?php
-    $isLogged = $this->Session->check('Auth.User.User.id');
+    $isLogged = $this->request->session()->check('Auth.User.User.id');
 ?>
 
 <?= $this->element('breadcrumbs', ['links' => [
@@ -104,7 +104,7 @@
             <i class="mask"></i>
         </div>
         <div class="col-md-4 lastfm"><a href="http://www.last.fm/" target="_blank"><img src="/img/icon-lastfm.png" alt="Last.fm" title="Last.fm" /></a></div>
-        <div class="col-md-4 bug"><span class="report-bug" data-bug-type="track wiki" data-location="tracks/<?= $track->slug; ?>" data-user="<?= $this->Session->read('Auth.User.User.id'); ?>"><i class="fa fa-bug"></i> <?= __("Wrong/weird bio?"); ?></span></div>
+        <div class="col-md-4 bug"><span class="report-bug" data-bug-type="track wiki" data-location="tracks/<?= $track->slug; ?>" data-user="<?= $this->request->session()->read('Auth.User.User.id'); ?>"><i class="fa fa-bug"></i> <?= __("Wrong/weird bio?"); ?></span></div>
         <div class="col-md-4 readmore">
             <?php if(strlen($wiki) > 800) : ?>
                 <?= $this->Html->link(__("Read more"), ['controller' => 'tracks', 'action' => 'wiki', $track->slug], ["class" => "btn btn-primary"]); ?>
@@ -146,7 +146,7 @@
                 <span class="position"> -:--</span> / <span class="duration"> -:--</span>
             </div>
         </div>
-        <small class="report-bug" data-bug-type="track player" data-location="artist: <?= $track->album->artist->slug; ?>, album: <?= $track->album->slug; ?>, track: <?= $track->slug; ?>" data-user="<?= $this->Session->read('Auth.User.User.id'); ?>"><i class="fa fa-bug"></i> <?= __("Wrong song?"); ?></small>
+        <small class="report-bug" data-bug-type="track player" data-location="artist: <?= $track->album->artist->slug; ?>, album: <?= $track->album->slug; ?>, track: <?= $track->slug; ?>" data-user="<?= $this->request->session()->read('Auth.User.User.id'); ?>"><i class="fa fa-bug"></i> <?= __("Wrong song?"); ?></small>
 
     </div>
 
@@ -219,7 +219,7 @@
                 </div>
                 <div class="col-md-6">
                     <?php if ($isLogged) : ?>
-                        <?php $subscriptions = $track->getRecentSubscriptionsReviewers($this->Session->get('Auth.User.User.id')); ?>
+                        <?php $subscriptions = $track->getRecentSubscriptionsReviewers($this->request->session()->get('Auth.User.User.id')); ?>
                         <?php if(count($subscriptions) > 0) : ?>
                             <ul>
                                 <?php foreach($subscriptions as $idx => $subscription) : ?>

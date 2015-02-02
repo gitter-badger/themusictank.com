@@ -5,7 +5,7 @@ namespace App\Model\Behavior;
 use Cake\Event\Event;
 use Cake\ORM\Table;
 use Cake\ORM\Entity;
-use Cake\Model\Behavior\TimestampBehavior;
+use Cake\ORM\Behavior\TimestampBehavior;
 
 class SyncableBehavior extends TimestampBehavior {
 

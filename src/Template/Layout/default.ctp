@@ -3,9 +3,9 @@
 <head>
     <?php $this->MetaTags->init(); ?>
     <?php if(isset($meta)) $this->MetaTags->addPageMeta($meta); ?>
-   	<?= $this->MetaTags->compileMetas();  ?>
-   	<?= $this->fetch('meta') ?>
-	<?= $this->fetch('css') ?>
+    <?= $this->MetaTags->compileMetas();  ?>
+    <?= $this->fetch('meta') ?>
+    <?= $this->fetch('css') ?>
     <?= $this->fetch('header-extra') ?>
 </head>
 <body class="<?= $this->Tmt->contextToClassNames(); ?>">

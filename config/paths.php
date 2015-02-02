@@ -15,7 +15,9 @@
 /**
  * Use the DS to separate the directories in other defines
  */
-define('DS', DIRECTORY_SEPARATOR);
+if (!defined('DS')) {
+    define('DS', DIRECTORY_SEPARATOR);
+}
 
 /**
  * These defines should only be edited if you have cake installed in
@@ -34,11 +36,6 @@ define('ROOT', dirname(__DIR__));
 define('APP_DIR', 'src');
 
 /**
- * The name of the webroot dir.  Defaults to 'webroot'
- */
-define('WEBROOT_DIR', 'webroot');
-
-/**
  * Path to the application's directory.
  */
 define('APP', ROOT . DS . APP_DIR . DS);
@@ -51,7 +48,7 @@ define('CONFIG', ROOT . DS . 'config' . DS);
 /**
  * File path to the webroot directory.
  */
-define('WWW_ROOT', ROOT . DS . WEBROOT_DIR . DS);
+define('WWW_ROOT', ROOT . DS . 'webroot' . DS);
 
 /**
  * Path to the tests directory.
@@ -78,7 +75,7 @@ define('CACHE', TMP . 'cache' . DS);
  *
  * CakePHP should always be installed with composer, so look there.
  */
-define('CAKE_CORE_INCLUDE_PATH', ROOT . '/vendor/cakephp/cakephp');
+define('CAKE_CORE_INCLUDE_PATH', ROOT . DS . 'vendor' . DS . 'cakephp' . DS . 'cakephp');
 
 /**
  * Path to the cake directory.

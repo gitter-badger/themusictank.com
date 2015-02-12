@@ -1,0 +1,3 @@
+## Documenting
+
+rake doc:app

@@ -1,0 +1,7 @@
+<ol>
+<% @artists.each do |artist| %>
+    <li>
+        <%= link_to artist.name, controller: :artists, action: :view, slug: artist.slug %>
+    </li>
+<% end %>
+</ol>

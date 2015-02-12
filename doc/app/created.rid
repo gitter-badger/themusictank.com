@@ -1,0 +1,12 @@
+Fri, 06 Feb 2015 18:25:11 +0000
+README.rdoc	Thu, 05 Feb 2015 02:56:43 +0000
+app/controllers/application_controller.rb	Thu, 05 Feb 2015 02:55:50 +0000
+app/helpers/application_helper.rb	Thu, 05 Feb 2015 02:55:52 +0000
+app/models/album.rb	Fri, 06 Feb 2015 16:55:23 +0000
+app/models/artist.rb	Fri, 06 Feb 2015 18:04:36 +0000
+app/models/repository/albums.rb	Thu, 05 Feb 2015 22:11:44 +0000
+app/models/repository/artists.rb	Fri, 06 Feb 2015 18:17:28 +0000
+app/models/repository/sluggable.rb	Fri, 06 Feb 2015 18:16:31 +0000
+app/models/services/base.rb	Fri, 06 Feb 2015 18:21:48 +0000
+app/models/services/lastfm_artist.rb	Fri, 06 Feb 2015 16:40:31 +0000
+app/models/services/musicbrainz_artist.rb	Fri, 06 Feb 2015 18:23:52 +0000

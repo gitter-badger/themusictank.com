@@ -1,0 +1,12 @@
+<%= render partial: "backdrop", locals: {entity: @album} %>
+
+<h1><a href="/albums/view/<%= @album.slug %>"><%= @album.title %></a></h1>
+<h2><a href="/artists/view/<%= @album.artist.slug %>"><%= @album.artist.name %></a></h2>
+
+<ul>
+<% @album.tracks.each do |track| %>
+    <li>
+        <a href="/tracks/view/<%= track.slug %>"><%= track.title %></a>
+    </li>
+<% end %>
+</ul>

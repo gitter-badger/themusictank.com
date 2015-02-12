@@ -1,0 +1,31 @@
+<%= render partial: "backdrop", locals: {entity: @artist} %>
+
+<h1><%= link_to @artist.name, @artist.slug %></h1>
+
+<section class="discography">
+    <ul>
+    <% @artist.albums.each do |album| %>
+        <li>
+            <%= link_to album.title, controller: :albums, action: :view, slug: album.slug %>
+        </li>
+    <% end %>
+    </ul>
+</section>
+
+<section class="similar-artists">
+    <ul>
+    <% @artist.similar_artists.each do |similar_artist| %>
+        <li>
+            <%= link_to similar_artist.name, controller: :artists, action: :view, slug: similar_artist.slug %>
+        </li>
+    <% end %>
+    </ul>
+</section>
+
+<section class="update-information">
+    <ul>
+        <li>LastFM : <%= @artist.last_lastfm_update %></li>
+        <li>MusicBrainz : <%= @artist.last_mb_update %></li>
+        <li>Enitty : <%= @artist.updated_at %></li>
+    </ul>
+</section>

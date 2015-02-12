@@ -1,0 +1,54 @@
+/*
+ * This is a manifest file that'll be compiled into application.css, which will include all the files
+ * listed below.
+ *
+ * Any CSS and SCSS file within this directory, lib/assets/stylesheets, vendor/assets/stylesheets,
+ * or vendor/assets/stylesheets of plugins, if any, can be referenced here using a relative path.
+ *
+ * You're free to add application-wide styles to this file and they'll appear at the bottom of the
+ * compiled file so the styles you add here take precedence over styles defined in any styles
+ * defined in the other CSS/SCSS files in this directory. It is generally better to create a new
+ * file per style scope.
+ *
+ *= require_tree .
+ *= require_self
+ */
+
+.header-wrapper {
+    background-color: #303e46;
+    position:   relative;
+    overflow:   hidden;
+    //height: 800px;
+    height: 200px;
+    border-bottom:1px solid #dedede;
+    box-shadow: 0 1px 3px 0 rgba(0,0,0,.3);
+
+    .piechart {
+        position: absolute;
+        top:10px;
+        right:15px;
+    }
+
+    div {
+        position: absolute;
+        top: 0;
+        left: 0;
+        width:100%;
+        height:100%;
+        background-repeat: no-repeat;
+        background-size: cover;
+    }
+
+    .mask {
+        bottom:0;
+        left:0;
+        right:0;
+        top:0;
+        position:absolute;
+        background: transparent url(/img/triangles.png) top left repeat;
+    }
+
+    &.plain {
+        height: 500px;
+    }
+}

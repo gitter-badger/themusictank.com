@@ -20,13 +20,7 @@ module Services
                 if expired_count > 0
                     expired.each do |artist|
                         log "Updating #{artist.name}"
-                        # Update the artist profile
                         update_artist_profile artist
-
-                        # Update the artist discography because it's likely either
-                        # not there or too old.
-                        log "Updating #{artist.name}'s discography"
-                        Services::Musicbrainz::MusicbrainzArtist.populate_discography(artist)
                     end
                 end
             end
@@ -87,7 +81,7 @@ module Services
 
             def self.prepare_similar_artists_by_names names
                 similar_artists = Array.new
-                if names.length > 0
+                if !name.nil? && names.length > 0
                     log "Starting similar artists loop."
                     names.each do |similar|
                         similar_artist = Services::Musicbrainz::MusicbrainzArtist.find_or_create_by_name similar['name']

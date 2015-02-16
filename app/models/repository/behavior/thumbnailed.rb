@@ -4,9 +4,10 @@ module Repository
         module Thumbnailed
             include Repository::Base
 
-            def with_no_thumbnails
+            def with_no_thumbnail
                 where(:thumbnail => nil)
             end
+
         end
     end
 end

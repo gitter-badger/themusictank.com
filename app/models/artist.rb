@@ -12,12 +12,9 @@ class Artist < Entity::Artist
     # When the last Musicbrainz update is expired (last_mb_update)
     # we will try and update the discography.
 
-    has_many :albums
+    has_many :albums, -> { order('playcount DESC') }
 
-    has_and_belongs_to_many  :similar_artists,
-        :class_name => "Artist",
-        :join_table => "similar_artists",
-        :association_foreign_key => "similar_artist_id"
+    has_and_belongs_to_many :similar_artists, :class_name => "Artist", :join_table => "similar_artists", :association_foreign_key => "similar_artist_id"
 
     validates :mbid, presence: true, uniqueness: true
 end

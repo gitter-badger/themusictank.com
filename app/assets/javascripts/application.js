@@ -11,8 +11,8 @@
 // about supported directives.
 //
 //= require jquery
-//= require jquery_ujs
-//= require_tree .
+//= require bootstrap-sprockets
+//= require bower_components/typeahead.js/dist/typeahead.bundle.min.js
 
 var tmt = window.tmt || {};
 
@@ -148,25 +148,25 @@ $(function() {
     */
 
 
-/*
+
     // search box
     var artistsSearch = new Bloodhound({
             name : 'artists',
             datumTokenizer: function(d) { return Bloodhound.tokenizers.obj.whitespace(d.artist); },
             queryTokenizer: Bloodhound.tokenizers.whitespace,
-            remote: '/ajax/artistssearch/?q=%QUERY'
+            remote: '/ajax/artist_search/?q=%QUERY'
         }),
         albumsSearch = new Bloodhound({
             name : 'albums',
             datumTokenizer: function(d) { return Bloodhound.tokenizers.obj.whitespace(d.album); },
             queryTokenizer: Bloodhound.tokenizers.whitespace,
-            remote: '/ajax/albumssearch/?q=%QUERY'
+            remote: '/ajax/album_search/?q=%QUERY'
         }),
         tracksSearch = new Bloodhound({
             name : 'tracks',
             datumTokenizer: function(d) { return Bloodhound.tokenizers.obj.whitespace(d.track); },
             queryTokenizer: Bloodhound.tokenizers.whitespace,
-            remote: '/ajax/trackssearch/?q=%QUERY'
+            remote: '/ajax/track_search/?q=%QUERY'
         });
 
     artistsSearch.initialize();

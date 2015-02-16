@@ -1,6 +1,6 @@
 module Entity
     # Represent a release by a musician or band.
-    class Sluggable < Entity::Base
+    class Slugged < Entity::Base
 
         # This does not have a table associated.
         # Models will inherit this class and overrite the fields.
@@ -14,10 +14,10 @@ module Entity
             log "before_validation: Starting validation loop on slugs."
 
             slug = self.generate_slug
-            if Repository::Sluggables.slug_exists?(self, slug)
+            if Repository::Behavior::Slugged.slug_exists?(self, slug)
                 # Loop for unique slugs.
                 counter = 1;
-                while Repository::Sluggables.slug_exists?(self, "#{slug}-#{counter}")
+                while Repository::Behavior::Slugged.slug_exists?(self, "#{slug}-#{counter}")
                     counter += 1
                 end
                 self.slug = "#{slug}-#{counter}"

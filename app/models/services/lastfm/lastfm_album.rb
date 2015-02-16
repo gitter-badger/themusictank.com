@@ -1,98 +1,53 @@
 module Services
     module Lastfm
     # This class talks to the Lastfm API and generates
-        # artist entities from the API results
+        # album entities from the API results
         class LastfmAlbum < Services::Lastfm::Base
 
             # Updates expired albums on TMT.
             def self.update_expired
-                expired = Artist.find_expired_lastfm
+                expired = Album.find_expired_lastfm
                 expired_count = expired.count
 
-                log "Found #{expired_count} expired artists."
+                log "Found #{expired_count} expired albums."
                 if expired_count > 0
-                    expired.each do |artist|
-                        log "Updating #{artist.name}"
-                        # Update the artist profile
-                        update_artist_profile artist
-
-                        # Update the artist discography because it's likely either
-                        # not there or too old.
-                        log "Updating #{artist.name}'s discography"
-                        Services::Musicbrainz::MusicbrainzArtist.populate_discography(artist)
+                    expired.each do |album|
+                        log "Updating #{album.title}"
+                        # Update the album profile
+                        update_album_profile album
                     end
                 end
             end
 
-            # Updates a TMT artist profile from the information on LastFM
-            def self.update_artist_profile artist
-                remote = find_remote_artist artist
-                artist.thumbnail_source = remote["image"][ remote["image"].length - 1 ]['#text']
-                artist.bio = remote["bio"]["summary"]
-                artist.last_lastfm_update = DateTime.now
-
-                # Use this moment to save similar artists
-                # to ensure we have a filled in DB
-                artist.similar_artists = prepare_similar_artists_by_names remote['similar']['artist']
-
-
-                # Save the updated entity
-                artist.save
+            # Updates a TMT album profile from the information on LastFM
+            def self.update_album_profile album
+                remote = find_remote album
+                unless remote.nil?
+                    album.thumbnail_source = remote["image"][ remote["image"].length - 1 ]['#text']
+                    album.playcount = remote['playcount']
+                    album.last_lastfm_update = DateTime.now
+                    # Save the updated entity
+                    album.save
+                end
             end
 
             # Finds or creates Artist entities from standard LastFM API return data.
-            # Only saves artists when a musicbrainz id is passed through.
-            def self.find_or_create lfm_artist
-                unless lfm_artist["mbid"].empty?
-                    Artist.where(mbid: lfm_artist["mbid"]).first_or_create! do |artist|
-                        artist.name = lfm_artist["name"]
-                        artist.last_lastfm_update = 1.month.ago
+            # Only saves albums when a musicbrainz id is passed through.
+            def self.find_or_create lfm_album
+                unless lfm_album["mbid"].empty?
+                    Artist.where(mbid: lfm_album["mbid"]).first_or_create! do |album|
+                        album.name = lfm_album["name"]
+                        album.last_lastfm_update = 1.month.ago
                     end
                 end
             end
 
             protected
 
-            # Fetches the list of current top artists on
-            # LastFm.
-            def self.remote_top_artists
-                log "Sending API request to 'get_top_artists()'"
-
-                # [Achievement unlocked : Cultural Victory]
-                # Default to united states as the country of the top artists because
-                # no one cares what's hot elsewhere it would seem.
-                generate_top_artists_datalist LastFM::Chart.get_top_artists :country => "United States"
-            end
-
-            # Fetches artist details on LastFM based on a name.
-            def self.find_remote_artist artist
-                log "Sending API request to 'get_info(:artist=> #{artist.name}, :mbid => #{artist.mbid})'"
-                LastFM::Artist.get_info(:artist=> artist.name, :mbid => artist.mbid)["artist"]
-            end
-
-            # Formats a resultset of API data into a known data structure
-            def self.generate_top_artists_datalist data
-                list = Array.new
-                data["artists"]["artist"].each do |artistData|
-                    list << Services::Lastfm::LastfmArtist.find_or_create(artistData)
-                end
-                list
-            end
-
-            def self.prepare_similar_artists_by_names names
-                similar_artists = Array.new
-                if names.length > 0
-                    log "Starting similar artists loop."
-                    names.each do |similar|
-                        similar_artist = Services::Musicbrainz::MusicbrainzArtist.find_or_create_by_name similar['name']
-                        unless similar_artist.nil? or similar_artist.id.nil?
-                            similar_artists << similar_artist#.becomes(SimilarArtist)
-                        end
-                    end
-                else
-                    log "No similar artists given."
-                end
-                similar_artists
+            # Fetches album details on LastFM based on a name.
+            def self.find_remote album
+                log "Sending API request to 'get_info(:artist => #{album.artist.name}, :album => #{album.title})'"
+                LastFM::Album.get_info(:artist => album.artist.name, :album => album.title)["album"]
             end
 
         end

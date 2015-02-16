@@ -7,6 +7,7 @@ gem 'rails', '4.1.7'
 gem 'sqlite3'
 
 # Use SCSS for stylesheets
+gem 'bootstrap-sass', '~> 3.3.3'
 gem 'sass-rails', '~> 4.0.3'
 
 # Use Uglifier as compressor for JavaScript assets
@@ -45,6 +46,12 @@ gem 'spring',        group: :development
 # Use debugger
 #gem 'debugger', group: [:development, :test]
 
+# Colorize log outlput
+gem 'colorize'
+
+# autocomplete
+#gem 'twitter-typeahead-rails'
+
 # TDD
 gem 'rspec-rails', :group => [:test, :development]
 gem 'factory_girl_rails', :group => [:test]
@@ -57,5 +64,6 @@ gem 'lastfm-client', :git => 'http://github.com/pch/lastfm-client.git'
 # https://github.com/localhots/musicbrainz
 gem 'musicbrainz'
 
-# Colorize log outlput
-gem 'colorize'
+# Load up an Amazon S3 client
+# https://github.com/qoobaa/s3
+gem 's3'

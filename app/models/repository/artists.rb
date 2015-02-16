@@ -34,5 +34,14 @@ module Repository
 
             random_set
         end
+
+        def search criteria, limit = 10
+            sanitized_position = sprintf("length(ltrim(name, %s)) as match_position", sanitize(criteria))
+            select("*, #{sanitized_position}")
+                .where('name LIKE ?', "%#{criteria}%")
+                .order('match_position ASC')
+                .limit(limit)
+        end
+
     end
 end

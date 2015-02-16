@@ -1,7 +1,28 @@
-<ol>
-<% @artists.each do |artist| %>
-    <li>
-        <%= link_to artist.name, controller: :artists, action: :view, slug: artist.slug %>
-    </li>
+<% unless @featured_artist.nil? %>
+    <div class="featured">
+        <%= render partial: "backdrop", locals: {entity: @featured_artist} %>
+        <h1><%= link_to @featured_artist.name, controller: :artists, action: :view, slug: @featured_artist.slug %></h1>
+
+        <section class="discography">
+            <ul>
+            <% @featured_artist.albums.limit(4).each do |album| %>
+                <li>
+                    <img src="<%= album.get_thumbnail_url 'thumb' %>" alt="<%= album.title %>" title="<%= album.title %>">
+                    <%= link_to album.title, controller: :albums, action: :view, slug: album.slug %>
+                </li>
+            <% end %>
+            </ul>
+        </section>
+
+    </div>
 <% end %>
-</ol>
+
+<% unless @artists.nil? %>
+    <ul>
+    <% @artists.each do |artist| %>
+        <li>
+            <%= link_to artist.name, controller: :artists, action: :view, slug: artist.slug %>
+        </li>
+    <% end %>
+    </ul>
+<% end %>

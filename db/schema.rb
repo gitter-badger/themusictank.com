@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20150211170050) do
+ActiveRecord::Schema.define(version: 20150213173813) do
 
   create_table "albums", force: true do |t|
     t.string   "title"
@@ -24,6 +24,7 @@ ActiveRecord::Schema.define(version: 20150211170050) do
     t.datetime "last_lastfm_update"
     t.datetime "created_at"
     t.datetime "updated_at"
+    t.integer  "playcount"
   end
 
   add_index "albums", ["artist_id"], name: "index_albums_on_artist_id"

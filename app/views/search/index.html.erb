@@ -1,0 +1,45 @@
+<h1><%= t 'Search results' %></h1>
+
+<% unless @artists.nil? %>
+    <h2><%= t 'Artist matches' %></h2>
+
+    <% if @artists.length > 0 %>
+        <ul>
+        <% @artists.each do |artist| %>
+            <li><%= link_to artist.name, controller: :artists, action: :view, slug: artist.slug %></li>
+        <% end %>
+        </ul>
+    <% else %>
+        <p><%= t 'We were not able to find anything that matched the query' %>.</p>
+    <% end %>
+<% end %>
+
+<% unless @albums.nil? %>
+    <h2><%= t 'Album matches' %></h2>
+
+    <% if @albums.length > 0 %>
+        <ul>
+        <% @albums.each do |album| %>
+            <li><%= link_to album.title, controller: :albums, action: :view, slug: album.slug %></li>
+        <% end %>
+        </ul>
+    <% else %>
+        <p><%= t 'We were not able to find anything that matched the query' %>.</p>
+    <% end %>
+<% end %>
+
+
+<% unless @tracks.nil? %>
+    <h2><%= t 'Track matches' %></h2>
+
+    <% if @tracks.length > 0 %>
+        <ul>
+        <% @tracks.each do |track| %>
+            <li><%= link_to track.title, controller: :tracks, action: :view, slug: track.slug %></li>
+        <% end %>
+        </ul>
+    <% else %>
+        <p><%= t 'We were not able to find anything that matched the query' %>.</p>
+    <% end %>
+<% end %>
+

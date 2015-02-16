@@ -1,0 +1,25 @@
+{
+  "name": "The Music Tank",
+  "version": "1.0.0",
+  "authors": [
+    "Francois Faubert <frank@francoisfaubert.com>"
+  ],
+  "main": "",
+  "moduleType": [
+    "globals"
+  ],
+  "license": "MIT",
+  "private": true,
+  "ignore": [
+    "**/.*",
+    "node_modules",
+    "bower_components",
+    "test",
+    "tests"
+  ],
+  "dependencies": {
+    "d3": ">=v3",
+    "typeahead.js": ">=v0.10.5",
+    "font-awesome": "~4.2.0"
+  }
+}

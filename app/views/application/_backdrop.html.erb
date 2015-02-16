@@ -4,18 +4,20 @@
         <div class="clean"></div>
         <i class="mask"></i>
     </div>
-<% content_for :header  do %>
+    <% if entity.thumbnail? %>
+        <% content_for :header  do %>
 <style type="text/css">
     @media (min-width: 501px) {
-        .blurred { background-image: url(<%= entity.getImageUrl("blur"); %>) }
-        .clean { background-image: url(<%= entity.getImageUrl("big"); %>) }
+        .blurred { background-image: url(<%= entity.get_thumbnail_url "blur" %>); }
+        .clean { background-image: url(<%= entity.get_thumbnail_url "big" %>); }
     }
     @media (max-width: 500px) {
-        .blurred { background-image: url(<%= entity.getImageUrl("mobile_blur"); %>) }
-        .clean { background-image: url(<%= entity.getImageUrl("mobile_big"); %>) }
+        .blurred { background-image: url(<%= entity.get_thumbnail_url "mobile_blur" %>); }
+        .clean { background-image: url(<%= entity.get_thumbnail_url "mobile_big" %>); }
     }
 </style>
-<% end %>
+        <% end %>
+    <% end %>
 
 <% else %>
     <div class="header-wrapper plain">

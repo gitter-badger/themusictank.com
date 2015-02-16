@@ -6,6 +6,7 @@
     <ul>
     <% @artist.albums.each do |album| %>
         <li>
+            <img src="<%= album.get_thumbnail_url 'thumb' %>" alt="<%= album.title %>" title="<%= album.title %>">
             <%= link_to album.title, controller: :albums, action: :view, slug: album.slug %>
         </li>
     <% end %>
@@ -16,6 +17,7 @@
     <ul>
     <% @artist.similar_artists.each do |similar_artist| %>
         <li>
+            <img src="<%= similar_artist.get_thumbnail_url 'thumb' %>" alt="<%= similar_artist.name %>" title="<%= similar_artist.name %>">
             <%= link_to similar_artist.name, controller: :artists, action: :view, slug: similar_artist.slug %>
         </li>
     <% end %>
@@ -26,6 +28,6 @@
     <ul>
         <li>LastFM : <%= @artist.last_lastfm_update %></li>
         <li>MusicBrainz : <%= @artist.last_mb_update %></li>
-        <li>Enitty : <%= @artist.updated_at %></li>
+        <li>Entity : <%= @artist.updated_at %></li>
     </ul>
 </section>

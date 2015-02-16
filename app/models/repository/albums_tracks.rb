@@ -1,7 +1,7 @@
 module Repository
     # This class handles queries of Albums objects.
     module AlbumsTracks
-        include Repository::Sluggables
+        include Repository::Behavior::Slugged
 
         # Lists artists that have no discography attached.
         def find_with_no_tracks

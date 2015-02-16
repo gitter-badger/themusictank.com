@@ -1,7 +1,8 @@
 Rails.application.routes.draw do
 
-  get ':controller(/:action(/:slug))'
+  get 'search/index'
 
+  get ':controller(/:action(/:slug))'
 
   # The priority is based upon order of creation: first created -> highest priority.
   # See how all your routes lay out with "rake routes".

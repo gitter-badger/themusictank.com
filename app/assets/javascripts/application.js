@@ -306,10 +306,10 @@ $(function() {
             id = el.attr("id"),
             url = el.attr("data-song");
 
-        $.getJSON('/ajax/getsong/' + url,
+        $.getJSON('/ajax/yt_key/' + url,
             function(response) {
-                if(response.vid.length === 11) {
-                    videoId = response.vid;
+                if(response.youtube_key.length === 11) {
+                    videoId = response.youtube_key;
                     el.append('<iframe id="songplayer_youtube_api" scrolling="no" marginwidth="0" marginheight="0" frameborder="0" src="//www.youtube.com/embed/'+videoId+'?enablejsapi=1&amp;iv_load_policy=3&amp;playerapiid=songplayer_component_17&amp;disablekb=1&amp;wmode=transparent&amp;controls=0&amp;playsinline=0&amp;showinfo=0&amp;modestbranding=1&amp;rel=0&amp;autoplay=0&amp;loop=0&amp;origin='+window.location.origin+'"></iframe>');
 
                     var tag = document.createElement('script');

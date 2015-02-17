@@ -2,7 +2,7 @@ module Repository
     # This class handles queries of Track objects.
     module Tracks
         include Repository::Behavior::Slugged
-
+        include Repository::Behavior::Youtubed
 
         def search criteria, limit = 10
             sanitized_position = sprintf("length(ltrim(title, %s)) as match_position", sanitize(criteria))

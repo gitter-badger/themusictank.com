@@ -1,7 +1,6 @@
 Rails.application.routes.draw do
 
-  get 'search/index'
-
+  root 'tmt#homepage'
   get ':controller(/:action(/:slug))'
 
   # The priority is based upon order of creation: first created -> highest priority.

@@ -4,5 +4,10 @@ module Entity
         include Entity::Thumbnailed
 
         self.abstract_class = true
+
+        def player_attributes
+            return { "class"=> "streamer", "data-song-vid" => self.youtube_key } unless self.youtube_key.nil?
+            return { "class"=> "streamer", "data-song" => self.slug }
+        end
     end
 end

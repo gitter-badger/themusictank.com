@@ -7,7 +7,7 @@
   <%= csrf_meta_tags %>
   <%= yield :header %>
 </head>
-<body>
+<body class="<%= action_name %>">
     <header>
         <div class="navbar navbar-fixed-top" role="navigation">
             <div class="container">
@@ -28,8 +28,7 @@
                                 <input type="submit" />
                             </form>
                         </li>
-                        <li><a href="/artists/"><%= t 'Artists' %></a></li>
-                        <li><a href="/community/"><%= t 'Community' %></a></li>
+                        <li><%= link_to t('Popular'), controller: :artists, action: :index %></li>
                         <li><a href="/profiles/dashboard/"><%= t 'Your account' %></a></li>
                     </ul>
                 </div>
@@ -48,8 +47,8 @@
                     <li><a href="https://plus.google.com/117543200043480372792" target="_blank"><i class="fa fa-google-plus"></i></li>
                 </ul>
                 <ul class="nav nav-pills website">
-                    <li><a href="/about/"><%= t 'About' %></a>
-                    <li><a href="/legal/"><%= t 'Legal' %></a>
+                    <li><%= link_to t('About'), controller: :tmt, action: :about %></li>
+                    <li><%= link_to t('Legal'), controller: :tmt, action: :legal %></li>
                     <li class="copyright">1999 - <%= Time.now.year %> <%= t "The Music Tank" %></li>
                 </ul>
             </nav>

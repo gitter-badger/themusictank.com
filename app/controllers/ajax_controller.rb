@@ -42,4 +42,13 @@ class AjaxController < ApplicationController
         render :json => formatted_results
     end
 
+    # Returns the information of the youtube video required
+    # to play a requested song.
+    def yt_key
+        track = Track.find_by(:slug => params[:slug]) or not_found
+        render :json => {
+            "youtube_key" => Services::Youtube::YoutubeVideo.get_video_key(track)
+        }
+    end
+
 end

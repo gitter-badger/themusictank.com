@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20150213173813) do
+ActiveRecord::Schema.define(version: 20150217144710) do
 
   create_table "albums", force: true do |t|
     t.string   "title"
@@ -64,11 +64,13 @@ ActiveRecord::Schema.define(version: 20150213173813) do
   create_table "tracks", force: true do |t|
     t.string   "title"
     t.string   "slug"
-    t.string   "mbid",       limit: 36, null: false
+    t.string   "mbid",                limit: 36, null: false
     t.integer  "position"
     t.integer  "duration"
     t.datetime "created_at"
     t.datetime "updated_at"
+    t.string   "youtube_key"
+    t.datetime "last_youtube_update"
   end
 
 end

@@ -5,7 +5,7 @@ class ArtistsController < ApplicationController
     end
 
     def view
-        @artist = Artist.find_by_slug(params[:slug])
+        @artist = Artist.find_by_slug(params[:slug]) or not_found
     end
 
     def search

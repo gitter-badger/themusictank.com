@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20150217144710) do
+ActiveRecord::Schema.define(version: 20150219150209) do
 
   create_table "albums", force: true do |t|
     t.string   "title"
@@ -44,7 +44,7 @@ ActiveRecord::Schema.define(version: 20150217144710) do
     t.string   "mbid",               limit: 36, null: false
     t.string   "thumbnail_source"
     t.string   "thumbnail"
-    t.boolean  "is_popular"
+    t.integer  "is_popular",         limit: 1
     t.datetime "last_lastfm_update"
     t.datetime "last_mb_update"
     t.datetime "created_at"

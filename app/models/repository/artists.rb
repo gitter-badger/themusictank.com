@@ -28,8 +28,10 @@ module Repository
                 how_many_left = popular_count - random_ids.length
                 random_offset = rand(how_many_left)
                 match = popular.where('id NOT IN (?)', random_ids).offset(random_offset).first
-                random_ids << match.id
-                random_set << match
+                unless match.nil?
+                    random_ids << match.id
+                    random_set << match
+                end
             end
 
             random_set

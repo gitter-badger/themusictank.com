@@ -8,6 +8,10 @@ Rails.application.routes.draw do
   #get 'auth/:provider/callback', to: 'sessions#create'
   #get 'signout', to: 'sessions#destroy', as: 'signout'
 
+  get 'auth/:provider/callback', to: 'sessions#create'
+  get 'sessions/signout', to: 'sessions#destroy', as: 'signout'
+  get 'sessions/login', to: 'sessions#login', as: :login_url
+
   # General fallback.
   get ':controller(/:action(/:slug))'
 

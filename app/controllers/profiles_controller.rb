@@ -6,4 +6,8 @@ class ProfilesController < ApplicationController
 
     end
 
+    def view
+        @profile = User.find_by_slug(params[:slug]) or not_found
+    end
+
 end

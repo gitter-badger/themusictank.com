@@ -1,0 +1,53 @@
+<%= render partial: "backdrop" %>
+
+<article class="container">
+
+    <div class="row content ">
+
+        <h1><%= t "Profiles" %></h1>
+
+         <h2><%= t "Access your account " %></h2>
+
+        <%= render partial: "messages", locals: {flash: flash} %>
+
+        <div class="col-md-7">
+
+            <div class="panel panel-default ">
+                <div class="panel-heading">
+                    <h3 class="panel-title"><%= t "Authentication" %></h3>
+                </div>
+                <div class="panel-body">
+                    <p><%= t "Connecting The Music Tank with these social services will automatically give you access to this website. If you have accounts on these, you have an account on TMT." %></p>
+                </div>
+                <ul class="list-group">
+                    <li class="list-group-item">
+                        <%= link_to '/auth/facebook', class: "btn btn-primary btn-lg btn-block" do %>
+                            <i class="fa fa-facebook-square"></i> <%= "Login with Facebook" %>
+                        <% end %>
+                    </li>
+                </ul>
+            </div>
+
+        </div>
+
+        <div class="col-md-5">
+
+            <div class="panel panel-default ">
+                <div class="panel-heading">
+                    <h3 class="panel-title"><%= t "If you do not use any of these services..." %></h3>
+                </div>
+                <div class="panel-body">
+                    <p><%= t "Connect with your existing TMT account " %></p>
+
+                </div>
+                <ul class="list-group">
+                    <li class="list-group-item"><%
+                    # $this->Html->link(__("Create a new TMT account "), ['controller' => 'users', 'action' => 'add', '?' => ["rurl" => $redirectUrl]]);
+                 %></li>
+                </ul>
+            </div>
+
+        </div>
+
+    </div>
+</article>

@@ -3,7 +3,7 @@ class CreateArtists < ActiveRecord::Migration
     create_table :artists do |t|
 
       t.string :name, :limit => 255, :null => false
-      t.string :slug
+      t.string :slug, unique: true
       t.string :mbid, :limit => 36, :null => false
       t.string :thumbnail_source, :limit => 255
       t.string :thumbnail, :limit => 255

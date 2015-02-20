@@ -7,4 +7,12 @@ class ApplicationController < ActionController::Base
         raise ActionController::RoutingError.new('Not Found')
     end
 
+    def require_login
+        unless user_signed_in?
+          flash[:error] = "Please login or create a new user before reaching your dashboard."
+          redirect_to login_url
+        else
+          #  @current_user = current_user
+        end
+    end
 end

@@ -62,6 +62,9 @@ gem 'rspec-rails', :group => [:test, :development]
 gem 'factory_girl_rails', :group => [:test]
 gem 'faker', :group => [:test]
 
+# Facebook login
+gem 'omniauth-facebook'
+
 # Load up a lastfm client
 gem 'lastfm-client', :git => 'http://github.com/pch/lastfm-client.git'
 

@@ -29,13 +29,15 @@
                             </form>
                         </li>
                         <li><%= link_to t('Popular'), controller: :artists, action: :index %></li>
-                        <li><a href="/profiles/dashboard/"><%= t 'Your account' %></a></li>
+
+                        </li>
                     </ul>
                 </div>
             </div>
         </div>
     </header>
 
+<%= render partial: "messages", locals: {flash: flash} %>
 <%= yield %>
 
     <footer class="site-foot">

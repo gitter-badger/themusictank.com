@@ -18,19 +18,22 @@ module Repository
 
         # Finds a list of the qty first popular artist by random order.
         def find_random_popular qty = 20
+
             random_ids = [-1]
             random_set = Array.new
             popular = find_popular
             popular_count = popular.count
 
-            log "Starting loop for random ids."
-            while random_ids.length < qty or random_ids.length >= popular_count
-                how_many_left = popular_count - random_ids.length
-                random_offset = rand(how_many_left)
-                match = popular.where('id NOT IN (?)', random_ids).offset(random_offset).first
-                unless match.nil?
-                    random_ids << match.id
-                    random_set << match
+            if popular_count > 0
+                log "Starting loop for random ids."
+                while random_ids.length < qty or random_ids.length >= popular_count
+                    how_many_left = popular_count - random_ids.length
+                    random_offset = rand(how_many_left)
+                    match = popular.where('id NOT IN (?)', random_ids).offset(random_offset).first
+                    unless match.nil?
+                        random_ids << match.id
+                        random_set << match
+                    end
                 end
             end
 

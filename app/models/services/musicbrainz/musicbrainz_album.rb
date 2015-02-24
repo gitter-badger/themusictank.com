@@ -29,7 +29,7 @@ module Services
                         warn "Album '#{mb_release.title}' (#{mb_release.id}) did not exist."
                         log "Creating '#{mb_release.title}' (#{mb_release.id})"
                         album.title = mb_release.title
-                        album.release_date = Time.at(mb_release.first_release_date)
+                        album.release_date = mb_release.first_release_date
                     end
                 end
             end

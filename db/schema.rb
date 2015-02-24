@@ -74,6 +74,7 @@ ActiveRecord::Schema.define(version: 20150219151400) do
   end
 
   create_table "users", force: true do |t|
+    t.string   "email",            null: false
     t.string   "slug"
     t.string   "provider"
     t.string   "uid"

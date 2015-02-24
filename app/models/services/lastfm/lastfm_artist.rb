@@ -81,12 +81,15 @@ module Services
 
             def self.prepare_similar_artists_by_names names
                 similar_artists = Array.new
-                if !name.nil? && names.length > 0
+                similar_artist_ids = Array.new
+
+                if !names.nil? && names.length > 0
                     log "Starting similar artists loop."
                     names.each do |similar|
                         similar_artist = Services::Musicbrainz::MusicbrainzArtist.find_or_create_by_name similar['name']
-                        unless similar_artist.nil? or similar_artist.id.nil?
-                            similar_artists << similar_artist#.becomes(SimilarArtist)
+                        unless similar_artist.nil? or similar_artist.id.nil? or similar_artist_ids.include? similar_artist.id
+                            similar_artist_ids << similar_artist.id
+                            similar_artists << similar_artist
                         end
                     end
                 else

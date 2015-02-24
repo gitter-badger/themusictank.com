@@ -8,7 +8,12 @@ module Repository
 
         # Updates a set of artists and marks them as current being popular.
         def update_popular artists
-            Artist.update_all(["is_popular = id in (?)", artists.map(&:id)])
+            make_all_unpopular
+            Artist.where(:id => artists.map(&:id)).update_all(:is_popular => 1)
+        end
+
+        def make_all_unpopular
+            Artist.update_all(:is_popular => 0)
         end
 
         # Returns a list of popular artists

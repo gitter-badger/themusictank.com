@@ -1,16 +1,29 @@
+class AuthConstraint
+  def matches?(request)
+    request.session['user_id'].present?
+  end
+end
+
+
 Rails.application.routes.draw do
+
+  constraints(AuthConstraint.new) do
+    root :to => 'profiles#dashboard', as: :authenticated_root
+  end
 
   root 'tmt#homepage'
 
-  # Facebook auth rules.
-  #get 'auth', to: 'sessions#login', as: 'login'
-  #get 'auth/failure', to: 'sessions#login'
-  #get 'auth/:provider/callback', to: 'sessions#create'
-  #get 'signout', to: 'sessions#destroy', as: 'signout'
+  #resources :users, :controller => "profiles"
 
+
+
+  # Facebook auth rules.
   get 'auth/:provider/callback', to: 'sessions#create'
   get 'sessions/signout', to: 'sessions#destroy', as: 'signout'
   get 'sessions/login', to: 'sessions#login', as: :login_url
+
+  # Routes that submit things
+  patch 'profiles/update', :to => 'profiles#update'
 
   # General fallback.
   get ':controller(/:action(/:slug))'

@@ -10,13 +10,14 @@ class ApplicationController < ActionController::Base
     end
 
     def require_login
-
-            puts user_signed_in?
-            puts @current_user
         unless user_signed_in?
           flash[:error] = "Please login or create a new user before reaching your dashboard."
           redirect_to controller: :sessions, action: :login
         end
+    end
+
+    def reload_current_user
+        @current_user = User.find(session[:user_id]) if session[:user_id]
     end
 
     private

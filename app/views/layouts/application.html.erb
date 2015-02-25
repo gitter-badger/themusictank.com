@@ -42,8 +42,8 @@
                                   <span class="caret"></span>
                                 </a>
                                 <ul class="dropdown-menu" role="menu" aria-labelledby="btnSettings">
-                                    <li><%= link_to t("Settings"), controller: :users, action: :edit %></li>
-                                    <li><%= link_to t("Logout"), controller: :users, action: :signout %></li>
+                                    <li><%= link_to t("Settings"), controller: :profiles, action: :edit %></li>
+                                    <li><%= link_to t("Logout"), controller: :sessions, action: :signout %></li>
                                 </ul>
                             </li>
                         <% else %>

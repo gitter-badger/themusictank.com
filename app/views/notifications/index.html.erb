@@ -1,0 +1,62 @@
+<%= render partial: "backdrop" %>
+
+<div class="container">
+
+    <div class="row">
+
+        <div class="col-md-12">
+
+            <h1><%= t "Notifications" %></h1>
+
+            <button name="markAsRead"  class="btn btn-primary"><%= t "Mark all as read" %></button>
+
+            <div class="notifications">
+                <% if @notifications.length > 0 %>
+                    <% @notifications.each do |notification| %>
+                        <div class="notification <% if notification.viewed? %>read<% else %>new<% end %> <%= notification.type %>">
+                            <h3><%= @notification.title %></h3>
+
+                            <time datetime="<%= notification.created %>" data-title="true" title="<%= notification.created %>">
+                                <%= notification.created %>
+                            </time>
+
+                            <!--
+
+
+                            <?php if($notification->isLinkedToObject()) : ?>
+                                <?php $linkedObject = $notification->getLinkedObject( ?>
+                                <?php if($linkedObject) : ?>
+                                    <?php if($notification->type === Notification::TYPE_ACHIEVEMENT) : ?>
+
+                                        <p><blockquote><?= $linkedObject->description; ?></blockquote></p>
+
+                                    <?php elseif($notification->type === Notification::TYPE_FOLLOWER) : ?>
+                                        <p>
+                                            <?= $this->Html->link($linkedObject->username, ['controller' => 'profiles', 'action' => 'view', $linkedObject->slug] ?>
+                                            <%= t "is now following you!" %>
+                                        </p>
+
+                                    <?php elseif($notification->type === Notification::TYPE_BUG) : ?>
+                                        <p><%= t "There's a new bug dude." %></p>
+                                    <?php endif; ?>
+
+                                <?php endif; ?>
+                            <?php endif; ?>
+
+                            -->
+
+
+                        </div>
+                    <% end %>
+                <% else %>
+                    <p><%= t "You have no notifications for the moment" %>.</p>
+                <% end %>
+            </div>
+
+            <%= will_paginate @notifications, renderer: BootstrapPagination::Rails %>
+
+        </div>
+
+    </div>
+
+</div>

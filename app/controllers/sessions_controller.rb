@@ -1,6 +1,5 @@
 class SessionsController < ApplicationController
   def create
-
     provider = env["omniauth.auth"][:provider]
     uid = env["omniauth.auth"][:uid]
 

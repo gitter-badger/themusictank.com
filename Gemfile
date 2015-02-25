@@ -57,8 +57,8 @@ gem 'newrelic_rpm'
 # Colorize log outlput
 gem 'colorize'
 
-# autocomplete
-#gem 'twitter-typeahead-rails'
+gem 'will_paginate', '~> 3.0.6'
+gem 'will_paginate-bootstrap'
 
 # TDD
 gem 'rspec-rails', :group => [:test, :development]

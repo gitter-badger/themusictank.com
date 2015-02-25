@@ -1,0 +1,28 @@
+<%= render partial: "backdrop" %>
+
+<%= form_for @profile, url: {controller: :profiles, action: :update}, html: {class: "container edit-container"} do |f| %>
+    <div class="row">
+        <div class="col-md-12">
+            <fieldset>
+                <p><%= t "Customize your personnal url" %>:</p>
+                <%= f.label :slug, "http://www.themusictank.com/profiles/view/" %>
+                <%= f.text_field :slug %></p>
+            </fieldset>
+            <fieldset>
+                <%= f.label :name, t("Name") %>
+                <%= f.text_field :name %>
+            </fieldset>
+            <fieldset>
+                <%= f.label :email, t("Email") %>
+                <%= f.text_field :email %>
+            </fieldset>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-md-12">
+            <div class="form-footer">
+                <%= f.submit "Update profile settings" %>
+            </div>
+        </div>
+    </div>
+<% end %>

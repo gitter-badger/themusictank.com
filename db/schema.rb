@@ -11,7 +11,17 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20150225213053) do
+ActiveRecord::Schema.define(version: 20150227150540) do
+
+  create_table "achievements", force: true do |t|
+    t.integer  "user_id"
+    t.string   "slug"
+    t.integer  "count"
+    t.datetime "created_at"
+    t.datetime "updated_at"
+  end
+
+  add_index "achievements", ["user_id"], name: "index_achievements_on_user_id"
 
   create_table "albums", force: true do |t|
     t.string   "title"
@@ -83,6 +93,17 @@ ActiveRecord::Schema.define(version: 20150225213053) do
     t.string   "youtube_key"
     t.datetime "last_youtube_update"
   end
+
+  create_table "user_activities", force: true do |t|
+    t.integer  "user_id"
+    t.string   "linked_obj_type"
+    t.integer  "linked_obj_id"
+    t.integer  "must_notify_user", default: 0
+    t.datetime "created_at"
+    t.datetime "updated_at"
+  end
+
+  add_index "user_activities", ["user_id"], name: "index_user_activities_on_user_id"
 
   create_table "users", force: true do |t|
     t.string   "email",            null: false

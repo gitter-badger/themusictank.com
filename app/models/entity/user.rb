@@ -5,5 +5,17 @@ module Entity
 
         self.abstract_class = true
 
+        def reward_account_creation
+            Services::TMTAchievement::CreatedAccount.new.reward!(self)
+        end
+
+        def has_unread_notifications?
+            ::UserActivity.has_unread_notifications?(self)
+        end
+
+        def unread_notifications_count
+            ::UserActivity.unread_notifications(self).count
+        end
+
     end
 end

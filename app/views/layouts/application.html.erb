@@ -33,7 +33,9 @@
                             <li><%= link_to t("You"), controller: 'profiles', action: :view, slug: current_user.slug %></li>
                             <li>
                             <%= link_to controller: :notifications, action: :index  do %>
-                                <i class="fa fa-bell-o"></i>
+                                <i class="fa fa-bell-o <% if current_user.has_unread_notifications? %>unread<% end %>">
+                                    <%= current_user.unread_notifications_count %>
+                                </i>
                             <% end %>
                             </li>
                             <li class="dropdown">

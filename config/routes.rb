@@ -1,20 +1,13 @@
 class AuthConstraint
   def matches?(request)
-    request.session['user_id'].present?
+    puts "ici"
+    puts request.session['user_id']
+    request.session['user_id'].present? && User.exists?(request.session[:user_id])
   end
 end
 
 
 Rails.application.routes.draw do
-
-  constraints(AuthConstraint.new) do
-    root :to => 'profiles#dashboard', as: :authenticated_root
-  end
-
-  root 'tmt#homepage'
-
-  #resources :users, :controller => "profiles"
-
 
 
   # Facebook auth rules.
@@ -28,6 +21,10 @@ Rails.application.routes.draw do
   # General fallback.
   get ':controller(/:action(/:slug))'
 
+  root 'tmt#homepage'
+  #constraints(AuthConstraint.new) do
+  #  root :to => 'profiles#dashboard', as: :authenticated_root
+  #end
 
   # The priority is based upon order of creation: first created -> highest priority.
   # See how all your routes lay out with "rake routes".

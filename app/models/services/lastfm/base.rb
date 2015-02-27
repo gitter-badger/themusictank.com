@@ -3,6 +3,8 @@ module Services
         # This class talks to the Lastfm API
         class Base < Services::Base
 
+
+
         end
     end
 end

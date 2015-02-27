@@ -8,43 +8,35 @@
 
             <h1><%= t "Notifications" %></h1>
 
-            <button name="markAsRead"  class="btn btn-primary"><%= t "Mark all as read" %></button>
+            <button name="markAsRead" class="btn btn-primary"><%= t "Mark all as read" %></button>
 
             <div class="notifications">
                 <% if @notifications.length > 0 %>
                     <% @notifications.each do |notification| %>
                         <div class="notification <% if notification.viewed? %>read<% else %>new<% end %> <%= notification.type %>">
-                            <h3><%= @notification.title %></h3>
 
-                            <time datetime="<%= notification.created %>" data-title="true" title="<%= notification.created %>">
-                                <%= notification.created %>
+                            <time datetime="<%= notification.created_at %>" data-title="true" title="<%= notification.created_at %>">
+                                <%= notification.created_at %>
                             </time>
 
-                            <!--
+                            <% unless notification.linked_obj.nil? %>
+                                <% if notification.linked_obj.kind_of? Services::TMTAchievement::Base %>
 
+                                    <h3><%= t notification.title %></h3>
+                                    <p><blockquote><%= t notification.linked_obj.description; %></blockquote></p>
 
-                            <?php if($notification->isLinkedToObject()) : ?>
-                                <?php $linkedObject = $notification->getLinkedObject( ?>
-                                <?php if($linkedObject) : ?>
-                                    <?php if($notification->type === Notification::TYPE_ACHIEVEMENT) : ?>
+                                <% elsif notification.linked_obj.kind_of? User %>
+                                    <h3><% t "New follower" %></h3>
+                                    <p>
+                                        <%= link_to notification.linked_obj.name, controller: :profiles, action: :view, slug: notification.linked_obj.slug %> <%= t "is now following you!" %>
+                                    </p>
+                                <% #elsif notification.linked_obj < Bug %>
+                                    <% #<p><%= t "There's a new bug dude." % ></p> %>
+                                <% else %>
+                                    <p>Could not figure out the linked object.</p>
+                                <% end %>
 
-                                        <p><blockquote><?= $linkedObject->description; ?></blockquote></p>
-
-                                    <?php elseif($notification->type === Notification::TYPE_FOLLOWER) : ?>
-                                        <p>
-                                            <?= $this->Html->link($linkedObject->username, ['controller' => 'profiles', 'action' => 'view', $linkedObject->slug] ?>
-                                            <%= t "is now following you!" %>
-                                        </p>
-
-                                    <?php elseif($notification->type === Notification::TYPE_BUG) : ?>
-                                        <p><%= t "There's a new bug dude." %></p>
-                                    <?php endif; ?>
-
-                                <?php endif; ?>
-                            <?php endif; ?>
-
-                            -->
-
+                            <% end %>
 
                         </div>
                     <% end %>
@@ -60,3 +52,16 @@
     </div>
 
 </div>
+
+
+<% content_for :footer  do %>
+<script>
+    $(function(){
+        $("button[name=markAsRead]").click(function(){
+            $.getJSON("<?php echo Router::url(array("controller" => "ajax", "action" => "okstfu")); ?>", function(){
+                $('.notifications .notification.new').removeClass("new").addClass("read");
+            });
+        });
+    });
+</script>
+<% end %>

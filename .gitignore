@@ -16,3 +16,4 @@
 /tmp
 config/local_secrets.yml
 vendor/assets/javascripts/bower_components/
+db/development.sqlite3.notifications

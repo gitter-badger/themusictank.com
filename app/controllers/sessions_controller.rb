@@ -3,7 +3,7 @@ class SessionsController < ApplicationController
     provider = env["omniauth.auth"][:provider]
     uid = env["omniauth.auth"][:uid]
 
-    user = User.from_omniauth(provider, uid, env["omniauth.auth"])
+    user = Services::Omniauth::OmniauthUser.find_or_create(provider, uid, env["omniauth.auth"])
     session[:user_id] = user.id
     redirect_to root_url
   end
@@ -14,7 +14,7 @@ class SessionsController < ApplicationController
   end
 
   def failure
-      flash[:error] = "We could not log you in."
+      flash[:error] = t "We could not log you in."
       redirect_to controller: :sessions, action: :login
   end
 
@@ -22,5 +22,6 @@ class SessionsController < ApplicationController
 
   end
 
-
 end
+
+

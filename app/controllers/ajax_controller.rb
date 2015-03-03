@@ -51,4 +51,36 @@ class AjaxController < ApplicationController
         }
     end
 
+    # Marks user notifications as 'read'
+    def okstfu
+        UserActivity.mark_user_notifications_read current_user
+        redirect_to action: :whatsup
+    end
+
+    # Checks for user notifications
+    # TODO: This could be pushed instead
+    def whatsup
+        @notifications = UserActivity.find_notifications_for_user(current_user).limit(5)
+        render layout: false
+    end
+
+
+    def bugreport
+        # https://developer.github.com/v3/issues/#edit-an-issue
+
+        Services::Github::GithubIssue.user_bug_report params
+
+        render layout: false
+
+        # if ($this->request->is('post'))
+        # {
+        #     $BugsTable = TableRegistry::get('Bugs');
+        #     $bug = $BugsTable->newEntity($this->request->data);
+        #     if ($BugsTable->save($bug)) {
+        #         $this->set("bug", $bug);
+        #     }
+        #     $this->render("bugreport");
+        # }
+    end
+
 end

@@ -455,10 +455,8 @@ $(function() {
                 });;
             }
 
-
             // Dump the server side response, but hook in the form post logic
-            $.post('/ajax/bugreport/', { 'type': type, 'location': loc, 'user_id': userId }, function(response) {
-
+            $.get('/ajax/bugreport/', { 'type': type, 'location': loc, 'user_id': userId }, function(response) {
                 var form = $("#bugreport .modal-content");
                 form.html(response);
                 form.find(".btn-default").click(function( event ) {
@@ -469,6 +467,9 @@ $(function() {
                         $.post('/ajax/bugreport/', {'id' : id, 'details' : details});
                     }
                 });
+            }).fail(function(response) {
+                var form = $("#bugreport .modal-content");
+                form.html(response);
             });
         });
     });

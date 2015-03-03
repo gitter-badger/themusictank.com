@@ -5,7 +5,7 @@ module Entity
         self.abstract_class = true
 
         def viewed?
-            self.must_notify_user == 1
+            self.must_notify_user === 0
         end
 
         def type

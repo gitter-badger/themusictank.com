@@ -12,6 +12,7 @@ gem 'pg', :group => [:production]
 
 # Use SCSS for stylesheets
 gem 'bootstrap-sass', '~> 3.3.3'
+gem 'sprockets-rails'
 gem 'sass-rails', '~> 4.0.3'
 
 # Use Uglifier as compressor for JavaScript assets

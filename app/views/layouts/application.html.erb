@@ -2,6 +2,7 @@
 <html>
 <head>
   <title>Themusictank</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1">
   <%= stylesheet_link_tag    'application', media: 'all' %>
   <%= javascript_include_tag 'application' %>
   <%= csrf_meta_tags %>
@@ -31,23 +32,7 @@
                         <li><%= link_to t('Popular'), controller: :artists, action: :index %></li>
                         <% unless !current_user %>
                             <li><%= link_to t("You"), controller: 'profiles', action: :view, slug: current_user.slug %></li>
-                            <li>
-                            <%= link_to controller: :notifications, action: :index  do %>
-                                <i class="fa fa-bell-o <% if current_user.has_unread_notifications? %>unread<% end %>">
-                                    <%= current_user.unread_notifications_count %>
-                                </i>
-                            <% end %>
-                            </li>
-                            <li class="dropdown">
-                                <a href="#" id="btnSettings" class="dropdown-toggle" data-toggle="dropdown">
-                                  <i class="fa fa-cog"></i>
-                                  <span class="caret"></span>
-                                </a>
-                                <ul class="dropdown-menu" role="menu" aria-labelledby="btnSettings">
-                                    <li><%= link_to t("Settings"), controller: :profiles, action: :edit %></li>
-                                    <li><%= link_to t("Logout"), controller: :sessions, action: :signout %></li>
-                                </ul>
-                            </li>
+                            <%= render partial: "notifications_popup" %>
                         <% else %>
                             <li><%= link_to t('Your account'), controller: :profiles, action: :dashboard %></li>
                         <% end %>
@@ -70,6 +55,7 @@
                 <ul class="nav nav-pills website">
                     <li><%= link_to t('About'), controller: :tmt, action: :about %></li>
                     <li><%= link_to t('Legal'), controller: :tmt, action: :legal %></li>
+                    <li><span class="report-bug" data-bug-type="footer" data-location="<%= request.original_url %>" data-user="<%= session[:user_id] %>"><i class="fa fa-bug"></i> <%= t "Found a bug" %>?</span></li>
                     <li class="copyright">1999 - <%= Time.now.year %> <%= t "The Music Tank" %></li>
                 </ul>
             </nav>

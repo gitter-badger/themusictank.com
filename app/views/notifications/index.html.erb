@@ -54,11 +54,11 @@
 </div>
 
 
-<% content_for :footer  do %>
+<% content_for :header  do %>
 <script>
     $(function(){
         $("button[name=markAsRead]").click(function(){
-            $.getJSON("<?php echo Router::url(array("controller" => "ajax", "action" => "okstfu")); ?>", function(){
+            $.getJSON("<%= url_for(:controller => 'ajax', :action => 'okstfu') %>", function(){
                 $('.notifications .notification.new').removeClass("new").addClass("read");
             });
         });

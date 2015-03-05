@@ -34,7 +34,9 @@ class ApplicationController < ActionController::Base
         end
 
         def current_user_notifications
-            @current_user_notifications ||= UserActivity.find_notifications_for_user(current_user).limit(5)
+            if user_signed_in?
+                @current_user_notifications ||= UserActivity.find_notifications_for_user(current_user).limit(5)
+            end
         end
 
 end

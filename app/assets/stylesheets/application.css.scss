@@ -48,7 +48,7 @@
         right:0;
         top:0;
         position:absolute;
-        background: transparent url(/img/triangles.png) top left repeat;
+        background: transparent url(image-path('triangles.png')) top left repeat;
     }
 
     &.plain {

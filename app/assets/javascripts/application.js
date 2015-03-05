@@ -13,8 +13,8 @@
 //= require jquery
 //= require bootstrap-sprockets
 //= require bower_components/typeahead.js/dist/typeahead.bundle.min.js
-
-var tmt = window.tmt || {};
+//= require tmt
+//= require bugreport
 
 $(function() {
 
@@ -435,44 +435,7 @@ $(function() {
     }
 
 
-    // Automate bug reporting
-    $("*[data-bug-type]").each(function(){
-        $(this).click(function(){
-            var el = $(this),
-                type = el.attr("data-bug-type"),
-                loc = el.attr("data-location"),
-                userId = el.attr("data-user");
 
-            $("body").addClass("dialog-open");
-
-            if($("#bugreport").length > 0) {
-                $("#bugreport .modal-content").html("<div class=\"loading-wrap\"><i class=\"fa fa-refresh fa-spin fa-fw\"></i></div>");
-                $("#bugreport").modal("show");
-            } else {
-                // Prepare the box
-                $("<div id=\"bugreport\" class=\"modal fade\"><div class=\"modal-dialog\"><div class=\"modal-content\"><div class=\"loading-wrap\"><i class=\"fa fa-refresh fa-spin fa-fw\"></i></div></div></div></div>").modal().on('hidden.bs.modal', function () {
-                    $("body").removeClass("dialog-open");
-                });;
-            }
-
-            // Dump the server side response, but hook in the form post logic
-            $.get('/ajax/bugreport/', { 'type': type, 'location': loc, 'user_id': userId }, function(response) {
-                var form = $("#bugreport .modal-content");
-                form.html(response);
-                form.find(".btn-default").click(function( event ) {
-                    var id = parseInt(form.find("input[name=id]").val(), 10),
-                        details = form.find("textarea").val().trim();
-
-                    if(details.length > 0) {
-                        $.post('/ajax/bugreport/', {'id' : id, 'details' : details});
-                    }
-                });
-            }).fail(function(response) {
-                var form = $("#bugreport .modal-content");
-                form.html(response);
-            });
-        });
-    });
 
     tmt.pieGraph = function(key, jsonData) {
         if (jsonData) {

@@ -68,6 +68,7 @@ gem 'faker', :group => [:test]
 
 # Facebook login
 gem 'omniauth-facebook'
+gem "github_api"
 
 # Load up a lastfm client
 gem 'lastfm-client', :git => 'http://github.com/pch/lastfm-client.git'

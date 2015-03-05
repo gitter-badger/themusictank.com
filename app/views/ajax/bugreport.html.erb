@@ -1,19 +1,31 @@
-<%= form_tag({controller: :ajax, action: :bugreport}, {class: "container edit-container", role: "form"}) do |f| %>
-    <% unless @bug.nil? %>
-        <input type="hidden" name="number" value="<%= @bug[:number] %>" />
-    <% end %>
-
-    <div class="modal-header">
-        <button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">&times;</span><span class="sr-only"><%= t "Close" %></span></button>
-        <h4 class="modal-title"><%= t "Report something" %></h4>
-    </div>
-    <div class="modal-body">
-        <p><%= t "I have been notified there was a problem with this area and I will fix it as soon as I can" %>.</p>
+<div class="modal-header">
+    <button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">&times;</span><span class="sr-only"><%= t "Close" %></span></button>
+    <h4 class="modal-title"><%= t "Bug Report" %></h4>
+</div>
+<div class="modal-body">
+    <% unless @report.nil? %>
+        <p><%= t "I have been notified there was a problem with this area and I will fix it as soon as I can." %>.</p>
         <p><%= t "Thanks again for helping keep the Tank healthy" %>! <i class="fa fa-heart"></i></p>
         <p><%= t "Did you want to add additional information" %></p>
-        <textarea class="form-control" name="details"></textarea>
-    </div>
-    <div class="modal-footer">
-        <button type="button" class="btn btn-default" data-dismiss="modal"><%= t "Close" %></button>
-    </div>
-<% end %>
+        <%= form_tag({controller: :ajax, action: :bugreport}, {role: "form"}) do |f| %>
+            <%= hidden_field_tag "report_number", @report[:number] %>
+            <%= hidden_field_tag "iden", params[:iden] %>
+            <%= hidden_field_tag "location", params[:location] %>
+            <%= text_area_tag "details", nil, class: "form-control" %>
+        <% end %>
+        <p><%= t "When you are done you can close this window" %></p>
+        <p><%= t "Your report is availlable on" %> <%= link_to "Github", @report[:html_url], target: "_blank" %></p>
+    <% else %>
+        <p><%= t "Hello thanks for helping us keep the Tank healthy" %>.</p>
+        <%= form_tag({controller: :ajax, action: :bugreport}, {role: "form"}) do |f| %>
+            <%= hidden_field_tag "iden", params[:iden] %>
+            <%= hidden_field_tag "location", params[:location] %>
+            <%= button_tag t("Get started"), class: "create-bug" %>
+        <% end %>
+        <p><%= t "If you hit this link by mistake just close the window" %></p>
+    <% end %>
+</div>
+
+<div class="modal-footer">
+    <button type="button" class="btn btn-default" data-dismiss="modal"><%= t "Close" %></button>
+</div>

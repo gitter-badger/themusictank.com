@@ -5,8 +5,17 @@ module Services
             def assignee
                 "francoisfaubert"
             end
-        end
 
+            def to_map
+                map = Hash.new
+                self.members.each { |m| map[m] = self[m] }
+                map
+            end
+
+            def to_json(*a)
+               to_map.to_json(*a)
+            end
+        end
 
         # This class talks to Github's API
         # and logs in an issue
@@ -15,32 +24,26 @@ module Services
             # Documentation on this can be found there
             # https://developer.github.com/v3/issues/#edit-an-issue
 
-            require "net/http"
-            require "uri"
-
-            def user_bug_report data
-                #POST /repos/:owner/:repo/issues
-
-                report = GithubReport.new(to_title(data), to_summary(data), to_labels(data))
-                #response = Net::HTTP.get_response(query_uri(report))
+            def self.create_automated data
+                github.issues.create(report(data).to_map)
             end
 
-
-            # def self.get_video_key track
-            #     if Track.youtube_key_is_expired? track
-            #         response = Net::HTTP.get_response(query_uri(track))
-            #         track.update_attributes(
-            #             :youtube_key => parse_key(response.body),
-            #             :last_youtube_update => DateTime.now
-            #         ) if response.is_a?(Net::HTTPSuccess)
-            #     end
-            #     track.youtube_key
-            # end
+            def self.update_automated data
+                github.issues.edit(ENV['Github_username'], ENV['Github_repo'], data['report_number'], report(data).to_map)
+            end
 
             protected
 
+                def self.report data
+                    GithubReport.new(to_title(data), to_summary(data), to_labels(data))
+                end
+
+                def self.github
+                    ::Github.new basic_auth: "#{ENV['Github_username']}:#{ENV['Github_password']}", user: "#{ENV['Github_username']}", repo: "#{ENV['Github_repo']}"
+                end
+
                 def self.to_summary data
-                    "Type: #{data['type']}<br>Location: #{data['location']}"
+                    "Type: #{data['iden']}<br>Location: #{data['location']}<br>Details:<br> #{data['details']}"
                 end
 
                 def self.to_title data
@@ -56,33 +59,15 @@ module Services
                 def self.to_labels data
                     labels = Array.new
                     labels << "user submitted"
-                    labels << data['type']
-
-                    {"labels" : labels}
+                    labels << data['iden']
+                    labels
                 end
 
-                # def self.query_uri track
-                #     uri = URI.parse("https://api.github.com/")
-                #     uri.query = URI.encode_www_form({
-                #         :alt => "json",
-                #         "max-results" => 1 ,
-                #         :q => "#{track.albums.first.artist.name}-#{track.title}"
-                #     })
-                #     uri
-                # end
-
-                # def self.parse_key response
-                #     decoded = ActiveSupport::JSON.decode response
-                #     decoded['feed']['entry'].each do |entry|
-                #         entry['link'].each do |link|
-                #             link['href'].gsub(/^.*(youtu.be\/|v\/|u\/\w\/|embed\/|watch\?v=|\&v=)([^#\&\?]*).*/) { |m|
-                #                 return "#{$2}" unless "#{$2}".empty?
-                #             }
-                #         end
-                #     end
-                #     nil
-                # end
-
+                def self.build_post report
+                    uri = URI.parse("https://api.github.com/repos/francoisfaubert/themusictank/issues")
+                    uri.query = URI.encode_www_form(report.to_map)
+                    uri
+                end
         end
     end
 end

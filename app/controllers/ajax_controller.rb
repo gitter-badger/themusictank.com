@@ -66,21 +66,17 @@ class AjaxController < ApplicationController
 
 
     def bugreport
-        # https://developer.github.com/v3/issues/#edit-an-issue
-
-        Services::Github::GithubIssue.user_bug_report params
-
+        # GET mode means the template has been loaded.
+        # Awaiting user confirmation using POST
+        if request.post?
+            # Check whether we are updating an issue or creating one
+            if params.include?("report_number")
+                @report = Services::Github::GithubIssue.update_automated(params).body
+            else
+                @report = Services::Github::GithubIssue.create_automated(params).body
+            end
+        end
         render layout: false
-
-        # if ($this->request->is('post'))
-        # {
-        #     $BugsTable = TableRegistry::get('Bugs');
-        #     $bug = $BugsTable->newEntity($this->request->data);
-        #     if ($BugsTable->save($bug)) {
-        #         $this->set("bug", $bug);
-        #     }
-        #     $this->render("bugreport");
-        # }
     end
 
 end

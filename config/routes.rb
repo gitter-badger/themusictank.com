@@ -17,6 +17,7 @@ Rails.application.routes.draw do
 
   # Routes that submit things
   patch 'profiles/update', :to => 'profiles#update'
+  match 'ajax/bugreport', :to => 'ajax#bugreport', via: [:get, :post]
 
   # General fallback.
   get ':controller(/:action(/:slug))'

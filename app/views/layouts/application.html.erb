@@ -55,7 +55,11 @@
                 <ul class="nav nav-pills website">
                     <li><%= link_to t('About'), controller: :tmt, action: :about %></li>
                     <li><%= link_to t('Legal'), controller: :tmt, action: :legal %></li>
-                    <li><span class="report-bug" data-bug-type="footer" data-location="<%= request.original_url %>" data-user="<%= session[:user_id] %>"><i class="fa fa-bug"></i> <%= t "Found a bug" %>?</span></li>
+                    <li>
+                        <%= link_to({controller: :ajax, action: :bugreport}, {class: "report-bug", "data-bug-iden" => "general", "data-bug-location" => request.original_url }) do %>
+                            <i class="fa fa-bug"></i> <%= t "Found a bug" %>?
+                        <% end %>
+                    </li>
                     <li class="copyright">1999 - <%= Time.now.year %> <%= t "The Music Tank" %></li>
                 </ul>
             </nav>

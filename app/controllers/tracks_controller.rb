@@ -4,6 +4,11 @@ class TracksController < ApplicationController
     end
 
     def search
+
     end
 
+    def review
+        @track = Track.find_by_slug(params[:slug]) or not_found
+        render layout: "reviewer"
+    end
 end

@@ -45,7 +45,7 @@ class AjaxController < ApplicationController
     # Returns the information of the youtube video required
     # to play a requested song.
     def yt_key
-        track = Track.find_by(:slug => track_params[:slug]) or not_found
+        track = Track.find_by(:slug => slug_params[:slug]) or not_found
         render :json => {
             "youtube_key" => Services::Youtube::YoutubeVideo.get_video_key(track)
         }
@@ -84,16 +84,8 @@ class AjaxController < ApplicationController
         params.permit(:report_number, :iden, :location, :details)
     end
 
-    def track_params
-        params.require(:track).permit(:slug)
-    end
-
-    def album_params
-        params.require(:track).permit(:slug)
-    end
-
-    def artist_params
-        params.require(:track).permit(:slug)
+    def slug_params
+        params.permit(:slug)
     end
 
     def query_params

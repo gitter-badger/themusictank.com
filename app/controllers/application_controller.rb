@@ -23,20 +23,20 @@ class ApplicationController < ActionController::Base
 
     private
 
-        def user_signed_in?
-            !@current_user.nil?
-        end
+    def user_signed_in?
+        !@current_user.nil?
+    end
 
-        def current_user
-            if session[:user_id] && User.exists?(session[:user_id])
-                @current_user ||= User.find(session[:user_id])
-            end
+    def current_user
+        if session[:user_id] && User.exists?(session[:user_id])
+            @current_user ||= User.find(session[:user_id])
         end
+    end
 
-        def current_user_notifications
-            if user_signed_in?
-                @current_user_notifications ||= UserActivity.find_notifications_for_user(current_user).limit(5)
-            end
+    def current_user_notifications
+        if user_signed_in?
+            @current_user_notifications ||= UserActivity.find_notifications_for_user(current_user).limit(5)
         end
+    end
 
 end

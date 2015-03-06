@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>The Music Tank</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <%= stylesheet_link_tag    'application', media: 'all' %>
+  <%= javascript_include_tag 'application' %>
+  <%= csrf_meta_tags %>
+  <%= yield :header %>
+</head>
+<body class="<%= action_name %>">
+    <header>
+        <div class="container-fuild review-header">
+            <div class="row">
+                <div class="col-sm-3">
+                     <span class="brand-title"><%= t 'The Music Tank' %></span>
+                </div>
+                <div class="col-sm-6">
+
+                </div>
+                <div class="col-sm-3">
+                    <%= link_to t "Cancel", controller: :tracks, action: :view, slug: @track.slug, class: "btn btn-default" %>
+                </div>
+            </div>
+        </div>
+
+<%= yield %>
+
+    <footer class="site-foot">
+        <div class="container">
+            <nav>
+                <ul class="nav nav-pills website">
+                    <li class="copyright">1999 - <%= Time.now.year %> <%= t "The Music Tank" %></li>
+                </ul>
+            </nav>
+        </div>
+    </footer>
+</body>
+</html>

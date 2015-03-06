@@ -1,7 +1,7 @@
 $(function() {
 
-    // Automate bug reporting
-    // ----------------------
+    // Automated bug reporting
+    // -----------------------
     //
     // Each time an element has a bug type on it, listen for clicks and build a report
     // based on the info.
@@ -10,7 +10,6 @@ $(function() {
     // Also aim not the create a gaping door where people will spam that they hate
     // Creed as a bug, valid as this may be.
     //
-
     var _uri = null,
         _dom = {
             'loading'   : $("<div class=\"loading-wrap\"><i class=\"fa fa-refresh fa-spin fa-fw\"></i></div>"),

@@ -3,9 +3,6 @@ class SessionsController < ApplicationController
     provider = env["omniauth.auth"][:provider]
     uid = env["omniauth.auth"][:uid]
 
-
-    puts env["omniauth.auth"].to_yaml
-
     user = Services::Omniauth::OmniauthUser.find_or_create(provider, uid, env["omniauth.auth"])
     session[:user_id] = user.id
     redirect_to root_url

@@ -1,6 +1,7 @@
 module Services
     module Github
 
+        # This class is a structure matching the issues on github.
         class GithubReport < Struct.new(:title, :body, :labels)
             def assignee
                 "francoisfaubert"
@@ -19,33 +20,42 @@ module Services
 
         # This class talks to Github's API
         # and logs in an issue
+        #
+        # Documentation on this can be found there
+        # https://developer.github.com/v3/issues/#edit-an-issue
         class GithubIssue < Services::Base
 
-            # Documentation on this can be found there
-            # https://developer.github.com/v3/issues/#edit-an-issue
 
+            # Creates an automated bug report and sends it
+            # on the Github repo.
             def self.create_automated data
                 github.issues.create(report(data).to_map)
             end
 
+            # Updates an existing bug report and updates it
+            # on the Github repo.
             def self.update_automated data
                 github.issues.edit(ENV['Github_username'], ENV['Github_repo'], data['report_number'], report(data).to_map)
             end
 
             protected
 
+                # Generates a bug report based on known post values.
                 def self.report data
                     GithubReport.new(to_title(data), to_summary(data), to_labels(data))
                 end
 
+                # Returns a Github connection.
                 def self.github
                     ::Github.new basic_auth: "#{ENV['Github_username']}:#{ENV['Github_password']}", user: "#{ENV['Github_username']}", repo: "#{ENV['Github_repo']}"
                 end
 
+                # Generates a bug summary from data
                 def self.to_summary data
                     "Type: #{data['iden']}<br>Location: #{data['location']}<br>Details:<br> #{data['details']}"
                 end
 
+                # Generates a bug title from data
                 def self.to_title data
                     title = "Automated bug report"
 
@@ -56,17 +66,12 @@ module Services
                     title
                 end
 
+                # Generates bug tags from data.
                 def self.to_labels data
                     labels = Array.new
                     labels << "user submitted"
                     labels << data['iden']
                     labels
-                end
-
-                def self.build_post report
-                    uri = URI.parse("https://api.github.com/repos/francoisfaubert/themusictank/issues")
-                    uri.query = URI.encode_www_form(report.to_map)
-                    uri
                 end
         end
     end

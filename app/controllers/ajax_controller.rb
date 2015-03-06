@@ -3,7 +3,7 @@ class AjaxController < ApplicationController
     def artist_search
         formatted_results = Array.new
 
-        Artist.search(params[:q]).each do |artist|
+        Artist.search(query_params[:q]).each do |artist|
             formatted_results << {
                 "slug" => artist.slug,
                 "artist" => artist.name
@@ -16,7 +16,7 @@ class AjaxController < ApplicationController
     def track_search
         formatted_results = Array.new
 
-        Track.search(params[:q]).each do |track|
+        Track.search(query_params[:q]).each do |track|
             formatted_results << {
                 "slug" => track.slug,
                 "track" => track.title,
@@ -31,7 +31,7 @@ class AjaxController < ApplicationController
     def album_search
         formatted_results = Array.new
 
-        Album.search(params[:q]).each do |album|
+        Album.search(query_params[:q]).each do |album|
             formatted_results << {
                 "slug" => album.slug,
                 "album" => album.title,
@@ -45,7 +45,7 @@ class AjaxController < ApplicationController
     # Returns the information of the youtube video required
     # to play a requested song.
     def yt_key
-        track = Track.find_by(:slug => params[:slug]) or not_found
+        track = Track.find_by(:slug => track_params[:slug]) or not_found
         render :json => {
             "youtube_key" => Services::Youtube::YoutubeVideo.get_video_key(track)
         }
@@ -64,19 +64,40 @@ class AjaxController < ApplicationController
         render layout: false
     end
 
-
     def bugreport
         # GET mode means the template has been loaded.
         # Awaiting user confirmation using POST
         if request.post?
             # Check whether we are updating an issue or creating one
             if params.include?("report_number")
-                @report = Services::Github::GithubIssue.update_automated(params).body
+                @report = Services::Github::GithubIssue.update_automated(bug_params).body
             else
-                @report = Services::Github::GithubIssue.create_automated(params).body
+                @report = Services::Github::GithubIssue.create_automated(bug_params).body
             end
         end
         render layout: false
+    end
+
+    protected
+
+    def bug_params
+        params.permit(:report_number, :iden, :location, :details)
+    end
+
+    def track_params
+        params.require(:track).permit(:slug)
+    end
+
+    def album_params
+        params.require(:track).permit(:slug)
+    end
+
+    def artist_params
+        params.require(:track).permit(:slug)
+    end
+
+    def query_params
+        params.permit(:q)
     end
 
 end

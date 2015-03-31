@@ -1,0 +1,17 @@
+<%= form_tag({controller: :ajax, action: :reviewer}, {class: "review", role: "form"}) do |f| %>
+    <%= fields_for(track) do |u| %>
+        <%= u.hidden_field :slug %>
+    <% end %>
+
+    <% if defined? album %>
+        <%= fields_for(album) do |u| %>
+            <%= u.hidden_field :slug %>
+        <% end %>
+    <% else %>
+        <%= fields_for(track.albums.first) do |u| %>
+            <%= u.hidden_field :slug %>
+        <% end %>
+    <% end %>
+
+    <%= button_tag t("Review") %>
+<% end %>

@@ -1,14 +1,4 @@
-class AuthConstraint
-  def matches?(request)
-    puts "ici"
-    puts request.session['user_id']
-    request.session['user_id'].present? && User.exists?(request.session[:user_id])
-  end
-end
-
-
 Rails.application.routes.draw do
-
 
   # Facebook auth rules.
   get 'auth/:provider/callback', to: 'sessions#create'
@@ -16,6 +6,7 @@ Rails.application.routes.draw do
   get 'sessions/login', to: 'sessions#login', as: :login_url
 
   # Routes that submit things
+  post 'ajax/reviewer', :to => 'ajax#reviewer', via: [:post]
   patch 'profiles/update', :to => 'profiles#update'
   match 'ajax/bugreport', :to => 'ajax#bugreport', via: [:get, :post]
 
@@ -23,6 +14,7 @@ Rails.application.routes.draw do
   get ':controller(/:action(/:slug))'
 
   root 'tmt#homepage'
+
   #constraints(AuthConstraint.new) do
   #  root :to => 'profiles#dashboard', as: :authenticated_root
   #end

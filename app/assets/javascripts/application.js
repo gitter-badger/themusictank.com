@@ -19,6 +19,7 @@
 //= require scrolling
 //= require googlemap
 //= require previewer
+//= require reviewer
 
 $(function() {
 
@@ -33,16 +34,11 @@ $(function() {
         ".header-wrapper div.clean" : $('.header-wrapper div.clean')
     }
 
-
-
-
     // Automate post loading of elements
     $("*[data-post-load]").each(function(){
         var $this = $(this);
         $this.load($this.attr("data-post-load"));
     });
-
-
 
 
     tmt.pieGraph = function(key, jsonData) {

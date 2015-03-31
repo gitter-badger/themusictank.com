@@ -78,6 +78,12 @@ class AjaxController < ApplicationController
         render layout: false
     end
 
+    def reviewer
+        @album = Album.find_by_slug(reviewer_album_params[:slug]) or not_found
+        @track = Track.find_by_slug(reviewer_track_params[:slug]) or not_found
+        render layout: false
+    end
+
     protected
 
     def bug_params
@@ -92,4 +98,11 @@ class AjaxController < ApplicationController
         params.permit(:q)
     end
 
+    def reviewer_track_params
+        params.require(:track).permit(:slug)
+    end
+
+    def reviewer_album_params
+        params.require(:album).permit(:slug)
+    end
 end

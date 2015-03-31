@@ -22,5 +22,17 @@ module Repository
                 .order('match_position ASC')
                 .limit(limit)
         end
+
+        def find_previous track
+            joins(:tracks).group("albums.id").where('tracks.position < (?)', track.position)
+        end
+
+        def find_next
+            joins(:tracks).group("albums.id").where('tracks.position > (?)', track.position)
+        end
+
+        def has_next?
+            joins(:tracks).group("albums.id").where('tracks.position > (?)', track.position).any?
+        end
     end
 end

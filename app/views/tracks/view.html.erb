@@ -11,7 +11,7 @@
 <% end %>
 </ul>
 
-<%= link_to t("Review"), {controller: :tracks, action: :review, slug: @track.slug}, class: "btn btn-primary" %>
+<%= render partial: "review_button", locals: {track: @track} %>
 
 <%= render partial: "player", locals: {track: @track} %>
 

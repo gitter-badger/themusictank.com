@@ -1,0 +1,36 @@
+<div class="modal-header">
+    <h4 class="modal-title"><%= @track.title %></h4>
+</div>
+
+<div class="modal-body">
+    <header class="container-fuild">
+        <div class="row">
+            <div class="col-sm-3">
+                <% if @track.previous? %>
+                    <%= link_to t("Back"), {controller: :tracks, action: :view, slug: @track.previous.slug}, class: "btn" %>
+                <% end %>
+            </div>
+            <div class="col-sm-6">
+            </div>
+            <div class="col-sm-3">
+                <% if @track.next? %>
+                    <%= link_to t("Forward"), {controller: :tracks, action: :view, slug: @track.next.slug}, class: "btn" %>
+                <% end %>
+            </div>
+        </div>
+    </header>
+
+    <div class="reviewer-wrapper">
+        <canvas class="visuals"></canvas>
+
+        <div class="knob">
+            <div class="track">
+                <i></i>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="modal-footer">
+    <button type="button" class="btn btn-default" data-dismiss="modal"><%= t "Cancel" %></button>
+</div>

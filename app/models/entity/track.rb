@@ -2,6 +2,7 @@ module Entity
     # Represent a release by a musician or band.
     class Track < Entity::Slugged
         include Entity::Thumbnailed
+        include Entity::Oembedable
 
         self.abstract_class = true
 

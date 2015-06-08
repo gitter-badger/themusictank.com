@@ -2,6 +2,7 @@ module Entity
     # Represent a release by a musician or band.
     class Album < Entity::Slugged
         include Entity::Thumbnailed
+        include Entity::Oembedable
 
         self.abstract_class = true
 
@@ -22,9 +23,10 @@ module Entity
         end
 
         def meta_description
-            str = t "View the reviewing statistics of %s, an album by %s that was released %s."
+            str = "View the reviewing statistics of %s, an album by %s that was released %s."
             sprintf(str, self.title, self.artist.name, self.release_date)
-            
+        end
+
         def previous? track
             ::Album.has_previous? self, track
         end

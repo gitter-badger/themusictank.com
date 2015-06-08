@@ -13,6 +13,9 @@
 
 ActiveRecord::Schema.define(version: 20150227150540) do
 
+  # These are extensions that must be enabled in order to support this database
+  enable_extension "plpgsql"
+
   create_table "achievements", force: true do |t|
     t.integer  "user_id"
     t.string   "slug"
@@ -21,7 +24,7 @@ ActiveRecord::Schema.define(version: 20150227150540) do
     t.datetime "updated_at"
   end
 
-  add_index "achievements", ["user_id"], name: "index_achievements_on_user_id"
+  add_index "achievements", ["user_id"], name: "index_achievements_on_user_id", using: :btree
 
   create_table "albums", force: true do |t|
     t.string   "title"
@@ -37,16 +40,16 @@ ActiveRecord::Schema.define(version: 20150227150540) do
     t.integer  "playcount"
   end
 
-  add_index "albums", ["artist_id"], name: "index_albums_on_artist_id"
-  add_index "albums", ["slug"], name: "index_albums_on_slug"
+  add_index "albums", ["artist_id"], name: "index_albums_on_artist_id", using: :btree
+  add_index "albums", ["slug"], name: "index_albums_on_slug", using: :btree
 
   create_table "albums_tracks", force: true do |t|
-    t.integer "track_id"
     t.integer "album_id"
+    t.integer "track_id"
   end
 
-  add_index "albums_tracks", ["album_id", "track_id"], name: "index_albums_tracks_on_album_id_and_track_id"
-  add_index "albums_tracks", ["track_id"], name: "index_albums_tracks_on_track_id"
+  add_index "albums_tracks", ["album_id", "track_id"], name: "index_albums_tracks_on_album_id_and_track_id", using: :btree
+  add_index "albums_tracks", ["track_id"], name: "index_albums_tracks_on_track_id", using: :btree
 
   create_table "artists", force: true do |t|
     t.string   "name",                          null: false
@@ -54,7 +57,7 @@ ActiveRecord::Schema.define(version: 20150227150540) do
     t.string   "mbid",               limit: 36, null: false
     t.string   "thumbnail_source"
     t.string   "thumbnail"
-    t.boolean  "is_popular"
+    t.integer  "is_popular"
     t.datetime "last_lastfm_update"
     t.datetime "last_mb_update"
     t.datetime "created_at"
@@ -62,7 +65,7 @@ ActiveRecord::Schema.define(version: 20150227150540) do
     t.text     "bio"
   end
 
-  add_index "artists", ["slug"], name: "index_artists_on_slug"
+  add_index "artists", ["slug"], name: "index_artists_on_slug", using: :btree
 
   create_table "notifications", force: true do |t|
     t.integer  "user_id"
@@ -73,14 +76,14 @@ ActiveRecord::Schema.define(version: 20150227150540) do
     t.datetime "updated_at"
   end
 
-  add_index "notifications", ["user_id"], name: "index_notifications_on_user_id"
+  add_index "notifications", ["user_id"], name: "index_notifications_on_user_id", using: :btree
 
   create_table "similar_artists", id: false, force: true do |t|
     t.integer "artist_id",         null: false
     t.integer "similar_artist_id", null: false
   end
 
-  add_index "similar_artists", ["artist_id", "similar_artist_id"], name: "index_similar_artists_on_artist_id_and_similar_artist_id", unique: true
+  add_index "similar_artists", ["artist_id", "similar_artist_id"], name: "index_similar_artists_on_artist_id_and_similar_artist_id", unique: true, using: :btree
 
   create_table "tracks", force: true do |t|
     t.string   "title"
@@ -94,6 +97,9 @@ ActiveRecord::Schema.define(version: 20150227150540) do
     t.datetime "last_youtube_update"
   end
 
+  add_index "tracks", ["mbid"], name: "index_tracks_on_mbid", unique: true, using: :btree
+  add_index "tracks", ["slug"], name: "index_tracks_on_slug", unique: true, using: :btree
+
   create_table "user_activities", force: true do |t|
     t.integer  "user_id"
     t.string   "linked_obj_type"
@@ -103,7 +109,7 @@ ActiveRecord::Schema.define(version: 20150227150540) do
     t.datetime "updated_at"
   end
 
-  add_index "user_activities", ["user_id"], name: "index_user_activities_on_user_id"
+  add_index "user_activities", ["user_id"], name: "index_user_activities_on_user_id", using: :btree
 
   create_table "users", force: true do |t|
     t.string   "email",            null: false

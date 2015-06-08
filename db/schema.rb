@@ -54,7 +54,7 @@ ActiveRecord::Schema.define(version: 20150227150540) do
     t.string   "mbid",               limit: 36, null: false
     t.string   "thumbnail_source"
     t.string   "thumbnail"
-    t.integer  "is_popular",         limit: 1
+    t.boolean  "is_popular"
     t.datetime "last_lastfm_update"
     t.datetime "last_mb_update"
     t.datetime "created_at"

@@ -72,6 +72,7 @@ gem "github_api"
 
 # Load up a lastfm client
 gem 'lastfm-client', :git => 'http://github.com/pch/lastfm-client.git'
+gem 'yourub'
 
 # Load up a Musicbrainz client
 # https://github.com/localhots/musicbrainz

@@ -1,20 +1,19 @@
-<div class="modal-header">
-    <h4 class="modal-title"><%= @track.title %></h4>
-</div>
-
 <div class="modal-body">
     <header class="container-fuild">
         <div class="row">
             <div class="col-sm-3">
-                <% if @track.previous? %>
-                    <%= link_to @track.previous.title, {controller: :tracks, action: :view, slug: @track.previous.slug}, class: "btn" %>
+                <% if !@album.nil? && @album.previous?(@track) %>
+                    <%  prev_track = @album.previous(@track) %>
+                    <%= link_to prev_track.title, {controller: :tracks, action: :view, slug: prev_track.slug, anchor: "review"}, class: "btn" %>
                 <% end %>
             </div>
             <div class="col-sm-6">
+                <%= @track.title %>
             </div>
             <div class="col-sm-3">
-                <% if @track.next? %>
-                    <%= link_to @track.next.title, {controller: :tracks, action: :view, slug: @track.next.slug}, class: "btn" %>
+                <% if !@album.nil? && @album.next?(@track) %>
+                    <%  next_track = @album.next(@track) %>
+                    <%= link_to next_track.title, {controller: :tracks, action: :view, slug: next_track.slug, anchor: "review"}, class: "btn" %>
                 <% end %>
             </div>
         </div>

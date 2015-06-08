@@ -6,8 +6,10 @@
 <ul>
     <li><%= t 'Appears on' %>:</li>
 <% @track.albums.each do |album| %>
-    <li><img src="<%= album.get_thumbnail_url 'thumb' %>" alt="<%= album.title %>" title="<%= album.title %>">
-    <%= link_to album.title, controller: :albums, action: :view, slug: album.slug %></li>
+    <li>
+        <%= link_to image_tag(album.get_thumbnail_url, alt: album.title, title: album.title), controller: :albums, action: :view, slug: album.slug %>
+        <%= link_to album.title, controller: :albums, action: :view, slug: album.slug %>
+    </li>
 <% end %>
 </ul>
 

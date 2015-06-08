@@ -19,7 +19,7 @@ module Entity
             end
         end
 
-        def get_thumbnail_url type
+        def get_thumbnail_url type = "thumb"
             "//static.themusictank.com/" + get_thumbnail_key_for(type)
         end
 

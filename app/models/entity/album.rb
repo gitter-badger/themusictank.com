@@ -24,6 +24,21 @@ module Entity
         def meta_description
             str = t "View the reviewing statistics of %s, an album by %s that was released %s."
             sprintf(str, self.title, self.artist.name, self.release_date)
+            
+        def previous? track
+            ::Album.has_previous? self, track
+        end
+
+        def previous track
+            ::Album.find_previous self, track
+        end
+
+        def next? track
+            ::Album.has_next? self, track
+        end
+
+        def next track
+            ::Album.find_next self, track
         end
 
     end

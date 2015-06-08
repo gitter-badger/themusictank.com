@@ -23,16 +23,36 @@ module Repository
                 .limit(limit)
         end
 
-        def find_previous track
-            joins(:tracks).group("albums.id").where('tracks.position < (?)', track.position)
+        def find_all_previous album, track
+            select("tracks.*")
+                .joins(:tracks)
+                .where('tracks.position < (?)', track.position)
+                .where('albums.id = (?)', album.id)
+                .order('tracks.position ASC')
         end
 
-        def find_next
-            joins(:tracks).group("albums.id").where('tracks.position > (?)', track.position)
+        def find_all_next album, track
+            select("tracks.*")
+                .joins(:tracks)
+                .where('tracks.position > (?)', track.position)
+                .where('albums.id = (?)', album.id)
+                .order('tracks.position ASC')
         end
 
-        def has_next?
-            joins(:tracks).group("albums.id").where('tracks.position > (?)', track.position).any?
+        def find_next album, track
+            find_all_next(album, track).first
+        end
+
+        def find_previous album, track
+            find_all_previous(album, track).first
+        end
+
+        def has_previous? album, track
+            find_all_previous(album, track).any?
+        end
+
+        def has_next? album, track
+            find_all_next(album, track).any?
         end
     end
 end

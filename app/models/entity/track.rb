@@ -15,15 +15,19 @@ module Entity
         end
 
         def previous
-            Album.find_previous self
+            ::Album.find_previous(self).first
+        end
+
+        def previous?
+            ::Album.has_previous? self
         end
 
         def next?
-            Album.has_next? self
+            ::Album.has_next? self
         end
 
         def next
-            Album.find_next self
+            ::Album.find_next(self).first
         end
 
     end

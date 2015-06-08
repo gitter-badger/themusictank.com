@@ -7,14 +7,14 @@
         <div class="row">
             <div class="col-sm-3">
                 <% if @track.previous? %>
-                    <%= link_to t("Back"), {controller: :tracks, action: :view, slug: @track.previous.slug}, class: "btn" %>
+                    <%= link_to @track.previous.title, {controller: :tracks, action: :view, slug: @track.previous.slug}, class: "btn" %>
                 <% end %>
             </div>
             <div class="col-sm-6">
             </div>
             <div class="col-sm-3">
                 <% if @track.next? %>
-                    <%= link_to t("Forward"), {controller: :tracks, action: :view, slug: @track.next.slug}, class: "btn" %>
+                    <%= link_to @track.next.title, {controller: :tracks, action: :view, slug: @track.next.slug}, class: "btn" %>
                 <% end %>
             </div>
         </div>

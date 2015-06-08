@@ -3,7 +3,7 @@ class ApplicationController < ActionController::Base
     # For APIs, you may want to use :null_session instead.
     protect_from_forgery with: :exception
 
-    before_filter :current_user, :current_user_notifications
+    before_filter :load_meta, :current_user, :current_user_notifications
     helper_method :current_user, :current_user_notifications
 
     def not_found
@@ -19,6 +19,10 @@ class ApplicationController < ActionController::Base
 
     def reload_current_user
         @current_user = User.find(session[:user_id]) if session[:user_id]
+    end
+
+    def load_meta
+        @meta = nil
     end
 
     private

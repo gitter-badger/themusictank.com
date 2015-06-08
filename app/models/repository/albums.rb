@@ -24,15 +24,19 @@ module Repository
         end
 
         def find_previous track
-            joins(:tracks).group("albums.id").where('tracks.position < (?)', track.position)
+            joins(:tracks).group("albums.id").where(['album.id = (?) AND tracks.position = (?)', track.album.id, track.position - 1])
         end
 
-        def find_next
-            joins(:tracks).group("albums.id").where('tracks.position > (?)', track.position)
+        def find_next track
+            joins(:tracks).group("albums.id").where(['album.id = (?) AND tracks.position = (?)', track.album.id, track.position + 1])
         end
 
-        def has_next?
-            joins(:tracks).group("albums.id").where('tracks.position > (?)', track.position).any?
+        def has_next? track
+            find_next(track).any?
+        end
+
+        def has_previous? track
+            find_previous(track).any?
         end
     end
 end

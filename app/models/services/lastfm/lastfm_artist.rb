@@ -74,7 +74,8 @@ module Services
             def self.generate_top_artists_datalist data
                 list = Array.new
                 data["artists"]["artist"].each do |artistData|
-                    list << find_or_create(artistData)
+                    artist = find_or_create(artistData)
+                    list << find_or_create(artist) unless artist.nil?
                 end
                 list
             end

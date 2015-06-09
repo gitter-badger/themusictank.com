@@ -19,7 +19,7 @@ module Repository
         end
 
         def user_was_rewarded? user, reward
-            UserActivity.where(:user_id => user.id, :linked_obj_type => reward.key).exists?
+            UserActivity.where(:user_id => user.id, :linked_obj_type => reward.class.name).exists?
         end
 
         def mark_user_notifications_read user

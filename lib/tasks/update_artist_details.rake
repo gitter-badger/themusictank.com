@@ -2,7 +2,7 @@ task :update_artist_details => :environment do
     Rails.logger.info "[RAKE START] update_artist_details."
 
     Rails.logger.info "Updating expired artists."
-    #Services::Lastfm::LastfmArtist.update_expired
+    Services::Lastfm::LastfmArtist.update_expired
 
     Rails.logger.info "Updating expired discographies."
     Services::Musicbrainz::MusicbrainzArtist.update_expired

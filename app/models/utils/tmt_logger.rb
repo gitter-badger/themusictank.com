@@ -24,11 +24,11 @@ module Utils
         end
 
         def get_info_context source
-            self.class.name.light_cyan + "##{source}\t  ".cyan
+            self.to_s.light_cyan + "##{source}\t  ".cyan
         end
 
         def get_warn_context source
-            self.class.name.light_red + "##{source}\t  ".light_red
+            self.to_s.name.light_red + "##{source}\t  ".light_red
         end
     end
 end

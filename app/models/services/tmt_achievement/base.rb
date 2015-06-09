@@ -2,8 +2,8 @@ module Services
     module TMTAchievement
         class Base < Services::Base
 
-            def key
-                self.class.name.downcase
+            def slug
+                self.title.parameterize
             end
 
             # Allow classes to specify if they increment values
@@ -27,8 +27,8 @@ module Services
             def reward! user
                 if unique? && !rewarded?(user)
                     if validates?(user)
-                        achievement = Achievement.create!(:user_id => user.id, :slug => self.key)
-                        UserActivity.create!(:user_id => user.id, :linked_obj_type => achievement.class.name, :linked_obj_id => achievement.id, :must_notify_user => true)
+                        achievement = Achievement.create!(:user_id => user.id, :slug => self.slug)
+                        UserActivity.create!(:user_id => user.id, :linked_obj_type => self.class.name, :linked_obj_id => achievement.id, :must_notify_user => true)
                     end
                 end
             end

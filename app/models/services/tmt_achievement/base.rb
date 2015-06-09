@@ -2,6 +2,10 @@ module Services
     module TMTAchievement
         class Base < Services::Base
 
+            def key
+                self.class.name.downcase
+            end
+
             # Allow classes to specify if they increment values
             # of it it's a unique match
             def unique?

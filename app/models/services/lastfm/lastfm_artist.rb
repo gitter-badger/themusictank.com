@@ -13,7 +13,7 @@ module Services
 
             # Updates expired artists on TMT.
             def self.update_expired
-                expired = Artist.find_expired_lastfm
+                expired = Artist.find_expired_lastfm.limit(300) # we aint got all day son
                 expired_count = expired.count
 
                 log "Found #{expired_count} expired artists."
@@ -27,16 +27,8 @@ module Services
 
             # Updates a TMT artist profile from the information on LastFM
             def self.update_artist_profile artist
-                remote = find_remote_artist artist
-                artist.thumbnail_source = remote["image"][ remote["image"].length - 1 ]['#text']
-                artist.bio = remote["bio"]["summary"]
+                artist = append_remote_data artist, find_remote_artist(artist)
                 artist.last_lastfm_update = DateTime.now
-
-                # Use this moment to save similar artists
-                # to ensure we have a filled in DB
-                artist.similar_artists = prepare_similar_artists_by_names remote['similar']['artist']
-
-                # Save the updated entity
                 artist.save
             end
 
@@ -96,6 +88,30 @@ module Services
                 else
                     log "No similar artists given."
                 end
+                similar_artists
+            end
+
+            def self.append_remote_data artist, remote
+                artist.thumbnail_source = remote["image"][ remote["image"].length - 1 ]['#text']
+                artist.bio = remote["bio"]["summary"]
+
+                formatted_artists = format_similar_arists remote['similar']['artist']
+                artist.similar_artists = prepare_similar_artists_by_names formatted_artists
+
+                artist
+            end
+
+            def self.format_similar_arists remote_data
+
+                similar_artists = remote_data
+
+                # Lastfm API sends only one uncontained result
+                # when there aren't multiple similar artists.
+                if !remote_data.is_a?(Array) && remote_data.has_key?("name")
+                    similar_artists = Array.new
+                    similar_artists << remote_data
+                end
+
                 similar_artists
             end
 

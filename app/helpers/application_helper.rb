@@ -46,7 +46,6 @@ module ApplicationHelper
 
     private
 
-
     def self.content_tag param1, param2
         ActionController::Base.helpers.content_tag param1, param2
     end

@@ -6,14 +6,13 @@ module Services
 
             # Updates expired albums on TMT.
             def self.update_expired
-                expired = Album.find_expired_lastfm
+                expired = Album.find_expired_lastfm.limit(300)
                 expired_count = expired.count
 
                 log "Found #{expired_count} expired albums."
                 if expired_count > 0
                     expired.each do |album|
                         log "Updating #{album.title}"
-                        # Update the album profile
                         update_album_profile album
                     end
                 end
@@ -36,7 +35,7 @@ module Services
             def self.find_or_create lfm_album
                 unless lfm_album["mbid"].empty?
                     Artist.where(mbid: lfm_album["mbid"]).first_or_create! do |album|
-                        album.name = lfm_album["name"]
+                        album.title = lfm_album["name"]
                         album.last_lastfm_update = 1.month.ago
                     end
                 end

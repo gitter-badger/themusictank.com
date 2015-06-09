@@ -34,7 +34,7 @@ module Utils
             context.name.light_cyan + "##{source}\t  ".cyan
         end
 
-        def get_warn_context
+        def get_warn_context source
             context = nil
             if self.respond_to?"name"
                 context = self

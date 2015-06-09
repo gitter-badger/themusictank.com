@@ -19,10 +19,9 @@ module Services
 
             # Populates the discography of an artist entity.
             def self.populate_discography artist
-
-                releases = find_remote(artist).release_groups
-                unless releases.nil?
-                    Services::Musicbrainz::MusicbrainzAlbum.save_and_filter_album_list artist, releases
+                remote_artist = find_remote(artist)
+                unless remote_artist.nil?
+                    Services::Musicbrainz::MusicbrainzAlbum.save_and_filter_album_list artist, remote_artist.release_groups
                 end
             end
 

@@ -24,25 +24,22 @@ module Utils
         end
 
         def get_info_context source
-            context = nil
-            if self.respond_to?"name"
-                context = self
-            else
-                context = self.class
-            end
-
-            context.name.light_cyan + "##{source}\t  ".cyan
+            contextualize.name.light_cyan + "##{source}\t  ".cyan
         end
 
         def get_warn_context source
-            context = nil
-            if self.respond_to?"name"
-                context = self
-            else
-                context = self.class
-            end
 
-            context.name.light_red + "##{source}\t  ".light_red
+            contextualize.name.light_red + "##{source}\t  ".light_red
+        end
+
+        private
+
+        def contextualize
+            if self.respond_to?"name"
+                self
+            else
+                self.class
+            end
         end
     end
 end

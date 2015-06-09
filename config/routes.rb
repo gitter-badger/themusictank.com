@@ -1,7 +1,9 @@
 Rails.application.routes.draw do
 
   # Facebook auth rules.
+  get 'auth/failure', to: 'sessions#failure'
   get 'auth/:provider/callback', to: 'sessions#create'
+
   get 'sessions/signout', to: 'sessions#destroy', as: 'signout'
   get 'sessions/login', to: 'sessions#login', as: :login_url
 

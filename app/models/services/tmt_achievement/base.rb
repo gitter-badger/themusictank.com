@@ -27,8 +27,8 @@ module Services
             def reward! user
                 if unique? && !rewarded?(user)
                     if validates?(user)
-                        achievement = Achievement.create!(:user_id => user.id, :slug => self.class.name)
-                        UserActivity.create!(:user_id => user.id, :linked_obj_type => slug, :linked_obj_id => achievement.id, :must_notify_user => true)
+                        achievement = Achievement.create!(:user_id => user.id, :slug => self.key)
+                        UserActivity.create!(:user_id => user.id, :linked_obj_type => achievement.class.name, :linked_obj_id => achievement.id, :must_notify_user => true)
                     end
                 end
             end

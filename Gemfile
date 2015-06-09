@@ -44,9 +44,8 @@ gem 'spring',        group: :development
 # gem 'bcrypt', '~> 3.1.7'
 
 # Use unicorn as the app server
-gem 'unicorn', group: :production
-
-gem 'newrelic_rpm'
+#gem 'unicorn', group: :production
+gem 'puma', group: :production
 
 
 # Use Capistrano for deployment

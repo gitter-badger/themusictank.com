@@ -107,7 +107,7 @@ module Services
 
                 # Lastfm API sends only one uncontained result
                 # when there aren't multiple similar artists.
-                if !remote_data.is_a?(Array) && remote_data.has_key?("name")
+                if !remote_data.nil? && !remote_data.is_a?(Array) && remote_data.has_key?("name")
                     similar_artists = Array.new
                     similar_artists << remote_data
                 end

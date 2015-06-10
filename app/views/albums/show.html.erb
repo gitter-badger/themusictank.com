@@ -1,14 +1,14 @@
 <%= render partial: "backdrop", locals: {entity: @album} %>
 
-<h1><a href="/albums/view/<%= @album.slug %>"><%= @album.title %></a></h1>
-<h2><a href="/artists/view/<%= @album.artist.slug %>"><%= @album.artist.name %></a></h2>
+<h1><%= link_to @album.title, controller: :albums, action: :show, id: @album.slug %></h1>
+<h2><%= link_to @album.artist.name, controller: :artists, action: :show, id: @album.artist.slug  %></h2>
 
 <%= render partial: "review_button", locals: {album: @album, track: @album.tracks.first} %>
 
 <ul>
     <% @album.tracks.each do |track| %>
     <li>
-        <a href="/tracks/view/<%= track.slug %>"><%= track.title %></a>
+        <%= link_to track.title, controller: :tracks, action: :show, id: track.slug  %>
     </li>
     <% end %>
 </ul>

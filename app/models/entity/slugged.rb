@@ -43,5 +43,9 @@ module Entity
             "_"
         end
 
+        def self.to_param
+            self.slug
+        end
+
     end
 end

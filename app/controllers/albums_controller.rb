@@ -1,6 +1,6 @@
 class AlbumsController < ApplicationController
-    def view
-        @album = Album.find_by_slug(params[:slug]) or not_found
+    def show
+        @album = Album.find_by_slug(params[:id]) or not_found
 
         @meta = {
             "oembed_obj"    => @album,

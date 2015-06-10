@@ -4,8 +4,8 @@ class ArtistsController < ApplicationController
         @featured_artist = @artists.pop
     end
 
-    def view
-        @artist = Artist.find_by_slug(params[:slug]) or not_found
+    def show
+        @artist = Artist.find_by_slug(params[:id]) or not_found
 
         @meta = {
             "oembed_obj"    => @artist,

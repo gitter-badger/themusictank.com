@@ -1,14 +1,14 @@
 <% unless @featured_artist.nil? %>
     <div class="featured">
         <%= render partial: "backdrop", locals: {entity: @featured_artist} %>
-        <h1><%= link_to @featured_artist.name, controller: :artists, action: :view, slug: @featured_artist.slug %></h1>
+        <h1><%= link_to @featured_artist.name, controller: :artists, action: :show, id: @featured_artist.slug %></h1>
 
         <section class="discography">
             <ul>
             <% @featured_artist.albums.limit(4).each do |album| %>
                 <li>
-                    <img src="<%= album.get_thumbnail_url 'thumb' %>" alt="<%= album.title %>" title="<%= album.title %>">
-                    <%= link_to album.title, controller: :albums, action: :view, slug: album.slug %>
+                    <%= link_to image_tag(album.get_thumbnail_url, class: "thumb", alt: album.title, title: album.title), controller: :albums, action: :show, id: album.slug %>
+                    <%= link_to album.title, controller: :albums, action: :show, id: album.slug %>
                 </li>
             <% end %>
             </ul>
@@ -21,7 +21,8 @@
     <ul>
     <% @artists.each do |artist| %>
         <li>
-            <%= link_to artist.name, controller: :artists, action: :view, slug: artist.slug %>
+            <%= link_to image_tag(artist.get_thumbnail_url, class: "thumb", alt: artist.name, title: artist.name), controller: :artists, action: :show, id: artist.slug %>
+            <%= link_to artist.name, controller: :artists, action: :show, id: artist.slug %>
         </li>
     <% end %>
     </ul>

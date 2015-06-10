@@ -12,6 +12,12 @@ Rails.application.routes.draw do
   patch 'profiles/update', :to => 'profiles#update'
   match 'ajax/bugreport', :to => 'ajax#bugreport', via: [:get, :post]
 
+
+  resources :albums
+  resources :artists
+  resources :tracks
+
+
   # General fallback.
   get ':controller(/:action(/:slug))'
 

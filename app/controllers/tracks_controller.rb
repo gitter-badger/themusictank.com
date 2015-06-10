@@ -1,6 +1,6 @@
 class TracksController < ApplicationController
-    def view
-        @track = Track.find_by_slug(params[:slug]) or not_found
+    def show
+        @track = Track.find_by_slug(params[:id]) or not_found
 
         @meta = {
             "oembed_obj"    => @track,

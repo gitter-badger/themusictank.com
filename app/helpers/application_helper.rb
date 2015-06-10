@@ -3,44 +3,46 @@ module ApplicationHelper
     def self.to_meta_tags meta, request
         tags = Array.new
         domain = get_domain request unless request.nil?
-        socialIcon = image_path('social-share.png')
+        socialIcon = 'http://static.themusictank.com/assets/images/social-share.png'
 
+        title = parse_title meta
+        description = parse_description meta
 
-        if meta.nil? || meta['title'].nil?
-            tags << content_tag(:title, "The Music Tank")
-            tags << tag(:meta, name: "og:title", description: "The Music Tank")
-            tags << tag(:meta, name: "twitter:title", itemprop: "title name", description: "The Music Tank")
-        else
-            tags << "<title>" + meta['title'].join(" - ") + "- The Music Tank</title>"
-            tags << '<meta name="og:title" description="' + meta['title'].join(" - ") + '- The Music Tank" >'
-            tags << '<meta name="twitter:title" itemprop="title name" description="' + meta['title'].join(" - ") + '- The Music Tank" />'
-        end
-
+        # General
+        tags << '<title>' + title + '</title>'
         tags << '<meta name="viewport" content="width=device-width, initial-scale=1">'
         tags << '<link href="https://plus.google.com/117543200043480372792" rel="publisher">'
+        tags << '<link rel="shortcut icon" href="' + socialIcon + '">'
         tags << '<noscript><meta http-equiv="refresh" content="0; URL=/pages/requirements/"></noscript>'
         tags << '<meta name="viewport" content="width=device-width, initial-scale=1">'
         tags << '<meta name="referrer" value="origin">'
-        tags << '<meta name="og:url" description="' + domain+ '">'
-        tags << '<meta name="og:image" description="' + domain + socialIcon + '">'
-        tags << '<meta name="og:site_name" description="The Music Tank">'
-        tags << '<meta name="og:type" description="website">'
-        tags << '<meta name="og:locale" description="en_CA">'
-        tags << '<meta name="twitter:card" description="summary">'
-        tags << '<meta name="twitter:image" description="' + domain + socialIcon + '">'
-        tags << '<link rel="shortcut icon" href="' + domain + socialIcon + '">'
+        tags << ''
 
-        unless meta.nil?
-            unless meta['description'].nil?
-                tags << "<title>" + meta['description'] + "The Music Tank</title>"
-                tags << '<meta name="og:title" description="' + meta['description'] + '" >'
-                tags << '<meta name="twitter:title" itemprop="description" description="' + meta['description'] + '" />'
-            end
+        # Open graph
+        tags << '<meta property="og:url" content="' + domain + '">'
+        tags << '<meta property="og:image" content="' + socialIcon + '">'
+        tags << '<meta property="og:site_name" content="The Music Tank">'
+        tags << '<meta property="og:type" content="website">'
+        tags << '<meta property="og:locale" content="en_CA">'
+        tags << '<meta property="og:title" content="'+title+'">'
+        tags << '<meta property="og:description" content="' + description + '" >'
+        tags << ''
 
-            unless meta['oembed_obj'].nil?
-                url = get_domain + meta['oembed_obj'].link_back
-                tags << '<link rel="alternate" type="application/json+oembed" href="' + url + '" title="oEmbed Profile" />'
-            end
+        # Twitter
+        tags << '<meta name="twitter:card" content="summary_large_image">'
+        tags << '<meta name="twitter:creator" content="@themusictank">'
+        tags << '<meta name="twitter:card" content="summary">'
+        tags << '<meta name="twitter:image:src" content="' + socialIcon + '">'
+        tags << '<meta name="twitter:title" content="'+title+'">'
+        tags << '<meta name="twitter:description" content="' + description + '" />'
+        tags << ''
+
+        # OEmbed
+        unless meta.nil? or meta['oembed_obj'].nil?
+            url =  domain + "/" + meta['oembed_obj'].class.name.downcase + "s/" + meta['oembed_obj'].slug
+
+            tags << '<link rel="alternative" type="application/json+oembed" href="/oembed?url=' + url + '" title="oEmbed Profile" />'
+            tags << ''
         end
 
         tags.join("\n").html_safe
@@ -56,8 +58,12 @@ module ApplicationHelper
         ActionController::Base.helpers.tag param1, param2
     end
 
-    def self.get_domain request = nil
+    def self.image_path src
+        ActionController::Base.helpers.image_path src
+    end
 
+
+    def self.get_domain request = nil
         if request.nil?
             return "/"
         end
@@ -66,8 +72,20 @@ module ApplicationHelper
         "#{request.protocol}#{domain}"
     end
 
-    def self.image_path src
-        ActionController::Base.helpers.image_path src
+    def self.parse_title meta
+        if meta.nil? || meta['title'].nil?
+            "The Music Tank"
+        else
+            meta['title'].join(" - ") + " - The Music Tank"
+        end
+    end
+
+    def self.parse_description meta
+         unless meta.nil? || meta['description'].nil?
+             meta['description']
+         else
+            "The Music Tank is a place where you can rate and discover music."
+         end
     end
 
 end

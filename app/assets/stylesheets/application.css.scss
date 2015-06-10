@@ -16,7 +16,7 @@ $fa-font-path: "bower_components/font-awesome/fonts";
 
 
 @import "bootstrap-sprockets";
-@import "bootstrap";
+@import "bootstrap-includes";
 @import "bower_components/font-awesome/scss/font-awesome.scss";
 @import "streamer";
 @import "tmt";
@@ -52,7 +52,7 @@ $fa-font-path: "bower_components/font-awesome/fonts";
         right:0;
         top:0;
         position:absolute;
-        background: transparent url(image-path('triangles.png')) top left repeat;
+        background: transparent url(http://static.themusictank.com/assets/images/triangles.png) top left repeat;
     }
 
     &.plain {

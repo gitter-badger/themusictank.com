@@ -11,7 +11,12 @@
 // about supported directives.
 //
 //= require jquery
-//= require bootstrap-sprockets
+//
+//= require bootstrap/button
+//= require bootstrap/collapse
+//= require bootstrap/dropdown
+//= require bootstrap/modal
+//
 //= require bower_components/typeahead.js/dist/typeahead.bundle.min.js
 //= require tmt
 //= require search

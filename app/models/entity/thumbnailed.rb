@@ -20,7 +20,11 @@ module Entity
         end
 
         def get_thumbnail_url type = "thumb"
-            "//static.themusictank.com/" + get_thumbnail_key_for(type)
+            if self.thumbnail.nil?
+                "//static.themusictank.com/assets/images/placeholder.png"
+            else
+                "//static.themusictank.com/" + get_thumbnail_key_for(type)
+            end
         end
 
     end

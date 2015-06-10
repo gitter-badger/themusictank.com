@@ -3,7 +3,7 @@
 class Track < Entity::Track
     extend Repository::Tracks
 
-    # MusicBrainz ID is unique, but referenced accros multiple albums.
+    # MusicBrainz ID is unique, but referenced across multiple albums.
     has_many :albums, through: :albums_tracks
     has_many :albums_tracks
 

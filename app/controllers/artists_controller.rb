@@ -6,6 +6,12 @@ class ArtistsController < ApplicationController
 
     def view
         @artist = Artist.find_by_slug(params[:slug]) or not_found
+
+        @meta = {
+            "oembed_obj"    => @artist,
+            "title"         => @artist.meta_title,
+            "description"   => @artist.meta_description
+        }
     end
 
     def search

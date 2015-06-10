@@ -3,7 +3,7 @@ module Entity
     module Oembedable
 
         def link_back
-            self.class.name + "/view/" + self.slug
+            "/" + self.class.name + "/view/" + self.slug
         end
 
     end

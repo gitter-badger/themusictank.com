@@ -2,6 +2,9 @@ module ApplicationHelper
 
     def self.to_meta_tags meta, request
         tags = Array.new
+        domain = get_domain request unless request.nil?
+        socialIcon = image_path('social-share.png')
+
 
         if meta.nil? || meta['title'].nil?
             tags << content_tag(:title, "The Music Tank")
@@ -18,14 +21,14 @@ module ApplicationHelper
         tags << '<noscript><meta http-equiv="refresh" content="0; URL=/pages/requirements/"></noscript>'
         tags << '<meta name="viewport" content="width=device-width, initial-scale=1">'
         tags << '<meta name="referrer" value="origin">'
-        tags << '<meta name="og:url" description="' + request.domain.to_s + '">'
-        tags << '<meta name="og:image" description="' + request.domain.to_s + 'img/social-share.png">'
+        tags << '<meta name="og:url" description="' + domain+ '">'
+        tags << '<meta name="og:image" description="' + domain + socialIcon + '">'
         tags << '<meta name="og:site_name" description="The Music Tank">'
         tags << '<meta name="og:type" description="website">'
         tags << '<meta name="og:locale" description="en_CA">'
         tags << '<meta name="twitter:card" description="summary">'
-        tags << '<meta name="twitter:image" description="' + request.domain .to_s+ 'img/social-share.png">'
-        tags << '<link rel="shortcut icon" href="' + request.domain.to_s + 'img/social-share.png">'
+        tags << '<meta name="twitter:image" description="' + domain + socialIcon + '">'
+        tags << '<link rel="shortcut icon" href="' + domain + socialIcon + '">'
 
         unless meta.nil?
             unless meta['description'].nil?
@@ -35,8 +38,7 @@ module ApplicationHelper
             end
 
             unless meta['oembed_obj'].nil?
-                #url = request.domain + meta['oembed_obj'].link_back
-                url = meta['oembed_obj'].link_back
+                url = get_domain + meta['oembed_obj'].link_back
                 tags << '<link rel="alternate" type="application/json+oembed" href="' + url + '" title="oEmbed Profile" />'
             end
         end
@@ -52,6 +54,20 @@ module ApplicationHelper
 
     def self.tag param1, param2
         ActionController::Base.helpers.tag param1, param2
+    end
+
+    def self.get_domain request = nil
+
+        if request.nil?
+            return "/"
+        end
+
+        domain = request.port.blank? ? request.host : "#{request.host}:#{request.port}"
+        "#{request.protocol}#{domain}"
+    end
+
+    def self.image_path src
+        ActionController::Base.helpers.image_path src
     end
 
 end

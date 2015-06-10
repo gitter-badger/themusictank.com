@@ -5,7 +5,7 @@ class AjaxController < ApplicationController
 
         Artist.search(query_params[:q]).each do |artist|
             formatted_results << {
-                "slug" => artist.slug,
+                "slug" => "/artists/view/" + artist.slug,
                 "artist" => artist.name
             }
         end
@@ -18,7 +18,7 @@ class AjaxController < ApplicationController
 
         Track.search(query_params[:q]).each do |track|
             formatted_results << {
-                "slug" => track.slug,
+                "slug" => "/tracks/view/" + track.slug,
                 "track" => track.title,
                 "album" => track.albums[0].title,
                 "artist" => track.albums[0].artist.name
@@ -33,7 +33,7 @@ class AjaxController < ApplicationController
 
         Album.search(query_params[:q]).each do |album|
             formatted_results << {
-                "slug" => album.slug,
+                "slug" => "/albums/view/" + album.slug,
                 "album" => album.title,
                 "artist" => album.artist.name,
             }

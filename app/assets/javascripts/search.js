@@ -3,21 +3,30 @@ $(function() {
     // search box
     var artistsSearch = new Bloodhound({
             name : 'artists',
-            datumTokenizer: function(d) { return Bloodhound.tokenizers.obj.whitespace(d.artist); },
+            datumTokenizer: Bloodhound.tokenizers.obj.whitespace('artist'),
             queryTokenizer: Bloodhound.tokenizers.whitespace,
-            remote: '/ajax/artist_search/?q=%QUERY'
+            remote: {
+                url: '/ajax/artist_search/?q=%QUERY',
+                wildcard: '%QUERY'
+            }
         }),
         albumsSearch = new Bloodhound({
             name : 'albums',
-            datumTokenizer: function(d) { return Bloodhound.tokenizers.obj.whitespace(d.album); },
+            datumTokenizer: Bloodhound.tokenizers.obj.whitespace('album'),
             queryTokenizer: Bloodhound.tokenizers.whitespace,
-            remote: '/ajax/album_search/?q=%QUERY'
+            remote: {
+                url: '/ajax/album_search/?q=%QUERY',
+                wildcard: '%QUERY'
+            }
         }),
         tracksSearch = new Bloodhound({
             name : 'tracks',
-            datumTokenizer: function(d) { return Bloodhound.tokenizers.obj.whitespace(d.track); },
+            datumTokenizer: Bloodhound.tokenizers.obj.whitespace('track'),
             queryTokenizer: Bloodhound.tokenizers.whitespace,
-            remote: '/ajax/track_search/?q=%QUERY'
+            remote: {
+                url: '/ajax/track_search/?q=%QUERY',
+                wildcard: '%QUERY'
+            }
         }),
         searchBox = $('.typeahead');
 
@@ -25,7 +34,7 @@ $(function() {
     // Listens for when Typeahead a selected a value.
     function typeahead_onSelected(e, data, section) {
         e.preventDefault();
-        document.location = "/" + [section, 'view', data.slug].join("/");
+        document.location = data.slug
     }
 
     artistsSearch.initialize();
@@ -38,8 +47,8 @@ $(function() {
         [
             {
                 name: 'artists',
-                displayKey: 'artist',
-                source: artistsSearch.ttAdapter(),
+                display: 'artist',
+                source: artistsSearch,
                 cache: true,
                 templates: {
                     header: '<h3>Artists</h3>',
@@ -48,8 +57,8 @@ $(function() {
             },
             {
                 name: 'albums',
-                displayKey: 'album',
-                source: albumsSearch.ttAdapter(),
+                display: 'album',
+                source: albumsSearch,
                 cache: true,
                 templates: {
                     header: '<h3>Albums</h3>',
@@ -58,8 +67,8 @@ $(function() {
             },
             {
                 name: 'tracks',
-                displayKey: 'track',
-                source: tracksSearch.ttAdapter(),
+                display: 'track',
+                source: tracksSearch,
                 cache: true,
                 templates: {
                     header: '<h3>Tracks</h3>',

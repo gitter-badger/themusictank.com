@@ -1,3 +1,8 @@
+<% content_for :header  do %>
+<meta name="tmt:album:lastfm:updated_at" content="<%= @album.last_lastfm_update %>">
+<meta name="tmt:album:entity:updated_at" content="<%= @album.updated_at %>">
+<% end %>
+
 <%= render partial: "backdrop", locals: {entity: @album} %>
 
 <h1><%= link_to @album.title, controller: :albums, action: :show, id: @album.slug %></h1>
@@ -12,10 +17,3 @@
     </li>
     <% end %>
 </ul>
-
-<section class="update-information">
-    <ul>
-        <li>LastFM : <%= @album.last_lastfm_update %></li>
-        <li>Entity : <%= @album.updated_at %></li>
-    </ul>
-</section>

@@ -12,12 +12,9 @@
  *
  */
 
-$fa-font-path: "bower_components/font-awesome/fonts";
-
-
 @import "bootstrap-sprockets";
 @import "bootstrap-includes";
-@import "bower_components/font-awesome/scss/font-awesome.scss";
+@import "font-awesome";
 @import "streamer";
 @import "tmt";
 

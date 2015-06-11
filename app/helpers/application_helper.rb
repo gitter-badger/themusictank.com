@@ -2,7 +2,13 @@ module ApplicationHelper
 
     def self.to_meta_tags meta, request
         tags = Array.new
+
+        domain = ""
         domain = get_domain request unless request.nil?
+
+        url = ""
+        url = request.original_url unless request.nil?
+
         socialIcon = 'http://static.themusictank.com/assets/images/social-share.png'
 
         title = parse_title meta
@@ -10,12 +16,22 @@ module ApplicationHelper
 
         # General
         tags << '<title>' + title + '</title>'
-        tags << '<meta name="viewport" content="width=device-width, initial-scale=1">'
-        tags << '<link href="https://plus.google.com/117543200043480372792" rel="publisher">'
-        tags << '<link rel="shortcut icon" href="' + socialIcon + '">'
-        tags << '<noscript><meta http-equiv="refresh" content="0; URL=/pages/requirements/"></noscript>'
-        tags << '<meta name="viewport" content="width=device-width, initial-scale=1">'
+
+        tags << '<meta charset="utf-8">'
+        tags << '<meta http-equiv="X-UA-Compatible" content="IE=edge">'
         tags << '<meta name="referrer" value="origin">'
+        tags << '<meta name="viewport" content="width=device-width, initial-scale=1">'
+        tags << '<meta name="author" content="Francois Faubert, active members of the community and contributors on Github">'
+        tags << ''
+
+        # Social
+        tags << '<link href="https://plus.google.com/117543200043480372792" rel="publisher">'
+        tags << ''
+
+
+        # Icons
+        tags << '<link rel="apple-touch-icon" href="'+socialIcon+'">'
+        tags << '<link rel="icon" href="'+socialIcon+'">'
         tags << ''
 
         # Open graph
@@ -34,16 +50,32 @@ module ApplicationHelper
         tags << '<meta name="twitter:card" content="summary">'
         tags << '<meta name="twitter:image:src" content="' + socialIcon + '">'
         tags << '<meta name="twitter:title" content="'+title+'">'
-        tags << '<meta name="twitter:description" content="' + description + '" />'
+        tags << '<meta name="twitter:description" content="' + description + '">'
+
+        unless meta.nil? or meta['oembed_obj'].nil?
+            tags << '<meta name="twitter:player" content="http://www.themusictank.com/embed/' + meta['oembed_obj'].class.name.downcase + "s/" + meta['oembed_obj'].slug + '">'
+            tags << '<meta name="twitter:player:width" content="1280">'
+            tags << '<meta name="twitter:player:height" content="720">'
+        end
+
         tags << ''
+
 
         # OEmbed
         unless meta.nil? or meta['oembed_obj'].nil?
             url =  domain + "/" + meta['oembed_obj'].class.name.downcase + "s/" + meta['oembed_obj'].slug
 
-            tags << '<link rel="alternative" type="application/json+oembed" href="/oembed?url=' + url + '" title="oEmbed Profile" />'
+            tags << '<link rel="alternative" type="application/json+oembed" href="/oembed?url=' + url + '" title="'+ title +'">'
             tags << ''
         end
+
+        # Legacy
+        tags << '<!--[if lt IE 9]>'
+        tags << '  <script src="https://oss.maxcdn.com/html5shiv/3.7.2/html5shiv.min.js"></script>'
+        tags << '  <script src="https://oss.maxcdn.com/respond/1.4.2/respond.min.js"></script>'
+        tags << '<![endif]-->'
+        tags << ''
+
 
         tags.join("\n").html_safe
     end
@@ -76,7 +108,7 @@ module ApplicationHelper
         if meta.nil? || meta['title'].nil?
             "The Music Tank"
         else
-            meta['title'].join(" - ") + " - The Music Tank"
+            meta['title'].join(" &middot; ") + " &middot; The Music Tank"
         end
     end
 

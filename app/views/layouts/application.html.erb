@@ -1,11 +1,10 @@
 <!DOCTYPE html>
 <html>
 <head>
-  <%= ApplicationHelper.to_meta_tags @meta, request %>
-  <%= stylesheet_link_tag    'application', media: 'all' %>
-  <%= javascript_include_tag 'application' %>
-  <%= csrf_meta_tags %>
-  <%= yield :header %>
+<%= ApplicationHelper.to_meta_tags @meta, request %>
+<%= csrf_meta_tags %>
+<%= yield :header %>
+<%= stylesheet_link_tag 'application', media: 'all' %>
 </head>
 <body class="<%= action_name %>">
     <header>
@@ -64,5 +63,8 @@
             </nav>
         </div>
     </footer>
+
+<%= javascript_include_tag 'application' %>
+
 </body>
 </html>

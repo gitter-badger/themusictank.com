@@ -15,7 +15,6 @@
   ],
   "dependencies": {
     "d3": ">=v3",
-    "typeahead.js": ">=v0.10.5",
-    "font-awesome": "~4.2.0"
+    "typeahead.js": ">=v0.10.5"
   }
 }

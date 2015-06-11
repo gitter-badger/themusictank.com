@@ -1,3 +1,9 @@
+<% content_for :header  do %>
+<meta name="tmt:artist:lastfm:updated_at" content="<%= @artist.last_lastfm_update %>">
+<meta name="tmt:artist:musicbrainz:updated_at" content="<%= @artist.last_mb_update %>">
+<meta name="tmt:artist:entity:updated_at" content="<%= @artist.updated_at %>">
+<% end %>
+
 <%= render partial: "backdrop", locals: {entity: @artist} %>
 
 <h1><%= link_to @artist.name, @artist.slug %></h1>
@@ -23,13 +29,5 @@
             <%= link_to similar_artist.name, controller: :artists, action: :show, id: similar_artist.slug %>
         </li>
     <% end %>
-    </ul>
-</section>
-
-<section class="update-information">
-    <ul>
-        <li>LastFM : <%= @artist.last_lastfm_update %></li>
-        <li>MusicBrainz : <%= @artist.last_mb_update %></li>
-        <li>Entity : <%= @artist.updated_at %></li>
     </ul>
 </section>

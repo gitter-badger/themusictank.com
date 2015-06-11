@@ -1,3 +1,7 @@
+<% content_for :header  do %>
+<meta name="tmt:track:entity:updated_at" content="<%= @track.updated_at %>">
+<% end %>
+
 <%= render partial: "backdrop", locals: {entity: @track.albums.first} %>
 
 <h1><%= link_to @track.title, controller: :tracks, action: :show, id: @track.slug %></h1>
@@ -16,9 +20,3 @@
 <%= render partial: "review_button", locals: {track: @track} %>
 
 <%= render partial: "player", locals: {track: @track} %>
-
-<section class="update-information">
-    <ul>
-        <li>Entity : <%= @track.updated_at %></li>
-    </ul>
-</section>

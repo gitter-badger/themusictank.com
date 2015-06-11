@@ -1,45 +1,62 @@
+<%= render partial: "backdrop" %>
+
 <h1><%= t 'Search results' %></h1>
 
 <% unless @artists.nil? %>
-    <h2><%= t 'Artist matches' %></h2>
+    <section class="results artists">
+        <h2><%= t 'Artist matches' %></h2>
 
-    <% if @artists.length > 0 %>
-        <ul>
-        <% @artists.each do |artist| %>
-            <li><%= link_to artist.name, controller: :artists, action: :view, slug: artist.slug %></li>
+        <% if @artists.length > 0 %>
+            <ul>
+            <% @artists.each do |artist| %>
+                <li>
+                    <%= link_to image_tag(artist.get_thumbnail_url, class: "thumb", alt: artist.name, title: artist.name), controller: :artists, action: :show, id: artist.slug %>
+                    <%= link_to artist.name, controller: :artists, action: :show, slug: artist.slug %></li>
+            <% end %>
+            </ul>
+        <% else %>
+            <p><%= t 'We were not able to find anything that matched the query' %>.</p>
         <% end %>
-        </ul>
-    <% else %>
-        <p><%= t 'We were not able to find anything that matched the query' %>.</p>
-    <% end %>
+    </section>
 <% end %>
 
 <% unless @albums.nil? %>
-    <h2><%= t 'Album matches' %></h2>
+    <section class="results albums">
+        <h2><%= t 'Album matches' %></h2>
 
-    <% if @albums.length > 0 %>
-        <ul>
-        <% @albums.each do |album| %>
-            <li><%= link_to album.title, controller: :albums, action: :view, slug: album.slug %></li>
+        <% if @albums.length > 0 %>
+            <ul>
+            <% @albums.each do |album| %>
+                <li>
+                    <%= link_to image_tag(album.get_thumbnail_url, class: "thumb", alt: album.title, title: album.title), controller: :albums, action: :show, id: album.slug %>
+                    <%= link_to album.title, controller: :albums, action: :show, slug: album.slug %>
+                </li>
+            <% end %>
+            </ul>
+        <% else %>
+            <p><%= t 'We were not able to find anything that matched the query' %>.</p>
         <% end %>
-        </ul>
-    <% else %>
-        <p><%= t 'We were not able to find anything that matched the query' %>.</p>
-    <% end %>
+    </section>
 <% end %>
 
-
 <% unless @tracks.nil? %>
-    <h2><%= t 'Track matches' %></h2>
+    <section class="results tracks">
+        <h2><%= t 'Track matches' %></h2>
 
-    <% if @tracks.length > 0 %>
-        <ul>
-        <% @tracks.each do |track| %>
-            <li><%= link_to track.title, controller: :tracks, action: :view, slug: track.slug %></li>
+        <% if @tracks.length > 0 %>
+            <ul>
+            <% @tracks.each do |track| %>
+                <li>
+                    <%= link_to image_tag(track.artist.get_thumbnail_url, class: "thumb", alt: track.title, title: track.title), controller: :tracks, action: :show, id: track.slug %>
+                    <%= link_to track.title, controller: :tracks, action: :show, slug: track.slug %>
+                    <%= t "by" %>
+                    <%= link_to track.artist.name, controller: :artists, action: :show, slug: track.artist.slug %>
+                </li>
+            <% end %>
+            </ul>
+        <% else %>
+            <p><%= t 'We were not able to find anything that matched the query' %>.</p>
         <% end %>
-        </ul>
-    <% else %>
-        <p><%= t 'We were not able to find anything that matched the query' %>.</p>
-    <% end %>
+    </section>
 <% end %>
 

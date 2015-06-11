@@ -10,7 +10,7 @@
                     <time datetime="<%= notification.created_at %>" data-title="true" title="<%= notification.created_at %>">
                         <%= notification.created_at %>
                     </time>
-                    <%= t notification.title %>
+                    <%= link_to t(notification.title), controller: :notifications, action: :index, anchor: "id-#{notification.id}" %>
                 </li>
             <% end %>
         <% else %>

@@ -27,9 +27,12 @@ module Services
 
             # Updates a TMT artist profile from the information on LastFM
             def self.update_artist_profile artist
-                artist = append_remote_data artist, find_remote_artist(artist)
-                artist.last_lastfm_update = DateTime.now
-                artist.save
+                remote_data = find_remote_artist(artist)
+                unless remote_data.nil?
+                    artist = append_remote_data artist, remote_data
+                    artist.last_lastfm_update = DateTime.now
+                    artist.save
+                end
             end
 
             # Finds or creates Artist entities from standard LastFM API return data.
@@ -59,7 +62,12 @@ module Services
             # Fetches artist details on LastFM based on a name.
             def self.find_remote_artist artist
                 log "Sending API request to 'get_info(:artist=> #{artist.name}, :mbid => #{artist.mbid})'"
-                LastFM::Artist.get_info(:artist=> artist.name, :mbid => artist.mbid)["artist"]
+                begin
+                    LastFM::Artist.get_info(:artist=> artist.name, :mbid => artist.mbid)["artist"]
+                rescue
+                    warn "Api request failed"
+                    nil
+                end
             end
 
             # Formats a resultset of API data into a known data structure

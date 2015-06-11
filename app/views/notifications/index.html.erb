@@ -13,7 +13,7 @@
             <div class="notifications">
                 <% if @notifications.length > 0 %>
                     <% @notifications.each do |notification| %>
-                        <div class="notification <% if notification.viewed? %>read<% else %>new<% end %> <%= notification.type %>">
+                        <div id="id-<%= notification.id %>" class="notification <% if notification.viewed? %>read<% else %>new<% end %> <%= notification.type %>">
 
                             <time datetime="<%= notification.created_at %>" data-title="true" title="<%= notification.created_at %>">
                                 <%= notification.created_at %>

@@ -20,7 +20,7 @@ module Utils
         end
 
         def get_type_warn
-            "[WARN]  ".light_red
+            "[WARN]  ".light_magenta
         end
 
         def get_info_context source

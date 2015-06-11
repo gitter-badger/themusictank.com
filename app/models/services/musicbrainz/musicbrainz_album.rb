@@ -29,7 +29,7 @@ module Services
                         warn "Album '#{mb_release.title}' (#{mb_release.id}) did not exist."
                         log "Creating '#{mb_release.title}' (#{mb_release.id})"
                         album.title = mb_release.title
-                        album.release_date = mb_release.first_release_date
+                        album.release_date = mb_release.first_release_date.to_datetime
                     end
                 end
             end
@@ -48,7 +48,6 @@ module Services
                 end
 
                 # We have updated MusicBrainz, save the flag.
-                #Services::MusicbrainzArtist.flag_updated artist
                 artist.last_mb_update = DateTime.now
                 artist.save!
 

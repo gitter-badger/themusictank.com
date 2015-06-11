@@ -12,4 +12,7 @@
     </div>
 <% end -%>
 
-<small class="report-bug" data-bug-type="track player" data-location="artist: <%= track.albums.first.artist.name; %>, track: <%= track.title; %>" data-user=""><i class="fa fa-bug"></i> <%= t 'Wrong song?' %></small>
+
+<%= link_to({controller: :ajax, action: :bugreport}, {class: "report-bug", "data-bug-iden" => "song-player", "data-bug-location" => request.original_url }) do %>
+    <i class="fa fa-bug"></i> <%= t "Wrong song?" %>
+<% end %>

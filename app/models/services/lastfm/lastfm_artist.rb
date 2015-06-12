@@ -30,9 +30,11 @@ module Services
                 remote_data = find_remote_artist(artist)
                 unless remote_data.nil?
                     artist = append_remote_data artist, remote_data
-                    artist.last_lastfm_update = DateTime.now
-                    artist.save
                 end
+
+                # Consider the record updated no matter what happened.
+                artist.last_lastfm_update = DateTime.now
+                artist.save
             end
 
             # Finds or creates Artist entities from standard LastFM API return data.

@@ -29,7 +29,14 @@ module Services
                         warn "Album '#{mb_release.title}' (#{mb_release.id}) did not exist."
                         log "Creating '#{mb_release.title}' (#{mb_release.id})"
                         album.title = mb_release.title
-                        album.release_date = mb_release.first_release_date.to_datetime
+
+                        begin
+                            album.release_date = mb_release.first_release_date.to_datetime
+                        rescue Exception => e
+                            warn "Failed to parse the release date of the album."
+                            album.release_date = nil
+                        end
+
                     end
                 end
             end

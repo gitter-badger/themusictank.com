@@ -29,7 +29,7 @@ module Utils
 
         def get_warn_context source
 
-            contextualize.name.light_red + "##{source}\t  ".light_red
+            contextualize.name.light_magenta + "##{source}\t  ".magenta
         end
 
         private

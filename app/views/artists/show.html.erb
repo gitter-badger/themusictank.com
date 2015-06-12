@@ -10,6 +10,7 @@
 
 <section class="discography">
     <h2>Discography</h2>
+    <% if !@artist.albums.empty? %>
     <ul>
     <% @artist.albums.each do |album| %>
         <li>
@@ -18,6 +19,11 @@
         </li>
     <% end %>
     </ul>
+    <% elsif @artist.last_mb_update.nil? %>
+        <p><%= t "The discography is still being processed Sorry for the inconvenience" %></p>
+    <% else %>
+        <p><%= t "The artist does not seem to have official releases" %></p>
+    <% end %>
 </section>
 
 <section class="similar-artists">

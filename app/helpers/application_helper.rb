@@ -77,6 +77,18 @@ module ApplicationHelper
         tags << ''
 
 
+        # GA
+        tags << "<script>"
+        tags << " (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){"
+        tags << " (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),"
+        tags << " m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)"
+        tags << " })(window,document,'script','//www.google-analytics.com/analytics.js','ga');"
+        tags << " ga('create', 'UA-1624062-1', 'auto');"
+        tags << " ga('send', 'pageview');"
+        tags << "</script>"
+        tags << ''
+
+
         tags.join("\n").html_safe
     end
 

@@ -32,7 +32,7 @@ module Services
 
                         begin
                             album.release_date = mb_release.first_release_date.to_datetime
-                        rescue Exception => e
+                        rescue
                             warn "Failed to parse the release date of the album."
                             album.release_date = nil
                         end
@@ -53,6 +53,7 @@ module Services
                     album = find_or_create(release)
                     artist.albums << album unless album.id.nil?
                 end
+
 
                 # We have updated MusicBrainz, save the flag.
                 artist.last_mb_update = DateTime.now

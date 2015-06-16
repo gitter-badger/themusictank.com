@@ -3,27 +3,29 @@
         <%= render partial: "backdrop", locals: {entity: @featured_artist} %>
         <h1><%= link_to @featured_artist.name, controller: :artists, action: :show, id: @featured_artist.slug %></h1>
 
-        <section class="discography">
-            <ul>
+        <section class="container-fluid discography">
+            <div class="row">
             <% @featured_artist.albums.limit(4).each do |album| %>
-                <li>
+                <div class="col-xs-6 col-sm-3 tile tile-album">
                     <%= link_to image_tag(album.get_thumbnail_url, class: "thumb", alt: album.title, title: album.title), controller: :albums, action: :show, id: album.slug %>
-                    <%= link_to album.title, controller: :albums, action: :show, id: album.slug %>
-                </li>
+                    <h3><%= link_to album.title, controller: :albums, action: :show, id: album.slug %></h3>
+                </div>
             <% end %>
-            </ul>
+            </div>
         </section>
 
     </div>
 <% end %>
 
 <% unless @artists.nil? %>
-    <ul>
-    <% @artists.each do |artist| %>
-        <li>
-            <%= link_to image_tag(artist.get_thumbnail_url, class: "thumb", alt: artist.name, title: artist.name), controller: :artists, action: :show, id: artist.slug %>
-            <%= link_to artist.name, controller: :artists, action: :show, id: artist.slug %>
-        </li>
-    <% end %>
-    </ul>
+    <section class="container-fluid popular-artists">
+        <div class="row">
+            <% @artists.each do |artist| %>
+                <div class="col-xs-6 col-sm-4 col-md-3 tile tile-artist">
+                    <%= link_to image_tag(artist.get_thumbnail_url, class: "thumb", alt: artist.name, title: artist.name), controller: :artists, action: :show, id: artist.slug %>
+                    <h3><%= link_to artist.name, controller: :artists, action: :show, id: artist.slug %></h3>
+                </div>
+            <% end %>
+        </div>
+    </section>
 <% end %>

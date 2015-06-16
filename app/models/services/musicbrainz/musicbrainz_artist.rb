@@ -11,10 +11,23 @@ module Services
                 log "Found #{expired_count} expired artists."
                 if expired_count > 0
                     expired.each do |artist|
-                        log "Updating #{artist.name}'s discography"
-                        populate_discography(artist)
+                        update_expired_artist artist
                     end
                 end
+            end
+
+            def self.update_expired_artist artist
+                log "Updating #{artist.name}'s discography"
+
+                begin
+                    populate_discography(artist)
+                rescue
+                    warn "Failed to parse the release date of #{artist.name}."
+                end
+
+                # Consider the record updated no matter what happened.
+                artist.last_lastfm_update = DateTime.now
+                artist.save
             end
 
             # Populates the discography of an artist entity.

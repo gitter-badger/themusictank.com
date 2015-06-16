@@ -37,3 +37,20 @@
         height: 500px;
     }
 }
+
+
+$default-margin: 1.5em;
+
+.tile {
+
+    margin: 0 0 $default-margin;
+
+    .thumb {
+        margin-bottom: $default-margin;
+        width: 100%;
+    }
+
+    h3 {
+        margin: 0 0 $default-margin;
+    }
+}

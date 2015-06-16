@@ -6,7 +6,7 @@ module Services
 
             # Populates the albums with empty tracks by querying MusicBrainz' database.
             def self.populate_trackless
-                Album.find_with_no_tracks.limit(300).each do |album|
+                Album.find_with_no_tracks.limit(600).each do |album|
                     populate_trackless_album album
                 end
             end

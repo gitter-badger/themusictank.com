@@ -6,7 +6,7 @@ module Services
 
             # Populates the artists with empty discographies by querying MusicBrainz' database.
             def self.update_expired
-                expired = Artist.find_expired_musicbrainz.limit(300)
+                expired = Artist.find_expired_musicbrainz.limit(200)
                 expired_count = expired.count
                 log "Found #{expired_count} expired artists."
                 if expired_count > 0

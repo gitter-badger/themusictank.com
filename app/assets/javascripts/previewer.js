@@ -62,7 +62,6 @@ $(function() {
         streamer.find(".duration").html(_toReadableTime(player.getDuration()));
         streamer.find(".position").html(_toReadableTime(0));
 
-        console.log(_toReadableTime(100));
         streamer.find(".progress-wrap .progress").click(function(e){
             if(tmt.playerIsPlaying) {
                 var offset = $(this).offset();

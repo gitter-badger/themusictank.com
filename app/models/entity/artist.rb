@@ -24,6 +24,5 @@ module Entity
             sprintf(str, self.name)
         end
 
-
     end
 end

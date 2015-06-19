@@ -21,7 +21,6 @@
 
                             <% unless notification.linked_obj.nil? %>
                                 <% if notification.linked_obj.kind_of? Services::TMTAchievement::Base %>
-
                                     <h3><%= t notification.title %></h3>
                                     <p><blockquote><%= t notification.linked_obj.description; %></blockquote></p>
 
@@ -30,8 +29,6 @@
                                     <p>
                                         <%= link_to notification.linked_obj.name, controller: :profiles, action: :view, slug: notification.linked_obj.slug %> <%= t "is now following you!" %>
                                     </p>
-                                <% #elsif notification.linked_obj < Bug %>
-                                    <% #<p><%= t "There's a new bug dude." % ></p> %>
                                 <% else %>
                                     <p>Could not figure out the linked object.</p>
                                 <% end %>

@@ -18,6 +18,7 @@
         </li>
         <% end %>
     </ul>
+
 <% elsif @album.last_lastfm_update.nil? %>
     <p><%= t "The albums tracks are still being processed Sorry for the inconvenience" %></p>
 <% else %>

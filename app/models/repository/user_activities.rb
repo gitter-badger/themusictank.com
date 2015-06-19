@@ -3,15 +3,15 @@ module Repository
         include Repository::Base
 
         def has_unread_notifications? user
-            unread_notifications(user).any?
+            UserActivity.unread_notifications(user).any?
         end
 
         def unread_notifications user
-            where( :user_id => user.id, :must_notify_user => 1)
+            UserActivity.where( :user_id => user.id, :must_notify_user => 1)
         end
 
         def find_notifications_for_user user
-            where(:user_id => user.id, :must_notify_user => [0,1])
+            UserActivity.where(:user_id => user.id, :must_notify_user => [0,1])
         end
 
         def find_paginated_notifications_for_user user, params

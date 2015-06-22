@@ -4,7 +4,7 @@ class ApplicationController < ActionController::Base
     protect_from_forgery with: :exception
 
     before_filter :load_meta, :current_user, :current_user_notifications
-    helper_method :current_user, :current_user_notifications
+    helper_method :current_user, :user_signed_in?, :current_user_notifications
 
     def not_found
         raise ActionController::RoutingError.new('Not Found')
@@ -12,8 +12,8 @@ class ApplicationController < ActionController::Base
 
     def require_login
         unless user_signed_in?
-          flash[:error] = "Please login or create a new user before reaching your dashboard."
-          redirect_to controller: :sessions, action: :login
+            flash[:error] = "Please login or create a new user before reaching your dashboard."
+            redirect_to controller: :sessions, action: :login
         end
     end
 

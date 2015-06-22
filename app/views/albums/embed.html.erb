@@ -1,0 +1,14 @@
+<% content_for :header  do %>
+<meta name="tmt:album:lastfm:updated_at" content="<%= @album.last_lastfm_update %>">
+<meta name="tmt:album:entity:updated_at" content="<%= @album.updated_at %>">
+<% end %>
+
+<%= render partial: "backdrop", locals: {entity: @album} %>
+
+<h1><%= link_to @album.title, controller: :albums, action: :show, id: @album.slug %></h1>
+
+<h2><%= link_to @album.artist.name, controller: :artists, action: :show, id: @album.artist.slug  %></h2>
+
+<%
+    # @todo : place review information
+%>

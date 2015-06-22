@@ -53,7 +53,7 @@ module ApplicationHelper
         tags << '<meta name="twitter:description" content="' + description + '">'
 
         unless meta.nil? or meta['oembed_obj'].nil?
-            tags << '<meta name="twitter:player" content="http://www.themusictank.com/embed/' + meta['oembed_obj'].class.name.downcase + "s/" + meta['oembed_obj'].slug + '">'
+            tags << '<meta name="twitter:player" content="' + domain + '/embed/' + meta['oembed_obj'].class.name.downcase + "s/" + meta['oembed_obj'].slug + '">'
             tags << '<meta name="twitter:player:width" content="1280">'
             tags << '<meta name="twitter:player:height" content="720">'
         end
@@ -65,7 +65,7 @@ module ApplicationHelper
         unless meta.nil? or meta['oembed_obj'].nil?
             url =  domain + "/" + meta['oembed_obj'].class.name.downcase + "s/" + meta['oembed_obj'].slug
 
-            tags << '<link rel="alternative" type="application/json+oembed" href="/oembed?url=' + url + '" title="'+ title +'">'
+            tags << '<link rel="alternative" type="application/json+oembed" href="' + domain + '/services/oembed?url=' + url + '" title="'+ title +'">'
             tags << ''
         end
 

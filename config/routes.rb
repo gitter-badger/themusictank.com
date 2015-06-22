@@ -12,6 +12,10 @@ Rails.application.routes.draw do
   patch 'profiles/update', :to => 'profiles#update'
   match 'ajax/bugreport', :to => 'ajax#bugreport', via: [:get, :post]
 
+  # Embed urls
+  match 'embed/albums/:id', :to => 'albums#embed', via: [:get]
+  match 'embed/artists/:id', :to => 'albums#embed', via: [:get]
+  match 'embed/tracks/:id', :to => 'tracks#embed', via: [:get]
 
   resources :albums
   resources :artists

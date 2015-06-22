@@ -5,7 +5,13 @@ class SessionsController < ApplicationController
 
     user = Services::Omniauth::OmniauthUser.find_or_create(provider, uid, env["omniauth.auth"])
     session[:user_id] = user.id
-    redirect_to root_url
+
+    if params[:rurl].nil?
+        redirect_to root_url
+    end
+
+    # I don't think this works because we probably lose the param once we forward to Facebook
+    redirect_to params[:rurl]
   end
 
   def destroy

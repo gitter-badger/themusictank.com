@@ -1,0 +1,32 @@
+<%= render partial: "backdrop" %>
+
+<h1><%= link_to @achievement.title, @achievement.slug %></h1>
+<h2><%= link_to t("Achievements"), controller: :achievements, action: :index %></h2>
+
+<section class="container-fluid achievement">
+    <div class="row">
+        <div class="col-xs-12 col-sm-6">
+            <p><%= @achievement.how_to %></p>
+            <blockquote><%= @achievement.description %></blockquote>
+        </div>
+        <div class="col-xs-12 col-sm-6">
+
+        <% if user_signed_in? %>
+            <%
+                # @todo
+                # does user have it?
+                # friend who have it
+            %>
+        <% else %>
+            <p>
+            <%= link_to t("Create or login"), { controller: :sessions, action: :login, rurl: request.original_url }, class: "btn btn-primary" %> <%= "to your TMT account to see your achievement progress" %>
+            </p>
+        <% end %>
+
+            <p><strong><%= @achievement.number_of_rewarded / @totalUsers * 100 %>%</strong> of Tankers have unlocked this achievement.</p>
+
+        </div>
+    </div>
+</section>
+
+

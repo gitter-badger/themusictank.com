@@ -1,0 +1,51 @@
+<%= render partial: "backdrop" %>
+<% min_results = 15 %>
+
+
+<section class="container-fluid achievements">
+    <div class="row">
+        <div class="col-xs-12">
+            <h1><%= t 'Achievements' %></h1>
+            <p><%= t 'There are multiple achievements you can unlock on TMT' %></p>
+        </div>
+        <div class="col-xs-12 col-sm-6 most-popular">
+            <h3><%= t "Most frequent achievements" %></h3>
+            <ul>
+                <% @mostPopular.each do |result| %>
+                <li>
+                    <%= link_to result[:achievement].title, controller: :achievements, action: :show, id: result[:achievement].slug  %>
+                    <p>Rewarded to <%=  result[:rewards] / @totalUsers * 100 %>% of Tankers.</p>
+                </li>
+                <% end %>
+                <% current_count = @mostPopular.length %>
+                <% while current_count < min_results do %>
+                <li class="undiscovered">
+                    <%= t "Undiscovered achievement" %>
+                    <p><%= t "This achievement has not been discovered by the community yet" %></p>
+                </li>
+                <% current_count+=1 %>
+                <% end %>
+            </ul>
+        </div>
+
+        <div class="col-xs-12 col-sm-6 least-popular">
+            <h3><%= t "Least frequent achievements" %></h3>
+            <ul>
+                <% @leastPopular.each do |result| %>
+                <li>
+                    <%= link_to result[:achievement].title, controller: :achievements, action: :show, id: result[:achievement].slug  %>
+                    <p>Rewarded to <%=  result[:rewards] / @totalUsers * 100 %>% of Tankers.</p>
+                </li>
+                <% end %>
+                <% current_count = @leastPopular.length %>
+                <% while current_count < min_results do %>
+                <li class="undiscovered">
+                    <%= t "Undiscovered achievement" %>
+                    <p><%= t "This achievement has not been discovered by the community yet" %></p>
+                </li>
+                <% current_count+=1 %>
+                <% end %>
+            </ul>
+        </div>
+    </div>
+</section>

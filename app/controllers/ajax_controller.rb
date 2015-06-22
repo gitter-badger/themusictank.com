@@ -60,6 +60,7 @@ class AjaxController < ApplicationController
     # Checks for user notifications
     # TODO: This could be pushed instead
     def whatsup
+        user_signed_in?
         @notifications = UserActivity.find_notifications_for_user(current_user).limit(5)
         render layout: false
     end

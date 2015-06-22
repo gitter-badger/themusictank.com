@@ -42,7 +42,7 @@ module Repository
         end
 
         def find_popularity_set
-            select("count(id), slug").order("count DESC").group( :slug )
+            select("count(id), slug").order("count DESC").group( :slug ).limit(10)
         end
 
     end

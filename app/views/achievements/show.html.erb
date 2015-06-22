@@ -23,7 +23,7 @@
             </p>
         <% end %>
 
-            <p><strong><%= @achievement.number_of_rewarded / @totalUsers * 100 %>%</strong> of Tankers have unlocked this achievement.</p>
+            <p><strong><%= ApplicationHelper.pct(@achievement.number_of_rewarded, @totalUsers) %>%</strong> of Tankers have unlocked this achievement.</p>
 
         </div>
     </div>

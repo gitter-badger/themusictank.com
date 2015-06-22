@@ -1,5 +1,5 @@
 <%= render partial: "backdrop" %>
-<% min_results = 15 %>
+<% min_results = 10 %>
 
 
 <section class="container-fluid achievements">
@@ -14,7 +14,7 @@
                 <% @mostPopular.each do |result| %>
                 <li>
                     <%= link_to result[:achievement].title, controller: :achievements, action: :show, id: result[:achievement].slug  %>
-                    <p>Rewarded to <%=  result[:rewards] / @totalUsers * 100 %>% of Tankers.</p>
+                    <p>Rewarded to <strong><%= ApplicationHelper.pct(result[:rewards], @totalUsers) %>%</strong> of Tankers.</p>
                 </li>
                 <% end %>
                 <% current_count = @mostPopular.length %>
@@ -34,7 +34,7 @@
                 <% @leastPopular.each do |result| %>
                 <li>
                     <%= link_to result[:achievement].title, controller: :achievements, action: :show, id: result[:achievement].slug  %>
-                    <p>Rewarded to <%=  result[:rewards] / @totalUsers * 100 %>% of Tankers.</p>
+                    <p>Rewarded to <strong><%= ApplicationHelper.pct(result[:rewards], @totalUsers) %>%</strong> of Tankers.</p>
                 </li>
                 <% end %>
                 <% current_count = @leastPopular.length %>

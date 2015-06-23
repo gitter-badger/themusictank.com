@@ -4,6 +4,7 @@ module Repository
         include Repository::Behavior::Thumbnailed
         include Repository::Behavior::Slugged
         include Repository::Behavior::Lastfmd
+        include Repository::Behavior::Searchable
 
         # Lists artists that have no discography attached.
         def find_with_no_tracks
@@ -13,13 +14,6 @@ module Repository
         # Lists artists that have discographies.
         def find_with_tracks
             Album.joins(:tracks).group("albums.id")
-        end
-
-        def search criteria, limit = 10
-            # http://stackoverflow.com/questions/22435780/how-to-order-results-by-closest-match-to-query
-            regexp = /#{criteria}/i;
-            result = order(:title).where("title ILIKE ?", "%#{criteria}%").limit(limit)
-            result.sort{|x, y| (x =~ regexp) <=> (y =~ regexp) }
         end
 
         def find_all_previous album, track

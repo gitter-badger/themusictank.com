@@ -1,5 +1,9 @@
 require 'rails_helper'
 
-RSpec.describe Achievements, type: :model do
-  pending "add some examples to (or delete) #{__FILE__}"
+RSpec.describe Achievement, type: :model do
+
+    before(:all) {
+        @achivement = FactoryGirl.create(:achievement)
+    }
+
 end

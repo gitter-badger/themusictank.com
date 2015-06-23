@@ -44,6 +44,8 @@ RSpec.configure do |config|
     Artist.delete_all
     Album.delete_all
     Track.delete_all
+    UserActivity.delete_all
+    User.delete_all
   end
 
 # The settings below are suggested to provide a good initial experience

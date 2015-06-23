@@ -5,6 +5,7 @@ module Repository
         include Repository::Behavior::Slugged
         include Repository::Behavior::Lastfmd
         include Repository::Behavior::Musicbrainzed
+        include Repository::Behavior::Searchable
 
         # Updates a set of artists and marks them as current being popular.
         def update_popular artists
@@ -45,12 +46,12 @@ module Repository
             random_set
         end
 
-        def search criteria, limit = 10
-            # http://stackoverflow.com/questions/22435780/how-to-order-results-by-closest-match-to-query
-            regexp = /#{criteria}/i;
-            result = order(:name).where("name ILIKE ?", "%#{criteria}%").limit(limit)
-            result.sort{|x, y| (x =~ regexp) <=> (y =~ regexp) }
+        def search_where_field
+            "name"
         end
 
+        def search_order_field
+            :name
+        end
     end
 end

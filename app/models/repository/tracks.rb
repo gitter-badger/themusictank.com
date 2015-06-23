@@ -3,12 +3,7 @@ module Repository
     module Tracks
         include Repository::Behavior::Slugged
         include Repository::Behavior::Youtubed
+        include Repository::Behavior::Searchable
 
-        def search criteria, limit = 10
-            # http://stackoverflow.com/questions/22435780/how-to-order-results-by-closest-match-to-query
-            regexp = /#{criteria}/i;
-            result = order(:title).where("title ILIKE ?", "%#{criteria}%").limit(limit)
-            result.sort{|x, y| (x =~ regexp) <=> (y =~ regexp) }
-        end
     end
 end

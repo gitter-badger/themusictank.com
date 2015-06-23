@@ -8,4 +8,11 @@ class Track < Entity::Track
     has_many :albums_tracks
 
     validates :mbid, presence: true, uniqueness: true
+
+    before_save :truncate_title
+
+    def truncate_title
+        self.title = self.title[0..254] if self.title.length > 255
+    end
+
 end

@@ -29,9 +29,11 @@ module MetatagsHelper
         tags << ''
 
 
-        # Icons
+        # Theming
         tags << '<link rel="apple-touch-icon" href="'+socialIcon+'">'
         tags << '<link rel="icon" href="'+socialIcon+'">'
+        tags << '<meta name="theme-color" content="#999999">'
+        tags << '<link rel="manifest" href="manifest.json">'
         tags << ''
 
         # Open graph

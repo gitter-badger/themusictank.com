@@ -4,7 +4,7 @@ module Services
         # album thumbnails
         class S3AlbumThumbnail < Services::S3::S3Thumbnail
             def self.generate_thumbnails
-                Album.with_no_thumbnail.each do |album|
+                Album.with_no_thumbnail.limit(100).each do |album|
                     generate_thumbnail album
                 end
             end

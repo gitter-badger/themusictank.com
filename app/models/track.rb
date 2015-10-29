@@ -7,6 +7,8 @@ class Track < Entity::Track
     has_many :albums, through: :albums_tracks
     has_many :albums_tracks
 
+    has_one :track_soundwave
+
     validates :mbid, presence: true, uniqueness: true
 
     before_save :truncate_title

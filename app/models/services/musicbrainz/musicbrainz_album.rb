@@ -69,7 +69,7 @@ module Services
             # the known fields in the album entity.
             def self.find_remote album
                 log "'find_by_artist_and_title(#{album.artist.name}, #{album.title})'"
-                MusicBrainz::ReleaseGroup.find_by_artist_and_title(album.artist.name, album.title) unless album.title.nil?
+                MusicBrainz::ReleaseGroup.find_by_artist_and_title(album.artist.name, album.title) unless album.title.nil? or album.artist.nil?
             end
 
             def self.find_remote_tracks album

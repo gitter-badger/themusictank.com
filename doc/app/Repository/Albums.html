@@ -55,7 +55,30 @@
   <div id="class-metadata">
     
     
-    
+    <div id="includes-section" class="nav-section">
+  <h3>Included Modules</h3>
+
+  <ul class="link-list">
+  
+  
+    <li><a class="include" href="Behavior/Thumbnailed.html">Repository::Behavior::Thumbnailed</a>
+  
+  
+  
+    <li><a class="include" href="Behavior/Slugged.html">Repository::Behavior::Slugged</a>
+  
+  
+  
+    <li><a class="include" href="Behavior/Lastfmd.html">Repository::Behavior::Lastfmd</a>
+  
+  
+  
+    <li><a class="include" href="Behavior/Searchable.html">Repository::Behavior::Searchable</a>
+  
+  
+  </ul>
+</div>
+
     
     <!-- Method Quickref -->
 <div id="method-list-section" class="nav-section">
@@ -63,11 +86,21 @@
 
   <ul class="link-list" role="directory">
     
-    <li ><a href="#method-i-entity_exists-3F">#entity_exists?</a>
+    <li ><a href="#method-i-find_all_next">#find_all_next</a>
     
-    <li ><a href="#method-i-populate_entity">#populate_entity</a>
+    <li ><a href="#method-i-find_all_previous">#find_all_previous</a>
     
-    <li ><a href="#method-i-preload_set">#preload_set</a>
+    <li ><a href="#method-i-find_next">#find_next</a>
+    
+    <li ><a href="#method-i-find_previous">#find_previous</a>
+    
+    <li ><a href="#method-i-find_with_no_tracks">#find_with_no_tracks</a>
+    
+    <li ><a href="#method-i-find_with_tracks">#find_with_tracks</a>
+    
+    <li ><a href="#method-i-has_next-3F">#has_next?</a>
+    
+    <li ><a href="#method-i-has_previous-3F">#has_previous?</a>
     
   </ul>
 </div>
@@ -105,11 +138,11 @@
        </header>
 
     
-      <div id="method-i-entity_exists-3F" class="method-detail ">
+      <div id="method-i-find_all_next" class="method-detail ">
         
         <div class="method-heading">
-          <span class="method-name">entity_exists?</span><span
-            class="method-args">(album)</span>
+          <span class="method-name">find_all_next</span><span
+            class="method-args">(album, track)</span>
           
           <span class="method-click-advice">click to toggle source</span>
           
@@ -118,19 +151,19 @@
 
         <div class="method-description">
           
-          <p>Checks if the entity has been saved based on known attributes.</p>
+          
           
           
 
           
-          <div class="method-source-code" id="entity_exists-3F-source">
-            <pre><span class="ruby-comment"># File app/models/repository/albums.rb, line 16</span>
-<span class="ruby-keyword">def</span> <span class="ruby-identifier">entity_exists?</span> <span class="ruby-identifier">album</span>
-    <span class="ruby-keyword">return</span> <span class="ruby-constant">Album</span>.<span class="ruby-identifier">exists?</span>(<span class="ruby-identifier">album</span>.<span class="ruby-identifier">id</span>) <span class="ruby-keyword">unless</span> <span class="ruby-identifier">album</span>.<span class="ruby-identifier">id</span>.<span class="ruby-identifier">nil?</span>
-    <span class="ruby-keyword">return</span> <span class="ruby-constant">Album</span>.<span class="ruby-identifier">exists?</span>(<span class="ruby-identifier">mbid</span><span class="ruby-operator">:</span> <span class="ruby-identifier">album</span>.<span class="ruby-identifier">mbid</span>) <span class="ruby-keyword">unless</span> <span class="ruby-identifier">album</span>.<span class="ruby-identifier">mbid</span>.<span class="ruby-identifier">nil?</span>
-    <span class="ruby-keyword">return</span> <span class="ruby-constant">Album</span>.<span class="ruby-identifier">exists?</span>(<span class="ruby-identifier">name</span><span class="ruby-operator">:</span> <span class="ruby-identifier">album</span>.<span class="ruby-identifier">name</span>) <span class="ruby-keyword">unless</span> <span class="ruby-identifier">album</span>.<span class="ruby-identifier">name</span>.<span class="ruby-identifier">nil?</span>
-    <span class="ruby-keyword">return</span> <span class="ruby-constant">Album</span>.<span class="ruby-identifier">exists?</span>(<span class="ruby-identifier">slug</span><span class="ruby-operator">:</span> <span class="ruby-identifier">album</span>.<span class="ruby-identifier">slug</span>) <span class="ruby-keyword">unless</span> <span class="ruby-identifier">album</span>.<span class="ruby-identifier">slug</span>.<span class="ruby-identifier">nil?</span>
-    <span class="ruby-keyword">false</span>
+          <div class="method-source-code" id="find_all_next-source">
+            <pre><span class="ruby-comment"># File app/models/repository/albums.rb, line 27</span>
+<span class="ruby-keyword">def</span> <span class="ruby-identifier">find_all_next</span> <span class="ruby-identifier">album</span>, <span class="ruby-identifier">track</span>
+    <span class="ruby-identifier">select</span>(<span class="ruby-string">&quot;tracks.*&quot;</span>)
+        .<span class="ruby-identifier">joins</span>(<span class="ruby-value">:tracks</span>)
+        .<span class="ruby-identifier">where</span>(<span class="ruby-string">&#39;tracks.position &gt; (?)&#39;</span>, <span class="ruby-identifier">track</span>.<span class="ruby-identifier">position</span>)
+        .<span class="ruby-identifier">where</span>(<span class="ruby-string">&#39;albums.id = (?)&#39;</span>, <span class="ruby-identifier">album</span>.<span class="ruby-identifier">id</span>)
+        .<span class="ruby-identifier">order</span>(<span class="ruby-string">&#39;tracks.position ASC&#39;</span>)
 <span class="ruby-keyword">end</span></pre>
           </div>
           
@@ -142,11 +175,11 @@
       </div>
 
     
-      <div id="method-i-populate_entity" class="method-detail ">
+      <div id="method-i-find_all_previous" class="method-detail ">
         
         <div class="method-heading">
-          <span class="method-name">populate_entity</span><span
-            class="method-args">(album)</span>
+          <span class="method-name">find_all_previous</span><span
+            class="method-args">(album, track)</span>
           
           <span class="method-click-advice">click to toggle source</span>
           
@@ -155,27 +188,19 @@
 
         <div class="method-description">
           
-          <p>Loads the entity based on known attributes.</p>
           
           
+          
 
           
-          <div class="method-source-code" id="populate_entity-source">
-            <pre><span class="ruby-comment"># File app/models/repository/albums.rb, line 25</span>
-<span class="ruby-keyword">def</span> <span class="ruby-identifier">populate_entity</span> <span class="ruby-identifier">album</span>
-
-    <span class="ruby-identifier">dbAlbum</span> = <span class="ruby-keyword">nil</span>
-    <span class="ruby-identifier">dbAlbum</span> = <span class="ruby-constant">Album</span>.<span class="ruby-identifier">find_by_mbid</span>(<span class="ruby-identifier">album</span>.<span class="ruby-identifier">mbid</span>) <span class="ruby-keyword">unless</span> <span class="ruby-identifier">album</span>.<span class="ruby-identifier">mbid</span>.<span class="ruby-identifier">nil?</span> <span class="ruby-keyword">or</span> <span class="ruby-operator">!</span><span class="ruby-identifier">dbAlbum</span>.<span class="ruby-identifier">nil?</span>
-    <span class="ruby-identifier">dbAlbum</span> = <span class="ruby-constant">Album</span>.<span class="ruby-identifier">find_by_name</span>(<span class="ruby-identifier">album</span>.<span class="ruby-identifier">name</span>) <span class="ruby-keyword">unless</span> <span class="ruby-identifier">album</span>.<span class="ruby-identifier">name</span>.<span class="ruby-identifier">nil?</span> <span class="ruby-keyword">or</span> <span class="ruby-operator">!</span><span class="ruby-identifier">dbAlbum</span>.<span class="ruby-identifier">nil?</span>
-    <span class="ruby-identifier">dbAlbum</span> = <span class="ruby-constant">Album</span>.<span class="ruby-identifier">find_by_slug</span>(<span class="ruby-identifier">album</span>.<span class="ruby-identifier">slug</span>) <span class="ruby-keyword">unless</span> <span class="ruby-identifier">album</span>.<span class="ruby-identifier">slug</span>.<span class="ruby-identifier">nil?</span> <span class="ruby-keyword">or</span> <span class="ruby-operator">!</span><span class="ruby-identifier">dbAlbum</span>.<span class="ruby-identifier">nil?</span>
-
-    <span class="ruby-comment"># When we have loaded a matching album using the unique keys,</span>
-    <span class="ruby-comment"># ensure</span>
-    <span class="ruby-keyword">unless</span> <span class="ruby-identifier">dbAlbum</span>.<span class="ruby-identifier">nil?</span> <span class="ruby-keyword">or</span> <span class="ruby-operator">!</span><span class="ruby-identifier">dbAlbum</span>.<span class="ruby-identifier">is_a?</span> <span class="ruby-constant">Album</span>
-        <span class="ruby-identifier">album</span>.<span class="ruby-identifier">assign_attributes</span>(<span class="ruby-identifier">dbAlbum</span>.<span class="ruby-identifier">attributes</span>)
-    <span class="ruby-keyword">end</span>
-
-    <span class="ruby-identifier">album</span>
+          <div class="method-source-code" id="find_all_previous-source">
+            <pre><span class="ruby-comment"># File app/models/repository/albums.rb, line 19</span>
+<span class="ruby-keyword">def</span> <span class="ruby-identifier">find_all_previous</span> <span class="ruby-identifier">album</span>, <span class="ruby-identifier">track</span>
+    <span class="ruby-identifier">select</span>(<span class="ruby-string">&quot;tracks.*&quot;</span>)
+        .<span class="ruby-identifier">joins</span>(<span class="ruby-value">:tracks</span>)
+        .<span class="ruby-identifier">where</span>(<span class="ruby-string">&#39;tracks.position &lt; (?)&#39;</span>, <span class="ruby-identifier">track</span>.<span class="ruby-identifier">position</span>)
+        .<span class="ruby-identifier">where</span>(<span class="ruby-string">&#39;albums.id = (?)&#39;</span>, <span class="ruby-identifier">album</span>.<span class="ruby-identifier">id</span>)
+        .<span class="ruby-identifier">order</span>(<span class="ruby-string">&#39;tracks.position ASC&#39;</span>)
 <span class="ruby-keyword">end</span></pre>
           </div>
           
@@ -187,11 +212,11 @@
       </div>
 
     
-      <div id="method-i-preload_set" class="method-detail ">
+      <div id="method-i-find_next" class="method-detail ">
         
         <div class="method-heading">
-          <span class="method-name">preload_set</span><span
-            class="method-args">(entities)</span>
+          <span class="method-name">find_next</span><span
+            class="method-args">(album, track)</span>
           
           <span class="method-click-advice">click to toggle source</span>
           
@@ -200,21 +225,180 @@
 
         <div class="method-description">
           
-          <p>Ensures albums have a local version saved.</p>
+          
           
           
 
           
-          <div class="method-source-code" id="preload_set-source">
-            <pre><span class="ruby-comment"># File app/models/repository/albums.rb, line 5</span>
-<span class="ruby-keyword">def</span> <span class="ruby-identifier">preload_set</span> <span class="ruby-identifier">entities</span>
-    <span class="ruby-identifier">entities</span>.<span class="ruby-identifier">each_with_index</span> <span class="ruby-keyword">do</span> <span class="ruby-operator">|</span><span class="ruby-identifier">entity</span>, <span class="ruby-identifier">idx</span><span class="ruby-operator">|</span>
-        <span class="ruby-keyword">unless</span> <span class="ruby-identifier">entity_exists?</span>(<span class="ruby-identifier">entity</span>)
-            <span class="ruby-identifier">entity</span>.<span class="ruby-identifier">save!</span>
-        <span class="ruby-keyword">else</span>
-            <span class="ruby-identifier">entities</span>[<span class="ruby-identifier">idx</span>] = <span class="ruby-identifier">populate_entity</span> <span class="ruby-identifier">entity</span>
-        <span class="ruby-keyword">end</span>
-    <span class="ruby-keyword">end</span>
+          <div class="method-source-code" id="find_next-source">
+            <pre><span class="ruby-comment"># File app/models/repository/albums.rb, line 35</span>
+<span class="ruby-keyword">def</span> <span class="ruby-identifier">find_next</span> <span class="ruby-identifier">album</span>, <span class="ruby-identifier">track</span>
+    <span class="ruby-identifier">find_all_next</span>(<span class="ruby-identifier">album</span>, <span class="ruby-identifier">track</span>).<span class="ruby-identifier">first</span>
+<span class="ruby-keyword">end</span></pre>
+          </div>
+          
+        </div>
+
+        
+
+        
+      </div>
+
+    
+      <div id="method-i-find_previous" class="method-detail ">
+        
+        <div class="method-heading">
+          <span class="method-name">find_previous</span><span
+            class="method-args">(album, track)</span>
+          
+          <span class="method-click-advice">click to toggle source</span>
+          
+        </div>
+        
+
+        <div class="method-description">
+          
+          
+          
+          
+
+          
+          <div class="method-source-code" id="find_previous-source">
+            <pre><span class="ruby-comment"># File app/models/repository/albums.rb, line 39</span>
+<span class="ruby-keyword">def</span> <span class="ruby-identifier">find_previous</span> <span class="ruby-identifier">album</span>, <span class="ruby-identifier">track</span>
+    <span class="ruby-identifier">find_all_previous</span>(<span class="ruby-identifier">album</span>, <span class="ruby-identifier">track</span>).<span class="ruby-identifier">first</span>
+<span class="ruby-keyword">end</span></pre>
+          </div>
+          
+        </div>
+
+        
+
+        
+      </div>
+
+    
+      <div id="method-i-find_with_no_tracks" class="method-detail ">
+        
+        <div class="method-heading">
+          <span class="method-name">find_with_no_tracks</span><span
+            class="method-args">()</span>
+          
+          <span class="method-click-advice">click to toggle source</span>
+          
+        </div>
+        
+
+        <div class="method-description">
+          
+          <p>Lists artists that have no discography attached.</p>
+          
+          
+
+          
+          <div class="method-source-code" id="find_with_no_tracks-source">
+            <pre><span class="ruby-comment"># File app/models/repository/albums.rb, line 10</span>
+<span class="ruby-keyword">def</span> <span class="ruby-identifier">find_with_no_tracks</span>
+    <span class="ruby-constant">Album</span>.<span class="ruby-identifier">where</span>([<span class="ruby-string">&#39;id not in (?)&#39;</span>, <span class="ruby-identifier">find_with_tracks</span>.<span class="ruby-identifier">select</span>(<span class="ruby-string">&quot;id&quot;</span>) ])
+<span class="ruby-keyword">end</span></pre>
+          </div>
+          
+        </div>
+
+        
+
+        
+      </div>
+
+    
+      <div id="method-i-find_with_tracks" class="method-detail ">
+        
+        <div class="method-heading">
+          <span class="method-name">find_with_tracks</span><span
+            class="method-args">()</span>
+          
+          <span class="method-click-advice">click to toggle source</span>
+          
+        </div>
+        
+
+        <div class="method-description">
+          
+          <p>Lists artists that have discographies.</p>
+          
+          
+
+          
+          <div class="method-source-code" id="find_with_tracks-source">
+            <pre><span class="ruby-comment"># File app/models/repository/albums.rb, line 15</span>
+<span class="ruby-keyword">def</span> <span class="ruby-identifier">find_with_tracks</span>
+    <span class="ruby-constant">Album</span>.<span class="ruby-identifier">joins</span>(<span class="ruby-value">:tracks</span>).<span class="ruby-identifier">group</span>(<span class="ruby-string">&quot;albums.id&quot;</span>)
+<span class="ruby-keyword">end</span></pre>
+          </div>
+          
+        </div>
+
+        
+
+        
+      </div>
+
+    
+      <div id="method-i-has_next-3F" class="method-detail ">
+        
+        <div class="method-heading">
+          <span class="method-name">has_next?</span><span
+            class="method-args">(album, track)</span>
+          
+          <span class="method-click-advice">click to toggle source</span>
+          
+        </div>
+        
+
+        <div class="method-description">
+          
+          
+          
+          
+
+          
+          <div class="method-source-code" id="has_next-3F-source">
+            <pre><span class="ruby-comment"># File app/models/repository/albums.rb, line 47</span>
+<span class="ruby-keyword">def</span> <span class="ruby-identifier">has_next?</span> <span class="ruby-identifier">album</span>, <span class="ruby-identifier">track</span>
+    <span class="ruby-identifier">find_all_next</span>(<span class="ruby-identifier">album</span>, <span class="ruby-identifier">track</span>).<span class="ruby-identifier">any?</span>
+<span class="ruby-keyword">end</span></pre>
+          </div>
+          
+        </div>
+
+        
+
+        
+      </div>
+
+    
+      <div id="method-i-has_previous-3F" class="method-detail ">
+        
+        <div class="method-heading">
+          <span class="method-name">has_previous?</span><span
+            class="method-args">(album, track)</span>
+          
+          <span class="method-click-advice">click to toggle source</span>
+          
+        </div>
+        
+
+        <div class="method-description">
+          
+          
+          
+          
+
+          
+          <div class="method-source-code" id="has_previous-3F-source">
+            <pre><span class="ruby-comment"># File app/models/repository/albums.rb, line 43</span>
+<span class="ruby-keyword">def</span> <span class="ruby-identifier">has_previous?</span> <span class="ruby-identifier">album</span>, <span class="ruby-identifier">track</span>
+    <span class="ruby-identifier">find_all_previous</span>(<span class="ruby-identifier">album</span>, <span class="ruby-identifier">track</span>).<span class="ruby-identifier">any?</span>
 <span class="ruby-keyword">end</span></pre>
           </div>
           

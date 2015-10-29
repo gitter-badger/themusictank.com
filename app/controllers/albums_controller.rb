@@ -1,13 +1,12 @@
 class AlbumsController < ApplicationController
 
-    before_filter :load_object, :except => [:search]
-
-    after_filter :setup_object_meta, :except => [:search]
+    before_filter :load_object, :setup_object_meta, :except => [:search]
 
     layout "embed", :only => [:embed]
 
     def show
 
+        puts @meta.to_yaml
     end
 
     def search

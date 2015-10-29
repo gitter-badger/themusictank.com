@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20150227150540) do
+ActiveRecord::Schema.define(version: 20151029193508) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -84,6 +84,11 @@ ActiveRecord::Schema.define(version: 20150227150540) do
   end
 
   add_index "similar_artists", ["artist_id", "similar_artist_id"], name: "index_similar_artists_on_artist_id_and_similar_artist_id", unique: true, using: :btree
+
+  create_table "track_soundwaves", force: true do |t|
+    t.integer "track_id",  null: false
+    t.string  "soundwave"
+  end
 
   create_table "tracks", force: true do |t|
     t.string   "title"

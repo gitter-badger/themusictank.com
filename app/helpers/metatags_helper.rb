@@ -29,11 +29,9 @@ module MetatagsHelper
         tags << ''
 
 
-        # Theming
+        # Icons
         tags << '<link rel="apple-touch-icon" href="'+socialIcon+'">'
         tags << '<link rel="icon" href="'+socialIcon+'">'
-        tags << '<meta name="theme-color" content="#999999">'
-        tags << '<link rel="manifest" href="manifest.json">'
         tags << ''
 
         # Open graph
@@ -53,6 +51,10 @@ module MetatagsHelper
         tags << '<meta name="twitter:image:src" content="' + socialIcon + '">'
         tags << '<meta name="twitter:title" content="'+title+'">'
         tags << '<meta name="twitter:description" content="' + description + '">'
+
+
+        puts meta
+        puts "wtf"
 
         unless meta.nil? or meta['oembed_obj'].nil?
             tags << '<meta name="twitter:player" content="' + domain + '/embed/' + meta['oembed_obj'].class.name.downcase + "s/" + meta['oembed_obj'].slug + '">'

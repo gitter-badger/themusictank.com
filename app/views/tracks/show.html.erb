@@ -7,16 +7,16 @@
 <h1><%= link_to @track.title, controller: :tracks, action: :show, id: @track.slug %></h1>
 <h2><%= link_to @track.artist.name, controller: :artists, action: :show, id: @track.artist.slug  %></h2>
 
-<ul>
-    <li><%= t 'Appears on' %>:</li>
+<ul class="appears-on">
+    <li class="title"><%= t 'Appears on' %>:</li>
 <% @track.albums.each do |album| %>
-    <li>
+    <li<% if TracksHelper.isSameSource @version, album %> class="selected-version"<% end %>>
         <%= link_to image_tag(album.get_thumbnail_url, alt: album.title, title: album.title), controller: :albums, action: :show, id: album.slug %>
         <%= link_to album.title, controller: :albums, action: :show, id: album.slug %>
     </li>
 <% end %>
 </ul>
 
-<%= render partial: "review_button", locals: {track: @track} %>
+<%= render partial: "review_button", locals: {track: @track, album: @version} %>
 
 <%= render partial: "player", locals: {track: @track} %>

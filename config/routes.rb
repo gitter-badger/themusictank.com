@@ -17,6 +17,9 @@ Rails.application.routes.draw do
   match 'embed/artists/:id', :to => 'albums#embed', via: [:get]
   match 'embed/tracks/:id', :to => 'tracks#embed', via: [:get]
 
+  # Tracks with album context
+  match 'tracks/:id/:version', :to => 'tracks#show', via: [:get]
+
   resources :albums
   resources :artists
   resources :tracks

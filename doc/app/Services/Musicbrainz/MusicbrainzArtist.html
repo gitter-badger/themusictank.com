@@ -1,0 +1,448 @@
+<!DOCTYPE html>
+
+<html>
+<head>
+<meta charset="utf-8">
+
+<title>class Services::Musicbrainz::MusicbrainzArtist - Rails Application Documentation</title>
+
+<script type="text/javascript">
+  var rdoc_rel_prefix = "../../";
+</script>
+
+<script src="../../js/jquery.js"></script>
+<script src="../../js/darkfish.js"></script>
+
+<link href="../../css/fonts.css" rel="stylesheet">
+<link href="../../css/rdoc.css" rel="stylesheet">
+
+
+
+<body id="top" role="document" class="class">
+<nav role="navigation">
+  <div id="project-navigation">
+    <div id="home-section" role="region" title="Quick navigation" class="nav-section">
+  <h2>
+    <a href="../../index.html" rel="home">Home</a>
+  </h2>
+
+  <div id="table-of-contents-navigation">
+    <a href="../../table_of_contents.html#pages">Pages</a>
+    <a href="../../table_of_contents.html#classes">Classes</a>
+    <a href="../../table_of_contents.html#methods">Methods</a>
+  </div>
+</div>
+
+    <div id="search-section" role="search" class="project-section initially-hidden">
+  <form action="#" method="get" accept-charset="utf-8">
+    <div id="search-field-wrapper">
+      <input id="search-field" role="combobox" aria-label="Search"
+             aria-autocomplete="list" aria-controls="search-results"
+             type="text" name="search" placeholder="Search" spellcheck="false"
+             title="Type to search, Up and Down to navigate, Enter to load">
+    </div>
+
+    <ul id="search-results" aria-label="Search Results"
+        aria-busy="false" aria-expanded="false"
+        aria-atomic="false" class="initially-hidden"></ul>
+  </form>
+</div>
+
+  </div>
+
+  
+
+  <div id="class-metadata">
+    
+    <div id="parent-class-section" class="nav-section">
+  <h3>Parent</h3>
+
+  
+  <p class="link"><a href="Base.html">Services::Musicbrainz::Base</a>
+  
+</div>
+
+    
+    
+    <!-- Method Quickref -->
+<div id="method-list-section" class="nav-section">
+  <h3>Methods</h3>
+
+  <ul class="link-list" role="directory">
+    
+    <li ><a href="#method-c-find_or_create">::find_or_create</a>
+    
+    <li ><a href="#method-c-find_or_create_by_name">::find_or_create_by_name</a>
+    
+    <li ><a href="#method-c-find_or_create_by_names_list">::find_or_create_by_names_list</a>
+    
+    <li ><a href="#method-c-find_remote">::find_remote</a>
+    
+    <li ><a href="#method-c-find_remote_by_name">::find_remote_by_name</a>
+    
+    <li ><a href="#method-c-populate_discography">::populate_discography</a>
+    
+    <li ><a href="#method-c-update_expired">::update_expired</a>
+    
+    <li ><a href="#method-c-update_expired_artist">::update_expired_artist</a>
+    
+  </ul>
+</div>
+
+  </div>
+</nav>
+
+<main role="main" aria-labelledby="class-Services::Musicbrainz::MusicbrainzArtist">
+  <h1 id="class-Services::Musicbrainz::MusicbrainzArtist" class="class">
+    class Services::Musicbrainz::MusicbrainzArtist
+  </h1>
+
+  <section class="description">
+    
+<p>This class talks to the <a href="../Musicbrainz.html">Musicbrainz</a> API
+and generates artist entities from the API results</p>
+
+  </section>
+
+  
+  
+  
+  <section id="5Buntitled-5D" class="documentation-section">
+    
+
+    
+
+    
+
+    
+
+    
+     <section id="public-class-5Buntitled-5D-method-details" class="method-section">
+       <header>
+         <h3>Public Class Methods</h3>
+       </header>
+
+    
+      <div id="method-c-find_or_create" class="method-detail ">
+        
+        <div class="method-heading">
+          <span class="method-name">find_or_create</span><span
+            class="method-args">(mb_artist)</span>
+          
+          <span class="method-click-advice">click to toggle source</span>
+          
+        </div>
+        
+
+        <div class="method-description">
+          
+          <p>Finds or creates <a href="../../Artist.html">Artist</a> entities from
+standard <a href="../Musicbrainz.html">Musicbrainz</a> API return data.</p>
+          
+          
+
+          
+          <div class="method-source-code" id="find_or_create-source">
+            <pre><span class="ruby-comment"># File app/models/services/musicbrainz/musicbrainz_artist.rb, line 56</span>
+<span class="ruby-keyword">def</span> <span class="ruby-keyword">self</span>.<span class="ruby-identifier">find_or_create</span> <span class="ruby-identifier">mb_artist</span>
+    <span class="ruby-keyword">unless</span> <span class="ruby-identifier">mb_artist</span>.<span class="ruby-identifier">nil?</span> <span class="ruby-keyword">or</span> <span class="ruby-identifier">mb_artist</span>.<span class="ruby-identifier">id</span>.<span class="ruby-identifier">nil?</span>
+        <span class="ruby-identifier">log</span> <span class="ruby-node">&quot;Find or create artist with :mbid =&gt; #{mb_artist.id}&quot;</span>
+        <span class="ruby-constant">Artist</span>.<span class="ruby-identifier">where</span>(<span class="ruby-identifier">mbid</span><span class="ruby-operator">:</span> <span class="ruby-identifier">mb_artist</span>.<span class="ruby-identifier">id</span>).<span class="ruby-identifier">first_or_create!</span> <span class="ruby-keyword">do</span> <span class="ruby-operator">|</span><span class="ruby-identifier">artist</span><span class="ruby-operator">|</span>
+            <span class="ruby-identifier">warn</span> <span class="ruby-node">&quot;Artist &#39;#{mb_artist.name}&#39; (#{mb_artist.id}) did not exist.&quot;</span>
+            <span class="ruby-identifier">log</span> <span class="ruby-node">&quot;Creating &#39;#{mb_artist.name}&#39; (#{mb_artist.id})&quot;</span>
+            <span class="ruby-identifier">artist</span>.<span class="ruby-identifier">name</span> = <span class="ruby-identifier">mb_artist</span>.<span class="ruby-identifier">name</span>
+        <span class="ruby-keyword">end</span>
+    <span class="ruby-keyword">end</span>
+<span class="ruby-keyword">end</span></pre>
+          </div>
+          
+        </div>
+
+        
+
+        
+      </div>
+
+    
+      <div id="method-c-find_or_create_by_name" class="method-detail ">
+        
+        <div class="method-heading">
+          <span class="method-name">find_or_create_by_name</span><span
+            class="method-args">(artist_name)</span>
+          
+          <span class="method-click-advice">click to toggle source</span>
+          
+        </div>
+        
+
+        <div class="method-description">
+          
+          
+          
+          
+
+          
+          <div class="method-source-code" id="find_or_create_by_name-source">
+            <pre><span class="ruby-comment"># File app/models/services/musicbrainz/musicbrainz_artist.rb, line 50</span>
+<span class="ruby-keyword">def</span> <span class="ruby-keyword">self</span>.<span class="ruby-identifier">find_or_create_by_name</span> <span class="ruby-identifier">artist_name</span>
+    <span class="ruby-identifier">log</span> <span class="ruby-node">&quot;Find or create artist named &#39;#{artist_name}&#39;&quot;</span>
+    <span class="ruby-identifier">find_or_create</span> <span class="ruby-identifier">find_remote_by_name</span> <span class="ruby-identifier">artist_name</span>
+<span class="ruby-keyword">end</span></pre>
+          </div>
+          
+        </div>
+
+        
+
+        
+      </div>
+
+    
+      <div id="method-c-find_or_create_by_names_list" class="method-detail ">
+        
+        <div class="method-heading">
+          <span class="method-name">find_or_create_by_names_list</span><span
+            class="method-args">(artist_names)</span>
+          
+          <span class="method-click-advice">click to toggle source</span>
+          
+        </div>
+        
+
+        <div class="method-description">
+          
+          
+          
+          
+
+          
+          <div class="method-source-code" id="find_or_create_by_names_list-source">
+            <pre><span class="ruby-comment"># File app/models/services/musicbrainz/musicbrainz_artist.rb, line 41</span>
+<span class="ruby-keyword">def</span> <span class="ruby-keyword">self</span>.<span class="ruby-identifier">find_or_create_by_names_list</span> <span class="ruby-identifier">artist_names</span>
+    <span class="ruby-identifier">list</span> = <span class="ruby-constant">Array</span>.<span class="ruby-identifier">new</span>
+    <span class="ruby-identifier">artist_names</span>.<span class="ruby-identifier">each</span> <span class="ruby-keyword">do</span> <span class="ruby-operator">|</span><span class="ruby-identifier">name</span><span class="ruby-operator">|</span>
+        <span class="ruby-identifier">artist</span> = <span class="ruby-identifier">find_or_create_by_name</span> <span class="ruby-identifier">name</span>
+        <span class="ruby-identifier">list</span> <span class="ruby-operator">&lt;&lt;</span> <span class="ruby-identifier">artist</span> <span class="ruby-keyword">unless</span> <span class="ruby-identifier">artist</span>.<span class="ruby-identifier">id</span>.<span class="ruby-identifier">nil?</span>
+    <span class="ruby-keyword">end</span>
+    <span class="ruby-identifier">list</span>
+<span class="ruby-keyword">end</span></pre>
+          </div>
+          
+        </div>
+
+        
+
+        
+      </div>
+
+    
+      <div id="method-c-populate_discography" class="method-detail ">
+        
+        <div class="method-heading">
+          <span class="method-name">populate_discography</span><span
+            class="method-args">(artist)</span>
+          
+          <span class="method-click-advice">click to toggle source</span>
+          
+        </div>
+        
+
+        <div class="method-description">
+          
+          <p>Populates the discography of an artist entity.</p>
+          
+          
+
+          
+          <div class="method-source-code" id="populate_discography-source">
+            <pre><span class="ruby-comment"># File app/models/services/musicbrainz/musicbrainz_artist.rb, line 34</span>
+<span class="ruby-keyword">def</span> <span class="ruby-keyword">self</span>.<span class="ruby-identifier">populate_discography</span> <span class="ruby-identifier">artist</span>
+    <span class="ruby-identifier">remote_artist</span> = <span class="ruby-identifier">find_remote</span>(<span class="ruby-identifier">artist</span>)
+    <span class="ruby-keyword">unless</span> <span class="ruby-identifier">remote_artist</span>.<span class="ruby-identifier">nil?</span>
+        <span class="ruby-constant">Services</span><span class="ruby-operator">::</span><span class="ruby-constant">Musicbrainz</span><span class="ruby-operator">::</span><span class="ruby-constant">MusicbrainzAlbum</span>.<span class="ruby-identifier">save_and_filter_album_list</span> <span class="ruby-identifier">artist</span>, <span class="ruby-identifier">remote_artist</span>.<span class="ruby-identifier">release_groups</span>
+    <span class="ruby-keyword">end</span>
+<span class="ruby-keyword">end</span></pre>
+          </div>
+          
+        </div>
+
+        
+
+        
+      </div>
+
+    
+      <div id="method-c-update_expired" class="method-detail ">
+        
+        <div class="method-heading">
+          <span class="method-name">update_expired</span><span
+            class="method-args">()</span>
+          
+          <span class="method-click-advice">click to toggle source</span>
+          
+        </div>
+        
+
+        <div class="method-description">
+          
+          <p>Populates the artists with empty discographies by querying MusicBrainz&#39;
+database.</p>
+          
+          
+
+          
+          <div class="method-source-code" id="update_expired-source">
+            <pre><span class="ruby-comment"># File app/models/services/musicbrainz/musicbrainz_artist.rb, line 8</span>
+<span class="ruby-keyword">def</span> <span class="ruby-keyword">self</span>.<span class="ruby-identifier">update_expired</span>
+    <span class="ruby-identifier">expired</span> = <span class="ruby-constant">Artist</span>.<span class="ruby-identifier">find_expired_musicbrainz</span>.<span class="ruby-identifier">limit</span>(<span class="ruby-value">200</span>)
+    <span class="ruby-identifier">expired_count</span> = <span class="ruby-identifier">expired</span>.<span class="ruby-identifier">count</span>
+    <span class="ruby-identifier">log</span> <span class="ruby-node">&quot;Found #{expired_count} expired artists.&quot;</span>
+    <span class="ruby-keyword">if</span> <span class="ruby-identifier">expired_count</span> <span class="ruby-operator">&gt;</span> <span class="ruby-value">0</span>
+        <span class="ruby-identifier">expired</span>.<span class="ruby-identifier">each</span> <span class="ruby-keyword">do</span> <span class="ruby-operator">|</span><span class="ruby-identifier">artist</span><span class="ruby-operator">|</span>
+            <span class="ruby-identifier">update_expired_artist</span> <span class="ruby-identifier">artist</span>
+        <span class="ruby-keyword">end</span>
+    <span class="ruby-keyword">end</span>
+<span class="ruby-keyword">end</span></pre>
+          </div>
+          
+        </div>
+
+        
+
+        
+      </div>
+
+    
+      <div id="method-c-update_expired_artist" class="method-detail ">
+        
+        <div class="method-heading">
+          <span class="method-name">update_expired_artist</span><span
+            class="method-args">(artist)</span>
+          
+          <span class="method-click-advice">click to toggle source</span>
+          
+        </div>
+        
+
+        <div class="method-description">
+          
+          
+          
+          
+
+          
+          <div class="method-source-code" id="update_expired_artist-source">
+            <pre><span class="ruby-comment"># File app/models/services/musicbrainz/musicbrainz_artist.rb, line 19</span>
+<span class="ruby-keyword">def</span> <span class="ruby-keyword">self</span>.<span class="ruby-identifier">update_expired_artist</span> <span class="ruby-identifier">artist</span>
+    <span class="ruby-identifier">log</span> <span class="ruby-node">&quot;Updating #{artist.name}&#39;s discography&quot;</span>
+
+    <span class="ruby-keyword">begin</span>
+        <span class="ruby-identifier">populate_discography</span>(<span class="ruby-identifier">artist</span>)
+    <span class="ruby-keyword">rescue</span>
+        <span class="ruby-identifier">warn</span> <span class="ruby-node">&quot;Failed to parse the release date of #{artist.name}.&quot;</span>
+    <span class="ruby-keyword">end</span>
+
+    <span class="ruby-comment"># Consider the record updated no matter what happened.</span>
+    <span class="ruby-identifier">artist</span>.<span class="ruby-identifier">last_lastfm_update</span> = <span class="ruby-constant">DateTime</span>.<span class="ruby-identifier">now</span>
+    <span class="ruby-identifier">artist</span>.<span class="ruby-identifier">save</span>
+<span class="ruby-keyword">end</span></pre>
+          </div>
+          
+        </div>
+
+        
+
+        
+      </div>
+
+    
+    </section>
+  
+     <section id="protected-class-5Buntitled-5D-method-details" class="method-section">
+       <header>
+         <h3>Protected Class Methods</h3>
+       </header>
+
+    
+      <div id="method-c-find_remote" class="method-detail ">
+        
+        <div class="method-heading">
+          <span class="method-name">find_remote</span><span
+            class="method-args">(artist)</span>
+          
+          <span class="method-click-advice">click to toggle source</span>
+          
+        </div>
+        
+
+        <div class="method-description">
+          
+          <p>Finds an artist using the MusicBrainz API using the known fields in the
+artist entity.</p>
+          
+          
+
+          
+          <div class="method-source-code" id="find_remote-source">
+            <pre><span class="ruby-comment"># File app/models/services/musicbrainz/musicbrainz_artist.rb, line 71</span>
+<span class="ruby-keyword">def</span> <span class="ruby-keyword">self</span>.<span class="ruby-identifier">find_remote</span> <span class="ruby-identifier">artist</span>
+    <span class="ruby-identifier">log</span> <span class="ruby-node">&quot;&#39;find_by_name(#{artist.name})&#39;&quot;</span>
+    <span class="ruby-identifier">find_remote_by_name</span>(<span class="ruby-identifier">artist</span>.<span class="ruby-identifier">name</span>) <span class="ruby-keyword">unless</span> <span class="ruby-identifier">artist</span>.<span class="ruby-identifier">name</span>.<span class="ruby-identifier">nil?</span>
+<span class="ruby-keyword">end</span></pre>
+          </div>
+          
+        </div>
+
+        
+
+        
+      </div>
+
+    
+      <div id="method-c-find_remote_by_name" class="method-detail ">
+        
+        <div class="method-heading">
+          <span class="method-name">find_remote_by_name</span><span
+            class="method-args">(name)</span>
+          
+          <span class="method-click-advice">click to toggle source</span>
+          
+        </div>
+        
+
+        <div class="method-description">
+          
+          <p>Finds an artist using the MusicBrainz API using the known fields in the
+artist entity.</p>
+          
+          
+
+          
+          <div class="method-source-code" id="find_remote_by_name-source">
+            <pre><span class="ruby-comment"># File app/models/services/musicbrainz/musicbrainz_artist.rb, line 78</span>
+<span class="ruby-keyword">def</span> <span class="ruby-keyword">self</span>.<span class="ruby-identifier">find_remote_by_name</span> <span class="ruby-identifier">name</span>
+    <span class="ruby-identifier">log</span> <span class="ruby-node">&quot;&#39;find_remote_by_name(#{name})&#39;&quot;</span>
+    <span class="ruby-constant">MusicBrainz</span><span class="ruby-operator">::</span><span class="ruby-constant">Artist</span>.<span class="ruby-identifier">find_by_name</span>(<span class="ruby-identifier">name</span>)
+<span class="ruby-keyword">end</span></pre>
+          </div>
+          
+        </div>
+
+        
+
+        
+      </div>
+
+    
+    </section>
+  
+  </section>
+</main>
+
+
+<footer id="validator-badges" role="contentinfo">
+  <p><a href="http://validator.w3.org/check/referer">Validate</a>
+  <p>Generated by <a href="http://docs.seattlerb.org/rdoc/">RDoc</a> 4.2.0.
+  <p>Based on <a href="http://deveiate.org/projects/Darkfish-RDoc/">Darkfish</a> by <a href="http://deveiate.org">Michael Granger</a>.
+</footer>
+

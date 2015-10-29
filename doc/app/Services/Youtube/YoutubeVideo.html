@@ -1,0 +1,283 @@
+<!DOCTYPE html>
+
+<html>
+<head>
+<meta charset="utf-8">
+
+<title>class Services::Youtube::YoutubeVideo - Rails Application Documentation</title>
+
+<script type="text/javascript">
+  var rdoc_rel_prefix = "../../";
+</script>
+
+<script src="../../js/jquery.js"></script>
+<script src="../../js/darkfish.js"></script>
+
+<link href="../../css/fonts.css" rel="stylesheet">
+<link href="../../css/rdoc.css" rel="stylesheet">
+
+
+
+<body id="top" role="document" class="class">
+<nav role="navigation">
+  <div id="project-navigation">
+    <div id="home-section" role="region" title="Quick navigation" class="nav-section">
+  <h2>
+    <a href="../../index.html" rel="home">Home</a>
+  </h2>
+
+  <div id="table-of-contents-navigation">
+    <a href="../../table_of_contents.html#pages">Pages</a>
+    <a href="../../table_of_contents.html#classes">Classes</a>
+    <a href="../../table_of_contents.html#methods">Methods</a>
+  </div>
+</div>
+
+    <div id="search-section" role="search" class="project-section initially-hidden">
+  <form action="#" method="get" accept-charset="utf-8">
+    <div id="search-field-wrapper">
+      <input id="search-field" role="combobox" aria-label="Search"
+             aria-autocomplete="list" aria-controls="search-results"
+             type="text" name="search" placeholder="Search" spellcheck="false"
+             title="Type to search, Up and Down to navigate, Enter to load">
+    </div>
+
+    <ul id="search-results" aria-label="Search Results"
+        aria-busy="false" aria-expanded="false"
+        aria-atomic="false" class="initially-hidden"></ul>
+  </form>
+</div>
+
+  </div>
+
+  
+
+  <div id="class-metadata">
+    
+    <div id="parent-class-section" class="nav-section">
+  <h3>Parent</h3>
+
+  
+  <p class="link"><a href="../Base.html">Services::Base</a>
+  
+</div>
+
+    
+    
+    <!-- Method Quickref -->
+<div id="method-list-section" class="nav-section">
+  <h3>Methods</h3>
+
+  <ul class="link-list" role="directory">
+    
+    <li ><a href="#method-c-api_client">::api_client</a>
+    
+    <li ><a href="#method-c-build_query_string">::build_query_string</a>
+    
+    <li ><a href="#method-c-get_video_key">::get_video_key</a>
+    
+    <li ><a href="#method-c-parse_key">::parse_key</a>
+    
+  </ul>
+</div>
+
+  </div>
+</nav>
+
+<main role="main" aria-labelledby="class-Services::Youtube::YoutubeVideo">
+  <h1 id="class-Services::Youtube::YoutubeVideo" class="class">
+    class Services::Youtube::YoutubeVideo
+  </h1>
+
+  <section class="description">
+    
+<p>This class talks to <a href="../Youtube.html">Youtube</a> and pulls a valid
+video match</p>
+
+  </section>
+
+  
+  
+  
+  <section id="5Buntitled-5D" class="documentation-section">
+    
+
+    
+
+    
+
+    
+
+    
+     <section id="public-class-5Buntitled-5D-method-details" class="method-section">
+       <header>
+         <h3>Public Class Methods</h3>
+       </header>
+
+    
+      <div id="method-c-get_video_key" class="method-detail ">
+        
+        <div class="method-heading">
+          <span class="method-name">get_video_key</span><span
+            class="method-args">(track)</span>
+          
+          <span class="method-click-advice">click to toggle source</span>
+          
+        </div>
+        
+
+        <div class="method-description">
+          
+          
+          
+          
+
+          
+          <div class="method-source-code" id="get_video_key-source">
+            <pre><span class="ruby-comment"># File app/models/services/youtube/youtube_video.rb, line 9</span>
+<span class="ruby-keyword">def</span> <span class="ruby-keyword">self</span>.<span class="ruby-identifier">get_video_key</span> <span class="ruby-identifier">track</span>
+    <span class="ruby-keyword">if</span> <span class="ruby-constant">Track</span>.<span class="ruby-identifier">youtube_key_is_expired?</span> <span class="ruby-identifier">track</span>
+        <span class="ruby-identifier">api_client</span>.<span class="ruby-identifier">search</span>(<span class="ruby-identifier">maxResults</span><span class="ruby-operator">:</span> <span class="ruby-value">1</span>, <span class="ruby-identifier">query</span><span class="ruby-operator">:</span> <span class="ruby-identifier">build_query_string</span>(<span class="ruby-identifier">track</span>)) <span class="ruby-keyword">do</span> <span class="ruby-operator">|</span><span class="ruby-identifier">v</span><span class="ruby-operator">|</span>
+            <span class="ruby-identifier">track</span>.<span class="ruby-identifier">update_attributes</span>(
+                <span class="ruby-value">:youtube_key</span> =<span class="ruby-operator">&gt;</span> <span class="ruby-identifier">parse_key</span>(<span class="ruby-identifier">v</span>),
+                <span class="ruby-value">:last_youtube_update</span> =<span class="ruby-operator">&gt;</span> <span class="ruby-constant">DateTime</span>.<span class="ruby-identifier">now</span>,
+            )
+        <span class="ruby-keyword">end</span>
+    <span class="ruby-keyword">end</span>
+    <span class="ruby-identifier">track</span>.<span class="ruby-identifier">youtube_key</span>
+<span class="ruby-keyword">end</span></pre>
+          </div>
+          
+        </div>
+
+        
+
+        
+      </div>
+
+    
+    </section>
+  
+     <section id="protected-class-5Buntitled-5D-method-details" class="method-section">
+       <header>
+         <h3>Protected Class Methods</h3>
+       </header>
+
+    
+      <div id="method-c-api_client" class="method-detail ">
+        
+        <div class="method-heading">
+          <span class="method-name">api_client</span><span
+            class="method-args">()</span>
+          
+          <span class="method-click-advice">click to toggle source</span>
+          
+        </div>
+        
+
+        <div class="method-description">
+          
+          
+          
+          
+
+          
+          <div class="method-source-code" id="api_client-source">
+            <pre><span class="ruby-comment"># File app/models/services/youtube/youtube_video.rb, line 23</span>
+<span class="ruby-keyword">def</span> <span class="ruby-keyword">self</span>.<span class="ruby-identifier">api_client</span>
+    <span class="ruby-constant">Yourub</span><span class="ruby-operator">::</span><span class="ruby-constant">Client</span>.<span class="ruby-identifier">new</span>({
+        <span class="ruby-identifier">developer_key</span><span class="ruby-operator">:</span> <span class="ruby-constant">ENV</span>[<span class="ruby-string">&quot;Youtube_key&quot;</span>],
+        <span class="ruby-identifier">youtube_api_version</span><span class="ruby-operator">:</span> <span class="ruby-string">&#39;v3&#39;</span>,
+        <span class="ruby-identifier">youtube_api_service_name</span><span class="ruby-operator">:</span> <span class="ruby-string">&#39;youtube&#39;</span>,
+        <span class="ruby-identifier">application_name</span><span class="ruby-operator">:</span> <span class="ruby-string">&#39;yourub&#39;</span>,
+        <span class="ruby-identifier">application_version</span><span class="ruby-operator">:</span> <span class="ruby-string">&#39;0.1&#39;</span>
+    })
+<span class="ruby-keyword">end</span></pre>
+          </div>
+          
+        </div>
+
+        
+
+        
+      </div>
+
+    
+      <div id="method-c-build_query_string" class="method-detail ">
+        
+        <div class="method-heading">
+          <span class="method-name">build_query_string</span><span
+            class="method-args">(track)</span>
+          
+          <span class="method-click-advice">click to toggle source</span>
+          
+        </div>
+        
+
+        <div class="method-description">
+          
+          
+          
+          
+
+          
+          <div class="method-source-code" id="build_query_string-source">
+            <pre><span class="ruby-comment"># File app/models/services/youtube/youtube_video.rb, line 34</span>
+<span class="ruby-keyword">def</span> <span class="ruby-keyword">self</span>.<span class="ruby-identifier">build_query_string</span> <span class="ruby-identifier">track</span>
+    <span class="ruby-node">&quot;#{track.albums.first.artist.name}-#{track.title}&quot;</span>
+<span class="ruby-keyword">end</span></pre>
+          </div>
+          
+        </div>
+
+        
+
+        
+      </div>
+
+    
+      <div id="method-c-parse_key" class="method-detail ">
+        
+        <div class="method-heading">
+          <span class="method-name">parse_key</span><span
+            class="method-args">(response)</span>
+          
+          <span class="method-click-advice">click to toggle source</span>
+          
+        </div>
+        
+
+        <div class="method-description">
+          
+          
+          
+          
+
+          
+          <div class="method-source-code" id="parse_key-source">
+            <pre><span class="ruby-comment"># File app/models/services/youtube/youtube_video.rb, line 38</span>
+<span class="ruby-keyword">def</span> <span class="ruby-keyword">self</span>.<span class="ruby-identifier">parse_key</span> <span class="ruby-identifier">response</span>
+    <span class="ruby-identifier">response</span>[<span class="ruby-string">&quot;id&quot;</span>]
+<span class="ruby-keyword">end</span></pre>
+          </div>
+          
+        </div>
+
+        
+
+        
+      </div>
+
+    
+    </section>
+  
+  </section>
+</main>
+
+
+<footer id="validator-badges" role="contentinfo">
+  <p><a href="http://validator.w3.org/check/referer">Validate</a>
+  <p>Generated by <a href="http://docs.seattlerb.org/rdoc/">RDoc</a> 4.2.0.
+  <p>Based on <a href="http://deveiate.org/projects/Darkfish-RDoc/">Darkfish</a> by <a href="http://deveiate.org">Michael Granger</a>.
+</footer>
+

@@ -60,3 +60,7 @@ gem 'musicbrainz'
 # Load up an Amazon S3 client
 # https://github.com/qoobaa/s3
 gem 's3'
+
+# A wav analyzer
+# http://wavefilegem.com/
+gem 'wavefile'

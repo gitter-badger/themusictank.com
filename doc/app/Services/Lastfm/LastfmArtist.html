@@ -1,0 +1,551 @@
+<!DOCTYPE html>
+
+<html>
+<head>
+<meta charset="utf-8">
+
+<title>class Services::Lastfm::LastfmArtist - Rails Application Documentation</title>
+
+<script type="text/javascript">
+  var rdoc_rel_prefix = "../../";
+</script>
+
+<script src="../../js/jquery.js"></script>
+<script src="../../js/darkfish.js"></script>
+
+<link href="../../css/fonts.css" rel="stylesheet">
+<link href="../../css/rdoc.css" rel="stylesheet">
+
+
+
+<body id="top" role="document" class="class">
+<nav role="navigation">
+  <div id="project-navigation">
+    <div id="home-section" role="region" title="Quick navigation" class="nav-section">
+  <h2>
+    <a href="../../index.html" rel="home">Home</a>
+  </h2>
+
+  <div id="table-of-contents-navigation">
+    <a href="../../table_of_contents.html#pages">Pages</a>
+    <a href="../../table_of_contents.html#classes">Classes</a>
+    <a href="../../table_of_contents.html#methods">Methods</a>
+  </div>
+</div>
+
+    <div id="search-section" role="search" class="project-section initially-hidden">
+  <form action="#" method="get" accept-charset="utf-8">
+    <div id="search-field-wrapper">
+      <input id="search-field" role="combobox" aria-label="Search"
+             aria-autocomplete="list" aria-controls="search-results"
+             type="text" name="search" placeholder="Search" spellcheck="false"
+             title="Type to search, Up and Down to navigate, Enter to load">
+    </div>
+
+    <ul id="search-results" aria-label="Search Results"
+        aria-busy="false" aria-expanded="false"
+        aria-atomic="false" class="initially-hidden"></ul>
+  </form>
+</div>
+
+  </div>
+
+  
+
+  <div id="class-metadata">
+    
+    <div id="parent-class-section" class="nav-section">
+  <h3>Parent</h3>
+
+  
+  <p class="link"><a href="Base.html">Services::Lastfm::Base</a>
+  
+</div>
+
+    
+    
+    <!-- Method Quickref -->
+<div id="method-list-section" class="nav-section">
+  <h3>Methods</h3>
+
+  <ul class="link-list" role="directory">
+    
+    <li ><a href="#method-c-append_remote_data">::append_remote_data</a>
+    
+    <li ><a href="#method-c-find_or_create">::find_or_create</a>
+    
+    <li ><a href="#method-c-find_remote_artist">::find_remote_artist</a>
+    
+    <li ><a href="#method-c-format_similar_arists">::format_similar_arists</a>
+    
+    <li ><a href="#method-c-generate_top_artists_datalist">::generate_top_artists_datalist</a>
+    
+    <li ><a href="#method-c-prepare_similar_artists_by_names">::prepare_similar_artists_by_names</a>
+    
+    <li ><a href="#method-c-remote_top_artists">::remote_top_artists</a>
+    
+    <li ><a href="#method-c-update_artist_profile">::update_artist_profile</a>
+    
+    <li ><a href="#method-c-update_expired">::update_expired</a>
+    
+    <li ><a href="#method-c-update_tmt_top_artists">::update_tmt_top_artists</a>
+    
+  </ul>
+</div>
+
+  </div>
+</nav>
+
+<main role="main" aria-labelledby="class-Services::Lastfm::LastfmArtist">
+  <h1 id="class-Services::Lastfm::LastfmArtist" class="class">
+    class Services::Lastfm::LastfmArtist
+  </h1>
+
+  <section class="description">
+    
+<p>This class talks to the <a href="../Lastfm.html">Lastfm</a> API and
+generates artist entities from the API results</p>
+
+  </section>
+
+  
+  
+  
+  <section id="5Buntitled-5D" class="documentation-section">
+    
+
+    
+
+    
+
+    
+
+    
+     <section id="public-class-5Buntitled-5D-method-details" class="method-section">
+       <header>
+         <h3>Public Class Methods</h3>
+       </header>
+
+    
+      <div id="method-c-find_or_create" class="method-detail ">
+        
+        <div class="method-heading">
+          <span class="method-name">find_or_create</span><span
+            class="method-args">(lfm_artist)</span>
+          
+          <span class="method-click-advice">click to toggle source</span>
+          
+        </div>
+        
+
+        <div class="method-description">
+          
+          <p>Finds or creates <a href="../../Artist.html">Artist</a> entities from
+standard LastFM API return data. Only saves artists when a musicbrainz id
+is passed through.</p>
+          
+          
+
+          
+          <div class="method-source-code" id="find_or_create-source">
+            <pre><span class="ruby-comment"># File app/models/services/lastfm/lastfm_artist.rb, line 42</span>
+<span class="ruby-keyword">def</span> <span class="ruby-keyword">self</span>.<span class="ruby-identifier">find_or_create</span> <span class="ruby-identifier">lfm_artist</span>
+    <span class="ruby-keyword">unless</span> <span class="ruby-identifier">lfm_artist</span>[<span class="ruby-string">&quot;mbid&quot;</span>].<span class="ruby-identifier">empty?</span>
+        <span class="ruby-constant">Artist</span>.<span class="ruby-identifier">where</span>(<span class="ruby-identifier">mbid</span><span class="ruby-operator">:</span> <span class="ruby-identifier">lfm_artist</span>[<span class="ruby-string">&quot;mbid&quot;</span>]).<span class="ruby-identifier">first_or_create!</span> <span class="ruby-keyword">do</span> <span class="ruby-operator">|</span><span class="ruby-identifier">artist</span><span class="ruby-operator">|</span>
+            <span class="ruby-identifier">artist</span>.<span class="ruby-identifier">name</span> = <span class="ruby-identifier">lfm_artist</span>[<span class="ruby-string">&quot;name&quot;</span>]
+            <span class="ruby-identifier">artist</span>.<span class="ruby-identifier">last_lastfm_update</span> = <span class="ruby-value">1</span>.<span class="ruby-identifier">month</span>.<span class="ruby-identifier">ago</span>
+        <span class="ruby-keyword">end</span>
+    <span class="ruby-keyword">end</span>
+<span class="ruby-keyword">end</span></pre>
+          </div>
+          
+        </div>
+
+        
+
+        
+      </div>
+
+    
+      <div id="method-c-update_artist_profile" class="method-detail ">
+        
+        <div class="method-heading">
+          <span class="method-name">update_artist_profile</span><span
+            class="method-args">(artist)</span>
+          
+          <span class="method-click-advice">click to toggle source</span>
+          
+        </div>
+        
+
+        <div class="method-description">
+          
+          <p>Updates a TMT artist profile from the information on LastFM</p>
+          
+          
+
+          
+          <div class="method-source-code" id="update_artist_profile-source">
+            <pre><span class="ruby-comment"># File app/models/services/lastfm/lastfm_artist.rb, line 29</span>
+<span class="ruby-keyword">def</span> <span class="ruby-keyword">self</span>.<span class="ruby-identifier">update_artist_profile</span> <span class="ruby-identifier">artist</span>
+    <span class="ruby-identifier">remote_data</span> = <span class="ruby-identifier">find_remote_artist</span>(<span class="ruby-identifier">artist</span>)
+    <span class="ruby-keyword">unless</span> <span class="ruby-identifier">remote_data</span>.<span class="ruby-identifier">nil?</span>
+        <span class="ruby-identifier">artist</span> = <span class="ruby-identifier">append_remote_data</span> <span class="ruby-identifier">artist</span>, <span class="ruby-identifier">remote_data</span>
+    <span class="ruby-keyword">end</span>
+
+    <span class="ruby-comment"># Consider the record updated no matter what happened.</span>
+    <span class="ruby-identifier">artist</span>.<span class="ruby-identifier">last_lastfm_update</span> = <span class="ruby-constant">DateTime</span>.<span class="ruby-identifier">now</span>
+    <span class="ruby-identifier">artist</span>.<span class="ruby-identifier">save</span>
+<span class="ruby-keyword">end</span></pre>
+          </div>
+          
+        </div>
+
+        
+
+        
+      </div>
+
+    
+      <div id="method-c-update_expired" class="method-detail ">
+        
+        <div class="method-heading">
+          <span class="method-name">update_expired</span><span
+            class="method-args">()</span>
+          
+          <span class="method-click-advice">click to toggle source</span>
+          
+        </div>
+        
+
+        <div class="method-description">
+          
+          <p>Updates expired artists on TMT.</p>
+          
+          
+
+          
+          <div class="method-source-code" id="update_expired-source">
+            <pre><span class="ruby-comment"># File app/models/services/lastfm/lastfm_artist.rb, line 15</span>
+<span class="ruby-keyword">def</span> <span class="ruby-keyword">self</span>.<span class="ruby-identifier">update_expired</span>
+    <span class="ruby-identifier">expired</span> = <span class="ruby-constant">Artist</span>.<span class="ruby-identifier">find_expired_lastfm</span>.<span class="ruby-identifier">limit</span>(<span class="ruby-value">300</span>) <span class="ruby-comment"># we aint got all day son</span>
+    <span class="ruby-identifier">expired_count</span> = <span class="ruby-identifier">expired</span>.<span class="ruby-identifier">count</span>
+
+    <span class="ruby-identifier">log</span> <span class="ruby-node">&quot;Found #{expired_count} expired artists.&quot;</span>
+    <span class="ruby-keyword">if</span> <span class="ruby-identifier">expired_count</span> <span class="ruby-operator">&gt;</span> <span class="ruby-value">0</span>
+        <span class="ruby-identifier">expired</span>.<span class="ruby-identifier">each</span> <span class="ruby-keyword">do</span> <span class="ruby-operator">|</span><span class="ruby-identifier">artist</span><span class="ruby-operator">|</span>
+            <span class="ruby-identifier">log</span> <span class="ruby-node">&quot;Updating #{artist.name}&quot;</span>
+            <span class="ruby-identifier">update_artist_profile</span> <span class="ruby-identifier">artist</span>
+        <span class="ruby-keyword">end</span>
+    <span class="ruby-keyword">end</span>
+<span class="ruby-keyword">end</span></pre>
+          </div>
+          
+        </div>
+
+        
+
+        
+      </div>
+
+    
+      <div id="method-c-update_tmt_top_artists" class="method-detail ">
+        
+        <div class="method-heading">
+          <span class="method-name">update_tmt_top_artists</span><span
+            class="method-args">()</span>
+          
+          <span class="method-click-advice">click to toggle source</span>
+          
+        </div>
+        
+
+        <div class="method-description">
+          
+          <p>Update the list of popular artists on TMT.</p>
+          
+          
+
+          
+          <div class="method-source-code" id="update_tmt_top_artists-source">
+            <pre><span class="ruby-comment"># File app/models/services/lastfm/lastfm_artist.rb, line 8</span>
+<span class="ruby-keyword">def</span> <span class="ruby-keyword">self</span>.<span class="ruby-identifier">update_tmt_top_artists</span>
+    <span class="ruby-identifier">artists</span> = <span class="ruby-identifier">remote_top_artists</span>
+    <span class="ruby-constant">Artist</span>.<span class="ruby-identifier">update_popular</span> <span class="ruby-identifier">artists</span>
+    <span class="ruby-identifier">artists</span>
+<span class="ruby-keyword">end</span></pre>
+          </div>
+          
+        </div>
+
+        
+
+        
+      </div>
+
+    
+    </section>
+  
+     <section id="protected-class-5Buntitled-5D-method-details" class="method-section">
+       <header>
+         <h3>Protected Class Methods</h3>
+       </header>
+
+    
+      <div id="method-c-append_remote_data" class="method-detail ">
+        
+        <div class="method-heading">
+          <span class="method-name">append_remote_data</span><span
+            class="method-args">(artist, remote)</span>
+          
+          <span class="method-click-advice">click to toggle source</span>
+          
+        </div>
+        
+
+        <div class="method-description">
+          
+          
+          
+          
+
+          
+          <div class="method-source-code" id="append_remote_data-source">
+            <pre><span class="ruby-comment"># File app/models/services/lastfm/lastfm_artist.rb, line 104</span>
+<span class="ruby-keyword">def</span> <span class="ruby-keyword">self</span>.<span class="ruby-identifier">append_remote_data</span> <span class="ruby-identifier">artist</span>, <span class="ruby-identifier">remote</span>
+    <span class="ruby-identifier">artist</span>.<span class="ruby-identifier">thumbnail_source</span> = <span class="ruby-identifier">remote</span>[<span class="ruby-string">&quot;image&quot;</span>][ <span class="ruby-identifier">remote</span>[<span class="ruby-string">&quot;image&quot;</span>].<span class="ruby-identifier">length</span> <span class="ruby-operator">-</span> <span class="ruby-value">1</span> ][<span class="ruby-string">&#39;#text&#39;</span>]
+    <span class="ruby-identifier">artist</span>.<span class="ruby-identifier">bio</span> = <span class="ruby-identifier">remote</span>[<span class="ruby-string">&quot;bio&quot;</span>][<span class="ruby-string">&quot;summary&quot;</span>]
+
+    <span class="ruby-identifier">formatted_artists</span> = <span class="ruby-identifier">format_similar_arists</span> <span class="ruby-identifier">remote</span>[<span class="ruby-string">&#39;similar&#39;</span>][<span class="ruby-string">&#39;artist&#39;</span>]
+    <span class="ruby-identifier">artist</span>.<span class="ruby-identifier">similar_artists</span> = <span class="ruby-identifier">prepare_similar_artists_by_names</span> <span class="ruby-identifier">formatted_artists</span>
+
+    <span class="ruby-identifier">artist</span>
+<span class="ruby-keyword">end</span></pre>
+          </div>
+          
+        </div>
+
+        
+
+        
+      </div>
+
+    
+      <div id="method-c-find_remote_artist" class="method-detail ">
+        
+        <div class="method-heading">
+          <span class="method-name">find_remote_artist</span><span
+            class="method-args">(artist)</span>
+          
+          <span class="method-click-advice">click to toggle source</span>
+          
+        </div>
+        
+
+        <div class="method-description">
+          
+          <p>Fetches artist details on LastFM based on a name.</p>
+          
+          
+
+          
+          <div class="method-source-code" id="find_remote_artist-source">
+            <pre><span class="ruby-comment"># File app/models/services/lastfm/lastfm_artist.rb, line 65</span>
+<span class="ruby-keyword">def</span> <span class="ruby-keyword">self</span>.<span class="ruby-identifier">find_remote_artist</span> <span class="ruby-identifier">artist</span>
+    <span class="ruby-identifier">log</span> <span class="ruby-node">&quot;Sending API request to &#39;get_info(:artist=&gt; #{artist.name}, :mbid =&gt; #{artist.mbid})&#39;&quot;</span>
+    <span class="ruby-keyword">begin</span>
+        <span class="ruby-constant">LastFM</span><span class="ruby-operator">::</span><span class="ruby-constant">Artist</span>.<span class="ruby-identifier">get_info</span>(<span class="ruby-value">:artist=</span><span class="ruby-operator">&gt;</span> <span class="ruby-identifier">artist</span>.<span class="ruby-identifier">name</span>, <span class="ruby-value">:mbid</span> =<span class="ruby-operator">&gt;</span> <span class="ruby-identifier">artist</span>.<span class="ruby-identifier">mbid</span>)[<span class="ruby-string">&quot;artist&quot;</span>]
+    <span class="ruby-keyword">rescue</span>
+        <span class="ruby-identifier">warn</span> <span class="ruby-string">&quot;Api request failed&quot;</span>
+        <span class="ruby-keyword">nil</span>
+    <span class="ruby-keyword">end</span>
+<span class="ruby-keyword">end</span></pre>
+          </div>
+          
+        </div>
+
+        
+
+        
+      </div>
+
+    
+      <div id="method-c-format_similar_arists" class="method-detail ">
+        
+        <div class="method-heading">
+          <span class="method-name">format_similar_arists</span><span
+            class="method-args">(remote_data)</span>
+          
+          <span class="method-click-advice">click to toggle source</span>
+          
+        </div>
+        
+
+        <div class="method-description">
+          
+          
+          
+          
+
+          
+          <div class="method-source-code" id="format_similar_arists-source">
+            <pre><span class="ruby-comment"># File app/models/services/lastfm/lastfm_artist.rb, line 114</span>
+<span class="ruby-keyword">def</span> <span class="ruby-keyword">self</span>.<span class="ruby-identifier">format_similar_arists</span> <span class="ruby-identifier">remote_data</span>
+
+    <span class="ruby-identifier">similar_artists</span> = <span class="ruby-identifier">remote_data</span>
+
+    <span class="ruby-comment"># Lastfm API sends only one uncontained result</span>
+    <span class="ruby-comment"># when there aren&#39;t multiple similar artists.</span>
+    <span class="ruby-keyword">if</span> <span class="ruby-operator">!</span><span class="ruby-identifier">remote_data</span>.<span class="ruby-identifier">nil?</span> <span class="ruby-operator">&amp;&amp;</span> <span class="ruby-operator">!</span><span class="ruby-identifier">remote_data</span>.<span class="ruby-identifier">is_a?</span>(<span class="ruby-constant">Array</span>) <span class="ruby-operator">&amp;&amp;</span> <span class="ruby-identifier">remote_data</span>.<span class="ruby-identifier">has_key?</span>(<span class="ruby-string">&quot;name&quot;</span>)
+        <span class="ruby-identifier">similar_artists</span> = <span class="ruby-constant">Array</span>.<span class="ruby-identifier">new</span>
+        <span class="ruby-identifier">similar_artists</span> <span class="ruby-operator">&lt;&lt;</span> <span class="ruby-identifier">remote_data</span>
+    <span class="ruby-keyword">end</span>
+
+    <span class="ruby-identifier">similar_artists</span>
+<span class="ruby-keyword">end</span></pre>
+          </div>
+          
+        </div>
+
+        
+
+        
+      </div>
+
+    
+      <div id="method-c-generate_top_artists_datalist" class="method-detail ">
+        
+        <div class="method-heading">
+          <span class="method-name">generate_top_artists_datalist</span><span
+            class="method-args">(data)</span>
+          
+          <span class="method-click-advice">click to toggle source</span>
+          
+        </div>
+        
+
+        <div class="method-description">
+          
+          <p>Formats a resultset of API data into a known data structure</p>
+          
+          
+
+          
+          <div class="method-source-code" id="generate_top_artists_datalist-source">
+            <pre><span class="ruby-comment"># File app/models/services/lastfm/lastfm_artist.rb, line 76</span>
+<span class="ruby-keyword">def</span> <span class="ruby-keyword">self</span>.<span class="ruby-identifier">generate_top_artists_datalist</span> <span class="ruby-identifier">data</span>
+    <span class="ruby-identifier">list</span> = <span class="ruby-constant">Array</span>.<span class="ruby-identifier">new</span>
+    <span class="ruby-identifier">data</span>[<span class="ruby-string">&quot;artists&quot;</span>][<span class="ruby-string">&quot;artist&quot;</span>].<span class="ruby-identifier">each</span> <span class="ruby-keyword">do</span> <span class="ruby-operator">|</span><span class="ruby-identifier">artistData</span><span class="ruby-operator">|</span>
+        <span class="ruby-identifier">artist</span> = <span class="ruby-identifier">find_or_create</span>(<span class="ruby-identifier">artistData</span>)
+        <span class="ruby-identifier">list</span> <span class="ruby-operator">&lt;&lt;</span> <span class="ruby-identifier">find_or_create</span>(<span class="ruby-identifier">artist</span>) <span class="ruby-keyword">unless</span> <span class="ruby-identifier">artist</span>.<span class="ruby-identifier">nil?</span>
+    <span class="ruby-keyword">end</span>
+    <span class="ruby-identifier">list</span>
+<span class="ruby-keyword">end</span></pre>
+          </div>
+          
+        </div>
+
+        
+
+        
+      </div>
+
+    
+      <div id="method-c-prepare_similar_artists_by_names" class="method-detail ">
+        
+        <div class="method-heading">
+          <span class="method-name">prepare_similar_artists_by_names</span><span
+            class="method-args">(names)</span>
+          
+          <span class="method-click-advice">click to toggle source</span>
+          
+        </div>
+        
+
+        <div class="method-description">
+          
+          
+          
+          
+
+          
+          <div class="method-source-code" id="prepare_similar_artists_by_names-source">
+            <pre><span class="ruby-comment"># File app/models/services/lastfm/lastfm_artist.rb, line 85</span>
+<span class="ruby-keyword">def</span> <span class="ruby-keyword">self</span>.<span class="ruby-identifier">prepare_similar_artists_by_names</span> <span class="ruby-identifier">names</span>
+    <span class="ruby-identifier">similar_artists</span> = <span class="ruby-constant">Array</span>.<span class="ruby-identifier">new</span>
+    <span class="ruby-identifier">similar_artist_ids</span> = <span class="ruby-constant">Array</span>.<span class="ruby-identifier">new</span>
+
+    <span class="ruby-keyword">if</span> <span class="ruby-operator">!</span><span class="ruby-identifier">names</span>.<span class="ruby-identifier">nil?</span> <span class="ruby-operator">&amp;&amp;</span> <span class="ruby-identifier">names</span>.<span class="ruby-identifier">length</span> <span class="ruby-operator">&gt;</span> <span class="ruby-value">0</span>
+        <span class="ruby-identifier">log</span> <span class="ruby-string">&quot;Starting similar artists loop.&quot;</span>
+        <span class="ruby-identifier">names</span>.<span class="ruby-identifier">each</span> <span class="ruby-keyword">do</span> <span class="ruby-operator">|</span><span class="ruby-identifier">similar</span><span class="ruby-operator">|</span>
+            <span class="ruby-identifier">similar_artist</span> = <span class="ruby-constant">Services</span><span class="ruby-operator">::</span><span class="ruby-constant">Musicbrainz</span><span class="ruby-operator">::</span><span class="ruby-constant">MusicbrainzArtist</span>.<span class="ruby-identifier">find_or_create_by_name</span> <span class="ruby-identifier">similar</span>[<span class="ruby-string">&#39;name&#39;</span>]
+            <span class="ruby-keyword">unless</span> <span class="ruby-identifier">similar_artist</span>.<span class="ruby-identifier">nil?</span> <span class="ruby-keyword">or</span> <span class="ruby-identifier">similar_artist</span>.<span class="ruby-identifier">id</span>.<span class="ruby-identifier">nil?</span> <span class="ruby-keyword">or</span> <span class="ruby-identifier">similar_artist_ids</span>.<span class="ruby-identifier">include?</span> <span class="ruby-identifier">similar_artist</span>.<span class="ruby-identifier">id</span>
+                <span class="ruby-identifier">similar_artist_ids</span> <span class="ruby-operator">&lt;&lt;</span> <span class="ruby-identifier">similar_artist</span>.<span class="ruby-identifier">id</span>
+                <span class="ruby-identifier">similar_artists</span> <span class="ruby-operator">&lt;&lt;</span> <span class="ruby-identifier">similar_artist</span>
+            <span class="ruby-keyword">end</span>
+        <span class="ruby-keyword">end</span>
+    <span class="ruby-keyword">else</span>
+        <span class="ruby-identifier">log</span> <span class="ruby-string">&quot;No similar artists given.&quot;</span>
+    <span class="ruby-keyword">end</span>
+    <span class="ruby-identifier">similar_artists</span>
+<span class="ruby-keyword">end</span></pre>
+          </div>
+          
+        </div>
+
+        
+
+        
+      </div>
+
+    
+      <div id="method-c-remote_top_artists" class="method-detail ">
+        
+        <div class="method-heading">
+          <span class="method-name">remote_top_artists</span><span
+            class="method-args">()</span>
+          
+          <span class="method-click-advice">click to toggle source</span>
+          
+        </div>
+        
+
+        <div class="method-description">
+          
+          <p>Fetches the list of current top artists on LastFm.</p>
+          
+          
+
+          
+          <div class="method-source-code" id="remote_top_artists-source">
+            <pre><span class="ruby-comment"># File app/models/services/lastfm/lastfm_artist.rb, line 55</span>
+<span class="ruby-keyword">def</span> <span class="ruby-keyword">self</span>.<span class="ruby-identifier">remote_top_artists</span>
+    <span class="ruby-identifier">log</span> <span class="ruby-string">&quot;Sending API request to &#39;get_top_artists()&#39;&quot;</span>
+
+    <span class="ruby-comment"># [Achievement unlocked : Cultural Victory]</span>
+    <span class="ruby-comment"># Default to united states as the country of the top artists because</span>
+    <span class="ruby-comment"># no one cares what&#39;s hot elsewhere it would seem.</span>
+    <span class="ruby-identifier">generate_top_artists_datalist</span> <span class="ruby-constant">LastFM</span><span class="ruby-operator">::</span><span class="ruby-constant">Chart</span>.<span class="ruby-identifier">get_top_artists</span> <span class="ruby-value">:country</span> =<span class="ruby-operator">&gt;</span> <span class="ruby-string">&quot;United States&quot;</span>
+<span class="ruby-keyword">end</span></pre>
+          </div>
+          
+        </div>
+
+        
+
+        
+      </div>
+
+    
+    </section>
+  
+  </section>
+</main>
+
+
+<footer id="validator-badges" role="contentinfo">
+  <p><a href="http://validator.w3.org/check/referer">Validate</a>
+  <p>Generated by <a href="http://docs.seattlerb.org/rdoc/">RDoc</a> 4.2.0.
+  <p>Based on <a href="http://deveiate.org/projects/Darkfish-RDoc/">Darkfish</a> by <a href="http://deveiate.org">Michael Granger</a>.
+</footer>
+

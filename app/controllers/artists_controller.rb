@@ -1,8 +1,6 @@
 class ArtistsController < ApplicationController
 
-    before_filter :load_object, :except => [:search, :index]
-
-    after_filter :setup_object_meta, :except => [:search, :index]
+    before_filter :load_object, :setup_object_meta, :except => [:search, :index]
 
     layout "embed", :only => [:embed]
 

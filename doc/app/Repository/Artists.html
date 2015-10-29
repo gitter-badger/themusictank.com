@@ -55,7 +55,34 @@
   <div id="class-metadata">
     
     
-    
+    <div id="includes-section" class="nav-section">
+  <h3>Included Modules</h3>
+
+  <ul class="link-list">
+  
+  
+    <li><a class="include" href="Behavior/Thumbnailed.html">Repository::Behavior::Thumbnailed</a>
+  
+  
+  
+    <li><a class="include" href="Behavior/Slugged.html">Repository::Behavior::Slugged</a>
+  
+  
+  
+    <li><a class="include" href="Behavior/Lastfmd.html">Repository::Behavior::Lastfmd</a>
+  
+  
+  
+    <li><a class="include" href="Behavior/Musicbrainzed.html">Repository::Behavior::Musicbrainzed</a>
+  
+  
+  
+    <li><a class="include" href="Behavior/Searchable.html">Repository::Behavior::Searchable</a>
+  
+  
+  </ul>
+</div>
+
     
     <!-- Method Quickref -->
 <div id="method-list-section" class="nav-section">
@@ -63,15 +90,15 @@
 
   <ul class="link-list" role="directory">
     
-    <li ><a href="#method-i-entity_exists-3F">#entity_exists?</a>
+    <li ><a href="#method-i-find_popular">#find_popular</a>
     
-    <li ><a href="#method-i-find_with_discographies">#find_with_discographies</a>
+    <li ><a href="#method-i-find_random_popular">#find_random_popular</a>
     
-    <li ><a href="#method-i-find_with_empty_discographies">#find_with_empty_discographies</a>
+    <li ><a href="#method-i-make_all_unpopular">#make_all_unpopular</a>
     
-    <li ><a href="#method-i-populate_entity">#populate_entity</a>
+    <li ><a href="#method-i-search_order_field">#search_order_field</a>
     
-    <li ><a href="#method-i-preload_set">#preload_set</a>
+    <li ><a href="#method-i-search_where_field">#search_where_field</a>
     
     <li ><a href="#method-i-update_popular">#update_popular</a>
     
@@ -111,47 +138,10 @@
        </header>
 
     
-      <div id="method-i-entity_exists-3F" class="method-detail ">
+      <div id="method-i-find_popular" class="method-detail ">
         
         <div class="method-heading">
-          <span class="method-name">entity_exists?</span><span
-            class="method-args">(artist)</span>
-          
-          <span class="method-click-advice">click to toggle source</span>
-          
-        </div>
-        
-
-        <div class="method-description">
-          
-          <p>Checks if the entity has been saved based on known attributes.</p>
-          
-          
-
-          
-          <div class="method-source-code" id="entity_exists-3F-source">
-            <pre><span class="ruby-comment"># File app/models/repository/artists.rb, line 31</span>
-<span class="ruby-keyword">def</span> <span class="ruby-identifier">entity_exists?</span> <span class="ruby-identifier">artist</span>
-    <span class="ruby-keyword">return</span> <span class="ruby-constant">Artist</span>.<span class="ruby-identifier">exists?</span>(<span class="ruby-identifier">artist</span>.<span class="ruby-identifier">id</span>) <span class="ruby-keyword">unless</span> <span class="ruby-identifier">artist</span>.<span class="ruby-identifier">id</span>.<span class="ruby-identifier">nil?</span>
-    <span class="ruby-keyword">return</span> <span class="ruby-constant">Artist</span>.<span class="ruby-identifier">exists?</span>(<span class="ruby-identifier">mbid</span><span class="ruby-operator">:</span> <span class="ruby-identifier">artist</span>.<span class="ruby-identifier">mbid</span>) <span class="ruby-keyword">unless</span> <span class="ruby-identifier">artist</span>.<span class="ruby-identifier">mbid</span>.<span class="ruby-identifier">nil?</span>
-    <span class="ruby-keyword">return</span> <span class="ruby-constant">Artist</span>.<span class="ruby-identifier">exists?</span>(<span class="ruby-identifier">name</span><span class="ruby-operator">:</span> <span class="ruby-identifier">artist</span>.<span class="ruby-identifier">name</span>) <span class="ruby-keyword">unless</span> <span class="ruby-identifier">artist</span>.<span class="ruby-identifier">name</span>.<span class="ruby-identifier">nil?</span>
-    <span class="ruby-keyword">return</span> <span class="ruby-constant">Artist</span>.<span class="ruby-identifier">exists?</span>(<span class="ruby-identifier">slug</span><span class="ruby-operator">:</span> <span class="ruby-identifier">artist</span>.<span class="ruby-identifier">slug</span>) <span class="ruby-keyword">unless</span> <span class="ruby-identifier">artist</span>.<span class="ruby-identifier">slug</span>.<span class="ruby-identifier">nil?</span>
-    <span class="ruby-keyword">false</span>
-<span class="ruby-keyword">end</span></pre>
-          </div>
-          
-        </div>
-
-        
-
-        
-      </div>
-
-    
-      <div id="method-i-find_with_discographies" class="method-detail ">
-        
-        <div class="method-heading">
-          <span class="method-name">find_with_discographies</span><span
+          <span class="method-name">find_popular</span><span
             class="method-args">()</span>
           
           <span class="method-click-advice">click to toggle source</span>
@@ -161,48 +151,15 @@
 
         <div class="method-description">
           
-          <p>Lists artists that have discographies.</p>
+          <p>Returns a list of popular artists</p>
           
           
 
           
-          <div class="method-source-code" id="find_with_discographies-source">
-            <pre><span class="ruby-comment"># File app/models/repository/artists.rb, line 26</span>
-<span class="ruby-keyword">def</span> <span class="ruby-identifier">find_with_discographies</span>
-    <span class="ruby-constant">Artist</span>.<span class="ruby-identifier">joins</span>(<span class="ruby-value">:albums</span>).<span class="ruby-identifier">group</span>(<span class="ruby-string">&quot;artists.id&quot;</span>)
-<span class="ruby-keyword">end</span></pre>
-          </div>
-          
-        </div>
-
-        
-
-        
-      </div>
-
-    
-      <div id="method-i-find_with_empty_discographies" class="method-detail ">
-        
-        <div class="method-heading">
-          <span class="method-name">find_with_empty_discographies</span><span
-            class="method-args">()</span>
-          
-          <span class="method-click-advice">click to toggle source</span>
-          
-        </div>
-        
-
-        <div class="method-description">
-          
-          <p>Lists artists that have no discography attached.</p>
-          
-          
-
-          
-          <div class="method-source-code" id="find_with_empty_discographies-source">
+          <div class="method-source-code" id="find_popular-source">
             <pre><span class="ruby-comment"># File app/models/repository/artists.rb, line 21</span>
-<span class="ruby-keyword">def</span> <span class="ruby-identifier">find_with_empty_discographies</span>
-    <span class="ruby-constant">Artist</span>.<span class="ruby-identifier">where</span>([<span class="ruby-string">&#39;id not in (?)&#39;</span>, <span class="ruby-identifier">find_with_discographies</span>.<span class="ruby-identifier">select</span>(<span class="ruby-string">&quot;id&quot;</span>) ])
+<span class="ruby-keyword">def</span> <span class="ruby-identifier">find_popular</span>
+    <span class="ruby-constant">Artist</span>.<span class="ruby-identifier">where</span>(<span class="ruby-value">:is_popular</span> =<span class="ruby-operator">&gt;</span> <span class="ruby-value">1</span>)
 <span class="ruby-keyword">end</span></pre>
           </div>
           
@@ -214,11 +171,11 @@
       </div>
 
     
-      <div id="method-i-populate_entity" class="method-detail ">
+      <div id="method-i-find_random_popular" class="method-detail ">
         
         <div class="method-heading">
-          <span class="method-name">populate_entity</span><span
-            class="method-args">(artist)</span>
+          <span class="method-name">find_random_popular</span><span
+            class="method-args">(qty = 20)</span>
           
           <span class="method-click-advice">click to toggle source</span>
           
@@ -227,66 +184,133 @@
 
         <div class="method-description">
           
-          <p>Loads the entity based on known attributes.</p>
+          <p>Finds a list of the qty first popular artist by random order.</p>
           
           
 
           
-          <div class="method-source-code" id="populate_entity-source">
-            <pre><span class="ruby-comment"># File app/models/repository/artists.rb, line 40</span>
-<span class="ruby-keyword">def</span> <span class="ruby-identifier">populate_entity</span> <span class="ruby-identifier">artist</span>
+          <div class="method-source-code" id="find_random_popular-source">
+            <pre><span class="ruby-comment"># File app/models/repository/artists.rb, line 26</span>
+<span class="ruby-keyword">def</span> <span class="ruby-identifier">find_random_popular</span> <span class="ruby-identifier">qty</span> = <span class="ruby-value">20</span>
 
-    <span class="ruby-identifier">dbArtist</span> = <span class="ruby-keyword">nil</span>
-    <span class="ruby-identifier">dbArtist</span> = <span class="ruby-constant">Artist</span>.<span class="ruby-identifier">find_by_mbid</span>(<span class="ruby-identifier">artist</span>.<span class="ruby-identifier">mbid</span>) <span class="ruby-keyword">unless</span> <span class="ruby-identifier">artist</span>.<span class="ruby-identifier">mbid</span>.<span class="ruby-identifier">nil?</span> <span class="ruby-keyword">or</span> <span class="ruby-operator">!</span><span class="ruby-identifier">dbArtist</span>.<span class="ruby-identifier">nil?</span>
-    <span class="ruby-identifier">dbArtist</span> = <span class="ruby-constant">Artist</span>.<span class="ruby-identifier">find_by_name</span>(<span class="ruby-identifier">artist</span>.<span class="ruby-identifier">name</span>) <span class="ruby-keyword">unless</span> <span class="ruby-identifier">artist</span>.<span class="ruby-identifier">name</span>.<span class="ruby-identifier">nil?</span> <span class="ruby-keyword">or</span> <span class="ruby-operator">!</span><span class="ruby-identifier">dbArtist</span>.<span class="ruby-identifier">nil?</span>
-    <span class="ruby-identifier">dbArtist</span> = <span class="ruby-constant">Artist</span>.<span class="ruby-identifier">find_by_slug</span>(<span class="ruby-identifier">artist</span>.<span class="ruby-identifier">slug</span>) <span class="ruby-keyword">unless</span> <span class="ruby-identifier">artist</span>.<span class="ruby-identifier">slug</span>.<span class="ruby-identifier">nil?</span> <span class="ruby-keyword">or</span> <span class="ruby-operator">!</span><span class="ruby-identifier">dbArtist</span>.<span class="ruby-identifier">nil?</span>
+    <span class="ruby-identifier">random_ids</span> = [<span class="ruby-value">-1</span>]
+    <span class="ruby-identifier">random_set</span> = <span class="ruby-constant">Array</span>.<span class="ruby-identifier">new</span>
+    <span class="ruby-identifier">popular</span> = <span class="ruby-identifier">find_popular</span>
+    <span class="ruby-identifier">popular_count</span> = <span class="ruby-identifier">popular</span>.<span class="ruby-identifier">count</span>
 
-    <span class="ruby-comment"># When we have loaded a matching artist using the unique keys,</span>
-    <span class="ruby-comment"># ensure</span>
-    <span class="ruby-keyword">unless</span> <span class="ruby-identifier">dbArtist</span>.<span class="ruby-identifier">nil?</span> <span class="ruby-keyword">or</span> <span class="ruby-operator">!</span><span class="ruby-identifier">dbArtist</span>.<span class="ruby-identifier">is_a?</span> <span class="ruby-constant">Artist</span>
-        <span class="ruby-identifier">artist</span>.<span class="ruby-identifier">assign_attributes</span>(<span class="ruby-identifier">dbArtist</span>.<span class="ruby-identifier">attributes</span>)
-    <span class="ruby-keyword">end</span>
-
-    <span class="ruby-identifier">artist</span>
-<span class="ruby-keyword">end</span></pre>
-          </div>
-          
-        </div>
-
-        
-
-        
-      </div>
-
-    
-      <div id="method-i-preload_set" class="method-detail ">
-        
-        <div class="method-heading">
-          <span class="method-name">preload_set</span><span
-            class="method-args">(entities)</span>
-          
-          <span class="method-click-advice">click to toggle source</span>
-          
-        </div>
-        
-
-        <div class="method-description">
-          
-          <p>Ensures artists have a local version saved.</p>
-          
-          
-
-          
-          <div class="method-source-code" id="preload_set-source">
-            <pre><span class="ruby-comment"># File app/models/repository/artists.rb, line 5</span>
-<span class="ruby-keyword">def</span> <span class="ruby-identifier">preload_set</span> <span class="ruby-identifier">entities</span>
-    <span class="ruby-identifier">entities</span>.<span class="ruby-identifier">each_with_index</span> <span class="ruby-keyword">do</span> <span class="ruby-operator">|</span><span class="ruby-identifier">entity</span>, <span class="ruby-identifier">idx</span><span class="ruby-operator">|</span>
-        <span class="ruby-keyword">unless</span> <span class="ruby-identifier">entity_exists?</span>(<span class="ruby-identifier">entity</span>)
-            <span class="ruby-identifier">entity</span>.<span class="ruby-identifier">save!</span>
-        <span class="ruby-keyword">else</span>
-            <span class="ruby-identifier">entities</span>[<span class="ruby-identifier">idx</span>] = <span class="ruby-identifier">populate_entity</span> <span class="ruby-identifier">entity</span>
+    <span class="ruby-keyword">if</span> <span class="ruby-identifier">popular_count</span> <span class="ruby-operator">&gt;</span> <span class="ruby-value">0</span>
+        <span class="ruby-identifier">log</span> <span class="ruby-string">&quot;Starting loop for random ids.&quot;</span>
+        <span class="ruby-keyword">while</span> <span class="ruby-identifier">random_ids</span>.<span class="ruby-identifier">length</span> <span class="ruby-operator">&lt;</span> <span class="ruby-identifier">qty</span> <span class="ruby-keyword">or</span> <span class="ruby-identifier">random_ids</span>.<span class="ruby-identifier">length</span> <span class="ruby-operator">&gt;=</span> <span class="ruby-identifier">popular_count</span>
+            <span class="ruby-identifier">how_many_left</span> = <span class="ruby-identifier">popular_count</span> <span class="ruby-operator">-</span> <span class="ruby-identifier">random_ids</span>.<span class="ruby-identifier">length</span>
+            <span class="ruby-identifier">random_offset</span> = <span class="ruby-identifier">rand</span>(<span class="ruby-identifier">how_many_left</span>)
+            <span class="ruby-identifier">match</span> = <span class="ruby-identifier">popular</span>.<span class="ruby-identifier">where</span>(<span class="ruby-string">&#39;id NOT IN (?)&#39;</span>, <span class="ruby-identifier">random_ids</span>).<span class="ruby-identifier">offset</span>(<span class="ruby-identifier">random_offset</span>).<span class="ruby-identifier">first</span>
+            <span class="ruby-keyword">unless</span> <span class="ruby-identifier">match</span>.<span class="ruby-identifier">nil?</span>
+                <span class="ruby-identifier">random_ids</span> <span class="ruby-operator">&lt;&lt;</span> <span class="ruby-identifier">match</span>.<span class="ruby-identifier">id</span>
+                <span class="ruby-identifier">random_set</span> <span class="ruby-operator">&lt;&lt;</span> <span class="ruby-identifier">match</span>
+            <span class="ruby-keyword">end</span>
         <span class="ruby-keyword">end</span>
     <span class="ruby-keyword">end</span>
+
+    <span class="ruby-identifier">random_set</span>
+<span class="ruby-keyword">end</span></pre>
+          </div>
+          
+        </div>
+
+        
+
+        
+      </div>
+
+    
+      <div id="method-i-make_all_unpopular" class="method-detail ">
+        
+        <div class="method-heading">
+          <span class="method-name">make_all_unpopular</span><span
+            class="method-args">()</span>
+          
+          <span class="method-click-advice">click to toggle source</span>
+          
+        </div>
+        
+
+        <div class="method-description">
+          
+          
+          
+          
+
+          
+          <div class="method-source-code" id="make_all_unpopular-source">
+            <pre><span class="ruby-comment"># File app/models/repository/artists.rb, line 16</span>
+<span class="ruby-keyword">def</span> <span class="ruby-identifier">make_all_unpopular</span>
+    <span class="ruby-constant">Artist</span>.<span class="ruby-identifier">update_all</span>(<span class="ruby-value">:is_popular</span> =<span class="ruby-operator">&gt;</span> <span class="ruby-value">0</span>)
+<span class="ruby-keyword">end</span></pre>
+          </div>
+          
+        </div>
+
+        
+
+        
+      </div>
+
+    
+      <div id="method-i-search_order_field" class="method-detail ">
+        
+        <div class="method-heading">
+          <span class="method-name">search_order_field</span><span
+            class="method-args">()</span>
+          
+          <span class="method-click-advice">click to toggle source</span>
+          
+        </div>
+        
+
+        <div class="method-description">
+          
+          
+          
+          
+
+          
+          <div class="method-source-code" id="search_order_field-source">
+            <pre><span class="ruby-comment"># File app/models/repository/artists.rb, line 53</span>
+<span class="ruby-keyword">def</span> <span class="ruby-identifier">search_order_field</span>
+    <span class="ruby-value">:name</span>
+<span class="ruby-keyword">end</span></pre>
+          </div>
+          
+        </div>
+
+        
+
+        
+      </div>
+
+    
+      <div id="method-i-search_where_field" class="method-detail ">
+        
+        <div class="method-heading">
+          <span class="method-name">search_where_field</span><span
+            class="method-args">()</span>
+          
+          <span class="method-click-advice">click to toggle source</span>
+          
+        </div>
+        
+
+        <div class="method-description">
+          
+          
+          
+          
+
+          
+          <div class="method-source-code" id="search_where_field-source">
+            <pre><span class="ruby-comment"># File app/models/repository/artists.rb, line 49</span>
+<span class="ruby-keyword">def</span> <span class="ruby-identifier">search_where_field</span>
+    <span class="ruby-string">&quot;name&quot;</span>
 <span class="ruby-keyword">end</span></pre>
           </div>
           
@@ -317,9 +341,10 @@
 
           
           <div class="method-source-code" id="update_popular-source">
-            <pre><span class="ruby-comment"># File app/models/repository/artists.rb, line 16</span>
+            <pre><span class="ruby-comment"># File app/models/repository/artists.rb, line 11</span>
 <span class="ruby-keyword">def</span> <span class="ruby-identifier">update_popular</span> <span class="ruby-identifier">artists</span>
-    <span class="ruby-constant">Artist</span>.<span class="ruby-identifier">update_all</span>([<span class="ruby-string">&quot;is_popular = id in (?)&quot;</span>, <span class="ruby-identifier">artists</span>.<span class="ruby-identifier">map</span>(<span class="ruby-operator">&amp;</span><span class="ruby-value">:id</span>)])
+    <span class="ruby-identifier">make_all_unpopular</span>
+    <span class="ruby-constant">Artist</span>.<span class="ruby-identifier">where</span>(<span class="ruby-value">:id</span> =<span class="ruby-operator">&gt;</span> <span class="ruby-identifier">artists</span>.<span class="ruby-identifier">map</span>(<span class="ruby-operator">&amp;</span><span class="ruby-value">:id</span>)).<span class="ruby-identifier">update_all</span>(<span class="ruby-value">:is_popular</span> =<span class="ruby-operator">&gt;</span> <span class="ruby-value">1</span>)
 <span class="ruby-keyword">end</span></pre>
           </div>
           

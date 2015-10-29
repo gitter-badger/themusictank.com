@@ -6,7 +6,8 @@ module Repository
 
             # Lists artists than haven't been updated in a while on Musicbrainz
             def find_expired_musicbrainz
-                where 'last_mb_update < ? or last_mb_update is null', musicbrainz_expiration_date
+                where('last_mb_update < ? or last_mb_update is null', musicbrainz_expiration_date)
+                .order(created_at: :asc)
             end
 
             # Update MB every week in other to catch new releases

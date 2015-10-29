@@ -14,7 +14,7 @@
     <ul>
         <% @album.tracks.each do |track| %>
         <li>
-            <%= link_to track.title, controller: :tracks, action: :show, id: track.slug  %>
+            <%= link_to track.title, controller: :tracks, action: :show, id: track.slug, version: @album.slug  %>
         </li>
         <% end %>
     </ul>

@@ -1,11 +1,14 @@
 <!DOCTYPE html>
 <html>
 <head>
-<%= ApplicationHelper.to_meta_tags @meta, request %>
+<%= MetatagsHelper.to_meta_tags @meta, request %>
 <%= csrf_meta_tags %>
+
 <%= stylesheet_link_tag 'application', media: 'all' %>
+
+<%= yield :header %>
 </head>
-<body class="<%= action_name %>">
+<body class="embeded <%= action_name %>">
 
 <%= yield %>
 

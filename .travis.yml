@@ -1,18 +1,24 @@
-language: php
+---
+language: node_js
+node_js:
+  - "4"
 
 sudo: false
 
-php:
-  - 5.4
-  - 5.5
-  - 5.6
+cache:
+  directories:
+    - $HOME/.npm
+    - $HOME/.cache # includes bowers cache
 
-before_script:
-  - sh -c "composer require 'cakephp/cakephp-codesniffer:dev-master'"
-  - phpenv rehash
+before_install:
+  - npm config set spin false
+  - npm install -g bower phantomjs-prebuilt
+  - bower --version
+  - phantomjs --version
+
+install:
+  - npm install
+  - bower install
 
 script:
-  - sh -c "vendor/bin/phpcs -p --extensions=php --standard=vendor/cakephp/cakephp-codesniffer/CakePHP ./src ./tests ./config ./webroot"
-
-notifications:
-  email: false
+  - npm test

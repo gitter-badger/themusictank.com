@@ -20,3 +20,4 @@ Route::get('albums/{slug}', "AlbumController@show");
 Route::get('tracks/{slug}', "TrackController@show");
 
 Route::get('ajax/bugreport', "AjaxController@bugreport");
+Route::get('ajax/ytkey/{slug}', "AjaxController@ytkey");

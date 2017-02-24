@@ -2,8 +2,10 @@
 
 namespace App\Models;
 
-class Albums extends RestModel
+use App\Models\Restful\Model;
+
+class Albums extends Model
 {
-    protected $hasMany = ["tracks" => "App\Models\Entities\Track"];
-    protected $belongsTo = ["artist" => "App\Models\Entities\Artist"];
+    public $hasMany = ["tracks" => "App\Models\Entities\Track"];
+    public $belongsTo = ["artist" => "App\Models\Entities\Artist"];
 }

@@ -2,7 +2,9 @@
 
 namespace App\Models;
 
-class Artists extends RestModel
+use App\Models\Restful\Model;
+
+class Artists extends Model
 {
-    protected $hasMany = ["albums" => "App\Models\Entities\Album"];
+    public $hasMany = ["albums" => "App\Models\Entities\Album"];
 }

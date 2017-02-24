@@ -1,5 +1,5 @@
 @if (isset($track))
-    <div data-attr="tmt-player">
+    <div data-attr="tmt-player" data-song-slug="{{ $track->slug }}" data-song-vid="{{ isset($track->youtube_key) ? $track->youtube_key : "" }}">
         <div class="progress-wrap">
             <div class="progress">
             <div class="progress-bar loaded-bar" role="progressbar" aria-valuenow="0" aria-valuemin="0" aria-valuemax="{{ $track->length }}" style="width: 0%;"></div>
@@ -7,7 +7,7 @@
             </div>
         <div class="cursor"></div>
         </div>
-        <i class="play fa fa-stop"></i>
+        <i class="play fa fa-stop">Play</i>
         <div class="times">
             <span class="position"> -:--</span> / <span class="duration"> -:--</span>
         </div>

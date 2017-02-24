@@ -1,6 +1,3 @@
-
-window.tmt = {};
-
 jQuery(function () {
 
     var $ = window.jQuery;
@@ -138,5 +135,3 @@ function onYouTubePlayerAPIReady() {
     player.addEventListener('onStateChange', tmt.onPlayerStateChange.bind(player));
 }
 
-
-//# sourceMappingURL=app.js.map

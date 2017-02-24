@@ -2,9 +2,11 @@
 
 namespace App\Models;
 
-class Tracks extends RestModel
+use App\Models\Restful\Model;
+
+class Tracks extends Model
 {
-    protected $belongsTo = [
+    public $belongsTo = [
         "artist" => "App\Models\Entities\Artist",
         "album" => "App\Models\Entities\Album"
     ];

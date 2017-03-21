@@ -24,6 +24,17 @@ class ModelParser
         $this->belongsTo = $obj->belongsTo;
     }
 
+    public function formatException($response)
+    {
+        $data = json_decode($response->getBody(), true);
+
+        if (is_array($data) && array_key_exists("error", $data)) {
+            return new Exception($data["error"]["message"]);
+        }
+
+        return new Exception("Request to API has failed.");
+    }
+
     protected function getEntity()
     {
         $reflection = new ReflectionClass($this->classContext);
@@ -65,7 +76,7 @@ class ModelParser
         }
 
         if (isset($data->id)) {
-            return $this->wrapEntity($data);
+            return $this->wrapEntity($data, $this->getEntity());
         }
 
         return $data;

@@ -3,6 +3,7 @@
 namespace App\Models\Restful;
 
 use GuzzleHttp\Client;
+use GuzzleHttp\Exception\ClientException;
 
 class Model
 {
@@ -53,11 +54,15 @@ class Model
         return $this->cache->get();
     }
 
-    // public function post($endpoint, $data = [])
-    // {
-    //     $response = $this->client->post($endpoint, $this->appendAccessToken($data));
-    //     return $this->parseResponseToJson($response);
-    // }
+    public function post($endpoint, $data = [])
+    {
+        try {
+            $response = $this->client->post($endpoint, $this->appendAccessToken($data));
+            return $this->parser->parseResponse($response);
+        } catch (ClientException $e) {
+            throw $this->parser->formatException($e->getResponse());
+        }
+    }
 
     // public function patch($endpoint, $data = [])
     // {

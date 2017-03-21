@@ -78,5 +78,6 @@
 
 	<script src="{{ elixir('assets/js/vendor.js') }}"></script>
 	<script src="{{ elixir('assets/js/app.js') }}"></script>
+    <script>jQuery(function(){(new tmt.App({})).init();});</script>
 </body>
 </html>

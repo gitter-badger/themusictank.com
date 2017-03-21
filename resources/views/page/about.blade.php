@@ -22,33 +22,24 @@
 
 @section('content')
 <div class="header-wrapper map">
-    <div id="mapCanvas" class="cover-image"></div>
+    <i id="mapCanvas"></i>
     <i class="mask"></i>
     <article>
         * Based in <a href="https://goo.gl/maps/7NQ1r" target="_blank" rel="noopener noreferrer">Montreal</a>
     </article>
 </div>
 
-<article class="container">
-
-    <div class="row">
-        <div class="col-md-12 introduction">
-            <h1>About Us</h1>
-            <p class="lead">We want to give you an easy and fun way to rate tracks and albums accurately. By integrating with various music streaming service, we aspire to collect opinions on the music you listen to.</p>
-        </div>
-    </div>
+<article>
+    <section class="introduction">
+        <h1>About Us</h1>
+        <p>We want to give you an easy and fun way to rate tracks and albums organically and accurately. By integrating with various music streaming service, we aspire to collect opinions on the music you listen to.</p>
+    </section>
 
     <section class="team">
-        <div class="row">
-            <div class="col-md-12">
-                <h2>Meet the team</h2>
+        <h2>Meet the team</h2>
 
-                <div class="lead">
-                    <p>First launched on the 30th of December 1999, The Music Tank has always been around under a form or another.</p>
-                    <p>We are a team of music enthusiasts who work together to build a place where people come hang out and discuss music.</p>
-                </div>
-            </div>
-        </div>
+        <p class="lead">First launched on the 30th of December 1999, The Music Tank has always been around under a form or another.</p>
+        <p class="lead">We are a team of music enthusiasts who work together to build a place where people come hang out and discuss music.</p>
 
         <div class="row">
             <div class="col-md-3">

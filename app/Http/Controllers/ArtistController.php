@@ -6,16 +6,17 @@ use App\Models\Artists;
 
 class ArtistController extends Controller
 {
+    public function index()
+    {
+        $featuredArtists = Artists::api()->findTopFeatured();
+        $spotlightArtist = array_pop($featuredArtists);
+
+        return view('artists.index', compact('spotlightArtist', 'featuredArtists'));
+    }
+
     public function show($slug)
     {
-        $artist = Artists::api()->first("artists", [
-            "query" => [
-                "filter" => [
-                    "where" => ["slug" =>  $slug],
-                    "include" => "albums"
-                ]
-            ]
-        ]);
+        $artist = Artists::api()->findBySlug($slug);
 
         if (!$artist) {
             return abort(404);

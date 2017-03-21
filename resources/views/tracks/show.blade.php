@@ -30,6 +30,9 @@
     </h3>
 </section>
 
+
+@include('partials.buttons.upvote', ['type' => "track", 'id' => $track->id, 'artistid' => $track->artist->id])
+
 @include('partials.player', ['track' => $track])
 
 <section class="stats">
@@ -39,6 +42,4 @@
 @endsection
 
 <%= render partial: "review_button", locals: {track: @track, album: @version} %>
-
-<%= render partial: "player", locals: {track: @track} %>
 

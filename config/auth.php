@@ -13,10 +13,11 @@ return [
     |
     */
 
-    // 'defaults' => [
-    //     'guard' => 'web',
-    //     'passwords' => 'users',
-    // ],
+    'defaults' => [
+        'guard' => 'web',
+        'passwords' => 'users',
+    ],
+
 
     /*
     |--------------------------------------------------------------------------
@@ -35,17 +36,16 @@ return [
     |
     */
 
-    // 'guards' => [
-    //     'web' => [
-    //         'driver' => 'session',
-    //         'provider' => 'users',
-    //     ],
-
-    //     'api' => [
-    //         'driver' => 'token',
-    //         'provider' => 'users',
-    //     ],
-    // ],
+    'guards' => [
+        'web' => [
+            'driver' => 'session',
+            'provider' => 'api_users',
+        ],
+        // 'api' => [
+        //     'driver' => 'session',
+        //     'provider' => 'api_users',
+        // ],
+    ],
 
     /*
     |--------------------------------------------------------------------------
@@ -64,17 +64,12 @@ return [
     |
     */
 
-    // 'providers' => [
-    //     'users' => [
-    //         'driver' => 'eloquent',
-    //         'model' => App\User::class,
-    //     ],
-
-    //     // 'users' => [
-    //     //     'driver' => 'database',
-    //     //     'table' => 'users',
-    //     // ],
-    // ],
+    'providers' => [
+        'api_users' => [
+            'driver' => 'TmtAuth',
+            'model' => App\Auth\User::class,
+        ],
+    ],
 
     /*
     |--------------------------------------------------------------------------

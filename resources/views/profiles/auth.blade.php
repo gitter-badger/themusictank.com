@@ -1,7 +1,6 @@
 @extends('app')
 
-@section('body-class', 'profiles login')
-
+@section('body-class', 'profiles auth')
 
 @section('content')
 
@@ -22,7 +21,7 @@
             </li>
             <li>
                 <a href="{{ action('ProfileController@login') }}">
-                    <i class="fa fa-facebook-square"></i> Login with TMT account
+                    <i class="fa fa-facebook-square"></i> Login with a TMT account
                 </a>
             </li>
             <li>

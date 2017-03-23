@@ -3,7 +3,9 @@
 namespace App\Http\Controllers;
 
 use Exception;
-use App\Models\Profiles;
+use App\Models\ApiSessionToken;
+use App\Auth\User;
+use Illuminate\Support\Facades\Auth;
 
 class ProfileController extends Controller
 {
@@ -19,6 +21,7 @@ class ProfileController extends Controller
 
     public function login()
     {
+        session(['_previous' => redirect()->back()]);
         return view('profiles.login');
     }
 
@@ -27,24 +30,8 @@ class ProfileController extends Controller
         return view('profiles.dashboard');
     }
 
-    public function tmtlogin()
+    public function create()
     {
-        try {
-            $request = request();
-            $account = Profiles::api()->login(
-                $request->input('email'),
-                $request->input('password')
-            );
-            // start user session
-
-            var_dump($account);
-
-          //  return redirect()->action('ProfileController@dashboard');
-        } catch (Exception $e) {
-            return redirect()->action('ProfileController@login')
-                ->withErrors([$e->getMessage()])
-                ->with('email', $request->input('email'));
-        }
+        return view('profiles.create');
     }
-
 }

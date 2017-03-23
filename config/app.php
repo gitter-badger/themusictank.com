@@ -178,6 +178,7 @@ return [
         App\Providers\RouteServiceProvider::class,
 
         'Collective\Html\HtmlServiceProvider',
+        App\Providers\TmtAuthServiceProvider::class,
     ],
 
     /*

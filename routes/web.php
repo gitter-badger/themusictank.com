@@ -34,16 +34,20 @@ Route::post('ajax/upvote/{type}', "AjaxController@upvote");
 
 // Profiles
 Route::get('profiles/dashboard', "ProfileController@dashboard")->middleware('auth');
-Route::get('profiles/edit', "ProfileController@edit")->middleware('auth');;
+Route::get('profiles/edit', "ProfileController@edit")->middleware('auth');
 
 Route::get('profiles/', "ProfileController@auth");
 Route::get('profiles/login', "ProfileController@login");
-Route::post('profiles/tmtlogin', "ProfileController@tmtlogin");
+Route::get('profiles/logout', "Auth\LoginController@logout");
 Route::get('profiles/facebook', "ProfileController@facebook");
-Route::get('profiles/logout', "ProfileController@logout");
 Route::get('profiles/create', "ProfileController@create");
+
+Route::post('profiles/login', "Auth\LoginController@login");
+Route::post('profiles/create', "ProfileController@create");
+
+// Notifications
+Route::get('notifications', "NotificationController@index")->middleware('auth');
+
 
 // User areas
 Route::get('tankers/{slug}', "ProfileController@show");
-
-

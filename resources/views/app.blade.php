@@ -39,9 +39,13 @@
             <input class="typeahead" type="text" name="q" value="" placeholder="Search across everything" />
             <input type="submit" name="search" />
         </form>
+
         <nav>
             <ul>
                 <li><a href="/artists/">Artists</a></li>
+                @include('partials.usermenu', ['user' => auth()->user()])
+            </ul>
+
             </ul>
         </nav>
     </header>

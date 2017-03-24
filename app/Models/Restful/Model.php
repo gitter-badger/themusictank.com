@@ -64,12 +64,6 @@ class Model
         }
     }
 
-    // public function patch($endpoint, $data = [])
-    // {
-    //     $response = $this->client->patch($endpoint, $this->appendAccessToken($data));
-    //     return $this->parseResponseToJson($response);
-    // }
-
     protected function appendAccessToken($data = [])
     {
         if (getenv("API_ACCESS_TOKEN")) {
@@ -77,7 +71,9 @@ class Model
                 $data["query"] = [];
             }
 
-            $data["query"]["access_token"] = getenv("API_ACCESS_TOKEN");
+            if (!array_key_exists("access_token", $data["query"])) {
+                $data["query"]["access_token"] = getenv("API_ACCESS_TOKEN");
+            }
         }
 
         return $data;

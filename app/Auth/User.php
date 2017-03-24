@@ -3,34 +3,41 @@
 namespace App\Auth;
 
 use Illuminate\Notifications\Notifiable;
-// use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Contracts\Auth\Authenticatable;
 use App\Models\Entities\ApiSessionToken;
+use App\Models\Entities\Profile;
 
 class User implements Authenticatable
 {
     use Notifiable;
 
-    /**
-     * The attributes that are mass assignable.
-     *
-     * @var array
-     */
-    protected $fillable = [
-        'token',
-    ];
-
     protected $rememberToken;
+    protected $token;
+    protected $profile;
 
     public function isAdmin()
     {
         return (int)$this->token->userId === 2;
     }
 
+    public function setProfile(Profile $profile)
+    {
+        $this->profile = $profile;
+    }
+
+    public function getProfile()
+    {
+        return $this->profile;
+    }
 
     public function setToken(ApiSessionToken $token)
     {
         $this->token = $token;
+    }
+
+    public function getToken()
+    {
+        return $this->token;
     }
 
     /**

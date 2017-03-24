@@ -7,6 +7,9 @@ use App\Exceptions\AuthFailedException;
 
 class Profiles extends Model
 {
-
+    public function findProfileById($id)
+    {
+        return $this->get(sprintf("profiles/%d", $id));
+    }
 
 }

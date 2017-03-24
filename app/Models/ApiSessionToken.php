@@ -3,6 +3,7 @@
 namespace App\Models;
 
 use App\Models\Restful\Model;
+use App\Models\Profiles;
 
 class ApiSessionToken extends Model
 {
@@ -12,6 +13,15 @@ class ApiSessionToken extends Model
             "json" => [
                 "email"     => $email,
                 "password"  => $password
+            ]
+        ]);
+    }
+
+    public function logout($accessToken)
+    {
+        return $this->post("profiles/logout", [
+            "query" => [
+                "access_token" => $accessToken
             ]
         ]);
     }

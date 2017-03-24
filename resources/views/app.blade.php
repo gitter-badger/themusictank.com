@@ -45,10 +45,10 @@
                 <li><a href="/artists/">Artists</a></li>
                 @include('partials.usermenu', ['user' => auth()->user()])
             </ul>
-
-            </ul>
         </nav>
     </header>
+
+    {{ dump(session("loggedUser")) }}
 
     @yield('backdrop', '<div class="backdrop plain"><i class="mask"></i></div>')
 

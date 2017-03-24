@@ -8,16 +8,19 @@ use Illuminate\Contracts\Auth\Authenticatable;
 
 use Illuminate\Support\Facades\Auth;
 use App\Models\ApiSessionToken;
+use App\Models\Profiles;
 use Exception;
 
 class ApiUserProvider implements UserProviderInterface {
 
-    protected $api;
+    protected $tokenService;
+    protected $profileService;
     protected $userClass;
 
-    public function __construct(ApiSessionToken $api, $userClass)
+    public function __construct(ApiSessionToken $tokenService, Profiles $profileService, $userClass)
     {
-        $this->api = $api;
+        $this->tokenService = $tokenService;
+        $this->profileService = $profileService;
         $this->userClass = $userClass;
     }
 
@@ -58,7 +61,7 @@ class ApiUserProvider implements UserProviderInterface {
     public function updateRememberToken(Authenticatable $user, $token)
     {
         session(["loggedUser" => [
-            "token" => $token,
+            "laravel_token" => $token,
             "authenticatable" => $user
         ]]);
     }
@@ -71,15 +74,16 @@ class ApiUserProvider implements UserProviderInterface {
      */
     public function retrieveByCredentials(array $credentials)
     {
-        try {
-            $user = new $this->userClass();
-            $user->setToken($this->api->login(
-                $credentials['email'],
-                $credentials['password']
-            ));
-            return $user;
+        extract($credentials);
+        $user = new $this->userClass();
 
-        } catch (Exception $e) {}
+        $token = $this->tokenService->login($email, $password);
+        $user->setToken($token);
+
+        $profile = $this->profileService->findProfileById($token->userId);
+        $user->setProfile($profile);
+
+        return $user;
     }
 
     /**

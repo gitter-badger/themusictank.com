@@ -24,4 +24,5 @@ class ArtistController extends Controller
 
         return view('artists.show', compact('artist'));
     }
+
 }

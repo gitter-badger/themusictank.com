@@ -7,7 +7,7 @@ use App\Models\Restful\Model;
 class Tracks extends Model
 {
     public $belongsTo = [
-        "artist" => "App\Models\Entities\Artist",
-        "album" => "App\Models\Entities\Album"
+        "artist" => \App\Models\Entities\Artist::class,
+        "album" => \App\Models\Entities\Album::class
     ];
 }

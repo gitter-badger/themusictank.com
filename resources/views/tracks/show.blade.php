@@ -1,11 +1,15 @@
 @extends('app')
 
+@section('title', sprintf('%s from %s by %s', $track->name, $track->album->name, $track->artist->name))
+@section('og-title', sprintf('%s from %s by %s', $track->name, $track->album->name, $track->artist->name))
+@section('description', sprintf('View the reviewing statistics of %s, a song by %s.', $track->name, $track->artist->name))
+@section('og-description', sprintf('View the reviewing statistics of %s, a song by %s.', $track->name, $track->artist->name))
+@section('body-class', 'tracks show')
+
 @push('header')
 <meta name="tmt:track:last_updated" content="{{ $track->last_updated }}">
 <meta name="tmt:track:gid" content="{{ $track->gid }}">
 @endpush
-
-@section('body-class', 'tracks show')
 
 @section('backdrop')
     @include('partials.backdrop', ['entity' => $track->album])
@@ -40,6 +44,3 @@
 </section>
 
 @endsection
-
-<%= render partial: "review_button", locals: {track: @track, album: @version} %>
-

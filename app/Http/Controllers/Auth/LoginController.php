@@ -46,18 +46,22 @@ class LoginController extends Controller
      */
     public function logout(Request $request)
     {
-        ApiSessionToken::api()->logout(auth()->user()->getAuthIdentifier());
+        try {
+            ApiSessionToken::api()->logout(auth()->user()->getAuthIdentifier());
+        } catch (Exception $e) {
+            // Session was not deleted on API. TBD is that a real problem?
+        }
+
         return $this->authLogout($request);
     }
 
     public function login(Request $request)
     {
-        // try {
+        try {
             return $this->authLogin($request);
-        // } catch (Exception $e) {
-
-            // return $this->sendFailedLoginResponse($request);
-        // }
+        } catch (Exception $e) {
+            return $this->sendFailedLoginResponse($request);
+        }
     }
 
 }

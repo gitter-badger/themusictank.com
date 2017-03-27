@@ -6,8 +6,9 @@ use App\Models\Restful\Model;
 
 class Artists extends Model
 {
-    public $hasMany = ["albums" => "App\Models\Entities\Album"];
-
+    public $hasMany = [
+        "albums" => \App\Models\Entities\Album::class
+    ];
 
     public function findTopFeatured($artistLimit = 10, $albumLimit = 4)
     {

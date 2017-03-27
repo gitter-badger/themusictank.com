@@ -30,6 +30,17 @@ class ProfileController extends Controller
         return view('profiles.dashboard');
     }
 
+    public function show($slug)
+    {
+        $profile = Profiles::api()->findBySlug($slug);
+
+        if (!$profile) {
+            return abort(404);
+        }
+
+        return view('profile.show', compact($profile));
+    }
+
     public function create()
     {
         return view('profiles.create');

@@ -9,6 +9,11 @@ use Illuminate\Http\Request;
 
 class AjaxController extends Controller
 {
+    public function __construct()
+    {
+        $this->middleware('auth', ['except' => 'ytkey']);
+    }
+
     public function ytkey($slug)
     {
         $response = Tracks::api()->get("tracks/getYoutubeKey", [
@@ -38,11 +43,9 @@ class AjaxController extends Controller
         $response = TrackUpvotes::api()->vote(
             request('id'),
             request('artistid'),
-            2,//auth()->user()->id,
+            auth()->user()->getProfile()->id,
             request('type')
         );
-
-dd($response);
 
         return view('partials.buttons.upvote', [
             'type' => "track",

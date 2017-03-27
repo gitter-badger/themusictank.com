@@ -1,11 +1,15 @@
 @extends('app')
 
+@section('title', sprintf('%s by %s', $album->name, $album->artist->name))
+@section('og-title', sprintf('%s by %s', $album->name, $album->artist->name))
+@section('description', sprintf('View the reviewing statistics of %s, an album by %s.', $album->name, $album->artist->name))
+@section('og-description', sprintf('View the reviewing statistics of %s, an album by %s.', $album->name, $album->artist->name))
+@section('body-class', 'albums show')
+
 @push('header')
 <meta name="tmt.album.last_updated" content="{{ $album->last_updated }}">
 <meta name="tmt.album.gid" content="{{ $album->gid }}">
 @endpush
-
-@section('body-class', 'albums show')
 
 @section('backdrop')
     @include('partials.backdrop', ['entity' => $album])

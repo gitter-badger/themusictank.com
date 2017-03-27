@@ -1,7 +1,8 @@
+<ul class="profile">
 @if(isset($user))
     <li><a href="{{ action('ProfileController@dashboard') }}">Dashboard</a></li>
     <li><a href="{{ action('NotificationController@index') }}"><i class="fa fa-bell-o">Notifications</i></a></li>
-    <li><a href="{{ action('ProfileController@show', ['id' => 'fake']) }}">You</a></li>
+    <li><a href="{{ action('ProfileController@show', ['id' => $user->getProfile()->slug]) }}">You</a></li>
     <li>
         <i class="fa fa-cog"></i>
         <ul>
@@ -20,3 +21,4 @@
 @else
     <li><a href="{{ action('ProfileController@auth') }}">Your account</a></li>
 @endif
+</ul>

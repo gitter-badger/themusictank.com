@@ -1,11 +1,16 @@
 @extends('app')
 
+@section('title', sprintf('%s', $artist->name))
+@section('og-title', sprintf('%s', $artist->name))
+@section('description', sprintf('View the reviewing statistics of %s.', $artist->name))
+@section('og-description', sprintf('View the reviewing statistics of %s.', $artist->name))
+@section('body-class', 'artists show')
+
 @push('header')
 <meta name="tmt.artist.last_updated" content="{{ $artist->last_updated }}">
 <meta name="tmt.artist.gid" content="{{ $artist->gid }}">
 @endpush
 
-@section('body-class', 'artists show')
 
 @section('backdrop')
     @include('partials.backdrop', ['entity' => $artist])

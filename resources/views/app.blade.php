@@ -13,15 +13,15 @@
     <meta property="og:site_name" content="The Music Tank">
     <meta property="og:type" content="website">
     <meta property="og:locale" content="en_CA">
-    <meta property="og:title" content="{{ isset($title) ? $title . ' - ' : null }}The Music Tank">
-    <meta property="og:description" content="{{ isset($description) ? $description : 'The Music Tank is a place where you can rate and discover music.' }}" >
+    <meta property="og:title" content="@yield('og-title', 'The Music Tank')">
+    <meta property="og:description" content="@yield('og-description', 'The Music Tank is a place where you can rate and discover music.')" >
 
     <meta name="twitter:card" content="summary_large_image">
     <meta name="twitter:creator" content="@themusictank">
     <meta name="twitter:card" content="summary">
     <meta name="twitter:image:src" content="http://static.themusictank.com/assets/images/social-share.png">
-    <meta name="twitter:title" content="{{ isset($title) ? $title . ' - ' : null }}The Music Tank">
-    <meta name="twitter:description" content="{{ isset($description) ? $description : 'The Music Tank is a place where you can rate and discover music.' }}">
+    <meta name="twitter:title" content="@yield('og-title', 'The Music Tank')">
+    <meta name="twitter:description" content="@yield('og-description', 'The Music Tank is a place where you can rate and discover music.')" >
 
     <link href="https://plus.google.com/117543200043480372792" rel="publisher">
     <link rel="apple-touch-icon" href="http://static.themusictank.com/assets/images/social-share.png">
@@ -29,7 +29,7 @@
 
     @stack('header')
 
-	<title>{{ isset($title) ? $title . ' - ' : null }}The Music Tank</title>
+	<title>@yield('title', 'The Music Tank')</title>
 </head>
 <body class="@yield('body-class', 'home')">
     <header>
@@ -43,12 +43,11 @@
         <nav>
             <ul>
                 <li><a href="/artists/">Artists</a></li>
-                @include('partials.usermenu', ['user' => auth()->user()])
             </ul>
+
+            @include('partials.usermenu', ['user' => auth()->user()])
         </nav>
     </header>
-
-    {{ dump(session("loggedUser")) }}
 
     @yield('backdrop', '<div class="backdrop plain"><i class="mask"></i></div>')
 

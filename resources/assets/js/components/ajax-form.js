@@ -1,20 +1,13 @@
-(function($, TMT, undefined) {
+(function() {
 
     "use strict";
 
-    var AjaxForms = TMT.Components.AjaxForms = function() {
-        var forms = [];
 
-        $("form[data-ctrl-mode=ajax]").each(function(){
-            var form = new AjaxForm($(this));
-            form.init();
-            forms.push(form);
-        });
-
-        return forms;
-    };
-
-    var AjaxForm = function(el) {
+    /**
+     * A form object that can be captured using ajax.
+     * @param {jQuery} el
+     */
+    var AjaxForm = namespace("Tmt.Components") = function(el) {
         this.element = el;
         this.listeners = {
             'onBeforeSubmit' : [],
@@ -24,7 +17,7 @@
         };
     };
 
-    AjaxForm.prototype = {
+    AjaxForm.prototype = extend([ Evemit ], {
 
         addListener : function(key, callback) {
             this.listeners[key].push(callback);
@@ -47,7 +40,7 @@
             this.addListener("onBeforeSubmit", onBeforeSubmit.bind(this));
             this.fireEvent('onBound', [this]);
         }
-    };
+    });
 
 
     function onSubmit(event) {
@@ -85,4 +78,4 @@
         this.fireEvent("afterRender", [this]);
     }
 
-})(jQuery, tmt);
+}());

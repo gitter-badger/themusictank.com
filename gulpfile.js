@@ -5,6 +5,7 @@ elixir(function(mix) {
 
     mix.scripts(
         [
+            'globals.js',
             'app.js',
             'player.js',
             'components/ajax-forms.js',
@@ -17,7 +18,8 @@ elixir(function(mix) {
 
     mix.scripts(
         [
-            'jquery/dist/jquery.min.js'
+            'jquery/dist/jquery.min.js',
+            'evemit/evemit.min.js'
         ],
         'public/assets/js/vendor.js',
         'node_modules/'

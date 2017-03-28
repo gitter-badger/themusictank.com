@@ -80,7 +80,7 @@ class ApiUserProvider implements UserProviderInterface {
         $token = $this->tokenService->login($email, $password);
         $user->setToken($token);
 
-        $profile = $this->profileService->findById($token->userId);
+        $profile = $this->profileService->findByIdForLogin($token->userId);
         $user->setProfile($profile);
 
         return $user;

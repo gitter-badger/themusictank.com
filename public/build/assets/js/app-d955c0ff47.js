@@ -1,41 +1,94 @@
-(function () {
+"use strict";
 
+/**
+ * Globally exposed namespacing function.
+ * @param {string} namespace
+ */
+function namespace(namespace) {
+    var object = window, tokens = namespace.split("."), token;
+
+    while (tokens.length > 0) {
+        token = tokens.shift();
+
+        if (typeof object[token] === "undefined") {
+            object[token] = {};
+        }
+
+        object = object[token];
+    }
+
+    return object;
+}
+
+
+/**
+ * Globally exposed extending function.
+ * @param {array} parent prototypes
+ * @param {hash} children
+ */
+function extend(parents, child) {
+    for (var i in parents) {
+        for(var k in parents[i].prototype) {
+            child[i] = parents[i].prototype[k];
+        }
+    }
+
+    return child;
+}
+
+
+/**
+ * Globally filters out jQuery elements matching selector
+ * from the haystack
+ * @param {*} selector
+ * @param {*} haystack
+ */
+function filter(selector, haystack) {
+    var matches = [],
+        i = -1;
+
+    while (++i < haystack.length) {
+        if (haystack[i].element && haystack[i].element.is('selector')) {
+            matches.push(haystack[i]);
+        }
+    }
+
+    return matches;
+}
+
+(function (undefined) {
     "use strict";
 
-    // Setup app namespacing
-    window.tmt = {
-        'Components': {}
+    var App = namespace("Tmt").App = function App() {
+        this.profile = null;
+        this.initializers = [];
     };
 
-    var App = window.tmt.App = function App(data) {
-        this.userData = data;
-    }
+    App.prototype = extend([ Evemit ], {
 
-    App.prototype = {
-        'init': function () {
-            var forms = tmt.Components.AjaxForms();
-
-            var upvotes = tmt.Components.Upvotes(
-                filter('[data-ctrl="upvote-widget"]', forms),
-                this.userData.upvotes || []
-            );
+        'init': function (userdata) {
+            this.profile = new tmt.Profile(userdata);
+            prepareInitializers.bind(this);
+            this.emit("init");
         }
-    };
+    });
 
-    function filter(selector, haystack) {
-        var matches = [],
-            i = -1;
 
-        while (++i < haystack.length) {
-            if (haystack[i].element && haystack[i].element.is('selector')) {
-                matches.push(haystack[i]);
-            }
+    function prepareInitializers() {
+        // Create an intance of each initializer.
+        for(var type in Tmt.Initializers) {
+            this.initializers[type] = new Tmt.Initializers[type]();
         }
 
-        return matches;
+        // Run the initialization. This is done in two steps because
+        // initializers may depend on one another.
+        for(var type in this.initializers) {
+            this.initializers[type].build(app);
+        }
+
     }
 
-})();
+}());
 
 jQuery(function () {
 
@@ -179,96 +232,7 @@ function onYouTubePlayerAPIReady() {
 
     "use strict";
 
-    var AjaxForms = TMT.Components.AjaxForms = function() {
-        var forms = [];
-
-        $("form[data-ctrl-mode=ajax]").each(function(){
-            var form = new AjaxForm($(this));
-            form.init();
-            forms.push(form);
-        });
-
-        return forms;
-    };
-
-    var AjaxForm = function(el) {
-        this.element = el;
-        this.listeners = {
-            'onBeforeSubmit' : [],
-            'onBound' : [],
-            'onRender' : [],
-            'onSubmit' : []
-        };
-    };
-
-    AjaxForm.prototype = {
-
-        addListener : function(key, callback) {
-            this.listeners[key].push(callback);
-        },
-
-        fireEvent : function (key) {
-            if (this.listeners[key]) {
-                for( var i = 0, len = this.listeners[key].length; i < len; i++) {
-                    this.listeners[key][i]();
-                }
-            }
-        },
-
-        init : function() {
-            this.addEvents();
-        },
-
-        addEvents : function() {
-            this.element.on("submit", onSubmit.bind(this));
-            this.addListener("onBeforeSubmit", onBeforeSubmit.bind(this));
-            this.fireEvent('onBound', [this]);
-        }
-    };
-
-
-    function onSubmit(event) {
-        event.preventDefault();
-
-        this.fireEvent("onBeforeSubmit", [this, event]);
-
-        var formElement = this.element;
-
-        $.ajax({
-            url: formElement.attr("action"),
-            data: new FormData(formElement.get(0)),
-            cache: false,
-            processData: false,
-            contentType: false,
-            type: formElement.attr('method'),
-            success: onSubmitSuccess.bind(this)
-        });
-
-        this.fireEvent("onSubmit", [this]);
-    };
-
-    function onBeforeSubmit()
-    {
-        this.element.addClass("working");
-    }
-
-    function onSubmitSuccess(html) {
-        var newVersion = $(html);
-
-        this.element.replaceWith(newVersion);
-        this.element = newVersion;
-        this.addEvents();
-
-        this.fireEvent("afterRender", [this]);
-    }
-
-})(jQuery, tmt);
-
-(function($, TMT, undefined) {
-
-    "use strict";
-
-    TMT.Components.Upvotes = function(instances, userdata) {
+    TMT.Components.Upvotes = function(instances) {
         var i = -1,
             upvotes = [];
 

@@ -1,38 +1,33 @@
-(function () {
-
+(function (undefined) {
     "use strict";
 
-    // Setup app namespacing
-    window.tmt = {
-        'Components': {}
+    var App = namespace("Tmt").App = function App() {
+        this.profile = null;
+        this.initializers = [];
     };
 
-    var App = window.tmt.App = function App(data) {
-        this.userData = data;
-    }
+    App.prototype = extend([ Evemit ], {
 
-    App.prototype = {
-        'init': function () {
-            var forms = tmt.Components.AjaxForms();
-
-            var upvotes = tmt.Components.Upvotes(
-                filter('[data-ctrl="upvote-widget"]', forms),
-                this.userData.upvotes || []
-            );
+        'init': function (userdata) {
+            this.profile = new tmt.Profile(userdata);
+            prepareInitializers.bind(this);
+            this.emit("init");
         }
-    };
+    });
 
-    function filter(selector, haystack) {
-        var matches = [],
-            i = -1;
 
-        while (++i < haystack.length) {
-            if (haystack[i].element && haystack[i].element.is('selector')) {
-                matches.push(haystack[i]);
-            }
+    function prepareInitializers() {
+        // Create an intance of each initializer.
+        for(var type in Tmt.Initializers) {
+            this.initializers[type] = new Tmt.Initializers[type]();
         }
 
-        return matches;
+        // Run the initialization. This is done in two steps because
+        // initializers may depend on one another.
+        for(var type in this.initializers) {
+            this.initializers[type].build(app);
+        }
+
     }
 
-})();
+}());

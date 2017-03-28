@@ -28,6 +28,9 @@
         </a>
     </h2>
     <span>Released <time>{{ date("M", $album->month) }} {{ $album->day }} {{ $album->year }}</time></span>
+
+    @include('partials.buttons.upvote', ['type' => "album", 'id' => $album->id])
+
 </section>
 
 <section class="discography">
@@ -37,6 +40,8 @@
         <ul>
         @foreach ($album->tracks as $track)
             <li>
+                @include('partials.buttons.upvote', ['type' => "track", 'id' => $track->id])
+
                 <a href="{{ action('TrackController@show', ['slug' => $track->slug]) }}">
                     <em>{{ $track->position }}</em>
                     {{ $track->name }}

@@ -2,7 +2,7 @@
 
     "use strict";
 
-    TMT.Components.Upvotes = function(instances, userdata) {
+    TMT.Components.Upvotes = function(instances) {
         var i = -1,
             upvotes = [];
 

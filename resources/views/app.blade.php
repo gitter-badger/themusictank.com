@@ -81,6 +81,9 @@
 
 	<script src="{{ elixir('assets/js/vendor.js') }}"></script>
 	<script src="{{ elixir('assets/js/app.js') }}"></script>
-    <script>jQuery(function(){(new tmt.App({})).init();});</script>
+    <script>jQuery(function(){(new tmt.App()).init(<?php echo auth()->user() ? auth()->user()->getProfile()->exportToJson() : '{}' ?>);});</script>
+
+{{ dd(auth()->user()) }}
+
 </body>
 </html>

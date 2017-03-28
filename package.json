@@ -8,8 +8,9 @@
   },
   "devDependencies": {
     "bootstrap-sass": "^3.3.7",
-    "jquery": "^3.1.0",
+    "evemit": "^1.0.2",
     "gulp": "^3.9.1",
+    "jquery": "^3.1.0",
     "laravel-elixir": "^6.0.0-9",
     "viewport-units-buggyfill": "^0.6.0"
   },

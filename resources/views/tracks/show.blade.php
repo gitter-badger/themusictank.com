@@ -34,8 +34,7 @@
     </h3>
 </section>
 
-
-@include('partials.buttons.upvote', ['type' => "track", 'id' => $track->id, 'artistid' => $track->artist->id])
+@include('partials.buttons.upvote', ['type' => "track", 'id' => $track->id])
 
 @include('partials.player', ['track' => $track])
 

@@ -1,20 +1,22 @@
 (function (undefined) {
+
     "use strict";
 
-    var App = namespace("Tmt").App = function App() {
+    var App = namespace("Tmt").App = function() {
         this.profile = null;
         this.initializers = [];
+        this.events = [
+            "ready"
+        ];
     };
 
-    App.prototype = extend([ Evemit ], {
-
+    inherit([ Evemit ], App, {
         'init': function (userdata) {
-            this.profile = new tmt.Profile(userdata);
-            prepareInitializers.bind(this);
-            this.emit("init");
+            this.profile = new Tmt.Models.Profile(userdata);
+            prepareInitializers.call(this);
+            this.emit("ready");
         }
     });
-
 
     function prepareInitializers() {
         // Create an intance of each initializer.
@@ -25,9 +27,8 @@
         // Run the initialization. This is done in two steps because
         // initializers may depend on one another.
         for(var type in this.initializers) {
-            this.initializers[type].build(app);
+            this.initializers[type].build(this);
         }
-
     }
 
 }());

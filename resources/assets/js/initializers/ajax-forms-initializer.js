@@ -5,13 +5,16 @@
     /**
      * Ajax-enabled forms public bootstraper
      */
-    var AjaxFormsInitializer = namespace("Tmt.Initializers").AjaxFormsInitializer = function(app) {
+    var AjaxFormsInitializer = namespace("Tmt.Initializers").AjaxFormsInitializer = function() {
         this.forms = [];
+        this.events = [
+            "bound"
+        ];
     };
 
-    AjaxFormsInitializer.prototype = extend([ Evemit ], {
+    inherit([ Evemit ], AjaxFormsInitializer, {
         'build' : function(app) {
-            addEvents(app).bind(this);
+            addEvents.call(this, app);
         }
     });
 

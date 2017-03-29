@@ -26,12 +26,29 @@ function namespace(namespace) {
  * @param {array} parent prototypes
  * @param {hash} children
  */
-function extend(parents, child) {
-    for (var i in parents) {
-        for(var k in parents[i].prototype) {
-            child[i] = parents[i].prototype[k];
+function extend(target, source) {
+    target = target || {};
+    for (var prop in source) {
+        if (typeof source[prop] === 'object') {
+            target[prop] = extend(target[prop], source[prop]);
+        } else {
+            target[prop] = source[prop];
         }
     }
+    return target;
+}
+
+function inherit(parents, child, properties) {
+
+    var childPrototype = properties;
+
+    for (var i in parents) {
+        var parentPrototype = Object.create(parents[i].prototype);
+        childPrototype = extend(childPrototype, parentPrototype);
+    }
+
+    child.prototype = childPrototype;
+    child.prototype.constructor = child;
 
     return child;
 }

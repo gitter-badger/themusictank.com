@@ -2,13 +2,18 @@
 
     "use strict";
 
-
     /**
      * A form object that can be captured using ajax.
      * @param {jQuery} el
      */
-    var AjaxForm = namespace("Tmt.Components") = function(el) {
+    var AjaxForm = namespace("Tmt.Components").AjaxForm = function(el) {
         this.element = el;
+        this.events = [
+            'onBeforeSubmit',
+            'onBound',
+            'onRender',
+            'onSubmit'
+        ];
         this.listeners = {
             'onBeforeSubmit' : [],
             'onBound' : [],
@@ -17,7 +22,7 @@
         };
     };
 
-    AjaxForm.prototype = extend([ Evemit ], {
+    inherit([ Evemit ], AjaxForm, {
 
         addListener : function(key, callback) {
             this.listeners[key].push(callback);

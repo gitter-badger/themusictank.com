@@ -4,7 +4,8 @@
         'action' => ["AjaxController@upvote", $type],
         'data-ctrl-mode' => "ajax",
         'data-upvote-type' => $type,
-        'data-upvote-id' => $id
+        'data-upvote-object-id' => $id,
+        'data-upvote-id' => ""
     ]) }}
         {{ Form::hidden('id', $id) }}
         <ul>

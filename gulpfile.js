@@ -7,9 +7,16 @@ elixir(function(mix) {
         [
             'globals.js',
             'app.js',
-            'player.js',
-            'components/ajax-forms.js',
-            'components/upvotes.js'
+
+            'models/profile.js',
+
+            'components/ajax-form.js',
+            'components/player.js',
+            'components/upvote-form.js',
+
+            'initializers/ajax-forms-initializer.js',
+            'initializers/player-initializer.js',
+            'initializers/upvote-forms-initializer.js'
         ],
         'public/assets/js/app.js',
         'resources/assets/js/'

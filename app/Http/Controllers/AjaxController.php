@@ -25,48 +25,36 @@ class AjaxController extends Controller
         return response()->json($response);
     }
 
-    public function upvote($type)
-    {
-        if ($type === "track") {
-            return $this->upvoteTrack();
-        }
-
-        if ($type === "album") {
-            return $this->upvoteAlbum();
-        }
-
-        return abort(404);
-    }
-
     public function upvoteTrack()
     {
-        $response = TrackUpvotes::api()->vote(
-            request('id'),
-            request('artistid'),
-            auth()->user()->getProfile()->id,
-            request('type')
-        );
+        $vote = (int)request('vote');
 
-        return view('partials.buttons.upvote', [
-            'type' => "track",
-            'id' => request('id'),
-            'artistid' => request('artistid')
-        ]);
+        if ($vote < 0) {
+            $response = TrackUpvotes::api()->removeVote(request('id'), auth()->user()->getProfile()->id);
+        } else {
+            $response = TrackUpvotes::api()->vote(
+                request('id'),
+                auth()->user()->getProfile()->id,
+                $vote
+            );
+        }
+        return response()->json($response);
     }
 
     public function upvoteAlbum()
     {
-        AlbumUpvotes::api()->vote(
-            request()('id'),
-            request('artistid'),
-            auth()->user()->id,
-            request('type')
-        );
+        $vote = (int)request('vote');
 
-        return view('partials.buttons.upvote', [
-            'type' => "album",
-            'id' => request('id'),
-            'artistid' => request('artistid')
-        ]);
+        if ($vote < 0) {
+            $response = AlbumUpvotes::api()->removeVote(request('id'), auth()->user()->getProfile()->id);
+        } else {
+            $response = AlbumUpvotes::api()->vote(
+                request('id'),
+                auth()->user()->getProfile()->id,
+                $vote
+            );
+        }
+
+        return response()->json($response);
     }
 }

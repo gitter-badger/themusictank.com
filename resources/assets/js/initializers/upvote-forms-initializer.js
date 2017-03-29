@@ -9,7 +9,8 @@
         this.boxes = [];
 
         this.events = [
-            "bound"
+            "bound",
+            "completed"
         ];
     };
 
@@ -19,14 +20,14 @@
         }
     });
 
-
     function addEvents(app) {
         app.initializers.AjaxFormsInitializer.on('bound', bindToAjaxForms.bind(this));
-        app.profile.on('upvoteUpdate', updateBoxesState.bind(this));
+        app.profile.on('upvoteSet', updateStateFirstTime.bind(this));
     }
 
     function bindToAjaxForms(AjaxFormsInitializer) {
         var upvoteForms = filter('[data-ctrl="upvote-widget"]', AjaxFormsInitializer.forms);
+
         for (var i = 0, len = upvoteForms.length; i < len; i++) {
             this.boxes.push(new Tmt.Components.UpvoteForm(upvoteForms[i]));
         }
@@ -34,8 +35,20 @@
         this.emit('bound', this);
     }
 
-    function updateBoxesState(newValues) {
+    function updateStateFirstTime(newValues) {
+        for (var i = 0, len = this.boxes.length; i < len; i++) {
+            var box = this.boxes[i],
+                source = newValues[ box.isTrack() ? "tracks" : "albums" ],
+                matching = source[box.getObjectId()];
 
+            if (matching)  {
+                box.setValue(matching);
+            }
+
+            box.unlock();
+        }
+
+        this.emit("completed");
     }
 
 }(jQuery));

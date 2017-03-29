@@ -11,15 +11,24 @@ class AlbumUpvotes extends Model
         "album" => "App\Models\Entities\Album"
     ];
 
-    public function vote($id, $artistId, $profileId, $type)
+    public function vote($id, $profileId, $vote)
     {
         return $this->post("albumupvotes", [
             "json" => [
-                "artistId" => $artistId,
-                "albumId" => $id,
-                "profileId" => $profileId,
-                "type" => $type
+                "albumId" => (int)$id,
+                "profileId" => (int)$profileId,
+                "vote" => (int)$vote
             ],
+        ]);
+    }
+
+    public function removeVote($id, $profileId)
+    {
+        return $this->delete("albumupvotes/deleteByForeign", [
+             "json" => [
+                    "albumId" =>  (int)$id,
+                    "profileId" => (int)$profileId
+            ]
         ]);
     }
 }

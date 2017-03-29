@@ -9,41 +9,23 @@
     var AjaxForm = namespace("Tmt.Components").AjaxForm = function(el) {
         this.element = el;
         this.events = [
-            'onBeforeSubmit',
-            'onBound',
-            'onRender',
-            'onSubmit'
+            'beforeSubmit',
+            'bound',
+            'render',
+            'submit',
+            'submitSuccess'
         ];
-        this.listeners = {
-            'onBeforeSubmit' : [],
-            'onBound' : [],
-            'onRender' : [],
-            'onSubmit' : []
-        };
     };
 
     inherit([ Evemit ], AjaxForm, {
-
-        addListener : function(key, callback) {
-            this.listeners[key].push(callback);
-        },
-
-        fireEvent : function (key) {
-            if (this.listeners[key]) {
-                for( var i = 0, len = this.listeners[key].length; i < len; i++) {
-                    this.listeners[key][i]();
-                }
-            }
-        },
-
         init : function() {
             this.addEvents();
         },
 
         addEvents : function() {
             this.element.on("submit", onSubmit.bind(this));
-            this.addListener("onBeforeSubmit", onBeforeSubmit.bind(this));
-            this.fireEvent('onBound', [this]);
+            this.element.on("onBeforeSubmit", onBeforeSubmit.bind(this));
+            this.emit("bound", this);
         }
     });
 
@@ -51,7 +33,7 @@
     function onSubmit(event) {
         event.preventDefault();
 
-        this.fireEvent("onBeforeSubmit", [this, event]);
+        this.emit("beforeSubmit", this, event);
 
         var formElement = this.element;
 
@@ -65,7 +47,7 @@
             success: onSubmitSuccess.bind(this)
         });
 
-        this.fireEvent("onSubmit", [this]);
+        this.emit("submit", this);
     };
 
     function onBeforeSubmit()
@@ -73,14 +55,16 @@
         this.element.addClass("working");
     }
 
-    function onSubmitSuccess(html) {
+    function onSubmitSuccess(response) {
+        /*
         var newVersion = $(html);
 
         this.element.replaceWith(newVersion);
         this.element = newVersion;
-        this.addEvents();
+        this.addEvents();*/
 
-        this.fireEvent("afterRender", [this]);
+        this.emit("submitSuccess", response, this);
+        // this.emit("afterRender", this);
     }
 
 }());

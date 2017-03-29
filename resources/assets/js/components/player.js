@@ -40,12 +40,12 @@
         },
 
         'getSongSlug' : function() {
-            return this.data("song-slug");
+            return this.element.data("song-slug");
         }
     });
 
     function queryForKey() {
-        $.getJSON('/ajax/ytkey/' + this.getSongSlug(), onYtKeyReceived(response).bind(this));
+        $.getJSON('/ajax/ytkey/' + this.getSongSlug(), onYtKeyReceived.bind(this));
     }
 
     function onYtKeyReceived(response) {

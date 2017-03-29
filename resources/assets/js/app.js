@@ -11,8 +11,8 @@
     };
 
     inherit([ Evemit ], App, {
-        'init': function (userdata) {
-            this.profile = new Tmt.Models.Profile(userdata);
+        'init': function () {
+            this.profile = new Tmt.Models.Profile();
             prepareInitializers.call(this);
             this.emit("ready");
         }

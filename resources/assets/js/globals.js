@@ -65,7 +65,7 @@ function filter(selector, haystack) {
         i = -1;
 
     while (++i < haystack.length) {
-        if (haystack[i].element && haystack[i].element.is('selector')) {
+        if (haystack[i].element && haystack[i].element.is(selector)) {
             matches.push(haystack[i]);
         }
     }

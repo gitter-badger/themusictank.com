@@ -30,7 +30,8 @@ Route::get('tracks/{slug}', "TrackController@show");
 // Ajax
 Route::get('ajax/bugreport', "AjaxController@bugreport");
 Route::get('ajax/ytkey/{slug}', "AjaxController@ytkey");
-Route::post('ajax/upvote/{type}', "AjaxController@upvote");
+Route::post('ajax/upvoteTrack', "AjaxController@upvoteTrack");
+Route::post('ajax/upvoteAlbum', "AjaxController@upvoteAlbum");
 
 // Profiles
 Route::get('profiles/dashboard', "ProfileController@dashboard")->middleware('auth');

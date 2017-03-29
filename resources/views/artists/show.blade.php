@@ -40,6 +40,8 @@
                         {{ $album->name }}
                     </a>
                 </h3>
+
+                @include('partials.buttons.upvote', ['type' => "album", 'id' => $album->id])
             </li>
         @endforeach
         </ul>

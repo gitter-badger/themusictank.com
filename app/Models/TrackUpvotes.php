@@ -11,15 +11,24 @@ class TrackUpvotes extends Model
         "track" => "App\Models\Entities\Track"
     ];
 
-    public function vote($id, $artistId, $profileId, $type)
+    public function vote($id, $profileId, $vote)
     {
         return $this->post("trackupvotes", [
             "json" => [
-                "artistId" => $artistId,
-                "trackId" => $id,
-                "profileId" => $profileId,
-                "type" => $type
+                "trackId" => (int)$id,
+                "profileId" => (int)$profileId,
+                "vote" => (int)$vote
             ],
+        ]);
+    }
+
+    public function removeVote($id, $profileId)
+    {
+        return $this->delete("trackupvotes/deleteByForeign", [
+             "json" => [
+                    "trackId" =>  (int)$id,
+                    "profileId" => (int)$profileId
+            ]
         ]);
     }
 }

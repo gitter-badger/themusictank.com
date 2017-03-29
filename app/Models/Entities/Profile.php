@@ -22,10 +22,21 @@ class Profile
     {
         return json_encode([
             "upvotes" => [
-                "tracks" => array_column($this->trackUpvotes, "id"),
-                "albums" => array_column($this->albumUpvotes, "id")
+                "tracks" => $this->simplifyUpvoteArray($this->trackUpvotes),
+                "albums" => $this->simplifyUpvoteArray($this->albumUpvotes, "albumId")
             ]
         ]);
+    }
+
+    private function simplifyUpvoteArray($source, $primaryKey = "trackId")
+    {
+        $return = [];
+
+        foreach ($source as $row) {
+            $return[$row->{$primaryKey} . ""] = $row->vote;
+        }
+
+        return $return;
     }
 
 }

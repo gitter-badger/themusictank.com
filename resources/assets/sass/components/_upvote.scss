@@ -1,0 +1,15 @@
+[data-ctrl="upvote-widget"] {
+
+    &.liked {
+        li:nth-child(2) {
+            display:none;
+        }
+    }
+
+    &.disliked {
+        li:nth-child(1) {
+            display:none;
+        }
+    }
+
+}

@@ -64,6 +64,16 @@ class Model
         }
     }
 
+    public function delete($endpoint, $data = [])
+    {
+        try {
+            $response = $this->client->delete($endpoint, $this->appendAccessToken($data));
+            return $this->parser->parseResponse($response);
+        } catch (ClientException $e) {
+            throw $this->parser->formatException($e->getResponse());
+        }
+    }
+
     protected function appendAccessToken($data = [])
     {
         if (getenv("API_ACCESS_TOKEN")) {

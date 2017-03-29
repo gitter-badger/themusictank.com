@@ -65,7 +65,7 @@ function filter(selector, haystack) {
         i = -1;
 
     while (++i < haystack.length) {
-        if (haystack[i].element && haystack[i].element.is('selector')) {
+        if (haystack[i].element && haystack[i].element.is(selector)) {
             matches.push(haystack[i]);
         }
     }
@@ -86,8 +86,8 @@ function filter(selector, haystack) {
     };
 
     inherit([ Evemit ], App, {
-        'init': function (userdata) {
-            this.profile = new Tmt.Models.Profile(userdata);
+        'init': function () {
+            this.profile = new Tmt.Models.Profile();
             prepareInitializers.call(this);
             this.emit("ready");
         }
@@ -117,12 +117,32 @@ function filter(selector, haystack) {
             "upvoteUpdate"
         ];
 
-        for(var i in userData) {
-            this[i] = userData[i];
-        }
+        this.upvotes = {
+            tracks : {},
+            albums : {}
+        };
+        this.setData(userData);
     };
 
     inherit([ Evemit ], Profile, {
+
+        'setData' : function(userData) {
+            for(var i in userData) {
+                this[i] = userData[i];
+            }
+
+            this.emit("upvoteSet", this.upvotes);
+        },
+
+        'addUpvote' : function (type, key, value) {
+            this.upvotes[type][key] = value;
+            this.emit("upvoteUpdate", this.upvotes);
+        },
+
+        'removeUpvote' : function(type, key) {
+            delete this.upvotes[type][key];
+            this.emit("upvoteUpdate", this.upvotes);
+        }
 
     });
 
@@ -139,41 +159,23 @@ function filter(selector, haystack) {
     var AjaxForm = namespace("Tmt.Components").AjaxForm = function(el) {
         this.element = el;
         this.events = [
-            'onBeforeSubmit',
-            'onBound',
-            'onRender',
-            'onSubmit'
+            'beforeSubmit',
+            'bound',
+            'render',
+            'submit',
+            'submitSuccess'
         ];
-        this.listeners = {
-            'onBeforeSubmit' : [],
-            'onBound' : [],
-            'onRender' : [],
-            'onSubmit' : []
-        };
     };
 
     inherit([ Evemit ], AjaxForm, {
-
-        addListener : function(key, callback) {
-            this.listeners[key].push(callback);
-        },
-
-        fireEvent : function (key) {
-            if (this.listeners[key]) {
-                for( var i = 0, len = this.listeners[key].length; i < len; i++) {
-                    this.listeners[key][i]();
-                }
-            }
-        },
-
         init : function() {
             this.addEvents();
         },
 
         addEvents : function() {
             this.element.on("submit", onSubmit.bind(this));
-            this.addListener("onBeforeSubmit", onBeforeSubmit.bind(this));
-            this.fireEvent('onBound', [this]);
+            this.element.on("onBeforeSubmit", onBeforeSubmit.bind(this));
+            this.emit("bound", this);
         }
     });
 
@@ -181,7 +183,7 @@ function filter(selector, haystack) {
     function onSubmit(event) {
         event.preventDefault();
 
-        this.fireEvent("onBeforeSubmit", [this, event]);
+        this.emit("beforeSubmit", this, event);
 
         var formElement = this.element;
 
@@ -195,7 +197,7 @@ function filter(selector, haystack) {
             success: onSubmitSuccess.bind(this)
         });
 
-        this.fireEvent("onSubmit", [this]);
+        this.emit("submit", this);
     };
 
     function onBeforeSubmit()
@@ -203,14 +205,16 @@ function filter(selector, haystack) {
         this.element.addClass("working");
     }
 
-    function onSubmitSuccess(html) {
+    function onSubmitSuccess(response) {
+        /*
         var newVersion = $(html);
 
         this.element.replaceWith(newVersion);
         this.element = newVersion;
-        this.addEvents();
+        this.addEvents();*/
 
-        this.fireEvent("afterRender", [this]);
+        this.emit("submitSuccess", response, this);
+        // this.emit("afterRender", this);
     }
 
 }());
@@ -257,12 +261,12 @@ function filter(selector, haystack) {
         },
 
         'getSongSlug' : function() {
-            return this.data("song-slug");
+            return this.element.data("song-slug");
         }
     });
 
     function queryForKey() {
-        $.getJSON('/ajax/ytkey/' + this.getSongSlug(), onYtKeyReceived(response).bind(this));
+        $.getJSON('/ajax/ytkey/' + this.getSongSlug(), onYtKeyReceived.bind(this));
     }
 
     function onYtKeyReceived(response) {
@@ -397,14 +401,86 @@ function filter(selector, haystack) {
     "use strict";
 
 
-    var UpvoteForm = namespace("Tmt.Components").UpvoteForm = function() {
-        this.events = [];
+    var UpvoteForm = namespace("Tmt.Components").UpvoteForm = function(ajaxForm) {
+        this.ajaxForm = ajaxForm;
+        this.element = ajaxForm.element;
+        this.events = [
+            'valueChange'
+        ];
+
+        this.addEvents();
     };
 
     inherit([ Evemit ], UpvoteForm, {
 
+        "addEvents" : function() {
+            this.element.find("button").click(onButtonClick.bind(this));
+            this.ajaxForm.on('submitSuccess', onSubmitSuccess.bind(this));
+        },
+
+        "getType" : function() {
+            return this.element.data("upvote-type");
+        },
+
+        "getObjectId" : function() {
+            return this.element.data("upvote-object-id");
+        },
+
+        "isTrack" : function() {
+            return this.getType() == "track";
+        },
+
+        "isAlbum" : function() {
+            return this.getType() == "album";
+        },
+
+        "setValue" : function(value) {
+            this.element.removeClass("liked disliked");
+            this.element.find("input[name=vote]").val(value);
+
+            if (value == 1) {
+                this.element.addClass("liked");
+            } else if(value == 2) {
+                this.element.addClass("disliked");
+            }
+
+            this.emit('valueChange', value, this);
+        },
+
+        "getValue" : function() {
+            return this.element.find("input[name=vote]").val();
+        },
+
+        "lock" : function() {
+            this.element.find("button").attr("disabled", "disabled");
+        },
+
+        "unlock" : function() {
+            this.element.find("button").removeAttr("disabled");
+        }
     });
 
+    function onButtonClick(evt) {
+        var clickedValue = evt.target.value;
+
+        if (clickedValue != this.getValue()) {
+            this.setValue(clickedValue);
+        } else {
+            // twice the same value means the user wants to cancel
+            this.setValue(-1);
+        }
+
+        this.lock();
+        this.element.submit();
+    }
+
+    function onSubmitSuccess(response, ajaxForm) {
+        if (response && response.vote) {
+            this.setValue(response.vote);
+        }
+
+        this.unlock();
+    }
 
 })(jQuery);
 
@@ -509,7 +585,8 @@ function filter(selector, haystack) {
         this.boxes = [];
 
         this.events = [
-            "bound"
+            "bound",
+            "completed"
         ];
     };
 
@@ -519,14 +596,14 @@ function filter(selector, haystack) {
         }
     });
 
-
     function addEvents(app) {
         app.initializers.AjaxFormsInitializer.on('bound', bindToAjaxForms.bind(this));
-        app.profile.on('upvoteUpdate', updateBoxesState.bind(this));
+        app.profile.on('upvoteSet', updateStateFirstTime.bind(this));
     }
 
     function bindToAjaxForms(AjaxFormsInitializer) {
         var upvoteForms = filter('[data-ctrl="upvote-widget"]', AjaxFormsInitializer.forms);
+
         for (var i = 0, len = upvoteForms.length; i < len; i++) {
             this.boxes.push(new Tmt.Components.UpvoteForm(upvoteForms[i]));
         }
@@ -534,8 +611,20 @@ function filter(selector, haystack) {
         this.emit('bound', this);
     }
 
-    function updateBoxesState(newValues) {
+    function updateStateFirstTime(newValues) {
+        for (var i = 0, len = this.boxes.length; i < len; i++) {
+            var box = this.boxes[i],
+                source = newValues[ box.isTrack() ? "tracks" : "albums" ],
+                matching = source[box.getObjectId()];
 
+            if (matching)  {
+                box.setValue(matching);
+            }
+
+            box.unlock();
+        }
+
+        this.emit("completed");
     }
 
 }(jQuery));

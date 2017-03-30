@@ -28,6 +28,18 @@ class Artists extends Model
         ]);
     }
 
+    public function search($query, $limit = 10)
+    {
+        return $this->get("artists", [
+            "query" => [
+                "filter" => [
+                    "where" => ["name" => ["regexp" => '^'.$query.'/i']],
+                    "limit" => $limit
+                ]
+            ]
+        ]);
+    }
+
     public function findBySlug($slug)
     {
         return $this->first("artists", [

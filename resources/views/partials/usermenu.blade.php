@@ -7,7 +7,7 @@
         <i class="fa fa-cog"></i>
         <ul>
             <li><a href="{{ action('ProfileController@edit') }}">Settings</a></li>
-            <li><a href="{{ action('Auth\LoginController@logout') }}">Logout</li>
+            <li><a href="{{ action('Auth\LoginController@logout') }}">Logout</a></li>
         </ul>
     </li>
     @if ($user->isAdmin())

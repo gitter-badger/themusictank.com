@@ -15,12 +15,12 @@
 
     function addEvents(app) {
         this.profile = app.profile;
-        app.initializers.UpvotesFormsInitializer.on('bound', bindToUpvoteForms.bind(this));
+        app.initializers.UpvoteFormsInitializer.on('bound', bindToUpvoteForms.bind(this));
     }
 
-    function bindToUpvoteForms(UpvotesFormsInitializer) {
-        for (var i = 0, len = UpvotesFormsInitializer.boxes.length; i < len; i++) {
-            var box = UpvotesFormsInitializer.boxes[i];
+    function bindToUpvoteForms(UpvoteFormsInitializer) {
+        for (var i = 0, len = UpvoteFormsInitializer.boxes.length; i < len; i++) {
+            var box = UpvoteFormsInitializer.boxes[i];
             box.on("valueChange", onUpvoteValue.bind(this));
         }
     }

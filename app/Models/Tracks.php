@@ -10,4 +10,17 @@ class Tracks extends Model
         "artist" => \App\Models\Entities\Artist::class,
         "album" => \App\Models\Entities\Album::class
     ];
+
+    public function search($query, $limit = 10)
+    {
+        return $this->get("tracks", [
+            "query" => [
+                "filter" => [
+                    "include" => ['artist', 'album'],
+                    "where" => ["name" => ["regexp" => '^'.$query.'/i']],
+                    "limit" => $limit
+                ]
+            ]
+        ]);
+    }
 }

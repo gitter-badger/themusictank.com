@@ -556,6 +556,108 @@ function filter(selector, haystack) {
 
 })(jQuery);
 
+
+(function ($, undefined) {
+
+    "use strict";
+
+    var SearchForm = namespace("Tmt.Components").SearchForm = function () {
+        this.initialize();
+    };
+
+    inherit([Tmt.EventEmitter], SearchForm, {
+
+        "initialize": function () {
+            Tmt.EventEmitter.prototype.initialize.call(this);
+
+            // search box
+            var artistsSearch = new Bloodhound({
+                name: 'artists',
+                datumTokenizer: Bloodhound.tokenizers.obj.whitespace('artist'),
+                queryTokenizer: Bloodhound.tokenizers.whitespace,
+                remote: {
+                    url: '/ajax/artistSearch/?q=%QUERY',
+                    wildcard: '%QUERY'
+                }
+            }),
+                albumsSearch = new Bloodhound({
+                    name: 'albums',
+                    datumTokenizer: Bloodhound.tokenizers.obj.whitespace('album'),
+                    queryTokenizer: Bloodhound.tokenizers.whitespace,
+                    remote: {
+                        url: '/ajax/albumSearch/?q=%QUERY',
+                        wildcard: '%QUERY'
+                    }
+                }),
+                tracksSearch = new Bloodhound({
+                    name: 'tracks',
+                    datumTokenizer: Bloodhound.tokenizers.obj.whitespace('track'),
+                    queryTokenizer: Bloodhound.tokenizers.whitespace,
+                    remote: {
+                        url: '/ajax/trackSearch/?q=%QUERY',
+                        wildcard: '%QUERY'
+                    }
+                }),
+                searchBox = $('.typeahead');
+
+
+            // Listens for when Typeahead a selected a value.
+            function typeahead_onSelected(e, data, section) {
+                e.preventDefault();
+                document.location = $('.tt-cursor a:nth-child(1)').attr('href');
+            }
+
+            artistsSearch.initialize();
+            albumsSearch.initialize();
+            tracksSearch.initialize();
+
+            searchBox.on("typeahead:selected", typeahead_onSelected);
+
+            searchBox.typeahead(
+                { minLength: 3, highlight: true, cache: true },
+                [
+                    {
+                        name: 'artists',
+                        display: 'artist',
+                        source: artistsSearch,
+                        cache: true,
+                        templates: {
+                            header: '<h3>Artists</h3>',
+                            empty: '<h3>Artists</h3><p class="empty-message">Could not find matching artists.</p>',
+                            suggestion: function (data) { return ['<p><a href="/artists/' + data.slug + '/">' + data.name + '</a></p>'].join(""); }
+                        }
+                    },
+                    {
+                        name: 'albums',
+                        display: 'album',
+                        source: albumsSearch,
+                        cache: true,
+                        templates: {
+                            header: '<h3>Albums</h3>',
+                            empty: '<h3>Albums</h3><p class="empty-message">Could not find matching albums.</p>',
+                            suggestion: function (data) { return ['<p><a href="/albums/' + data.slug + '/">' + data.name + '</a> by <a href="/artists/' + data.slug + '/">' + data.name + '</a></p>'].join(""); }
+                        }
+                    },
+                    {
+                        name: 'tracks',
+                        display: 'track',
+                        source: tracksSearch,
+                        cache: true,
+                        templates: {
+                            header: '<h3>Tracks</h3>',
+                            empty: '<h3>Tracks</h3><p class="empty-message">Could not find matching tracks.</p>',
+                            suggestion: function (data) { return ['<p><a href="/albums/' + data.slug + '/">' + data.name + '</a> by <a href="/artists/' + data.slug + '/">' + data.name + '</a></p>'].join(""); }
+                        }
+                    }
+                ]
+            );
+
+        }
+    });
+
+
+})(jQuery);
+
 (function ($, undefined) {
 
     "use strict";
@@ -637,6 +739,72 @@ function filter(selector, haystack) {
 
         var firstScriptTag = document.getElementsByTagName('script')[0];
         firstScriptTag.parentNode.insertBefore(tag, firstScriptTag);
+    }
+
+}(jQuery));
+
+(function ($, undefined) {
+
+    "use strict";
+
+    var ProfileInitializer = namespace("Tmt.Initializers").ProfileInitializer = function () {
+        this.profile = null;
+        this.initialize();
+    };
+
+    inherit([Tmt.EventEmitter], ProfileInitializer, {
+        'build': function (app) {
+            addEvents.call(this, app);
+        }
+    });
+
+    function addEvents(app) {
+        this.profile = app.profile;
+        app.initializers.UpvoteFormsInitializer.on('bound', bindToUpvoteForms.bind(this));
+    }
+
+    function bindToUpvoteForms(UpvoteFormsInitializer) {
+        for (var i = 0, len = UpvoteFormsInitializer.boxes.length; i < len; i++) {
+            var box = UpvoteFormsInitializer.boxes[i];
+            box.on("valueChange", onUpvoteValue.bind(this));
+        }
+    }
+
+    function onUpvoteValue(value, upvoteForm) {
+        var type = upvoteForm.isTrack() ? "tracks" : "albums";
+
+        if (value > 0) {
+            this.profile.addUpvote(type, upvoteForm.getObjectId(), value);
+        } else {
+            this.profile.removeUpvote(type, upvoteForm.getObjectId());
+        }
+    }
+
+}(jQuery));
+
+(function ($, undefined) {
+
+    "use strict";
+
+    /**
+     * Ajax-enabled forms public bootstraper
+     */
+    var SearchInitializer = namespace("Tmt.Initializers").SearchInitializer = function () {
+        this.initialize();
+    };
+
+    inherit([Tmt.EventEmitter], SearchInitializer, {
+        'build': function (app) {
+            addEvents.call(this, app);
+        }
+    });
+
+    function bindForm() {
+        new Tmt.Components.SearchForm();
+    }
+
+    function addEvents(app) {
+        app.on('ready', bindForm.bind(this));
     }
 
 }(jQuery));

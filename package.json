@@ -7,12 +7,15 @@
     "production": "node node_modules/cross-env/bin/cross-env.js NODE_ENV=production node_modules/webpack/bin/webpack.js --progress --hide-modules --config=node_modules/laravel-mix/setup/webpack.config.js"
   },
   "devDependencies": {
+    "bloodhound-js": "^1.2.1",
     "bootstrap-sass": "^3.3.7",
     "evemit": "^1.0.2",
     "font-awesome": "^4.7.0",
     "gulp": "^3.9.1",
     "jquery": "^3.1.0",
     "laravel-elixir": "^6.0.0-9",
+    "typeahead": "^0.2.2",
+    "typeahead.js": "github:twitter/typeahead.js",
     "viewport-units-buggyfill": "^0.6.0"
   },
   "dependencies": {

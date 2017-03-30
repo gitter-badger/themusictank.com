@@ -2,6 +2,8 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Artists;
+use App\Models\Albums;
 use App\Models\Tracks;
 use App\Models\TrackUpvotes;
 use App\Models\AlbumUpvotes;
@@ -71,5 +73,20 @@ class AjaxController extends Controller
 
         $authUser->setProfile($profile, true);
         return response()->json($response);
+    }
+
+    public function artistSearch()
+    {
+        return response()->json(Artists::api()->search(request('q')));
+    }
+
+    public function trackSearch()
+    {
+        return response()->json(Tracks::api()->search(request('q')));
+    }
+
+    public function albumSearch()
+    {
+        return response()->json(Albums::api()->search(request('q')));
     }
 }

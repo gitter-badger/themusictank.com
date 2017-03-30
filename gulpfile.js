@@ -16,9 +16,12 @@ elixir(function(mix) {
             'components/ajax-form.js',
             'components/player.js',
             'components/upvote-form.js',
+            'components/search-form.js',
 
             'initializers/ajax-forms-initializer.js',
             'initializers/player-initializer.js',
+            'initializers/profile-initializer.js',
+            'initializers/search-initializer.js',
             'initializers/upvote-forms-initializer.js'
         ],
         'public/assets/js/app.js',
@@ -28,7 +31,8 @@ elixir(function(mix) {
     mix.scripts(
         [
             'jquery/dist/jquery.min.js',
-            'evemit/evemit.min.js'
+            'evemit/evemit.min.js',
+            'typeahead.js/dist/typeahead.bundle.min.js'
         ],
         'public/assets/js/vendor.js',
         'node_modules/'

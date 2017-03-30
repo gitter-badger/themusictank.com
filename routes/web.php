@@ -25,6 +25,7 @@ Route::get('artists/{slug}', "ArtistController@show");
 Route::get('albums/{slug}', "AlbumController@show");
 
 // Tracks
+Route::get('tracks/review/{slug}', "TrackController@review")->middleware('auth');
 Route::get('tracks/{slug}', "TrackController@show");
 
 // Ajax

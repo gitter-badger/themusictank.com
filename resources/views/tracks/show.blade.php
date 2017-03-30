@@ -16,30 +16,30 @@
 @endsection
 
 @section('content')
-<section class="header">
-    <h1>
-        <a href="{{ action('ArtistController@show', ['slug' => $track->artist->slug]) }}">
-            {{ $track->artist->name }}
-        </a>
-    </h1>
-    <h2>
-        <a href="{{ action('AlbumController@show', ['slug' => $track->album->slug]) }}">
-            {{ $track->album->name }}
-        </a>
-    </h2>
-    <h3>
-        <a href="{{ action('TrackController@show', ['slug' => $track->slug]) }}">
-            {{ $track->name }}
-        </a>
-    </h3>
-</section>
+    <section class="header">
+        <h1>
+            <a href="{{ action('ArtistController@show', ['slug' => $track->artist->slug]) }}">
+                {{ $track->artist->name }}
+            </a>
+        </h1>
+        <h2>
+            <a href="{{ action('AlbumController@show', ['slug' => $track->album->slug]) }}">
+                {{ $track->album->name }}
+            </a>
+        </h2>
+        <h3>
+            <a href="{{ action('TrackController@show', ['slug' => $track->slug]) }}">
+                {{ $track->name }}
+            </a>
+            @include('partials.buttons.upvote', ['type' => "track", 'id' => $track->id])
+        </h3>
+    </section>
 
-@include('partials.buttons.upvote', ['type' => "track", 'id' => $track->id])
+    <a href="{{ action('TrackController@review', ['slug' => $track->slug]) }}">Review track</a>
 
-@include('partials.player', ['track' => $track])
-
-<section class="stats">
-    Still to do.
-</section>
+    <section class="stats" style="color:#ccc; height: 300px;">
+        todo: Output stats here.
+    </section>
+    @include('partials.player', ['track' => $track])
 
 @endsection

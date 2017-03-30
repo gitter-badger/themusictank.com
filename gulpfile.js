@@ -25,7 +25,6 @@ elixir(function(mix) {
         'resources/assets/js/'
     );
 
-
     mix.scripts(
         [
             'jquery/dist/jquery.min.js',

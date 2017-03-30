@@ -11,6 +11,6 @@ trait Upvotable
 
     public static function shouldRemoveVote($value)
     {
-        return (int)$value === -1;
+        return (int)$value === 0;
     }
 }

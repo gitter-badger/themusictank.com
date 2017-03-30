@@ -13,7 +13,10 @@
 
         "initialize": function () {
             Tmt.EventEmitter.prototype.initialize.call(this);
+
             this.addEvents();
+            resetButtons.call(this);
+            this.element.addClass("initialized");
         },
 
         "addEvents": function () {
@@ -43,8 +46,12 @@
 
             if (value == 1) {
                 this.element.addClass("liked");
+                enableButton(this.element.find('button.up'));
             } else if (value == 2) {
                 this.element.addClass("disliked");
+                this.element.find('button.down').html('<i class="fa fa-thumbs-down" aria-hidden="true">');
+            } else {
+                resetButtons.call(this);
             }
 
             this.emit('valueChange', value, this);
@@ -62,6 +69,20 @@
             this.element.find("button").removeAttr("disabled");
         }
     });
+
+    function resetButtons() {
+        this.element.find('button.up').html('<i class="fa fa-thumbs-o-up" aria-hidden="true">');
+        this.element.find('button.down').html('<i class="fa fa-thumbs-o-down" aria-hidden="true">');
+    }
+
+    function enableButton(button) {
+        if (button.hasClass("up")) {
+            button.html('<i class="fa fa-thumbs-up" aria-hidden="true">');
+        }
+        if (button.hasClass("down")) {
+            button.html('<i class="fa fa-thumbs-down" aria-hidden="true">');
+        }
+    }
 
     function onButtonClick(evt) {
         var clickedValue = evt.target.value;

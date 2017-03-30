@@ -100,11 +100,11 @@
 
     function onProgressClick(e) {
         if (this.isPlaying) {
-            var progressBar = this.element.find(".progress-wrap .progress");
-            var offset = progressBar.offset();
-            var relX = e.pageX - offset.left;
-            var pctLocation = relX / progressBar.width();
-            player.seekTo(pctLocation * this.ytPlayer.getDuration(), true);
+            var progressBar = this.element.find(".progress-wrap .progress"),
+                offset = progressBar.offset(),
+                relX = e.pageX - offset.left,
+                pctLocation = relX / progressBar.width();
+            this.ytPlayer.seekTo(pctLocation * this.ytPlayer.getDuration(), true);
         }
     };
 

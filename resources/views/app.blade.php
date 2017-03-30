@@ -26,6 +26,7 @@
     <link href="https://plus.google.com/117543200043480372792" rel="publisher">
     <link rel="apple-touch-icon" href="http://static.themusictank.com/assets/images/social-share.png">
     <link rel="icon" href="http://static.themusictank.com/assets/images/social-share.png">
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css">
     <link rel="stylesheet" href="{{ elixir('assets/css/app.css') }}">
 
     @stack('header')
@@ -83,12 +84,9 @@
 	<script src="{{ elixir('assets/js/vendor.js') }}"></script>
 	<script src="{{ elixir('assets/js/app.js') }}"></script>
     <script>(function(){
-            var app = new Tmt.App();
-            app.boot();
-            app.setData(<?php echo auth()->user() ? json_encode(auth()->user()) : '{}' ?>);
-        })();</script>
-
-{{ dd(auth()->user()) }}
-
+        var app = new Tmt.App();
+        app.boot();
+        app.setData(<?php echo auth()->user() ? json_encode(auth()->user()) : '{}' ?>);
+    })();</script>
 </body>
 </html>

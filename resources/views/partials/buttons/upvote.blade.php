@@ -9,8 +9,8 @@
         {{ Form::hidden('id', $id) }}
         {{ Form::hidden('vote') }}
         <ul>
-            <li>{{ Form::button('Like', ['disabled' => 'disabled', 'class' => 'up', 'name' => 'cast', 'value' => 1]) }}</li>
-            <li>{{ Form::button('Dislike', ['disabled' => 'disabled', 'class' => 'down', 'name' => 'cast', 'value' => 2]) }}</li>
+            <li>{{ Form::button('Like', ['disabled' => 'disabled', 'title' => 'Like', 'class' => 'up', 'name' => 'cast', 'value' => 1]) }}</li>
+            <li>{{ Form::button('Dislike', ['disabled' => 'disabled', 'title' => 'Dislike', 'class' => 'down', 'name' => 'cast', 'value' => 2]) }}</li>
         </ul>
     {{ Form::close() }}
  @endif

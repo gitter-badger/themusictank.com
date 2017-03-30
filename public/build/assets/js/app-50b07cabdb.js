@@ -372,11 +372,11 @@ function filter(selector, haystack) {
 
     function onProgressClick(e) {
         if (this.isPlaying) {
-            var progressBar = this.element.find(".progress-wrap .progress");
-            var offset = progressBar.offset();
-            var relX = e.pageX - offset.left;
-            var pctLocation = relX / progressBar.width();
-            player.seekTo(pctLocation * this.ytPlayer.getDuration(), true);
+            var progressBar = this.element.find(".progress-wrap .progress"),
+                offset = progressBar.offset(),
+                relX = e.pageX - offset.left,
+                pctLocation = relX / progressBar.width();
+            this.ytPlayer.seekTo(pctLocation * this.ytPlayer.getDuration(), true);
         }
     };
 
@@ -461,7 +461,10 @@ function filter(selector, haystack) {
 
         "initialize": function () {
             Tmt.EventEmitter.prototype.initialize.call(this);
+
             this.addEvents();
+            resetButtons.call(this);
+            this.element.addClass("initialized");
         },
 
         "addEvents": function () {
@@ -491,8 +494,12 @@ function filter(selector, haystack) {
 
             if (value == 1) {
                 this.element.addClass("liked");
+                enableButton(this.element.find('button.up'));
             } else if (value == 2) {
                 this.element.addClass("disliked");
+                this.element.find('button.down').html('<i class="fa fa-thumbs-down" aria-hidden="true">');
+            } else {
+                resetButtons.call(this);
             }
 
             this.emit('valueChange', value, this);
@@ -510,6 +517,20 @@ function filter(selector, haystack) {
             this.element.find("button").removeAttr("disabled");
         }
     });
+
+    function resetButtons() {
+        this.element.find('button.up').html('<i class="fa fa-thumbs-o-up" aria-hidden="true">');
+        this.element.find('button.down').html('<i class="fa fa-thumbs-o-down" aria-hidden="true">');
+    }
+
+    function enableButton(button) {
+        if (button.hasClass("up")) {
+            button.html('<i class="fa fa-thumbs-up" aria-hidden="true">');
+        }
+        if (button.hasClass("down")) {
+            button.html('<i class="fa fa-thumbs-down" aria-hidden="true">');
+        }
+    }
 
     function onButtonClick(evt) {
         var clickedValue = evt.target.value;

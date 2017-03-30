@@ -1,63 +1,64 @@
-(function($, undefined) {
+(function ($, undefined) {
 
     "use strict";
 
-
-    var UpvoteForm = namespace("Tmt.Components").UpvoteForm = function(ajaxForm) {
+    var UpvoteForm = namespace("Tmt.Components").UpvoteForm = function (ajaxForm) {
         this.ajaxForm = ajaxForm;
         this.element = ajaxForm.element;
-        this.events = [
-            'valueChange'
-        ];
 
-        this.addEvents();
+        this.initialize();
     };
 
-    inherit([ Evemit ], UpvoteForm, {
+    inherit([Tmt.EventEmitter], UpvoteForm, {
 
-        "addEvents" : function() {
+        "initialize": function () {
+            Tmt.EventEmitter.prototype.initialize.call(this);
+            this.addEvents();
+        },
+
+        "addEvents": function () {
             this.element.find("button").click(onButtonClick.bind(this));
             this.ajaxForm.on('submitSuccess', onSubmitSuccess.bind(this));
         },
 
-        "getType" : function() {
+        "getType": function () {
             return this.element.data("upvote-type");
         },
 
-        "getObjectId" : function() {
+        "getObjectId": function () {
             return this.element.data("upvote-object-id");
         },
 
-        "isTrack" : function() {
+        "isTrack": function () {
             return this.getType() == "track";
         },
 
-        "isAlbum" : function() {
+        "isAlbum": function () {
             return this.getType() == "album";
         },
 
-        "setValue" : function(value) {
+        "setValue": function (value) {
             this.element.removeClass("liked disliked");
             this.element.find("input[name=vote]").val(value);
 
             if (value == 1) {
                 this.element.addClass("liked");
-            } else if(value == 2) {
+            } else if (value == 2) {
                 this.element.addClass("disliked");
             }
 
             this.emit('valueChange', value, this);
         },
 
-        "getValue" : function() {
+        "getValue": function () {
             return this.element.find("input[name=vote]").val();
         },
 
-        "lock" : function() {
+        "lock": function () {
             this.element.find("button").attr("disabled", "disabled");
         },
 
-        "unlock" : function() {
+        "unlock": function () {
             this.element.find("button").removeAttr("disabled");
         }
     });

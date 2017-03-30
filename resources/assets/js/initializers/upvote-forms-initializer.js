@@ -1,21 +1,17 @@
-(function($, undefined) {
+(function ($, undefined) {
 
     "use strict";
 
     /**
      * Ajax-enabled forms public bootstraper
      */
-    var UpvoteFormsInitializer = namespace("Tmt.Initializers").UpvoteFormsInitializer = function() {
+    var UpvoteFormsInitializer = namespace("Tmt.Initializers").UpvoteFormsInitializer = function () {
         this.boxes = [];
-
-        this.events = [
-            "bound",
-            "completed"
-        ];
+        this.initialize();
     };
 
-    inherit([ Evemit ], UpvoteFormsInitializer, {
-        'build' : function(app) {
+    inherit([Tmt.EventEmitter], UpvoteFormsInitializer, {
+        'build': function (app) {
             addEvents.call(this, app);
         }
     });
@@ -35,17 +31,19 @@
         this.emit('bound', this);
     }
 
-    function updateStateFirstTime(newValues) {
+    function updateStateFirstTime(type, newValues) {
+
         for (var i = 0, len = this.boxes.length; i < len; i++) {
-            var box = this.boxes[i],
-                source = newValues[ box.isTrack() ? "tracks" : "albums" ],
-                matching = source[box.getObjectId()];
+            var box = this.boxes[i];
 
-            if (matching)  {
-                box.setValue(matching);
+            if (box.getType() == type) {
+                var matching = newValues[box.getObjectId()];
+                if (matching) {
+                    box.setValue(matching);
+                }
+
+                box.unlock();
             }
-
-            box.unlock();
         }
 
         this.emit("completed");

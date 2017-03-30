@@ -20,7 +20,6 @@ function namespace(namespace) {
     return object;
 }
 
-
 /**
  * Globally exposed extending function.
  * @param {array} parent prototypes
@@ -39,12 +38,11 @@ function extend(target, source) {
 }
 
 function inherit(parents, child, properties) {
-
     var childPrototype = properties;
 
     for (var i in parents) {
         var parentPrototype = Object.create(parents[i].prototype);
-        childPrototype = extend(childPrototype, parentPrototype);
+        childPrototype = extend(parentPrototype, childPrototype);
     }
 
     child.prototype = childPrototype;
@@ -77,31 +75,55 @@ function filter(selector, haystack) {
 
     "use strict";
 
-    var App = namespace("Tmt").App = function() {
-        this.profile = null;
-        this.initializers = [];
-        this.events = [
-            "ready"
-        ];
+    var EventEmitter = namespace("Tmt").EventEmitter = function() {
+        this.events = null;
     };
 
-    inherit([ Evemit ], App, {
-        'init': function () {
+    inherit([Evemit], namespace("Tmt").EventEmitter, {
+        'initialize': function () {
+            // Exposing the creation in a prototype function
+            // ensures child classes will have an instantiated value
+            // even if they don't go through the constructor.
+            this.events = {};
+        }
+    });
+
+}());
+
+(function (undefined) {
+
+    "use strict";
+
+    var App = namespace("Tmt").App = function () {
+        this.profile = null;
+        this.initializers = [];
+
+        this.initialize();
+    };
+
+    inherit([Tmt.EventEmitter], App, {
+        boot: function () {
             this.profile = new Tmt.Models.Profile();
             prepareInitializers.call(this);
             this.emit("ready");
+        },
+
+        setData: function (data) {
+            if (data.profile) {
+                this.profile.setData(data.profile);
+            }
         }
     });
 
     function prepareInitializers() {
         // Create an intance of each initializer.
-        for(var type in Tmt.Initializers) {
+        for (var type in Tmt.Initializers) {
             this.initializers[type] = new Tmt.Initializers[type]();
         }
 
         // Run the initialization. This is done in two steps because
         // initializers may depend on one another.
-        for(var type in this.initializers) {
+        for (var type in this.initializers) {
             this.initializers[type].build(this);
         }
     }
@@ -112,39 +134,74 @@ function filter(selector, haystack) {
 
     "use strict";
 
-    var Profile = namespace("Tmt.Models").Profile = function(userData) {
-        this.events = [
-            "upvoteUpdate"
-        ];
-
-        this.upvotes = {
-            tracks : {},
-            albums : {}
-        };
-        this.setData(userData);
+    var Profile = namespace("Tmt.Models").Profile = function () {
+        this.initialize();
     };
 
-    inherit([ Evemit ], Profile, {
+    inherit([Tmt.EventEmitter], Profile, {
 
-        'setData' : function(userData) {
-            for(var i in userData) {
-                this[i] = userData[i];
+        setData: function (userData) {
+            this.albumUpvotes = indexUpvotes("albumUpvotes", userData);
+            this.trackUpvotes = indexUpvotes("trackUpvotes", userData);
+
+            if (this.albumUpvotes && this.albumUpvotes.length > 0) {
+                this.emit("upvoteSet", "album", this.albumUpvotes);
             }
 
-            this.emit("upvoteSet", this.upvotes);
+            if (this.trackUpvotes && this.trackUpvotes.length > 0) {
+                this.emit("upvoteSet", "track", this.trackUpvotes);
+            }
         },
 
-        'addUpvote' : function (type, key, value) {
-            this.upvotes[type][key] = value;
-            this.emit("upvoteUpdate", this.upvotes);
+        addUpvote: function (type, key, value) {
+            if (type == "album") {
+                return this.addAlbumUpvote(key, value);
+            } else if (type == "track") {
+                return this.addTrackUpvote(key, value);
+            }
         },
 
-        'removeUpvote' : function(type, key) {
-            delete this.upvotes[type][key];
-            this.emit("upvoteUpdate", this.upvotes);
+        addAlbumUpvote: function (key, value) {
+            this.albumUpvotes[key] = value;
+            this.emit("upvoteUpdate", "album", this.albumUpvotes);
+        },
+
+        addTrackUpvote: function (key, value) {
+            this.trackUpvotes[key] = value;
+            this.emit("upvoteUpdate", "track", this.trackUpvotes);
+        },
+
+        removeUpvote: function (type, key) {
+            if (type == "album") {
+                return this.removeAlbumUpvote(key, value);
+            } else if (type == "track") {
+                return this.removeTrackUpvote(key, value);
+            }
+        },
+
+        removeAlbumUpvote: function (type, key) {
+            delete this.albumUpvotes[key];
+            this.emit("upvoteUpdate", "album", this.upvotes);
+        },
+
+        removeTrackUpvote: function (type, key) {
+            delete this.trackUpvotes[key];
+            this.emit("upvoteUpdate", "track", this.upvotes);
         }
-
     });
+
+    function indexUpvotes(key, data) {
+        var indexed = [];
+        if (data && data[key]) {
+            for (var i in data[key]) {
+                var id = data[key][i].id,
+                    value = data[key][i].vote;
+
+                indexed[id] = value;
+            }
+        }
+        return indexed;
+    }
 
 }());
 
@@ -158,17 +215,11 @@ function filter(selector, haystack) {
      */
     var AjaxForm = namespace("Tmt.Components").AjaxForm = function(el) {
         this.element = el;
-        this.events = [
-            'beforeSubmit',
-            'bound',
-            'render',
-            'submit',
-            'submitSuccess'
-        ];
+        this.initialize();
     };
 
-    inherit([ Evemit ], AjaxForm, {
-        init : function() {
+    inherit([ Tmt.EventEmitter ], AjaxForm, {
+        render : function() {
             this.addEvents();
         },
 
@@ -219,48 +270,47 @@ function filter(selector, haystack) {
 
 }());
 
-(function($, undefined) {
+(function ($, undefined) {
 
     "use strict";
 
-    var Player = namespace("Tmt.Components").Player = function(element) {
+    var Player = namespace("Tmt.Components").Player = function (element) {
         this.element = element;
         this.embed = null;
         this.ytPlayer = null;
-        this.events = [
-            'play',
-            'stop'
-        ];
         this.isPlaying = false;
         this.range = null;
+
+        this.initialize();
     };
 
-    inherit([ Evemit ], Player, {
-        'init' : function() {
+    inherit([Tmt.EventEmitter], Player, {
+
+        'render': function () {
             this.hasVideoId() ?
                 embedVideo.call(this) :
                 queryForKey.call(this);
         },
 
-        'getEmbedId' : function() {
+        'getEmbedId': function () {
             if (this.hasVideoId) {
                 return "tmt_player_" + this.getVideoId();
             }
         },
 
-        'getVideoId' : function() {
+        'getVideoId': function () {
             return this.element.data("song-vid");
         },
 
-        'setVideoId' : function(id) {
+        'setVideoId': function (id) {
             this.element.data("song-vid", id);
         },
 
-        'hasVideoId' : function() {
+        'hasVideoId': function () {
             return this.getVideoId() != "";
         },
 
-        'getSongSlug' : function() {
+        'getSongSlug': function () {
             return this.element.data("song-slug");
         }
     });
@@ -280,11 +330,11 @@ function filter(selector, haystack) {
         var id = this.getEmbedId();
         var iframeHtml =
             '<iframe id="' + id + '" scrolling="no" marginwidth="0" ' +
-                'marginheight="0" frameborder="0" src="//www.youtube.com/embed/' +
-                this.getVideoId() + '?enablejsapi=1&amp;iv_load_policy=3&amp;' +
-                'playerapiid=songplayer_component_17&amp;disablekb=1&amp;wmode=transparent&amp;controls=0' +
-                '&amp;playsinline=0&amp;showinfo=0&amp;modestbranding=1&amp;rel=0&amp;' +
-                'autoplay=0&amp;loop=0&amp;origin=' + window.location.origin + '"></iframe>'
+            'marginheight="0" frameborder="0" src="//www.youtube.com/embed/' +
+            this.getVideoId() + '?enablejsapi=1&amp;iv_load_policy=3&amp;' +
+            'playerapiid=songplayer_component_17&amp;disablekb=1&amp;wmode=transparent&amp;controls=0' +
+            '&amp;playsinline=0&amp;showinfo=0&amp;modestbranding=1&amp;rel=0&amp;' +
+            'autoplay=0&amp;loop=0&amp;origin=' + window.location.origin + '"></iframe>'
 
         this.element.append(iframeHtml);
         this.embed = $("#" + id);
@@ -396,66 +446,67 @@ function filter(selector, haystack) {
 
 })(jQuery);
 
-(function($, undefined) {
+(function ($, undefined) {
 
     "use strict";
 
-
-    var UpvoteForm = namespace("Tmt.Components").UpvoteForm = function(ajaxForm) {
+    var UpvoteForm = namespace("Tmt.Components").UpvoteForm = function (ajaxForm) {
         this.ajaxForm = ajaxForm;
         this.element = ajaxForm.element;
-        this.events = [
-            'valueChange'
-        ];
 
-        this.addEvents();
+        this.initialize();
     };
 
-    inherit([ Evemit ], UpvoteForm, {
+    inherit([Tmt.EventEmitter], UpvoteForm, {
 
-        "addEvents" : function() {
+        "initialize": function () {
+            Tmt.EventEmitter.prototype.initialize.call(this);
+            this.addEvents();
+        },
+
+        "addEvents": function () {
             this.element.find("button").click(onButtonClick.bind(this));
             this.ajaxForm.on('submitSuccess', onSubmitSuccess.bind(this));
         },
 
-        "getType" : function() {
+        "getType": function () {
             return this.element.data("upvote-type");
         },
 
-        "getObjectId" : function() {
+        "getObjectId": function () {
             return this.element.data("upvote-object-id");
         },
 
-        "isTrack" : function() {
+        "isTrack": function () {
             return this.getType() == "track";
         },
 
-        "isAlbum" : function() {
+        "isAlbum": function () {
             return this.getType() == "album";
         },
 
-        "setValue" : function(value) {
+        "setValue": function (value) {
             this.element.removeClass("liked disliked");
             this.element.find("input[name=vote]").val(value);
 
             if (value == 1) {
                 this.element.addClass("liked");
-            } else if(value == 2) {
+            } else if (value == 2) {
                 this.element.addClass("disliked");
             }
 
             this.emit('valueChange', value, this);
         },
 
-        "getValue" : function() {
+        "getValue": function () {
             return this.element.find("input[name=vote]").val();
         },
 
-        "lock" : function() {
+        "lock": function () {
             this.element.find("button").attr("disabled", "disabled");
         },
 
-        "unlock" : function() {
+        "unlock": function () {
             this.element.find("button").removeAttr("disabled");
         }
     });
@@ -484,22 +535,20 @@ function filter(selector, haystack) {
 
 })(jQuery);
 
-(function($, undefined) {
+(function ($, undefined) {
 
     "use strict";
 
     /**
      * Ajax-enabled forms public bootstraper
      */
-    var AjaxFormsInitializer = namespace("Tmt.Initializers").AjaxFormsInitializer = function() {
+    var AjaxFormsInitializer = namespace("Tmt.Initializers").AjaxFormsInitializer = function () {
         this.forms = [];
-        this.events = [
-            "bound"
-        ];
+        this.initialize();
     };
 
-    inherit([ Evemit ], AjaxFormsInitializer, {
-        'build' : function(app) {
+    inherit([Tmt.EventEmitter], AjaxFormsInitializer, {
+        'build': function (app) {
             addEvents.call(this, app);
         }
     });
@@ -507,9 +556,9 @@ function filter(selector, haystack) {
     function bindPageForms() {
         var forms = [];
 
-        $("form[data-ctrl-mode=ajax]").each(function(){
+        $("form[data-ctrl-mode=ajax]").each(function () {
             var form = new Tmt.Components.AjaxForm($(this));
-            form.init();
+            form.render();
             forms.push(form);
         });
 
@@ -523,20 +572,17 @@ function filter(selector, haystack) {
 
 }(jQuery));
 
-(function($, undefined) {
+(function ($, undefined) {
 
     "use strict";
 
-    var PlayerInitializer = namespace("Tmt.Initializers").PlayerInitializer = function() {
-        this.events = [
-            "bound",
-            "youtubeBound"
-        ];
+    var PlayerInitializer = namespace("Tmt.Initializers").PlayerInitializer = function () {
+        this.initialize();
         this.players = [];
     };
 
-    inherit([ Evemit ], PlayerInitializer, {
-        'build' : function(app) {
+    inherit([Tmt.EventEmitter], PlayerInitializer, {
+        'build': function (app) {
             addEvents.call(this, app);
         }
     });
@@ -548,7 +594,7 @@ function filter(selector, haystack) {
     function onDomReady() {
         var components = $("*[data-song-vid]");
         if (components.length > 0) {
-            for(var i = 0; i < components.length; i++) {
+            for (var i = 0; i < components.length; i++) {
                 this.players.push(new Tmt.Components.Player($(components.get(i))));
             }
             includeYoutubeScript.call(this);
@@ -557,8 +603,8 @@ function filter(selector, haystack) {
     }
 
     function onYouTubeReady() {
-        for(var i = 0; i < this.players.length; i++) {
-            this.players[i].init();
+        for (var i = 0; i < this.players.length; i++) {
+            this.players[i].render();
         }
     }
 
@@ -574,24 +620,20 @@ function filter(selector, haystack) {
 
 }(jQuery));
 
-(function($, undefined) {
+(function ($, undefined) {
 
     "use strict";
 
     /**
      * Ajax-enabled forms public bootstraper
      */
-    var UpvoteFormsInitializer = namespace("Tmt.Initializers").UpvoteFormsInitializer = function() {
+    var UpvoteFormsInitializer = namespace("Tmt.Initializers").UpvoteFormsInitializer = function () {
         this.boxes = [];
-
-        this.events = [
-            "bound",
-            "completed"
-        ];
+        this.initialize();
     };
 
-    inherit([ Evemit ], UpvoteFormsInitializer, {
-        'build' : function(app) {
+    inherit([Tmt.EventEmitter], UpvoteFormsInitializer, {
+        'build': function (app) {
             addEvents.call(this, app);
         }
     });
@@ -611,17 +653,19 @@ function filter(selector, haystack) {
         this.emit('bound', this);
     }
 
-    function updateStateFirstTime(newValues) {
+    function updateStateFirstTime(type, newValues) {
+
         for (var i = 0, len = this.boxes.length; i < len; i++) {
-            var box = this.boxes[i],
-                source = newValues[ box.isTrack() ? "tracks" : "albums" ],
-                matching = source[box.getObjectId()];
+            var box = this.boxes[i];
 
-            if (matching)  {
-                box.setValue(matching);
+            if (box.getType() == type) {
+                var matching = newValues[box.getObjectId()];
+                if (matching) {
+                    box.setValue(matching);
+                }
+
+                box.unlock();
             }
-
-            box.unlock();
         }
 
         this.emit("completed");

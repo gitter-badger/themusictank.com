@@ -2,7 +2,20 @@
 
 namespace App\Models\Entities;
 
-class TrackUpvote
-{
+use JsonSerializable;
 
+class TrackUpvote implements JsonSerializable
+{
+    public $id;
+    public $trackId;
+    public $vote;
+    public $profileId;
+
+    public function jsonSerialize()
+    {
+        return [
+            "id" => $this->trackId,
+            "vote" => $this->vote
+        ];
+    }
 }

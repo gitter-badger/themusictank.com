@@ -8,17 +8,11 @@
      */
     var AjaxForm = namespace("Tmt.Components").AjaxForm = function(el) {
         this.element = el;
-        this.events = [
-            'beforeSubmit',
-            'bound',
-            'render',
-            'submit',
-            'submitSuccess'
-        ];
+        this.initialize();
     };
 
-    inherit([ Evemit ], AjaxForm, {
-        init : function() {
+    inherit([ Tmt.EventEmitter ], AjaxForm, {
+        render : function() {
             this.addEvents();
         },
 

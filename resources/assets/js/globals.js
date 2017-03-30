@@ -20,7 +20,6 @@ function namespace(namespace) {
     return object;
 }
 
-
 /**
  * Globally exposed extending function.
  * @param {array} parent prototypes
@@ -39,12 +38,11 @@ function extend(target, source) {
 }
 
 function inherit(parents, child, properties) {
-
     var childPrototype = properties;
 
     for (var i in parents) {
         var parentPrototype = Object.create(parents[i].prototype);
-        childPrototype = extend(childPrototype, parentPrototype);
+        childPrototype = extend(parentPrototype, childPrototype);
     }
 
     child.prototype = childPrototype;

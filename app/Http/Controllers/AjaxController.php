@@ -28,33 +28,48 @@ class AjaxController extends Controller
     public function upvoteTrack()
     {
         $vote = (int)request('vote');
+        $objectId = (int)request('id');
 
-        if ($vote < 0) {
-            $response = TrackUpvotes::api()->removeVote(request('id'), auth()->user()->getProfile()->id);
+        $authUser = auth()->user();
+        $profile = $authUser->getProfile();
+
+        if (TrackUpvotes::shouldAddVote($vote)) {
+            $response = TrackUpvotes::api()->vote($objectId, $profile->id, $vote);
+            $profile->addTrackVote($objectId, $vote);
+
+        } elseif (TrackUpvotes::shouldRemoveVote($vote)) {
+            $response = TrackUpvotes::api()->removeVote($objectId, $profile->id);
+            $profile->removeTrackVote($objectId);
+
         } else {
-            $response = TrackUpvotes::api()->vote(
-                request('id'),
-                auth()->user()->getProfile()->id,
-                $vote
-            );
+            return abort(404);
         }
+
+        $authUser->setProfile($profile, true);
         return response()->json($response);
     }
 
     public function upvoteAlbum()
     {
         $vote = (int)request('vote');
+        $objectId = (int)request('id');
 
-        if ($vote < 0) {
-            $response = AlbumUpvotes::api()->removeVote(request('id'), auth()->user()->getProfile()->id);
+        $authUser = auth()->user();
+        $profile = $authUser->getProfile();
+
+        if (AlbumUpvotes::shouldAddVote($vote)) {
+            $response = AlbumUpvotes::api()->vote($objectId, $profile->id, $vote);
+            $profile->addAlbumVote($objectId, $vote);
+
+        } elseif (AlbumUpvotes::shouldRemoveVote($vote)) {
+            $response = AlbumUpvotes::api()->removeVote($objectId, $profile->id);
+            $profile->removeTrackVote($objectId);
+
         } else {
-            $response = AlbumUpvotes::api()->vote(
-                request('id'),
-                auth()->user()->getProfile()->id,
-                $vote
-            );
+            return abort(404);
         }
 
+        $authUser->setProfile($profile, true);
         return response()->json($response);
     }
 }

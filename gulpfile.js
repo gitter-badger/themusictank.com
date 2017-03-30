@@ -1,11 +1,14 @@
 var elixir = require('laravel-elixir');
 
+process.env.DISABLE_NOTIFIER = true;
+
 elixir(function(mix) {
     mix.sass('app.scss', 'public/assets/css');
 
     mix.scripts(
         [
             'globals.js',
+            'event-emitter.js',
             'app.js',
 
             'models/profile.js',

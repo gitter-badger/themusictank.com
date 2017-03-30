@@ -84,8 +84,8 @@
 	<script src="{{ elixir('assets/js/app.js') }}"></script>
     <script>(function(){
             var app = new Tmt.App();
-            app.init();
-            app.profile.setData(<?php echo auth()->user() ? auth()->user()->getProfile()->exportToJson() : '{}' ?>);
+            app.boot();
+            app.setData(<?php echo auth()->user() ? json_encode(auth()->user()) : '{}' ?>);
         })();</script>
 
 {{ dd(auth()->user()) }}

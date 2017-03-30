@@ -1,19 +1,17 @@
-(function($, undefined) {
+(function ($, undefined) {
 
     "use strict";
 
     /**
      * Ajax-enabled forms public bootstraper
      */
-    var AjaxFormsInitializer = namespace("Tmt.Initializers").AjaxFormsInitializer = function() {
+    var AjaxFormsInitializer = namespace("Tmt.Initializers").AjaxFormsInitializer = function () {
         this.forms = [];
-        this.events = [
-            "bound"
-        ];
+        this.initialize();
     };
 
-    inherit([ Evemit ], AjaxFormsInitializer, {
-        'build' : function(app) {
+    inherit([Tmt.EventEmitter], AjaxFormsInitializer, {
+        'build': function (app) {
             addEvents.call(this, app);
         }
     });
@@ -21,9 +19,9 @@
     function bindPageForms() {
         var forms = [];
 
-        $("form[data-ctrl-mode=ajax]").each(function(){
+        $("form[data-ctrl-mode=ajax]").each(function () {
             var form = new Tmt.Components.AjaxForm($(this));
-            form.init();
+            form.render();
             forms.push(form);
         });
 

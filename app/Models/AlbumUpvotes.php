@@ -3,9 +3,12 @@
 namespace App\Models;
 
 use App\Models\Restful\Model;
+use App\Models\Traits\Upvotable;
 
 class AlbumUpvotes extends Model
 {
+    use Upvotable;
+
     public $belongsTo = [
         "artist" => "App\Models\Entities\Artist",
         "album" => "App\Models\Entities\Album"

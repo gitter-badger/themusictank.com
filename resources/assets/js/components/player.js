@@ -1,45 +1,44 @@
-(function($, undefined) {
+(function ($, undefined) {
 
     "use strict";
 
-    var Player = namespace("Tmt.Components").Player = function(element) {
+    var Player = namespace("Tmt.Components").Player = function (element) {
         this.element = element;
         this.embed = null;
         this.ytPlayer = null;
-        this.events = [
-            'play',
-            'stop'
-        ];
         this.isPlaying = false;
         this.range = null;
+
+        this.initialize();
     };
 
-    inherit([ Evemit ], Player, {
-        'init' : function() {
+    inherit([Tmt.EventEmitter], Player, {
+
+        'render': function () {
             this.hasVideoId() ?
                 embedVideo.call(this) :
                 queryForKey.call(this);
         },
 
-        'getEmbedId' : function() {
+        'getEmbedId': function () {
             if (this.hasVideoId) {
                 return "tmt_player_" + this.getVideoId();
             }
         },
 
-        'getVideoId' : function() {
+        'getVideoId': function () {
             return this.element.data("song-vid");
         },
 
-        'setVideoId' : function(id) {
+        'setVideoId': function (id) {
             this.element.data("song-vid", id);
         },
 
-        'hasVideoId' : function() {
+        'hasVideoId': function () {
             return this.getVideoId() != "";
         },
 
-        'getSongSlug' : function() {
+        'getSongSlug': function () {
             return this.element.data("song-slug");
         }
     });
@@ -59,11 +58,11 @@
         var id = this.getEmbedId();
         var iframeHtml =
             '<iframe id="' + id + '" scrolling="no" marginwidth="0" ' +
-                'marginheight="0" frameborder="0" src="//www.youtube.com/embed/' +
-                this.getVideoId() + '?enablejsapi=1&amp;iv_load_policy=3&amp;' +
-                'playerapiid=songplayer_component_17&amp;disablekb=1&amp;wmode=transparent&amp;controls=0' +
-                '&amp;playsinline=0&amp;showinfo=0&amp;modestbranding=1&amp;rel=0&amp;' +
-                'autoplay=0&amp;loop=0&amp;origin=' + window.location.origin + '"></iframe>'
+            'marginheight="0" frameborder="0" src="//www.youtube.com/embed/' +
+            this.getVideoId() + '?enablejsapi=1&amp;iv_load_policy=3&amp;' +
+            'playerapiid=songplayer_component_17&amp;disablekb=1&amp;wmode=transparent&amp;controls=0' +
+            '&amp;playsinline=0&amp;showinfo=0&amp;modestbranding=1&amp;rel=0&amp;' +
+            'autoplay=0&amp;loop=0&amp;origin=' + window.location.origin + '"></iframe>'
 
         this.element.append(iframeHtml);
         this.embed = $("#" + id);

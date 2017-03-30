@@ -7,6 +7,11 @@ use App\Exceptions\AuthFailedException;
 
 class Profiles extends Model
 {
+    public $hasMany = [
+        "trackUpvotes" => \App\Models\Entities\TrackUpvote::class,
+        "albumUpvotes" => \App\Models\Entities\AlbumUpvote::class,
+    ];
+
     public function findById($id)
     {
         return $this->get(sprintf("profiles/%d", $id));

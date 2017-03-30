@@ -1,17 +1,14 @@
-(function($, undefined) {
+(function ($, undefined) {
 
     "use strict";
 
-    var PlayerInitializer = namespace("Tmt.Initializers").PlayerInitializer = function() {
-        this.events = [
-            "bound",
-            "youtubeBound"
-        ];
+    var PlayerInitializer = namespace("Tmt.Initializers").PlayerInitializer = function () {
+        this.initialize();
         this.players = [];
     };
 
-    inherit([ Evemit ], PlayerInitializer, {
-        'build' : function(app) {
+    inherit([Tmt.EventEmitter], PlayerInitializer, {
+        'build': function (app) {
             addEvents.call(this, app);
         }
     });
@@ -23,7 +20,7 @@
     function onDomReady() {
         var components = $("*[data-song-vid]");
         if (components.length > 0) {
-            for(var i = 0; i < components.length; i++) {
+            for (var i = 0; i < components.length; i++) {
                 this.players.push(new Tmt.Components.Player($(components.get(i))));
             }
             includeYoutubeScript.call(this);
@@ -32,8 +29,8 @@
     }
 
     function onYouTubeReady() {
-        for(var i = 0; i < this.players.length; i++) {
-            this.players[i].init();
+        for (var i = 0; i < this.players.length; i++) {
+            this.players[i].render();
         }
     }
 

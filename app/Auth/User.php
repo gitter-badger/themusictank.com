@@ -6,8 +6,9 @@ use Illuminate\Notifications\Notifiable;
 use Illuminate\Contracts\Auth\Authenticatable;
 use App\Models\Entities\ApiSessionToken;
 use App\Models\Entities\Profile;
+use JsonSerializable;
 
-class User implements Authenticatable
+class User implements Authenticatable, JsonSerializable
 {
     use Notifiable;
 
@@ -15,14 +16,25 @@ class User implements Authenticatable
     protected $token;
     protected $profile;
 
+    public function jsonSerialize()
+    {
+        return [
+            'profile' => $this->profile
+        ];
+    }
+
     public function isAdmin()
     {
         return (int)$this->token->userId === 2;
     }
 
-    public function setProfile(Profile $profile)
+    public function setProfile(Profile $profile, $reloadSession = false)
     {
         $this->profile = $profile;
+
+        if ($reloadSession) {
+            session()->regenerate();
+        }
     }
 
     public function getProfile()

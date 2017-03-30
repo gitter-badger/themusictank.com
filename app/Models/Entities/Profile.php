@@ -2,7 +2,9 @@
 
 namespace App\Models\Entities;
 
-class Profile
+use JsonSerializable;
+
+class Profile implements JsonSerializable
 {
 	public $realm;
 	public $username;
@@ -18,25 +20,45 @@ class Profile
     public $albumUpvotes = [];
     public $trackUpvotes = [];
 
-    public function exportToJson()
+    public function jsonSerialize()
     {
-        return json_encode([
-            "upvotes" => [
-                "tracks" => $this->simplifyUpvoteArray($this->trackUpvotes),
-                "albums" => $this->simplifyUpvoteArray($this->albumUpvotes, "albumId")
-            ]
-        ]);
+        return [
+            'username' => $this->username,
+            'email' => $this->email,
+            'slug' => $this->slug,
+            'name' => $this->name,
+            'albumUpvotes' => $this->albumUpvotes,
+            'trackUpvotes' => $this->trackUpvotes,
+        ];
     }
 
-    private function simplifyUpvoteArray($source, $primaryKey = "trackId")
+    public function addTrackVote($objectId, $vote)
     {
-        $return = [];
-
-        foreach ($source as $row) {
-            $return[$row->{$primaryKey} . ""] = $row->vote;
+        $key = "$objectId";
+        if (!array_key_exists($key, $this->trackUpvotes)) {
+            $this->trackUpvotes[$key] = new TrackUpvote();
         }
 
-        return $return;
+        $this->trackUpvotes[$key]->vote = $vote;
     }
 
+    public function removeTrackVote($key)
+    {
+        unset($this->trackUpvotes["$key"]);
+    }
+
+    public function addAlbumVote($objectId, $vote)
+    {
+        $key = "$objectId";
+        if (!array_key_exists($key, $this->albumUpvotes)) {
+            $this->albumUpvotes[$key] = new AlbumUpvote();
+        }
+
+        $this->albumUpvotes[$key]->vote = $vote;
+    }
+
+    public function removeAlbumVote($key)
+    {
+        unset($this->albumUpvotes["$key"]);
+    }
 }

@@ -1,13 +1,14 @@
-(function($, undefined) {
+(function ($, undefined) {
 
     "use strict";
 
-    var ProfileInitializer = namespace("Tmt.Initializers").ProfileInitializer = function() {
-       this.profile = null;
+    var ProfileInitializer = namespace("Tmt.Initializers").ProfileInitializer = function () {
+        this.profile = null;
+        this.initialize();
     };
 
-    inherit([ Evemit ], ProfileInitializer, {
-        'build' : function(app) {
+    inherit([Tmt.EventEmitter], ProfileInitializer, {
+        'build': function (app) {
             addEvents.call(this, app);
         }
     });

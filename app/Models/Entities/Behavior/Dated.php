@@ -8,6 +8,11 @@ trait Dated
 {
     public function getLastUpdatedForHumans()
     {
-        return Carbon::parse($this->last_updated)->diffForHumans();
+        return Carbon::parse($this->updated_at)->diffForHumans();
+    }
+
+    public function getCreatedDateForHumans()
+    {
+        return Carbon::parse($this->created_at)->diffForHumans();
     }
 }

@@ -2,7 +2,9 @@
 
 /**
  * Globally exposed namespacing function.
+ * @public
  * @param {string} namespace
+ * @return {object} A referene to the object created
  */
 function namespace(namespace) {
     var object = window, tokens = namespace.split("."), token;
@@ -22,8 +24,9 @@ function namespace(namespace) {
 
 /**
  * Globally exposed extending function.
- * @param {array} parent prototypes
- * @param {hash} children
+ * @param {object} target
+ * @param {hash} source
+ * @return {object}
  */
 function extend(target, source) {
     target = target || {};
@@ -37,6 +40,14 @@ function extend(target, source) {
     return target;
 }
 
+/**
+ * Sets up inheritance of the child object to the objects
+ * supplied by the parents object.
+ * @param {array} parents
+ * @param {object} child
+ * @param {hash} properties
+ * @return {object} An object with inheritance
+ */
 function inherit(parents, child, properties) {
     var childPrototype = properties;
 
@@ -51,12 +62,13 @@ function inherit(parents, child, properties) {
     return child;
 }
 
-
 /**
  * Globally filters out jQuery elements matching selector
- * from the haystack
- * @param {*} selector
- * @param {*} haystack
+ * from the haystack. This expects javascript objects that
+ * have a public "element" property.
+ * @param {string} selector
+ * @param {array} haystack
+ * @return {array} matches
  */
 function filter(selector, haystack) {
     var matches = [],
@@ -75,13 +87,23 @@ function filter(selector, haystack) {
 
     "use strict";
 
+    /**
+     * @namespace Tmt.EventEmitter
+     * @property {array} events A collection of object events and callbacks.
+     */
     var EventEmitter = namespace("Tmt").EventEmitter = function() {
         this.events = null;
     };
 
     inherit([Evemit], namespace("Tmt").EventEmitter, {
+
+        /**
+         * Initializes the event emitter object.
+         * @method
+         * @public
+         */
         'initialize': function () {
-            // Exposing the creation in a prototype function
+            // Exposing the creation in a prototype method
             // ensures child classes will have an instantiated value
             // even if they don't go through the constructor.
             this.events = {};
@@ -94,6 +116,13 @@ function filter(selector, haystack) {
 
     "use strict";
 
+    /**
+     * The global wrapper for the application instance.
+     * @namespace Tmt.App
+     * @extends {Tmt.EventEmitter}
+     * @property {Tmt.Models.Profile} profile - An active session profile
+     * @property {Array} initializers - An array of Tmt.Initializers object.
+     */
     var App = namespace("Tmt").App = function () {
         this.profile = null;
         this.initializers = [];
@@ -102,12 +131,24 @@ function filter(selector, haystack) {
     };
 
     inherit([Tmt.EventEmitter], App, {
+
+        /**
+         * Boots the application instance
+         * @public
+         * @method
+         */
         boot: function () {
             this.profile = new Tmt.Models.Profile();
             prepareInitializers.call(this);
             this.emit("ready");
         },
 
+        /**
+         * Assigns session data from PHP to this javascript
+         * session instance.
+         * @method
+         * @public
+         */
         setData: function (data) {
             if (data.profile) {
                 this.profile.setData(data.profile);
@@ -115,6 +156,12 @@ function filter(selector, haystack) {
         }
     });
 
+    /**
+     * Loads all initializer objects that it can dynamically find
+     * in the Tmt.Initializers namespace and then builds them.
+     * @method
+     * @private
+     */
     function prepareInitializers() {
         // Create an intance of each initializer.
         for (var type in Tmt.Initializers) {
@@ -134,12 +181,26 @@ function filter(selector, haystack) {
 
     "use strict";
 
+    /**
+     * The Profile object is the frontend equivalent of the
+     * backend Profile model.
+     * @namespace Tmt.Models.Profile
+     * @property {array} albumUpvotes
+     * @property {array} trackUpvotes
+     */
     var Profile = namespace("Tmt.Models").Profile = function () {
         this.initialize();
     };
 
     inherit([Tmt.EventEmitter], Profile, {
 
+        /**
+         * Applies backend session data to the object.
+         * @param {hash} userData
+         * @public
+         * @method
+         * @fires Profile#upvoteSet
+         */
         setData: function (userData) {
             this.albumUpvotes = indexUpvotes("albumUpvotes", userData);
             this.trackUpvotes = indexUpvotes("trackUpvotes", userData);
@@ -153,6 +214,15 @@ function filter(selector, haystack) {
             }
         },
 
+        /**
+         * Adds a new vote value to the current profile
+         * @param {string} type One of track or album
+         * @param {string} key The {type}'s id
+         * @param {string} value
+         * @fires Profile#upvoteUpdate
+         * @public
+         * @method
+         */
         addUpvote: function (type, key, value) {
             if (type == "album") {
                 return this.addAlbumUpvote(key, value);
@@ -161,16 +231,40 @@ function filter(selector, haystack) {
             }
         },
 
+        /**
+         * Add a new album vote
+         * @param {string} key album id
+         * @param {string} value
+         * @fires Profile#upvoteUpdate
+         * @public
+         * @method
+         */
         addAlbumUpvote: function (key, value) {
             this.albumUpvotes[key] = value;
             this.emit("upvoteUpdate", "album", this.albumUpvotes);
         },
 
+        /**
+         * Add a new track vote
+         * @param {string} key track id
+         * @param {string} value
+         * @fires Profile#upvoteUpdate
+         * @public
+         * @method
+         */
         addTrackUpvote: function (key, value) {
             this.trackUpvotes[key] = value;
             this.emit("upvoteUpdate", "track", this.trackUpvotes);
         },
 
+        /**
+         * Removes an existing vote value to the current profile
+         * @param {string} type One of track or album
+         * @param {string} key The {type}'s id
+         * @fires Profile#upvoteUpdate
+         * @public
+         * @method
+         */
         removeUpvote: function (type, key) {
             if (type == "album") {
                 return this.removeAlbumUpvote(key, value);
@@ -179,17 +273,42 @@ function filter(selector, haystack) {
             }
         },
 
+        /**
+         * Removes an existing album vote
+         * @param {string} key album id
+         * @param {string} value
+         * @fires Profile#upvoteUpdate
+         * @public
+         * @method
+         */
         removeAlbumUpvote: function (type, key) {
             delete this.albumUpvotes[key];
             this.emit("upvoteUpdate", "album", this.upvotes);
         },
 
+        /**
+         * Removes an existing track vote
+         * @param {string} key track id
+         * @param {string} value
+         * @fires Profile#upvoteUpdate
+         * @public
+         * @method
+         */
         removeTrackUpvote: function (type, key) {
             delete this.trackUpvotes[key];
             this.emit("upvoteUpdate", "track", this.upvotes);
         }
     });
 
+    /**
+     * Data saved in the database is not easily serachable
+     * in javascript. This method bridges the two.
+     * @param {string} key one of track or album
+     * @param {hash} data values as stored in the BD
+     * @return {hash} A javascript-oriented indexed object
+     * @private
+     * @method
+     */
     function indexUpvotes(key, data) {
         var indexed = [];
         if (data && data[key]) {

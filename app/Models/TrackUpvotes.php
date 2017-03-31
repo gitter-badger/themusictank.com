@@ -10,8 +10,8 @@ class TrackUpvotes extends Model
     use Upvotable;
 
     public $belongsTo = [
-        "artist" => "App\Models\Entities\Artist",
-        "track" => "App\Models\Entities\Track"
+        "artist" => \App\Models\Entities\Artist::class,
+        "track" => \App\Models\Entities\Track::class
     ];
 
     public function vote($id, $profileId, $vote)

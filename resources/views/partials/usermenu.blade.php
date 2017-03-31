@@ -1,7 +1,14 @@
 <ul class="profile">
 @if(isset($user))
     <li><a href="{{ action('ProfileController@dashboard') }}">Dashboard</a></li>
-    <li><a href="{{ action('NotificationController@index') }}"><i class="fa fa-bell-o">Notifications</i></a></li>
+    <li>
+        <span class="notifications-bell">
+            <a href="{{ action('NotificationController@index') }}">
+                <i class="fa fa-bell"></i>
+                <em>--</em>
+            </a>
+        </span>
+    </li>
     <li><a href="{{ action('ProfileController@show', ['id' => $user->getProfile()->slug]) }}">You</a></li>
     <li>
         <i class="fa fa-cog"></i>
@@ -14,7 +21,7 @@
         <li>
             <i class="fa fa-sliders"></i>
             <ul>
-                <li><?php echo $this->Html->link(__("Console"), ['controller' => 'tmt', 'action' => 'index']); ?></li>
+                <li><a href="{{ action('AdminController@console') }}">Admin Console</a></li>
             </ul>
         </li>
     @endif

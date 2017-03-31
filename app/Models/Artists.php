@@ -52,4 +52,9 @@ class Artists extends Model
         ]);
     }
 
+    public function fetchCount()
+    {
+        return $this->get("artists/count");
+    }
+
 }

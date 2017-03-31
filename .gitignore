@@ -1,4 +1,6 @@
 /node_modules
+/.vscode
+/docs
 /public/storage
 /public/hot
 /storage/*.key

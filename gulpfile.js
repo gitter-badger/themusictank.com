@@ -1,6 +1,12 @@
 var elixir = require('laravel-elixir');
+var jsdoc = require('gulp-jsdoc3');
 
 process.env.DISABLE_NOTIFIER = true;
+
+gulp.task('doc', function (cb) {
+    gulp.src(['README.md', './resources/assets/js/**/*.js'], {read: false})
+        .pipe(jsdoc(cb));
+});
 
 elixir(function(mix) {
     mix.sass('app.scss', 'public/assets/css');

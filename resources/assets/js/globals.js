@@ -2,7 +2,9 @@
 
 /**
  * Globally exposed namespacing function.
+ * @public
  * @param {string} namespace
+ * @return {object} A referene to the object created
  */
 function namespace(namespace) {
     var object = window, tokens = namespace.split("."), token;
@@ -22,8 +24,9 @@ function namespace(namespace) {
 
 /**
  * Globally exposed extending function.
- * @param {array} parent prototypes
- * @param {hash} children
+ * @param {object} target
+ * @param {hash} source
+ * @return {object}
  */
 function extend(target, source) {
     target = target || {};
@@ -37,6 +40,14 @@ function extend(target, source) {
     return target;
 }
 
+/**
+ * Sets up inheritance of the child object to the objects
+ * supplied by the parents object.
+ * @param {array} parents
+ * @param {object} child
+ * @param {hash} properties
+ * @return {object} An object with inheritance
+ */
 function inherit(parents, child, properties) {
     var childPrototype = properties;
 
@@ -51,12 +62,13 @@ function inherit(parents, child, properties) {
     return child;
 }
 
-
 /**
  * Globally filters out jQuery elements matching selector
- * from the haystack
- * @param {*} selector
- * @param {*} haystack
+ * from the haystack. This expects javascript objects that
+ * have a public "element" property.
+ * @param {string} selector
+ * @param {array} haystack
+ * @return {array} matches
  */
 function filter(selector, haystack) {
     var matches = [],

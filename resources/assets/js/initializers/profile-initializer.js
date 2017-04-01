@@ -14,12 +14,16 @@
         }
     });
 
+
     function addEvents(app) {
-        this.profile = app.profile;
-        
-        app.on('ready', bindNotifier.bind(this));
-        this.profile.on("dataSet", pingNotifications.call(this));
+        app.on('ready', bindProfileHooks.bind(this));
         app.initializers.UpvoteFormsInitializer.on('bound', bindToUpvoteForms.bind(this));
+    }
+
+    function bindProfileHooks(app) {
+        this.app = app;
+        this.profile = app.profile;
+        app.profile.on("dataSet", bindToProfile.bind(this));
     }
 
     function bindToUpvoteForms(UpvoteFormsInitializer) {
@@ -29,9 +33,10 @@
         }
     }
 
-    function bindToProfile() {
-        if (this.profile.id > 0) {   
-            pingNotifications.call(this);
+    function bindToProfile(profile) {
+        if (profile.id > 0) {   
+            bindNotifier.call(this, profile);
+            pingNotifications.call(this, profile);
         }
     }
 
@@ -41,8 +46,10 @@
         $.ajax({
             dataType : "html",
             url : "/ajax/whatsUp/",
+            contentType:"application/json; charset=utf-8",
             data : { timestamp: this.notificationTimestamp},
             success : function(data) {
+                data = JSON.parse(data);
                 for(var i = 0, len = data.length; i < len; i++) {
                     this.profile.addNotification(data[i]);
                 }
@@ -51,8 +58,8 @@
         });
     }
 
-    function bindNotifier(app) {
-        var notifier = new Tmt.Components.Notifer($('[data-ctrl=notifier]'), this.profile);
+    function bindNotifier(profile) {
+        var notifier = new Tmt.Components.Notifier($('[data-ctrl=notifier]'), profile);
         notifier.render();
     }
 

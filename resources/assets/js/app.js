@@ -26,7 +26,7 @@
         boot: function () {
             this.profile = new Tmt.Models.Profile();
             prepareInitializers.call(this);
-            this.emit("ready");
+            this.emit("ready", this);
         },
 
         /**

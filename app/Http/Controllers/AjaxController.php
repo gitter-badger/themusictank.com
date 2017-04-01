@@ -97,6 +97,6 @@ class AjaxController extends Controller
     {
         $dateTime = Carbon::createFromTimestamp((int)request('timestamp'))->toDateTimeString();
         $currentProfile = auth()->user()->getProfile();
-        return response()->json(Activities::api()->findSince($dateTime, $currentProfile->id));
+        return response()->json((array)Activities::api()->findSince($dateTime, $currentProfile->id));
     }
 }

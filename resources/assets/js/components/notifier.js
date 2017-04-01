@@ -10,7 +10,6 @@
         this.element = el;
         this.profile = profile;
 
-
         this.initialize();
     };
 

@@ -2,15 +2,19 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Tracks;
+use App\Models\Albums;
+use App\Models\Artists;
+
 class PageController extends Controller
 {
     public function home()
     {
-        return view('page.home', [
-            "nbArtists" => 100,
-            "nbAlbums" => 100,
-            "nbTracks" => 100,
-        ]);
+        $artistCount = Artists::api()->fetchCount()->count;
+        $albumCount = Albums::api()->fetchCount()->count;
+        $trackCount = Tracks::api()->fetchCount()->count;
+
+        return view('page.home', compact('artistCount', 'albumCount', 'trackCount'));
     }
 
     public function about()

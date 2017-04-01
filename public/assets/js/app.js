@@ -140,7 +140,7 @@ function filter(selector, haystack) {
         boot: function () {
             this.profile = new Tmt.Models.Profile();
             prepareInitializers.call(this);
-            this.emit("ready");
+            this.emit("ready", this);
         },
 
         /**
@@ -190,6 +190,7 @@ function filter(selector, haystack) {
      * @property {array} activities
      */
     var Profile = namespace("Tmt.Models").Profile = function () {
+        this.notifications = [];
         this.initialize();
     };
 
@@ -208,7 +209,7 @@ function filter(selector, haystack) {
             this.slug = userData.slug;
             this.name = userData.name;
             this.id = userData.id;
-            this.emit("dataSet", this.id);
+            this.emit("dataSet", this);
 
             this.albumUpvotes = indexUpvotes("albumUpvotes", userData);
             this.trackUpvotes = indexUpvotes("trackUpvotes", userData);
@@ -802,6 +803,38 @@ function filter(selector, haystack) {
 
 })(jQuery);
 
+(function() {
+
+    "use strict";
+
+    /**
+     * A user notifier control.
+     * @param {jQuery} el
+     */
+    var Notifier = namespace("Tmt.Components").Notifier = function(el, profile) {
+        this.element = el;
+        this.profile = profile;
+
+        this.initialize();
+    };
+
+    inherit([ Tmt.EventEmitter ], Notifier, {
+        render : function() {
+            this.addEvents();
+        },
+
+        addEvents : function() {
+            this.profile.on("notification", onNewNotification.bind(this));
+            this.emit("bound", this);
+        }
+    });
+
+    function onNewNotification(notification) {
+        console.log(notification);
+    }
+
+}());
+
 (function ($, undefined) {
 
     "use strict";
@@ -903,12 +936,16 @@ function filter(selector, haystack) {
         }
     });
 
+
     function addEvents(app) {
-        this.profile = app.profile;
-        
-        app.on('ready', bindNotifier.bind(this));
-        this.profile.on("dataSet", pingNotifications.call(this));
+        app.on('ready', bindProfileHooks.bind(this));
         app.initializers.UpvoteFormsInitializer.on('bound', bindToUpvoteForms.bind(this));
+    }
+
+    function bindProfileHooks(app) {
+        this.app = app;
+        this.profile = app.profile;
+        app.profile.on("dataSet", bindToProfile.bind(this));
     }
 
     function bindToUpvoteForms(UpvoteFormsInitializer) {
@@ -918,9 +955,10 @@ function filter(selector, haystack) {
         }
     }
 
-    function bindToProfile() {
-        if (this.profile.id > 0) {   
-            pingNotifications.call(this);
+    function bindToProfile(profile) {
+        if (profile.id > 0) {   
+            bindNotifier.call(this, profile);
+            pingNotifications.call(this, profile);
         }
     }
 
@@ -930,8 +968,10 @@ function filter(selector, haystack) {
         $.ajax({
             dataType : "html",
             url : "/ajax/whatsUp/",
+            contentType:"application/json; charset=utf-8",
             data : { timestamp: this.notificationTimestamp},
             success : function(data) {
+                data = JSON.parse(data);
                 for(var i = 0, len = data.length; i < len; i++) {
                     this.profile.addNotification(data[i]);
                 }
@@ -940,8 +980,8 @@ function filter(selector, haystack) {
         });
     }
 
-    function bindNotifier(app) {
-        var notifier = new Tmt.Components.Notifer($('[data-ctrl=notifier]'), this.profile);
+    function bindNotifier(profile) {
+        var notifier = new Tmt.Components.Notifier($('[data-ctrl=notifier]'), profile);
         notifier.render();
     }
 

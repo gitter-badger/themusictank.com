@@ -11,6 +11,7 @@
      * @property {array} activities
      */
     var Profile = namespace("Tmt.Models").Profile = function () {
+        this.notifications = [];
         this.initialize();
     };
 
@@ -29,7 +30,7 @@
             this.slug = userData.slug;
             this.name = userData.name;
             this.id = userData.id;
-            this.emit("dataSet", this.id);
+            this.emit("dataSet", this);
 
             this.albumUpvotes = indexUpvotes("albumUpvotes", userData);
             this.trackUpvotes = indexUpvotes("trackUpvotes", userData);

@@ -4,28 +4,27 @@ namespace App\Models\Entities;
 
 use App\Models\Entities\Behavior\Dated;
 
-class Notification
+class Activity
 {
     use Dated;
 
     public $id;
-    public $type;
-    public $createdAt;
-    public $viewed;
-    public $associatedObjectId;
-
+    public $associated_object_id;
+    public $associated_object_type;
+    public $must_notify;
+    public $updated_at;
 
     public function isViewed()
     {
-        return (bool)$this->viewed;
+        return (int)$this->must_notify > 0;
     }
 
     public function hasLinkedObject()
     {
-        return (int)$this->associatedObjectId > 0;
+        return (int)$this->associated_object_id > 0;
     }
 
-    public function getLinkedObjectType()
+    public function getLinkedObject()
     {
         return "dude";
     }

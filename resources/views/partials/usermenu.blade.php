@@ -2,7 +2,7 @@
 @if(isset($user))
     <li><a href="{{ action('ProfileController@dashboard') }}">Dashboard</a></li>
     <li>
-        <span class="notifications-bell">
+        <span data-ctrl="notifier" class="notifications-bell">
             <a href="{{ action('NotificationController@index') }}">
                 <i class="fa fa-bell"></i>
                 <em>--</em>

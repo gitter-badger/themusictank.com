@@ -31,11 +31,13 @@ Route::get('tracks/{slug}', "TrackController@show");
 // Ajax
 Route::get('ajax/bugreport', "AjaxController@bugreport");
 Route::get('ajax/ytkey/{slug}', "AjaxController@ytkey");
-Route::post('ajax/upvoteTrack', "AjaxController@upvoteTrack");
-Route::post('ajax/upvoteAlbum', "AjaxController@upvoteAlbum");
 Route::get('ajax/artistSearch', "AjaxController@artistSearch");
 Route::get('ajax/albumSearch', "AjaxController@albumSearch");
 Route::get('ajax/trackSearch', "AjaxController@trackSearch");
+
+Route::post('ajax/upvoteTrack', "AjaxController@upvoteTrack")->middleware('auth');
+Route::post('ajax/upvoteAlbum', "AjaxController@upvoteAlbum")->middleware('auth');
+Route::get('ajax/whatsUp', "AjaxController@whatsUp")->middleware('auth');
 
 // Profiles
 Route::get('you', "ProfileController@dashboard")->middleware('auth');
@@ -56,4 +58,4 @@ Route::get('tankers/{slug}', "ProfileController@show");
 
 
 // Others
-Route::get('admin/console', "AdminController@console");
+Route::get('admin/console', "AdminController@console")->middleware('auth');

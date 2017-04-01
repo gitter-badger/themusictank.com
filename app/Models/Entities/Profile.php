@@ -19,6 +19,7 @@ class Profile implements JsonSerializable
 	public $name;
     public $albumUpvotes = [];
     public $trackUpvotes = [];
+    public $activities = [];
 
     public function jsonSerialize()
     {
@@ -26,9 +27,11 @@ class Profile implements JsonSerializable
             'username' => $this->username,
             'email' => $this->email,
             'slug' => $this->slug,
+            'id' => $this->id,
             'name' => $this->name,
             'albumUpvotes' => $this->albumUpvotes,
             'trackUpvotes' => $this->trackUpvotes,
+            'activities' => $this->activities,
         ];
     }
 

@@ -23,6 +23,7 @@ elixir(function(mix) {
             'components/player.js',
             'components/upvote-form.js',
             'components/search-form.js',
+            'components/notifier.js',
 
             'initializers/ajax-forms-initializer.js',
             'initializers/player-initializer.js',

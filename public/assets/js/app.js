@@ -187,6 +187,7 @@ function filter(selector, haystack) {
      * @namespace Tmt.Models.Profile
      * @property {array} albumUpvotes
      * @property {array} trackUpvotes
+     * @property {array} activities
      */
     var Profile = namespace("Tmt.Models").Profile = function () {
         this.initialize();
@@ -202,6 +203,13 @@ function filter(selector, haystack) {
          * @fires Profile#upvoteSet
          */
         setData: function (userData) {
+            this.username = userData.username;
+            this.email = userData.email;
+            this.slug = userData.slug;
+            this.name = userData.name;
+            this.id = userData.id;
+            this.emit("dataSet", this.id);
+
             this.albumUpvotes = indexUpvotes("albumUpvotes", userData);
             this.trackUpvotes = indexUpvotes("trackUpvotes", userData);
 
@@ -297,6 +305,23 @@ function filter(selector, haystack) {
         removeTrackUpvote: function (type, key) {
             delete this.trackUpvotes[key];
             this.emit("upvoteUpdate", "track", this.upvotes);
+        },
+
+        /**
+         * Adds a user activity notification (viewed or not)
+         * @param {hash} notification
+         * @fires Profile#notification
+         * @public
+         * @method 
+         */
+        addNotification : function (notification) {
+            this.notifications.push(notification);
+
+            if (this.notifications.length > 10) {
+                this.notifications.length = 10;
+            }
+
+            this.emit("notification", notification);
         }
     });
 
@@ -868,6 +893,7 @@ function filter(selector, haystack) {
 
     var ProfileInitializer = namespace("Tmt.Initializers").ProfileInitializer = function () {
         this.profile = null;
+        this.notificationTimestamp = 0;
         this.initialize();
     };
 
@@ -879,6 +905,9 @@ function filter(selector, haystack) {
 
     function addEvents(app) {
         this.profile = app.profile;
+        
+        app.on('ready', bindNotifier.bind(this));
+        this.profile.on("dataSet", pingNotifications.call(this));
         app.initializers.UpvoteFormsInitializer.on('bound', bindToUpvoteForms.bind(this));
     }
 
@@ -887,6 +916,33 @@ function filter(selector, haystack) {
             var box = UpvoteFormsInitializer.boxes[i];
             box.on("valueChange", onUpvoteValue.bind(this));
         }
+    }
+
+    function bindToProfile() {
+        if (this.profile.id > 0) {   
+            pingNotifications.call(this);
+        }
+    }
+
+    function pingNotifications() {    
+        this.notificationTimestamp = Date.now();
+
+        $.ajax({
+            dataType : "html",
+            url : "/ajax/whatsUp/",
+            data : { timestamp: this.notificationTimestamp},
+            success : function(data) {
+                for(var i = 0, len = data.length; i < len; i++) {
+                    this.profile.addNotification(data[i]);
+                }
+                setTimeout(pingNotifications.bind(this), 1000 * 60 * 2);
+            }.bind(this)
+        });
+    }
+
+    function bindNotifier(app) {
+        var notifier = new Tmt.Components.Notifer($('[data-ctrl=notifier]'), this.profile);
+        notifier.render();
     }
 
     function onUpvoteValue(value, upvoteForm) {

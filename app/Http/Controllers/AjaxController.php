@@ -7,7 +7,10 @@ use App\Models\Albums;
 use App\Models\Tracks;
 use App\Models\TrackUpvotes;
 use App\Models\AlbumUpvotes;
+use App\Models\Activities;
+
 use Illuminate\Http\Request;
+use Carbon\Carbon;
 
 class AjaxController extends Controller
 {
@@ -88,5 +91,12 @@ class AjaxController extends Controller
     public function albumSearch()
     {
         return response()->json(Albums::api()->search(request('q')));
+    }
+
+    public function whatsUp()
+    {
+        $dateTime = Carbon::createFromTimestamp((int)request('timestamp'))->toDateTimeString();
+        $currentProfile = auth()->user()->getProfile();
+        return response()->json(Activities::api()->findSince($dateTime, $currentProfile->id));
     }
 }

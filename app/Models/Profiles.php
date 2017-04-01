@@ -10,6 +10,7 @@ class Profiles extends Model
     public $hasMany = [
         "trackUpvotes" => \App\Models\Entities\TrackUpvote::class,
         "albumUpvotes" => \App\Models\Entities\AlbumUpvote::class,
+        "activities" => \App\Models\Entities\Activity::class,
     ];
 
     public function findById($id)
@@ -29,7 +30,8 @@ class Profiles extends Model
                 "filter" => [
                     "include" => [
                         'trackUpvotes',
-                        'albumUpvotes'
+                        'albumUpvotes',
+                        'activities'
                     ]
                 ]
             ]

@@ -8,6 +8,7 @@
      * @namespace Tmt.Models.Profile
      * @property {array} albumUpvotes
      * @property {array} trackUpvotes
+     * @property {array} activities
      */
     var Profile = namespace("Tmt.Models").Profile = function () {
         this.initialize();
@@ -23,6 +24,13 @@
          * @fires Profile#upvoteSet
          */
         setData: function (userData) {
+            this.username = userData.username;
+            this.email = userData.email;
+            this.slug = userData.slug;
+            this.name = userData.name;
+            this.id = userData.id;
+            this.emit("dataSet", this.id);
+
             this.albumUpvotes = indexUpvotes("albumUpvotes", userData);
             this.trackUpvotes = indexUpvotes("trackUpvotes", userData);
 
@@ -118,6 +126,23 @@
         removeTrackUpvote: function (type, key) {
             delete this.trackUpvotes[key];
             this.emit("upvoteUpdate", "track", this.upvotes);
+        },
+
+        /**
+         * Adds a user activity notification (viewed or not)
+         * @param {hash} notification
+         * @fires Profile#notification
+         * @public
+         * @method 
+         */
+        addNotification : function (notification) {
+            this.notifications.push(notification);
+
+            if (this.notifications.length > 10) {
+                this.notifications.length = 10;
+            }
+
+            this.emit("notification", notification);
         }
     });
 

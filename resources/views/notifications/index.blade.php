@@ -13,14 +13,14 @@
             </div>
 
             @foreach ($notifications as $notification)
-                <div id="id-{{ $notification->id }}" class="notification {{ $notification->isViewed() ? "read" :  "new" }} {{ $notification->type }}">
+                <div class="notification {{ $notification->isViewed() ? "read" :  "new" }} {{ $notification->getAssociationType() }}">
 
-                    <time datetime="{{ $notification->created_at }}" title="{{ $notification->created_at }}">
+                    <time datetime="{{ $notification->getDateCreated() }}" title="{{ $notification->getDateCreated() }}">
                         {{ $notification->getCreatedDateForHumans() }}
                     </time>
 
                     @if ($notification->hasLinkedObject())
-                        @include('partials.notifications.' . $notification->getLinkedObjectType(), ['notification' => $notification])
+                        @include('partials.notifications.' . $notification->getAssociationType(), ['notification' => $notification])
                     @endif
                 </div>
             @endforeach

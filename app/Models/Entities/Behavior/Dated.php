@@ -15,4 +15,14 @@ trait Dated
     {
         return Carbon::parse($this->created_at)->diffForHumans();
     }
+
+    public function getDateCreated()
+    {
+        return $this->created_at;
+    }
+
+    public function getDateUpdated()
+    {
+        return $this->updated_at;
+    }
 }

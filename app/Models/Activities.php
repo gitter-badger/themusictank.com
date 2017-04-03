@@ -22,7 +22,7 @@ class Activities extends Model
             ]
         ]);
     }
-    
+
     public function findRecent($profileId, $limit = 20)
     {
         return $this->get("activities", [

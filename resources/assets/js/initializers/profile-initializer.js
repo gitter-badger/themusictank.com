@@ -34,15 +34,13 @@
     }
 
     function bindToProfile(profile) {
-        if (profile.id > 0) {   
+        if (profile.id > 0) {
             bindNotifier.call(this, profile);
             pingNotifications.call(this, profile);
         }
     }
 
-    function pingNotifications() {    
-        this.notificationTimestamp = Date.now();
-
+    function pingNotifications() {
         $.ajax({
             dataType : "html",
             url : "/ajax/whatsUp/",
@@ -56,6 +54,8 @@
                 setTimeout(pingNotifications.bind(this), 1000 * 60 * 2);
             }.bind(this)
         });
+
+        this.notificationTimestamp = parseInt(Date.now() / 1000, 10);
     }
 
     function bindNotifier(profile) {

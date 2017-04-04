@@ -2,8 +2,10 @@
 
 namespace App\Http\Controllers;
 
-use Exception;
+use App\Models\Profiles;
 use App\Models\ApiSessionToken;
+
+use Exception;
 use App\Auth\User;
 use Illuminate\Support\Facades\Auth;
 
@@ -38,7 +40,7 @@ class ProfileController extends Controller
             return abort(404);
         }
 
-        return view('profile.show', compact($profile));
+        return view('profiles.show', compact('profile'));
     }
 
     public function create()

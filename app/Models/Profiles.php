@@ -38,8 +38,15 @@ class Profiles extends Model
         ]);
     }
 
+
     public function findBySlug($slug)
     {
-        return $this->get(sprintf("profiles/%s", $slug));
+        return $this->first("profiles", [
+            "query" => [
+                "filter" => [
+                    "where" => ["slug" =>  $slug]
+                ]
+            ]
+        ]);
     }
 }

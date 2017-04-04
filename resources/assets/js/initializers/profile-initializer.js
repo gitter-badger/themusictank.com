@@ -60,7 +60,22 @@
 
     function bindNotifier(profile) {
         var notifier = new Tmt.Components.Notifier($('[data-ctrl=notifier]'), profile);
+        notifier.on('notificationRead', clearNotifications.bind(this));
         notifier.render();
+    }
+
+    function clearNotifications(notificationsIds, destinationUrl) {
+         $.ajax({
+            dataType : "html",
+            url : "/ajax/okstfu/",
+            contentType:"application/json; charset=utf-8",
+            data : { ids: notificationsIds},
+            success : function(data) {
+                if (destinationUrl) {
+                    window.location = destinationUrl;
+                }
+            }
+        });
     }
 
     function onUpvoteValue(value, upvoteForm) {

@@ -99,4 +99,10 @@ class AjaxController extends Controller
         $currentProfile = auth()->user()->getProfile();
         return response()->json((array)Activities::api()->findSince($dateTime, $currentProfile->id));
     }
+
+    public function okstfu()
+    {
+        $currentProfile = auth()->user()->getProfile();
+        return response()->json(Activities::api()->markAsReadByIds(request('ids'), $currentProfile->id));
+    }
 }

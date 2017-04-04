@@ -38,6 +38,7 @@ Route::get('ajax/trackSearch', "AjaxController@trackSearch");
 Route::post('ajax/upvoteTrack', "AjaxController@upvoteTrack")->middleware('auth');
 Route::post('ajax/upvoteAlbum', "AjaxController@upvoteAlbum")->middleware('auth');
 Route::get('ajax/whatsUp', "AjaxController@whatsUp")->middleware('auth');
+Route::get('ajax/okstfu', "AjaxController@okstfu")->middleware('auth');
 
 // Profiles
 Route::get('you', "ProfileController@dashboard")->middleware('auth');

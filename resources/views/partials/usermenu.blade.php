@@ -8,7 +8,7 @@
                 <em>--</em>
             </a>
             <div class="panel">
-                Mark all as read<br>
+                <button name="stfu">Mark all as read</button>
                 <ul>
                     <li class="no-notices">You have no notifications for the moment.</li>
                 </ul>

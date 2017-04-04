@@ -19,9 +19,6 @@ class Activity implements JsonSerializable
     public $updated_at;
     public $created_at;
     public $associated_object;
-    public $association_title;
-    public $association_summary;
-    public $association_link;
 
     public function jsonSerialize()
     {
@@ -31,9 +28,6 @@ class Activity implements JsonSerializable
             "associated_object_type" => $this->associated_object_type,
             "associated_object_id" => $this->associated_object_id,
             "associated_object" => $this->associated_object,
-            "association_title"   => $this->association_title,
-            "association_summary"=> $this->association_summary,
-            "association_link"=> $this->association_link,
             "updated_at" => $this->updated_at,
             "created_at" => $this->created_at,
         ];

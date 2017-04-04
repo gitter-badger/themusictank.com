@@ -35,4 +35,20 @@ class Activities extends Model
             ]
         ]);
     }
+
+    public function markAsReadByIds($ids, $profileId)
+    {
+        return $this->post("activities/update", [
+            "json" => [
+                "must_notify" => 0
+            ],
+            "query" => [
+                "where" => [
+                    "profileid" => $profileId,
+                    "id" => ["inq" => $ids],
+                    "must_notify" => 1
+                ],
+            ]
+        ]);
+    }
 }

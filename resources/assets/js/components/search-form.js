@@ -77,7 +77,7 @@
                         templates: {
                             header: '<h3>Albums</h3>',
                             empty: '<h3>Albums</h3><p class="empty-message">Could not find matching albums.</p>',
-                            suggestion: function (data) { return ['<p><a href="/albums/' + data.slug + '/">' + data.name + '</a> by <a href="/artists/' + data.slug + '/">' + data.name + '</a></p>'].join(""); }
+                            suggestion: function (data) { return ['<p><a href="/albums/' + data.slug + '/">' + data.name + '</a> by <a href="/artists/' + data.artist.slug + '/">' + data.artist.name + '</a></p>'].join(""); }
                         }
                     },
                     {
@@ -88,7 +88,7 @@
                         templates: {
                             header: '<h3>Tracks</h3>',
                             empty: '<h3>Tracks</h3><p class="empty-message">Could not find matching tracks.</p>',
-                            suggestion: function (data) { return ['<p><a href="/albums/' + data.slug + '/">' + data.name + '</a> by <a href="/artists/' + data.slug + '/">' + data.name + '</a></p>'].join(""); }
+                            suggestion: function (data) { return ['<p><a href="/albums/' + data.slug + '/">' + data.name + '</a> by <a href="/artists/' + data.artist.slug + '/">' + data.artist.name + '</a></p>'].join(""); }
                         }
                     }
                 ]

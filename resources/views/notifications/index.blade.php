@@ -7,11 +7,6 @@
 
     <section class="notifications">
         @if (count($notifications) > 0)
-
-            <div class="heading">
-                <button name="markAsRead" class="btn btn-primary">Mark all as read</button>
-            </div>
-
             @foreach ($notifications as $notification)
                 <div class="notification {{ $notification->isViewed() ? "read" :  "new" }} {{ $notification->getAssociationType() }}">
 

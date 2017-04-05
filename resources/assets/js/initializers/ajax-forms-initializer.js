@@ -20,9 +20,7 @@
         var forms = [];
 
         $("form[data-ctrl-mode=ajax]").each(function () {
-            var form = new Tmt.Components.AjaxForm($(this));
-            form.render();
-            forms.push(form);
+            forms.push(new Tmt.Components.AjaxForm($(this)));
         });
 
         this.forms = forms;
@@ -33,4 +31,4 @@
         app.on('ready', bindPageForms.bind(this));
     }
 
-}(jQuery));
+})(jQuery);

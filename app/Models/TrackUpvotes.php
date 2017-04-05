@@ -16,12 +16,18 @@ class TrackUpvotes extends Model
 
     public function vote($id, $profileId, $vote)
     {
-        return $this->post("trackupvotes", [
+        return $this->post("trackupvotes/upsertWithWhere", [
             "json" => [
                 "trackId" => (int)$id,
                 "profileId" => (int)$profileId,
                 "vote" => (int)$vote
             ],
+            "query" => [
+                "where" => [
+                    "profileId" => (int)$profileId,
+                    "trackId" => (int)$id
+                ],
+            ]
         ]);
     }
 

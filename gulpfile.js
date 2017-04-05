@@ -25,8 +25,12 @@ elixir(function(mix) {
             'components/search-form.js',
             'components/notifier.js',
 
+            'components/reviewer/knob.js',
+            'components/reviewer/reviewer.js',
+
             'initializers/ajax-forms-initializer.js',
             'initializers/player-initializer.js',
+            'initializers/reviewer-initializer.js',
             'initializers/profile-initializer.js',
             'initializers/search-initializer.js',
             'initializers/upvote-forms-initializer.js'
@@ -35,11 +39,15 @@ elixir(function(mix) {
         'resources/assets/js/'
     );
 
+
+//            'howler/dist/howler.min.js'
     mix.scripts(
         [
             'jquery/dist/jquery.min.js',
             'evemit/evemit.min.js',
-            'typeahead.js/dist/typeahead.bundle.min.js'
+            'typeahead.js/dist/typeahead.bundle.min.js',
+            'gsap/src/minified/TweenMax.min.js',
+            'gsap/src/minified/utils/Draggable.min.js'
         ],
         'public/assets/js/vendor.js',
         'node_modules/'

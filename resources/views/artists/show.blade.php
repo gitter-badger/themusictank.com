@@ -7,7 +7,7 @@
 @section('body-class', 'artists show')
 
 @push('header')
-<meta name="tmt.artist.last_updated" content="{{ $artist->last_updated }}">
+<meta name="tmt.artist.last_updated" content="{{ $artist->updated_at }}">
 <meta name="tmt.artist.gid" content="{{ $artist->gid }}">
 @endpush
 

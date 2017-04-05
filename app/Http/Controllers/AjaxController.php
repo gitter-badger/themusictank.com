@@ -95,9 +95,15 @@ class AjaxController extends Controller
 
     public function whatsUp()
     {
-        $dateTime = Carbon::createFromTimestamp((int)request('timestamp'))->toDateTimeString();
         $currentProfile = auth()->user()->getProfile();
-        return response()->json((array)Activities::api()->findSince($dateTime, $currentProfile->id));
+        $timestamp = (int)request('timestamp');
+
+        if ($timestamp > 0) {
+            $dateTime = Carbon::createFromTimestamp()->toDateTimeString();
+            return response()->json((array)Activities::api()->findSince($dateTime, $currentProfile->id));
+        }
+
+        return response()->json((array)Activities::api()->findRecent($currentProfile->id, 5));
     }
 
     public function okstfu()

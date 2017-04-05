@@ -2,9 +2,13 @@
 
     "use strict";
 
-    var UpvoteForm = namespace("Tmt.Components").UpvoteForm = function (ajaxForm) {
-        this.ajaxForm = ajaxForm;
-        this.element = ajaxForm.element;
+    var ajaxForm,
+        rootNode,
+        enabled = false;
+
+    var UpvoteForm = namespace("Tmt.Components").UpvoteForm = function (ajaxFormObj) {
+        ajaxForm = ajaxFormObj;
+        rootNode = ajaxForm.element;
 
         this.initialize();
     };
@@ -14,22 +18,20 @@
         "initialize": function () {
             Tmt.EventEmitter.prototype.initialize.call(this);
 
-            this.addEvents();
-            resetButtons.call(this);
-            this.element.addClass("initialized");
-        },
-
-        "addEvents": function () {
-            this.element.find("button").click(onButtonClick.bind(this));
-            this.ajaxForm.on('submitSuccess', onSubmitSuccess.bind(this));
+            addEvents.bind(this);
+            resetButtons();
         },
 
         "getType": function () {
-            return this.element.data("upvote-type");
+            return rootNode.data("upvote-type");
         },
 
         "getObjectId": function () {
-            return this.element.data("upvote-object-id");
+            return rootNode.data("upvote-object-id");
+        },
+
+        "setObjectId": function (id) {
+            return rootNode.data("upvote-object-id", id);
         },
 
         "isTrack": function () {
@@ -41,38 +43,45 @@
         },
 
         "setValue": function (value) {
-            this.element.removeClass("liked disliked");
-            this.element.find("input[name=vote]").val(value);
+            rootNode.removeClass("liked disliked");
+            rootNode.find("input[name=vote]").val(value);
 
             if (value == 1) {
-                this.element.addClass("liked");
-                enableButton(this.element.find('button.up'));
+                rootNode.addClass("liked");
+                enableButton(rootNode.find('button.up'));
             } else if (value == 2) {
-                this.element.addClass("disliked");
-                this.element.find('button.down').html('<i class="fa fa-thumbs-down" aria-hidden="true">');
+                rootNode.addClass("disliked");
+                rootNode.find('button.down').html('<i class="fa fa-thumbs-down" aria-hidden="true">');
             } else {
-                resetButtons.call(this);
+                resetButtons();
             }
 
             this.emit('valueChange', value, this);
         },
 
         "getValue": function () {
-            return this.element.find("input[name=vote]").val();
+            return rootNode.find("input[name=vote]").val();
         },
 
         "lock": function () {
-            this.element.find("button").attr("disabled", "disabled");
+            enabled = false;
+            rootNode.find("button").attr("disabled", "disabled");
         },
 
         "unlock": function () {
-            this.element.find("button").removeAttr("disabled");
+            enabled = true;
+            rootNode.find("button").removeAttr("disabled");
         }
     });
 
+    function addEvents() {
+        rootNode.find("button").click(onButtonClick.bind(this));
+        ajaxForm.on('submitSuccess', onSubmitSuccess.bind(this));
+    };
+
     function resetButtons() {
-        this.element.find('button.up').html('<i class="fa fa-thumbs-o-up" aria-hidden="true">');
-        this.element.find('button.down').html('<i class="fa fa-thumbs-o-down" aria-hidden="true">');
+        rootNode.find('button.up').html('<i class="fa fa-thumbs-o-up" aria-hidden="true">');
+        rootNode.find('button.down').html('<i class="fa fa-thumbs-o-down" aria-hidden="true">');
     }
 
     function enableButton(button) {
@@ -85,7 +94,13 @@
     }
 
     function onButtonClick(evt) {
-        var clickedValue = evt.target.value;
+        if (!enabled) {
+            return;
+        }
+
+        var $el = $(evt.target),
+            button = $el.parents('button'),
+            clickedValue = button.val();
 
         if (clickedValue != this.getValue()) {
             this.setValue(clickedValue);
@@ -95,11 +110,12 @@
         }
 
         this.lock();
-        this.element.submit();
+        rootNode.submit();
     }
 
     function onSubmitSuccess(response, ajaxForm) {
         if (response && response.vote) {
+            this.setObjectId(response.id);
             this.setValue(response.vote);
         }
 

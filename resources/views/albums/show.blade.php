@@ -7,7 +7,7 @@
 @section('body-class', 'albums show')
 
 @push('header')
-<meta name="tmt.album.last_updated" content="{{ $album->last_updated }}">
+<meta name="tmt.album.last_updated" content="{{ $album->updated_at }}">
 <meta name="tmt.album.gid" content="{{ $album->gid }}">
 @endpush
 

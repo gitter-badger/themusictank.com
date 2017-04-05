@@ -44,4 +44,4 @@
         firstScriptTag.parentNode.insertBefore(tag, firstScriptTag);
     }
 
-}(jQuery));
+})(jQuery);

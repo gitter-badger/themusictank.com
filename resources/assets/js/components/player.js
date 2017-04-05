@@ -2,17 +2,27 @@
 
     "use strict";
 
-    var Player = namespace("Tmt.Components").Player = function (element) {
-        this.element = element;
-        this.embed = null;
-        this.ytPlayer = null;
-        this.isPlaying = false;
-        this.range = null;
+    var rootNode,
+        ready = false,
+        embed = null,
+        ytPlayer = null,
+        isPlaying = false,
+        canSkip = true,
+        range = null;
 
+    var Player = namespace("Tmt.Components").Player = function (element) {
+        rootNode = element;
         this.initialize();
     };
 
     inherit([Tmt.EventEmitter], Player, {
+        'isReady' : function() {
+            return ready;
+        },
+
+        'getStreamer' : function() {
+            return ytPlayer;
+        },
 
         'render': function () {
             this.hasVideoId() ?
@@ -21,17 +31,17 @@
         },
 
         'getEmbedId': function () {
-            if (this.hasVideoId) {
+            if (this.hasVideoId()) {
                 return "tmt_player_" + this.getVideoId();
             }
         },
 
         'getVideoId': function () {
-            return this.element.data("song-vid");
+            return rootNode.data("song-vid");
         },
 
         'setVideoId': function (id) {
-            this.element.data("song-vid", id);
+            rootNode.data("song-vid", id);
         },
 
         'hasVideoId': function () {
@@ -39,7 +49,7 @@
         },
 
         'getSongSlug': function () {
-            return this.element.data("song-slug");
+            return rootNode.data("song-slug");
         }
     });
 
@@ -64,13 +74,15 @@
             '&amp;playsinline=0&amp;showinfo=0&amp;modestbranding=1&amp;rel=0&amp;' +
             'autoplay=0&amp;loop=0&amp;origin=' + window.location.origin + '"></iframe>'
 
-        this.element.append(iframeHtml);
-        this.embed = $("#" + id);
+        rootNode.append(iframeHtml);
+        embed = $("#" + id);
 
-        this.ytPlayer = new YT.Player(id);
+        ytPlayer = new YT.Player(id);
+        ytPlayer.addEventListener('onReady', onPlayerReady.bind(this));
+        ytPlayer.addEventListener('onStateChange', onPlayerStateChange.bind(this));
 
-        this.ytPlayer.addEventListener('onReady', onPlayerReady.bind(this));
-        this.ytPlayer.addEventListener('onStateChange', onPlayerStateChange.bind(this));
+        ready = true;
+        this.emit("embeded", this);
     }
 
     function onPlayerStateChange(newState) {
@@ -81,30 +93,32 @@
         2 (paused)
         3 (buffering)
         5 (video queued) */
-        var controlButton = this.element.find('.play');
+        var controlButton = rootNode.find('.play');
 
         if (newState.data === 1) {
             controlButton.removeClass("fa-play");
             controlButton.addClass("fa-pause");
 
-            this.isPlaying = true;
+            isPlaying = true;
+            this.emit("play");
             onPlayerTick.call(this);
         }
         else if (newState.data === 2) {
             controlButton.removeClass("fa-pause");
             controlButton.addClass("fa-play");
 
-            this.isPlaying = false;
+            isPlaying = false;
+            this.emit("stop");
         }
     }
 
     function onProgressClick(e) {
-        if (this.isPlaying) {
-            var progressBar = this.element.find(".progress-wrap .progress"),
+        if (isPlaying) {
+            var progressBar = rootNode.find(".progress-wrap .progress"),
                 offset = progressBar.offset(),
                 relX = e.pageX - offset.left,
                 pctLocation = relX / progressBar.width();
-            this.ytPlayer.seekTo(pctLocation * this.ytPlayer.getDuration(), true);
+            ytPlayer.seekTo(pctLocation * ytPlayer.getDuration(), true);
         }
     };
 
@@ -112,18 +126,18 @@
         // Ranges wil be back shortly
         this.playingRange = null;
 
-        (this.ytPlayer.getPlayerState() != 1) ?
-            this.ytPlayer.playVideo() :
-            this.ytPlayer.pauseVideo();
+        (ytPlayer.getPlayerState() != 1) ?
+            ytPlayer.playVideo() :
+            ytPlayer.pauseVideo();
     }
 
 
     function onPlayerReady(event) {
-        this.element.find(".duration").html(toReadableTime(this.ytPlayer.getDuration()));
-        this.element.find(".position").html(toReadableTime(0));
-        this.element.find(".progress-wrap .progress").click(onProgressClick.bind(this));
+        rootNode.find(".duration").html(toReadableTime(ytPlayer.getDuration()));
+        rootNode.find(".position").html(toReadableTime(0));
+        rootNode.find(".progress-wrap .progress").click(onProgressClick.bind(this));
 
-        var playBtn = this.element.find('.play');
+        var playBtn = rootNode.find('.play');
         playBtn.removeClass("fa-stop");
         playBtn.addClass("fa-play");
         playBtn.click(onPlayBtnClick.bind(this));
@@ -138,18 +152,18 @@
     };
 
     function onPlayerTick() {
-        var currentTime = this.ytPlayer.getCurrentTime(),
-            durationTime = this.ytPlayer.getDuration(),
+        var currentTime = ytPlayer.getCurrentTime(),
+            durationTime = ytPlayer.getDuration(),
             currentPositionPct = (currentTime / durationTime) * 100;
 
-        this.element.find('.position').html(toReadableTime(currentTime));
+        rootNode.find('.position').html(toReadableTime(currentTime));
 
-        this.element.find('.cursor').css("left", currentPositionPct + "%");
-        this.element.find('.progress .loaded-bar').css("width", (this.ytPlayer.getVideoLoadedFraction() * 100) + "%");
-        this.element.find('.progress .playing-bar').css("width", currentPositionPct + "%");
-        this.element.find('.progress .playing-bar').attr("aria-valuenow", currentTime);
+        rootNode.find('.cursor').css("left", currentPositionPct + "%");
+        rootNode.find('.progress .loaded-bar').css("width", (ytPlayer.getVideoLoadedFraction() * 100) + "%");
+        rootNode.find('.progress .playing-bar').css("width", currentPositionPct + "%");
+        rootNode.find('.progress .playing-bar').attr("aria-valuenow", currentTime);
 
-        if (this.isPlaying) {
+        if (isPlaying) {
             // if (tmt.playingRange) {
 
             //     if (currentTime >= tmt.playingRange[1]) {

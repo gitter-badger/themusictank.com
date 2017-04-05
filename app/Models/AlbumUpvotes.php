@@ -16,12 +16,18 @@ class AlbumUpvotes extends Model
 
     public function vote($id, $profileId, $vote)
     {
-        return $this->post("albumupvotes", [
+        return $this->post("albumupvotes/upsertWithWhere", [
             "json" => [
                 "albumId" => (int)$id,
                 "profileId" => (int)$profileId,
                 "vote" => (int)$vote
             ],
+            "query" => [
+                "where" => [
+                    "profileId" => (int)$profileId,
+                    "albumId" => (int)$id
+                ],
+            ]
         ]);
     }
 

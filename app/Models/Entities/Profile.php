@@ -42,6 +42,7 @@ class Profile implements JsonSerializable
             $this->trackUpvotes[$key] = new TrackUpvote();
         }
 
+        $this->trackUpvotes[$key]->trackId = $objectId;
         $this->trackUpvotes[$key]->vote = $vote;
     }
 
@@ -57,6 +58,7 @@ class Profile implements JsonSerializable
             $this->albumUpvotes[$key] = new AlbumUpvote();
         }
 
+        $this->albumUpvotes[$key]->albumId = $objectId;
         $this->albumUpvotes[$key]->vote = $vote;
     }
 

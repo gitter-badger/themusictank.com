@@ -38,7 +38,10 @@
         setData: function (data) {
             if (data.profile) {
                 this.profile.setData(data.profile);
+                this.emit('profileFirstPopulated', this, this.profile);
             }
+
+            this.emit('configured', this);
         }
     });
 

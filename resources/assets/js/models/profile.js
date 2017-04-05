@@ -30,18 +30,15 @@
             this.slug = userData.slug;
             this.name = userData.name;
             this.id = userData.id;
-            this.emit("dataSet", this);
+            this.emit("dataChange", this);
 
-            this.albumUpvotes = indexUpvotes("albumUpvotes", userData);
-            this.trackUpvotes = indexUpvotes("trackUpvotes", userData);
+           // this.albumUpvotes = indexUpvotes("albumUpvotes", userData);
+            this.albumUpvotes = userData.albumUpvotes;
+            this.emit("upvoteChange", "album", this.albumUpvotes);
 
-            if (this.albumUpvotes && this.albumUpvotes.length > 0) {
-                this.emit("upvoteSet", "album", this.albumUpvotes);
-            }
-
-            if (this.trackUpvotes && this.trackUpvotes.length > 0) {
-                this.emit("upvoteSet", "track", this.trackUpvotes);
-            }
+            // this.trackUpvotes = indexUpvotes("trackUpvotes", userData);
+            this.trackUpvotes = userData.trackUpvotes;
+            this.emit("upvoteChange", "track",this.trackUpvotes);
         },
 
         /**
@@ -134,7 +131,7 @@
          * @param {hash} notification
          * @fires Profile#notification
          * @public
-         * @method 
+         * @method
          */
         addNotification : function (notification) {
             this.notifications.push(notification);
@@ -144,6 +141,20 @@
             }
 
             this.emit("notification", notification);
+        },
+
+        getVoteByObjectId : function (type, objectId) {
+            var match = null;
+
+            if (type == "track") {
+                match = this.trackUpvotes[objectId];
+            } else if (type == "album") {
+                match = this.albumUpvotes[objectId];
+            }
+
+            if (match) {
+                return match.vote;
+            }
         }
     });
 
@@ -156,17 +167,17 @@
      * @private
      * @method
      */
-    function indexUpvotes(key, data) {
-        var indexed = [];
-        if (data && data[key]) {
-            for (var i in data[key]) {
-                var id = data[key][i].id,
-                    value = data[key][i].vote;
+    // function indexUpvotes(key, data) {
+    //     var indexed = [];
+    //     if (data && data[key]) {
+    //         for (var i in data[key]) {
+    //             var id = data[key][i].id,
+    //                 value = data[key][i].vote;
 
-                indexed[id] = value;
-            }
-        }
-        return indexed;
-    }
+    //             indexed[id] = value;
+    //         }
+    //     }
+    //     return indexed;
+    // }
 
 }());

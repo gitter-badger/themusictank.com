@@ -23,7 +23,7 @@
         </h1>
     </section>
 
-    @include('partials.player', ['track' => $track, 'controls' => false])
+    @include('partials.reviewer', ['track' => $track])
 
 
 @endsection

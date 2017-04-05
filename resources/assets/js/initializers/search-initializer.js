@@ -23,4 +23,4 @@
         app.on('ready', bindForm.bind(this));
     }
 
-}(jQuery));
+})(jQuery);

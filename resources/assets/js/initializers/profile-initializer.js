@@ -3,7 +3,6 @@
     "use strict";
 
     var ProfileInitializer = namespace("Tmt.Initializers").ProfileInitializer = function () {
-        this.profile = null;
         this.notificationTimestamp = 0;
         this.initialize();
     };
@@ -14,33 +13,41 @@
         }
     });
 
-
     function addEvents(app) {
         app.on('ready', bindProfileHooks.bind(this));
-        app.initializers.UpvoteFormsInitializer.on('bound', bindToUpvoteForms.bind(this));
+        app.initializers.UpvoteFormsInitializer.on('bound', function(UpvoteFormsInitializer){
+            bindToUpvoteForms(app, UpvoteFormsInitializer);
+        }.bind(this));
     }
 
     function bindProfileHooks(app) {
-        this.app = app;
-        this.profile = app.profile;
-        app.profile.on("dataSet", bindToProfile.bind(this));
+        app.on("profileFirstPopulated", bindToProfile.bind(this));
     }
 
-    function bindToUpvoteForms(UpvoteFormsInitializer) {
+    function bindToUpvoteForms(app, UpvoteFormsInitializer) {
+        var fn = function(value, upvoteForm) {
+            onUpvoteValue(app.profile, value, upvoteForm);
+        }.bind(this);
+
         for (var i = 0, len = UpvoteFormsInitializer.boxes.length; i < len; i++) {
             var box = UpvoteFormsInitializer.boxes[i];
-            box.on("valueChange", onUpvoteValue.bind(this));
+            box.on("valueChange", fn);
         }
     }
 
-    function bindToProfile(profile) {
+    function bindToProfile(app, profile) {
         if (profile.id > 0) {
-            bindNotifier.call(this, profile);
+            bindNotifier.call(this, app, profile);
             pingNotifications.call(this, profile);
         }
     }
 
-    function pingNotifications() {
+    function bindNotifier(app, profile) {
+        var notifier = new Tmt.Components.Notifier($('[data-ctrl=notifier]'), profile);
+        notifier.on('notificationRead', clearNotifications.bind(this));
+    }
+
+    function pingNotifications(profile) {
         $.ajax({
             dataType : "html",
             url : "/ajax/whatsUp/",
@@ -49,19 +56,13 @@
             success : function(data) {
                 data = JSON.parse(data);
                 for(var i = 0, len = data.length; i < len; i++) {
-                    this.profile.addNotification(data[i]);
+                    profile.addNotification(data[i]);
                 }
                 setTimeout(pingNotifications.bind(this), 1000 * 60 * 2);
             }.bind(this)
         });
 
         this.notificationTimestamp = parseInt(Date.now() / 1000, 10);
-    }
-
-    function bindNotifier(profile) {
-        var notifier = new Tmt.Components.Notifier($('[data-ctrl=notifier]'), profile);
-        notifier.on('notificationRead', clearNotifications.bind(this));
-        notifier.render();
     }
 
     function clearNotifications(notificationsIds, destinationUrl) {
@@ -78,14 +79,13 @@
         });
     }
 
-    function onUpvoteValue(value, upvoteForm) {
+    function onUpvoteValue(profile, value, upvoteForm) {
         var type = upvoteForm.isTrack() ? "tracks" : "albums";
-
         if (value > 0) {
-            this.profile.addUpvote(type, upvoteForm.getObjectId(), value);
+            profile.addUpvote(type, upvoteForm.getObjectId(), value);
         } else {
-            this.profile.removeUpvote(type, upvoteForm.getObjectId());
+            profile.removeUpvote(type, upvoteForm.getObjectId());
         }
     }
 
-}(jQuery));
+})(jQuery);

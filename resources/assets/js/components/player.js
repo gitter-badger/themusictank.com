@@ -2,8 +2,7 @@
 
     "use strict";
 
-    var rootNode,
-        ready = false,
+    var ready = false,
         embed = null,
         ytPlayer = null,
         isPlaying = false,
@@ -11,7 +10,7 @@
         range = null;
 
     var Player = namespace("Tmt.Components").Player = function (element) {
-        rootNode = element;
+        this.rootNode = element;
         this.initialize();
     };
 
@@ -37,11 +36,11 @@
         },
 
         'getVideoId': function () {
-            return rootNode.data("song-vid");
+            return this.rootNode.data("song-vid");
         },
 
         'setVideoId': function (id) {
-            rootNode.data("song-vid", id);
+            this.rootNode.data("song-vid", id);
         },
 
         'hasVideoId': function () {
@@ -49,7 +48,7 @@
         },
 
         'getSongSlug': function () {
-            return rootNode.data("song-slug");
+            return this.rootNode.data("song-slug");
         }
     });
 
@@ -74,7 +73,7 @@
             '&amp;playsinline=0&amp;showinfo=0&amp;modestbranding=1&amp;rel=0&amp;' +
             'autoplay=0&amp;loop=0&amp;origin=' + window.location.origin + '"></iframe>'
 
-        rootNode.append(iframeHtml);
+        this.rootNode.append(iframeHtml);
         embed = $("#" + id);
 
         ytPlayer = new YT.Player(id);
@@ -93,7 +92,7 @@
         2 (paused)
         3 (buffering)
         5 (video queued) */
-        var controlButton = rootNode.find('.play');
+        var controlButton = this.rootNode.find('.play');
 
         if (newState.data === 1) {
             controlButton.removeClass("fa-play");
@@ -114,7 +113,7 @@
 
     function onProgressClick(e) {
         if (isPlaying) {
-            var progressBar = rootNode.find(".progress-wrap .progress"),
+            var progressBar = this.rootNode.find(".progress-wrap .progress"),
                 offset = progressBar.offset(),
                 relX = e.pageX - offset.left,
                 pctLocation = relX / progressBar.width();
@@ -133,11 +132,11 @@
 
 
     function onPlayerReady(event) {
-        rootNode.find(".duration").html(toReadableTime(ytPlayer.getDuration()));
-        rootNode.find(".position").html(toReadableTime(0));
-        rootNode.find(".progress-wrap .progress").click(onProgressClick.bind(this));
+        this.rootNode.find(".duration").html(toReadableTime(ytPlayer.getDuration()));
+        this.rootNode.find(".position").html(toReadableTime(0));
+        this.rootNode.find(".progress-wrap .progress").click(onProgressClick.bind(this));
 
-        var playBtn = rootNode.find('.play');
+        var playBtn = this.rootNode.find('.play');
         playBtn.removeClass("fa-stop");
         playBtn.addClass("fa-play");
         playBtn.click(onPlayBtnClick.bind(this));
@@ -156,12 +155,12 @@
             durationTime = ytPlayer.getDuration(),
             currentPositionPct = (currentTime / durationTime) * 100;
 
-        rootNode.find('.position').html(toReadableTime(currentTime));
+        this.rootNode.find('.position').html(toReadableTime(currentTime));
 
-        rootNode.find('.cursor').css("left", currentPositionPct + "%");
-        rootNode.find('.progress .loaded-bar').css("width", (ytPlayer.getVideoLoadedFraction() * 100) + "%");
-        rootNode.find('.progress .playing-bar').css("width", currentPositionPct + "%");
-        rootNode.find('.progress .playing-bar').attr("aria-valuenow", currentTime);
+        this.rootNode.find('.cursor').css("left", currentPositionPct + "%");
+        this.rootNode.find('.progress .loaded-bar').css("width", (ytPlayer.getVideoLoadedFraction() * 100) + "%");
+        this.rootNode.find('.progress .playing-bar').css("width", currentPositionPct + "%");
+        this.rootNode.find('.progress .playing-bar').attr("aria-valuenow", currentTime);
 
         if (isPlaying) {
             // if (tmt.playingRange) {

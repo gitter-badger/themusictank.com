@@ -2,7 +2,6 @@
 
     "use strict";
 
-
     var rootNode,
         profile,
         // sound,

@@ -15,8 +15,8 @@
 
     function addEvents(app) {
         app.on('ready', bindProfileHooks.bind(this));
-        app.initializers.UpvoteFormsInitializer.on('bound', function(UpvoteFormsInitializer){
-            bindToUpvoteForms(app, UpvoteFormsInitializer);
+        app.initializers.UpvoteFormsInitializer.on('bound', function(upvoteFormsInitializer){
+            bindToUpvoteForms(app, upvoteFormsInitializer);
         }.bind(this));
     }
 
@@ -29,9 +29,12 @@
             onUpvoteValue(app.profile, value, upvoteForm);
         }.bind(this);
 
-        for (var i = 0, len = UpvoteFormsInitializer.boxes.length; i < len; i++) {
-            var box = UpvoteFormsInitializer.boxes[i];
-            box.on("valueChange", fn);
+        var i = 0,
+            forms = UpvoteFormsInitializer.getForms(),
+            len = forms.length;
+
+        for ( ; i < len; i++) {
+            forms[i].on("valueChange", fn);
         }
     }
 

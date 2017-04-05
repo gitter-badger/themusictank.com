@@ -99,7 +99,7 @@ class AjaxController extends Controller
         $timestamp = (int)request('timestamp');
 
         if ($timestamp > 0) {
-            $dateTime = Carbon::createFromTimestamp()->toDateTimeString();
+            $dateTime = Carbon::createFromTimestamp()->toDateTimeString($timestamp);
             return response()->json((array)Activities::api()->findSince($dateTime, $currentProfile->id));
         }
 

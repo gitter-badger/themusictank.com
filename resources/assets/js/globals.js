@@ -65,20 +65,20 @@ function inherit(parents, child, properties) {
 /**
  * Globally filters out jQuery elements matching selector
  * from the haystack. This expects javascript objects that
- * have a public "element" property.
+ * have a public "getRootNode" method.
  * @param {string} selector
  * @param {array} haystack
  * @return {array} matches
  */
 function filter(selector, haystack) {
-    var matches = [],
-        i = -1;
+    var matches = [];
 
-    while (++i < haystack.length) {
-        if (haystack[i].element && haystack[i].element.is(selector)) {
-            matches.push(haystack[i]);
+    haystack.forEach(function(hay){
+        var node = hay.getRootNode();
+        if (node && node.is(selector)) {
+            matches.push(hay);
         }
-    }
+    });
 
     return matches;
 }

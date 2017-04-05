@@ -65,20 +65,20 @@ function inherit(parents, child, properties) {
 /**
  * Globally filters out jQuery elements matching selector
  * from the haystack. This expects javascript objects that
- * have a public "element" property.
+ * have a public "getRootNode" method.
  * @param {string} selector
  * @param {array} haystack
  * @return {array} matches
  */
 function filter(selector, haystack) {
-    var matches = [],
-        i = -1;
+    var matches = [];
 
-    while (++i < haystack.length) {
-        if (haystack[i].element && haystack[i].element.is(selector)) {
-            matches.push(haystack[i]);
+    haystack.forEach(function(hay){
+        var node = hay.getRootNode();
+        if (node && node.is(selector)) {
+            matches.push(hay);
         }
-    }
+    });
 
     return matches;
 }
@@ -368,55 +368,53 @@ function filter(selector, haystack) {
 
     "use strict";
 
-    var rootNode;
-
     /**
      * A form object that can be captured using ajax.
      * @param {jQuery} el
      */
     var AjaxForm = namespace("Tmt.Components").AjaxForm = function (el) {
-        rootNode = el;
+        this.rootNode = el;
         this.initialize();
     };
 
     inherit([Tmt.EventEmitter], AjaxForm, {
         initialize: function () {
             Tmt.EventEmitter.prototype.initialize.call(this);
+            addEvents.call(this);
+        },
 
-            addEvents.bind(this);
+        getRootNode: function () {
+            return this.rootNode;
         }
     });
 
 
     function addEvents() {
-        rootNode.on("submit", onSubmit.bind(this));
-        rootNode.on("onBeforeSubmit", onBeforeSubmit.bind(this));
+        this.rootNode.on("submit", onSubmit.bind(this));
         this.emit("bound", this);
     }
 
     function onSubmit(event) {
         event.preventDefault();
 
+        this.rootNode.addClass("working");
         this.emit("beforeSubmit", this, event);
 
         $.ajax({
-            url: rootNode.attr("action"),
-            data: new FormData(rootNode.get(0)),
+            url: this.rootNode.attr("action"),
+            data: new FormData(this.rootNode.get(0)),
             cache: false,
             processData: false,
             contentType: false,
-            type: rootNode.attr('method'),
+            type: this.rootNode.attr('method'),
             success: onSubmitSuccess.bind(this)
         });
 
         this.emit("submit", this);
-    };
-
-    function onBeforeSubmit() {
-        rootNode.addClass("working");
     }
 
     function onSubmitSuccess(response) {
+        this.rootNode.removeClass("working");
         this.emit("submitSuccess", response, this);
     }
 
@@ -426,8 +424,7 @@ function filter(selector, haystack) {
 
     "use strict";
 
-    var rootNode,
-        ready = false,
+    var ready = false,
         embed = null,
         ytPlayer = null,
         isPlaying = false,
@@ -435,7 +432,7 @@ function filter(selector, haystack) {
         range = null;
 
     var Player = namespace("Tmt.Components").Player = function (element) {
-        rootNode = element;
+        this.rootNode = element;
         this.initialize();
     };
 
@@ -461,11 +458,11 @@ function filter(selector, haystack) {
         },
 
         'getVideoId': function () {
-            return rootNode.data("song-vid");
+            return this.rootNode.data("song-vid");
         },
 
         'setVideoId': function (id) {
-            rootNode.data("song-vid", id);
+            this.rootNode.data("song-vid", id);
         },
 
         'hasVideoId': function () {
@@ -473,7 +470,7 @@ function filter(selector, haystack) {
         },
 
         'getSongSlug': function () {
-            return rootNode.data("song-slug");
+            return this.rootNode.data("song-slug");
         }
     });
 
@@ -498,7 +495,7 @@ function filter(selector, haystack) {
             '&amp;playsinline=0&amp;showinfo=0&amp;modestbranding=1&amp;rel=0&amp;' +
             'autoplay=0&amp;loop=0&amp;origin=' + window.location.origin + '"></iframe>'
 
-        rootNode.append(iframeHtml);
+        this.rootNode.append(iframeHtml);
         embed = $("#" + id);
 
         ytPlayer = new YT.Player(id);
@@ -517,7 +514,7 @@ function filter(selector, haystack) {
         2 (paused)
         3 (buffering)
         5 (video queued) */
-        var controlButton = rootNode.find('.play');
+        var controlButton = this.rootNode.find('.play');
 
         if (newState.data === 1) {
             controlButton.removeClass("fa-play");
@@ -538,7 +535,7 @@ function filter(selector, haystack) {
 
     function onProgressClick(e) {
         if (isPlaying) {
-            var progressBar = rootNode.find(".progress-wrap .progress"),
+            var progressBar = this.rootNode.find(".progress-wrap .progress"),
                 offset = progressBar.offset(),
                 relX = e.pageX - offset.left,
                 pctLocation = relX / progressBar.width();
@@ -557,11 +554,11 @@ function filter(selector, haystack) {
 
 
     function onPlayerReady(event) {
-        rootNode.find(".duration").html(toReadableTime(ytPlayer.getDuration()));
-        rootNode.find(".position").html(toReadableTime(0));
-        rootNode.find(".progress-wrap .progress").click(onProgressClick.bind(this));
+        this.rootNode.find(".duration").html(toReadableTime(ytPlayer.getDuration()));
+        this.rootNode.find(".position").html(toReadableTime(0));
+        this.rootNode.find(".progress-wrap .progress").click(onProgressClick.bind(this));
 
-        var playBtn = rootNode.find('.play');
+        var playBtn = this.rootNode.find('.play');
         playBtn.removeClass("fa-stop");
         playBtn.addClass("fa-play");
         playBtn.click(onPlayBtnClick.bind(this));
@@ -580,12 +577,12 @@ function filter(selector, haystack) {
             durationTime = ytPlayer.getDuration(),
             currentPositionPct = (currentTime / durationTime) * 100;
 
-        rootNode.find('.position').html(toReadableTime(currentTime));
+        this.rootNode.find('.position').html(toReadableTime(currentTime));
 
-        rootNode.find('.cursor').css("left", currentPositionPct + "%");
-        rootNode.find('.progress .loaded-bar').css("width", (ytPlayer.getVideoLoadedFraction() * 100) + "%");
-        rootNode.find('.progress .playing-bar').css("width", currentPositionPct + "%");
-        rootNode.find('.progress .playing-bar').attr("aria-valuenow", currentTime);
+        this.rootNode.find('.cursor').css("left", currentPositionPct + "%");
+        this.rootNode.find('.progress .loaded-bar').css("width", (ytPlayer.getVideoLoadedFraction() * 100) + "%");
+        this.rootNode.find('.progress .playing-bar').css("width", currentPositionPct + "%");
+        this.rootNode.find('.progress .playing-bar').attr("aria-valuenow", currentTime);
 
         if (isPlaying) {
             // if (tmt.playingRange) {
@@ -616,13 +613,11 @@ function filter(selector, haystack) {
 
     "use strict";
 
-    var ajaxForm,
-        rootNode,
-        enabled = false;
 
     var UpvoteForm = namespace("Tmt.Components").UpvoteForm = function (ajaxFormObj) {
-        ajaxForm = ajaxFormObj;
-        rootNode = ajaxForm.element;
+        this.ajaxForm = ajaxFormObj;
+        this.rootNode = ajaxFormObj.getRootNode();
+        this.enabled = false;
 
         this.initialize();
     };
@@ -632,20 +627,22 @@ function filter(selector, haystack) {
         "initialize": function () {
             Tmt.EventEmitter.prototype.initialize.call(this);
 
-            addEvents.bind(this);
-            resetButtons();
+            addEvents.call(this);
+            resetButtons.call(this);
+
+            this.rootNode.addClass('initialized');
         },
 
         "getType": function () {
-            return rootNode.data("upvote-type");
+            return this.rootNode.data("upvote-type");
         },
 
         "getObjectId": function () {
-            return rootNode.data("upvote-object-id");
+            return this.rootNode.data("upvote-object-id");
         },
 
         "setObjectId": function (id) {
-            return rootNode.data("upvote-object-id", id);
+            return this.rootNode.data("upvote-object-id", id);
         },
 
         "isTrack": function () {
@@ -657,45 +654,45 @@ function filter(selector, haystack) {
         },
 
         "setValue": function (value) {
-            rootNode.removeClass("liked disliked");
-            rootNode.find("input[name=vote]").val(value);
+            this.rootNode.removeClass("liked disliked");
+            this.rootNode.find("input[name=vote]").val(value);
 
             if (value == 1) {
-                rootNode.addClass("liked");
-                enableButton(rootNode.find('button.up'));
+                this.rootNode.addClass("liked");
+                enableButton(this.rootNode.find('button.up'));
             } else if (value == 2) {
-                rootNode.addClass("disliked");
-                rootNode.find('button.down').html('<i class="fa fa-thumbs-down" aria-hidden="true">');
+                this.rootNode.addClass("disliked");
+                this.rootNode.find('button.down').html('<i class="fa fa-thumbs-down" aria-hidden="true">');
             } else {
-                resetButtons();
+                resetButtons.call(this);
             }
 
             this.emit('valueChange', value, this);
         },
 
         "getValue": function () {
-            return rootNode.find("input[name=vote]").val();
+            return this.rootNode.find("input[name=vote]").val();
         },
 
         "lock": function () {
-            enabled = false;
-            rootNode.find("button").attr("disabled", "disabled");
+            this.enabled = false;
+            this.rootNode.find("button").attr("disabled", "disabled");
         },
 
         "unlock": function () {
-            enabled = true;
-            rootNode.find("button").removeAttr("disabled");
+            this.enabled = true;
+            this.rootNode.find("button").removeAttr("disabled");
         }
     });
 
     function addEvents() {
-        rootNode.find("button").click(onButtonClick.bind(this));
-        ajaxForm.on('submitSuccess', onSubmitSuccess.bind(this));
+        this.rootNode.find("button").click(onButtonClick.bind(this));
+        this.ajaxForm.on('submitSuccess', onSubmitSuccess.bind(this));
     };
 
     function resetButtons() {
-        rootNode.find('button.up').html('<i class="fa fa-thumbs-o-up" aria-hidden="true">');
-        rootNode.find('button.down').html('<i class="fa fa-thumbs-o-down" aria-hidden="true">');
+        this.rootNode.find('button.up').html('<i class="fa fa-thumbs-o-up" aria-hidden="true">');
+        this.rootNode.find('button.down').html('<i class="fa fa-thumbs-o-down" aria-hidden="true">');
     }
 
     function enableButton(button) {
@@ -708,13 +705,17 @@ function filter(selector, haystack) {
     }
 
     function onButtonClick(evt) {
-        if (!enabled) {
+        if (!this.enabled) {
             return;
         }
+
+
 
         var $el = $(evt.target),
             button = $el.parents('button'),
             clickedValue = button.val();
+
+console.log(clickedValue);
 
         if (clickedValue != this.getValue()) {
             this.setValue(clickedValue);
@@ -724,7 +725,7 @@ function filter(selector, haystack) {
         }
 
         this.lock();
-        rootNode.submit();
+        this.rootNode.submit();
     }
 
     function onSubmitSuccess(response, ajaxForm) {
@@ -843,7 +844,6 @@ function filter(selector, haystack) {
 (function () {
 
     "use strict";
-
 
     var rootNode,
         profile,
@@ -1899,29 +1899,32 @@ function filter(selector, haystack) {
 
     "use strict";
 
+    var forms = [];
+
     /**
      * Ajax-enabled forms public bootstraper
      */
     var AjaxFormsInitializer = namespace("Tmt.Initializers").AjaxFormsInitializer = function () {
-        this.forms = [];
         this.initialize();
     };
 
     inherit([Tmt.EventEmitter], AjaxFormsInitializer, {
         'build': function (app) {
             addEvents.call(this, app);
+        },
+
+        'getForms': function() {
+            return forms;
         }
     });
 
     function bindPageForms() {
-        var forms = [];
-
+        forms = [];
         $("form[data-ctrl-mode=ajax]").each(function () {
             forms.push(new Tmt.Components.AjaxForm($(this)));
         });
 
-        this.forms = forms;
-        this.emit('bound', this);
+        this.emit('bound', this, forms);
     }
 
     function addEvents(app) {
@@ -2026,8 +2029,8 @@ function filter(selector, haystack) {
 
     function addEvents(app) {
         app.on('ready', bindProfileHooks.bind(this));
-        app.initializers.UpvoteFormsInitializer.on('bound', function(UpvoteFormsInitializer){
-            bindToUpvoteForms(app, UpvoteFormsInitializer);
+        app.initializers.UpvoteFormsInitializer.on('bound', function(upvoteFormsInitializer){
+            bindToUpvoteForms(app, upvoteFormsInitializer);
         }.bind(this));
     }
 
@@ -2040,9 +2043,12 @@ function filter(selector, haystack) {
             onUpvoteValue(app.profile, value, upvoteForm);
         }.bind(this);
 
-        for (var i = 0, len = UpvoteFormsInitializer.boxes.length; i < len; i++) {
-            var box = UpvoteFormsInitializer.boxes[i];
-            box.on("valueChange", fn);
+        var i = 0,
+            forms = UpvoteFormsInitializer.getForms(),
+            len = forms.length;
+
+        for ( ; i < len; i++) {
+            forms[i].on("valueChange", fn);
         }
     }
 
@@ -2132,17 +2138,21 @@ function filter(selector, haystack) {
 
     "use strict";
 
+    var boxes = [];
+
     /**
      * Ajax-enabled forms public bootstraper
      */
     var UpvoteFormsInitializer = namespace("Tmt.Initializers").UpvoteFormsInitializer = function () {
-        this.boxes = [];
         this.initialize();
     };
 
     inherit([Tmt.EventEmitter], UpvoteFormsInitializer, {
         'build': function (app) {
             addEvents.call(this, app);
+        },
+        'getForms': function () {
+            return boxes;
         }
     });
 
@@ -2151,19 +2161,16 @@ function filter(selector, haystack) {
         app.on('profileFirstPopulated', updateStateFirstTime.bind(this));
     }
 
-    function bindToAjaxForms(AjaxFormsInitializer) {
-        var upvoteForms = filter('[data-ctrl="upvote-widget"]', AjaxFormsInitializer.forms);
-        for (var i = 0, len = upvoteForms.length; i < len; i++) {
-            this.boxes.push(new Tmt.Components.UpvoteForm(upvoteForms[i]));
-        }
-
+    function bindToAjaxForms(ajaxFormsInitializer, forms) {
+        filter('[data-ctrl="upvote-widget"]', forms).forEach(function(form){
+            boxes.push(new Tmt.Components.UpvoteForm(form));
+        });
         this.emit('bound', this);
     }
 
     function updateStateFirstTime(app, profile) {
-        for (var i = 0, len = this.boxes.length; i < len; i++) {
-            var box = this.boxes[i],
-                matchFound = profile.getVoteByObjectId(box.getType(), box.getObjectId());
+        boxes.forEach(function (box) {
+            var matchFound = profile.getVoteByObjectId(box.getType(), box.getObjectId());
 
             if (matchFound) {
                 box.setValue(matchFound);
@@ -2172,7 +2179,7 @@ function filter(selector, haystack) {
             // Though we have no value to apply on the control,
             // it is still time to activate it.
             box.unlock();
-        }
+        });
 
         this.emit("synched", this);
     }

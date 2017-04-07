@@ -179,8 +179,10 @@ body.tracks.review header {
 }
 
 *[data-attr="tmt-reviewer"] .knob-track b {
-  -webkit-transition: top .3s;
-  transition: top .3s;
+  -webkit-transition: -webkit-transform .1s;
+  transition: -webkit-transform .1s;
+  transition: transform .1s;
+  transition: transform .1s, -webkit-transform .1s;
   background: #666;
   border: 1px solid #333;
   box-shadow: 0 2px 7px #000;
@@ -189,15 +191,25 @@ body.tracks.review header {
   width: 72px;
   height: 72px;
   position: absolute;
-  top: 90%;
-  left: 50%;
-  -webkit-transform: translate(-50%, -50%);
-  transform: translate(-50%, -50%);
 }
 
 *[data-attr="tmt-reviewer"] .knob-track.enabled b {
   background: #eee;
   cursor: pointer;
+}
+
+*[data-attr="tmt-reviewer"] i {
+  position: absolute;
+  top: 0;
+  left: 50%;
+}
+
+*[data-attr="tmt-reviewer"] i img {
+  -webkit-transition: top left .1s;
+  transition: top left .1s;
+  position: absolute;
+  top: 0;
+  left: 0;
 }
 
 *[data-attr="tmt-reviewer"] *[data-attr="tmt-player"] {

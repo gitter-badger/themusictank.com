@@ -98,13 +98,9 @@
             return;
         }
 
-
-
         var $el = $(evt.target),
             button = $el.parents('button'),
             clickedValue = button.val();
-
-console.log(clickedValue);
 
         if (clickedValue != this.getValue()) {
             this.setValue(clickedValue);

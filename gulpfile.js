@@ -27,6 +27,10 @@ elixir(function(mix) {
 
             'components/reviewer/knob.js',
             'components/reviewer/reviewer.js',
+            'components/reviewer/canvas.js',
+            'components/reviewer/emitter/vector.js',
+            'components/reviewer/emitter/particle.js',
+            'components/reviewer/emitter/particle-emitter.js',
 
             'initializers/ajax-forms-initializer.js',
             'initializers/player-initializer.js',

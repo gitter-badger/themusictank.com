@@ -13,7 +13,7 @@
 
     //     // These define the length of all 'animations'
     //     DURATION_COMPARE    = 3.5 * 60, // the basis for all effects is based on 1 sec when song is 3m30s
-    //     LENGTH_TO_SHAKE     = 0.1,
+    //     ,
     //     //LENGTH_POWERING     = 4.2,
     //     LENGTH_SHAKING      = 1.8,
     //     //LENGTH_TO_MULTIPLIER = 3,
@@ -45,66 +45,170 @@
 
     var NEUTRAL_GROOVE_POINT = 0.500,
         GROOVE_DECAY        = 0.0005,
-        FRAMERATE           = 24,
+        FRAMERATE           = 28,
         SAVE_FRAMERATE      = 3 / FRAMERATE * 1000,
-        FRAMES_TO_SHAKE     = FRAMERATE * LENGTH_TO_SHAKE,
-        FRAME_PER_SHAKE     = FRAMERATE * LENGTH_SHAKING,
-        FRAMES_PER_SAVE     = FRAMERATE * 5,
-        LENGTH_TO_SHAKE     = 0.1,
-        LENGTH_SHAKING      = 1.8;
-
-    var currentGroove,
-        player,
-        knob,
-        rootNode;
+        HIGH_GROOVE_THRESHOLD = 0.98,
+        LOW_GROOVE_THRESHOLD = 0.02,
+        LENGTH_TO_SHAKE     = 0.75 * FRAMERATE,
+        LENGTH_PER_SHAKE    = 2 * FRAMERATE;
 
 
     var Reviewer = namespace("Tmt.Components.Reviewer").Reviewer = function (element, playerObj) {
-        rootNode = element;
-        player = playerObj;
+        this.rootNode = element;
+        this.player = playerObj;
+        this.isShaking = false;
+
+        this.timers = {
+            highGrooveStart : null,
+            lowGrooveStart : null,
+        };
+        this.currentGroove = 0;
+        this.currentFrameId = 0;
 
         this.initialize();
     };
 
     inherit([Tmt.EventEmitter], Reviewer, {
 
-        'initialize' : function()
-        {
+        'initialize' : function() {
             Tmt.EventEmitter.prototype.initialize.call(this);
 
-            addEvents();
-            setGrooveTo(NEUTRAL_GROOVE_POINT);
-            start();
+            registerKnob.call(this);
+            registerEmitter.call(this);
+            addEvents.call(this);
+            setGrooveTo.call(this, NEUTRAL_GROOVE_POINT);
+            start.call(this);
         }
     });
 
     function addEvents()
     {
-        registerKnob();
-
-        player.on("play", onPlay);
-        player.on("stop", onStop);
+        this.player.on("play", onPlay.bind(this));
+        this.player.on("stop", onStop.bind(this));
     }
 
     function setGrooveTo(value) {
-        currentGroove = value;
-        knob.setValue(value);
+        this.currentGroove = value;
+        this.knob.setValue(value);
     }
 
     function start() {
-        player.getStreamer().playVideo();
+        this.player.getStreamer().playVideo();
     }
 
     function onPlay() {
-        knob.enable();
+        this.knob.enable();
+        tick.call(this);
     }
 
     function onStop() {
-        knob.disable();
+        this.knob.disable();
     }
 
     function registerKnob() {
-        knob = new Tmt.Components.Reviewer.Knob(rootNode.find(".knob-track"));
+        this.knob = new Tmt.Components.Reviewer.Knob(this.rootNode.find(".knob-track"));
+    }
+
+    function registerEmitter() {
+        this.emitter = new Tmt.Components.Reviewer.Emitter.ParticleEmitter(this.rootNode.find("i"));
+        this.emitter.moveTo(this.knob.position.left, this.knob.position.top);
+        this.emitter.initialize(40);
+    }
+
+    function tick() {
+        if (this.player.isPlaying()) {
+            setFrameContext.call(this);
+            calculateTimelineContext.call(this);
+            calculateGroove.call(this);
+            paintFrame.call(this);
+        }
+
+        this.emitter.tick();
+        setTimeout(tick.bind(this), 1000 / FRAMERATE);
+    }
+
+    function isPositive() {
+        return this.currentGroove > NEUTRAL_GROOVE_POINT;
+    }
+
+    function isNegative() {
+        return this.currentGroove < NEUTRAL_GROOVE_POINT;
+    }
+
+    function setFrameContext() {
+        this.currentFrameId++;
+
+        if (this.currentFrameId > 100000) {
+            this.currentFrameId = 1;
+        }
+    }
+
+    function paintFrame() {
+        this.emitter.animate();
+
+        // dont update if user is still dragging
+        if (!this.knob.isWorking()) {
+            this.knob.setValue(this.currentGroove);
+        }
+
+        (this.isShaking) ?
+            this.knob.nudge() :
+            this.knob.center();
+    }
+
+    function calculateGroove() {
+        if (this.knob.isWorking()) {
+            this.currentGroove = this.knob.getValue();
+        } else if (isPositive.call(this)) {
+            this.currentGroove -= GROOVE_DECAY;
+        } else if (isNegative.call(this)) {
+            this.currentGroove += GROOVE_DECAY;
+        }
+
+        if (
+            this.currentGroove > (NEUTRAL_GROOVE_POINT - (GROOVE_DECAY * 2)) &&
+            this.currentGroove < (NEUTRAL_GROOVE_POINT + (GROOVE_DECAY * 2))
+        ) {
+            this.currentGroove = NEUTRAL_GROOVE_POINT;
+        }
+    }
+
+    function calculateTimelineContext() {
+        if(this.knob.isWorking()) {
+            if (this.currentGroove > HIGH_GROOVE_THRESHOLD) {
+                this.timers.lowGrooveStart = null;
+                calculatePositiveContext.call(this);
+            } else if (this.currentGroove < LOW_GROOVE_THRESHOLD) {
+                this.timers.highGrooveStart = null;
+                calculateNegativeContext.call(this);
+            }
+        }
+    }
+
+    // liking it a lot
+    function calculatePositiveContext() {
+        if (!this.timers.highGrooveStart) {
+            this.timers.highGrooveStart = this.currentFrameId;
+            this.isShaking = true;
+        } else if (this.timers.highGrooveStart + LENGTH_PER_SHAKE <= this.currentFrameId) {
+            this.timers.highGrooveStart = null;
+            this.currentGroove = HIGH_GROOVE_THRESHOLD;
+            this.knob.stopCurrentDrag();
+            this.isShaking = false;
+        }
+    }
+
+    // hating it a lot
+    function calculateNegativeContext() {
+        if (!this.timers.lowGrooveStart) {
+            this.timers.lowGrooveStart = this.currentFrameId;
+            this.isShaking = true;
+        } else if (this.timers.lowGrooveStart + LENGTH_PER_SHAKE <= this.currentFrameId) {
+            this.timers.lowGrooveStart = null;
+            this.currentGroove = LOW_GROOVE_THRESHOLD;
+            this.knob.stopCurrentDrag();
+            this.isShaking = false;
+        }
     }
 
 })(jQuery);

@@ -73,7 +73,7 @@ function inherit(parents, child, properties) {
 function filter(selector, haystack) {
     var matches = [];
 
-    haystack.forEach(function(hay){
+    haystack.forEach(function (hay) {
         var node = hay.getRootNode();
         if (node && node.is(selector)) {
             matches.push(hay);
@@ -81,6 +81,27 @@ function filter(selector, haystack) {
     });
 
     return matches;
+}
+
+
+function debounce(func, threshold, execAsap) {
+    var timeout;
+
+    return function debounced() {
+        var obj = this, args = arguments;
+        function delayed() {
+            if (!execAsap)
+                func.apply(obj, args);
+            timeout = null;
+        };
+
+        if (timeout)
+            clearTimeout(timeout);
+        else if (execAsap)
+            func.apply(obj, args);
+
+        timeout = setTimeout(delayed, threshold || 100);
+    };
 }
 
 (function (undefined) {
@@ -424,25 +445,29 @@ function filter(selector, haystack) {
 
     "use strict";
 
-    var ready = false,
-        embed = null,
-        ytPlayer = null,
-        isPlaying = false,
-        canSkip = true,
-        range = null;
-
     var Player = namespace("Tmt.Components").Player = function (element) {
         this.rootNode = element;
+        this.ready = false;
+        this.embed = null;
+        this.ytPlayer = null;
+        this.playing = false;
+        this.canSkip = true;
+        this.range = null;
+
         this.initialize();
     };
 
     inherit([Tmt.EventEmitter], Player, {
         'isReady' : function() {
-            return ready;
+            return this.ready;
+        },
+
+        'isPlaying' : function() {
+            return this.playing;
         },
 
         'getStreamer' : function() {
-            return ytPlayer;
+            return this.ytPlayer;
         },
 
         'render': function () {
@@ -496,13 +521,13 @@ function filter(selector, haystack) {
             'autoplay=0&amp;loop=0&amp;origin=' + window.location.origin + '"></iframe>'
 
         this.rootNode.append(iframeHtml);
-        embed = $("#" + id);
+        this.embed = $("#" + id);
 
-        ytPlayer = new YT.Player(id);
-        ytPlayer.addEventListener('onReady', onPlayerReady.bind(this));
-        ytPlayer.addEventListener('onStateChange', onPlayerStateChange.bind(this));
+        this.ytPlayer = new YT.Player(id);
+        this.ytPlayer.addEventListener('onReady', onPlayerReady.bind(this));
+        this.ytPlayer.addEventListener('onStateChange', onPlayerStateChange.bind(this));
 
-        ready = true;
+        this.ready = true;
         this.emit("embeded", this);
     }
 
@@ -520,7 +545,7 @@ function filter(selector, haystack) {
             controlButton.removeClass("fa-play");
             controlButton.addClass("fa-pause");
 
-            isPlaying = true;
+            this.playing = true;
             this.emit("play");
             onPlayerTick.call(this);
         }
@@ -528,18 +553,18 @@ function filter(selector, haystack) {
             controlButton.removeClass("fa-pause");
             controlButton.addClass("fa-play");
 
-            isPlaying = false;
+            this.playing = false;
             this.emit("stop");
         }
     }
 
     function onProgressClick(e) {
-        if (isPlaying) {
+        if (this.playing) {
             var progressBar = this.rootNode.find(".progress-wrap .progress"),
                 offset = progressBar.offset(),
                 relX = e.pageX - offset.left,
                 pctLocation = relX / progressBar.width();
-            ytPlayer.seekTo(pctLocation * ytPlayer.getDuration(), true);
+            this.ytPlayer.seekTo(pctLocation * this.ytPlayer.getDuration(), true);
         }
     };
 
@@ -547,14 +572,14 @@ function filter(selector, haystack) {
         // Ranges wil be back shortly
         this.playingRange = null;
 
-        (ytPlayer.getPlayerState() != 1) ?
-            ytPlayer.playVideo() :
-            ytPlayer.pauseVideo();
+        (this.ytPlayer.getPlayerState() != 1) ?
+            this.ytPlayer.playVideo() :
+            this.ytPlayer.pauseVideo();
     }
 
 
     function onPlayerReady(event) {
-        this.rootNode.find(".duration").html(toReadableTime(ytPlayer.getDuration()));
+        this.rootNode.find(".duration").html(toReadableTime(this.ytPlayer.getDuration()));
         this.rootNode.find(".position").html(toReadableTime(0));
         this.rootNode.find(".progress-wrap .progress").click(onProgressClick.bind(this));
 
@@ -573,18 +598,18 @@ function filter(selector, haystack) {
     };
 
     function onPlayerTick() {
-        var currentTime = ytPlayer.getCurrentTime(),
-            durationTime = ytPlayer.getDuration(),
+        var currentTime = this.ytPlayer.getCurrentTime(),
+            durationTime = this.ytPlayer.getDuration(),
             currentPositionPct = (currentTime / durationTime) * 100;
 
         this.rootNode.find('.position').html(toReadableTime(currentTime));
 
         this.rootNode.find('.cursor').css("left", currentPositionPct + "%");
-        this.rootNode.find('.progress .loaded-bar').css("width", (ytPlayer.getVideoLoadedFraction() * 100) + "%");
+        this.rootNode.find('.progress .loaded-bar').css("width", (this.ytPlayer.getVideoLoadedFraction() * 100) + "%");
         this.rootNode.find('.progress .playing-bar').css("width", currentPositionPct + "%");
         this.rootNode.find('.progress .playing-bar').attr("aria-valuenow", currentTime);
 
-        if (isPlaying) {
+        if (this.playing) {
             // if (tmt.playingRange) {
 
             //     if (currentTime >= tmt.playingRange[1]) {
@@ -709,13 +734,9 @@ function filter(selector, haystack) {
             return;
         }
 
-
-
         var $el = $(evt.target),
             button = $el.parents('button'),
             clickedValue = button.val();
-
-console.log(clickedValue);
 
         if (clickedValue != this.getValue()) {
             this.setValue(clickedValue);
@@ -829,7 +850,7 @@ console.log(clickedValue);
                         templates: {
                             header: '<h3>Tracks</h3>',
                             empty: '<h3>Tracks</h3><p class="empty-message">Could not find matching tracks.</p>',
-                            suggestion: function (data) { return ['<p><a href="/albums/' + data.slug + '/">' + data.name + '</a> by <a href="/artists/' + data.artist.slug + '/">' + data.artist.name + '</a></p>'].join(""); }
+                            suggestion: function (data) { return ['<p><a href="/tracks/' + data.slug + '/">' + data.name + '</a> by <a href="/artists/' + data.artist.slug + '/">' + data.artist.name + '</a></p>'].join(""); }
                         }
                     }
                 ]
@@ -988,50 +1009,109 @@ console.log(clickedValue);
 
     "use strict";
 
-    var track = null,
-        knob = null,
-        enabled = false,
-        draggable = null;
-
     var Knob = namespace("Tmt.Components.Reviewer").Knob = function (element) {
-        track = element;
-        knob = element.find('b');
-        enabled = false;
+        this.track = element;
+        this.knob = element.find('b');
 
-        addEvents();
+        this.enabled = false;
+        this.working = false;
+        this.position = null;
+        this.trackHeight = null;
+        this.draggable = null;
+        this.nudged = false;
+
+        addEvents.call(this);
+        saveCurrentPosition.call(this);
     };
 
     inherit([], Knob, {
         enable: function () {
-            track.removeClass("disabled");
-            track.addClass("enabled");
+            this.track.removeClass("disabled");
+            this.track.addClass("enabled");
 
-            draggable.enable();
-
-            enabled = true;
+            this.draggable.enable();
+            this.enabled = true;
         },
 
         disable: function () {
-            track.addClass("disabled");
-            track.removeClass("enabled");
+            this.track.addClass("disabled");
+            this.track.removeClass("enabled");
 
-            draggable.disable();
-
-            enabled = false;
+            this.draggable.disable();
+            this.enabled = false;
         },
 
         setValue: function (value) {
-            knob.css("top", (value * 100) + "%");
+            var topPosition = this.trackHeight * (1 - value);
+            TweenMax.set(this.knob.get(0), { css: { y:  topPosition } });
+            this.draggable.update();
+        },
+
+        getValue: function () {
+            var value = 1 - (this.draggable.y / this.trackHeight);
+
+            // Ensure we don't break boundries
+            if (value > 1)  {
+                return 1;
+            } else if (value < 0) {
+                return 0;
+            }
+
+            return value;
+        },
+
+        isWorking : function() {
+            return this.working;
+        },
+
+        isEnabled : function() {
+            return this.enabled;
+        },
+
+        stopCurrentDrag : function() {
+            this.draggable.disable();
+            this.draggable.enable();
+        },
+
+        nudge : function() {
+            this.nudged = true;
+            this.track.css({
+                'margin-top' : (Math.random() <= 0.5 ?  2 : -2) + "px",
+                'margin-left' : (Math.random() <= 0.5 ?  2 : -2) + "px"
+            });
+        },
+
+        center : function() {
+            if (this.nudged) {
+                this.track.css({
+                    'margin-top' : null,
+                    'margin-left' : null
+                });
+            }
         }
     });
 
+    function saveCurrentPosition() {
+        this.position = this.track.position();
+        this.trackHeight = this.track.innerHeight() - this.knob.outerHeight();
+    }
+
     function addEvents() {
-        draggable = Draggable.create(knob.get(0), {
+        this.draggable = Draggable.create(this.knob.get(0), {
             type: "y",
-            bounds: track.get(0)
+            bounds: this.track.get(0),
+            onDragStart: onDragStart.bind(this),
+            onDragEnd: onDragEnd.bind(this),
         })[0];
     }
 
+    function onDragStart() {
+        this.working = true;
+    }
+
+    function onDragEnd() {
+        this.working = false;
+    }
 
 })(jQuery);
 
@@ -1050,7 +1130,7 @@ console.log(clickedValue);
 
     //     // These define the length of all 'animations'
     //     DURATION_COMPARE    = 3.5 * 60, // the basis for all effects is based on 1 sec when song is 3m30s
-    //     LENGTH_TO_SHAKE     = 0.1,
+    //     ,
     //     //LENGTH_POWERING     = 4.2,
     //     LENGTH_SHAKING      = 1.8,
     //     //LENGTH_TO_MULTIPLIER = 3,
@@ -1082,66 +1162,170 @@ console.log(clickedValue);
 
     var NEUTRAL_GROOVE_POINT = 0.500,
         GROOVE_DECAY        = 0.0005,
-        FRAMERATE           = 24,
+        FRAMERATE           = 28,
         SAVE_FRAMERATE      = 3 / FRAMERATE * 1000,
-        FRAMES_TO_SHAKE     = FRAMERATE * LENGTH_TO_SHAKE,
-        FRAME_PER_SHAKE     = FRAMERATE * LENGTH_SHAKING,
-        FRAMES_PER_SAVE     = FRAMERATE * 5,
-        LENGTH_TO_SHAKE     = 0.1,
-        LENGTH_SHAKING      = 1.8;
-
-    var currentGroove,
-        player,
-        knob,
-        rootNode;
+        HIGH_GROOVE_THRESHOLD = 0.98,
+        LOW_GROOVE_THRESHOLD = 0.02,
+        LENGTH_TO_SHAKE     = 0.75 * FRAMERATE,
+        LENGTH_PER_SHAKE    = 2 * FRAMERATE;
 
 
     var Reviewer = namespace("Tmt.Components.Reviewer").Reviewer = function (element, playerObj) {
-        rootNode = element;
-        player = playerObj;
+        this.rootNode = element;
+        this.player = playerObj;
+        this.isShaking = false;
+
+        this.timers = {
+            highGrooveStart : null,
+            lowGrooveStart : null,
+        };
+        this.currentGroove = 0;
+        this.currentFrameId = 0;
 
         this.initialize();
     };
 
     inherit([Tmt.EventEmitter], Reviewer, {
 
-        'initialize' : function()
-        {
+        'initialize' : function() {
             Tmt.EventEmitter.prototype.initialize.call(this);
 
-            addEvents();
-            setGrooveTo(NEUTRAL_GROOVE_POINT);
-            start();
+            registerKnob.call(this);
+            registerEmitter.call(this);
+            addEvents.call(this);
+            setGrooveTo.call(this, NEUTRAL_GROOVE_POINT);
+            start.call(this);
         }
     });
 
     function addEvents()
     {
-        registerKnob();
-
-        player.on("play", onPlay);
-        player.on("stop", onStop);
+        this.player.on("play", onPlay.bind(this));
+        this.player.on("stop", onStop.bind(this));
     }
 
     function setGrooveTo(value) {
-        currentGroove = value;
-        knob.setValue(value);
+        this.currentGroove = value;
+        this.knob.setValue(value);
     }
 
     function start() {
-        player.getStreamer().playVideo();
+        this.player.getStreamer().playVideo();
     }
 
     function onPlay() {
-        knob.enable();
+        this.knob.enable();
+        tick.call(this);
     }
 
     function onStop() {
-        knob.disable();
+        this.knob.disable();
     }
 
     function registerKnob() {
-        knob = new Tmt.Components.Reviewer.Knob(rootNode.find(".knob-track"));
+        this.knob = new Tmt.Components.Reviewer.Knob(this.rootNode.find(".knob-track"));
+    }
+
+    function registerEmitter() {
+        this.emitter = new Tmt.Components.Reviewer.Emitter.ParticleEmitter(this.rootNode.find("i"));
+        this.emitter.moveTo(this.knob.position.left, this.knob.position.top);
+        this.emitter.initialize(40);
+    }
+
+    function tick() {
+        if (this.player.isPlaying()) {
+            setFrameContext.call(this);
+            calculateTimelineContext.call(this);
+            calculateGroove.call(this);
+            paintFrame.call(this);
+        }
+
+        this.emitter.tick();
+        setTimeout(tick.bind(this), 1000 / FRAMERATE);
+    }
+
+    function isPositive() {
+        return this.currentGroove > NEUTRAL_GROOVE_POINT;
+    }
+
+    function isNegative() {
+        return this.currentGroove < NEUTRAL_GROOVE_POINT;
+    }
+
+    function setFrameContext() {
+        this.currentFrameId++;
+
+        if (this.currentFrameId > 100000) {
+            this.currentFrameId = 1;
+        }
+    }
+
+    function paintFrame() {
+        this.emitter.animate();
+
+        // dont update if user is still dragging
+        if (!this.knob.isWorking()) {
+            this.knob.setValue(this.currentGroove);
+        }
+
+        (this.isShaking) ?
+            this.knob.nudge() :
+            this.knob.center();
+    }
+
+    function calculateGroove() {
+        if (this.knob.isWorking()) {
+            this.currentGroove = this.knob.getValue();
+        } else if (isPositive.call(this)) {
+            this.currentGroove -= GROOVE_DECAY;
+        } else if (isNegative.call(this)) {
+            this.currentGroove += GROOVE_DECAY;
+        }
+
+        if (
+            this.currentGroove > (NEUTRAL_GROOVE_POINT - (GROOVE_DECAY * 2)) &&
+            this.currentGroove < (NEUTRAL_GROOVE_POINT + (GROOVE_DECAY * 2))
+        ) {
+            this.currentGroove = NEUTRAL_GROOVE_POINT;
+        }
+    }
+
+    function calculateTimelineContext() {
+        if(this.knob.isWorking()) {
+            if (this.currentGroove > HIGH_GROOVE_THRESHOLD) {
+                this.timers.lowGrooveStart = null;
+                calculatePositiveContext.call(this);
+            } else if (this.currentGroove < LOW_GROOVE_THRESHOLD) {
+                this.timers.highGrooveStart = null;
+                calculateNegativeContext.call(this);
+            }
+        }
+    }
+
+    // liking it a lot
+    function calculatePositiveContext() {
+        if (!this.timers.highGrooveStart) {
+            this.timers.highGrooveStart = this.currentFrameId;
+            this.isShaking = true;
+        } else if (this.timers.highGrooveStart + LENGTH_PER_SHAKE <= this.currentFrameId) {
+            this.timers.highGrooveStart = null;
+            this.currentGroove = HIGH_GROOVE_THRESHOLD;
+            this.knob.stopCurrentDrag();
+            this.isShaking = false;
+        }
+    }
+
+    // hating it a lot
+    function calculateNegativeContext() {
+        if (!this.timers.lowGrooveStart) {
+            this.timers.lowGrooveStart = this.currentFrameId;
+            this.isShaking = true;
+        } else if (this.timers.lowGrooveStart + LENGTH_PER_SHAKE <= this.currentFrameId) {
+            this.timers.lowGrooveStart = null;
+            this.currentGroove = LOW_GROOVE_THRESHOLD;
+            this.knob.stopCurrentDrag();
+            this.isShaking = false;
+        }
     }
 
 })(jQuery);
@@ -1894,6 +2078,160 @@ console.log(clickedValue);
             this.debug("data", "appHasFocus", this.data.appHasFocus);
         }*/
 
+
+(function ($, undefined) {
+
+    "use strict";
+
+    var Canvas = namespace("Tmt.Components.Reviewer").Canvas = function (element) {
+        this.rootNode = element;
+        addEvents.call(this);
+    };
+
+    inherit([], Canvas, {
+
+
+    });
+
+    function addEvents () {
+        $(window).on('resize', debounce(applyCurrentSize.bind(this)));
+        applyCurrentSize.call(this);
+    }
+
+    function applyCurrentSize () {
+        this.rootNode.get(0).height = this.rootNode.parent().height();
+        this.rootNode.get(0).width = this.rootNode.parent().width();
+    }
+
+
+})(jQuery);
+
+(function ($, undefined) {
+
+    "use strict";
+
+    var Vector = namespace("Tmt.Components.Reviewer.Emitter").Vector = function (x, y) {
+        this.y = y;
+        this.x = x;
+    };
+
+    inherit([], Vector, {
+
+        add : function (vector) {
+            this.x = this.x + vector.x;
+            this.y = this.y + vector.y;
+        }
+
+    });
+
+})(jQuery);
+
+(function ($, undefined) {
+
+    "use strict";
+
+    var Vector = Tmt.Components.Reviewer.Emitter.Vector;
+
+    var Particle = namespace("Tmt.Components.Reviewer.Emitter").Particle = function (x, y, attachTo) {
+        this.size = Math.random() * 10 + 15;
+
+        this.position = new Vector(x, y);
+        var velocityX = (Math.random() * 3) * (Math.random() >= 0.5 ? 1 : -1);
+        var velocityY = Math.random() * 5;
+
+        this.velocity = new Vector(velocityX, velocityY);
+        this.acceleration = new Vector(0, 0.085);
+        this.lifespan = Math.random() * 650;
+
+        this.image  = $('<img src="/assets/img/spark.png">');
+        this.image.css({
+            top : 0,
+            left : 0
+        });
+        attachTo.append(this.image);
+    };
+
+    inherit([], Particle, {
+
+        update : function() {
+            this.velocity.add(this.acceleration);
+            this.position.add(this.velocity);
+            this.lifespan -= 1;
+        },
+
+        isDead : function(){
+            return this.lifespan < 0;
+        },
+
+        paint : function() {
+            var offset = this.image.offset();
+            this.image.css({
+                top : this.position.y,
+                left : this.position.x
+            })
+
+            if (this.lifespan < 100) {
+                this.image.fadeOut();
+            }
+
+        },
+
+        remove : function() {
+			this.image.remove();
+        }
+
+    });
+
+
+})(jQuery);
+
+(function ($, undefined) {
+
+    "use strict";
+
+    var Particle = Tmt.Components.Reviewer.Emitter.Particle;
+
+    var ParticleEmitter = namespace("Tmt.Components.Reviewer.Emitter").ParticleEmitter = function (element) {
+        this.rootNode = element;
+        this.x = 0;
+        this.y = 0;
+        this.particles = [];
+    };
+
+    inherit([], ParticleEmitter, {
+
+        moveTo : function (x, y) {
+            this.x = x;
+            this.y = y;
+        },
+
+        initialize: function (quantity) {
+            for (var i = 0; i < quantity; i++) {
+                this.particles[i] = new Particle(0, 0, this.rootNode);
+            }
+        },
+
+        tick: function () {
+            for (var i = 0; i < this.particles.length; i++) {
+                this.particles[i].update();
+            }
+        },
+
+        animate: function () {
+            for (var i = this.particles.length - 1; i >= 0; i--) {
+                if (this.particles[i].isDead()) {
+                    var particle = this.particles.pop();
+                    particle.remove();
+                } else {
+                    this.particles[i].paint();
+                }
+            }
+        }
+
+    });
+
+
+})(jQuery);
 
 (function ($, undefined) {
 

@@ -73,7 +73,7 @@ function inherit(parents, child, properties) {
 function filter(selector, haystack) {
     var matches = [];
 
-    haystack.forEach(function(hay){
+    haystack.forEach(function (hay) {
         var node = hay.getRootNode();
         if (node && node.is(selector)) {
             matches.push(hay);
@@ -81,4 +81,25 @@ function filter(selector, haystack) {
     });
 
     return matches;
+}
+
+
+function debounce(func, threshold, execAsap) {
+    var timeout;
+
+    return function debounced() {
+        var obj = this, args = arguments;
+        function delayed() {
+            if (!execAsap)
+                func.apply(obj, args);
+            timeout = null;
+        };
+
+        if (timeout)
+            clearTimeout(timeout);
+        else if (execAsap)
+            func.apply(obj, args);
+
+        timeout = setTimeout(delayed, threshold || 100);
+    };
 }

@@ -11,7 +11,6 @@
 <meta name="tmt.artist.gid" content="{{ $artist->gid }}">
 @endpush
 
-
 @section('backdrop')
     @include('partials.backdrop', ['entity' => $artist])
 @endsection

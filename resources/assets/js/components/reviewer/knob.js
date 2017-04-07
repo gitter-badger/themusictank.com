@@ -2,49 +2,108 @@
 
     "use strict";
 
-    var track = null,
-        knob = null,
-        enabled = false,
-        draggable = null;
-
     var Knob = namespace("Tmt.Components.Reviewer").Knob = function (element) {
-        track = element;
-        knob = element.find('b');
-        enabled = false;
+        this.track = element;
+        this.knob = element.find('b');
 
-        addEvents();
+        this.enabled = false;
+        this.working = false;
+        this.position = null;
+        this.trackHeight = null;
+        this.draggable = null;
+        this.nudged = false;
+
+        addEvents.call(this);
+        saveCurrentPosition.call(this);
     };
 
     inherit([], Knob, {
         enable: function () {
-            track.removeClass("disabled");
-            track.addClass("enabled");
+            this.track.removeClass("disabled");
+            this.track.addClass("enabled");
 
-            draggable.enable();
-
-            enabled = true;
+            this.draggable.enable();
+            this.enabled = true;
         },
 
         disable: function () {
-            track.addClass("disabled");
-            track.removeClass("enabled");
+            this.track.addClass("disabled");
+            this.track.removeClass("enabled");
 
-            draggable.disable();
-
-            enabled = false;
+            this.draggable.disable();
+            this.enabled = false;
         },
 
         setValue: function (value) {
-            knob.css("top", (value * 100) + "%");
+            var topPosition = this.trackHeight * (1 - value);
+            TweenMax.set(this.knob.get(0), { css: { y:  topPosition } });
+            this.draggable.update();
+        },
+
+        getValue: function () {
+            var value = 1 - (this.draggable.y / this.trackHeight);
+
+            // Ensure we don't break boundries
+            if (value > 1)  {
+                return 1;
+            } else if (value < 0) {
+                return 0;
+            }
+
+            return value;
+        },
+
+        isWorking : function() {
+            return this.working;
+        },
+
+        isEnabled : function() {
+            return this.enabled;
+        },
+
+        stopCurrentDrag : function() {
+            this.draggable.disable();
+            this.draggable.enable();
+        },
+
+        nudge : function() {
+            this.nudged = true;
+            this.track.css({
+                'margin-top' : (Math.random() <= 0.5 ?  2 : -2) + "px",
+                'margin-left' : (Math.random() <= 0.5 ?  2 : -2) + "px"
+            });
+        },
+
+        center : function() {
+            if (this.nudged) {
+                this.track.css({
+                    'margin-top' : null,
+                    'margin-left' : null
+                });
+            }
         }
     });
 
+    function saveCurrentPosition() {
+        this.position = this.track.position();
+        this.trackHeight = this.track.innerHeight() - this.knob.outerHeight();
+    }
+
     function addEvents() {
-        draggable = Draggable.create(knob.get(0), {
+        this.draggable = Draggable.create(this.knob.get(0), {
             type: "y",
-            bounds: track.get(0)
+            bounds: this.track.get(0),
+            onDragStart: onDragStart.bind(this),
+            onDragEnd: onDragEnd.bind(this),
         })[0];
     }
 
+    function onDragStart() {
+        this.working = true;
+    }
+
+    function onDragEnd() {
+        this.working = false;
+    }
 
 })(jQuery);

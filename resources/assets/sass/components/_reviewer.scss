@@ -37,7 +37,7 @@ body.tracks.review {
         border-radius: 72px;
 
         b {
-            transition: top .3s;
+            transition: transform .1s;
             background: #666;
             border: 1px solid #333;
             box-shadow: 0 2px 7px #000;
@@ -46,9 +46,6 @@ body.tracks.review {
             width: 72px;
             height: 72px;
             position: absolute;
-            top: 90%;
-            left: 50%;
-            transform: translate(-50%, -50%);
         }
 
 
@@ -58,6 +55,18 @@ body.tracks.review {
         }
     }
 
+    i {
+        position: absolute;
+        top: 0;
+        left: 50%;
+
+        img {
+            transition: top left .1s;
+            position:absolute;
+            top:0;
+            left:0;
+        }
+    }
 
     *[data-attr="tmt-player"] {
         position:absolute;

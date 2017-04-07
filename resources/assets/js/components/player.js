@@ -2,25 +2,29 @@
 
     "use strict";
 
-    var ready = false,
-        embed = null,
-        ytPlayer = null,
-        isPlaying = false,
-        canSkip = true,
-        range = null;
-
     var Player = namespace("Tmt.Components").Player = function (element) {
         this.rootNode = element;
+        this.ready = false;
+        this.embed = null;
+        this.ytPlayer = null;
+        this.playing = false;
+        this.canSkip = true;
+        this.range = null;
+
         this.initialize();
     };
 
     inherit([Tmt.EventEmitter], Player, {
         'isReady' : function() {
-            return ready;
+            return this.ready;
+        },
+
+        'isPlaying' : function() {
+            return this.playing;
         },
 
         'getStreamer' : function() {
-            return ytPlayer;
+            return this.ytPlayer;
         },
 
         'render': function () {
@@ -74,13 +78,13 @@
             'autoplay=0&amp;loop=0&amp;origin=' + window.location.origin + '"></iframe>'
 
         this.rootNode.append(iframeHtml);
-        embed = $("#" + id);
+        this.embed = $("#" + id);
 
-        ytPlayer = new YT.Player(id);
-        ytPlayer.addEventListener('onReady', onPlayerReady.bind(this));
-        ytPlayer.addEventListener('onStateChange', onPlayerStateChange.bind(this));
+        this.ytPlayer = new YT.Player(id);
+        this.ytPlayer.addEventListener('onReady', onPlayerReady.bind(this));
+        this.ytPlayer.addEventListener('onStateChange', onPlayerStateChange.bind(this));
 
-        ready = true;
+        this.ready = true;
         this.emit("embeded", this);
     }
 
@@ -98,7 +102,7 @@
             controlButton.removeClass("fa-play");
             controlButton.addClass("fa-pause");
 
-            isPlaying = true;
+            this.playing = true;
             this.emit("play");
             onPlayerTick.call(this);
         }
@@ -106,18 +110,18 @@
             controlButton.removeClass("fa-pause");
             controlButton.addClass("fa-play");
 
-            isPlaying = false;
+            this.playing = false;
             this.emit("stop");
         }
     }
 
     function onProgressClick(e) {
-        if (isPlaying) {
+        if (this.playing) {
             var progressBar = this.rootNode.find(".progress-wrap .progress"),
                 offset = progressBar.offset(),
                 relX = e.pageX - offset.left,
                 pctLocation = relX / progressBar.width();
-            ytPlayer.seekTo(pctLocation * ytPlayer.getDuration(), true);
+            this.ytPlayer.seekTo(pctLocation * this.ytPlayer.getDuration(), true);
         }
     };
 
@@ -125,14 +129,14 @@
         // Ranges wil be back shortly
         this.playingRange = null;
 
-        (ytPlayer.getPlayerState() != 1) ?
-            ytPlayer.playVideo() :
-            ytPlayer.pauseVideo();
+        (this.ytPlayer.getPlayerState() != 1) ?
+            this.ytPlayer.playVideo() :
+            this.ytPlayer.pauseVideo();
     }
 
 
     function onPlayerReady(event) {
-        this.rootNode.find(".duration").html(toReadableTime(ytPlayer.getDuration()));
+        this.rootNode.find(".duration").html(toReadableTime(this.ytPlayer.getDuration()));
         this.rootNode.find(".position").html(toReadableTime(0));
         this.rootNode.find(".progress-wrap .progress").click(onProgressClick.bind(this));
 
@@ -151,18 +155,18 @@
     };
 
     function onPlayerTick() {
-        var currentTime = ytPlayer.getCurrentTime(),
-            durationTime = ytPlayer.getDuration(),
+        var currentTime = this.ytPlayer.getCurrentTime(),
+            durationTime = this.ytPlayer.getDuration(),
             currentPositionPct = (currentTime / durationTime) * 100;
 
         this.rootNode.find('.position').html(toReadableTime(currentTime));
 
         this.rootNode.find('.cursor').css("left", currentPositionPct + "%");
-        this.rootNode.find('.progress .loaded-bar').css("width", (ytPlayer.getVideoLoadedFraction() * 100) + "%");
+        this.rootNode.find('.progress .loaded-bar').css("width", (this.ytPlayer.getVideoLoadedFraction() * 100) + "%");
         this.rootNode.find('.progress .playing-bar').css("width", currentPositionPct + "%");
         this.rootNode.find('.progress .playing-bar').attr("aria-valuenow", currentTime);
 
-        if (isPlaying) {
+        if (this.playing) {
             // if (tmt.playingRange) {
 
             //     if (currentTime >= tmt.playingRange[1]) {

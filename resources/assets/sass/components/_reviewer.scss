@@ -34,10 +34,11 @@ body.tracks.review {
         display:block;
         transform: translate(-50%, -50%);
         overflow:hidden;
+        z-index: 2;
         border-radius: 72px;
 
         b {
-            transition: transform .1s;
+            transition: transform .3s;
             background: #666;
             border: 1px solid #333;
             box-shadow: 0 2px 7px #000;
@@ -55,17 +56,13 @@ body.tracks.review {
         }
     }
 
-    i {
+    canvas {
         position: absolute;
         top: 0;
-        left: 50%;
-
-        img {
-            transition: top left .1s;
-            position:absolute;
-            top:0;
-            left:0;
-        }
+        bottom: 0;
+        left: 0;
+        right: 0;
+        z-index: 1;
     }
 
     *[data-attr="tmt-player"] {
@@ -74,7 +71,8 @@ body.tracks.review {
         left:0;
         right: 0;
         background:transparent;
-        border:none;
+        border:none;    
+        z-index: 2;
     }
 }
 

@@ -13,6 +13,8 @@
         this.draggable = null;
         this.nudged = false;
 
+        this.value = 0;
+
         addEvents.call(this);
         saveCurrentPosition.call(this);
     };
@@ -35,14 +37,22 @@
         },
 
         setValue: function (value) {
-            var topPosition = this.trackHeight * (1 - value);
-            TweenMax.set(this.knob.get(0), { css: { y:  topPosition } });
-            this.draggable.update();
+            this.value = value;
+
+            if (!this.working) {
+                var topPosition = this.trackHeight * (1 - value);
+                TweenMax.set(this.knob.get(0), { css: { y:  topPosition } });
+                this.draggable.update();
+            }
         },
 
         getValue: function () {
-            var value = 1 - (this.draggable.y / this.trackHeight);
-
+            if (this.working) {
+                var value = 1 - (this.draggable.y / this.trackHeight);
+            } else {
+                var value = this.value;
+            }
+            
             // Ensure we don't break boundries
             if (value > 1)  {
                 return 1;

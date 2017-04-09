@@ -4,52 +4,46 @@
 
     var Vector = Tmt.Components.Reviewer.Emitter.Vector;
 
-    var Particle = namespace("Tmt.Components.Reviewer.Emitter").Particle = function (x, y, attachTo) {
+    var Particle = namespace("Tmt.Components.Reviewer.Emitter").Particle = function (canvas, x, y) {
         this.size = Math.random() * 10 + 15;
 
         this.position = new Vector(x, y);
-        var velocityX = (Math.random() * 3) * (Math.random() >= 0.5 ? 1 : -1);
+        var velocityX = (Math.random() * 5) * (Math.random() >= 0.5 ? 1 : -1);
         var velocityY = Math.random() * 5;
 
         this.velocity = new Vector(velocityX, velocityY);
-        this.acceleration = new Vector(0, 0.085);
-        this.lifespan = Math.random() * 650;
+        this.acceleration = new Vector(0, 0.1);
+        this.lifespan = Math.random() * 350;
 
-        this.image  = $('<img src="/assets/img/spark.png">');
-        this.image.css({
-            top : 0,
-            left : 0
-        });
-        attachTo.append(this.image);
+        this.image = new Image();
+        this.image.src = '/assets/img/spark.png';
+        this.context = canvas.getContext('2d');
+
+        this.image.onload = function () {
+            this.context.drawImage(this.image, this.position.x, this.position.y);
+        }.bind(this);
     };
 
     inherit([], Particle, {
 
-        update : function() {
+        update: function () {
             this.velocity.add(this.acceleration);
             this.position.add(this.velocity);
             this.lifespan -= 1;
         },
 
-        isDead : function(){
+        isDead: function () {
             return this.lifespan < 0;
         },
 
-        paint : function() {
-            var offset = this.image.offset();
-            this.image.css({
-                top : this.position.y,
-                left : this.position.x
-            })
-
-            if (this.lifespan < 100) {
-                this.image.fadeOut();
+        paint: function () {
+            this.context.save();
+            if (this.lifespan < 10) {
+                this.context.globalAlpha = this.lifespan / 100;
             }
-
-        },
-
-        remove : function() {
-			this.image.remove();
+            
+            this.context.drawImage(this.image, this.position.x, this.position.y);
+            this.context.restore();
         }
 
     });

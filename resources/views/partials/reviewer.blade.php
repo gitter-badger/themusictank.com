@@ -1,7 +1,7 @@
 @if (isset($track))
     <section data-attr="tmt-reviewer">
-
-        <span class="knob-track"><i></i><b></b></span>
+        <canvas></canvas>
+        <span class="knob-track"><b></b></span>
         @include('partials.player', ['track' => $track])
     </section>
 @else

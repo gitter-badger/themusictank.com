@@ -1020,6 +1020,8 @@ function debounce(func, threshold, execAsap) {
         this.draggable = null;
         this.nudged = false;
 
+        this.value = 0;
+
         addEvents.call(this);
         saveCurrentPosition.call(this);
     };
@@ -1042,14 +1044,22 @@ function debounce(func, threshold, execAsap) {
         },
 
         setValue: function (value) {
-            var topPosition = this.trackHeight * (1 - value);
-            TweenMax.set(this.knob.get(0), { css: { y:  topPosition } });
-            this.draggable.update();
+            this.value = value;
+
+            if (!this.working) {
+                var topPosition = this.trackHeight * (1 - value);
+                TweenMax.set(this.knob.get(0), { css: { y:  topPosition } });
+                this.draggable.update();
+            }
         },
 
         getValue: function () {
-            var value = 1 - (this.draggable.y / this.trackHeight);
-
+            if (this.working) {
+                var value = 1 - (this.draggable.y / this.trackHeight);
+            } else {
+                var value = this.value;
+            }
+            
             // Ensure we don't break boundries
             if (value > 1)  {
                 return 1;
@@ -1119,87 +1129,46 @@ function debounce(func, threshold, execAsap) {
 
     "use strict";
 
-
-    // var GROOVE_DECAY_VALUE  = 0.0005,
-    //     MIDDLE_GROOVE_VALUE = 0.500,
-    //     FRAMERATE           = 24,
-    //     FRAMES_PER_SAVE     = null,
-
-    //     SAVE_FRAMERATE       = 3 / FRAMERATE * 1000,
-    //     MAX_MULTIPLIER      = 3,
-
-    //     // These define the length of all 'animations'
-    //     DURATION_COMPARE    = 3.5 * 60, // the basis for all effects is based on 1 sec when song is 3m30s
-    //     ,
-    //     //LENGTH_POWERING     = 4.2,
-    //     LENGTH_SHAKING      = 1.8,
-    //     //LENGTH_TO_MULTIPLIER = 3,
-    //     //LENGTH_MULTIPLYING  = 3.5,
-
-    //     //FRAMES_PER_POWERING = null,
-    //     FRAMES_TO_SHAKE     = null,
-    //     FRAME_PER_SHAKE     = null
-    //     //FRAMES_PER_MULTIPLIER  = null,
-        //FRAMES_PER_MULTIPLY = null,
-
-       // HIGH_GROOVE_MULTIPLIER_THRESHOLD = .75,
-        //LOW_GROOVE_MULTIPLIER_THRESHOLD = .25,
-        //HIGH_GROOVE_THRESHOLD = .98,
-        //LOW_GROOVE_THRESHOLD = .02;
-;
-
-
-// var //currentGroove = MIDDLE_GROOVE_VALUE,
-//     decay = 0,
-//     multiplier = 0,
-//     reviewFrames = [],
-//     appHasFocus = true,
-//     savetick = 0,
-//     lastframeSent = 0,
-//     songIsOver = false,
-
-//     domCache = [];
-
     var NEUTRAL_GROOVE_POINT = 0.500,
-        GROOVE_DECAY        = 0.0005,
-        FRAMERATE           = 28,
-        SAVE_FRAMERATE      = 3 / FRAMERATE * 1000,
+        GROOVE_DECAY = 0.0005,
+        FRAMERATE = 26,
+        SAVE_FRAMERATE = 3 / FRAMERATE * 1000,
         HIGH_GROOVE_THRESHOLD = 0.98,
         LOW_GROOVE_THRESHOLD = 0.02,
-        LENGTH_TO_SHAKE     = 0.75 * FRAMERATE,
-        LENGTH_PER_SHAKE    = 2 * FRAMERATE;
+        LENGTH_TO_SHAKE = 0.65 * FRAMERATE,
+        LENGTH_PER_SHAKE = 1.75 * FRAMERATE;
 
 
     var Reviewer = namespace("Tmt.Components.Reviewer").Reviewer = function (element, playerObj) {
         this.rootNode = element;
         this.player = playerObj;
-        this.isShaking = false;
+        this.shaking = false;
 
         this.timers = {
-            highGrooveStart : null,
-            lowGrooveStart : null,
+            highGrooveStart: null,
+            lowGrooveStart: null,
         };
         this.currentGroove = 0;
         this.currentFrameId = 0;
+        this.drawnFrameId = null;
 
         this.initialize();
     };
 
     inherit([Tmt.EventEmitter], Reviewer, {
 
-        'initialize' : function() {
+        'initialize': function () {
             Tmt.EventEmitter.prototype.initialize.call(this);
 
             registerKnob.call(this);
-            registerEmitter.call(this);
+            registerCanvas.call(this);
             addEvents.call(this);
             setGrooveTo.call(this, NEUTRAL_GROOVE_POINT);
             start.call(this);
         }
     });
 
-    function addEvents()
-    {
+    function addEvents() {
         this.player.on("play", onPlay.bind(this));
         this.player.on("stop", onStop.bind(this));
     }
@@ -1216,6 +1185,7 @@ function debounce(func, threshold, execAsap) {
     function onPlay() {
         this.knob.enable();
         tick.call(this);
+        animate.call(this);
     }
 
     function onStop() {
@@ -1226,10 +1196,11 @@ function debounce(func, threshold, execAsap) {
         this.knob = new Tmt.Components.Reviewer.Knob(this.rootNode.find(".knob-track"));
     }
 
-    function registerEmitter() {
-        this.emitter = new Tmt.Components.Reviewer.Emitter.ParticleEmitter(this.rootNode.find("i"));
-        this.emitter.moveTo(this.knob.position.left, this.knob.position.top);
-        this.emitter.initialize(40);
+    function registerCanvas() {
+        this.canvas = new Tmt.Components.Reviewer.Canvas(this.rootNode.find("canvas"));
+
+        this.canvas.addEmitter("positiveSpark", this.canvas.node.width / 2, this.canvas.node.height * .15);
+        this.canvas.addEmitter("negativeSpark", this.canvas.node.width / 2, this.canvas.node.height * .85);
     }
 
     function tick() {
@@ -1237,11 +1208,18 @@ function debounce(func, threshold, execAsap) {
             setFrameContext.call(this);
             calculateTimelineContext.call(this);
             calculateGroove.call(this);
-            paintFrame.call(this);
-        }
+            // saveFrameBAtch
 
-        this.emitter.tick();
-        setTimeout(tick.bind(this), 1000 / FRAMERATE);
+            setTimeout(tick.bind(this), 1000 / FRAMERATE);
+        }
+    }
+
+    function animate() {
+        if (this.drawnFrameId != this.currentFrameId) {
+            this.drawnFrameId = this.currentFrameId;
+            paintFrame.call(this);
+            requestAnimationFrame(animate.bind(this));
+        }
     }
 
     function isPositive() {
@@ -1261,16 +1239,13 @@ function debounce(func, threshold, execAsap) {
     }
 
     function paintFrame() {
-        this.emitter.animate();
-
-        // dont update if user is still dragging
-        if (!this.knob.isWorking()) {
-            this.knob.setValue(this.currentGroove);
+        if (this.shaking) {
+            this.knob.nudge();
+        } else {
+            this.knob.center();
         }
 
-        (this.isShaking) ?
-            this.knob.nudge() :
-            this.knob.center();
+        this.canvas.draw();
     }
 
     function calculateGroove() {
@@ -1288,30 +1263,41 @@ function debounce(func, threshold, execAsap) {
         ) {
             this.currentGroove = NEUTRAL_GROOVE_POINT;
         }
+
+        this.knob.setValue(this.currentGroove);
     }
 
     function calculateTimelineContext() {
-        if(this.knob.isWorking()) {
+        if (this.knob.isWorking()) {
             if (this.currentGroove > HIGH_GROOVE_THRESHOLD) {
                 this.timers.lowGrooveStart = null;
                 calculatePositiveContext.call(this);
+                return;
             } else if (this.currentGroove < LOW_GROOVE_THRESHOLD) {
                 this.timers.highGrooveStart = null;
                 calculateNegativeContext.call(this);
+                return;
             }
         }
+
+        this.timers.lowGrooveStart = null;
+        this.timers.highGrooveStart = null;
+        this.shaking = false;
     }
 
     // liking it a lot
     function calculatePositiveContext() {
         if (!this.timers.highGrooveStart) {
             this.timers.highGrooveStart = this.currentFrameId;
-            this.isShaking = true;
+            this.shaking = true;
+            this.canvas.emit("positiveSpark", 10);
+
         } else if (this.timers.highGrooveStart + LENGTH_PER_SHAKE <= this.currentFrameId) {
             this.timers.highGrooveStart = null;
             this.currentGroove = HIGH_GROOVE_THRESHOLD;
             this.knob.stopCurrentDrag();
-            this.isShaking = false;
+            this.shaking = false;
+            this.canvas.emit("positiveSpark", 100);
         }
     }
 
@@ -1319,14 +1305,45 @@ function debounce(func, threshold, execAsap) {
     function calculateNegativeContext() {
         if (!this.timers.lowGrooveStart) {
             this.timers.lowGrooveStart = this.currentFrameId;
-            this.isShaking = true;
+            this.shaking = true;
+            this.canvas.emit("negativeSpark", 10);
+
         } else if (this.timers.lowGrooveStart + LENGTH_PER_SHAKE <= this.currentFrameId) {
             this.timers.lowGrooveStart = null;
             this.currentGroove = LOW_GROOVE_THRESHOLD;
             this.knob.stopCurrentDrag();
-            this.isShaking = false;
+            this.shaking = false;
+            this.canvas.emit("negativeSpark", 100);
         }
     }
+
+    function sendFramesPackage (idxStart, idxEnd) {
+        this.synchronising = true;
+
+        $.ajax("/ajax/savegroove", {
+            type: "POST",
+            data: { frames: this.data.reviewFrames.slice(idxStart, idxEnd) },
+            success: $.proxy(this.onSyncSuccess, this),
+            error: $.proxy(this.onSyncFail, this)
+        });
+    },
+    
+        onSyncSuccess : function()
+        {
+            this.data.synchronising = false;
+
+            if(this.data.songIsOver)
+            {
+                this.config.container.ref.removeClass("loading");
+                this.config.container.ref.addClass("completed");
+            }
+        },
+
+        onSyncFail : function()
+        {
+            this.data.synchronising = false;
+        },
+
 
 })(jQuery);
 
@@ -2085,11 +2102,36 @@ function debounce(func, threshold, execAsap) {
 
     var Canvas = namespace("Tmt.Components.Reviewer").Canvas = function (element) {
         this.rootNode = element;
+        this.node = element.get(0);
+        this.context = this.node.getContext('2d');
+        this.emitters = {};
+
         addEvents.call(this);
     };
 
     inherit([], Canvas, {
 
+        addEmitter : function(id, x, y) {
+            var emitter = new Tmt.Components.Reviewer.Emitter.ParticleEmitter();
+            emitter.setCanvas(this.node); 
+            emitter.moveTo(x, y);
+
+            this.emitters[id] = emitter;
+        },
+
+        emit : function(id, qty) {  
+            this.emitters[id].start(qty);
+        },
+
+        draw : function() {
+            this.context.clearRect(0, 0, this.node.width, this.node.height);
+            for(var i in  this.emitters) {
+                if (this.emitters[i].isRunning()) {
+                    this.emitters[i].run();
+                    this.emitters[i].render();
+                }
+            }
+        }
 
     });
 
@@ -2099,8 +2141,8 @@ function debounce(func, threshold, execAsap) {
     }
 
     function applyCurrentSize () {
-        this.rootNode.get(0).height = this.rootNode.parent().height();
-        this.rootNode.get(0).width = this.rootNode.parent().width();
+        this.node.height = this.rootNode.parent().height();
+        this.node.width = this.rootNode.parent().width();
     }
 
 
@@ -2132,52 +2174,46 @@ function debounce(func, threshold, execAsap) {
 
     var Vector = Tmt.Components.Reviewer.Emitter.Vector;
 
-    var Particle = namespace("Tmt.Components.Reviewer.Emitter").Particle = function (x, y, attachTo) {
+    var Particle = namespace("Tmt.Components.Reviewer.Emitter").Particle = function (canvas, x, y) {
         this.size = Math.random() * 10 + 15;
 
         this.position = new Vector(x, y);
-        var velocityX = (Math.random() * 3) * (Math.random() >= 0.5 ? 1 : -1);
+        var velocityX = (Math.random() * 5) * (Math.random() >= 0.5 ? 1 : -1);
         var velocityY = Math.random() * 5;
 
         this.velocity = new Vector(velocityX, velocityY);
-        this.acceleration = new Vector(0, 0.085);
-        this.lifespan = Math.random() * 650;
+        this.acceleration = new Vector(0, 0.1);
+        this.lifespan = Math.random() * 350;
 
-        this.image  = $('<img src="/assets/img/spark.png">');
-        this.image.css({
-            top : 0,
-            left : 0
-        });
-        attachTo.append(this.image);
+        this.image = new Image();
+        this.image.src = '/assets/img/spark.png';
+        this.context = canvas.getContext('2d');
+
+        this.image.onload = function () {
+            this.context.drawImage(this.image, this.position.x, this.position.y);
+        }.bind(this);
     };
 
     inherit([], Particle, {
 
-        update : function() {
+        update: function () {
             this.velocity.add(this.acceleration);
             this.position.add(this.velocity);
             this.lifespan -= 1;
         },
 
-        isDead : function(){
+        isDead: function () {
             return this.lifespan < 0;
         },
 
-        paint : function() {
-            var offset = this.image.offset();
-            this.image.css({
-                top : this.position.y,
-                left : this.position.x
-            })
-
-            if (this.lifespan < 100) {
-                this.image.fadeOut();
+        paint: function () {
+            this.context.save();
+            if (this.lifespan < 10) {
+                this.context.globalAlpha = this.lifespan / 100;
             }
-
-        },
-
-        remove : function() {
-			this.image.remove();
+            
+            this.context.drawImage(this.image, this.position.x, this.position.y);
+            this.context.restore();
         }
 
     });
@@ -2189,42 +2225,46 @@ function debounce(func, threshold, execAsap) {
 
     "use strict";
 
-    var Particle = Tmt.Components.Reviewer.Emitter.Particle;
+    var Particle = Tmt.Components.Reviewer.Emitter.Particle,
+        Vector = Tmt.Components.Reviewer.Emitter.Vector;
 
-    var ParticleEmitter = namespace("Tmt.Components.Reviewer.Emitter").ParticleEmitter = function (element) {
-        this.rootNode = element;
-        this.x = 0;
-        this.y = 0;
+    var ParticleEmitter = namespace("Tmt.Components.Reviewer.Emitter").ParticleEmitter = function () {
         this.particles = [];
+        this.position = new Vector(0, 0);
     };
 
     inherit([], ParticleEmitter, {
 
-        moveTo : function (x, y) {
-            this.x = x;
-            this.y = y;
+        isRunning: function () {
+            return this.particles.length > 0;
         },
 
-        initialize: function (quantity) {
+        setCanvas: function (canvas) {
+            this.canvas = canvas;
+        },
+
+        moveTo: function (x, y) {
+            this.position = new Vector(x, y);
+        },
+
+        start: function (quantity) {
             for (var i = 0; i < quantity; i++) {
-                this.particles[i] = new Particle(0, 0, this.rootNode);
+                this.particles.push(new Particle(this.canvas, this.position.x, this.position.y));
             }
         },
 
-        tick: function () {
-            for (var i = 0; i < this.particles.length; i++) {
-                this.particles[i].update();
-            }
-        },
-
-        animate: function () {
+        run: function () {
             for (var i = this.particles.length - 1; i >= 0; i--) {
+                this.particles[i].update();
                 if (this.particles[i].isDead()) {
-                    var particle = this.particles.pop();
-                    particle.remove();
-                } else {
-                    this.particles[i].paint();
+                    this.particles.pop();
                 }
+            }
+        },
+
+        render: function () {
+            for (var i = this.particles.length - 1; i >= 0; i--) {
+                this.particles[i].paint();
             }
         }
 

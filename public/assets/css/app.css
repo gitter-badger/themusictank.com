@@ -175,14 +175,15 @@ body.tracks.review header {
   -webkit-transform: translate(-50%, -50%);
   transform: translate(-50%, -50%);
   overflow: hidden;
+  z-index: 2;
   border-radius: 72px;
 }
 
 *[data-attr="tmt-reviewer"] .knob-track b {
-  -webkit-transition: -webkit-transform .1s;
-  transition: -webkit-transform .1s;
-  transition: transform .1s;
-  transition: transform .1s, -webkit-transform .1s;
+  -webkit-transition: -webkit-transform .3s;
+  transition: -webkit-transform .3s;
+  transition: transform .3s;
+  transition: transform .3s, -webkit-transform .3s;
   background: #666;
   border: 1px solid #333;
   box-shadow: 0 2px 7px #000;
@@ -198,18 +199,13 @@ body.tracks.review header {
   cursor: pointer;
 }
 
-*[data-attr="tmt-reviewer"] i {
+*[data-attr="tmt-reviewer"] canvas {
   position: absolute;
   top: 0;
-  left: 50%;
-}
-
-*[data-attr="tmt-reviewer"] i img {
-  -webkit-transition: top left .1s;
-  transition: top left .1s;
-  position: absolute;
-  top: 0;
+  bottom: 0;
   left: 0;
+  right: 0;
+  z-index: 1;
 }
 
 *[data-attr="tmt-reviewer"] *[data-attr="tmt-player"] {
@@ -219,6 +215,7 @@ body.tracks.review header {
   right: 0;
   background: transparent;
   border: none;
+  z-index: 2;
 }
 
 .twitter-typeahead {

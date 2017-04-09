@@ -2,42 +2,46 @@
 
     "use strict";
 
-    var Particle = Tmt.Components.Reviewer.Emitter.Particle;
+    var Particle = Tmt.Components.Reviewer.Emitter.Particle,
+        Vector = Tmt.Components.Reviewer.Emitter.Vector;
 
-    var ParticleEmitter = namespace("Tmt.Components.Reviewer.Emitter").ParticleEmitter = function (element) {
-        this.rootNode = element;
-        this.x = 0;
-        this.y = 0;
+    var ParticleEmitter = namespace("Tmt.Components.Reviewer.Emitter").ParticleEmitter = function () {
         this.particles = [];
+        this.position = new Vector(0, 0);
     };
 
     inherit([], ParticleEmitter, {
 
-        moveTo : function (x, y) {
-            this.x = x;
-            this.y = y;
+        isRunning: function () {
+            return this.particles.length > 0;
         },
 
-        initialize: function (quantity) {
+        setCanvas: function (canvas) {
+            this.canvas = canvas;
+        },
+
+        moveTo: function (x, y) {
+            this.position = new Vector(x, y);
+        },
+
+        start: function (quantity) {
             for (var i = 0; i < quantity; i++) {
-                this.particles[i] = new Particle(0, 0, this.rootNode);
+                this.particles.push(new Particle(this.canvas, this.position.x, this.position.y));
             }
         },
 
-        tick: function () {
-            for (var i = 0; i < this.particles.length; i++) {
-                this.particles[i].update();
-            }
-        },
-
-        animate: function () {
+        run: function () {
             for (var i = this.particles.length - 1; i >= 0; i--) {
+                this.particles[i].update();
                 if (this.particles[i].isDead()) {
-                    var particle = this.particles.pop();
-                    particle.remove();
-                } else {
-                    this.particles[i].paint();
+                    this.particles.pop();
                 }
+            }
+        },
+
+        render: function () {
+            for (var i = this.particles.length - 1; i >= 0; i--) {
+                this.particles[i].paint();
             }
         }
 

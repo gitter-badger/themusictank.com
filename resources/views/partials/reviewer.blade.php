@@ -27,8 +27,8 @@
                         $url = sprintf("/tankers/%s/review/%s/", auth()->user()->getProfile()->slug, $track->slug);
                     @endphp
 
-                    <a class="twitter-share-button" href="#" onclick="window.open('https://twitter.com/intent/tweet?text={{ rawurlencode($text) }}&amp;url={{ rawurlencode($url) }}&amp;via=themusictank">Share on Twitter</a>
-                    <a class="facebook-share-button" href="#" onclick="window.open('https://www.facebook.com/sharer/sharer.php?u={{ rawurlencode($url) }}','facebook-share-dialog','width=626,height=436');return false;">Share on Facebook</a>
+                    <a class="twitter-share-button" href="#" onclick="window.open('https://twitter.com/intent/tweet?text={{ rawurlencode($text) }}&amp;url={{ $url }}&amp;via=themusictank,'twitter-share-dialog','width=626,height=436'); return false;">Share on Twitter</a>
+                    <a class="facebook-share-button" href="#" onclick="window.open('https://www.facebook.com/sharer/sharer.php?u={{ $url }}','facebook-share-dialog','width=626,height=436');return false;">Share on Facebook</a>
                 </div>
             </div>
         </div>

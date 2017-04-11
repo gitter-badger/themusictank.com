@@ -61,7 +61,6 @@
     }
 
     function start() {
-        this.player.getStreamer().seekTo(95 * this.player.getStreamer().getDuration() / 100, true);
         this.player.getStreamer().playVideo();
     }
 
@@ -115,7 +114,7 @@
     }
 
     function animate() {
-        if (this.player.isPlaying() && this.drawnFrameId != this.currentFrameId) {
+        if (this.drawnFrameId != this.currentFrameId) {
             this.drawnFrameId = this.currentFrameId;
             paintFrame.call(this);
         }

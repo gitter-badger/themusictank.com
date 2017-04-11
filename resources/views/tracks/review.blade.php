@@ -1,13 +1,12 @@
 @extends('review')
 
-@push('header')
-<script src="//cdnjs.cloudflare.com/ajax/libs/p5.js/0.5.8/p5.js"></script>
+@push('footer')
+<script async src="https://platform.twitter.com/widgets.js"></script>
 @endpush
 
 @section('body-class', 'tracks review')
 
 @section('content')
-
     <section class="header">
         <h1>
             Reviewing
@@ -28,6 +27,4 @@
     </section>
 
     @include('partials.reviewer', ['track' => $track])
-
-
 @endsection

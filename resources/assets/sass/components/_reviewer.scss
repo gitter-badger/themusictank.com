@@ -71,8 +71,52 @@ body.tracks.review {
         left:0;
         right: 0;
         background:transparent;
-        border:none;    
+        border:none;
         z-index: 2;
+    }
+
+    &.review-completed {
+        *[data-attr="tmt-player"], canvas, .knob-track {
+            display: none;
+        }
+
+        .next-step, .next-step-mask {
+            display: block;
+        }
+    }
+
+    .next-step-mask {
+        display:none;
+        position:absolute;
+        bottom: 0;
+        left:0;
+        right: 0;
+        background:rgba(0,0,0,.3);
+        top:0;
+    }
+
+    .next-step {
+        display:none;
+        position: absolute;
+        top: 50%;
+        left: 50%;
+        transform: translate(-50%, -50%);
+
+        .saving, .next, .done {
+            display:none;
+        }
+
+        &.review-still-saving .saving {
+            display: block;
+        }
+
+        &.next-track .next {
+            display: block;
+        }
+
+        &.nothing-else .done {
+            display: block;
+        }
     }
 }
 

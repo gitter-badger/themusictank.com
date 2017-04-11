@@ -98,20 +98,29 @@
         5 (video queued) */
         var controlButton = this.rootNode.find('.play');
 
-        if (newState.data === 1) {
-            controlButton.removeClass("fa-play");
-            controlButton.addClass("fa-pause");
+        if (newState.data > -1) {
+            if (newState.data === 1) {
+                controlButton.removeClass("fa-play");
+                controlButton.addClass("fa-pause");
 
-            this.playing = true;
-            this.emit("play");
-            onPlayerTick.call(this);
-        }
-        else if (newState.data === 2) {
-            controlButton.removeClass("fa-pause");
-            controlButton.addClass("fa-play");
+                this.playing = true;
+                this.emit("play");
+                onPlayerTick.call(this);
 
-            this.playing = false;
-            this.emit("stop");
+            } else if (newState.data === 0) {
+                controlButton.removeClass("fa-pause");
+                controlButton.addClass("fa-play");
+
+                this.playing = false;
+                this.emit("completed");
+
+            } else {
+                controlButton.removeClass("fa-pause");
+                controlButton.addClass("fa-play");
+
+                this.playing = false;
+                this.emit("stop");
+            }
         }
     }
 

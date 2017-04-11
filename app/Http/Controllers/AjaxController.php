@@ -8,6 +8,7 @@ use App\Models\Tracks;
 use App\Models\TrackUpvotes;
 use App\Models\AlbumUpvotes;
 use App\Models\Activities;
+use App\Models\ReviewFrames;
 
 use Illuminate\Http\Request;
 use Carbon\Carbon;
@@ -109,6 +110,31 @@ class AjaxController extends Controller
     public function okstfu()
     {
         $currentProfile = auth()->user()->getProfile();
-        return response()->json(Activities::api()->markAsReadByIds(request('ids'), $currentProfile->id));
+        return response()->json(
+            Activities::api()
+                ->markAsReadByIds(request('ids'), $currentProfile->id)
+        );
+    }
+
+    public function saveCurvePart($slug)
+    {
+        $track = Tracks::api()->findBySlug($slug);
+        if (!$track) {
+            return abort(404);
+        }
+
+        return response()->json(
+            ReviewFrames::api()->savePartial(request('package'), $track, auth()->user()->getProfile())
+        );
+    }
+
+    public function getNextTrack($slug)
+    {
+        $track = Tracks::api()->findBySlug($slug);
+        if (!$track) {
+            return abort(404);
+        }
+
+        return response()->json(Tracks::api()->getNext($track));
     }
 }

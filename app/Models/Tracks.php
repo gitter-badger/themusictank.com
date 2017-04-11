@@ -24,8 +24,37 @@ class Tracks extends Model
         ]);
     }
 
+    public function findBySlug($slug)
+    {
+        return $this->first("tracks", [
+            "query" => [
+                "filter" => [
+                    "include" => ['artist', 'album'],
+                    "where" => [
+                        "slug" =>  $slug
+                    ]
+                ]
+            ]
+        ]);
+    }
+
     public function fetchCount()
     {
-        return $this->get("artists/count");
+        return $this->get("tracks/count");
+    }
+
+    public function getNext(\App\Models\Entities\Track $track)
+    {
+        return $this->get("tracks", [
+            "query" => [
+                "filter" => [
+                    "where" => [
+                        "position" => $track->position + 1,
+                        "albumId" => $track->album->id,
+                        "artistId" => $track->artist->id,
+                    ]
+                ]
+            ]
+        ]);
     }
 }

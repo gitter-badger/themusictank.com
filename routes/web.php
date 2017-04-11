@@ -25,7 +25,7 @@ Route::get('artists/{slug}', "ArtistController@show");
 Route::get('albums/{slug}', "AlbumController@show");
 
 // Tracks
-Route::get('tracks/{slug}/review', "TrackController@review");//->middleware('auth');
+Route::get('tracks/{slug}/review', "TrackController@review")->middleware('auth');
 Route::get('tracks/{slug}', "TrackController@show");
 
 // Ajax
@@ -39,6 +39,9 @@ Route::post('ajax/upvoteTrack', "AjaxController@upvoteTrack")->middleware('auth'
 Route::post('ajax/upvoteAlbum', "AjaxController@upvoteAlbum")->middleware('auth');
 Route::get('ajax/whatsUp', "AjaxController@whatsUp")->middleware('auth');
 Route::get('ajax/okstfu', "AjaxController@okstfu")->middleware('auth');
+
+Route::post('ajax/{slug}/saveCurvePart', "AjaxController@saveCurvePart")->middleware('auth');
+Route::post('ajax/{slug}/getNext', "AjaxController@getNextTrack")->middleware('auth');
 
 // Profiles
 Route::get('you', "ProfileController@dashboard")->middleware('auth');
@@ -56,6 +59,7 @@ Route::post('profiles/create', "ProfileController@create");
 
 // User areas
 Route::get('tankers/{slug}', "ProfileController@show");
+Route::get('tankers/{slug}/curve/{trackSlug}', "ProfileController@showCurve");
 
 
 // Others

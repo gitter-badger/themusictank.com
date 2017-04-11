@@ -39,6 +39,8 @@ class ModelParser
     {
         $reflection = new ReflectionClass($this->classContext);
         $shortName = str_singular($reflection->getShortName());
+
+
         $fqn = sprintf("App\Models\Entities\%s", $shortName);
 
         if (class_exists($fqn)) {

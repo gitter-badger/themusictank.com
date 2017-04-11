@@ -38,10 +38,11 @@
 
         paint: function () {
             this.context.save();
-            if (this.lifespan < 10) {
+
+            if (this.lifespan < 100) {
                 this.context.globalAlpha = this.lifespan / 100;
             }
-            
+
             this.context.drawImage(this.image, this.position.x, this.position.y);
             this.context.restore();
         }

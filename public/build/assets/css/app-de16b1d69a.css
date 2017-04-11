@@ -218,6 +218,49 @@ body.tracks.review header {
   z-index: 2;
 }
 
+*[data-attr="tmt-reviewer"].review-completed *[data-attr="tmt-player"], *[data-attr="tmt-reviewer"].review-completed canvas, *[data-attr="tmt-reviewer"].review-completed .knob-track {
+  display: none;
+}
+
+*[data-attr="tmt-reviewer"].review-completed .next-step, *[data-attr="tmt-reviewer"].review-completed .next-step-mask {
+  display: block;
+}
+
+*[data-attr="tmt-reviewer"] .next-step-mask {
+  display: none;
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  background: rgba(0, 0, 0, 0.3);
+  top: 0;
+}
+
+*[data-attr="tmt-reviewer"] .next-step {
+  display: none;
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  -webkit-transform: translate(-50%, -50%);
+  transform: translate(-50%, -50%);
+}
+
+*[data-attr="tmt-reviewer"] .next-step .saving, *[data-attr="tmt-reviewer"] .next-step .next, *[data-attr="tmt-reviewer"] .next-step .done {
+  display: none;
+}
+
+*[data-attr="tmt-reviewer"] .next-step.review-still-saving .saving {
+  display: block;
+}
+
+*[data-attr="tmt-reviewer"] .next-step.next-track .next {
+  display: block;
+}
+
+*[data-attr="tmt-reviewer"] .next-step.nothing-else .done {
+  display: block;
+}
+
 .twitter-typeahead {
   width: 300px;
 }

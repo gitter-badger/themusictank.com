@@ -47,4 +47,16 @@ class ProfileController extends Controller
     {
         return view('profiles.create');
     }
+
+    public function showCurve($slug, $trackSlug)
+    {
+        $profile = Profiles::api()->findBySlug($slug);
+        $profile = Track::api()->findBySlug($slug);
+
+        if (!$profile) {
+            return abort(404);
+        }
+
+        return view('profiles.show', compact('profile'));
+    }
 }

@@ -125,7 +125,7 @@
     }
 
     function onProgressClick(e) {
-        if (this.playing) {
+        if (this.playing && this.canSkip) {
             var progressBar = this.rootNode.find(".progress-wrap .progress"),
                 offset = progressBar.offset(),
                 relX = e.pageX - offset.left,

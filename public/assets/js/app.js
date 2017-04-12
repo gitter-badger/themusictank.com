@@ -575,7 +575,7 @@ function debounce(func, threshold, execAsap) {
     }
 
     function onProgressClick(e) {
-        if (this.playing) {
+        if (this.playing && this.canSkip) {
             var progressBar = this.rootNode.find(".progress-wrap .progress"),
                 offset = progressBar.offset(),
                 relX = e.pageX - offset.left,
@@ -1158,6 +1158,7 @@ function debounce(func, threshold, execAsap) {
     var Reviewer = namespace("Tmt.Components.Reviewer").Reviewer = function (element, playerObj) {
         this.rootNode = element;
         this.player = playerObj;
+        this.player.canSkip = false;
 
         this.shaking = false;
         this.synchronising = false;
@@ -1196,6 +1197,7 @@ function debounce(func, threshold, execAsap) {
         this.player.on("play", onPlay.bind(this));
         this.player.on("stop", onStop.bind(this));
         this.player.on("completed", onComplete.bind(this));
+        this.player.on("progressClickEvent", function(){ return false; });
     }
 
     function setGrooveTo(value) {
@@ -1204,7 +1206,6 @@ function debounce(func, threshold, execAsap) {
     }
 
     function start() {
-        this.player.getStreamer().seekTo(95 * this.player.getStreamer().getDuration() / 100, true);
         this.player.getStreamer().playVideo();
     }
 
@@ -1258,7 +1259,7 @@ function debounce(func, threshold, execAsap) {
     }
 
     function animate() {
-        if (this.player.isPlaying() && this.drawnFrameId != this.currentFrameId) {
+        if (this.drawnFrameId != this.currentFrameId) {
             this.drawnFrameId = this.currentFrameId;
             paintFrame.call(this);
         }

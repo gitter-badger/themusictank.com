@@ -15,6 +15,7 @@
     var Reviewer = namespace("Tmt.Components.Reviewer").Reviewer = function (element, playerObj) {
         this.rootNode = element;
         this.player = playerObj;
+        this.player.canSkip = false;
 
         this.shaking = false;
         this.synchronising = false;
@@ -53,6 +54,7 @@
         this.player.on("play", onPlay.bind(this));
         this.player.on("stop", onStop.bind(this));
         this.player.on("completed", onComplete.bind(this));
+        this.player.on("progressClickEvent", function(){ return false; });
     }
 
     function setGrooveTo(value) {

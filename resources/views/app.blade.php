@@ -79,7 +79,7 @@
         </p>
     </footer>
 
-    @yield('footer')
+    @stack('footer')
 
 	<script src="{{ elixir('assets/js/vendor.js') }}"></script>
 	<script src="{{ elixir('assets/js/app.js') }}"></script>

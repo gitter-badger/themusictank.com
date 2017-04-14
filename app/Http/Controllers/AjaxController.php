@@ -123,9 +123,9 @@ class AjaxController extends Controller
             return abort(404);
         }
 
-        return response()->json(
-            ReviewFrames::api()->savePartial(request('package'), $track, auth()->user()->getProfile())
-        );
+        ReviewFrames::api()->savePartial(request('package'), $track, auth()->user()->getProfile());
+
+        return response()->json(["rock" => "on"]);
     }
 
     public function getNextTrack($slug)

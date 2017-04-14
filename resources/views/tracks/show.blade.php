@@ -38,7 +38,10 @@
     <a href="{{ action('TrackController@review', ['slug' => $track->slug]) }}">Review track</a>
 
     <section class="stats" style="color:#ccc; height: 300px;">
-        todo: Output stats here.
+
+        {{ json_encode($globalCurves) }}
+
+
     </section>
     @include('partials.player', ['track' => $track])
 

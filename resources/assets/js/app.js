@@ -35,13 +35,25 @@
          * @method
          * @public
          */
-        setData: function (data) {
+        session: function (data) {
             if (data.profile) {
                 this.profile.setData(data.profile);
                 this.emit('profileFirstPopulated', this, this.profile);
             }
 
             this.emit('configured', this);
+        },
+
+        chartData: function(slug, datasetName, data) {
+            this.emit('chartData', this, slug, datasetName, data);
+        },
+
+        waveData: function(slug, data) {
+            this.emit('waveData', this, slug, data);
+        },
+
+        chart: function(selector, datasetName, startPosition, endPosition) {
+            this.emit('chart', this, selector, datasetName, startPosition, endPosition);
         }
     });
 

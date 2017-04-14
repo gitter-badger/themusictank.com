@@ -9,6 +9,7 @@
   "devDependencies": {
     "bloodhound-js": "^1.2.1",
     "bootstrap-sass": "^3.3.7",
+    "chartjs": "^0.3.24",
     "evemit": "^1.0.2",
     "font-awesome": "^4.7.0",
     "gsap": "^1.19.1",

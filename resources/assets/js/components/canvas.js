@@ -2,7 +2,7 @@
 
     "use strict";
 
-    var Canvas = namespace("Tmt.Components.Reviewer").Canvas = function (element) {
+    var Canvas = namespace("Tmt.Components").Canvas = function (element) {
         this.rootNode = element;
         this.node = element.get(0);
         this.context = this.node.getContext('2d');
@@ -15,13 +15,13 @@
 
         addEmitter : function(id, x, y) {
             var emitter = new Tmt.Components.Reviewer.Emitter.ParticleEmitter();
-            emitter.setCanvas(this.node); 
+            emitter.setCanvas(this.node);
             emitter.moveTo(x, y);
 
             this.emitters[id] = emitter;
         },
 
-        emit : function(id, qty) {  
+        emit : function(id, qty) {
             this.emitters[id].start(qty);
         },
 

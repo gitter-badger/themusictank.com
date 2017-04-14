@@ -177,13 +177,25 @@ function debounce(func, threshold, execAsap) {
          * @method
          * @public
          */
-        setData: function (data) {
+        session: function (data) {
             if (data.profile) {
                 this.profile.setData(data.profile);
                 this.emit('profileFirstPopulated', this, this.profile);
             }
 
             this.emit('configured', this);
+        },
+
+        chartData: function(slug, datasetName, data) {
+            this.emit('chartData', this, slug, datasetName, data);
+        },
+
+        waveData: function(slug, data) {
+            this.emit('waveData', this, slug, data);
+        },
+
+        chart: function(selector, datasetName, startPosition, endPosition) {
+            this.emit('chart', this, selector, datasetName, startPosition, endPosition);
         }
     });
 
@@ -1025,6 +1037,181 @@ function debounce(func, threshold, execAsap) {
 
     "use strict";
 
+    var Canvas = namespace("Tmt.Components").Canvas = function (element) {
+        this.rootNode = element;
+        this.node = element.get(0);
+        this.context = this.node.getContext('2d');
+        this.emitters = {};
+
+        addEvents.call(this);
+    };
+
+    inherit([], Canvas, {
+
+        addEmitter : function(id, x, y) {
+            var emitter = new Tmt.Components.Reviewer.Emitter.ParticleEmitter();
+            emitter.setCanvas(this.node);
+            emitter.moveTo(x, y);
+
+            this.emitters[id] = emitter;
+        },
+
+        emit : function(id, qty) {
+            this.emitters[id].start(qty);
+        },
+
+        draw : function() {
+            this.context.clearRect(0, 0, this.node.width, this.node.height);
+            for(var i in  this.emitters) {
+                if (this.emitters[i].isRunning()) {
+                    this.emitters[i].run();
+                    this.emitters[i].render();
+                }
+            }
+        }
+
+    });
+
+    function addEvents () {
+        $(window).on('resize', debounce(applyCurrentSize.bind(this)));
+        applyCurrentSize.call(this);
+    }
+
+    function applyCurrentSize () {
+        this.node.height = this.rootNode.parent().height();
+        this.node.width = this.rootNode.parent().width();
+    }
+
+
+})(jQuery);
+
+(function ($, undefined) {
+
+    "use strict";
+
+    var LineChart = namespace("Tmt.Components.Chart").LineChart = function (element, data) {
+        this.rootNode = element;
+        this.canvas = null;
+
+        this.data = [];
+        this.wave = [];
+        this.start = 0;
+        this.end = 0;
+    };
+
+    inherit([], LineChart, {
+
+        render : function() {
+            registerCanvas.call(this);
+            drawWaves.call(this);
+            drawChart.call(this);
+        },
+
+        setData : function(data) {
+            this.data = data;
+        },
+
+        setWave : function(data) {
+            this.wave = data;
+        },
+
+        setRange : function(start, end) {
+            this.start = start;
+            this.end = end;
+        }
+
+    });
+
+    function registerCanvas() {
+        var canvasTag = $('<canvas>');
+        this.rootNode.html(canvasTag);
+        this.canvas = new Tmt.Components.Canvas(canvasTag);
+    }
+
+    function drawWaves() {
+        if (this.wave.length > 0) {
+            // todo.
+        }
+    }
+
+    function drawChart() {
+        if (this.data.length > 0) {
+            drawUI.call(this);
+        }
+    }
+
+    function drawUI() {
+        var height =  this.canvas.node.height,
+            width =  this.canvas.node.width,
+            context = this.canvas.context;
+
+        context.beginPath();
+        context.lineWidth = .5;
+        context.strokeStyle = '#aaa';
+        context.shadowOffsetX = 0;
+        context.shadowOffsetY = 0;
+        context.shadowBlur = 0;
+        context.moveTo(10, height / 2);
+        context.lineTo(width, height / 2);
+        context.stroke();
+        context.closePath();
+
+        context.beginPath();
+        context.lineWidth = .5;
+        context.strokeStyle = '#aaa';
+        context.shadowOffsetX = 0;
+        context.shadowOffsetY = 0;
+        context.shadowBlur = 0;
+        context.moveTo(0,  0);
+        context.lineTo(width, 0);
+        context.stroke();
+        context.closePath();
+
+        context.beginPath();
+        context.lineWidth = .5;
+        context.strokeStyle = '#aaa';
+        context.shadowOffsetX = 0;
+        context.shadowOffsetY = 0;
+        context.shadowBlur = 0;
+        context.moveTo(0, height);
+        context.lineTo(width, height);
+        context.stroke();
+        context.closePath();
+
+         context.beginPath();
+        context.fillStyle = '#aaa';
+        context.textBaseline = 'middle';
+        context.shadowOffsetX = 0;
+        context.shadowOffsetY = 0;
+        context.shadowBlur = 0;
+        context.fillText("0", 0, height / 2);
+        context.closePath();
+
+        context.beginPath();
+        context.fillStyle = '#aaa';
+        context.textBaseline = 'top';
+        context.shadowOffsetX = 0;
+        context.shadowOffsetY = 0;
+        context.shadowBlur = 0;
+        context.fillText("+1", 0, 5);
+        context.closePath();
+
+        context.beginPath();
+        context.fillStyle = '#aaa';
+        context.textBaseline = 'bottom';
+        context.shadowOffsetX = 0;
+        context.shadowOffsetY = 0;
+        context.shadowBlur = 0;
+        context.fillText("-1", 0, height - 5);
+        context.closePath();
+    }
+
+})(jQuery);
+
+(function ($, undefined) {
+
+    "use strict";
+
     var Knob = namespace("Tmt.Components.Reviewer").Knob = function (element) {
         this.track = element;
         this.knob = element.find('b');
@@ -1236,7 +1423,7 @@ function debounce(func, threshold, execAsap) {
     }
 
     function registerCanvas() {
-        this.canvas = new Tmt.Components.Reviewer.Canvas(this.rootNode.find("canvas"));
+        this.canvas = new Tmt.Components.Canvas(this.rootNode.find("canvas"));
 
         this.canvas.addEmitter("positiveSpark", this.canvas.node.width / 2, this.canvas.node.height * .15);
         this.canvas.addEmitter("negativeSpark", this.canvas.node.width / 2, this.canvas.node.height * .85);
@@ -1458,58 +1645,6 @@ function debounce(func, threshold, execAsap) {
         } else {
             next.addClass("nothing-else");
         }
-    }
-
-
-})(jQuery);
-
-(function ($, undefined) {
-
-    "use strict";
-
-    var Canvas = namespace("Tmt.Components.Reviewer").Canvas = function (element) {
-        this.rootNode = element;
-        this.node = element.get(0);
-        this.context = this.node.getContext('2d');
-        this.emitters = {};
-
-        addEvents.call(this);
-    };
-
-    inherit([], Canvas, {
-
-        addEmitter : function(id, x, y) {
-            var emitter = new Tmt.Components.Reviewer.Emitter.ParticleEmitter();
-            emitter.setCanvas(this.node); 
-            emitter.moveTo(x, y);
-
-            this.emitters[id] = emitter;
-        },
-
-        emit : function(id, qty) {  
-            this.emitters[id].start(qty);
-        },
-
-        draw : function() {
-            this.context.clearRect(0, 0, this.node.width, this.node.height);
-            for(var i in  this.emitters) {
-                if (this.emitters[i].isRunning()) {
-                    this.emitters[i].run();
-                    this.emitters[i].render();
-                }
-            }
-        }
-
-    });
-
-    function addEvents () {
-        $(window).on('resize', debounce(applyCurrentSize.bind(this)));
-        applyCurrentSize.call(this);
-    }
-
-    function applyCurrentSize () {
-        this.node.height = this.rootNode.parent().height();
-        this.node.width = this.rootNode.parent().width();
     }
 
 
@@ -1849,6 +1984,64 @@ function debounce(func, threshold, execAsap) {
         } else {
             profile.removeUpvote(type, upvoteForm.getObjectId());
         }
+    }
+
+})(jQuery);
+
+(function ($, undefined) {
+
+    "use strict";
+
+    var ChartInitializer = namespace("Tmt.Initializers").ChartInitializer = function () {
+        this.initialize();
+        this.data = [];
+        this.charts = [];
+        this.waves = {};
+    };
+
+    inherit([Tmt.EventEmitter], ChartInitializer, {
+        'build': function (app) {
+            app.on('chartData', addChartData.bind(this));
+            app.on('waveData', addWaveData.bind(this));
+            app.on('chart', addChart.bind(this));
+
+            $(onDomReady.bind(this));
+        }
+    });
+
+    function addChartData(app, slug, datasetName, chartData) {
+        if (this.data[datasetName]) {
+            throw Error("Dataset name is not unique: " + datasetName);
+        }
+
+        this.data[datasetName] = {
+            'slug' : slug,
+            'data' : chartData
+        }
+    }
+
+    function addWaveData(app, slug, waveData) {
+        this.waves[slug] = waveData;
+    }
+
+    function addChart(app, selector, datasetName, startPosition, endPosition) {
+        var dataset = this.data[datasetName],
+            chart = new Tmt.Components.Chart.LineChart($(selector));
+
+        chart.setData(dataset.data)
+        chart.setRange(startPosition, endPosition);
+
+        if (this.waves[dataset.slug]) {
+            chart.setWave(this.waves[dataset.slug]);
+        }
+
+        this.charts.push(chart);
+    }
+
+    function onDomReady() {
+        this.charts.forEach(function(chart){
+            chart.render();
+        });
     }
 
 })(jQuery);

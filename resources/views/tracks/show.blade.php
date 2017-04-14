@@ -15,6 +15,12 @@
     @include('partials.backdrop', ['entity' => $track->album])
 @endsection
 
+@push('app-javascript')
+    app.chartData('{{ $track->slug }}', 'global', <?php echo json_encode($globalCurves) ?>);
+    // app.waveData('{{ $track->slug }}', <?php echo json_encode([]) ?>);
+    app.chart('.chart-{{ $track->slug }}', 'global', 0, {{ $track->length / 1000 }});
+@endpush
+
 @section('content')
     <section class="header">
         <h1>
@@ -37,11 +43,8 @@
 
     <a href="{{ action('TrackController@review', ['slug' => $track->slug]) }}">Review track</a>
 
-    <section class="stats" style="color:#ccc; height: 300px;">
-
-        {{ json_encode($globalCurves) }}
-
-
+    <section class="stats chart-{{ $track->slug }}" style="color:#ccc; height: 300px;">
+        Loading...
     </section>
     @include('partials.player', ['track' => $track])
 

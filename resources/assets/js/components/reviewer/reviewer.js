@@ -93,7 +93,7 @@
     }
 
     function registerCanvas() {
-        this.canvas = new Tmt.Components.Reviewer.Canvas(this.rootNode.find("canvas"));
+        this.canvas = new Tmt.Components.Canvas(this.rootNode.find("canvas"));
 
         this.canvas.addEmitter("positiveSpark", this.canvas.node.width / 2, this.canvas.node.height * .15);
         this.canvas.addEmitter("negativeSpark", this.canvas.node.width / 2, this.canvas.node.height * .85);

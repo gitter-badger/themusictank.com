@@ -78,15 +78,13 @@
             1999 - {{ date('Y') }} The Music Tank <a href="https://www.gnu.org/licenses/quick-guide-gplv3.html" target="_blank" rel="noopener noreferrer">GPL-3.0</a>
         </p>
     </footer>
-
     @stack('footer')
-
 	<script src="{{ elixir('assets/js/vendor.js') }}"></script>
 	<script src="{{ elixir('assets/js/app.js') }}"></script>
     <script>(function(){
-        var app = new Tmt.App();
-        app.boot();
-        app.setData(<?php echo auth()->user() ? json_encode(auth()->user()) : '{}' ?>);
+        var app = new Tmt.App(); app.boot();
+        app.session(<?php echo auth()->user() ? json_encode(auth()->user()) : '{}' ?>);
+        @stack('app-javascript');
     })();</script>
 </body>
 </html>

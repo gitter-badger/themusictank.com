@@ -24,10 +24,12 @@ elixir(function(mix) {
             'components/upvote-form.js',
             'components/search-form.js',
             'components/notifier.js',
+            'components/canvas.js',
+
+            'components/chart/line-chart.js',
 
             'components/reviewer/knob.js',
             'components/reviewer/reviewer.js',
-            'components/reviewer/canvas.js',
             'components/reviewer/emitter/vector.js',
             'components/reviewer/emitter/particle.js',
             'components/reviewer/emitter/particle-emitter.js',
@@ -36,6 +38,7 @@ elixir(function(mix) {
             'initializers/player-initializer.js',
             'initializers/reviewer-initializer.js',
             'initializers/profile-initializer.js',
+            'initializers/chart-initializer.js',
             'initializers/search-initializer.js',
             'initializers/upvote-forms-initializer.js'
         ],
@@ -50,6 +53,7 @@ elixir(function(mix) {
             'jquery/dist/jquery.min.js',
             'evemit/evemit.min.js',
             'typeahead.js/dist/typeahead.bundle.min.js',
+            'chartjs/chart.js',
             'gsap/src/minified/TweenMax.min.js',
             'gsap/src/minified/utils/Draggable.min.js'
         ],

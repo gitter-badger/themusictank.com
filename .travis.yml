@@ -8,12 +8,12 @@ before_install:
 - chmod 600 /tmp/deploy_rsa
 - ssh-add /tmp/deploy_rsa
 before_script:
-    - composer install --prefer-dist > /dev/null
-    - export APP_ENV=testing
-    - npm install && gulp
+- composer install --prefer-dist > /dev/null
+- export APP_ENV=testing
+- npm install && gulp
 script:
-  - vendor\bin\phpunit
-  - node .\node_modules\jasmine\bin\jasmine.js
+- vendor\bin\phpunit
+- node .\node_modules\jasmine\bin\jasmine.js
 deploy:
   provider: script
   skip_cleanup: true

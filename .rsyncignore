@@ -10,3 +10,13 @@ storage/framework/views/*
 storage/logs/*
 storage/app/*
 resources/assets/*
+artisan
+.codeclimate.yml
+circle.yml
+.editorconfig
+phpunit.xml
+package.json
+README.md
+.rsyncignore
+server.php
+webpack.mix.js

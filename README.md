@@ -1,4 +1,7 @@
-Hello!
+# The Music Tank.com
+
+[![Build Status](https://travis-ci.org/themusictank/themusictank.com.svg?branch=master)](https://travis-ci.org/themusictank/themusictank.com) [![Code Climate](https://codeclimate.com/github/themusictank/themusictank.com.svg)](https://codeclimate.com/github/strata-mvc/strata)
+
 
 
 ### Developping

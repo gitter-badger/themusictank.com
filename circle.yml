@@ -1,0 +1,9 @@
+dependencies:
+  pre:
+    - composer install --no-interaction --optimize-autoloader
+    - npm install
+    - gulp
+test:
+  override:
+    - vendor\bin\phpunit
+    - node .\node_modules\jasmine\bin\jasmine.js

@@ -6,7 +6,7 @@ dependencies:
 test:
   override:
     - "vendor/bin/phpunit"
-    - node "node_modules/jasmine/bin/jasmine.js"
+   # - node "node_modules/jasmine/bin/jasmine.js"
 deployment:
   push_to_server:
     branch: master

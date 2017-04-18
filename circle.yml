@@ -1,4 +1,6 @@
 dependencies:
+  cache_directories:
+    - ~/.composer/cache
   override:
     - composer install --no-interaction --optimize-autoloader
     - npm install
@@ -11,4 +13,4 @@ deployment:
   push_to_server:
     branch: master
     commands:
-      - rsync -avzp --delete --exclude-from '.rsyncignore' circleci@138.197.148.166:/var/www/themusictank.com
+      - rsync -avzp --delete --exclude-from '.rsyncignore' . circleci@138.197.148.166:/var/www/themusictank.com

@@ -2,8 +2,8 @@ dependencies:
   pre:
     - composer install --no-interaction --optimize-autoloader
     - npm install
-    - node .\node_modules\gulp\bin\gulp.js
+    - node "node_modules/gulp/bin/gulp.js"
 test:
   override:
-    - vendor\bin\phpunit
-    - node .\node_modules\jasmine\bin\jasmine.js
+    - "vendor/bin/phpunit"
+    - node "node_modules/jasmine/bin/jasmine.js"

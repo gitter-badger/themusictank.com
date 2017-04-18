@@ -16,6 +16,8 @@
 Route::get("/", "PageController@home");
 Route::get("/about", "PageController@about");
 Route::get("/legal", "PageController@legal");
+Route::get("/api/is-down", "PageController@apiIsDown");
+Route::get("/api/error", "PageController@apiError");
 
 // Artists
 Route::get('artists', "ArtistController@index");

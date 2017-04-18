@@ -23,6 +23,9 @@ class AppServiceProvider extends ServiceProvider
      */
     public function register()
     {
-        //
+        if (getenv('APP_ENV') === "production") {
+            $this->app->alias('bugsnag.logger', \Illuminate\Contracts\Logging\Log::class);
+            $this->app->alias('bugsnag.logger', \Psr\Log\LoggerInterface::class);
+        }
     }
 }

@@ -1,3 +1,22 @@
+language: php
+addons:
+  ssh_known_hosts: 138.197.148.166
 before_install:
 - openssl aes-256-cbc -K $encrypted_19b58e9cd6f6_key -iv $encrypted_19b58e9cd6f6_iv
   -in deploy_rsa.enc -out deploy_rsa -d
+- eval "$(ssh-agent -s)"
+- chmod 600 /tmp/deploy_rsa
+- ssh-add /tmp/deploy_rsa
+before_script:
+    - composer install --prefer-dist > /dev/null
+    - export APP_ENV=testing
+    - npm install && gulp
+script:
+  - vendor\bin\phpunit
+  - node .\node_modules\jasmine\bin\jasmine.js
+deploy:
+  provider: script
+  skip_cleanup: true
+  script: rsync -r --delete-after --quiet $TRAVIS_BUILD_DIR/<dir> $DEPLOY_USER@138.197.148.166:/home/$DEPLOY_USER/sites/themusictank
+  on:
+    branch: master

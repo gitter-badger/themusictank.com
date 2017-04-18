@@ -22,9 +22,18 @@ class PageController extends Controller
         return view('page.about');
     }
 
-
     public function legal()
     {
         return view('page.legal');
+    }
+
+    public function apiIsDown()
+    {
+        return view('errors/api/down');
+    }
+
+    public function apiError()
+    {
+        return view('errors/api/error');
     }
 }

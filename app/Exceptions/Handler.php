@@ -45,6 +45,12 @@ class Handler extends ExceptionHandler
      */
     public function render($request, Exception $exception)
     {
+        if (get_class($exception) == \GuzzleHttp\Exception\ConnectException::class) {
+            return redirect()->guest('api/is-down');
+        } elseif (get_class($exception) == \GuzzleHttp\Exception\ClientException::class) {
+            return redirect()->guest('api/error');
+        }
+
         return parent::render($request, $exception);
     }
 

@@ -16,9 +16,11 @@
     "gulp": "^3.9.1",
     "gulp-jsdoc3": "^1.0.1",
     "howler": "^2.0.3",
+    "jasmine": "^2.5.3",
     "jquery": "^3.1.0",
     "jsdoc": "^3.4.3",
     "laravel-elixir": "^6.0.0-9",
+    "qunitjs": "^2.3.2",
     "typeahead": "^0.2.2",
     "typeahead.js": "github:twitter/typeahead.js",
     "viewport-units-buggyfill": "^0.6.0"

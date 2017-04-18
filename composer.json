@@ -1,11 +1,12 @@
 {
-    "name": "laravel/laravel",
-    "description": "The Laravel Framework.",
-    "keywords": ["framework", "laravel"],
+    "name": "themusictank/themusictank.com",
+    "description": "The Music Tank.com",
+    "keywords": ["music", "the music tank"],
     "license": "MIT",
     "type": "project",
     "require": {
         "php": ">=5.6.4",
+        "bugsnag/bugsnag-laravel": "2.0",
         "guzzlehttp/guzzle": "^6.2",
         "laravel/framework": "5.4.*",
         "laravel/tinker": "~1.0",
@@ -14,7 +15,9 @@
     "require-dev": {
         "fzaninotto/faker": "~1.4",
         "mockery/mockery": "0.9.*",
-        "phpunit/phpunit": "~5.7"
+        "phpunit/phpunit": "~5.7",
+        "phpmd/phpmd" : "@stable",
+        "squizlabs/php_codesniffer": "^2.8"
     },
     "autoload": {
         "classmap": [

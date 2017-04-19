@@ -5,6 +5,8 @@ dependencies:
   cache_directories:
     - ~/.composer/cache
   override:
+    - "curl -sL https://deb.nodesource.com/setup_6.x | sudo -E bash -"
+    - sudo apt-get install -y nodejs
     - composer install --no-interaction --optimize-autoloader
     - npm install
     - node "node_modules/gulp/bin/gulp.js"

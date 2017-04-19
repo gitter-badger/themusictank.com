@@ -1,6 +1,6 @@
 # The Music Tank.com
 
-[![Code Climate](https://codeclimate.com/github/themusictank/themusictank.com.svg)](https://codeclimate.com/github/strata-mvc/strata)
+[![CircleCI](https://circleci.com/gh/themusictank/themusictank.com/tree/master.svg?style=svg)](https://circleci.com/gh/themusictank/themusictank.com/tree/master) [![Code Climate](https://codeclimate.com/github/themusictank/themusictank.com.svg)](https://codeclimate.com/github/strata-mvc/strata)
 
 
 ### Developping

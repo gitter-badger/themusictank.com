@@ -1,5 +1,5 @@
 var phantom = require("phantom");
-var _ph, _page, _outObj;
+var _ph, _page, _outObj, _failed;
 
 phantom.create().then(ph => {
     _ph = ph;
@@ -10,10 +10,12 @@ phantom.create().then(ph => {
 }).then(status => {
     return _page.evaluate(function () { return document.querySelector('.jasmine-bar.jasmine-passed'); });
 }).then(element => {
-    if (!element) {
-        console.log(0);
-    }
+    _failed = !element;
     return _page.close();
 }).then(arg => {
     return _ph.exit();
-}).catch(e => console.log(e));
+}).then(arg => {
+    if (_failed) {
+        throw new Error("Failed");
+    }
+})

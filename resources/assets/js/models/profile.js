@@ -30,15 +30,14 @@
             this.slug = userData.slug;
             this.name = userData.name;
             this.id = userData.id;
-            this.emit("dataChange", this);
 
-           // this.albumUpvotes = indexUpvotes("albumUpvotes", userData);
-            this.albumUpvotes = userData.albumUpvotes;
-            this.emit("upvoteChange", "album", this.albumUpvotes);
+            // this.albumUpvotes = indexUpvotes("albumUpvotes", userData);
+            this.albumUpvotes = userData.albumUpvotes || {};
 
             // this.trackUpvotes = indexUpvotes("trackUpvotes", userData);
-            this.trackUpvotes = userData.trackUpvotes;
-            this.emit("upvoteChange", "track",this.trackUpvotes);
+            this.trackUpvotes = userData.trackUpvotes || {};
+
+            this.emit("dataChange", this);
         },
 
         /**
@@ -67,7 +66,7 @@
          * @method
          */
         addAlbumUpvote: function (key, value) {
-            this.albumUpvotes[key] = value;
+            this.albumUpvotes[key+''] = {'id': key, 'vote': value};
             this.emit("upvoteUpdate", "album", this.albumUpvotes);
         },
 
@@ -80,7 +79,7 @@
          * @method
          */
         addTrackUpvote: function (key, value) {
-            this.trackUpvotes[key] = value;
+            this.trackUpvotes[key+''] = {'id': key, 'vote': value};
             this.emit("upvoteUpdate", "track", this.trackUpvotes);
         },
 
@@ -94,9 +93,9 @@
          */
         removeUpvote: function (type, key) {
             if (type == "album") {
-                return this.removeAlbumUpvote(key, value);
+                return this.removeAlbumUpvote(key);
             } else if (type == "track") {
-                return this.removeTrackUpvote(key, value);
+                return this.removeTrackUpvote(key);
             }
         },
 
@@ -108,9 +107,9 @@
          * @public
          * @method
          */
-        removeAlbumUpvote: function (type, key) {
+        removeAlbumUpvote: function (key) {
             delete this.albumUpvotes[key];
-            this.emit("upvoteUpdate", "album", this.upvotes);
+            this.emit("upvoteUpdate", "album", this.albumUpvotes);
         },
 
         /**
@@ -121,9 +120,9 @@
          * @public
          * @method
          */
-        removeTrackUpvote: function (type, key) {
+        removeTrackUpvote: function (key) {
             delete this.trackUpvotes[key];
-            this.emit("upvoteUpdate", "track", this.upvotes);
+            this.emit("upvoteUpdate", "track", this.trackUpvotes);
         },
 
         /**

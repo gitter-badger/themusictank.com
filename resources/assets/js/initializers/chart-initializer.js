@@ -50,7 +50,7 @@
 
     function onDomReady() {
         this.charts.forEach(function(chart){
-            chart.render();
+            chart.build();
         });
     }
 

@@ -7,6 +7,7 @@
         this.node = element.get(0);
         this.context = this.node.getContext('2d');
         this.emitters = {};
+        this.renderers = [];
 
         addEvents.call(this);
     };
@@ -21,12 +22,22 @@
             this.emitters[id] = emitter;
         },
 
+        addRenderer : function(renderer) {
+            this.renderers.push(renderer);
+            renderer.linkTo(this);
+        },
+
         emit : function(id, qty) {
             this.emitters[id].start(qty);
         },
 
         draw : function() {
             this.context.clearRect(0, 0, this.node.width, this.node.height);
+
+            for(var i in this.renderers) {
+                this.renderers[i].render();
+            }
+
             for(var i in  this.emitters) {
                 if (this.emitters[i].isRunning()) {
                     this.emitters[i].run();

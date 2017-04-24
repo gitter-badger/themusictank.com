@@ -31,5 +31,5 @@ elixir(function (mix) {
         'node_modules/'
     );
 
-    mix.version(['assets/css/app.css', 'assets/js/app.js', 'assets/js/vendor.js']);
+    mix.version(['public/assets/css/app.css', 'public/assets/js/app.js', 'public/assets/js/vendor.js']);
 });

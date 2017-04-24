@@ -3,6 +3,8 @@
 /docs
 /public/storage
 /public/hot
+/public/assets/js
+/public/assets/css
 /storage/*.key
 /vendor
 /.idea

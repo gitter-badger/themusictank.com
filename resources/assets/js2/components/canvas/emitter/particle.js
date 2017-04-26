@@ -16,7 +16,7 @@
         this.lifespan = Math.random() * 350;
 
         this.image = new Image();
-        this.image.src = '/assets/img/spark.png';
+        this.image.src = '/img/spark.png';
         this.context = canvas.getContext('2d');
 
         this.image.onload = function () {

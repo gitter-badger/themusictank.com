@@ -1,8 +1,11 @@
 /node_modules
 /.vscode
 /docs
-/public/assets/js
-/public/assets/css
+/public/mix-manifest.json
+/public/css/app.css
+/public/js/app.js
+/public/js/manifest.js
+/public/js/vendor.js
 /public/storage
 /public/hot
 /storage/*.key

@@ -8,20 +8,13 @@ use App\Models\Entities\ApiSessionToken;
 use App\Models\Entities\Profile;
 use JsonSerializable;
 
-class User implements Authenticatable, JsonSerializable
+class User implements Authenticatable
 {
     use Notifiable;
 
     protected $rememberToken;
     protected $token;
     protected $profile;
-
-    public function jsonSerialize()
-    {
-        return [
-            'profile' => $this->profile
-        ];
-    }
 
     public function isAdmin()
     {

@@ -29,41 +29,83 @@ class Profile implements JsonSerializable
             'slug' => $this->slug,
             'id' => $this->id,
             'name' => $this->name,
-            'albumUpvotes' => $this->albumUpvotes,
-            'trackUpvotes' => $this->trackUpvotes,
             'activities' => $this->activities,
         ];
     }
 
-    public function addTrackVote($objectId, $vote)
+    public function getUpvotes()
     {
-        $key = "$objectId";
-        if (!array_key_exists($key, $this->trackUpvotes)) {
-            $this->trackUpvotes[$key] = new TrackUpvote();
-        }
-
-        $this->trackUpvotes[$key]->trackId = $objectId;
-        $this->trackUpvotes[$key]->vote = $vote;
+        return [
+            'albumUpvotes' => $this->albumUpvotes,
+            'trackUpvotes' => $this->trackUpvotes,
+        ];
     }
 
-    public function removeTrackVote($key)
+    public function trackVoteExists($objectId)
     {
-        unset($this->trackUpvotes["$key"]);
+        return $this->getTrackVoteIndexById($objectId) > -1;
+    }
+
+    public function albumVoteExists($objectId)
+    {
+        return $this->getAlbumVoteIndexById($objectId) > -1;
+    }
+
+    public function addTrackVote($objectId, $vote)
+    {
+        if (!$this->trackVoteExists($objectId)) {
+            $upvote = new TrackUpvote();
+            $upvote->trackId = $objectId;
+            $upvote->vote = $vote;
+
+            $this->trackUpvotes[] = $upvote;
+        }
+    }
+
+    public function removeTrackVote($objectId)
+    {
+        $idx = $this->getTrackVoteIndexById($objectId);
+        unset($this->trackUpvotes[$idx]);
+        $this->trackUpvotes = array_values($this->trackUpvotes);
     }
 
     public function addAlbumVote($objectId, $vote)
     {
-        $key = "$objectId";
-        if (!array_key_exists($key, $this->albumUpvotes)) {
-            $this->albumUpvotes[$key] = new AlbumUpvote();
-        }
+        if (!$this->albumVoteExists($objectId)) {
+            $upvote = new AlbumUpvote();
+            $upvote->albumId = $objectId;
+            $upvote->vote = $vote;
 
-        $this->albumUpvotes[$key]->albumId = $objectId;
-        $this->albumUpvotes[$key]->vote = $vote;
+            $this->albumUpvotes[] = $upvote;
+        }
     }
 
-    public function removeAlbumVote($key)
+    public function removeAlbumVote($objectId)
     {
-        unset($this->albumUpvotes["$key"]);
+        $idx = $this->getAlbumVoteIndexById($objectId);
+        unset($this->albumUpvotes[$idx]);
+        $this->albumUpvotes = array_values($this->albumUpvotes);
+    }
+
+    private function getTrackVoteIndexById($objectId)
+    {
+        foreach($this->trackUpvotes as $idx => $vote) {
+            if ((int)$vote->trackId === (int)$objectId) {
+                return $idx;
+            }
+        }
+
+        return -1;
+    }
+
+    private function getAlbumVoteIndexById($objectId)
+    {
+        foreach($this->albumUpvotes as $idx => $vote) {
+            if ((int)$vote->albumId === (int)$objectId) {
+                return $idx;
+            }
+        }
+
+        return -1;
     }
 }

@@ -37,8 +37,10 @@ Route::get('ajax/artistSearch', "AjaxController@artistSearch");
 Route::get('ajax/albumSearch', "AjaxController@albumSearch");
 Route::get('ajax/trackSearch', "AjaxController@trackSearch");
 
-Route::post('ajax/upvoteTrack', "AjaxController@upvoteTrack")->middleware('auth');
-Route::post('ajax/upvoteAlbum', "AjaxController@upvoteAlbum")->middleware('auth');
+Route::post('ajax/addTrackUpvote', "AjaxController@addTrackUpvote")->middleware('auth');
+Route::post('ajax/addAlbumUpvote', "AjaxController@addAlbumUpvote")->middleware('auth');
+Route::post('ajax/removeTrackUpvote', "AjaxController@removeTrackUpvote")->middleware('auth');
+Route::post('ajax/removeAlbumUpvote', "AjaxController@removeAlbumUpvote")->middleware('auth');
 Route::get('ajax/whatsUp', "AjaxController@whatsUp")->middleware('auth');
 Route::get('ajax/okstfu', "AjaxController@okstfu")->middleware('auth');
 

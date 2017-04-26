@@ -1,6 +1,7 @@
 var elixir = require('laravel-elixir');
 var jsdoc = require('gulp-jsdoc3');
 var glob = require('glob');
+var typescript = require('laravel-elixir-typescript');
 
 process.env.DISABLE_NOTIFIER = true;
 
@@ -12,10 +13,10 @@ gulp.task('doc', function (cb) {
 elixir(function (mix) {
     mix.sass('app.scss', 'public/assets/css');
 
-    mix.scripts(
-        glob.sync('resources/assets/js/**/*.js'),
-        'public/assets/js/app.js'
-    );
+    // mix.scripts(
+    //     glob.sync('resources/assets/js/**/*.js'),
+    //     'public/assets/js/app.js'
+    // );
 
     mix.scripts(
         [
@@ -31,5 +32,5 @@ elixir(function (mix) {
         'node_modules/'
     );
 
-    mix.version(['public/assets/css/app.css', 'public/assets/js/app.js', 'public/assets/js/vendor.js']);
+    mix.version(['public/assets/css/app.css' /*, 'public/assets/js/app.js'*/, 'public/assets/js/vendor.js']);
 });

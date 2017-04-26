@@ -16,10 +16,13 @@
 @endsection
 
 @push('app-javascript')
-    app.chartData('{{ $track->slug }}', 'global', <?php echo json_encode($globalCurves) ?>);
+    Tmt.app.reviewFrames('{{ $track->slug }}', <?php echo json_encode($globalCurves) ?>);
+    
+    //app.chartData('{{ $track->slug }}', 'global', <?php echo json_encode($globalCurves) ?>);
     // app.waveData('{{ $track->slug }}', <?php echo json_encode([]) ?>);
-    app.chart('.chart-{{ $track->slug }}', 'global', 0, {{ $track->length / 1000 }});
+    //app.chart('.chart-{{ $track->slug }}', 'global', 0, {{ $track->length / 1000 }});
 @endpush
+
 
 @section('content')
     <section class="header">

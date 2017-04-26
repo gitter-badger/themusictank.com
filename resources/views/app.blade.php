@@ -27,20 +27,18 @@
     <link rel="apple-touch-icon" href="http://static.themusictank.com/assets/images/social-share.png">
     <link rel="icon" href="http://static.themusictank.com/assets/images/social-share.png">
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css">
-    <link rel="stylesheet" href="{{ elixir('assets/css/app.css') }}">
+    <link rel="stylesheet" href="/css/app.css">
 
     @stack('header')
 
 	<title>@yield('title', 'The Music Tank')</title>
 </head>
 <body class="@yield('body-class', 'home')">
+    <section class="app">
     <header>
         <h1><a href="/" title="The Music Tank">The Music Tank</a></h1>
 
-        <form action="/search/" method="get">
-            <input class="typeahead" type="text" name="q" value="" placeholder="Search across everything" />
-            <input type="submit" name="search" />
-        </form>
+        <search-form></search-form>
 
         <nav>
             <ul>
@@ -78,13 +76,32 @@
             1999 - {{ date('Y') }} The Music Tank <a href="https://www.gnu.org/licenses/quick-guide-gplv3.html" target="_blank" rel="noopener noreferrer">GPL-3.0</a>
         </p>
     </footer>
+
+    </section>
     @stack('footer')
+	<script src="/js/manifest.js"></script>
+	<script src="/js/vendor.js"></script>
+	<script src="/js/app.js"></script>
+
+    <script>(function(){
+    @if(auth()->user())
+        <?php $profile = auth()->user()->getProfile(); ?>
+        Tmt.app.profile(<?php echo json_encode($profile) ?>);
+        Tmt.app.upvotes(<?php echo json_encode($profile->getUpvotes()) ?>);
+    @else
+        Tmt.app.profile({'id': -1, 'username': 'Anonymous', 'role': 'guest'});
+        Tmt.app.upvotes({});
+    @endif
+        @stack('app-javascript')
+    })();</script>
+
+    <!--
 	<script src="{{ elixir('assets/js/vendor.js') }}"></script>
 	<script src="{{ elixir('assets/js/app.js') }}"></script>
     <script>(function(){
         var app = new Tmt.App(); app.boot();
-        app.session(<?php echo auth()->user() ? json_encode(auth()->user()) : '{}' ?>);
+        app.session();
         @stack('app-javascript');
-    })();</script>
+    })();</script> -->
 </body>
 </html>

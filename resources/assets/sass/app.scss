@@ -8,10 +8,17 @@
 // Bootstrap
 //@import "node_modules/bootstrap-sass/assets/stylesheets/bootstrap";
 
-
+/*
 @import "components/_upvote";
 @import "components/_player";
 @import "components/_reviewer";
 @import "components/_typeahead";
 
 @import "_header";
+*/
+html {
+  box-sizing: border-box;
+}
+*, *:before, *:after {
+  box-sizing: inherit;
+}

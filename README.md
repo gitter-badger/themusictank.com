@@ -9,7 +9,13 @@ Install the project using Composer and Gulp:
 
 ~~~ 
 $ composer install
-$ gulp
+$ npm install
+~~~
+
+Watch frontend code changes:
+
+~~~
+$ npm run watch
 ~~~
 
 Test your code using PHPUnit, PHPCS and PHPMD:

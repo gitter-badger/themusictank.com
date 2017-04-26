@@ -1,0 +1,141 @@
+<?php
+
+namespace App\Http\Controllers;
+
+use App\Models\Artists;
+use App\Models\Albums;
+use App\Models\Tracks;
+use App\Models\TrackUpvotes;
+use App\Models\AlbumUpvotes;
+use App\Models\Activities;
+use App\Models\ReviewFrames;
+
+use Illuminate\Http\Request;
+use Carbon\Carbon;
+
+class AjaxController extends Controller
+{
+    public function ytkey($slug)
+    {
+        $response = Tracks::api()->get("tracks/getYoutubeKey", [
+            "query" => [
+                "slug" => $slug
+            ]
+        ]);
+
+        return response()->json($response);
+    }
+
+    public function addTrackUpvote()
+    {
+        $vote = (int)request('vote');
+        $objectId = (int)request('id');
+        $authUser = auth()->user();
+        $profile = $authUser->getProfile();
+
+        $response = TrackUpvotes::api()->vote($objectId, $profile->id, $vote);
+        $profile->addTrackVote($objectId, $vote);
+
+        $authUser->setProfile($profile, true);
+        return response()->json($response);
+    }
+
+    public function addAlbumUpvote()
+    {
+        $vote = (int)request('vote');
+        $objectId = (int)request('id');
+        $authUser = auth()->user();
+        $profile = $authUser->getProfile();
+
+        $response = AlbumUpvotes::api()->vote($objectId, $profile->id, $vote);
+        $profile->addAlbumVote($objectId, $vote);
+
+        $authUser->setProfile($profile, true);
+        return response()->json($response);
+    }
+
+    public function removeTrackUpvote()
+    {
+        $objectId = (int)request('id');
+        $authUser = auth()->user();
+        $profile = $authUser->getProfile();
+
+        $response = TrackUpvotes::api()->removeVote($objectId, $profile->id);
+        $profile->removeTrackVote($objectId);
+
+        $authUser->setProfile($profile, true);
+        return response()->json($response);
+    }
+
+    public function removeAlbumUpvote()
+    {
+        $objectId = (int)request('id');
+        $authUser = auth()->user();
+        $profile = $authUser->getProfile();
+
+        $response = AlbumUpvotes::api()->removeVote($objectId, $profile->id);
+        $profile->removeTrackVote($objectId);
+
+        $authUser->setProfile($profile, true);
+        return response()->json($response);
+    }
+
+    public function artistSearch()
+    {
+        return response()->json(Artists::api()->search(request('q')));
+    }
+
+    public function trackSearch()
+    {
+        return response()->json(Tracks::api()->search(request('q')));
+    }
+
+    public function albumSearch()
+    {
+        return response()->json(Albums::api()->search(request('q')));
+    }
+
+    public function whatsUp()
+    {
+        $currentProfile = auth()->user()->getProfile();
+        $timestamp = (int)request('timestamp');
+
+        if ($timestamp > 0) {
+            $dateTime = Carbon::createFromTimestamp($timestamp)->toDateTimeString();
+            return response()->json((array)Activities::api()->findSince($dateTime, $currentProfile->id));
+        }
+
+        return response()->json((array)Activities::api()->findRecent($currentProfile->id, 5));
+    }
+
+    public function okstfu()
+    {
+        $currentProfile = auth()->user()->getProfile();
+        return response()->json(
+            Activities::api()
+                ->markAsReadByIds(request('ids'), $currentProfile->id)
+        );
+    }
+
+    public function saveCurvePart($slug)
+    {
+        $track = Tracks::api()->findBySlug($slug);
+        if (!$track) {
+            return abort(404);
+        }
+
+        ReviewFrames::api()->savePartial(request('package'), $track, auth()->user()->getProfile());
+
+        return response()->json(["rock" => "on"]);
+    }
+
+    public function getNextTrack($slug)
+    {
+        $track = Tracks::api()->findBySlug($slug);
+        if (!$track) {
+            return abort(404);
+        }
+
+        return response()->json(Tracks::api()->getNext($track));
+    }
+}

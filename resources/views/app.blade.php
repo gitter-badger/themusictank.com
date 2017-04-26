@@ -65,9 +65,7 @@
                 <li><a href="{{ action("PageController@about") }}">About</a></li>
                 <li><a href="{{ action("PageController@legal") }}">Legal</a></li>
                 <li>
-                    <a href="{{ action("AjaxController@bugreport") }}" class="report-bug" data-bug-iden="general" data-bug-location="{{ Request::url() }}">
-                        <i class="fa fa-bug"></i> Found a bug?
-                    </a>
+                    @include('partials.buttons.bugreport', ['identity' => "general", 'location' => Request::url(), 'label' => "Found a bug?"])
                 </li>
             </ul>
         </nav>
@@ -82,7 +80,6 @@
 	<script src="/js/manifest.js"></script>
 	<script src="/js/vendor.js"></script>
 	<script src="/js/app.js"></script>
-
     <script>(function(){
     @if(auth()->user())
         <?php $profile = auth()->user()->getProfile(); ?>
@@ -94,14 +91,5 @@
     @endif
         @stack('app-javascript')
     })();</script>
-
-    <!--
-	<script src="{{ elixir('assets/js/vendor.js') }}"></script>
-	<script src="{{ elixir('assets/js/app.js') }}"></script>
-    <script>(function(){
-        var app = new Tmt.App(); app.boot();
-        app.session();
-        @stack('app-javascript');
-    })();</script> -->
 </body>
 </html>

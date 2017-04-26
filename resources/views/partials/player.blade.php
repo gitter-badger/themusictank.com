@@ -1,28 +1,4 @@
 @if (isset($track))
-    <div data-attr="tmt-player" data-song-slug="{{ $track->slug }}" data-song-vid="{{ isset($track->youtube_key) ? $track->youtube_key : "" }}">
-
-            <div class="progress-wrap">
-                <div class="progress">
-                    <div class="progress-bar loaded-bar" role="progressbar" aria-valuenow="0" aria-valuemin="0" aria-valuemax="{{ $track->length }}" style="width: 0%;"></div>
-                    <div class="progress-bar playing-bar" role="progressbar" aria-valuenow="0" aria-valuemin="0" aria-valuemax="{{ $track->length }}" style="width: 0%;"></div>
-                </div>
-                <div class="cursor"></div>
-            </div>
-
-        @if (!isset($controls) || (bool)$controls !== false)
-            <i class="play fa fa-stop"></i>
-        @endif
-
-        <div class="times">
-            <span class="position"> -:--</span> / <span class="duration"> -:--</span>
-        </div>
-    </div>
-@else
-    <p>We can't load the player.</p>
-@endif
-
-@if (!isset($controls) || (bool)$controls !== false)
-    <a href="{{ action("AjaxController@bugreport") }}" class="report-bug" data-bug-iden="song-player" data-bug-location="{{ Request::url() }}">
-        <i class="fa fa-bug"></i> Wrong or badly formatted song?
-    </a>
+    <player song-slug="{{ $track->slug }}" song-video="{{ isset($track->youtube_key) ? $track->youtube_key : "" }}" song-length="{{ $track->length }}"></player>
+    @include('partials.buttons.bugreport', ['identity' => "song-player", 'location' => Request::url(), 'label' => "Wrong song or something is wrong?"])
 @endif

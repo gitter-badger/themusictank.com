@@ -7,11 +7,10 @@ dependencies:
   override:
     - composer install --no-interaction --optimize-autoloader
     - npm install
-    - node "node_modules/gulp/bin/gulp.js"
+    - npm run production
 test:
   override:
     - "vendor/bin/phpunit"
-    - "npm test"
 deployment:
   push_to_server:
     branch: master

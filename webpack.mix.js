@@ -14,5 +14,14 @@ const { mix } = require('laravel-mix');
 mix.disableNotifications();
 
 mix.js('resources/assets/js/app.js', 'public/js')
-   .sass('resources/assets/sass/app.scss', 'public/css')
-   .extract(['vue', 'typeahead.js', 'bloodhound-js']);
+    .sass('resources/assets/sass/app.scss', 'public/css')
+    .extract([
+        'axios',
+        'babel-polyfill',
+        'bloodhound-js',
+        'gsap',
+        'jquery',
+        'typeahead.js',
+        'vue',
+        'vuex'
+    ]);

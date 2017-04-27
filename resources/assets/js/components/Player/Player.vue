@@ -2,55 +2,101 @@
 import ComponentBase from '../mixins/base.js'
 import ProgressGroup from './ProgressGroup.vue'
 import TimeLabel from './TimeLabel.vue'
+import YtStreamer from '../../models/yt-streamer.js'
 
 export default {
-    components : {
+    components: {
         ProgressGroup, TimeLabel
     },
     mixins: [ComponentBase],
 
-    props: ['songSlug', 'songVideo'],
+    props: ['songSlug', 'songVideo', 'seekable', 'autoplay'],
 
     computed: {
-        songLength() {
-            if (this.youtube) {
-                return this.youtube.getDuration()
+        isPlaying() {
+            if (this.streamer) {
+                return this.streamer.isPlaying();
             }
 
-            return 0;
+            return false;
+        },
+
+        songIsLoaded() {
+            if (this.streamer) {
+                return this.streamer.isLoaded();
+            }
+
+            return false;
         }
     },
 
     data() {
         return {
-            'seekable': true,
-            'isPlaying': false,
-            'songIsLoaded': false,
-            'currentPosition': 0,
-            'loadedProgress': 0
+            'streamer': null
         }
     },
 
+    mounted() {
+        this.songVideo == "" ? getVideoId.call(this) : loadStreamer.call(this);
+    },
+
     methods: {
+        seek(position) {
+            if (this.seekable) {
+                this.streamer.seek(position);
+            }
+        },
 
-
+        onPlay() {
+            this.streamer.toggle();
+        }
     }
 };
+
+function getVideoId() {
+    this.ajax()
+        .post('/ajax/ytkey/', this.songSlug)
+        .then((response) => {
+            if (response.youtubekey.length === 11) {
+                this.songVideo = response.youtubekey;
+                loadStreamer.bind(this);
+            } else {
+                Tmt.app.error(response);
+            }
+        })
+        .catch((error) => {
+            Tmt.app.error(error);
+        });
+}
+
+function loadStreamer() {
+    this.streamer = new YtStreamer(this.songVideo, this.autoplay);
+    this.streamer.render(this.getElement());
+}
 </script>
 
 
 <template>
     <div class="ctrl ctrl-player">
-        <progress-group :total-units="songLength" :currentPositionProgress="currentPosition" :currentLoadedProgress="loadedProgress"></progress-group>
+        <div class="ui" v-if="this.streamer">
+            <progress-group
+                :total-position-units="this.streamer.duration"
+                :total-buffered-units="100"
+                :current-position-progress="this.streamer.position"
+                :current-buffered-progress="this.streamer.bufferedPct"
+                v-on:seek="seek"
+            ></progress-group>
 
-        <button class="play" :disabled="!songIsLoaded">
-            <i class="fa fa-stop" v-if="!songIsLoaded"></i>
-            <i class="fa fa-play" v-if="isPlaying"></i>
-            <i class="fa fa-pause" v-if="!isPlaying && songIsLoaded"></i>
-        </button>
+            <button class="play" @click="onPlay" :disabled="!songIsLoaded">
+                <i class="fa fa-stop" v-if="!songIsLoaded"></i>
+                <i class="fa fa-play" v-if="!isPlaying && songIsLoaded"></i>
+                <i class="fa fa-pause" v-if="isPlaying && songIsLoaded"></i>
+            </button>
 
-        <div class="times">
-            <time-label class="position" :time="currentPosition"></time-label> / <time-label class="duration" :time="songLength"></time-label>
+            <div class="times">
+                <time-label class="position" :time="this.streamer.position"></time-label> /
+                <time-label class="duration" :time="this.streamer.duration"></time-label>
+            </div>
         </div>
     </div>
 </template>

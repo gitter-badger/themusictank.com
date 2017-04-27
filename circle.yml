@@ -6,7 +6,7 @@ dependencies:
     - ~/.composer/cache
   override:
     - composer install --no-interaction --optimize-autoloader
-    - npm install
+    - yarn
     - npm run production
 test:
   override:

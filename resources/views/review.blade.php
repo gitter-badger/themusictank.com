@@ -27,46 +27,49 @@
     <link rel="apple-touch-icon" href="http://static.themusictank.com/assets/images/social-share.png">
     <link rel="icon" href="http://static.themusictank.com/assets/images/social-share.png">
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css">
-    <link rel="stylesheet" href="{{ elixir('assets/css/app.css') }}">
+    <link rel="stylesheet" href="{{ mix('css/app.css') }}">
 
     @stack('header')
 
 	<title>@yield('title', 'The Music Tank')</title>
 </head>
 <body class="@yield('body-class', 'home')">
-    <header>
-        <h1><a href="/" title="The Music Tank">The Music Tank</a></h1>
-        <nav>
-            @php
-                $previous = url()->previous();
-            @endphp
+    <section class="app">
+        <header>
+            <h1><a href="/" title="The Music Tank">The Music Tank</a></h1>
+            <nav>
+                @php
+                    $previous = url()->previous();
+                @endphp
 
-            @if (isset($previous) && $previous != url()->current())
-            <ul>
-                <li><a href="{{ url()->previous() }}">Back</a></li>
-            </ul>
-            @endif
+                @if (isset($previous) && $previous != url()->current())
+                <ul>
+                    <li><a href="{{ url()->previous() }}">Back</a></li>
+                </ul>
+                @endif
 
-            @include('partials.usermenu', ['user' => auth()->user()])
-        </nav>
-    </header>
+                @include('partials.usermenu', ['user' => auth()->user()])
+            </nav>
+        </header>
 
-    @yield('content')
+        @yield('content')
 
-    <footer>
-        <p class="copyright">
-            1999 - {{ date('Y') }} The Music Tank <a href="https://www.gnu.org/licenses/quick-guide-gplv3.html" target="_blank" rel="noopener noreferrer">GPL-3.0</a>
-        </p>
-    </footer>
+        <footer>
+            <p class="copyright">
+                1999 - {{ date('Y') }} The Music Tank <a href="https://www.gnu.org/licenses/quick-guide-gplv3.html" target="_blank" rel="noopener noreferrer">GPL-3.0</a>
+            </p>
+        </footer>
 
-    @yield('footer')
-
-	<script src="{{ elixir('assets/js/vendor.js') }}"></script>
-	<script src="{{ elixir('assets/js/app.js') }}"></script>
+        @yield('footer')
+    </section>
+    @stack('footer')
+    <script src="{{ mix('js/manifest.js') }}"></script>
+    <script src="{{ mix('js/vendor.js') }}"></script>
+    <script src="{{ mix('js/app.js') }}"></script>
     <script>(function(){
-        var app = new Tmt.App();
-        app.boot();
-        app.setData(<?php echo auth()->user() ? json_encode(auth()->user()) : '{}' ?>);
+        <?php $profile = auth()->user()->getProfile(); ?>
+        Tmt.app.profile(<?php echo json_encode($profile) ?>);
+        @stack('app-javascript')
     })();</script>
 </body>
 </html>

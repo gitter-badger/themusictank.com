@@ -2,37 +2,47 @@
 import ComponentBase from '../mixins/base.js'
 import ProgressGroup from './ProgressGroup.vue'
 import TimeLabel from './TimeLabel.vue'
+import Reviewer from '../Reviewer/Reviewer.vue'
 import YtStreamer from '../../models/yt-streamer.js'
 
 export default {
     components: {
-        ProgressGroup, TimeLabel
+        ProgressGroup, TimeLabel, Reviewer
     },
     mixins: [ComponentBase],
 
-    props: ['songSlug', 'songVideo', 'seekable', 'autoplay'],
+    props: [
+        'songSlug',
+        'songVideo',
+        'songName',
+        'isReview',
+        'autoplay',
+        'profileSlug',
+        'albumName'
+    ],
 
     computed: {
-        isPlaying() {
-            if (this.streamer) {
-                return this.streamer.isPlaying();
-            }
 
-            return false;
+        seekable() {
+            return !this.isReview;
+        },
+
+        isPlaying() {
+            return this.streamer && this.streamer.isPlaying();
+        },
+
+        isCompleted() {
+            return this.streamer && this.streamer.isCompleted();
         },
 
         songIsLoaded() {
-            if (this.streamer) {
-                return this.streamer.isLoaded();
-            }
-
-            return false;
+            return this.streamer && this.streamer.isLoaded();
         }
     },
 
-    data() {
+    data () {
         return {
-            'streamer': null
+            'streamer' : null
         }
     },
 
@@ -78,12 +88,20 @@ function loadStreamer() {
 
 <template>
     <div class="ctrl ctrl-player">
+        <reviewer
+            v-if="isReview && streamer && profileSlug"
+            :song-name="songName"
+            :song-slug="songSlug"
+            :profile-slug="profileSlug"
+            :album-name="albumName"
+        ></reviewer>
+
         <div class="ui" v-if="this.streamer">
             <progress-group
-                :total-position-units="this.streamer.duration"
+                :total-position-units="streamer.duration"
                 :total-buffered-units="100"
-                :current-position-progress="this.streamer.position"
-                :current-buffered-progress="this.streamer.bufferedPct"
+                :current-position-progress="streamer.position"
+                :current-buffered-progress="streamer.bufferedPct"
                 v-on:seek="seek"
             ></progress-group>
 
@@ -94,8 +112,8 @@ function loadStreamer() {
             </button>
 
             <div class="times">
-                <time-label class="position" :time="this.streamer.position"></time-label> /
-                <time-label class="duration" :time="this.streamer.duration"></time-label>
+                <time-label class="position" :time="streamer.position"></time-label> /
+                <time-label class="duration" :time="streamer.duration"></time-label>
             </div>
         </div>
     </div>

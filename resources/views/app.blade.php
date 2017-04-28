@@ -27,7 +27,7 @@
     <link rel="apple-touch-icon" href="http://static.themusictank.com/assets/images/social-share.png">
     <link rel="icon" href="http://static.themusictank.com/assets/images/social-share.png">
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css">
-    <link rel="stylesheet" href="/css/app.css">
+    <link rel="stylesheet" href="{{ mix('css/app.css') }}">
 
     @stack('header')
 
@@ -77,9 +77,9 @@
 
     </section>
     @stack('footer')
-	<script src="/js/manifest.js"></script>
-	<script src="/js/vendor.js"></script>
-	<script src="/js/app.js"></script>
+    <script src="{{ mix('js/manifest.js') }}"></script>
+    <script src="{{ mix('js/vendor.js') }}"></script>
+    <script src="{{ mix('js/app.js') }}"></script>
     <script>(function(){
     @if(auth()->user())
         <?php $profile = auth()->user()->getProfile(); ?>

@@ -19,6 +19,22 @@
 html {
   box-sizing: border-box;
 }
+
+body, html, section.app {
+    min-height: 100%;
+    min-width: 100%;
+}
+
+
 *, *:before, *:after {
   box-sizing: inherit;
+}
+
+
+body.tracks.review {
+    overflow: hidden;
+
+    header {
+        display: none;
+    }
 }

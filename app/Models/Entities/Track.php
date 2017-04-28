@@ -8,7 +8,6 @@ class Track
 {
     use Dated;
 
-
     public $length;
     public $position;
     public $name;

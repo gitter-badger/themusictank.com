@@ -49,6 +49,10 @@ export default class YtStreamer {
         return this.state == 1;
     }
 
+    isCompleted() {
+        return this.state === 0;
+    }
+
     isLoaded() {
         return this.loaded;
     }

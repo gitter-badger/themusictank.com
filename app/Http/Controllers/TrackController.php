@@ -20,7 +20,7 @@ class TrackController extends Controller
 
     public function review($slug)
     {
-        $track = Tracks::api()-findBySlug($slug);
+        $track = Tracks::api()->findBySlug($slug);
 
         if (!$track) {
             return abort(404);

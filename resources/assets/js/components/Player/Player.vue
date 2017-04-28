@@ -37,6 +37,10 @@ export default {
 
         songIsLoaded() {
             return this.streamer && this.streamer.isLoaded();
+        },
+
+        position() {
+            return this.streamer && this.streamer.position;
         }
     },
 
@@ -94,6 +98,9 @@ function loadStreamer() {
             :song-slug="songSlug"
             :profile-slug="profileSlug"
             :album-name="albumName"
+            :completed="isCompleted"
+            :working="isPlaying"
+            :position="position"
         ></reviewer>
 
         <div class="ui" v-if="this.streamer">

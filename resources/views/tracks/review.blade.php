@@ -2,6 +2,9 @@
 
 @push('footer')
 <script async src="https://platform.twitter.com/widgets.js"></script>
+<!-- GSAP's dependencies cannot be loaded through webpack for the moment. -->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/1.19.1/TweenMax.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/1.19.1/utils/Draggable.min.js"></script>
 @endpush
 
 @section('body-class', 'tracks review')

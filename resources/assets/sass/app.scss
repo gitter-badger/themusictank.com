@@ -30,6 +30,7 @@ body, html, section.app {
   box-sizing: inherit;
 }
 
+@import "_header";
 
 body.tracks.review {
     overflow: hidden;

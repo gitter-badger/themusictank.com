@@ -3,65 +3,78 @@ import ComponentBase from '../mixins/base.js'
 
 export default {
     mixins: [ComponentBase],
-    props: ['enabled'],
+    props: ['enabled', 'reviewer'],
     data() {
         return {
-            'dragging': false,
-            'draggable': null
+            'dragging' : false,
+            'draggable' : null,
+            'nudged' : false,
+            'position' : null,
+            'value' : 0
         }
     },
     computed : {
+        track() {
+            return this.getElement();
+        },
+        knob() {
+            return this.track.find('b');
+        },
+        position() {
+            return this.track.position();
+        },
         trackHeight() {
-            return this.getElement().height();
-        },
-        handle() {
-            return this.getElement().find("b").get(0);
-        },
-        value() {
-            if (this.enabled && this.draggable) {
-                var value = 1 - (this.draggable.y / this.trackHeight);
-            } else {
-                var value = this.value;
-            }
-
-            // Ensure we don't break boundries
-            if (value > 1)  {
-                return 1;
-            } else if (value < 0) {
-                return 0;
-            }
-
-            return value;
+            return this.track.innerHeight() - this.knob.outerHeight();
         }
     },
     watch: {
         value(val) {
             if (!this.dragging) {
-                this.applyValue();
-            }
-        },
-        enabled(val) {
-            if (this.draggable) {
-                val ? this.draggable.enable() : this.draggable.disable();
+                let topPosition = this.trackHeight * (1 - value);
+                TweenMax.set(this.knob.get(0), { css: { y:  topPosition } });
+                this.draggable.update();
             }
         }
     },
-    mounted() {
-         this.draggable = Draggable.create(this.handle, {
+    render() {
+        this.draggable = Draggable.create(this.knob.get(0), {
             type: "y",
-            bounds: this.$el,
-            onDragStart: () => { this.dragging = true },
-            onDragEnd: () => { this.dragging = false }
+            bounds: this.track.get(0),
+            onDragStart: () => { this.working = true },
+            onDragEnd: () => { this.working = false },
         })[0];
     },
-    methods: {
-        applyValue() {
-            var topPosition = this.trackHeight * (1 - val);
-            TweenMax.set(this.handle, { css: { y:  topPosition } });
-            this.draggable.update();
-        }
-    }
+    methods : {
+        isWorking() {
+            return this.working;
+        },
 
+        isEnabled() {
+            return this.enabled;
+        },
+
+        stopCurrentDrag() {
+            this.draggable.disable();
+            this.draggable.enable();
+        },
+
+        nudge() {
+            this.nudged = true;
+            this.track.css({
+                'margin-top': (Math.random() <= 0.5 ? 2 : -2) + "px",
+                'margin-left': (Math.random() <= 0.5 ? 2 : -2) + "px"
+            });
+        },
+
+        center() {
+            if (this.nudged) {
+                this.track.css({
+                    'margin-top': null,
+                    'margin-left': null
+                });
+            }
+        },
+    }
 };
 </script>
 
@@ -71,7 +84,6 @@ export default {
         :class="{enabled: enabled}"
     ><b></b></span>
 </template>
-
 
 <style lang="scss">
 .knob-track {

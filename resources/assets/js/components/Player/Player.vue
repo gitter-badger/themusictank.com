@@ -91,7 +91,10 @@ function loadStreamer() {
 
 
 <template>
-    <div class="ctrl ctrl-player">
+    <div class="ctrl ctrl-player"
+        :class="{
+            reviewer: isReview
+        }">
         <reviewer
             v-if="isReview && streamer && profileSlug"
             :song-name="songName"
@@ -99,7 +102,7 @@ function loadStreamer() {
             :profile-slug="profileSlug"
             :album-name="albumName"
             :completed="isCompleted"
-            :working="isPlaying"
+            :enabled="isPlaying"
             :position="position"
         ></reviewer>
 

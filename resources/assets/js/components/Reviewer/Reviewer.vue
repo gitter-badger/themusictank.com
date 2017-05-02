@@ -34,17 +34,20 @@ export default {
             }
         },
         isPowersucking(val) {
-            if (val) {
-                this.canvas.emit("negativeSpark", 20);
-            } else {
+            if (this.canvas && val) {
                 this.canvas.emit("negativeSpark", 200);
             }
         },
         isPowerliking(val) {
-            if (val) {
-                this.canvas.emit("positiveSpark", 20);
-            } else {
+            if (this.canvas && val) {
                 this.canvas.emit("positiveSpark", 200);
+            }
+        },
+        isShaking(val) {
+            if (val && this.canvas && this.reviewer) {
+                this.reviewer.isPositive() ?
+                    this.canvas.emit("positiveSpark", 10) :
+                    this.canvas.emit("negativeSpark", 10);
             }
         }
     },
@@ -58,11 +61,15 @@ export default {
     },
     computed: {
         isPowersucking() {
-            return this.reviewer && this.reviewer.shaking && this.reviewer.isNegative();
+            return this.reviewer && this.reviewer.isPowersucking;
         },
 
         isPowerliking() {
-            return this.reviewer && this.reviewer.shaking && this.reviewer.isPositive();
+            return this.reviewer && this.reviewer.isPowerliking;
+        },
+
+        isShaking() {
+            return this.reviewer && this.reviewer.shaking;
         },
 
         height() {
@@ -80,10 +87,10 @@ export default {
         this.canvas = new Canvas(canvasTag);
         this.canvas.resize(this.width, this.height);
 
-        let position = new Vector(canvasTag.width / 2, canvasTag.height * .15);
+        let position = new Vector(this.width / 2, this.height * .15);
         this.canvas.addEmitter("positiveSpark", new ParticleEmitter(position));
 
-        position = new Vector(canvasTag.width / 2, canvasTag.height * .85);
+        position = new Vector(this.width / 2, this.height * .85);
         this.canvas.addEmitter("negativeSpark", new ParticleEmitter(position));
 
         $(window).on('resize', this.debounce(() => {

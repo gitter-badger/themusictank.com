@@ -19,6 +19,8 @@ export default class Reviewer {
         this.completed = false;
         this.highGrooveStart = null;
         this.lowGrooveStart = null;
+        this.isPowerliking = false;
+        this.isPowersucking = false;
         this.currentFrameId = 0;
         this.drawnFrameId = null;
         this.savedFrameIdx = 0;
@@ -117,6 +119,8 @@ function calculateTimersContext() {
 
     this.lowGrooveStart = null;
     this.highGrooveStart = null;
+    this.isPowerliking = false;
+    this.isPowersucking = false;
     this.shaking = false;
 }
 
@@ -148,12 +152,14 @@ function calculatePositiveContext() {
     if (!this.highGrooveStart) {
         this.highGrooveStart = this.currentFrameId;
         this.shaking = true;
+        this.isPowerliking = false;
 
     } else if (this.highGrooveStart + LENGTH_PER_SHAKE <= this.currentFrameId) {
         this.highGrooveStart = null;
         this.currentGroove = HIGH_GROOVE_THRESHOLD;
         this.knob.stopCurrentDrag();
         this.shaking = false;
+        this.isPowerliking = true;
     }
 }
 
@@ -162,12 +168,14 @@ function calculateNegativeContext() {
     if (!this.lowGrooveStart) {
         this.lowGrooveStart = this.currentFrameId;
         this.shaking = true;
+        this.isPowersucking = false;
 
     } else if (this.lowGrooveStart + LENGTH_PER_SHAKE <= this.currentFrameId) {
         this.lowGrooveStart = null;
         this.currentGroove = LOW_GROOVE_THRESHOLD;
         this.knob.stopCurrentDrag();
         this.shaking = false;
+        this.isPowersucking = true;
     }
 }
 

@@ -1,6 +1,5 @@
 @if (isset($track))
     <player
-        autoplay="true"
         song-slug="{{ $track->slug }}"
         song-video="{{ isset($track->youtube_key) ? $track->youtube_key : "" }}"
     ></player>

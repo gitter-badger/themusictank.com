@@ -9,7 +9,6 @@ export default {
             'dragging' : false,
             'draggable' : null,
             'nudged' : false,
-            'position' : null,
             'value' : 0
         }
     },
@@ -25,32 +24,41 @@ export default {
         },
         trackHeight() {
             return this.track.innerHeight() - this.knob.outerHeight();
+        },
+        valueFromPosition() {
+            let value = 1 - (this.draggable.y / this.trackHeight);
+
+            // Ensure we don't break boundries
+            if (value > 1)  {
+                return 1;
+            } else if (value < 0) {
+                return 0;
+            }
+
+            return value;
         }
     },
     watch: {
         value(val) {
             if (!this.dragging) {
-                let topPosition = this.trackHeight * (1 - value);
+                let topPosition = this.trackHeight * (1 - val);
                 TweenMax.set(this.knob.get(0), { css: { y:  topPosition } });
                 this.draggable.update();
             }
         }
     },
-    render() {
+    mounted() {
         this.draggable = Draggable.create(this.knob.get(0), {
             type: "y",
             bounds: this.track.get(0),
-            onDragStart: () => { this.working = true },
-            onDragEnd: () => { this.working = false },
+            onDragStart: () => { this.dragging = true },
+            onDragEnd: () => { this.dragging = false },
         })[0];
     },
     methods : {
-        isWorking() {
-            return this.working;
-        },
 
-        isEnabled() {
-            return this.enabled;
+        isDragging() {
+            return this.dragging;
         },
 
         stopCurrentDrag() {
@@ -81,7 +89,10 @@ export default {
 <template>
     <span
         class="knob-track"
-        :class="{enabled: enabled}"
+        :class="{
+            enabled: enabled,
+            dragging: isDragging
+        }"
     ><b></b></span>
 </template>
 
@@ -114,6 +125,9 @@ export default {
         position: absolute;
     }
 
+    &.dragging b {
+        transition: none;
+    }
 
     &.enabled b {
         background: #eee;

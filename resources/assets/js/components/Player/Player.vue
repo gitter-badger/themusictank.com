@@ -93,7 +93,7 @@ function loadStreamer() {
 <template>
     <div class="ctrl ctrl-player"
         :class="{
-            reviewer: isReview
+            'has-reviewer': isReview
         }">
         <reviewer
             v-if="isReview && streamer && profileSlug"

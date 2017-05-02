@@ -21,6 +21,7 @@ export default class Particle {
             this.context.drawImage(this.image, this.position.x, this.position.y);
         };
     }
+
     update() {
         this.velocity.add(this.acceleration);
         this.position.add(this.velocity);

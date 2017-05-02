@@ -95,6 +95,7 @@ export default {
 
         $(window).on('resize', this.debounce(() => {
             this.canvas.resize(this.width, this.height);
+            this.canvas.draw();
         }));
 
         this.reviewer.start();

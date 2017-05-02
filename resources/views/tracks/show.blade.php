@@ -17,7 +17,7 @@
 
 @push('app-javascript')
     Tmt.app.reviewFrames('{{ $track->slug }}', <?php echo json_encode($globalCurves) ?>);
-    
+
     //app.chartData('{{ $track->slug }}', 'global', <?php echo json_encode($globalCurves) ?>);
     // app.waveData('{{ $track->slug }}', <?php echo json_encode([]) ?>);
     //app.chart('.chart-{{ $track->slug }}', 'global', 0, {{ $track->length / 1000 }});
@@ -46,9 +46,7 @@
 
     <a href="{{ action('TrackController@review', ['slug' => $track->slug]) }}">Review track</a>
 
-    <section class="stats chart-{{ $track->slug }}" style="color:#ccc; height: 300px;">
-        Loading...
-    </section>
+    <line-chart object-id="$track->slug"></line-chart>
     @include('partials.player', ['track' => $track])
 
 @endsection

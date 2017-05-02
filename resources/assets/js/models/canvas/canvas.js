@@ -39,8 +39,8 @@ export default class Canvas {
     }
 
     addRenderer(renderer) {
+        renderer.setCanvas(this.node);
         this.renderers.push(renderer);
-        renderer.linkTo(this);
     }
 
     emit(id, qty) {

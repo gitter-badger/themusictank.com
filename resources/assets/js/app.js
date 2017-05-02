@@ -9,6 +9,7 @@ import SearchForm from './components/SearchForm.vue'
 import Upvote from './components/Upvote.vue'
 import BugReport from './components/BugReport.vue'
 import Player from './components/Player/Player.vue'
+import LineChart from './components/LineChart.vue'
 
 import Profile from './models/profile'
 import ReviewFrames from './models/review-frames'
@@ -18,7 +19,7 @@ Tmt.app = new Vue({
     el: 'section.app',
     store,
     components : {
-        SearchForm, Upvote, BugReport, Player
+        SearchForm, Upvote, BugReport, Player, LineChart
     },
     methods : {
         error (er) {

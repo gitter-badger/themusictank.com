@@ -2,19 +2,7 @@
 @if(isset($user))
     <li><a href="{{ action('ProfileController@dashboard') }}">Dashboard</a></li>
     <li>
-        <div data-ctrl="notifier" class="notifications-bell">
-            <a href="{{ action('NotificationController@index') }}">
-                <i class="fa fa-bell"></i>
-                <em>--</em>
-            </a>
-            <div class="panel">
-                <button name="stfu">Mark all as read</button>
-                <ul>
-                    <li class="no-notices">You have no notifications for the moment.</li>
-                </ul>
-                <a href="{{ action('NotificationController@index') }}">View all notifications</a>
-            </div>
-        </div>
+        <notifier href="{{ action('NotificationController@index') }}"></notifier>
     </li>
     <li>
         <i class="fa fa-cog"></i>

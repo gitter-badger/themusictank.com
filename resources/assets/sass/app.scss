@@ -1,21 +1,3 @@
-
-// Fonts
-//@import url(https://fonts.googleapis.com/css?family=Raleway:300,400,600);
-
-// Variables
-//@import "variables";
-
-// Bootstrap
-//@import "node_modules/bootstrap-sass/assets/stylesheets/bootstrap";
-
-/*
-@import "components/_upvote";
-@import "components/_player";
-@import "components/_reviewer";
-@import "components/_typeahead";
-
-@import "_header";
-*/
 html {
   box-sizing: border-box;
 }
@@ -28,8 +10,6 @@ body, html, section.app {
 *, *:before, *:after {
   box-sizing: inherit;
 }
-
-@import "_header";
 
 body.tracks.review {
     overflow: hidden;

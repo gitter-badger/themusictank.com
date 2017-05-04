@@ -115,7 +115,7 @@ function loadStreamer() {
                 v-on:seek="seek"
             ></progress-group>
 
-            <button class="play" @click="onPlay" :disabled="!songIsLoaded">
+            <button class="play" @click.prevent="onPlay" :disabled="!songIsLoaded">
                 <i class="fa fa-stop" v-if="!songIsLoaded"></i>
                 <i class="fa fa-play" v-if="!isPlaying && songIsLoaded"></i>
                 <i class="fa fa-pause" v-if="isPlaying && songIsLoaded"></i>

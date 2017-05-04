@@ -29,8 +29,12 @@ class Profile implements JsonSerializable
             'slug' => $this->slug,
             'id' => $this->id,
             'name' => $this->name,
-            'activities' => $this->activities,
         ];
+    }
+
+    public function getActivities()
+    {
+        return $this->activities;
     }
 
     public function getUpvotes()

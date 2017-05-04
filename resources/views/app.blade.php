@@ -85,6 +85,7 @@
         <?php $profile = auth()->user()->getProfile(); ?>
         Tmt.app.profile(<?php echo json_encode($profile) ?>);
         Tmt.app.upvotes(<?php echo json_encode($profile->getUpvotes()) ?>);
+        Tmt.app.activities(<?php echo json_encode($profile->getActivities()) ?>);
     @else
         Tmt.app.profile({'id': -1, 'username': 'Anonymous', 'role': 'guest'});
         Tmt.app.upvotes({});

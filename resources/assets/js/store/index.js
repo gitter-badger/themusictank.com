@@ -7,7 +7,8 @@ export default new Vuex.Store({
     state: {
         profile: null,
         upvotes: null,
-        frames: null
+        frames: null,
+        activities: null
     },
 
     getters: {
@@ -21,10 +22,18 @@ export default new Vuex.Store({
 
         reviewFrames(state) {
             return state.frames;
+        },
+
+        activities(state) {
+            return state.activities;
         }
     },
 
     mutations: {
+        updateActivities(state, activities) {
+            state.activities = activities;
+        },
+
         updateProfile(state, profile) {
             state.profile = profile;
         },

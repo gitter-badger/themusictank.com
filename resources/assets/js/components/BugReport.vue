@@ -32,7 +32,7 @@ export default {
 
 
 <template>
-    <button class="report-bug" @click="report" :disabled="!enabled">
+    <button class="report-bug" @click.prevent="report" :disabled="!enabled">
         <i class="fa fa-bug"></i> {{ label }}
     </button>
 </template>

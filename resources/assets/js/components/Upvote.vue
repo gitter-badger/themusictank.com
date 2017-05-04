@@ -92,12 +92,12 @@ export default {
     <div class="ctrl ctrl-upvote" :class="{ 'liked' : value == 1, 'disliked' : value == 2 }">
         <ul>
             <li>
-                <button class="up" @click="like" :disabled="!enabled">
+                <button class="up" @click.prevent="like" :disabled="!enabled">
                     <i class="fa" :class="{ 'fa-thumbs-o-up': value != 1, 'fa-thumbs-up': value == 1 }" aria-hidden="true"></i>
                 </button>
             </li>
             <li>
-                <button class="down" @click="dislike" :disabled="!enabled">
+                <button class="down" @click.prevent="dislike" :disabled="!enabled">
                     <i class="fa" :class="{ 'fa-thumbs-o-down': value != 2, 'fa-thumbs-down': value == 2 }" aria-hidden="true"></i>
                 </button>
             </li>

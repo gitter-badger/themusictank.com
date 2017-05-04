@@ -22,5 +22,5 @@
         @else
             <p>You have no notifications for the moment.</p>
         @endif
-    </div>
+    </section>
 @endsection

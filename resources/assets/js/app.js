@@ -12,7 +12,7 @@ import Player from './components/Player/Player.vue'
 import LineChart from './components/LineChart.vue'
 
 import Profile from './models/profile'
-import ReviewFrames from './models/review-frames'
+import ReviewFrameCache from './models/review-frames/cache'
 import Upvotes from './models/upvotes'
 
 Tmt.app = new Vue({
@@ -36,9 +36,14 @@ Tmt.app = new Vue({
             this.$store.commit('updateVotes', upvote);
         },
 
-        reviewFrames (key, data) {
-            let frames = new ReviewFrames(data);
-            this.$store.commit('updateFrames', { key, frames })
+        reviewFrames (data) {
+            let cache = new ReviewFrameCache();
+
+            data.forEach((row) => {
+                cache.addTrack(row);
+            });
+
+            this.$store.commit('updateFrames', cache);
         },
 
         setWaveData (data) {

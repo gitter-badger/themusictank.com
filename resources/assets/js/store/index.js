@@ -7,7 +7,7 @@ export default new Vuex.Store({
     state: {
         profile: null,
         upvotes: null,
-        frames: {}
+        frames: null
     },
 
     getters: {

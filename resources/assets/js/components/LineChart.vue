@@ -2,23 +2,17 @@
 import ComponentBase from './mixins/base.js'
 import {mapGetters} from 'vuex';
 import Canvas from '../models/canvas/canvas.js'
-import DataRenderer from '../models/canvas/renderer/data-renderer.js'
+import LineChartDataRenderer from '../models/canvas/renderer/line-chart-data-renderer.js'
 import UiRenderer from '../models/canvas/renderer/ui-renderer.js'
 
 
 export default {
     mixins: [ComponentBase],
 
-    props: ['objectId', 'start', 'end'],
+    props: ['objectId', 'start', 'end', 'datasource'],
 
     computed: {
         ...mapGetters(['reviewFrames']),
-        value() {
-            if (this.upvotes) {
-                return this.upvotes.getVote(this.type, this.objectId);
-            }
-            return -1;
-        },
 
         height() {
             return this.getElement().height();
@@ -26,6 +20,12 @@ export default {
 
         width() {
             return this.getElement().width();
+        },
+
+        dataset() {
+            if (this.reviewFrames) {
+                return this.reviewFrames.getTrackData(this.objectId, this.datasource);
+            }
         }
     },
 
@@ -35,77 +35,26 @@ export default {
         }
     },
 
+    watch : {
+        dataset() {
+            this.canvas.addRenderer(new UiRenderer());
+            this.canvas.addRenderer(new LineChartDataRenderer(this.dataset, this.start, this.end));
+            this.canvas.draw();
+        }
+    },
+
     mounted() {
         let element = this.getElement();
 
         this.canvas = new Canvas(this.getElement().find('canvas'));
         this.canvas.resize(element.width(), element.height());
 
-        // $(window).on('resize', this.debounce(() => {
-        //     this.canvas.resize(element.width(), element.height());
-        //     this.canvas.draw();
-        // }));
+        $(window).on('resize', this.debounce(() => {
+            this.canvas.resize(element.width(), element.height());
+            console.log('resize with ' + element.width() + " , " + element.height());
+            this.canvas.draw();
+        }));
 
-        this.canvas.addRenderer(new UiRenderer());
-        this.canvas.addRenderer(new DataRenderer([]));
-        this.canvas.draw();
-    },
-
-    methods: {
-
-        is(value) {
-            return this.value == value;
-        },
-
-        save(value) {
-            let action = this.type == "track" ? "addTrackUpvote" : "addAlbumUpvote";
-            let payload = { id: this.objectId, vote: value };
-
-            this.lock();
-            this.ajax()
-                .post('/ajax/' + action, payload)
-                .then((response) => {
-                    this.$store.commit(action, payload);
-                    this.unlock();
-                })
-                .catch((error) => {
-                    Tmt.app.error(error);
-                    this.unlock();
-                });
-        },
-
-        remove(value) {
-            let action = this.type == "track" ? "removeTrackUpvote" : "removeAlbumUpvote";
-            let payload = { id : this.objectId };
-
-            this.lock();
-            this.ajax()
-                .post('/ajax/' + action, payload)
-                .then((response) => {
-                    this.$store.commit(action, this.objectId);
-                    this.unlock();
-                })
-                .catch((error) => {
-                    Tmt.app.error(error);
-                    this.unlock();
-                });
-        },
-
-        like() {
-            this.is(types.like) ? this.remove() : this.save(types.like);
-        },
-
-        dislike() {
-            this.is(types.dislike) ? this.remove() : this.save(types.dislike);
-        },
-
-        lock () {
-            this.enabled = false;
-        },
-
-        unlock () {
-            this.enabled = true;
-        }
     }
 };
 </script>

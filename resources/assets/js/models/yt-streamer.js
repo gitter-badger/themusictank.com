@@ -1,5 +1,3 @@
-import Frame from './frame'
-
 export default class YtStreamer {
     constructor(videoId, autoplay) {
         this.videoId = videoId

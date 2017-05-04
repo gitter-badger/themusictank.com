@@ -16,7 +16,14 @@
 @endsection
 
 @push('app-javascript')
-    Tmt.app.reviewFrames('{{ $track->slug }}', <?php echo json_encode($globalCurves) ?>);
+    Tmt.app.reviewFrames(
+        [{
+            'id' : {{ $track->id }},
+            'global' : <?php echo json_encode($globalCurves) ?>,
+            'tanker' : [],
+            'subscriptions' : []
+        }]
+    );
 
     //app.chartData('{{ $track->slug }}', 'global', <?php echo json_encode($globalCurves) ?>);
     // app.waveData('{{ $track->slug }}', <?php echo json_encode([]) ?>);
@@ -46,7 +53,8 @@
 
     <a href="{{ action('TrackController@review', ['slug' => $track->slug]) }}">Review track</a>
 
-    <line-chart object-id="$track->slug"></line-chart>
+    <line-chart object-id="{{ $track->id }}" datasource="global"></line-chart>
+
     @include('partials.player', ['track' => $track])
 
 @endsection

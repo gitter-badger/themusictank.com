@@ -2,26 +2,22 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\Artists;
+use App\Models\Artist;
 
 class ArtistController extends Controller
 {
     public function index()
     {
-        $featuredArtists = Artists::api()->findTopFeatured();
-        $spotlightArtist = array_pop($featuredArtists);
+        $collection = Artist::whereIsFeatured(1)->take(11)->get();
+        $spotlightArtist = $collection->shift()->first();
+        $featuredArtists = $collection;
 
         return view('artists.index', compact('spotlightArtist', 'featuredArtists'));
     }
 
     public function show($slug)
     {
-        $artist = Artists::api()->findBySlug($slug);
-
-        if (!$artist) {
-            return abort(404);
-        }
-
+        $artist = Artist::whereSlug($slug)->firstOrFail();
         return view('artists.show', compact('artist'));
     }
 

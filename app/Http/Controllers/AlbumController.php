@@ -2,25 +2,13 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\Albums;
+use App\Models\Album;
 
 class AlbumController extends Controller
 {
     public function show($slug)
     {
-        $album = Albums::api()->first("albums", [
-            "query" => [
-                "filter" => [
-                    "where" => ["slug" =>  $slug],
-                    "include" => ["artist", "tracks"]
-                ]
-            ]
-        ]);
-
-        if (!$album) {
-            return abort(404);
-        }
-
+        $album = Album::whereSlug($slug)->firstOrFail();
         return view('albums.show', compact('album'));
     }
 }

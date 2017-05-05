@@ -43,9 +43,19 @@ class ProfileController extends Controller
         return view('profiles.show', compact('profile'));
     }
 
+    public function edit()
+    {
+        return view('profiles.edit');
+    }
+
     public function create()
     {
         return view('profiles.create');
+    }
+
+    public function save()
+    {
+        // @todo
     }
 
     public function showCurve($slug, $trackSlug)

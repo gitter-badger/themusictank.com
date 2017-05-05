@@ -11,6 +11,7 @@ import BugReport from './components/BugReport.vue'
 import Player from './components/Player/Player.vue'
 import LineChart from './components/LineChart.vue'
 import Notifier from './components/Notifier.vue'
+import VisibleToggler from './components/VisibleToggler.vue'
 
 import Profile from './models/profile'
 import ReviewFrameCache from './models/review-frames/cache'
@@ -21,7 +22,7 @@ Tmt.app = new Vue({
     el: 'section.app',
     store,
     components : {
-        SearchForm, Upvote, BugReport, Player, LineChart, Notifier
+        SearchForm, Upvote, BugReport, Player, LineChart, Notifier, VisibleToggler
     },
     methods : {
         error (er) {

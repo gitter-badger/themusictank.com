@@ -2,13 +2,13 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\Artists;
-use App\Models\Albums;
-use App\Models\Tracks;
-use App\Models\TrackUpvotes;
-use App\Models\AlbumUpvotes;
-use App\Models\Activities;
-use App\Models\ReviewFrames;
+use App\Models\Artist;
+use App\Models\Album;
+use App\Models\Track;
+use App\Models\TrackUpvote;
+use App\Models\AlbumUpvote;
+use App\Models\Activity;
+use App\Models\ReviewFrame;
 
 use Illuminate\Http\Request;
 use Carbon\Carbon;

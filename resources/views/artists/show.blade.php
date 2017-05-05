@@ -27,9 +27,10 @@
 <section class="discography">
     <h2>Discography</h2>
 
-    @if (isset($artist->albums) && count($artist->albums))
-        <ul>
-        @foreach ($artist->albums as $album)
+
+    @if ($artist->albums->count())
+    <ul>
+        @foreach ($artist->albums->take(4) as $idx => $album)
             <li>
                 <a href="{{ action('AlbumController@show', ['slug' => $album->slug]) }}">
                     <img src="{{ $album->getThumbnailUrl() }}" alt="{{ $album->name }}" title="{{ $album->name }}">

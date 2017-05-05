@@ -2,30 +2,21 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\Tracks;
-use App\Models\TrackReviews;
+use App\Models\Track;
+use App\Models\TrackReview;
 
 class TrackController extends Controller
 {
     public function show($slug)
     {
-        $track = Tracks::api()->findBySlug($slug);
-        if (!$track) {
-            return abort(404);
-        }
-
-        $globalCurves = TrackReviews::api()->global($track);
+        $track = Track::whereSlug($slug)->firstOrFail();
+        $globalCurves = TrackReview::componentFields()->global($track)->get();
         return view('tracks.show', compact('track', 'globalCurves'));
     }
 
     public function review($slug)
     {
-        $track = Tracks::api()->findBySlug($slug);
-
-        if (!$track) {
-            return abort(404);
-        }
-
+        $track = Track::whereSlug($slug)->firstOrFail();
         return view('tracks.review', compact('track'));
     }
 }

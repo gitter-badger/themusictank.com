@@ -13,9 +13,9 @@
                 </a>
             </h1>
 
-            @if (isset($spotlightArtist->albums) && count($spotlightArtist->albums))
+            @if ($spotlightArtist->albums->count())
                 <ul>
-                    @foreach ($spotlightArtist->albums as $idx => $album)
+                    @foreach ($spotlightArtist->albums->take(4) as $idx => $album)
                         @if ($idx < 3)
                             <li>
                                 <a href="{{ action('AlbumController@show', ['slug' => $album->slug]) }}">
@@ -41,7 +41,7 @@
 @endsection
 
 @section('content')
-    @if (isset($featuredArtists) && count($featuredArtists))
+    @if (isset($featuredArtists) && $featuredArtists->count())
         <section class="featured-artists">
             <ul>
                 @foreach ($featuredArtists as $artist)

@@ -27,8 +27,8 @@ Route::get('artists/{slug}', "ArtistController@show");
 Route::get('albums/{slug}', "AlbumController@show");
 
 // Tracks
-Route::get('tracks/{slug}/review', "TrackController@review")->middleware('auth');
 Route::get('tracks/{slug}', "TrackController@show");
+Route::get('tracks/{slug}/review', "TrackController@review")->middleware('auth');
 
 // Ajax
 Route::get('ajax/bugreport', "AjaxController@bugreport");
@@ -36,13 +36,12 @@ Route::get('ajax/ytkey/{slug}', "AjaxController@ytkey");
 Route::get('ajax/artistSearch', "AjaxController@artistSearch");
 Route::get('ajax/albumSearch', "AjaxController@albumSearch");
 Route::get('ajax/trackSearch', "AjaxController@trackSearch");
-
+Route::get('ajax/whatsUp', "AjaxController@whatsUp")->middleware('auth');
+Route::get('ajax/okstfu', "AjaxController@okstfu")->middleware('auth');
 Route::post('ajax/addTrackUpvote', "AjaxController@addTrackUpvote")->middleware('auth');
 Route::post('ajax/addAlbumUpvote', "AjaxController@addAlbumUpvote")->middleware('auth');
 Route::post('ajax/removeTrackUpvote', "AjaxController@removeTrackUpvote")->middleware('auth');
 Route::post('ajax/removeAlbumUpvote', "AjaxController@removeAlbumUpvote")->middleware('auth');
-Route::get('ajax/whatsUp', "AjaxController@whatsUp")->middleware('auth');
-Route::get('ajax/okstfu', "AjaxController@okstfu")->middleware('auth');
 
 Route::post('ajax/{slug}/saveCurvePart', "AjaxController@saveCurvePart")->middleware('auth');
 Route::post('ajax/{slug}/getNext', "AjaxController@getNextTrack")->middleware('auth');
@@ -51,6 +50,8 @@ Route::post('ajax/{slug}/getNext', "AjaxController@getNextTrack")->middleware('a
 Route::get('you', "ProfileController@dashboard")->middleware('auth');
 Route::get('you/edit', "ProfileController@edit")->middleware('auth');
 Route::get('you/notifications', "NotificationController@index")->middleware('auth');
+
+Route::post('you/save', "ProfileController@save")->middleware('auth');
 
 Route::get('profiles/', "ProfileController@auth");
 Route::get('profiles/login', "ProfileController@login");

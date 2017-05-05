@@ -16,18 +16,17 @@
 @endsection
 
 @push('app-javascript')
-    Tmt.app.reviewFrames(
-        [{
-            'id' : {{ $track->id }},
-            'global' : <?php echo json_encode($globalCurves) ?>,
-            'tanker' : [],
-            'subscriptions' : []
-        }]
-    );
+    @if ($globalCurves->count())
 
-    //app.chartData('{{ $track->slug }}', 'global', <?php echo json_encode($globalCurves) ?>);
-    // app.waveData('{{ $track->slug }}', <?php echo json_encode([]) ?>);
-    //app.chart('.chart-{{ $track->slug }}', 'global', 0, {{ $track->length / 1000 }});
+        Tmt.app.reviewFrames(
+            [{
+                'id' : {{ $track->id }},
+                'global' : <?php echo $globalCurves->toJson(); ?>,
+                'tanker' : [],
+                'subscriptions' : []
+            }]
+        );
+    @endif
 @endpush
 
 

@@ -4,7 +4,7 @@ use Illuminate\Support\Facades\Schema;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Database\Migrations\Migration;
 
-class CreateTrackUpvotesTable extends Migration
+class CreateSocialAccountsTable extends Migration
 {
     /**
      * Run the migrations.
@@ -13,14 +13,13 @@ class CreateTrackUpvotesTable extends Migration
      */
     public function up()
     {
-        Schema::create('track_upvotes', function (Blueprint $table) {
+        Schema::create('social_accounts', function (Blueprint $table) {
             $table->increments('id');
-            $table->integer('track_id')->index();
-            $table->integer('user_id')->index();
-            $table->integer('vote')->unsigned();
+            $table->integer('user_id');
+            $table->string('provider_user_id');
+            $table->string('provider');
             $table->timestamps();
-
-            $table->foreign('track_id')->references('id')->on('tracks');
+            
             $table->foreign('user_id')->references('id')->on('users');
         });
     }
@@ -32,6 +31,6 @@ class CreateTrackUpvotesTable extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('track_upvotes');
+        Schema::dropIfExists('social_accounts');
     }
 }

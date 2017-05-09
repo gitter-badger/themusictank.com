@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Models\Artist;
 use App\Models\Album;
 use App\Models\Track;
+use App\Models\User;
 use App\Models\TrackUpvote;
 use App\Models\AlbumUpvote;
 use App\Models\Activity;
@@ -82,17 +83,22 @@ class AjaxController extends Controller
 
     public function artistSearch()
     {
-        return response()->json(Artists::api()->search(request('q')));
+        return response()->json(Artist::search(request('q'))->take(10)->get());
     }
 
     public function trackSearch()
     {
-        return response()->json(Tracks::api()->search(request('q')));
+        return response()->json(Track::search(request('q'))->take(10)->get());
     }
 
     public function albumSearch()
     {
-        return response()->json(Albums::api()->search(request('q')));
+        return response()->json(Album::search(request('q'))->take(10)->get());
+    }
+
+    public function userSearch()
+    {
+        return response()->json(User::search(request('q'))->take(10)->get());
     }
 
     public function whatsUp()

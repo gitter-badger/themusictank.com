@@ -59,7 +59,7 @@ function getSources() {
             templates: {
                 header: '<h3>Artists</h3>',
                 empty: '<h3>Artists</h3><p class="empty-message">Could not find matching artists.</p>',
-                suggestion: function (data) { return ['<p><a href="/artists/' + data.slug + '/">' + data.name + '</a></p>'].join(""); }
+                suggestion: function (data) { return '<p><a href="/artists/' + data.slug + '/">' + data.name + '</a></p>'; }
             }
         },
         {
@@ -67,10 +67,10 @@ function getSources() {
             display: 'album',
             source: getSource('album', '/ajax/albumSearch/?q=%QUERY'),
             cache: true,
+                empty: '<h3>Albums</h3><p class="empty-message">Could not find matching albums.</p>',
             templates: {
                 header: '<h3>Albums</h3>',
-                empty: '<h3>Albums</h3><p class="empty-message">Could not find matching albums.</p>',
-                suggestion: function (data) { return ['<p><a href="/albums/' + data.slug + '/">' + data.name + '</a> by <a href="/artists/' + data.artist.slug + '/">' + data.artist.name + '</a></p>'].join(""); }
+                suggestion: function (data) { return '<p><a href="/albums/' + data.slug + '/">' + data.name + '</a> by <a href="/artists/' + data.artist.slug + '/">' + data.artist.name + '</a></p>'; }
             }
         },
         {
@@ -81,7 +81,18 @@ function getSources() {
             templates: {
                 header: '<h3>Tracks</h3>',
                 empty: '<h3>Tracks</h3><p class="empty-message">Could not find matching tracks.</p>',
-                suggestion: function (data) { return ['<p><a href="/tracks/' + data.slug + '/">' + data.name + '</a> by <a href="/artists/' + data.artist.slug + '/">' + data.artist.name + '</a></p>'].join(""); }
+                suggestion: function (data) { return '<p><a href="/tracks/' + data.slug + '/">' + data.name + '</a> by <a href="/artists/' + data.artist.slug + '/">' + data.artist.name + '</a></p>'; }
+            }
+        },
+        {
+            name: 'users',
+            display: 'user',
+            source: getSource('user', '/ajax/userSearch/?q=%QUERY'),
+            cache: true,
+            templates: {
+                header: '<h3>Tankers</h3>',
+                empty: '<h3>Tankers</h3><p class="empty-message">Could not find matching user.</p>',
+                suggestion: function (data) { return '<p><a href="/tankers/' + data.slug + '/">' + data.name + '</a></p>'; }
             }
         }
     ];

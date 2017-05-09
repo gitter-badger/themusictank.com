@@ -8,9 +8,9 @@ class ArtistController extends Controller
 {
     public function index()
     {
-        $collection = Artist::whereIsFeatured(1)->take(11)->get();
-        $spotlightArtist = $collection->shift()->first();
-        $featuredArtists = $collection;
+        $collection = Artist::whereIsFeatured(true)->take(11)->get();
+        $spotlightArtist = $collection->first();
+        $featuredArtists = $collection->slice(1);
 
         return view('artists.index', compact('spotlightArtist', 'featuredArtists'));
     }

@@ -82,13 +82,15 @@
     <script src="{{ mix('js/app.js') }}"></script>
     <script>(function(){
     @if(auth()->user())
-        <?php $profile = auth()->user()->getProfile(); ?>
-        Tmt.app.profile(<?php echo json_encode($profile) ?>);
-        Tmt.app.upvotes(<?php echo json_encode($profile->getUpvotes()) ?>);
-        Tmt.app.activities(<?php echo json_encode($profile->getActivities()) ?>);
+        <?php $user = auth()->user(); ?>
+        Tmt.app.profile(<?php echo $user->toJson() ?>);
+        Tmt.app.upvotes([
+            'albumUpvotes' => <?php echo $user->albumUpvotes->toJson() ?>
+            'trackUpvotes' => <?php echo $user->trackUpvotes->toJson() ?>
+        ]);
+        Tmt.app.activities(<?php echo $user->activities->toJson() ?>);
     @else
-        Tmt.app.profile({'id': -1, 'username': 'Anonymous', 'role': 'guest'});
-        Tmt.app.upvotes({});
+        Tmt.app.profile({'id': -1, 'username': 'Anonymous'});
     @endif
         @stack('app-javascript')
     })();</script>

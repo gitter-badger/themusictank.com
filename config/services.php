@@ -13,7 +13,7 @@ return [
     | to have a conventional place to find your various credentials.
     |
     */
-
+/*
     'mailgun' => [
         'domain' => env('MAILGUN_DOMAIN'),
         'secret' => env('MAILGUN_SECRET'),
@@ -33,6 +33,12 @@ return [
         'model' => App\User::class,
         'key' => env('STRIPE_KEY'),
         'secret' => env('STRIPE_SECRET'),
+    ],*/
+
+    'facebook' => [
+        'client_id' => env("FACEBOOK_CLIENT_ID"),
+        'client_secret' => env("FACEBOOK_SECRET"),
+        'redirect' => env("APP_URL") . "/profiles/auth/facebook/callback",
     ],
 
 ];

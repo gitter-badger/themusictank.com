@@ -1,18 +1,25 @@
 <ul class="profile">
 @if(isset($user))
-    <li><a href="{{ action('ProfileController@dashboard') }}">Dashboard</a></li>
-    <li>
+
+    <li class="picture">
+        @if ($user->thumbnail)
+            <a href="{{ action('UserController@dashboard') }}">
+                <img src="{{ $user->thumbnail }}" alt="{{ $user->name }}" title="{{ $user->name }}">
+            </a>
+        @endif
+    </li>
+    <li><a href="{{ action('UserController@dashboard') }}">Dashboard</a></li><li>
         <notifier href="{{ action('NotificationController@index') }}"></notifier>
     </li>
     <li>
         <i class="fa fa-cog"></i>
         <ul>
-            <li><a href="{{ action('ProfileController@show', ['id' => $user->getProfile()->slug]) }}">Your page</a></li>
-            <li><a href="{{ action('ProfileController@edit') }}">Settings</a></li>
-            <li><a href="{{ action('Auth\LoginController@logout') }}">Logout</a></li>
+            <li><a href="{{ action('UserController@show', ['id' => $user->slug]) }}">Your page</a></li>
+            <li><a href="{{ action('UserController@edit') }}">Settings</a></li>
+            <li><a href="{{ action('Auth\AuthController@logout') }}">Logout</a></li>
         </ul>
     </li>
-    @if ($user->isAdmin())
+    @if ($user->is_admin)
         <li>
             <i class="fa fa-sliders"></i>
             <ul>
@@ -21,6 +28,6 @@
         </li>
     @endif
 @else
-    <li><a href="{{ action('ProfileController@auth') }}">Your account</a></li>
+    <li><a href="{{ action('Auth\AuthController@index') }}">Your account</a></li>
 @endif
 </ul>

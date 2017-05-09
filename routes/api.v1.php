@@ -13,6 +13,12 @@ use Illuminate\Http\Request;
 |
 */
 
-Route::middleware('auth:api')->get('/user', function (Request $request) {
-    return $request->user();
-});
+// Route::middleware('auth:api')->get('/user', function (Request $request) {
+//     return $request->user();
+// });
+
+
+Route::resource('configurations', 'Api\ConfigurationController');
+Route::resource('artists', 'Api\ArtistController');
+Route::resource('albums', 'Api\AlbumController');
+Route::resource('tracks', 'Api\TrackController');

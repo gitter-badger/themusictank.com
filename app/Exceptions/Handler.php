@@ -6,6 +6,8 @@ use Exception;
 use Illuminate\Auth\AuthenticationException;
 use Illuminate\Foundation\Exceptions\Handler as ExceptionHandler;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\MessageBag;
+use Illuminate\Support\ViewErrorBag;
 
 class Handler extends ExceptionHandler
 {
@@ -45,12 +47,8 @@ class Handler extends ExceptionHandler
      */
     public function render($request, Exception $exception)
     {
-        if (get_class($exception) == \GuzzleHttp\Exception\ConnectException::class) {
-            return redirect()->guest('api/is-down');
-        } elseif (get_class($exception) == \GuzzleHttp\Exception\ServerException::class) {
-            return redirect()->guest('api/is-down');
-        } elseif (get_class($exception) == \GuzzleHttp\Exception\ClientException::class) {
-            return redirect()->guest('api/error');
+        if ($request->expectsJson()) {
+            return response()->json(['error' => $exception->getMessage()], 422);
         }
 
         return parent::render($request, $exception);
@@ -68,7 +66,8 @@ class Handler extends ExceptionHandler
         if ($request->expectsJson()) {
             return response()->json(['error' => 'Unauthenticated.'], 401);
         }
+        
+        return redirect()->to('profiles/auth/');
 
-        return redirect()->guest('profiles');
     }
 }

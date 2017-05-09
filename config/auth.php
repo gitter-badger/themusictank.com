@@ -39,12 +39,12 @@ return [
     'guards' => [
         'web' => [
             'driver' => 'session',
-            'provider' => 'api_users',
+            'provider' => 'users',
         ],
-        // 'api' => [
-        //     'driver' => 'session',
-        //     'provider' => 'api_users',
-        // ],
+        'api' => [
+            'driver' => 'token',
+            'provider' => 'users',
+        ],
     ],
 
     /*
@@ -65,9 +65,9 @@ return [
     */
 
     'providers' => [
-        'api_users' => [
-            'driver' => 'TmtAuth',
-            'model' => App\Auth\User::class,
+        'users' => [
+            'driver' => 'eloquent',
+            'model' => App\Models\User::class,
         ],
     ],
 

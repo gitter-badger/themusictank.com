@@ -11,6 +11,7 @@
 |
 */
 
+Auth::routes();
 
 // Internals
 Route::get("/", "PageController@home");
@@ -36,6 +37,7 @@ Route::get('ajax/ytkey/{slug}', "AjaxController@ytkey");
 Route::get('ajax/artistSearch', "AjaxController@artistSearch");
 Route::get('ajax/albumSearch', "AjaxController@albumSearch");
 Route::get('ajax/trackSearch', "AjaxController@trackSearch");
+Route::get('ajax/userSearch', "AjaxController@userSearch");
 Route::get('ajax/whatsUp', "AjaxController@whatsUp")->middleware('auth');
 Route::get('ajax/okstfu', "AjaxController@okstfu")->middleware('auth');
 Route::post('ajax/addTrackUpvote', "AjaxController@addTrackUpvote")->middleware('auth');
@@ -47,24 +49,28 @@ Route::post('ajax/{slug}/saveCurvePart', "AjaxController@saveCurvePart")->middle
 Route::post('ajax/{slug}/getNext', "AjaxController@getNextTrack")->middleware('auth');
 
 // Profiles
-Route::get('you', "ProfileController@dashboard")->middleware('auth');
-Route::get('you/edit', "ProfileController@edit")->middleware('auth');
+
+// auth landing
+Route::get('profiles/auth/', "Auth\AuthController@index");
+Route::get('profiles/auth/logout', "Auth\AuthController@logout");
+
+// -> facebook
+Route::get('profiles/auth/facebook/redirect', 'Auth\SocialController@facebookRedirect');
+Route::get('profiles/auth/facebook/callback', 'Auth\SocialController@facebookCallback');
+
+// -> tmt accounts
+Route::post('profiles/auth/tmt/login', "Auth\TmtController@login");
+Route::post('profiles/create', "UserController@create");
+
+// -> account pages
+Route::get('you', "UserController@dashboard")->middleware('auth');
+Route::get('you/edit', "UserController@edit")->middleware('auth');
+Route::post('you/save', "UserController@save")->middleware('auth');
 Route::get('you/notifications', "NotificationController@index")->middleware('auth');
 
-Route::post('you/save', "ProfileController@save")->middleware('auth');
-
-Route::get('profiles/', "ProfileController@auth");
-Route::get('profiles/login', "ProfileController@login");
-Route::get('profiles/logout', "Auth\LoginController@logout");
-Route::get('profiles/facebook', "ProfileController@facebook");
-Route::get('profiles/create', "ProfileController@create");
-
-Route::post('profiles/login', "Auth\LoginController@login");
-Route::post('profiles/create', "ProfileController@create");
-
 // User areas
-Route::get('tankers/{slug}', "ProfileController@show");
-Route::get('tankers/{slug}/curve/{trackSlug}', "ProfileController@showCurve");
+Route::get('tankers/{slug}', "UserController@show");
+Route::get('tankers/{slug}/curve/{trackSlug}', "UserController@showCurve");
 
 
 // Others

@@ -23,7 +23,6 @@ class CreateAlbumsTable extends Migration
             $table->integer('month')->nullable();
             $table->integer('day')->nullable();
             $table->string('thumbnail')->nullable();
-            $table->boolean('is_featured')->nullable();
             $table->timestamps();
 
             $table->foreign('artist_id')->references('id')->on('artists');

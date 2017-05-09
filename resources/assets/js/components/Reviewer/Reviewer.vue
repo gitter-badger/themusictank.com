@@ -107,7 +107,7 @@ export default {
             let payload = { 'package': span };
 
             this.ajax()
-                .post("/ajax/" + this.songSlug + "/saveCurvePart/", payload)
+                .post("/ajax/track/" + this.songSlug + "/saveCurvePart/", payload)
                 .then((response) => {
                     this.synchronising = false;
 

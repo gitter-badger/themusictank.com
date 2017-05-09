@@ -35,12 +35,12 @@ export default {
         },
 
         save(value) {
-            let action = this.type == "track" ? "addTrackUpvote" : "addAlbumUpvote";
+            let action = this.type == "track" ? "addTrack" : "addAlbum";
             let payload = { id: this.objectId, vote: value };
 
             this.lock();
             this.ajax()
-                .post('/ajax/' + action, payload)
+                .post('/ajax/upvote/' + action, payload)
                 .then((response) => {
                     this.$store.commit(action, payload);
                     this.unlock();
@@ -52,12 +52,12 @@ export default {
         },
 
         remove(value) {
-            let action = this.type == "track" ? "removeTrackUpvote" : "removeAlbumUpvote";
+            let action = this.type == "track" ? "removeTrack" : "removeAlbum";
             let payload = { id : this.objectId };
 
             this.lock();
             this.ajax()
-                .post('/ajax/' + action, payload)
+                .post('/ajax/upvote/' + action, payload)
                 .then((response) => {
                     this.$store.commit(action, this.objectId);
                     this.unlock();

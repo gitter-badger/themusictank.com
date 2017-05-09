@@ -32,23 +32,25 @@ Route::get('tracks/{slug}', "TrackController@show");
 Route::get('tracks/{slug}/review', "TrackController@review")->middleware('auth');
 
 // Ajax
-Route::get('ajax/bugreport', "AjaxController@bugreport");
-Route::get('ajax/ytkey/{slug}', "AjaxController@ytkey");
-Route::get('ajax/artistSearch', "AjaxController@artistSearch");
-Route::get('ajax/albumSearch', "AjaxController@albumSearch");
-Route::get('ajax/trackSearch', "AjaxController@trackSearch");
-Route::get('ajax/userSearch', "AjaxController@userSearch");
-Route::get('ajax/whatsUp', "AjaxController@whatsUp")->middleware('auth');
-Route::get('ajax/okstfu', "AjaxController@okstfu")->middleware('auth');
-Route::post('ajax/addTrackUpvote', "AjaxController@addTrackUpvote")->middleware('auth');
-Route::post('ajax/addAlbumUpvote', "AjaxController@addAlbumUpvote")->middleware('auth');
-Route::post('ajax/removeTrackUpvote', "AjaxController@removeTrackUpvote")->middleware('auth');
-Route::post('ajax/removeAlbumUpvote', "AjaxController@removeAlbumUpvote")->middleware('auth');
 
-Route::post('ajax/{slug}/saveCurvePart', "AjaxController@saveCurvePart")->middleware('auth');
-Route::post('ajax/{slug}/getNext', "AjaxController@getNextTrack")->middleware('auth');
+Route::get('ajax/search/artist', "Ajax\SearchController@artist");
+Route::get('ajax/search/album', "Ajax\SearchController@album");
+Route::get('ajax/search/track', "Ajax\SearchController@track");
+Route::get('ajax/search/user', "Ajax\SearchController@user");
 
-// Profiles
+Route::post('ajax/upvote/track/add', "Ajax\UpvoteController@addTrack")->middleware('auth');
+Route::post('ajax/upvote/track/remove', "Ajax\UpvoteController@removeTrack")->middleware('auth');
+Route::post('ajax/upvote/album/add', "Ajax\UpvoteController@addAlbum")->middleware('auth');
+Route::post('ajax/upvote/album/remove', "Ajax\UpvoteController@removeAlbum")->middleware('auth');
+
+Route::get('ajax/tanker/whatsUp', "Ajax\UserController@whatsUp")->middleware('auth');
+Route::get('ajax/tanker/okstfu', "Ajax\UserController@okstfu")->middleware('auth');
+Route::get('ajax/tanker/bugreport', "Ajax\UserController@bugreport");
+
+Route::get('ajax/track/ytkey/{slug}', "Ajax\TrackController@ytkey");
+Route::post('ajax/track/{slug}/saveCurvePart', "Ajax\TrackController@saveCurvePart")->middleware('auth');
+Route::post('ajax/track/{slug}/getNext', "Ajax\TrackController@getNextTrack")->middleware('auth');
+
 
 // auth landing
 Route::get('profiles/auth/', "Auth\AuthController@index");

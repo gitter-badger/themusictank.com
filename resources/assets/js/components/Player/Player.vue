@@ -69,7 +69,7 @@ export default {
 
 function getVideoId() {
     this.ajax()
-        .post('/ajax/ytkey/', this.songSlug)
+        .post('/ajax/track/ytkey/', this.songSlug)
         .then((response) => {
             if (response.youtubekey.length === 11) {
                 this.songVideo = response.youtubekey;

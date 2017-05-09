@@ -60,7 +60,7 @@ export default {
             };
 
             this.ajax()
-                .post('/ajax/okstfu', payload)
+                .post('/ajax/user/okstfu', payload)
                 .then((response) => {
                     if (destinationUrl) {
                         window.location = destinationUrl;

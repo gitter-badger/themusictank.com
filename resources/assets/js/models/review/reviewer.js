@@ -219,7 +219,7 @@ function onSyncFail() {
 }
 
 function proposeNextSong() {
-    $.ajax("/ajax/" + this.trackSlug + "/getNext/", {
+    $.ajax("/ajax/track/" + this.trackSlug + "/getNext/", {
         type: "POST",
         dataType: "json",
         cache: false,

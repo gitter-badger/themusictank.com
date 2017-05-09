@@ -22,7 +22,49 @@ export default {
 
     mounted() {
         var box = this.getSearchBox();
-        box.typeahead(getDefaults(), getSources());
+
+        box.typeahead(getDefaults(),
+            {
+                name: 'artists',
+                display: 'artist',
+                source: getSource('artist', '/ajax/search/artist/?q=%QUERY').ttAdapter(),
+                templates: {
+                    header: '<h3>Artists</h3>',
+                    empty: '<h3>Artists</h3><p class="empty-message">Could not find matching artists.</p>',
+                    suggestion: function (data) { return '<p><a href="/artists/' + data.slug + '/">' + data.name + '</a></p>'; }
+                }
+            },
+            {
+                name: 'albums',
+                display: 'album',
+                source: getSource('album', '/ajax/search/album/?q=%QUERY').ttAdapter(),
+                templates: {
+                    header: '<h3>Albums</h3>',
+                    empty: '<h3>Albums</h3><p class="empty-message">Could not find matching albums.</p>',
+                    suggestion: function (data) { return '<p><a href="/albums/' + data.slug + '/">' + data.name + '</a> by <a href="/artists/' + data.artist.slug + '/">' + data.artist.name + '</a></p>'; }
+                }
+            },
+            {
+                name: 'tracks',
+                display: 'track',
+                source: getSource('track', '/ajax/search/track/?q=%QUERY').ttAdapter(),
+                templates: {
+                    header: '<h3>Tracks</h3>',
+                    empty: '<h3>Tracks</h3><p class="empty-message">Could not find matching tracks.</p>',
+                    suggestion: function (data) { return '<p><a href="/tracks/' + data.slug + '/">' + data.name + '</a> by <a href="/artists/' + data.artist.slug + '/">' + data.artist.name + '</a></p>'; }
+                }
+            },
+            {
+                name: 'users',
+                display: 'user',
+                source: getSource('user', '/ajax/search/user/?q=%QUERY').ttAdapter(),
+                templates: {
+                    header: '<h3>Tankers</h3>',
+                    empty: '<h3>Tankers</h3><p class="empty-message">Could not find matching user.</p>',
+                    suggestion: function (data) { return '<p><a href="/tankers/' + data.slug + '/">' + data.name + '</a></p>'; }
+                }
+            }
+        );
         box.on('typeahead:selected', this.resultSelected.bind(this));
     }
 };
@@ -30,7 +72,7 @@ export default {
 function getSource(key, endpoint) {
     var source = new Bloodhound({
         name: key,
-        datumTokenizer: Bloodhound.tokenizers.obj.whitespace(key),
+        datumTokenizer: Bloodhound.tokenizers.whitespace,
         queryTokenizer: Bloodhound.tokenizers.whitespace,
         remote: {
             url: endpoint,
@@ -45,58 +87,10 @@ function getDefaults() {
     return {
         minLength: 3,
         highlight: true,
-        cache: true
+        cache: true,
+        hint: true
     };
-};
-
-function getSources() {
-    return [
-        {
-            name: 'artists',
-            display: 'artist',
-            source: getSource('artist', '/ajax/artistSearch/?q=%QUERY'),
-            cache: true,
-            templates: {
-                header: '<h3>Artists</h3>',
-                empty: '<h3>Artists</h3><p class="empty-message">Could not find matching artists.</p>',
-                suggestion: function (data) { return '<p><a href="/artists/' + data.slug + '/">' + data.name + '</a></p>'; }
-            }
-        },
-        {
-            name: 'albums',
-            display: 'album',
-            source: getSource('album', '/ajax/albumSearch/?q=%QUERY'),
-            cache: true,
-                empty: '<h3>Albums</h3><p class="empty-message">Could not find matching albums.</p>',
-            templates: {
-                header: '<h3>Albums</h3>',
-                suggestion: function (data) { return '<p><a href="/albums/' + data.slug + '/">' + data.name + '</a> by <a href="/artists/' + data.artist.slug + '/">' + data.artist.name + '</a></p>'; }
-            }
-        },
-        {
-            name: 'tracks',
-            display: 'track',
-            source: getSource('track', '/ajax/trackSearch/?q=%QUERY'),
-            cache: true,
-            templates: {
-                header: '<h3>Tracks</h3>',
-                empty: '<h3>Tracks</h3><p class="empty-message">Could not find matching tracks.</p>',
-                suggestion: function (data) { return '<p><a href="/tracks/' + data.slug + '/">' + data.name + '</a> by <a href="/artists/' + data.artist.slug + '/">' + data.artist.name + '</a></p>'; }
-            }
-        },
-        {
-            name: 'users',
-            display: 'user',
-            source: getSource('user', '/ajax/userSearch/?q=%QUERY'),
-            cache: true,
-            templates: {
-                header: '<h3>Tankers</h3>',
-                empty: '<h3>Tankers</h3><p class="empty-message">Could not find matching user.</p>',
-                suggestion: function (data) { return '<p><a href="/tankers/' + data.slug + '/">' + data.name + '</a></p>'; }
-            }
-        }
-    ];
-};
+}
 </script>
 
 <template>
@@ -172,8 +166,17 @@ function getSources() {
         font-size: 1.1em;
     }
 
+    p {
+        margin: 0 0.5em 0.5em;
+
+        &.empty-message {
+            margin: 0 1em 0.5em;
+        }
+    }
+
     a {
         display: block;
     }
+
 }
 </style>

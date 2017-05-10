@@ -15,12 +15,12 @@ class YoutubeService
     {
         $this->client = new Google_Client();
         $this->client->setDeveloperKey($key);
-        $this->yt = new Google_Service_YouTube($client);
+        $this->yt = new Google_Service_YouTube($this->client);
     }
 
     public function getKey(Track $track)
     {
-        $results = $this->getSearchClient()->listSearch('*', [
+        $results = $this->getSearchClient()->listSearch('id,snippet', [
             'q' => $this->makeQuery($track),
             'maxResults' => 1,
         ]);
@@ -30,7 +30,7 @@ class YoutubeService
 
     private function getSearchClient()
     {
-        return $yt->search;
+        return $this->yt->search;
     }
 
     private function makeQuery(Track $track)

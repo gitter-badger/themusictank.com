@@ -2,64 +2,56 @@
 
 namespace App\Http\Controllers\Ajax;
 
-use App\Models\AlbumUpvotes;
-use App\Models\TrackUpvotes;
+use App\Models\AlbumUpvote;
+use App\Models\TrackUpvote;
+use App\Services\UpvoteService;
 use App\Http\Controllers\Controller;
 
 class UpvoteController extends Controller
 {
-
     public function addTrack()
     {
-        $vote = (int)request('vote');
-        $objectId = (int)request('id');
-        $authUser = auth()->user();
-        $profile = $authUser->getProfile();
+        $upvote = TrackUpvote::firstOrNew([
+            'track_id' => (int)request('track_id'),
+            'user_id' => auth()->user()->id
+        ]);
 
-        $response = TrackUpvotes::api()->vote($objectId, $profile->id, $vote);
-        $profile->addTrackVote($objectId, $vote);
+        $upvote->vote = (int)request('vote');
+        $upvote->save();
 
-        $authUser->setProfile($profile, true);
-        return response()->json($response);
+        return response()->json($upvote);
     }
 
     public function addAlbum()
     {
-        $vote = (int)request('vote');
-        $objectId = (int)request('id');
-        $authUser = auth()->user();
-        $profile = $authUser->getProfile();
+        $upvote = AlbumUpvote::firstOrNew([
+            'album_id' => (int)request('album_id'),
+            'user_id' => auth()->user()->id
+        ]);
 
-        $response = AlbumUpvotes::api()->vote($objectId, $profile->id, $vote);
-        $profile->addAlbumVote($objectId, $vote);
+        $upvote->vote = (int)request('vote');
+        $upvote->save();
 
-        $authUser->setProfile($profile, true);
-        return response()->json($response);
+        return response()->json($upvote);
     }
 
     public function removeTrack()
     {
-        $objectId = (int)request('id');
-        $authUser = auth()->user();
-        $profile = $authUser->getProfile();
+        $upvote = TrackUpvote::where([
+            'track_id' => (int)request('track_id'),
+            'user_id' => auth()->user()->id
+        ])->firstOrFail();
 
-        $response = TrackUpvotes::api()->removeVote($objectId, $profile->id);
-        $profile->removeTrackVote($objectId);
-
-        $authUser->setProfile($profile, true);
-        return response()->json($response);
+        return response()->json($upvote->delete());
     }
 
     public function removeAlbum()
     {
-        $objectId = (int)request('id');
-        $authUser = auth()->user();
-        $profile = $authUser->getProfile();
+        $upvote = AlbumUpvote::where([
+            'album_id' => (int)request('album_id'),
+            'user_id' => auth()->user()->id
+        ])->firstOrFail();
 
-        $response = AlbumUpvotes::api()->removeVote($objectId, $profile->id);
-        $profile->removeTrackVote($objectId);
-
-        $authUser->setProfile($profile, true);
-        return response()->json($response);
+        return response()->json($upvote->delete());
     }
 }

@@ -47,16 +47,15 @@ class Handler extends ExceptionHandler
      */
     public function render($request, Exception $exception)
     {
-        if ($request->expectsJson()) {
-            $message = $exception->getMessage();
+        // if ($request->expectsJson()) {
+        //     $message = $exception->getMessage();
 
-            if (is_object($message)) {
-                $message = json_encode($message);
-            }
+        //     if (empty($message)) {
+        //         $message = get_class($exception);
+        //     }
 
-
-            return response()->json(['error' => ], 422);
-        }
+        //     return response()->json(['error' => $message], $exception->statusCode);
+        // }
 
         return parent::render($request, $exception);
     }
@@ -73,7 +72,7 @@ class Handler extends ExceptionHandler
         if ($request->expectsJson()) {
             return response()->json(['error' => 'Unauthenticated.'], 401);
         }
-        
+
         return redirect()->to('profiles/auth/');
 
     }

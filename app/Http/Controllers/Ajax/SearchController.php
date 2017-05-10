@@ -10,28 +10,27 @@ use App\Http\Controllers\Controller;
 
 class SearchController extends Controller
 {
+    public function album()
+    {
+        $searchResults = Album::search(request('q'))->take(10)->get();
+        return response()->json($searchResults);
+    }
+
     public function artist()
     {
-        return $this->answer(Artist::search(request('q'))->take(10)->get());
+        $searchResults = Artist::search(request('q'))->take(10)->get();
+        return response()->json($searchResults);
     }
 
     public function track()
     {
-        return $this->answer(Track::search(request('q'))->take(10)->get());
-    }
-
-    public function album()
-    {
-        return $this->answer(Album::search(request('q'))->take(10)->get());
+        $searchResults = Track::search(request('q'))->take(10)->get();
+        return response()->json($searchResults);
     }
 
     public function user()
     {
-        return $this->answer(User::search(request('q'))->take(10)->get());
-    }
-
-    protected function answer($dataset)
-    {
-        return response()->json($dataset);
+        $searchResults = User::search(request('q'))->take(10)->get();
+        return response()->json($searchResults);
     }
 }

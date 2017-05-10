@@ -21,8 +21,9 @@ export default {
         'albumName'
     ],
 
-    computed: {
 
+
+    computed: {
         seekable() {
             return !this.isReview;
         },
@@ -46,12 +47,13 @@ export default {
 
     data () {
         return {
-            'streamer' : null
+            'streamer' : null,
+            'acquiredSongVideo' : null
         }
     },
 
     mounted() {
-        this.songVideo == "" ? getVideoId.call(this) : loadStreamer.call(this);
+        this.songVideo == "" ? getVideoId.call(this) : loadStreamer.call(this, this.songVideo);
     },
 
     methods: {
@@ -69,11 +71,10 @@ export default {
 
 function getVideoId() {
     this.ajax()
-        .post('/ajax/track/ytkey/', this.songSlug)
+        .post('/ajax/track/ytkey/' + this.songSlug)
         .then((response) => {
-            if (response.youtubekey.length === 11) {
-                this.songVideo = response.youtubekey;
-                loadStreamer.bind(this);
+            if (response.data.youtubekey && response.data.youtubekey.length === 11) {
+                loadStreamer.call(this, response.data.youtubekey);
             } else {
                 Tmt.app.error(response);
             }
@@ -83,8 +84,8 @@ function getVideoId() {
         });
 }
 
-function loadStreamer() {
-    this.streamer = new YtStreamer(this.songVideo, this.autoplay);
+function loadStreamer(songVideo) {
+    this.streamer = new YtStreamer(songVideo, this.autoplay);
     this.streamer.render(this.getElement());
 }
 </script>

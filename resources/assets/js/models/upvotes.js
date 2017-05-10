@@ -14,7 +14,7 @@ export default class UpvoteCache {
      * @method
      */
     addAlbumUpvote (key, value) {
-        this.albumUpvotes.push({'id': parseInt(key, 10), 'vote': parseInt(value, 10)});
+        this.albumUpvotes.push({'album_id': parseInt(key, 10), 'vote': parseInt(value, 10)});
     }
 
     /**
@@ -25,7 +25,7 @@ export default class UpvoteCache {
      * @method
      */
     addTrackUpvote (key, value) {
-        this.trackUpvotes.push({'id': parseInt(key, 10), 'vote': parseInt(value, 10)});
+        this.trackUpvotes.push({'track_id': parseInt(key, 10), 'vote': parseInt(value, 10)});
     }
 
     /**
@@ -36,7 +36,7 @@ export default class UpvoteCache {
      * @method
      */
     removeAlbumUpvote (id) {
-        let index = this.albumUpvotes.map(function(vote) {return vote.id; }).indexOf(parseInt(id, 10));
+        let index = this.albumUpvotes.map(function(vote) {return vote.album_id; }).indexOf(parseInt(id, 10));
         if (index > -1) {
             this.albumUpvotes.splice(index, 1);
         }
@@ -50,21 +50,21 @@ export default class UpvoteCache {
      * @method
      */
     removeTrackUpvote (id) {
-        let index = this.trackUpvotes.map(function(vote) {return vote.id; }).indexOf(parseInt(id, 10));
+        let index = this.trackUpvotes.map(function(vote) {return vote.track_id; }).indexOf(parseInt(id, 10));
         if (index > -1) {
             this.trackUpvotes.splice(index, 1);
         }
     }
 
     findByTrackId(id) {
-        let vote = this.trackUpvotes.find(vote => { return parseInt(vote.id, 10) == parseInt(id, 10) });
+        let vote = this.trackUpvotes.find(vote => { return parseInt(vote.track_id, 10) == parseInt(id, 10) });
         if (vote) {
             return vote.vote;
         }
     }
 
     findByAblumId(id) {
-        let vote = this.albumUpvotes.find(vote => { return parseInt(vote.id, 10) == parseInt(id, 10) });
+        let vote = this.albumUpvotes.find(vote => { return parseInt(vote.album_id, 10) == parseInt(id, 10) });
         if (vote) {
             return vote.vote;
         }

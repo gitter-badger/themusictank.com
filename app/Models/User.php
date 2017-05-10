@@ -37,7 +37,7 @@ class User extends Authenticatable
 
     public function albumUpvotes()
     {
-        return $this->hasMany(\App\Models\TrackUpvote::class);
+        return $this->hasMany(\App\Models\AlbumUpvote::class);
     }
 
     public function activities()

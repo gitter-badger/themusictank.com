@@ -84,10 +84,10 @@
     @if(auth()->user())
         <?php $user = auth()->user(); ?>
         Tmt.app.profile(<?php echo $user->toJson() ?>);
-        Tmt.app.upvotes([
-            'albumUpvotes' => <?php echo $user->albumUpvotes->toJson() ?>
-            'trackUpvotes' => <?php echo $user->trackUpvotes->toJson() ?>
-        ]);
+        Tmt.app.upvotes({
+            'albumUpvotes' : <?php echo $user->albumUpvotes->toJson() ?>,
+            'trackUpvotes' : <?php echo $user->trackUpvotes->toJson() ?>
+        });
         Tmt.app.activities(<?php echo $user->activities->toJson() ?>);
     @else
         Tmt.app.profile({'id': -1, 'username': 'Anonymous'});

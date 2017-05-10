@@ -1,15 +1,17 @@
 <?php
 
-namespace App\Models;
+namespace App;
 
 use Illuminate\Database\Eloquent\Model;
 
-class TrackUpvote extends Model
+class ReviewFrame extends Model
 {
     protected $fillable = [
-        'track_id',
-        'vote',
-        'user_id'
+        "id",
+        "track_id",
+        "user_id",
+        "groove",
+        "position"
     ];
 
     public function track() {

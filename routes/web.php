@@ -47,7 +47,7 @@ Route::get('ajax/tanker/whatsUp', "Ajax\UserController@whatsUp")->middleware('au
 Route::get('ajax/tanker/okstfu', "Ajax\UserController@okstfu")->middleware('auth');
 Route::get('ajax/tanker/bugreport', "Ajax\UserController@bugreport");
 
-Route::get('ajax/track/ytkey/{slug}', "Ajax\TrackController@ytkey");
+Route::post('ajax/track/ytkey/{slug}', "Ajax\TrackController@ytkey");
 Route::post('ajax/track/{slug}/saveCurvePart', "Ajax\TrackController@saveCurvePart")->middleware('auth');
 Route::post('ajax/track/{slug}/getNext', "Ajax\TrackController@getNextTrack")->middleware('auth');
 

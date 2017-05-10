@@ -3,11 +3,12 @@
 namespace App\Http\Controllers\Ajax;
 
 use App\Models\Track;
+use App\Models\ReviewFrame;
 use App\Services\YoutubeService;
 
 use App\Http\Controllers\Controller;
 
-class SearchController extends Controller
+class TrackController extends Controller
 {
     public function ytkey($slug)
     {
@@ -19,28 +20,34 @@ class SearchController extends Controller
             $track->save();
         }
 
-        return response()->json(['youtubekey' => $track->youtube_key]);
+        return response()->json([
+            'youtubekey' => $track->youtube_key
+        ]);
     }
 
     public function saveCurvePart($slug)
     {
-        $track = Tracks::api()->findBySlug($slug);
-        if (!$track) {
-            return abort(404);
+        $track = Track::whereSlug($slug)->firstOrFail();
+        $user = auth()->user();
+        $package = request('package');
+
+        foreach ((array)$package as $idx => $pack) {
+            $package[$idx]["user_id"] = (int)$user->id;
+            $package[$idx]["track_id"] = (int)$track->id;
         }
 
-        ReviewFrames::api()->savePartial(request('package'), $track, auth()->user()->getProfile());
+        ReviewFrame::create($package);
 
-        return response()->json(["rock" => "on"]);
+        return response()->json([
+            "rock" => "on"
+        ]);
     }
 
     public function getNextTrack($slug)
     {
-        $track = Tracks::api()->findBySlug($slug);
-        if (!$track) {
-            return abort(404);
-        }
-
-        return response()->json(Tracks::api()->getNext($track));
+        $track = Track::whereSlug($slug)->firstOrFail();
+        return response()->json(
+            Track::next($track)->first()
+        );
     }
 }

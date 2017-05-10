@@ -1,6 +1,6 @@
 <script>
 import ComponentBase from './mixins/base.js'
-import {mapGetters} from 'vuex';
+import { mapGetters } from 'vuex';
 
 const types = {
     like: 1,
@@ -22,9 +22,9 @@ export default {
         }
     },
 
-    data () {
+    data() {
         return {
-            'enabled' : true
+            'enabled': true
         }
     },
 
@@ -35,13 +35,14 @@ export default {
         },
 
         save(value) {
-            let action = this.type == "track" ? "addTrack" : "addAlbum";
-            let payload = { id: this.objectId, vote: value };
+            let payload = { vote: value };
+            payload[this.type + '_id']  = this.objectId;
 
             this.lock();
             this.ajax()
-                .post('/ajax/upvote/' + action, payload)
+                .post('/ajax/upvote/' + this.type + '/add/', payload)
                 .then((response) => {
+                    let action = this.type == "track" ? "addTrackUpvote" : "addAlbumUpvote";
                     this.$store.commit(action, payload);
                     this.unlock();
                 })
@@ -52,13 +53,14 @@ export default {
         },
 
         remove(value) {
-            let action = this.type == "track" ? "removeTrack" : "removeAlbum";
-            let payload = { id : this.objectId };
+            let payload = {};
+            payload[this.type + '_id']  = this.objectId;
 
             this.lock();
             this.ajax()
-                .post('/ajax/upvote/' + action, payload)
+                .post('/ajax/upvote/' + this.type + '/remove/', payload)
                 .then((response) => {
+                    let action = this.type == "track" ? "removeTrackUpvote" : "removeAlbumUpvote";
                     this.$store.commit(action, this.objectId);
                     this.unlock();
                 })
@@ -76,11 +78,11 @@ export default {
             this.is(types.dislike) ? this.remove() : this.save(types.dislike);
         },
 
-        lock () {
+        lock() {
             this.enabled = false;
         },
 
-        unlock () {
+        unlock() {
             this.enabled = true;
         }
     }
@@ -113,19 +115,19 @@ export default {
     border-radius: 3px;
     display: inline-block;
     text-align: center;
-    margin:1px 0;
+    margin: 1px 0;
     width: 66px;
     vertical-align: middle;
 
     &.liked {
         li:nth-child(2) {
-            display:none;
+            display: none;
         }
     }
 
     &.disliked {
         li:nth-child(1) {
-            display:none;
+            display: none;
         }
     }
 
@@ -146,18 +148,19 @@ export default {
         border: none;
         background: #efefef;
         cursor: pointer;
-        color:#333;
+        color: #333;
         font-size: 14px;
         text-shadow: 0 1px #fff;
         height: 30px;
         width: 30px;
 
         &:hover {
-            color:blue;
+            color: blue;
         }
 
-        &:disabled, &:disabled:hover {
-            color:#ccc;
+        &:disabled,
+        &:disabled:hover {
+            color: #ccc;
         }
     }
 }

@@ -46,27 +46,27 @@ export default new Vuex.Store({
             state.upvotes = upvotesCache;
         },
 
-        addTrackUpvote(state, { id, vote }) {
+        addTrackUpvote(state, { track_id, vote }) {
             let upvotesCache = state.upvotes;
-            upvotesCache.addTrackUpvote(id, vote);
+            upvotesCache.addTrackUpvote(track_id, vote);
             state.upvotes = upvotesCache;
         },
 
-        removeTrackUpvote(state, id) {
+        removeTrackUpvote(state, track_id) {
             let upvotesCache = state.upvotes;
-            upvotesCache.removeTrackUpvote(id);
+            upvotesCache.removeTrackUpvote(track_id);
             state.upvotes = upvotesCache;
         },
 
-        addAlbumUpvote(state, { id, vote }) {
+        addAlbumUpvote(state, { album_id, vote }) {
             let upvotesCache = state.upvotes;
-            upvotesCache.addAlbumUpvote(id, vote);
+            upvotesCache.addAlbumUpvote(album_id, vote);
             state.upvotes = upvotesCache;
         },
 
-        removeAlbumUpvote(state, id) {
+        removeAlbumUpvote(state, album_id) {
             let upvotesCache = state.upvotes;
-            upvotesCache.removeAlbumUpvote(id);
+            upvotesCache.removeAlbumUpvote(album_id);
             state.upvotes = upvotesCache;
         }
     }

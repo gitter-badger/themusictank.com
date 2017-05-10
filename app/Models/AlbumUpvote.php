@@ -4,19 +4,19 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
 
-class TrackUpvote extends Model
+class AlbumUpvote extends Model
 {
     protected $fillable = [
-        'track_id',
+        'album_id',
         'vote',
         'user_id'
     ];
 
-    public function track() {
-        return $this->belongsTo(\App\Models\Track::class);
-    }
-
     public function user() {
         return $this->belongsTo(\App\Models\User::class);
+    }
+
+    public function album() {
+        return $this->belongsTo(\App\Models\Album::class);
     }
 }

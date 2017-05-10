@@ -39,4 +39,12 @@ class Track extends Model
     {
         return $query->where("name", 'ilike', "%$criteria%");
     }
+
+    public function scopeNext($query, \App\Models\Track $pointer)
+    {
+        return $query
+            ->wherePosition($track->position + 1)
+            ->andWhereArtistId($track->artist->id)
+            ->andWhereAlbumId($track->album->id);
+    }
 }

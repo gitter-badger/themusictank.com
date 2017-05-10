@@ -6,6 +6,8 @@ use Illuminate\Database\Eloquent\Model;
 
 class AlbumUpvote extends Model
 {
+    use Behavior\Dated;
+
     protected $fillable = [
         'album_id',
         'vote',

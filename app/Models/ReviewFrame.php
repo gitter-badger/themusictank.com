@@ -6,6 +6,8 @@ use Illuminate\Database\Eloquent\Model;
 
 class ReviewFrame extends Model
 {
+    use Behavior\Dated;
+
     protected $fillable = [
         "id",
         "track_id",

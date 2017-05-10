@@ -11,7 +11,7 @@ class User extends Authenticatable
 {
     use Notifiable,
         Sluggable,
-        Entities\Behavior\Dated;
+        Behavior\Dated;
 
     protected $fillable = [
         'name',

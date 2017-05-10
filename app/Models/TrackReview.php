@@ -8,6 +8,8 @@ use App\Models\User;
 
 class TrackReview extends Model
 {
+    use Behavior\Dated;
+
     public function track()
     {
         return $this->belongsTo(\App\Models\Track::class);

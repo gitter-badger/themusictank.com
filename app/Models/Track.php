@@ -7,8 +7,8 @@ use Cviebrock\EloquentSluggable\Sluggable;
 
 class Track extends Model
 {
-    use Entities\Behavior\Thumbnailed,
-        Entities\Behavior\Dated,
+    use Behavior\Thumbnailed,
+        Behavior\Dated,
         Sluggable;
 
     protected $fillable = [

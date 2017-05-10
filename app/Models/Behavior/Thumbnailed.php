@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Models\Entities\Behavior;
+namespace App\Models\Behavior;
 
 trait Thumbnailed
 {

@@ -39,4 +39,12 @@ class ActivityService
         }
     }
 
+    public static function getAssociationKey(Activity $activity)
+    {
+        switch ($activity->associated_object_type) {
+            case self::TYPE_ACHIEVEMENT   : return "achievement";
+            case self::TYPE_USER          : return "user";
+        }
+    }
+
 }

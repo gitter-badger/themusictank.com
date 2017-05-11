@@ -26,13 +26,13 @@ class UserController extends Controller
     public function okstfu()
     {
         $ids = (array)request('ids');
-        $status = true;
 
         if (count($ids)) {
             $activities = Activity::whereUserId(auth()->user()->id)
                 ->whereIn('id', $ids)
                 ->get();
 
+            $status = true;
             foreach ($activities as $activity) {
                 $activity->must_notify = 0;
                 $status = $status && $activity->save();

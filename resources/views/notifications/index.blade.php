@@ -8,14 +8,14 @@
     <section class="notifications">
         @if (count($notifications) > 0)
             @foreach ($notifications as $notification)
-                <div class="notification {{ $notification->isViewed() ? "read" :  "new" }} {{ $notification->getAssociationType() }}">
+                <div class="notification {{ $notification->must_notify ? "read" :  "new" }} {{ $notification->associated_object_type_slug }}">
 
                     <time datetime="{{ $notification->getDateCreated() }}" title="{{ $notification->getDateCreated() }}">
                         {{ $notification->getCreatedDateForHumans() }}
                     </time>
 
-                    @if ($notification->hasLinkedObject())
-                        @include('partials.notifications.' . $notification->getAssociationType(), ['notification' => $notification])
+                    @if (!is_null($notification->associated_object))
+                        @include('partials.notifications.' . $notification->associated_object_type_slug, ['notification' => $notification])
                     @endif
                 </div>
             @endforeach

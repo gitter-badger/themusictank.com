@@ -36,6 +36,11 @@ class CheckAlbumAchievement implements ShouldQueue
      */
     public function handle()
     {
-
+        $possibleAchievements = AchievementService::collectForArtist($this->album);
+        foreach ($possibleAchievements as $achievement) {
+            AchievementService::grant($achievement, $user, [
+                "album" => $this->album
+            ]);
+        }
     }
 }

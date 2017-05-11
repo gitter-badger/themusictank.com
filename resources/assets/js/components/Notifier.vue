@@ -13,6 +13,7 @@ export default {
             return this.activities ? this.activities.getAll() : [];
         },
         newNotifications() {
+            // @todo : getNew needs to be exposed as a property to register into Vue
             return this.activities ? this.activities.getNew() : [];
         },
         newNotificationsCount() {
@@ -40,7 +41,7 @@ export default {
             this.opened = !this.opened;
         },
         stfu() {
-            let ids = this.newNotifications.filter((row) => { return row.id; });
+            let ids = this.newNotifications.map((row) => { return row.id; });
             this.clearNotifications(ids);
         },
         listItemClick(evt) {

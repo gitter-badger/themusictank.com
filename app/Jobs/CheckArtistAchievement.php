@@ -36,6 +36,11 @@ class CheckArtistAchievement implements ShouldQueue
      */
     public function handle()
     {
-
+        $possibleAchievements = AchievementService::collectForArtist($this->artist);
+        foreach ($possibleAchievements as $achievement) {
+            AchievementService::grant($achievement, $user, [
+                "artist" => $this->artist
+            ]);
+        }
     }
 }

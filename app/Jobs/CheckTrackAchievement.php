@@ -4,6 +4,8 @@ namespace App\Jobs;
 
 use App\Models\Track;
 use App\Models\User;
+use App\Models\Achievements\Contributor;
+use App\Services\AchievementService;
 
 use Illuminate\Bus\Queueable;
 use Illuminate\Queue\SerializesModels;
@@ -36,6 +38,15 @@ class CheckTrackAchievement implements ShouldQueue
      */
     public function handle()
     {
+        // reward all reviewing
+        AchievementService::grant(new Contibutor(), $user);
 
+        // reward by track id trigger
+        $possibleAchievements = AchievementService::collectForTrack($this->track);
+        foreach ($possibleAchievements as $achievement) {
+            AchievementService::grant($achievement, $user, [
+                "track" => $this->track
+            ]);
+        }
     }
 }

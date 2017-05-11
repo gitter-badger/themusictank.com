@@ -1,2 +1,2 @@
-<h3>{{ $notification->title }}</h3>
-<p><blockquote>{{ $notification->getLinkedObject()->description }}</blockquote></p>
+<h3>{{ $notification->associated_object->name }}</h3>
+<p><blockquote>{{ $notification->associated_object->description }}</blockquote></p>

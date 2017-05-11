@@ -43,9 +43,9 @@
 
         <div class="row">
             <div class="col-md-3">
-                <% #if(isset($francois) && count($francois)) : %>
-                <% # echo $this->element("userbadge", array("user" => $francois)); %>
-                <% #end %>
+                @if(isset($francois))
+                    @include('partials.user-badge', ["user" => $francois])
+                @endif
             </div>
             <div class="col-md-9">
 
@@ -90,9 +90,9 @@
                 <p><a href="http://www.twitter.com/julienguay">~Julien Guay</a></p>
             </div>
             <div class="col-md-3">
-                <% #if(isset($francois) && count($francois)) : %>
-                <% # echo $this->element("userbadge", array("user" => $francois)); %>
-                <% #end %>
+                @if(isset($francois))
+                    @include('partials.user-badge', ["user" => $julien])
+                @endif
             </div>
         </div>
     </section>

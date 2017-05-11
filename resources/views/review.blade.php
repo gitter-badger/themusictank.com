@@ -66,9 +66,9 @@
     <script src="{{ mix('js/manifest.js') }}"></script>
     <script src="{{ mix('js/vendor.js') }}"></script>
     <script src="{{ mix('js/app.js') }}"></script>
-    <script>(function(){
-        <?php $profile = auth()->user()->getProfile(); ?>
-        Tmt.app.profile(<?php echo json_encode($profile) ?>);
+    <script>
+    (function(){<?php $user = auth()->user(); ?>
+        Tmt.app.profile(<?php echo $user->toJson() ?>);
         @stack('app-javascript')
     })();</script>
 </body>

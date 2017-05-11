@@ -17,7 +17,6 @@
 
 @push('app-javascript')
     @if ($globalCurves->count())
-
         Tmt.app.reviewFrames(
             [{
                 'id' : {{ $track->id }},

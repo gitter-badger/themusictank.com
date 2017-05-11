@@ -43,9 +43,9 @@ Route::post('ajax/upvote/track/remove', "Ajax\UpvoteController@removeTrack")->mi
 Route::post('ajax/upvote/album/add', "Ajax\UpvoteController@addAlbum")->middleware('auth');
 Route::post('ajax/upvote/album/remove', "Ajax\UpvoteController@removeAlbum")->middleware('auth');
 
-Route::get('ajax/tanker/whatsUp', "Ajax\UserController@whatsUp")->middleware('auth');
-Route::get('ajax/tanker/okstfu', "Ajax\UserController@okstfu")->middleware('auth');
-Route::get('ajax/tanker/bugreport', "Ajax\UserController@bugreport");
+Route::post('ajax/tanker/whats-up', "Ajax\UserController@whatsUp")->middleware('auth');
+Route::post('ajax/tanker/ok-stfu', "Ajax\UserController@okstfu")->middleware('auth');
+Route::post('ajax/tanker/bugreport', "Ajax\UserController@bugreport");
 
 Route::post('ajax/track/ytkey/{slug}', "Ajax\TrackController@ytkey");
 Route::post('ajax/track/{slug}/saveCurvePart', "Ajax\TrackController@saveCurvePart")->middleware('auth');

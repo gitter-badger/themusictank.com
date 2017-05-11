@@ -3,30 +3,43 @@
 namespace App\Http\Controllers\Ajax;
 
 use App\Http\Controllers\Controller;
+use App\Models\Activity;
 use Carbon\Carbon;
 
 class UserController extends Controller
 {
     public function whatsUp()
     {
-        $currentProfile = auth()->user()->getProfile();
         $timestamp = (int)request('timestamp');
+        $query = Activity::whereUserId(auth()->user()->id)
+            ->orderBy('created_at', 'DESC')
+            ->take(6);
 
         if ($timestamp > 0) {
-            $dateTime = Carbon::createFromTimestamp($timestamp)->toDateTimeString();
-            return response()->json((array)Activities::api()->findSince($dateTime, $currentProfile->id));
+            $dateTime = Carbon::createFromTimestamp($timestamp)->toDateString();
+            $query->whereDate('created_at', '>', $dateTime);
         }
 
-        return response()->json((array)Activities::api()->findRecent($currentProfile->id, 5));
+        return response()->json($query->get());
     }
 
     public function okstfu()
     {
-        $currentProfile = auth()->user()->getProfile();
-        return response()->json(
-            Activities::api()
-                ->markAsReadByIds(request('ids'), $currentProfile->id)
-        );
+        $ids = (array)request('ids');
+        $status = true;
+
+        if (count($ids)) {
+            $activities = Activity::whereUserId(auth()->user()->id)
+                ->whereIn('id', $ids)
+                ->get();
+
+            foreach ($activities as $activity) {
+                $activity->must_notify = 0;
+                $status = $status && $activity->save();
+            }
+        }
+
+        return response()->json(["status" => $status]);
     }
 
     public function bugreport()

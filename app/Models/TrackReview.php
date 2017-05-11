@@ -8,7 +8,17 @@ use App\Models\User;
 
 class TrackReview extends Model
 {
-    use Behavior\Dated;
+    use \App\Models\Behavior\Dated;
+
+    protected $fillable = [
+        "id",
+        "track_id",
+        "user_id",
+        'avg_groove',
+        'high_avg_groove',
+        'low_avg_groove',
+        "position"
+    ];
 
     public function track()
     {

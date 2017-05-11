@@ -60,7 +60,7 @@ export default {
             };
 
             this.ajax()
-                .post('/ajax/user/okstfu', payload)
+                .post('/ajax/tanker/ok-stfu', payload)
                 .then((response) => {
                     if (destinationUrl) {
                         window.location = destinationUrl;
@@ -68,14 +68,26 @@ export default {
                 })
                 .catch((error) => {
                     Tmt.app.error(error);
-                    this.unlock();
                 });
         }
+    },
+
+    mounted() {
+        setTimeout(() => {
+            this.ajax()
+                .post('/ajax/tanker/whats-up', {"hel":"lo"})
+                .then((response) => {
+                    if (response.data.length) {
+                        response.data.forEach((row) => { this.activities.addActivity(row); });
+                        this.$store.commit('updateActivities', this.activities);
+                    }
+                })
+                .catch((error) => {
+                    Tmt.app.error(error);
+                });
+        }, 1000 * 60);
     }
 };
-
-
-
 </script>
 
 

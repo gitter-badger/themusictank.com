@@ -3,7 +3,7 @@
 namespace App\Http\Controllers\Ajax;
 
 use App\Models\Track;
-use App\Models\ReviewFrame;
+use App\Jobs\SaveReviewFrameDump;
 use App\Services\YoutubeService;
 
 use App\Http\Controllers\Controller;
@@ -27,16 +27,11 @@ class TrackController extends Controller
 
     public function saveCurvePart($slug)
     {
-        $track = Track::whereSlug($slug)->firstOrFail();
-        $user = auth()->user();
-        $package = request('package');
-
-        foreach ((array)$package as $idx => $pack) {
-            $package[$idx]["user_id"] = (int)$user->id;
-            $package[$idx]["track_id"] = (int)$track->id;
-        }
-
-        ReviewFrame::create($package);
+        dispatch(new SaveReviewFrameDump(
+            Track::whereSlug($slug)->firstOrFail(),
+            auth()->user(),
+            (array)request('package')
+        ));
 
         return response()->json([
             "rock" => "on"

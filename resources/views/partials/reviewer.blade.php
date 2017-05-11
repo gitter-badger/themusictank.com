@@ -6,7 +6,7 @@
         song-video="{{ isset($track->youtube_key) ? $track->youtube_key : "" }}"
         album-name="{{ $track->album->name}}"
         song-name="{{ $track->name}}"
-        profile-slug="{{ auth()->user()->getProfile()->slug }}"
+        profile-slug="{{ auth()->user()->slug }}"
     >
     <em>this is my additional content!</em>
     </player>

@@ -3,6 +3,11 @@
 namespace App\Providers;
 
 use Illuminate\Support\ServiceProvider;
+use Illuminate\Contracts\Logging\Log;
+use Psr\Log\LoggerInterface;
+
+use App\Models\User;
+use App\Observers\UserObserver;
 
 class AppServiceProvider extends ServiceProvider
 {
@@ -13,7 +18,7 @@ class AppServiceProvider extends ServiceProvider
      */
     public function boot()
     {
-        //
+        User::observe(UserObserver::class);
     }
 
     /**
@@ -24,8 +29,8 @@ class AppServiceProvider extends ServiceProvider
     public function register()
     {
         if (getenv('APP_ENV') === "production") {
-            $this->app->alias('bugsnag.logger', \Illuminate\Contracts\Logging\Log::class);
-            $this->app->alias('bugsnag.logger', \Psr\Log\LoggerInterface::class);
+            $this->app->alias('bugsnag.logger', Log::class);
+            $this->app->alias('bugsnag.logger', LoggerInterface::class);
         }
     }
 }

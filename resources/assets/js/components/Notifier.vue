@@ -75,7 +75,7 @@ export default {
     mounted() {
         setTimeout(() => {
             this.ajax()
-                .post('/ajax/tanker/whats-up', {"hel":"lo"})
+                .post('/ajax/tanker/whats-up', { "timestamp": Math.floor(Date.now() / 1000) })
                 .then((response) => {
                     if (response.data.length) {
                         response.data.forEach((row) => { this.activities.addActivity(row); });
@@ -102,11 +102,14 @@ export default {
             <ul>
                 <li v-for="notification in notifications" :class="{ 'new': notification.must_notify, 'read': !notification.must_notify }">
                     <a v-if="notification.getLink()" @click="listItemClick" :href="notification.getLink()" :id="notification.id" :hide-click="notification.must_notify">
-                                {{ notification.getLabel() }}
-                            </a v-if="notification.getLink()">
-                        </li>
-                        <li v-if="!hasNotifications" class="no-notices">You have no notifications for the moment.</li>
-                        <li class="view-all"><a :href="href">View all notifications</a></li>
+                        {{ notification.getLabel() }}
+                    </a>
+                    <span v-else>{{ notification.getLabel() }}</span>
+                </li>
+                <li v-if="!hasNotifications" class="no-notices">You have no notifications for the moment.</li>
+                <li class="view-all">
+                    <a :href="href">View all notifications</a>
+                </li>
                 <li class="close" @click.prevent="toggle">Close</li>
             </ul>
 

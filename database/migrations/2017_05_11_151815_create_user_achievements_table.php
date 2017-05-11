@@ -4,7 +4,7 @@ use Illuminate\Support\Facades\Schema;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Database\Migrations\Migration;
 
-class CreateActivityTable extends Migration
+class CreateUserAchievementsTable extends Migration
 {
     /**
      * Run the migrations.
@@ -13,12 +13,10 @@ class CreateActivityTable extends Migration
      */
     public function up()
     {
-        Schema::create('activities', function (Blueprint $table) {
+        Schema::create('user_achievements', function (Blueprint $table) {
             $table->increments('id');
-            $table->integer('user_id');
-            $table->integer('associated_object_id');
-            $table->integer('associated_object_type');
-            $table->boolean('must_notify');
+            $table->integer('achievement_id')->index();
+            $table->integer('user_id')->index();
             $table->timestamps();
 
             $table->foreign('user_id')->references('id')->on('users');
@@ -32,6 +30,6 @@ class CreateActivityTable extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('activities');
+        Schema::dropIfExists('user_achievements');
     }
 }

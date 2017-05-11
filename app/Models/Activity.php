@@ -3,17 +3,25 @@
 namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
+use App\Services\ActivityService;
 
 class Activity extends Model
 {
-    public function user() {
-        return $this->belongsTo(\App\Models\User::class);
+    protected $fillable = [
+        'user_id',
+        'associated_object_id',
+        'associated_object_type',
+        'must_notify',
+    ];
+
+    protected $appends = ['associated_object'];
+
+    public function getAssociatedObjectAttribute()
+    {
+        return ActivityService::loadAssociation($this);
     }
 
-    public function associatedModel() {
-
-        dd("Oh noes!");
-
-        // return $this->hasOne(\App\Models\Track::class);
+    public function user() {
+        return $this->belongsTo(\App\Models\User::class);
     }
 }

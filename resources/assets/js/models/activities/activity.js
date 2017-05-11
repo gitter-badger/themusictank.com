@@ -2,8 +2,8 @@
 export default class Activity {
     constructor(frameData) {
         this.id = frameData.id;
-        this.associated_object_id = frameData.associated_object_id;
-        this.associated_object_type = frameData.associated_object_type;
+        this.associated_object_id = parseInt(frameData.associated_object_id, 10);
+        this.associated_object_type = parseInt(frameData.associated_object_type, 10);
         this.must_notify = frameData.must_notify;
         this.updated_at = frameData.updated_at;
         this.created_at = frameData.created_at;
@@ -11,7 +11,12 @@ export default class Activity {
     }
 
     getLabel() {
-        if (this.associated_object_type === "profile") {
+
+        if (this.associated_object_type === 1) {
+            return 'You have earned the achievement: ' + this.associated_object.name + '.';
+        }
+
+        if (this.associated_object_type === 2) {
             return this.associated_object.name + ' is now following you.';
         }
     }

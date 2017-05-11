@@ -6,6 +6,7 @@ use Illuminate\Database\Eloquent\Model;
 use Illuminate\Notifications\Notifiable;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Cviebrock\EloquentSluggable\Sluggable;
+use App\Observers\UserObserver;
 
 class User extends Authenticatable
 {
@@ -25,6 +26,11 @@ class User extends Authenticatable
         'password', 'remember_token',
     ];
 
+    public static function boot()
+    {
+        User::observe(new UserObserver);
+    }
+
     public function trackReviews()
     {
         return $this->hasMany(\App\Models\TrackReview::class);
@@ -43,6 +49,11 @@ class User extends Authenticatable
     public function activities()
     {
         return $this->hasMany(\App\Models\Activity::class);
+    }
+
+    public function userAchievements()
+    {
+        return $this->hasMany(\App\Models\UserAchievements::class);
     }
 
     public function sluggable()

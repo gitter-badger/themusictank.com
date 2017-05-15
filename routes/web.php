@@ -62,8 +62,9 @@ Route::get('profiles/auth/facebook/callback', 'Auth\SocialController@facebookCal
 
 // -> tmt accounts
 Route::post('profiles/auth/tmt/login', "Auth\TmtController@login");
-Route::get('profiles/auth/tmt/create', "Auth\TmtController@create");
+Route::post('profiles/auth/tmt/create', "Auth\TmtController@create");
 Route::post('profiles/auth/tmt/save', "Auth\TmtController@save");
+Route::get('profiles/auth/tmt/register', "Auth\TmtController@register");
 
 // -> account pages
 Route::get('you', "UserController@dashboard")->middleware('auth');

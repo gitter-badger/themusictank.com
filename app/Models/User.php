@@ -26,8 +26,17 @@ class User extends Authenticatable
         'password', 'remember_token',
     ];
 
+    protected $rules = [
+        'name' => 'required',
+        'email' => 'required',
+        'password' => 'required',
+        'password_confirm' => 'same:password',
+        'slug' => 'required',
+    ];
+
     public static function boot()
     {
+        parent::boot();
         User::observe(new UserObserver);
     }
 

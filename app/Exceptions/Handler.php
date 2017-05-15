@@ -47,16 +47,6 @@ class Handler extends ExceptionHandler
      */
     public function render($request, Exception $exception)
     {
-        // if ($request->expectsJson()) {
-        //     $message = $exception->getMessage();
-
-        //     if (empty($message)) {
-        //         $message = get_class($exception);
-        //     }
-
-        //     return response()->json(['error' => $message], $exception->statusCode);
-        // }
-
         return parent::render($request, $exception);
     }
 
@@ -74,6 +64,5 @@ class Handler extends ExceptionHandler
         }
 
         return redirect()->to('profiles/auth/');
-
     }
 }

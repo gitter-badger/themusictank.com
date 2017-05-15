@@ -25,7 +25,7 @@
                 </a>
             </li>
             <li>
-                <a href="{{ action('UserController@create') }}">
+                <a href="{{ action('Auth\TmtController@create') }}">
                    <i class="fa fa-address-card-o" aria-hidden="true"></i> Create a new TMT account
                 </a>
             </li>

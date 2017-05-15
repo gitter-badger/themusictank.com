@@ -14,10 +14,9 @@ class AuthController extends Controller
     }
 
     public function logout()
-    {        
+    {
         Auth::logout();
         session(['_previous' => null]);
         return redirect()->to('/');
     }
-
 }

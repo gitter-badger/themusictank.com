@@ -29,7 +29,7 @@
                                 @include('partials.buttons.upvote', ['type' => "album", 'id' => $album->id])
                             </li>
                         @else
-                            <li>
+                            <li class="more">
                                 <a href="{{ action('ArtistController@show', ['slug' => $spotlightArtist->slug]) }}">More</a>
                             </li>
                         @endif

@@ -2,9 +2,9 @@
 
 namespace App\Models;
 
-use Illuminate\Database\Eloquent\Model;
+use App\Service\AchievementService;
 
-class UserAchievement extends Model
+class UserAchievement extends AppModel
 {
     protected $fillable = [
         'achievement_id',
@@ -12,7 +12,7 @@ class UserAchievement extends Model
     ];
 
     public function archievement() {
-        // return $this->belongsTo(\App\Models\Achievement::class);
+        return AchievementService::findById($this->achievement_id);
     }
 
     public function user() {

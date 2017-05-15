@@ -2,12 +2,8 @@
 
 namespace App\Models;
 
-use Illuminate\Database\Eloquent\Model;
-
-class AlbumUpvote extends Model
+class AlbumUpvote extends AppModel
 {
-    use Behavior\Dated;
-
     protected $fillable = [
         'album_id',
         'vote',

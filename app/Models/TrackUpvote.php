@@ -2,12 +2,8 @@
 
 namespace App\Models;
 
-use Illuminate\Database\Eloquent\Model;
-
-class TrackUpvote extends Model
+class TrackUpvote extends AppModel
 {
-    use Behavior\Dated;
-
     protected $fillable = [
         'track_id',
         'vote',

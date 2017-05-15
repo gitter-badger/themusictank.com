@@ -2,14 +2,8 @@
 
 namespace App\Models;
 
-use Illuminate\Database\Eloquent\Model;
-use App\Models\Track;
-use App\Models\User;
-
-class TrackReview extends Model
+class TrackReview extends AppModel
 {
-    use \App\Models\Behavior\Dated;
-
     protected $fillable = [
         "id",
         "track_id",

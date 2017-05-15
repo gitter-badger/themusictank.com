@@ -2,16 +2,16 @@
 
 namespace App\Models;
 
-use Illuminate\Database\Eloquent\Model;
 use Illuminate\Notifications\Notifiable;
 use Illuminate\Foundation\Auth\User as Authenticatable;
-use Cviebrock\EloquentSluggable\Sluggable;
+
 use App\Observers\UserObserver;
 
 class User extends Authenticatable
 {
     use Notifiable,
-        Sluggable,
+        Behavior\Slugged,
+        Behavior\Searchable,
         Behavior\Dated;
 
     protected $fillable = [
@@ -54,15 +54,5 @@ class User extends Authenticatable
     public function userAchievements()
     {
         return $this->hasMany(\App\Models\UserAchievements::class);
-    }
-
-    public function sluggable()
-    {
-        return ['slug' => ['source' => 'name']];
-    }
-
-    public function scopeSearch($query, $criteria)
-    {
-        return $query->where("name", 'ilike', "%$criteria%");
     }
 }

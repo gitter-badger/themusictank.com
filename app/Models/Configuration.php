@@ -2,15 +2,10 @@
 
 namespace App\Models;
 
-use Illuminate\Database\Eloquent\Model;
-
-class Configuration extends Model
+class Configuration extends AppModel
 {
-    use Behavior\Dated;
-
     protected $fillable = [
         'key',
         'value'
     ];
-
 }

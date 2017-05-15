@@ -2,12 +2,8 @@
 
 namespace App\Models;
 
-use Illuminate\Database\Eloquent\Model;
-
-class ReviewFrame extends Model
+class ReviewFrame extends AppModel
 {
-    use Behavior\Dated;
-
     protected $fillable = [
         "id",
         "track_id",

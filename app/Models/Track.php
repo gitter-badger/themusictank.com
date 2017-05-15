@@ -2,14 +2,11 @@
 
 namespace App\Models;
 
-use Illuminate\Database\Eloquent\Model;
-use Cviebrock\EloquentSluggable\Sluggable;
-
-class Track extends Model
+class Track extends AppModel
 {
     use Behavior\Thumbnailed,
-        Behavior\Dated,
-        Sluggable;
+        Behavior\Slugged,
+        Behavior\Searchable;
 
     protected $fillable = [
         'artist_id',
@@ -28,16 +25,6 @@ class Track extends Model
 
     public function artist() {
         return $this->belongsTo(\App\Models\Artist::class);
-    }
-
-    public function sluggable()
-    {
-        return ['slug' => ['source' => 'name']];
-    }
-
-    public function scopeSearch($query, $criteria)
-    {
-        return $query->where("name", 'ilike', "%$criteria%");
     }
 
     public function scopeNext($query, \App\Models\Track $pointer)

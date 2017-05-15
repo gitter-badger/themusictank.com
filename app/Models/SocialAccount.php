@@ -2,12 +2,8 @@
 
 namespace App\Models;
 
-use Illuminate\Database\Eloquent\Model;
-
-class SocialAccount extends Model
+class SocialAccount extends AppModel
 {
-    use Behavior\Dated;
-
     protected $fillable = [
         'user_id',
         'provider_user_id',

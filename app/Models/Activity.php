@@ -2,13 +2,10 @@
 
 namespace App\Models;
 
-use Illuminate\Database\Eloquent\Model;
 use App\Services\ActivityService;
 
-class Activity extends Model
+class Activity extends AppModel
 {
-    use Behavior\Dated;
-
     protected $fillable = [
         'user_id',
         'associated_object_id',

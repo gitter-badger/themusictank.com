@@ -20,17 +20,12 @@ class YoutubeService
 
     public function getKey(Track $track)
     {
-        $results = $this->getSearchClient()->listSearch('id,snippet', [
+        $results = $this->yt->search->listSearch('id,snippet', [
             'q' => $this->makeQuery($track),
             'maxResults' => 1,
         ]);
 
         return $results['items'][0]['id']['videoId'];
-    }
-
-    private function getSearchClient()
-    {
-        return $this->yt->search;
     }
 
     private function makeQuery(Track $track)

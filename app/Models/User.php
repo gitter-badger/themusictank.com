@@ -5,7 +5,8 @@ namespace App\Models;
 use Illuminate\Notifications\Notifiable;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 
-use App\Observers\UserObserver;
+use App\Models\Achievements\WelcomeToTmt;
+use App\Services\AchievementService;
 
 class User extends Authenticatable
 {
@@ -26,18 +27,19 @@ class User extends Authenticatable
         'password', 'remember_token',
     ];
 
-    protected $rules = [
-        'name' => 'required',
-        'email' => 'required',
-        'password' => 'required',
-        'password_confirm' => 'same:password',
-        'slug' => 'required',
-    ];
-
     public static function boot()
     {
         parent::boot();
-        User::observe(new UserObserver);
+
+        static::created(function($model)
+        {
+            AchievementService::grant(new WelcomeToTmt(), $user);
+        });
+    }
+
+    public function socialAccounts()
+    {
+        return $this->hasMany(\App\Models\SocialAccount::class);
     }
 
     public function trackReviews()

@@ -7,7 +7,7 @@
 
     <h1>Create a TMT account</h1>
 
-    <form role="form" method="POST" action="{{ action('Auth\TmtController@create') }}">
+    <form role="form" method="POST" action="{{ action('Auth\Tmt\RegisterController@register') }}">
         {{ csrf_field() }}
 
         <div class="form-group{{ $errors->has('name') ? ' has-error' : '' }}">

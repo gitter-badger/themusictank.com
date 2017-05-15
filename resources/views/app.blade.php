@@ -45,7 +45,7 @@
                 <li><a href="/artists/">Artists</a></li>
             </ul>
 
-            @include('partials.usermenu', ['user' => auth()->user()])
+            @include('partials.site-nav', ['user' => auth()->user()])
         </nav>
     </header>
 

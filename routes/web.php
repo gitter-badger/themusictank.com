@@ -17,8 +17,6 @@ Auth::routes();
 Route::get("/", "PageController@home");
 Route::get("/about", "PageController@about");
 Route::get("/legal", "PageController@legal");
-Route::get("/api/is-down", "PageController@apiIsDown");
-Route::get("/api/error", "PageController@apiError");
 
 // Artists
 Route::get('artists', "ArtistController@index");
@@ -57,20 +55,30 @@ Route::get('profiles/auth/', "Auth\AuthController@index");
 Route::get('profiles/auth/logout', "Auth\AuthController@logout");
 
 // -> facebook
-Route::get('profiles/auth/facebook/redirect', 'Auth\SocialController@facebookRedirect');
-Route::get('profiles/auth/facebook/callback', 'Auth\SocialController@facebookCallback');
+Route::get('profiles/auth/facebook/redirect', 'Auth\Social\FacebookController@redirect');
+Route::get('profiles/auth/facebook/callback', 'Auth\Social\FacebookController@callback');
 
 // -> tmt accounts
-Route::post('profiles/auth/tmt/login', "Auth\TmtController@login");
-Route::post('profiles/auth/tmt/create', "Auth\TmtController@create");
-Route::post('profiles/auth/tmt/save', "Auth\TmtController@save");
-Route::get('profiles/auth/tmt/register', "Auth\TmtController@register");
+Route::get('profiles/auth/tmt/login', "Auth\Tmt\LoginController@showLoginForm");
+Route::get('profiles/auth/tmt/register', "Auth\Tmt\RegisterController@showRegisterForm");
+
+Route::post('profiles/auth/tmt/login/attempt', "Auth\Tmt\LoginController@login");
+Route::post('profiles/auth/tmt/register/attempt', "Auth\Tmt\RegisterController@register");
 
 // -> account pages
-Route::get('you', "UserController@dashboard")->middleware('auth');
-Route::get('you/edit', "UserController@edit")->middleware('auth');
-Route::post('you/save', "UserController@save")->middleware('auth');
+Route::get('you', "Profile\DashboardController@index")->middleware('auth');
 Route::get('you/notifications', "NotificationController@index")->middleware('auth');
+
+Route::get('you/edit', "Profile\ManageController@edit")->middleware('auth');
+Route::get('you/edit/thirdparty', "Profile\ManageController@thirdparty")->middleware('auth');
+Route::get('you/edit/password', "Profile\ManageController@password")->middleware('auth');
+Route::get('you/edit/api', "Profile\ManageController@api")->middleware('auth');
+Route::get('you/edit/delete', "Profile\ManageController@delete")->middleware('auth');
+
+Route::post('you/edit/general/update', "Profile\ManageController@generalPost")->middleware('auth');
+Route::post('you/edit/thirdparty/attempt', "Profile\ManageController@thirdpartyPost")->middleware('auth');
+Route::post('you/edit/password/attempt', "Profile\ManageController@passwordPost")->middleware('auth');
+Route::post('you/edit/delete/attempt', "Profile\ManageController@deletePost")->middleware('auth');
 
 // User areas
 Route::get('tankers/{slug}', "UserController@show");

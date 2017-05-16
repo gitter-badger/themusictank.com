@@ -12,4 +12,11 @@
             {{ $user->name }}
         </a>
     </h3>
+
+    @php
+        $authUser = auth()->user();
+    @endphp
+    @if ($authUser && $authUser->id !== $user->id)
+        <follow user-id="{{ $user->id }}"></follow>
+    @endif
 </div>

@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Ajax;
 
 use App\Http\Controllers\Controller;
 use App\Models\Activity;
+use App\Models\UserSubscription;
 use Carbon\Carbon;
 
 class UserController extends Controller
@@ -45,6 +46,27 @@ class UserController extends Controller
     public function bugreport()
     {
 
+    }
+
+    public function follow()
+    {
+        $subscription = new UserSubscription();
+        $subscription->user_id = auth()->user()->id;
+        $subscription->sub_id = request()->offsetGet('sub_id');
+        $subscription->save();
+
+        return response()->json($subscription);
+    }
+
+    public function unfollow()
+    {
+        $subscription = UserSubscription::whereUserId(auth()->user()->id)
+            ->whereSubId(request()->offsetGet('sub_id'))
+            ->firstOrFail();
+
+        return response()->json([
+            "status" => $subscription->delete()
+        ]);
     }
 
 }

@@ -5,15 +5,16 @@ Vue.use(Vuex)
 
 export default new Vuex.Store({
     state: {
-        profile: null,
+        user: null,
         upvotes: null,
         frames: null,
-        activities: null
+        activities: null,
+        subscriptions: null
     },
 
     getters: {
-        profile(state) {
-            return state.profile;
+        user(state) {
+            return state.user;
         },
 
         upvotes(state) {
@@ -26,6 +27,10 @@ export default new Vuex.Store({
 
         activities(state) {
             return state.activities;
+        },
+
+        subscriptions(state) {
+            return state.subscriptions;
         }
     },
 
@@ -34,8 +39,12 @@ export default new Vuex.Store({
             state.activities = activities;
         },
 
-        updateProfile(state, profile) {
-            state.profile = profile;
+        updateUser(state, user) {
+            state.user = user;
+        },
+
+        updateSubscriptions(state, subscriptions) {
+            state.subscriptions = subscriptions;
         },
 
         updateFrames(state, framesCache) {

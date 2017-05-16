@@ -66,4 +66,9 @@ class User extends Authenticatable
     {
         return $this->hasMany(\App\Models\UserAchievements::class)->orderBy("created_at", "DESC");
     }
+
+    public function subscriptions()
+    {
+        return $this->hasMany(\App\Models\UserSubscription::class);
+    }
 }

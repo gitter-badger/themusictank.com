@@ -43,6 +43,8 @@ Route::post('ajax/upvote/album/remove', "Ajax\UpvoteController@removeAlbum")->mi
 
 Route::post('ajax/tanker/whats-up', "Ajax\UserController@whatsUp")->middleware('auth');
 Route::post('ajax/tanker/ok-stfu', "Ajax\UserController@okstfu")->middleware('auth');
+Route::post('ajax/tanker/follow', "Ajax\UserController@follow")->middleware('auth');
+Route::post('ajax/tanker/unfollow', "Ajax\UserController@unfollow")->middleware('auth');
 Route::post('ajax/tanker/bugreport', "Ajax\UserController@bugreport");
 
 Route::post('ajax/track/ytkey/{slug}', "Ajax\TrackController@ytkey");

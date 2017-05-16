@@ -8,30 +8,32 @@ import {mapGetters} from 'vuex';
 import SearchForm from './components/SearchForm.vue'
 import Upvote from './components/Upvote.vue'
 import BugReport from './components/BugReport.vue'
+import Follow from './components/Follow.vue'
 import Player from './components/Player/Player.vue'
 import LineChart from './components/LineChart.vue'
 import Notifier from './components/Notifier.vue'
 import VisibleToggler from './components/VisibleToggler.vue'
 import ShareButtons from './components/Reviewer/ShareButtons.vue'
 
-import Profile from './models/profile'
+import User from './models/user'
+import Upvotes from './models/upvotes'
 import ReviewFrameCache from './models/review-frames/cache'
 import ActivitiesCache from './models/activities/cache'
-import Upvotes from './models/upvotes'
+import SubscriptionsCache from './models/subscriptions/cache'
 
 Tmt.app = new Vue({
     el: 'section.app',
     store,
     components : {
-        SearchForm, Upvote, BugReport, Player, LineChart, Notifier, VisibleToggler, ShareButtons
+        SearchForm, Upvote, BugReport, Player, LineChart, Notifier, VisibleToggler, ShareButtons, Follow
     },
     methods : {
         error (er) {
             console.log(er);
         },
 
-        profile (data) {
-            this.$store.commit('updateProfile', new Profile(data));
+        user (data) {
+            this.$store.commit('updateUser', new User(data));
         },
 
         upvotes (data) {
@@ -50,9 +52,15 @@ Tmt.app = new Vue({
             this.$store.commit('updateActivities', cache);
         },
 
+        subscriptions (data) {
+            let cache = new SubscriptionsCache();
+            data.forEach((row) => { cache.addUser(row); });
+            this.$store.commit('updateSubscriptions', cache);
+        },
+
         setWaveData (data) {
             // this.$store.commit('wave', { data })
         }
     },
-    computed: mapGetters(['profile','reviewFrames'])
+    computed: mapGetters(['user','reviewFrames'])
 });

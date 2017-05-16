@@ -5,49 +5,43 @@
 @section('content')
     <a href="{{ action('Auth\AuthController@index') }}">Log in using another method</a>
 
-    <h1>Create a TMT account</h1>
+    <h1>Register</h1>
+    <h2>Create a TMT account</h2>
 
-    <form role="form" method="POST" action="{{ action('Auth\Tmt\RegisterController@register') }}">
-        {{ csrf_field() }}
+    @include('partials.application-messages')
 
-        <div class="form-group{{ $errors->has('name') ? ' has-error' : '' }}">
+    {{ Form::open(['action' => "Auth\Tmt\RegisterController@register"]) }}
+        <fieldset class="{{ $errors->has('name') ? ' has-error' : '' }}">
             <label for="name">Name</label>
-                <input type="text" name="name" value="{{ old('name') }}" required autofocus>
-                @if ($errors->has('name'))
-                    <span class="help-block">
-                        <strong>{{ $errors->first('name') }}</strong>
-                    </span>
-                @endif
-            </div>
-        </div>
+            <input id="name" type="text" name="name" value="{{ old('name') }}" required autofocus>
+            @if ($errors->has('name'))
+                <p class="help-block">{{ $errors->first('name') }}</p>
+            @endif
+        </fieldset>
 
-        <div class="form-group{{ $errors->has('email') ? ' has-error' : '' }}">
+        <fieldset class="form-group{{ $errors->has('email') ? ' has-error' : '' }}">
             <label for="email">E-Mail Address</label>
-            <input type="email"name="email" value="{{ old('email') }}" required>
+            <input id="email" type="email"name="email" value="{{ old('email') }}" required>
             @if ($errors->has('email'))
-                <span class="help-block">
-                    <strong>{{ $errors->first('email') }}</strong>
-                </span>
+                <p class="help-block">{{ $errors->first('email') }}</p>
             @endif
-        </div>
+        </fieldset>
 
-        <div class="form-group{{ $errors->has('password') ? ' has-error' : '' }}">
+        <fieldset class="{{ $errors->has('password') ? ' has-error' : '' }}">
             <label for="password">Password</label>
-            <input type="password" name="password" required>
+            <input id="password" type="password" name="password" required>
             @if ($errors->has('password'))
-                <span class="help-block">
-                    <strong>{{ $errors->first('password') }}</strong>
-                </span>
+                <p class="help-block">{{ $errors->first('password') }}</p>
             @endif
-        </div>
+        </fieldset>
 
-        <div class="form-group">
+        <fieldset>
             <label for="password-confirm">Confirm Password</label>
-            <input type="password" class="form-control" name="password_confirmation" required>
-        </div>
+            <input id="password-confirm" type="password" name="password_confirmation" required>
+        </fieldset>
 
-        <button type="submit" class="btn btn-primary">
-            Register
-        </button>
+        <fieldset>
+            <button type="submit" class="btn btn-primary">Register</button>
+        </fieldset>
     </form>
 @endsection

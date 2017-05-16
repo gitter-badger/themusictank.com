@@ -23,7 +23,7 @@ class CreateTrackReviewsTable extends Migration
             $table->double('high_avg_groove');
             $table->timestamps();
 
-            $table->foreign('track_id')->references('id')->on('tracks');
+            $table->foreign('track_id')->references('id')->on('tracks')->onDelete('cascade');
         });
     }
 

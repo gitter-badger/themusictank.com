@@ -75,10 +75,10 @@ Route::get('you/edit/password', "Profile\ManageController@password")->middleware
 Route::get('you/edit/api', "Profile\ManageController@api")->middleware('auth');
 Route::get('you/edit/delete', "Profile\ManageController@delete")->middleware('auth');
 
-Route::post('you/edit/general/update', "Profile\ManageController@generalPost")->middleware('auth');
-Route::post('you/edit/thirdparty/attempt', "Profile\ManageController@thirdpartyPost")->middleware('auth');
-Route::post('you/edit/password/attempt', "Profile\ManageController@passwordPost")->middleware('auth');
-Route::post('you/edit/delete/attempt', "Profile\ManageController@deletePost")->middleware('auth');
+Route::post('you/edit/general/update', "Profile\ManageController@saveGeneral")->middleware('auth');
+Route::post('you/edit/thirdparty/revoke', "Profile\ManageController@revokeThirdParty")->middleware('auth');
+Route::post('you/edit/password/update', "Profile\ManageController@savePassword")->middleware('auth');
+Route::post('you/edit/delete/attempt', "Profile\ManageController@saveDelete")->middleware('auth');
 
 // User areas
 Route::get('tankers/{slug}', "UserController@show");

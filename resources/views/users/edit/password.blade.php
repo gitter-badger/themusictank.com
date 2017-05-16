@@ -13,27 +13,28 @@
     <h1>Settings</h1>
     <h2>Change your password</h2>
 
-    <form role="form" method="POST" action="{{ action('Profile\ManageController@passwordPost') }}">
-        {{ csrf_field() }}
+    <p>You can set a password even if you use a third party login like Facebook. This will allow you to also login using your Tanker profile with your email and password.</p>
+    <p>This is a required step if you wish to disconnect all 3rd party integrations.</p>
 
-        <div class="form-group{{ $errors->has('password') ? ' has-error' : '' }}">
+    @include('partials.application-messages')
+
+    {!! Form::model($user, ['action' => 'Profile\ManageController@savePassword']) !!}
+        <fieldset class="{{ $errors->has('password') ? ' has-error' : '' }}">
             <label for="password">Password</label>
-            <input type="password" name="password" required>
+            <input id="password" type="password" name="password" required>
             @if ($errors->has('password'))
-                <span class="help-block">
-                    <strong>{{ $errors->first('password') }}</strong>
-                </span>
+                <p class="help-block">{{ $errors->first('password') }}</p>
             @endif
-        </div>
+        </fieldset>
 
-        <div class="form-group">
+        <fieldset>
             <label for="password-confirm">Confirm Password</label>
-            <input type="password" class="form-control" name="password_confirmation" required>
-        </div>
+            <input id="password-confirm" type="password" name="password_confirmation" required>
+        </fieldset>
 
-        <button type="submit" class="btn btn-primary">
-            Update
-        </button>
+        <fieldset>
+            <button type="submit" class="btn btn-primary">Update</button>
+        </fieldset>
     </form>
 
 @endsection

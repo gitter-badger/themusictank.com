@@ -7,9 +7,7 @@
     <h1>Tanker Profiles</h1>
     <h2>Access your account</h2>
 
-    @if (isset($error))
-        <p class="error">{{ $error }}</p>
-    @endif
+    @include('partials.application-messages')
 
     <section>
         <h3>Authentication</h3>

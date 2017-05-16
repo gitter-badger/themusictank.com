@@ -6,7 +6,7 @@ use App\Http\Controllers\Controller;
 use App\Services\SocialAccountService;
 use Socialite;
 
-class SocialController extends Controller
+class FacebookController extends Controller
 {
     public function redirect()
     {

@@ -20,8 +20,8 @@ class CreateTrackUpvotesTable extends Migration
             $table->integer('vote')->unsigned();
             $table->timestamps();
 
-            $table->foreign('track_id')->references('id')->on('tracks');
-            $table->foreign('user_id')->references('id')->on('users');
+            $table->foreign('track_id')->references('id')->on('tracks')->onDelete('cascade');
+            $table->foreign('user_id')->references('id')->on('users')->onDelete('cascade');
         });
     }
 

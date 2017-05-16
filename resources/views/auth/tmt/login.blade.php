@@ -5,25 +5,34 @@
 @section('content')
     <a href="{{ action('Auth\AuthController@index') }}">Log in using another method</a>
 
-    <h1>Login with a TMT account</h1>
+    <h1>Login</h1>
+    <h2>Tanker Account</h2>
 
-    @include('partials.errors')
+    @include('partials.application-messages')
 
     {{ Form::open(['action' => "Auth\Tmt\LoginController@login"]) }}
-        <fieldset>
-            {{ Form::label('email', 'E-Mail Address') }}
-            {{ Form::email('email', Session::get('email')) }}
+        <fieldset class="{{ $errors->has('email') ? ' has-error' : '' }}">
+            <label for="email">E-Mail Address</label>
+            <input id="email" type="email"name="email" value="{{ old('email') }}" required>
+            @if ($errors->has('email'))
+                <p class="help-block">{{ $errors->first('email') }}</p>
+            @endif
         </fieldset>
-        <fieldset>
-            {{ Form::label('password', 'Password') }}
-            {{ Form::password('password') }}
+        <fieldset class="{{ $errors->has('password') ? ' has-error' : '' }}">
+            <label for="password">Password</label>
+            <input id="password" type="password" name="password" required>
+            @if ($errors->has('password'))
+                <p class="help-block">{{ $errors->first('password') }}</p>
+            @endif
         </fieldset>
         <fieldset>
             <label>
                 <input type="checkbox" name="remember" {{ old('remember') ? 'checked' : '' }}> Remember Me
             </label>
         </fieldset>
-        {{ Form::submit('Login') }}
-    {{ Form::close() }}
+        <fieldset>
+            <button type="submit" class="btn btn-primary">Login</button>
+        </fieldset>
+    </form>
 
 @endsection

@@ -2,31 +2,41 @@
 
 namespace App\Http\Controllers\Profile;
 
+use App\Http\Requests\UpdateUserGeneral;
+use App\Http\Requests\UpdateUserPassword;
+use App\Http\Requests\DeleteUserAccount;
+
+use App\Models\SocialAccount;
 use App\Http\Controllers\Controller;
-use Illuminate\Support\Facades\Validator;
-use App\Models\User;
 
 class ManageController extends Controller
 {
-
     public function edit()
     {
         return view('users.edit.general');
     }
 
-    public function thirdparty()
+    public function saveGeneral(UpdateUserGeneral $request)
     {
-        return view('users.edit.thirdparty');
-    }
+        $user = $request->user();
+        $user->fill($request->all());
+        $user->save();
 
-    public function api()
-    {
-        return view('users.edit.api');
+        return redirect('/you/edit')->with('success', 'You have successfully updated your profile');
     }
 
     public function password()
     {
-        return view('users.edit.password');
+         return view('users.edit.password');
+    }
+
+    public function savePassword(UpdateUserPassword $request)
+    {
+        $user = $request->user();
+        $user->password = bcrypt($request->offsetGet('password'));
+        $user->save();
+
+        return redirect('/you/edit/password')->with('success', 'You have successfully updated your password');
     }
 
     public function delete()
@@ -34,51 +44,29 @@ class ManageController extends Controller
         return view('users.edit.delete');
     }
 
-    public function generalPost()
+    public function saveDelete(DeleteUserAccount $request)
     {
-        $user = auth()->user();
-        $user->fill(request()->all());
-
-        $this->generalvalidator(request()->all())->validate();
-
-        $user->save();
-
-        return redirect('/you/edit');
+        $request->user()->delete();
+        auth()->logout();
+        return redirect('/profiles/auth')->with('success', 'We have successfully deleted your account');
     }
 
-
-    protected function generalvalidator($data)
+    public function thirdparty()
     {
-        $validations = [
-            'name' => 'required|max:255',
-            'email' => 'required|email|max:255',
-            'password' => 'required|min:6|confirmed',
-            'slug' => 'required'
-        ];
-
-        if ($user->isDirty('email')){
-            $validations['email'] .= "|unique:users";
-        }
-
-        if ($user->isDirty('slug')){
-            $validations['slug'] .= "|unique:users";
-        }
-
-        return Validator::make($data, $validations);
+        session(['_previous' => redirect()->back()]);
+        return view('users.edit.thirdparty');
     }
 
-    public function thirdpartyPost()
+    public function revokeThirdParty()
     {
+        $account = SocialAccount::findOrFail(request()->offsetGet("id"));
+        $account->delete();
 
+        return redirect('/you/edit/thirdparty')->with('success', ucfirst($account->provider) . ' was revoked from your account');
     }
 
-    public function deletePost()
+    public function api()
     {
-        return view('users.edit.delete');
-    }
-
-    public function passwordPost()
-    {
-        return view('users.edit.delete');
+        return view('users.edit.api');
     }
 }

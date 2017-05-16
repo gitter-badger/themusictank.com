@@ -25,8 +25,8 @@ class CreateTracksTable extends Migration
             $table->integer('position')->nullable();
             $table->timestamps();
 
-            $table->foreign('artist_id')->references('id')->on('artists');
-            $table->foreign('album_id')->references('id')->on('albums');
+            $table->foreign('artist_id')->references('id')->on('artists')->onDelete('cascade');
+            $table->foreign('album_id')->references('id')->on('albums')->onDelete('cascade');
         });
     }
 

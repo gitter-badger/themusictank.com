@@ -20,8 +20,8 @@ class CreateAlbumUpvotesTable extends Migration
             $table->integer('vote')->unsigned();
             $table->timestamps();
 
-            $table->foreign('album_id')->references('id')->on('albums');
-            $table->foreign('user_id')->references('id')->on('users');
+            $table->foreign('album_id')->references('id')->on('albums')->onDelete('cascade');
+            $table->foreign('user_id')->references('id')->on('users')->onDelete('cascade');
         });
     }
 

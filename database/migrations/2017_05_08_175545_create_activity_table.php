@@ -21,7 +21,7 @@ class CreateActivityTable extends Migration
             $table->boolean('must_notify');
             $table->timestamps();
 
-            $table->foreign('user_id')->references('id')->on('users');
+            $table->foreign('user_id')->references('id')->on('users')->onDelete('cascade');
         });
     }
 

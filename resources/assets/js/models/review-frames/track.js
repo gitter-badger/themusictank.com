@@ -9,6 +9,10 @@ export default class Track {
     }
 
     setData(source, data) {
+        if (!data) {
+            data = []
+        }
+
         data.forEach(frameData => {
             this[source].push(new Frame(frameData));
         });

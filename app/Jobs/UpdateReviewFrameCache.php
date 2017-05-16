@@ -44,8 +44,9 @@ class UpdateReviewFrameCache implements ShouldQueue
             $groove = new GrooveAnalysisService($this->package);
             $keys = $this->getPrimaryKeys();
 
+            // @todo: consider batch saving these
             foreach ($groove->calculate() as $grooveData) {
-                // @todo: consider batch saving these
+                $keys['position'] = $grooveData['position'];
                 $review = TrackReview::firstOrNew($keys);
                 $review->fill($grooveData);
                 $review->save();

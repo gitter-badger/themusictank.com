@@ -24,6 +24,6 @@ class Album extends AppModel
     }
 
     public function tracks() {
-        return $this->hasMany(\App\Models\Track::class);
+        return $this->hasMany(\App\Models\Track::class)->orderBy("position", "ASC");
     }
 }

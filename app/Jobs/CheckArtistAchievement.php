@@ -4,6 +4,7 @@ namespace App\Jobs;
 
 use App\Models\Artist;
 use App\Models\User;
+use App\Services\AchievementService;
 
 use Illuminate\Bus\Queueable;
 use Illuminate\Queue\SerializesModels;
@@ -38,7 +39,7 @@ class CheckArtistAchievement implements ShouldQueue
     {
         $possibleAchievements = AchievementService::collectForArtist($this->artist);
         foreach ($possibleAchievements as $achievement) {
-            AchievementService::grant($achievement, $user, [
+            AchievementService::grant($achievement, $this->user, [
                 "artist" => $this->artist
             ]);
         }

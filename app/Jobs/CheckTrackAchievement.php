@@ -39,12 +39,12 @@ class CheckTrackAchievement implements ShouldQueue
     public function handle()
     {
         // reward all reviewing
-        AchievementService::grant(new Contibutor(), $user);
+        AchievementService::grant(new Contributor(), $this->user);
 
         // reward by track id trigger
         $possibleAchievements = AchievementService::collectForTrack($this->track);
         foreach ($possibleAchievements as $achievement) {
-            AchievementService::grant($achievement, $user, [
+            AchievementService::grant($achievement, $this->user, [
                 "track" => $this->track
             ]);
         }

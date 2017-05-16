@@ -82,8 +82,9 @@ Route::post('you/edit/delete/attempt', "Profile\ManageController@saveDelete")->m
 
 // User areas
 Route::get('tankers/{slug}', "UserController@show");
-Route::get('tankers/{slug}/curve/{trackSlug}', "UserController@showCurve");
+Route::get('tankers/{slug}/curve/{trackSlug}', "TrackController@viewUserReview");
 
 
 // Others
 Route::get('admin/console', "AdminController@console")->middleware('auth');
+Route::post('admin/reset-review-cache', "AdminController@resetReviewCache")->middleware('auth');

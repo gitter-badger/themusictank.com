@@ -42,7 +42,7 @@ class TrackController extends Controller
     {
         $track = Track::whereSlug($slug)->firstOrFail();
         return response()->json(
-            Track::next($track)->first()
+            $track->next()->first()
         );
     }
 }

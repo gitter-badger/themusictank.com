@@ -21,4 +21,20 @@ class Achievement {
         return count($additional) === 0;
     }
 
+    public function trackTriggers()
+    {
+        return $this->trackIdsTriggers;
+    }
+
+    public function albumTriggers()
+    {
+        return $this->albumIdsTriggers;
+    }
+
+    public function artistTriggers()
+    {
+        return $this->artistIdsTriggers;
+    }
+
+
 }

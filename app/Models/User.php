@@ -59,11 +59,11 @@ class User extends Authenticatable
 
     public function activities()
     {
-        return $this->hasMany(\App\Models\Activity::class);
+        return $this->hasMany(\App\Models\Activity::class)->orderBy("created_at", "DESC");
     }
 
     public function userAchievements()
     {
-        return $this->hasMany(\App\Models\UserAchievements::class);
+        return $this->hasMany(\App\Models\UserAchievements::class)->orderBy("created_at", "DESC");
     }
 }

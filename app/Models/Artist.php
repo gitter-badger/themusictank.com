@@ -18,6 +18,6 @@ class Artist extends AppModel
 
     public function albums()
     {
-        return $this->hasMany(\App\Models\Album::class);
+        return $this->hasMany(\App\Models\Album::class)->orderBy("year", "DESC");
     }
 }

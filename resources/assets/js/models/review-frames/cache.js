@@ -8,7 +8,8 @@ export default class Cache {
     addTrack(data) {
         let track = new Track(data['id']);
         track.setData('global', data['global']);
-        track.setData('tanker', data['tanker']);
+        track.setData('user', data['user']);
+        track.setData('auth_user', data['auth_user']);
         track.setData('subscriptions', data['subscriptions']);
 
         this.tracks.push(track);

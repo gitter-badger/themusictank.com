@@ -3,7 +3,11 @@
 @section('body-class', 'admin console')
 
 @section('content')
+
     <h1>Console</h1>
+
+    @include('partials.application-messages')
+
 
     <h3>Summary</h3>
     <table>
@@ -14,7 +18,25 @@
         </tr>
     </table>
 
-    <h3>API Requests</h3>
+
+    <h3>Reset review Cache</h3>
+
+    {{ Form::open(['action' => "AdminController@resetReviewCache"]) }}
+        <fieldset>
+            <label for="track_id">Track ID</label>
+            <input id="track_id" type="number" name="track_id" required>
+        </fieldset>
+        <fieldset>
+            <label for="user_id">User ID</label>
+            <input id="user_id" type="number" name="user_id">
+            Keep field empty to reset the global curve instead.
+        </fieldset>
+        <fieldset>
+            <button type="submit">Refresh</button>
+        </fieldset>
+    </form>
+
+    {{-- <h3>API Requests</h3>
     <table>
         <tr>
             <th>ID</th>
@@ -28,8 +50,8 @@
             <tr>
                 <td>{{ $request->id }}</td>
                 <td>
-                    @if (!is_null($request->profile))
-                        <a href="{{ action('ProfileController@show', ['id' => $request->profile->slug]) }}">{{ $request->profile->name }}</a>
+                    @if (!is_null($request->UserController))
+                        <a href="{{ action('UserController@show', ['id' => $request->profile->slug]) }}">{{ $request->profile->name }}</a>
                     @else
                         Anonymous
                     @endif
@@ -40,6 +62,6 @@
                 <td>{{ $request->getCreatedDateForHumans() }}</td>
             </tr>
         @endforeach
-    </table>
+    </table> --}}
 
 @endsection

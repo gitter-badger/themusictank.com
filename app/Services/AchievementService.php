@@ -5,6 +5,8 @@ namespace App\Services;
 use App\Models\Achievements\Achievement;
 use App\Models\User;
 use App\Models\Track;
+use App\Models\Album;
+use App\Models\Artist;
 use App\Models\UserAchievement;
 use Exception;
 
@@ -41,21 +43,21 @@ class AchievementService
     public static function collectForTrack(Track $track)
     {
         return array_filter(self::collect(), function ($achievement) use ($track) {
-            return in_array($track->id, $achievement->trackIdsTriggers);
+            return in_array($track->id, $achievement->trackTriggers());
         });
     }
 
     public static function collectForAlbum(Album $album)
     {
         return array_filter(self::collect(), function ($achievement) use ($album) {
-            return in_array($album->id, $achievement->albumIdsTriggers);
+            return in_array($album->id, $achievement->albumTriggers());
         });
     }
 
     public static function collectForArtist(Artist $artist)
     {
         return array_filter(self::collect(), function ($achievement) use ($artist) {
-            return in_array($artist->id, $achievement->artistIdsTriggers);
+            return in_array($artist->id, $achievement->artistTriggers());
         });
     }
 

@@ -21,6 +21,8 @@
             'id' : {{ $track->id }},
             'global' : <?php echo $globalCurve->count() ? $globalCurve->toJson() : '[]'; ?>,
             'subscriptions' : <?php echo $subscriptionsCurve->count() ? $subscriptionsCurve->toJson() : '[]'; ?>
+            'user' : <?php echo $userCurve->count() ? $userCurve->toJson() : '[]'; ?>
+            'auth_user' : <?php echo isset($authUserCurve) ? $authUserCurve->toJson() : '[]'; ?>
         }]
     );
 @endpush
@@ -48,32 +50,17 @@
 
     <section class="review-cta">
         <a href="{{ action('TrackController@review', ['slug' => $track->slug]) }}">Review track</a>
-
-        @if (isset($authUserCurve))
-            You have already reviewed this track but you may review it again to fine tune your results.
-            <a href="{{ action('TrackController@viewUserReview', ['slug' => auth()->user()->slug, 'trackSlug' => $track->slug]) }}">View your curve</a>
-        @endif
     </section>
 
     <section>
+        @if (isset($authUserCurve))
+            <line-chart object-id="{{ $track->id }}" datasource="auth_user"></line-chart>
+        @endif
+
         <line-chart object-id="{{ $track->id }}" datasource="subscriptions"></line-chart>
         <line-chart object-id="{{ $track->id }}" datasource="global"></line-chart>
+        <line-chart object-id="{{ $track->id }}" datasource="user"></line-chart>
         @include('partials.player', ['track' => $track])
-    </section>
-
-
-    <section class="track-navigation">
-        @if ($track->previous()->count() && $previous = $track->previous()->first())
-            <a href="{{ action('TrackController@show', ['slug' => $previous->slug]) }}">
-                <i class="fa fa-fast-backward" aria-hidden="true"></i> {{ $previous->name }}
-            </a>
-        @endif
-
-        @if ($track->next()->count() && $next = $track->next()->first())
-            <a href="{{ action('TrackController@show', ['slug' => $next->slug]) }}">
-                {{ $next->name }} <i class="fa fa-fast-forward" aria-hidden="true"></i>
-            </a>
-        @endif
     </section>
 
 @endsection

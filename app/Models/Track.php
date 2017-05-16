@@ -27,11 +27,19 @@ class Track extends AppModel
         return $this->belongsTo(\App\Models\Artist::class);
     }
 
-    public function scopeNext($query, \App\Models\Track $pointer)
+    public function scopeNext($query)
     {
         return $query
-            ->wherePosition($track->position + 1)
-            ->andWhereArtistId($track->artist->id)
-            ->andWhereAlbumId($track->album->id);
+            ->wherePosition($this->position + 1)
+            ->whereArtistId($this->artist->id)
+            ->whereAlbumId($this->album->id);
+    }
+
+    public function scopePrevious($query)
+    {
+        return $query
+            ->wherePosition($this->position - 1)
+            ->whereArtistId($this->artist->id)
+            ->whereAlbumId($this->album->id);
     }
 }

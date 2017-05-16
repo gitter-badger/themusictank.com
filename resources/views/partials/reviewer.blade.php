@@ -6,8 +6,7 @@
         song-video="{{ isset($track->youtube_key) ? $track->youtube_key : "" }}"
         album-name="{{ $track->album->name}}"
         song-name="{{ $track->name}}"
-        profile-slug="{{ auth()->user()->slug }}"
-    >
-    </player>
+        user-slug="{{ auth()->user()->slug }}"
+    ></player>
     @include('partials.buttons.bugreport', ['identity' => "song-reviewer", 'location' => Request::url(), 'label' => "Wrong song or something is wrong?"])
 @endif

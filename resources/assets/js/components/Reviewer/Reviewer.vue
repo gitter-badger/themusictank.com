@@ -2,6 +2,7 @@
 import $ from 'jquery'
 import ComponentBase from '../mixins/base.js'
 import Knob from './Knob.vue'
+import CompletedDialogs from './CompletedDialogs.vue'
 
 import ReviewerModel from '../../models/review/reviewer.js'
 
@@ -12,12 +13,12 @@ import ParticleEmitter from '../../models/canvas/emitter/particle-emitter.js'
 export default {
     mixins: [ComponentBase],
     components: {
-        Knob
+        Knob, CompletedDialogs
     },
     props: [
         'songName',
         'songSlug',
-        'profileSlug',
+        'userSlug',
         'albumName',
         'enabled',
         'position',
@@ -132,7 +133,7 @@ export default {
     <div class="ctrl ctrl-reviewer">
         <canvas></canvas>
         <knob ref="knob" :enabled="enabled"></knob>
-        <completed-dialogs v-if="completed" :sync-complete="syncComplete" :profile-slug="profileSlug" :song-name="songName" :album-name="albumName"></completed-dialogs>
+        <completed-dialogs v-if="completed" :sync-complete="syncComplete" :user-slug="userSlug" :song-name="songName" :album-name="albumName"></completed-dialogs>
         <i v-if="synchronising" class="synchronising fa fa-circle-o-notch fa-spin" aria-hidden="true"></i>
     </div>
 </template>

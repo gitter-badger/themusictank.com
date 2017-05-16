@@ -20,13 +20,12 @@
         [{
             'id' : {{ $track->id }},
             'global' : <?php echo $globalCurve->count() ? $globalCurve->toJson() : '[]'; ?>,
-            'subscriptions' : <?php echo $subscriptionsCurve->count() ? $subscriptionsCurve->toJson() : '[]'; ?>
-            'user' : <?php echo $userCurve->count() ? $userCurve->toJson() : '[]'; ?>
+            'subscriptions' : <?php echo $subscriptionsCurve->count() ? $subscriptionsCurve->toJson() : '[]'; ?>,
+            'user' : <?php echo $userCurve->count() ? $userCurve->toJson() : '[]'; ?>,
             'auth_user' : <?php echo isset($authUserCurve) ? $authUserCurve->toJson() : '[]'; ?>
         }]
     );
 @endpush
-
 
 @section('content')
     <section class="header">
@@ -46,6 +45,14 @@
             </a>
             @include('partials.buttons.upvote', ['type' => "track", 'id' => $track->id])
         </h3>
+
+        @if ($user->id === auth()->user()->id)
+            <share-buttons
+                user-slug="{{ $user->slug }}"
+                song-name="{{ $track->name }}"
+                song-slug="{{ $track->slug }}"
+            ></share-buttons>
+        @endif
     </section>
 
     <section class="review-cta">

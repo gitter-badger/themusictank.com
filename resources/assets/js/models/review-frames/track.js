@@ -4,7 +4,8 @@ export default class Track {
     constructor(id, frameData) {
         this.id = id;
         this.global = [];
-        this.tanker = [];
+        this.user = [];
+        this.auth_user = [];
         this.subscriptions = [];
     }
 

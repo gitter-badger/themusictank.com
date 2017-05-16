@@ -51,7 +51,7 @@ export default {
 
         $(window).on('resize', this.debounce(() => {
             this.canvas.resize(element.width(), element.height());
-            console.log('resize with ' + element.width() + " , " + element.height());
+            // console.log('resize with ' + element.width() + " , " + element.height());
             this.canvas.draw();
         }));
 

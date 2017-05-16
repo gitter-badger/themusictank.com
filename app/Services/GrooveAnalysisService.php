@@ -60,13 +60,15 @@ class GrooveAnalysisService
         $sorted = [];
 
         for ($i = 0, $len = count($this->raw); $i < $len; $i++) {
-            $value = $this->raw[$i]['groove'];
-            $position =  (int)floor($this->raw[$i]['position']);
+            if (array_key_exists('groove', $this->raw[$i])) {
+                $value = $this->raw[$i]['groove'];
+                $position =  (int)floor($this->raw[$i]['position']);
 
-            if (array_key_exists($position, $sorted)) {
-                $sorted[$position][] = $value;
-            } else {
-                $sorted[$position] = [$value];
+                if (array_key_exists($position, $sorted)) {
+                    $sorted[$position][] = $value;
+                } else {
+                    $sorted[$position] = [$value];
+                }
             }
         }
 

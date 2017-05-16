@@ -6,8 +6,8 @@ use App\Models\Track;
 use App\Models\User;
 use App\Models\Album;
 use App\Models\Artist;
-use App\Models\ReviewFrame;
 use App\Jobs\UpdateReviewFrameCache;
+use App\Services\Curves\ReviewCurve;
 
 class AdminController extends Controller
 {
@@ -22,16 +22,14 @@ class AdminController extends Controller
 
     public function resetReviewCache()
     {
-        $data = request()->all();
-        $track = Track::find($data['track_id']);
-        $user = empty($data['user_id']) ? null : User::find($data['user_id']);
+        $trackId = request()->offsetGet('track_id');
+        $userId = request()->offsetGet('user_id');
 
-        $query = ReviewFrame::whereTrackId($track->id);
-        if (!is_null($user)) {
-            $query->whereUserId($user->id);
-        }
+        $track = Track::find($trackId);
+        $user = $userId ? Track::find($trackId) : null;
 
-        $job = new UpdateReviewFrameCache($query->get()->toArray(), $track, $user);
+        $curve = new ReviewCurve($track, $user);
+        $job = new UpdateReviewFrameCache($curve->filterFrames()->toArray(), $track, $user);
         $job->handle();
 
         return redirect('/admin/console')

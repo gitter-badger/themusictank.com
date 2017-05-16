@@ -24,19 +24,14 @@ class TrackReview extends AppModel
         return $this->belongsTo(\App\Models\User::class);
     }
 
-    public function scopeSubscriptionsOf($query, User $user)
-    {
-        return $query->whereUserId($user->id);
-    }
-
-    public function scopeTrack($query, Track $track)
+    public function scopeForTrack($query, Track $track)
     {
         return $query->whereTrackId($track->id);
     }
 
     public function scopeGlobal($query)
     {
-        return $query->whereUserId(null);
+        return $query->whereNull('user_id');
     }
 
     public function scopeForUser($query, User $user)

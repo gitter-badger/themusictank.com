@@ -28,6 +28,11 @@
 @endpush
 
 @section('content')
+    @php
+        $authUser = auth()->user();
+    @endphp
+
+
     <section class="header">
         <h1>
             <a href="{{ action('ArtistController@show', ['slug' => $track->artist->slug]) }}">
@@ -64,8 +69,17 @@
             <line-chart object-id="{{ $track->id }}" datasource="auth_user"></line-chart>
         @endif
 
-        <line-chart object-id="{{ $track->id }}" datasource="subscriptions"></line-chart>
+        @if (!is_null($authUser))
+            <h3>Your subscriptions</h3>
+            <line-chart object-id="{{ $track->id }}" datasource="subscriptions"></line-chart>
+        @endif
+
+        <h3>Global curve</h3>
         <line-chart object-id="{{ $track->id }}" datasource="global"></line-chart>
+
+        @if ( && )
+        <h3>{{  }}</h3>
+        @endif
         <line-chart object-id="{{ $track->id }}" datasource="user"></line-chart>
         @include('partials.player', ['track' => $track])
     </section>

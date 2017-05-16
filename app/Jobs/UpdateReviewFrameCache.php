@@ -57,8 +57,9 @@ class UpdateReviewFrameCache implements ShouldQueue
     protected function getPrimaryKeys()
     {
         return [
+            "position" => -1,
             "track_id" => $this->track->id,
-            "user_id" => is_null( $this->user) ? null : $this->user->id
+            "user_id" => is_null($this->user) ? null : $this->user->id
         ];
     }
 }

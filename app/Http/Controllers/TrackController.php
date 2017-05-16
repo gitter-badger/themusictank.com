@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Models\Track;
 use App\Models\User;
 use App\Models\TrackReview;
+use App\Services\Curves\SubscriptionsCurve;
 
 class TrackController extends Controller
 {
@@ -22,6 +23,7 @@ class TrackController extends Controller
     {
         $user = User::whereSlug($userSlug)->firstOrFail();
         $track = Track::whereSlug($trackSlug)->firstOrFail();
+
         $globalCurve = $this->globalCurve($track);
         $userCurve = $this->userCurve($track, $user);
         $subscriptionsCurve = $this->subscriptionsCurve($track, $this->user());
@@ -46,7 +48,7 @@ class TrackController extends Controller
     private function globalCurve(Track $track)
     {
         return TrackReview::componentFields()
-            ->track($track)
+            ->forTrack($track)
             ->global()
             ->ordered()
             ->get();
@@ -56,21 +58,18 @@ class TrackController extends Controller
     {
         if (!is_null($user)) {
             return TrackReview::componentFields()
-                ->track($track)
-                ->forUser($this->user())
+                ->forTrack($track)
+                ->forUser($user)
                 ->ordered()
                 ->get();
         }
     }
 
-    private function subscriptionsCurve(Track $track, User $user = null)
+    private function subscriptionsCurve(Track $track, User $user)
     {
         if (!is_null($user)) {
-            return TrackReview::componentFields()
-                ->track($track)
-                ->subscriptionsOf($this->user())
-                ->ordered()
-                ->get();
+            $curve = new SubscriptionsCurve($track, $user);
+            return $curve->calculate();
         }
     }
 }

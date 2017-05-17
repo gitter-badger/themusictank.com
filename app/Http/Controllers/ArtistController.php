@@ -18,6 +18,7 @@ class ArtistController extends Controller
     public function show($slug)
     {
         $artist = Artist::whereSlug($slug)->firstOrFail();
+        
         return view('artists.show', compact('artist'));
     }
 

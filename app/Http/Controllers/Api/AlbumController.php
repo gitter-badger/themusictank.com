@@ -9,7 +9,7 @@ class AlbumController extends ApiController
 {
     public function show($slug)
     {
-        return $this->answer(Album::where(['slug' => $slug])->first());
+        return $this->answer(Album::where(['slug' => $slug])->firstOrFail());
     }
 
     public function update(Request $request, $gid)

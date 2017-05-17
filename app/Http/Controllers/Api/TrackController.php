@@ -9,7 +9,7 @@ class TrackController extends ApiController
 {
     public function show($slug)
     {
-        return $this->answer(Track::where(['slug' => $slug])->first());
+        return $this->answer(Track::where(['slug' => $slug])->firstOrFail());
     }   
     
     public function update(Request $request, $gid)

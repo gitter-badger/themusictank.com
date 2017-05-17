@@ -17,19 +17,21 @@ class AdminController extends Controller
         $albumCount = Album::count();
         $trackCount = Track::count();
 
-        return view('admin.console', compact('artistCount', 'albumCount', 'trackCount', 'apiRequests'));
+        return view('admin.console', compact('artistCount', 'albumCount', 'trackCount');
     }
 
     public function resetReviewCache()
     {
-        $trackId = request()->offsetGet('track_id');
-        $userId = request()->offsetGet('user_id');
+        $trackId = (int)request('track_id');
+        $userId = (int)request('user_id');
 
         $track = Track::find($trackId);
-        $user = $userId ? Track::find($trackId) : null;
+        $user = $userId ? User::find($userId) : null;
 
         $curve = new ReviewCurve($track, $user);
-        $job = new UpdateReviewFrameCache($curve->filterFrames()->toArray(), $track, $user);
+        $frames = $curve->filterFrames()->toArray();
+
+        $job = new UpdateReviewFrameCache($frames, $track, $user);
         $job->handle();
 
         return redirect('/admin/console')

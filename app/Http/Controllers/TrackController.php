@@ -13,8 +13,11 @@ class TrackController extends Controller
     {
         $track = Track::whereSlug($slug)->firstOrFail();
         $globalCurve = $this->globalCurve($track);
-        $authUserCurve = $this->userCurve($track, $this->user());
-        $subscriptionsCurve = $this->subscriptionsCurve($track, $this->user());
+
+        if ($this->hasActiveSession()) {        
+            $authUserCurve = $this->userCurve($track, auth()->user());
+            $subscriptionsCurve = $this->subscriptionsCurve($track, auth()->user());
+        }
 
         return view('tracks.show', compact('track', 'globalCurve', 'authUserCurve', 'subscriptionsCurve'));
     }
@@ -26,10 +29,13 @@ class TrackController extends Controller
 
         $globalCurve = $this->globalCurve($track);
         $userCurve = $this->userCurve($track, $user);
-        $subscriptionsCurve = $this->subscriptionsCurve($track, $this->user());
-
-        $authUserCurve = $this->user()->id !== $user->id ?
-            $this->userCurve($track, $this->user()) : null;
+            
+        if ($this->hasActiveSession()) {        
+            $subscriptionsCurve = $this->subscriptionsCurve($track, auth()->user());
+            if (!$this->isAuthUser($user)) {
+                $authUserCurve = $this->userCurve($track, auth()->user());
+            }
+        }
 
         return view('tracks.show-review', compact('user', 'track', 'globalCurve', 'userCurve', 'authUserCurve', 'subscriptionsCurve'));
     }
@@ -40,10 +46,6 @@ class TrackController extends Controller
         return view('tracks.review', compact('track'));
     }
 
-    public function user()
-    {
-        return auth()->user();
-    }
 
     private function globalCurve(Track $track)
     {
@@ -56,20 +58,16 @@ class TrackController extends Controller
 
     private function userCurve(Track $track, User $user = null)
     {
-        if (!is_null($user)) {
-            return TrackReview::componentFields()
-                ->forTrack($track)
-                ->forUser($user)
-                ->ordered()
-                ->get();
-        }
+        return TrackReview::componentFields()
+            ->forTrack($track)
+            ->forUser($user)
+            ->ordered()
+            ->get();
     }
 
     private function subscriptionsCurve(Track $track, User $user)
     {
-        if (!is_null($user)) {
-            $curve = new SubscriptionsCurve($track, $user);
-            return $curve->calculate();
-        }
+        $curve = new SubscriptionsCurve($track, $user);
+        return $curve->calculate();
     }
 }

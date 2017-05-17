@@ -33,9 +33,10 @@ class ActivityService
 
     public static function loadAssociation(Activity $activity)
     {
+        $id = $activity->associated_object_id;
         switch ($activity->associated_object_type) {
-            case self::TYPE_ACHIEVEMENT   : return AchievementService::findById($activity->associated_object_id);
-            case self::TYPE_USER          : return User::find($activity->associated_object_id);
+            case self::TYPE_ACHIEVEMENT   : return AchievementService::findById($id);
+            case self::TYPE_USER          : return User::find($id);
         }
     }
 

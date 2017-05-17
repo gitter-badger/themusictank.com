@@ -9,7 +9,7 @@ class ConfigurationController extends ApiController
 {
     public function show($key)
     {
-        return $this->answer(Configuration::where(['key' => $key])->first());
+        return $this->answer(Configuration::where(['key' => $key])->firstOrFail());
     }
 
     public function update(Request $request, $key)

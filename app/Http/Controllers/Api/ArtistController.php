@@ -9,7 +9,7 @@ class ArtistController extends ApiController
 {
     public function show($slug)
     {
-        return $this->answer(Artist::where(['slug' => $slug])->first());
+        return $this->answer(Artist::where(['slug' => $slug])->firstOrFail());
     }
 
     public function update(Request $request, $gid)

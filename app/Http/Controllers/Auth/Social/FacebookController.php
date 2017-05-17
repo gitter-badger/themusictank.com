@@ -16,8 +16,14 @@ class FacebookController extends Controller
     public function callback()
     {
         $service = new SocialAccountService();
-        $user = $service->createOrGetUser(Socialite::driver('facebook')->user());
+        $user = $service->createOrGetUser($this->fromFacebook());
+        
         auth()->login($user);
         return redirect()->intended('/you/');
+    }
+
+    protected function fromFacebook()
+    {
+        return Socialite::driver('facebook')->user();
     }
 }

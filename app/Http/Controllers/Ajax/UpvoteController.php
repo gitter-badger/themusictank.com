@@ -13,7 +13,7 @@ class UpvoteController extends Controller
     {
         $upvote = TrackUpvote::firstOrNew([
             'track_id' => (int)request('track_id'),
-            'user_id' => auth()->user()->id
+            'user_id' => $this->authUserId()
         ]);
 
         $upvote->vote = (int)request('vote');
@@ -26,7 +26,7 @@ class UpvoteController extends Controller
     {
         $upvote = AlbumUpvote::firstOrNew([
             'album_id' => (int)request('album_id'),
-            'user_id' => auth()->user()->id
+            'user_id' => $this->authUserId()
         ]);
 
         $upvote->vote = (int)request('vote');
@@ -39,19 +39,23 @@ class UpvoteController extends Controller
     {
         $upvote = TrackUpvote::where([
             'track_id' => (int)request('track_id'),
-            'user_id' => auth()->user()->id
+            'user_id' => $this->authUserId()
         ])->firstOrFail();
 
-        return response()->json($upvote->delete());
+        return response()->json([
+            "status" => $upvote->delete()
+        ]);
     }
 
     public function removeAlbum()
     {
         $upvote = AlbumUpvote::where([
             'album_id' => (int)request('album_id'),
-            'user_id' => auth()->user()->id
+            'user_id' => $this->authUserId()
         ])->firstOrFail();
 
-        return response()->json($upvote->delete());
+        return response()->json([
+            "status" => $upvote->delete()
+        ]);
     }
 }

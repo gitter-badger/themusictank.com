@@ -12,7 +12,7 @@ class UserController extends Controller
     public function whatsUp()
     {
         $timestamp = (int)request('timestamp');
-        $query = Activity::whereUserId(auth()->user()->id)
+        $query = Activity::whereUserId($this->authUserId())
             ->orderBy('created_at', 'DESC')
             ->take(6);
 
@@ -40,7 +40,9 @@ class UserController extends Controller
             }
         }
 
-        return response()->json(["status" => $status]);
+        return response()->json([
+            "status" => $status
+        ]);
     }
 
     public function bugreport()
@@ -51,8 +53,8 @@ class UserController extends Controller
     public function follow()
     {
         $subscription = new UserSubscription();
-        $subscription->user_id = auth()->user()->id;
-        $subscription->sub_id = request()->offsetGet('sub_id');
+        $subscription->user_id = $this->authUserId();
+        $subscription->sub_id = (int)request('sub_id');
         $subscription->save();
 
         return response()->json($subscription);
@@ -60,8 +62,8 @@ class UserController extends Controller
 
     public function unfollow()
     {
-        $subscription = UserSubscription::whereUserId(auth()->user()->id)
-            ->whereSubId(request()->offsetGet('sub_id'))
+        $subscription = UserSubscription::whereUserId($this->authUserId())
+            ->whereSubId((int)request('sub_id'))
             ->firstOrFail();
 
         return response()->json([

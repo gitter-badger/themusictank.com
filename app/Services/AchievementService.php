@@ -34,10 +34,21 @@ class AchievementService
     }
 
     public static function collect() {
-        $files = array_diff(scandir(app_path('Models\\Achievements')), array('.', '..', 'Achievement.php'));
-        return array_map(function($file) {
-            return self::find(basename($file, '.php'));
-        }, $files);
+        // If the crawl was never made during the lifetime of
+        // the object, scan the files in the achievement directory and
+        // preload the models for subsequent use.
+        if (is_null(self::$modelFiles)) {
+            $files = array_diff(scandir(app_path('Models\\Achievements')), ['.', '..', 'Achievement.php']);
+            $filenames = array_map(function($file) {
+                $filename = basename($file, '.php');
+                if (preg_match("/^(\d+)\.(.*)/", $filename, $matches)) {
+                    return self::find($matches[2]);
+                }
+            }, $files);
+
+        }
+
+        return self::$modelFiles;
     }
 
     public static function collectForTrack(Track $track)
@@ -69,19 +80,12 @@ class AchievementService
                 return new $classname();
             }
         }
-
-        throw new Exception(sprintf("%s is not a valid achievement identifier.", $slug));
     }
 
     public static function findById($id)
     {
-        foreach (self::collect() as $achievement) {
-            if ($achievement->id === $id) {
-                return $achievement;
-            }
-        }
-
-        throw new Exception(sprintf("%s is not a valid achievement id.", $id));
+        return array_filter(self::collect(), function ($achievement) use ($id) {
+            return $achievement->id === (int)$id;
+        });
     }
-
 }

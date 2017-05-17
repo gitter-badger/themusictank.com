@@ -22,7 +22,8 @@ class ManageController extends Controller
         $user->fill($request->all());
         $user->save();
 
-        return redirect('/you/edit')->with('success', 'You have successfully updated your profile');
+        return redirect('/you/edit')
+            ->with('success', 'You have successfully updated your profile');
     }
 
     public function password()
@@ -36,7 +37,8 @@ class ManageController extends Controller
         $user->password = bcrypt($request->offsetGet('password'));
         $user->save();
 
-        return redirect('/you/edit/password')->with('success', 'You have successfully updated your password');
+        return redirect('/you/edit/password')
+            ->with('success', 'You have successfully updated your password');
     }
 
     public function delete()
@@ -48,21 +50,25 @@ class ManageController extends Controller
     {
         $request->user()->delete();
         auth()->logout();
-        return redirect('/profiles/auth')->with('success', 'We have successfully deleted your account');
+
+        return redirect('/profiles/auth')
+            ->with('success', 'We have successfully deleted your account');
     }
 
     public function thirdparty()
     {
         session(['_previous' => redirect()->back()]);
+        
         return view('users.edit.thirdparty');
     }
 
     public function revokeThirdParty()
     {
-        $account = SocialAccount::findOrFail(request()->offsetGet("id"));
+        $account = SocialAccount::findOrFail((int)request("id"));
         $account->delete();
 
-        return redirect('/you/edit/thirdparty')->with('success', ucfirst($account->provider) . ' was revoked from your account');
+        return redirect('/you/edit/thirdparty')
+            ->with('success', ucfirst($account->provider) . ' was revoked from your account');
     }
 
     public function api()

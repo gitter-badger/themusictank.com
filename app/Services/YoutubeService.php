@@ -30,7 +30,12 @@ class YoutubeService
 
     private function makeQuery(Track $track)
     {
-        return $track->name . " by " . $track->album->artist->name . " from " . $track->album->name;
+        return sprintf(
+            "%s by %s from %s",
+            $track->name,
+            $track->artist->name,
+            $track->album->name
+        );
     }
 
 }

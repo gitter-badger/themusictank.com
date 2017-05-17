@@ -9,6 +9,7 @@ class AlbumController extends Controller
     public function show($slug)
     {
         $album = Album::whereSlug($slug)->firstOrFail();
+        
         return view('albums.show', compact('album'));
     }
 }

@@ -18,11 +18,11 @@
 @push('app-javascript')
     Tmt.app.reviewFrames(
         [{
-            'id' : {{ $track->id }},
-            'global' : <?php echo $globalCurve->count() ? $globalCurve->toJson() : '[]'; ?>,
-            'subscriptions' : <?php echo $subscriptionsCurve->count() ? $subscriptionsCurve->toJson() : '[]'; ?>,
-            'user' : <?php echo $userCurve->count() ? $userCurve->toJson() : '[]'; ?>,
-            'auth_user' : <?php echo isset($authUserCurve) ? $authUserCurve->toJson() : '[]'; ?>
+            @if (isset($globalCurve))        'global'       : <?php echo $globalCurve->toJson(); ?>,{{ PHP_EOL }}@endif
+            @if (isset($subscriptionsCurve)) 'subscriptions': <?php echo $subscriptionsCurve->toJson(); ?>,{{ PHP_EOL }}@endif
+            @if (isset($userCurve))          'user'         : <?php echo $userCurve->toJson(); ?>,{{ PHP_EOL }}@endif
+            @if (isset($authUserCurve))      'auth_user'    : <?php echo $authUserCurve->toJson(); ?>,{{ PHP_EOL }}@endif
+            'id' : {{ $track->id }}
         }]
     );
 @endpush
@@ -69,7 +69,7 @@
             <line-chart object-id="{{ $track->id }}" datasource="auth_user"></line-chart>
         @endif
 
-        @if (!is_null($authUser))
+        @if (!is_null($subscriptionsCurve))
             <h3>Your subscriptions</h3>
             <line-chart object-id="{{ $track->id }}" datasource="subscriptions"></line-chart>
         @endif
@@ -77,10 +77,10 @@
         <h3>Global curve</h3>
         <line-chart object-id="{{ $track->id }}" datasource="global"></line-chart>
 
-        @if ( && )
-        <h3>{{  }}</h3>
+        @if (!is_null($userCurve))
+            <h3>{{ $user->name }}'s review</h3>
+            <line-chart object-id="{{ $track->id }}" datasource="user"></line-chart>
         @endif
-        <line-chart object-id="{{ $track->id }}" datasource="user"></line-chart>
         @include('partials.player', ['track' => $track])
     </section>
 

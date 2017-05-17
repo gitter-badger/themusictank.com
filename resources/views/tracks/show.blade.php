@@ -18,9 +18,10 @@
 @push('app-javascript')
     Tmt.app.reviewFrames(
         [{
-            'id' : {{ $track->id }},
-            'global' : <?php echo $globalCurve->count() ? $globalCurve->toJson() : '[]'; ?>,
-            'subscriptions' : <?php echo $subscriptionsCurve->count() ? $subscriptionsCurve->toJson() : '[]'; ?>
+            @if (isset($globalCurve))        'global'       : <?php echo $globalCurve->toJson(); ?>,{{ PHP_EOL }}@endif
+            @if (isset($subscriptionsCurve)) 'subscriptions': <?php echo $subscriptionsCurve->toJson(); ?>,{{ PHP_EOL }}@endif
+            @if (isset($authUserCurve))      'auth_user'    : <?php echo $authUserCurve->toJson(); ?>,{{ PHP_EOL }}@endif
+            'id' : {{ $track->id }}
         }]
     );
 @endpush

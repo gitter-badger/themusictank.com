@@ -14,7 +14,7 @@ class TrackController extends Controller
         $track = Track::whereSlug($slug)->firstOrFail();
         $globalCurve = $this->globalCurve($track);
 
-        if ($this->hasActiveSession()) {        
+        if ($this->hasActiveSession()) {
             $authUserCurve = $this->userCurve($track, auth()->user());
             $subscriptionsCurve = $this->subscriptionsCurve($track, auth()->user());
         }
@@ -29,8 +29,8 @@ class TrackController extends Controller
 
         $globalCurve = $this->globalCurve($track);
         $userCurve = $this->userCurve($track, $user);
-            
-        if ($this->hasActiveSession()) {        
+
+        if ($this->hasActiveSession()) {
             $subscriptionsCurve = $this->subscriptionsCurve($track, auth()->user());
             if (!$this->isAuthUser($user)) {
                 $authUserCurve = $this->userCurve($track, auth()->user());
@@ -45,7 +45,6 @@ class TrackController extends Controller
         $track = Track::whereSlug($slug)->firstOrFail();
         return view('tracks.review', compact('track'));
     }
-
 
     private function globalCurve(Track $track)
     {

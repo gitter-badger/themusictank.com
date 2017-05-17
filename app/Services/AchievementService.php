@@ -39,13 +39,13 @@ class AchievementService
         // preload the models for subsequent use.
         if (is_null(self::$modelFiles)) {
             $files = array_diff(scandir(app_path('Models\\Achievements')), ['.', '..', 'Achievement.php']);
-            $filenames = array_map(function($file) {
+            self::$modelFiles = array_map(function($file) {
                 $filename = basename($file, '.php');
-                if (preg_match("/^(\d+)\.(.*)/", $filename, $matches)) {
-                    return self::find($matches[2]);
-                }
+                return self::find($filename);
             }, $files);
 
+            // Reset index
+            self::$modelFiles = array_values(self::$modelFiles);
         }
 
         return self::$modelFiles;
@@ -76,6 +76,7 @@ class AchievementService
     {
         if ($slug != "Achievement") {
             $classname = "\\App\\Models\\Achievements\\" . $slug;
+
             if (class_exists($classname)) {
                 return new $classname();
             }
@@ -84,8 +85,10 @@ class AchievementService
 
     public static function findById($id)
     {
-        return array_filter(self::collect(), function ($achievement) use ($id) {
-            return $achievement->id === (int)$id;
-        });
+        foreach (self::collect() as $achievement) {
+            if ($achievement->id === (int)$id) {
+                return $achievement;
+            }
+        }
     }
 }

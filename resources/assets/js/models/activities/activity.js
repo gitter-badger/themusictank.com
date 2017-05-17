@@ -11,7 +11,6 @@ export default class Activity {
     }
 
     getLabel() {
-
         if (this.associated_object_type === 1) {
             return 'You have earned the achievement: ' + this.associated_object.name + '.';
         }

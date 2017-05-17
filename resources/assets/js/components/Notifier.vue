@@ -32,7 +32,8 @@ export default {
 
     data() {
         return {
-            opened: false
+            opened: false,
+            enabled: true
         }
     },
 
@@ -40,10 +41,20 @@ export default {
         toggle() {
             this.opened = !this.opened;
         },
+
+        lock() {
+            this.enabled = false;
+        },
+
+        unlock() {
+            this.enabled = true;
+        },
+
         stfu() {
             let ids = this.newNotifications.map((row) => { return row.id; });
             this.clearNotifications(ids);
         },
+
         listItemClick(evt) {
             let item = evt.target;
             if (item.getAttribute('hide-click') > 0) {
@@ -51,6 +62,7 @@ export default {
                 this.clearNotifications([item.getAttribute('id')]);
             }
         },
+
         clearNotifications(notificationsIds, destinationUrl) {
             if (notificationsIds.length < 1) {
                 return;
@@ -60,15 +72,26 @@ export default {
                 'ids': notificationsIds
             };
 
+            this.lock();
             this.ajax()
                 .post('/ajax/tanker/ok-stfu', payload)
                 .then((response) => {
+                    this.unlock();
+
+                    payload.ids.forEach((id) => {
+                        let activity = this.activities.findById(id);
+                        if (activity) {
+                            activity.must_notify = false;
+                        }
+                    });
+
                     if (destinationUrl) {
                         window.location = destinationUrl;
                     }
                 })
                 .catch((error) => {
                     Tmt.app.error(error);
+                    this.unlock();
                 });
         }
     },
@@ -99,7 +122,7 @@ export default {
             <em v-if="hasNewNotifications">{{ newNotificationsCount }}</em>
         </a>
         <div class="panel" v-if="opened">
-            <button name="stfu" @click.prevent="stfu">Mark all as read</button>
+            <button name="stfu" @click.prevent="stfu" :disabled="!enabled">Mark all as read</button>
             <ul>
                 <li v-for="notification in notifications" :class="{ 'new': notification.must_notify, 'read': !notification.must_notify }">
                     <a v-if="notification.getLink()" @click="listItemClick" :href="notification.getLink()" :id="notification.id" :hide-click="notification.must_notify">

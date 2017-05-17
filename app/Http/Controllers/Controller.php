@@ -2,7 +2,7 @@
 
 namespace App\Http\Controllers;
 
-use App\Model\User;
+use App\Models\User;
 use Illuminate\Foundation\Bus\DispatchesJobs;
 use Illuminate\Routing\Controller as BaseController;
 use Illuminate\Foundation\Validation\ValidatesRequests;
@@ -26,7 +26,7 @@ class Controller extends BaseController
 
     protected function hasActiveSession()
     {
-        return !is_null();
+        return !is_null(auth()->user());
     }
 
 }

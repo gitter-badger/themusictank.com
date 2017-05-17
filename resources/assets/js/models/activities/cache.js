@@ -20,4 +20,12 @@ export default class Cache {
     getAll() {
         return this.activities;
     }
+
+    findById(id) {
+        for (var i = 0, len = this.count(); i < len; i++) {
+            if (this.activities[i].id == id) {
+                return this.activities[i];
+            }
+        }
+    }
 };

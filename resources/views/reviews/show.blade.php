@@ -1,4 +1,4 @@
-@extends('app')
+@extends('layouts.app')
 
 @section('title', sprintf('%s from %s by %s', $track->name, $track->album->name, $track->artist->name))
 @section('og-title', sprintf('%s from %s by %s', $track->name, $track->album->name, $track->artist->name))

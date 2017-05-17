@@ -1,4 +1,4 @@
-@extends('app')
+@extends('layouts.app')
 
 @section('body-class')
 error error-404

@@ -1,4 +1,4 @@
-@extends('app')
+@extends('layouts.app')
 
 @section('title', sprintf('%s by %s', $album->name, $album->artist->name))
 @section('og-title', sprintf('%s by %s', $album->name, $album->artist->name))
@@ -18,19 +18,18 @@
 @section('content')
 <section class="header">
     <h1>
-        <a href="{{ action('ArtistController@show', ['slug' => $album->artist->slug]) }}">
+        <a href="{{ route('artist', ['slug' => $album->artist->slug]) }}">
             {{ $album->artist->name }}
         </a>
     </h1>
     <h2>
-        <a href="{{ action('AlbumController@show', ['slug' => $album->slug]) }}">
+        <a href="{{ route('album', ['slug' => $album->slug]) }}">
             {{ $album->name }}
         </a>
     </h2>
     <span>Released <time>{{ date("M", $album->month) }} {{ $album->day }} {{ $album->year }}</time></span>
 
     @include('partials.buttons.upvote', ['type' => "album", 'id' => $album->id])
-
 </section>
 
 <section class="discography">
@@ -42,7 +41,7 @@
             <li>
                 @include('partials.buttons.upvote', ['type' => "track", 'id' => $track->id])
 
-                <a href="{{ action('TrackController@show', ['slug' => $track->slug]) }}">
+                <a href="{{ route('track', ['slug' => $track->slug]) }}">
                     <em>{{ $track->position }}</em>
                     {{ $track->name }}
                 </a>

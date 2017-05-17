@@ -1,4 +1,4 @@
-@extends('app')
+@extends('layouts.app')
 
 @section('body-class', 'profiles settings')
 
@@ -13,7 +13,7 @@
 
     @include('partials.application-messages')
 
-    {!! Form::model(auth()->user(), ['action' => 'Profile\ManageController@saveDelete']) !!}
+    {!! Form::model(auth()->user(), ['route' => 'profile-delete-save']) !!}
         <fieldset class="{{ $errors->has('confirm') ? ' has-error' : '' }}">
             <label for="confirm">If you wish to delete your account on TMT, type "delete my account" in the following box</label>
             <input id="confirm" type="text" name="confirm" value="{{ old('confirm') }}" required autofocus>

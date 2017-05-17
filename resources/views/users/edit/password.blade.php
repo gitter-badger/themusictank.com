@@ -1,4 +1,4 @@
-@extends('app')
+@extends('layouts.app')
 
 @section('body-class', 'profiles settings')
 
@@ -18,7 +18,7 @@
 
     @include('partials.application-messages')
 
-    {!! Form::model($user, ['action' => 'Profile\ManageController@savePassword']) !!}
+    {!! Form::model($user, ['route' => 'profile-password-save']) !!}
         <fieldset class="{{ $errors->has('password') ? ' has-error' : '' }}">
             <label for="password">Password</label>
             <input id="password" type="password" name="password" required>

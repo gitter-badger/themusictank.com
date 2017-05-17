@@ -1,4 +1,4 @@
-@extends('app')
+@extends('layouts.app')
 
 @section('title', sprintf('%s', $artist->name))
 @section('og-title', sprintf('%s', $artist->name))
@@ -18,7 +18,7 @@
 @section('content')
 <section class="header">
     <h1>
-        <a href="{{ action('ArtistController@show', ['slug' => $artist->slug]) }}">
+        <a href="{{ route('artist', ['slug' => $artist->slug]) }}">
             {{ $artist->name }}
         </a>
     </h1>
@@ -32,11 +32,11 @@
     <ul>
         @foreach ($artist->albums->take(4) as $idx => $album)
             <li>
-                <a href="{{ action('AlbumController@show', ['slug' => $album->slug]) }}">
+                <a href="{{ route('album', ['slug' => $album->slug]) }}">
                     <img src="{{ $album->getThumbnailUrl() }}" alt="{{ $album->name }}" title="{{ $album->name }}">
                 </a>
                 <h3>
-                    <a href="{{ action('AlbumController@show', ['slug' => $album->slug]) }}">
+                    <a href="{{ route('album', ['slug' => $album->slug]) }}">
                         {{ $album->name }}
                     </a>
                 </h3>

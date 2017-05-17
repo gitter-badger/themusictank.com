@@ -1,4 +1,7 @@
 
+const TYPE_ACHIEVEMENT = 1;
+const TYPE_USER = 2;
+
 export default class Activity {
     constructor(frameData) {
         this.id = frameData.id;
@@ -11,17 +14,21 @@ export default class Activity {
     }
 
     getLabel() {
-        if (this.associated_object_type === 1) {
+        if (this.associated_object_type === TYPE_ACHIEVEMENT) {
             return 'You have earned the achievement: ' + this.associated_object.name + '.';
         }
 
-        if (this.associated_object_type === 2) {
+        if (this.associated_object_type === TYPE_USER) {
             return this.associated_object.name + ' is now following you.';
         }
     }
 
     getLink() {
-        if (this.associated_object_type === "profile") {
+        if (this.associated_object_type === TYPE_ACHIEVEMENT) {
+            return "/achievement/" + this.associated_object.slug;
+        }
+
+        if (this.associated_object_type === TYPE_USER) {
             return "/tankers/" + this.associated_object.slug;
         }
     }

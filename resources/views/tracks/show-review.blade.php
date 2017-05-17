@@ -1,4 +1,4 @@
-@extends('app')
+@extends('layouts.app')
 
 @section('title', sprintf('%s from %s by %s', $track->name, $track->album->name, $track->artist->name))
 @section('og-title', sprintf('%s from %s by %s', $track->name, $track->album->name, $track->artist->name))
@@ -16,15 +16,13 @@
 @endsection
 
 @push('app-javascript')
-    Tmt.app.reviewFrames(
-        [{
-            @if (isset($globalCurve))        'global'       : <?php echo $globalCurve->toJson(); ?>,{{ PHP_EOL }}@endif
-            @if (isset($subscriptionsCurve)) 'subscriptions': <?php echo $subscriptionsCurve->toJson(); ?>,{{ PHP_EOL }}@endif
-            @if (isset($userCurve))          'user'         : <?php echo $userCurve->toJson(); ?>,{{ PHP_EOL }}@endif
-            @if (isset($authUserCurve))      'auth_user'    : <?php echo $authUserCurve->toJson(); ?>,{{ PHP_EOL }}@endif
-            'id' : {{ $track->id }}
-        }]
-    );
+Tmt.app.reviewFrames([{
+    @if (isset($globalCurve))        'global'       : <?php echo $globalCurve->toJson(); ?>,{{ PHP_EOL }}@endif
+    @if (isset($subscriptionsCurve)) 'subscriptions': <?php echo $subscriptionsCurve->toJson(); ?>,{{ PHP_EOL }}@endif
+    @if (isset($userCurve))          'user'         : <?php echo $userCurve->toJson(); ?>,{{ PHP_EOL }}@endif
+    @if (isset($authUserCurve))      'auth_user'    : <?php echo $authUserCurve->toJson(); ?>,{{ PHP_EOL }}@endif
+    'id' : {{ $track->id }}
+}]);
 @endpush
 
 @section('content')
@@ -32,20 +30,19 @@
         $authUser = auth()->user();
     @endphp
 
-
     <section class="header">
         <h1>
-            <a href="{{ action('ArtistController@show', ['slug' => $track->artist->slug]) }}">
+            <a href="{{ route('artist', ['slug' => $track->artist->slug]) }}">
                 {{ $track->artist->name }}
             </a>
         </h1>
         <h2>
-            <a href="{{ action('AlbumController@show', ['slug' => $track->album->slug]) }}">
+            <a href="{{ route('album', ['slug' => $track->album->slug]) }}">
                 {{ $track->album->name }}
             </a>
         </h2>
         <h3>
-            <a href="{{ action('TrackController@show', ['slug' => $track->slug]) }}">
+            <a href="{{ route('track', ['slug' => $track->slug]) }}">
                 {{ $track->name }}
             </a>
             @include('partials.buttons.upvote', ['type' => "track", 'id' => $track->id])
@@ -61,7 +58,7 @@
     </section>
 
     <section class="review-cta">
-        <a href="{{ action('TrackController@review', ['slug' => $track->slug]) }}">Review track</a>
+        <a href="{{ route('review', ['slug' => $track->slug]) }}">Review track</a>
     </section>
 
     <section>
@@ -81,6 +78,7 @@
             <h3>{{ $user->name }}'s review</h3>
             <line-chart object-id="{{ $track->id }}" datasource="user"></line-chart>
         @endif
+
         @include('partials.player', ['track' => $track])
     </section>
 

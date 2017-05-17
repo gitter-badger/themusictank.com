@@ -91,4 +91,13 @@ class AchievementService
             }
         }
     }
+
+    public static function findBySlug($slug)
+    {
+        foreach (self::collect() as $achievement) {
+            if ($achievement->slug === $slug) {
+                return $achievement;
+            }
+        }
+    }
 }

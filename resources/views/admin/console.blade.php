@@ -1,4 +1,4 @@
-@extends('app')
+@extends('layouts.app')
 
 @section('body-class', 'admin console')
 
@@ -18,10 +18,9 @@
         </tr>
     </table>
 
-
     <h3>Reset review Cache</h3>
 
-    {{ Form::open(['action' => "AdminController@resetReviewCache"]) }}
+    {{ Form::open(['route' => 'admin-resetcache']) }}
         <fieldset>
             <label for="track_id">Track ID</label>
             <input id="track_id" type="number" name="track_id" required>

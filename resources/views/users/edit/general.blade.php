@@ -1,4 +1,4 @@
-@extends('app')
+@extends('layouts.app')
 
 @section('body-class', 'profiles settings')
 
@@ -17,7 +17,7 @@
 
     @include('partials.application-messages')
 
-     {!! Form::model($user, ['action' => 'Profile\ManageController@saveGeneral']) !!}
+     {!! Form::model($user, ['route' => 'profile-save']) !!}
         <fieldset class="{{ $errors->has('name') ? ' has-error' : '' }}">
             <label for="name">Name</label>
             <input id="name" type="text" name="name" value="{{ old('name', $user->name) }}" required autofocus>

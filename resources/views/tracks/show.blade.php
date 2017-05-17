@@ -1,4 +1,4 @@
-@extends('app')
+@extends('layouts.app')
 
 @section('title', sprintf('%s from %s by %s', $track->name, $track->album->name, $track->artist->name))
 @section('og-title', sprintf('%s from %s by %s', $track->name, $track->album->name, $track->artist->name))
@@ -30,17 +30,17 @@
 @section('content')
     <section class="header">
         <h1>
-            <a href="{{ action('ArtistController@show', ['slug' => $track->artist->slug]) }}">
+            <a href="{{ route('artist', ['slug' => $track->artist->slug]) }}">
                 {{ $track->artist->name }}
             </a>
         </h1>
         <h2>
-            <a href="{{ action('AlbumController@show', ['slug' => $track->album->slug]) }}">
+            <a href="{{ route('album', ['slug' => $track->album->slug]) }}">
                 {{ $track->album->name }}
             </a>
         </h2>
         <h3>
-            <a href="{{ action('TrackController@show', ['slug' => $track->slug]) }}">
+            <a href="{{ route('track', ['slug' => $track->slug]) }}">
                 {{ $track->name }}
             </a>
             @include('partials.buttons.upvote', ['type' => "track", 'id' => $track->id])
@@ -48,11 +48,11 @@
     </section>
 
     <section class="review-cta">
-        <a href="{{ action('TrackController@review', ['slug' => $track->slug]) }}">Review track</a>
+        <a href="{{ route('review', ['slug' => $track->slug]) }}">Review track</a>
 
         @if (isset($authUserCurve))
             You have already reviewed this track but you may review it again to fine tune your results.
-            <a href="{{ action('TrackController@viewUserReview', ['slug' => auth()->user()->slug, 'trackSlug' => $track->slug]) }}">View your curve</a>
+            <a href="{{ route('user-review', ['slug' => auth()->user()->slug, 'trackSlug' => $track->slug]) }}">View your curve</a>
         @endif
     </section>
 
@@ -65,13 +65,13 @@
 
     <section class="track-navigation">
         @if ($track->previous()->count() && $previous = $track->previous()->first())
-            <a href="{{ action('TrackController@show', ['slug' => $previous->slug]) }}">
+            <a href="{{ route('track', ['slug' => $previous->slug]) }}">
                 <i class="fa fa-fast-backward" aria-hidden="true"></i> {{ $previous->name }}
             </a>
         @endif
 
         @if ($track->next()->count() && $next = $track->next()->first())
-            <a href="{{ action('TrackController@show', ['slug' => $next->slug]) }}">
+            <a href="{{ route('track', ['slug' => $next->slug]) }}">
                 {{ $next->name }} <i class="fa fa-fast-forward" aria-hidden="true"></i>
             </a>
         @endif

@@ -7,6 +7,7 @@ class Achievement {
     public $id = -1;
     public $name = "Undefined Achievement";
     public $description = "This means something is broken.";
+    public $slug = "undefined";
 
     protected $trackIdsTriggers = [];
     protected $albumIdsTriggers = [];
@@ -35,6 +36,4 @@ class Achievement {
     {
         return $this->artistIdsTriggers;
     }
-
-
 }

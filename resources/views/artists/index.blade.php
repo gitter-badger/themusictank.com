@@ -1,4 +1,4 @@
-@extends('app')
+@extends('layouts.app')
 
 @section('body-class', 'artists index')
 
@@ -8,7 +8,7 @@
             @include('partials.backdrop', ['entity' => $spotlightArtist])
 
             <h1>
-                <a href="{{ action('ArtistController@show', ['slug' => $spotlightArtist->slug]) }}">
+                <a href="{{ route('artist', ['slug' => $spotlightArtist->slug]) }}">
                     {{ $spotlightArtist->name }}
                 </a>
             </h1>
@@ -18,11 +18,11 @@
                     @foreach ($spotlightArtist->albums->take(4) as $idx => $album)
                         @if ($idx < 3)
                             <li>
-                                <a href="{{ action('AlbumController@show', ['slug' => $album->slug]) }}">
+                                <a href="{{ route('album', ['slug' => $album->slug]) }}">
                                     <img src="{{ $album->getThumbnailUrl() }}" alt="{{ $album->name }}" title="{{ $album->name }}">
                                 </a>
                                 <h3>
-                                    <a href="{{ action('AlbumController@show', ['slug' => $album->slug]) }}">
+                                    <a href="{{ route('album', ['slug' => $album->slug]) }}">
                                         {{ $album->name }}
                                     </a>
                                 </h3>
@@ -30,7 +30,7 @@
                             </li>
                         @else
                             <li class="more">
-                                <a href="{{ action('ArtistController@show', ['slug' => $spotlightArtist->slug]) }}">More</a>
+                                <a href="{{ route('artist', ['slug' => $spotlightArtist->slug]) }}">More</a>
                             </li>
                         @endif
                     @endforeach
@@ -45,11 +45,11 @@
         <section class="featured-artists">
             <ul>
                 @foreach ($featuredArtists as $artist)
-                    <a href="{{ action('ArtistController@show', ['slug' => $artist->slug]) }}">
+                    <a href="{{ route('artist', ['slug' => $artist->slug]) }}">
                         <img src="{{ $artist->getThumbnailUrl() }}" alt="{{ $artist->name }}" title="{{ $artist->name }}">
                     </a>
                     <h3>
-                        <a href="{{ action('ArtistController@show', ['slug' => $artist->slug]) }}">
+                        <a href="{{ route('artist', ['slug' => $artist->slug]) }}">
                             {{ $artist->name }}
                         </a>
                     </h3>

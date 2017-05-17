@@ -1,16 +1,17 @@
-@extends('app')
+@extends('layouts.app')
 
 @section('body-class', 'profiles login tmt-login')
 
 @section('content')
-    <a href="{{ action('Auth\AuthController@index') }}">Log in using another method</a>
+
+    <a href="{{ route('login') }}">Log in using another method</a>
 
     <h1>Register</h1>
     <h2>Create a TMT account</h2>
 
     @include('partials.application-messages')
 
-    {{ Form::open(['action' => "Auth\Tmt\RegisterController@register"]) }}
+    {{ Form::open([ 'route' => 'tmt-register-do']) }}
         <fieldset class="{{ $errors->has('name') ? ' has-error' : '' }}">
             <label for="name">Name</label>
             <input id="name" type="text" name="name" value="{{ old('name') }}" required autofocus>

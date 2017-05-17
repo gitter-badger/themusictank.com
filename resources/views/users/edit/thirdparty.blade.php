@@ -1,4 +1,4 @@
-@extends('app')
+@extends('layouts.app')
 
 @section('body-class', 'profiles settings thirdparty')
 
@@ -33,7 +33,7 @@
                 </time>
 
                 @if (isset($user->password))
-                    {!! Form::model($user, ['action' => 'Profile\ManageController@revokeThirdParty']) !!}
+                    {!! Form::model($user, ['route' => 'profile-thirdparty-revoke']) !!}
                         <input type="hidden" name="id" value="{{ $account->id }}">
                         <button type="submit">Revoke</button>
                     </form>
@@ -55,7 +55,7 @@
     <ul>
         @if (!in_array('facebook', $setAccounts))
             <li>
-                <a href="{{ action('Auth\Social\FacebookController@redirect') }}">
+                <a href="{{ route('facebook-login') }}">
                     <i class="fa fa-facebook-square" aria-hidden="true"></i> Login with Facebook
                 </a>
             </li>

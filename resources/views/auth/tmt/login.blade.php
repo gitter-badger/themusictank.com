@@ -1,16 +1,16 @@
-@extends('app')
+@extends('layouts.app')
 
 @section('body-class', 'profiles login tmt-login')
 
 @section('content')
-    <a href="{{ action('Auth\AuthController@index') }}">Log in using another method</a>
+    <a href="{{ route('login') }}">Log in using another method</a>
 
     <h1>Login</h1>
     <h2>Tanker Account</h2>
 
     @include('partials.application-messages')
 
-    {{ Form::open(['action' => "Auth\Tmt\LoginController@login"]) }}
+    {{ Form::open(['route' => 'tmt-login-do']) }}
         <fieldset class="{{ $errors->has('email') ? ' has-error' : '' }}">
             <label for="email">E-Mail Address</label>
             <input id="email" type="email"name="email" value="{{ old('email') }}" required>

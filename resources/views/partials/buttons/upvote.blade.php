@@ -1,3 +1,8 @@
  @if (!is_null(auth()->user()))
-    <upvote type="{{ $type }}" object-id="{{ $id }}"></upvote>
+    <upvote
+        upvote-href="{{ route('upvote-' . $type)}}"
+        deupvote-href="{{ route('deupvote-' . $type)}}"
+        type="{{ $type }}"
+        object-id="{{ $id }}"
+    ></upvote>
  @endif

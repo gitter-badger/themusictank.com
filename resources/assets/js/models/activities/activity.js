@@ -25,7 +25,7 @@ export default class Activity {
 
     getLink() {
         if (this.associated_object_type === TYPE_ACHIEVEMENT) {
-            return "/achievement/" + this.associated_object.slug;
+            return "/achievements/" + this.associated_object.slug;
         }
 
         if (this.associated_object_type === TYPE_USER) {

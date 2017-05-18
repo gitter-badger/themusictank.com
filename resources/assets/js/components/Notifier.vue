@@ -57,9 +57,8 @@ export default {
 
         listItemClick(evt) {
             let item = evt.target;
-            if (item.getAttribute('hide-click') > 0) {
-                evt.preventDefault();
-                this.clearNotifications([item.getAttribute('id')]);
+            if (item.getAttribute('hide-click')) {
+                this.clearNotifications([item.getAttribute('id')], item.getAttribute("href"));
             }
         },
 
@@ -125,7 +124,7 @@ export default {
             <button name="stfu" @click.prevent="stfu" :disabled="!enabled">Mark all as read</button>
             <ul>
                 <li v-for="notification in notifications" :class="{ 'new': notification.must_notify, 'read': !notification.must_notify }">
-                    <a v-if="notification.getLink()" @click="listItemClick" :href="notification.getLink()" :id="notification.id" :hide-click="notification.must_notify">
+                    <a v-if="notification.getLink()" @click.prevent="listItemClick" :href="notification.getLink()" :id="notification.id" :hide-click="notification.must_notify">
                         {{ notification.getLabel() }}
                     </a>
                     <span v-else>{{ notification.getLabel() }}</span>

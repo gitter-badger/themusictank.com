@@ -17,9 +17,9 @@ class FacebookController extends Controller
     {
         $service = new SocialAccountService();
         $user = $service->createOrGetUser($this->fromFacebook());
-        
+
         auth()->login($user);
-        return redirect()->intended('/you/');
+        return redirect('/you/');
     }
 
     protected function fromFacebook()

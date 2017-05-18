@@ -33,7 +33,7 @@ class User extends Authenticatable
 
         static::created(function($model)
         {
-            AchievementService::grant(new WelcomeToTmt(), $user);
+            AchievementService::grant(new WelcomeToTmt(), $model);
         });
     }
 

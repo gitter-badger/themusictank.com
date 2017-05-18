@@ -17,7 +17,7 @@ class AdminController extends Controller
         $albumCount = Album::count();
         $trackCount = Track::count();
 
-        return view('admin.console', compact('artistCount', 'albumCount', 'trackCount');
+        return view('admin.console', compact('artistCount', 'albumCount', 'trackCount'));
     }
 
     public function resetReviewCache()

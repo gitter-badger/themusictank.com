@@ -20,4 +20,9 @@ class Artist extends AppModel
     {
         return $this->hasMany(\App\Models\Album::class)->orderBy("year", "DESC");
     }
+
+    public function discog()
+    {
+        return $this->hasOne(\App\Models\ArtistDiscog::class);
+    }
 }

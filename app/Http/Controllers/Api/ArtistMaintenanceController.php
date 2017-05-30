@@ -4,13 +4,14 @@ namespace App\Http\Controllers\Api;
 
 use App\Http\Controllers\Controller;
 use App\Models\ArtistDiscog;
+use App\Models\Artist;
 use Illuminate\Http\Request;
 
-class MaintenanceController extends Controller
+class ArtistMaintenanceController extends Controller
 {
     use RespondsJson;
 
-    public function artistSyncRequired(Request $request)
+    public function syncRequired(Request $request)
     {
         $ids = (array)$request->json("ids");
         $states = (array)$request->json("states");
@@ -25,7 +26,7 @@ class MaintenanceController extends Controller
         ]);
     }
 
-    public function artistExistance(Request $request)
+    public function existance(Request $request)
     {
         $ids = (array)$request->json("ids");
         $existingIds = ArtistDiscog::whereIn("discog_id", $ids)
@@ -41,17 +42,27 @@ class MaintenanceController extends Controller
         ]);
     }
 
-    public function artistSync(Request $request)
+    public function sync(Request $request)
     {
+        ini_set('max_execution_time', 0);
 
+        $status = true;
+        $rawArtists = (array)$request->json('artists');
 
-        $album = Album::firstOrNew(['gid' => $gid]);
-        $album->fill($request->json()->all());
+        array_walk($rawArtists, function($raw) use ($status) {
+            $discog = ArtistDiscog::firstOrNew(['discog_id' => $raw['discog_id']]);
+            $discog->fill($raw);
 
-        if ($album->save()) {
-            return $this->answer($album);
-        }
+            if ($discog->artist()->count() === 0) {
+                $artist = Artist::create(['name' => $raw['name']]);
+                $discog->artist()->associate($artist);
+            }
 
-        return $this->fail();
+            $status = $status && $discog->save();
+        });
+
+        return $this->answer([
+            "status" => $status
+        ]);
     }
 }

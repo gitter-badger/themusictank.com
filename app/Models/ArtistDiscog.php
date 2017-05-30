@@ -6,8 +6,14 @@ use Illuminate\Database\Eloquent\Model;
 
 class ArtistDiscog extends Model
 {
+    protected $fillable = [
+        "discog_id",
+        "image",
+        "state"
+    ];
+
     public function artist()
     {
-        return $this->hasOne(\App\Models\Artist::class);
+        return $this->belongsTo(\App\Models\Artist::class);
     }
 }

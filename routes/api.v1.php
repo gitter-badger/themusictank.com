@@ -17,9 +17,9 @@ use Illuminate\Http\Request;
 //     return $request->user();
 // });
 
-Route::post('/maintenance/discog/artists/update', "Api\MaintenanceController@artistSync");
-Route::post('/maintenance/discog/artists/sync-snapshot', "Api\MaintenanceController@artistSyncRequired");
-Route::post('/maintenance/discog/artists/existance-check', "Api\MaintenanceController@artistExistance");
+Route::post('/maintenance/discog/artists/update', "Api\ArtistMaintenanceController@sync");
+Route::post('/maintenance/discog/artists/sync-snapshot', "Api\ArtistMaintenanceController@syncRequired");
+Route::post('/maintenance/discog/artists/existance-check', "Api\ArtistMaintenanceController@existance");
 
 Route::resource('configurations', 'Api\ConfigurationController');
 Route::resource('artists', 'Api\ArtistController');

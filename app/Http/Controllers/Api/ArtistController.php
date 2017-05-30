@@ -12,15 +12,15 @@ class ArtistController extends ApiController
         return $this->answer(Artist::where(['slug' => $slug])->firstOrFail());
     }
 
-    public function update(Request $request, $gid)
-    {
-        $artist = Artist::firstOrNew(['gid' => $gid]);
-        $artist->fill($request->json()->all());
+    // public function update(Request $request, $gid)
+    // {
+    //     $artist = Artist::firstOrNew(['gid' => $gid]);
+    //     $artist->fill($request->json()->all());
 
-        if ($artist->save()) {
-            return $this->answer($artist);
-        }
+    //     if ($artist->save()) {
+    //         return $this->answer($artist);
+    //     }
 
-        return $this->fail();
-    }
+    //     return $this->fail();
+    // }
 }

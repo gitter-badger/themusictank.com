@@ -15,11 +15,13 @@ class CreateUserSubscriptionsTable extends Migration
     {
         Schema::create('user_subscriptions', function (Blueprint $table) {
             $table->increments('id');
-            $table->integer('artist_id')->index();
-            $table->integer('discog_id')->index();
-            $table->integer('status');
+            $table->integer('artist_id')->index()->unsigned();
+            $table->integer('discog_id')->index()->unsigned();
+            $table->integer('status')->unsigned();
             $table->timestamps();
+        });
 
+        Schema::table('user_subscriptions', function (Blueprint $table) {
             $table->foreign('artist_id')->references('id')->on('artists')->onDelete('cascade');
         });
     }

@@ -17,14 +17,15 @@ class CreateTracksTable extends Migration
             $table->increments('id');
             $table->string('name')->index();
             $table->string('slug')->index()->unique();
-            $table->string('gid')->index()->unique();
-            $table->integer('artist_id')->index();
-            $table->integer('album_id')->index();
+            $table->integer('artist_id')->index()->unsigned();
+            $table->integer('album_id')->index()->unsigned();
             $table->string('youtube_key')->nullable();
-            $table->integer('length')->nullable();
-            $table->integer('position')->nullable();
+            $table->integer('length')->nullable()->unsigned();
+            $table->integer('position')->nullable()->unsigned();
             $table->timestamps();
+        });
 
+        Schema::table('tracks', function (Blueprint $table) {
             $table->foreign('artist_id')->references('id')->on('artists')->onDelete('cascade');
             $table->foreign('album_id')->references('id')->on('albums')->onDelete('cascade');
         });

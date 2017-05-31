@@ -15,11 +15,13 @@ class CreateArtistDiscogsTable extends Migration
     {
         Schema::create('artist_discogs', function (Blueprint $table) {
             $table->increments('id');
-            $table->integer('artist_id')->index();
-            $table->integer('discog_id')->index();
+            $table->integer('artist_id')->index()->unsigned();
+            $table->integer('discog_id')->index()->unsigned();
             $table->string('state');
             $table->timestamps();
+        });
 
+        Schema::table('artist_discogs', function (Blueprint $table) {
             $table->foreign('artist_id')->references('id')->on('artists')->onDelete('cascade');
         });
     }

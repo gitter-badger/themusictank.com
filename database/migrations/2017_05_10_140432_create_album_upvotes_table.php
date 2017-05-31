@@ -15,11 +15,13 @@ class CreateAlbumUpvotesTable extends Migration
     {
         Schema::create('album_upvotes', function (Blueprint $table) {
             $table->increments('id');
-            $table->integer('album_id')->index();
-            $table->integer('user_id')->index();
+            $table->integer('album_id')->index()->unsigned();
+            $table->integer('user_id')->index()->unsigned();
             $table->integer('vote')->unsigned();
             $table->timestamps();
+        });
 
+        Schema::table('album_upvotes', function (Blueprint $table) {
             $table->foreign('album_id')->references('id')->on('albums')->onDelete('cascade');
             $table->foreign('user_id')->references('id')->on('users')->onDelete('cascade');
         });

@@ -15,10 +15,12 @@ class CreateUserAchievementsTable extends Migration
     {
         Schema::create('user_achievements', function (Blueprint $table) {
             $table->increments('id');
-            $table->integer('achievement_id')->index();
-            $table->integer('user_id')->index();
+            $table->integer('achievement_id')->index()->unsigned();
+            $table->integer('user_id')->index()->unsigned();
             $table->timestamps();
+        });
 
+        Schema::table('user_achievements', function (Blueprint $table) {
             $table->foreign('user_id')->references('id')->on('users')->onDelete('cascade');
         });
     }

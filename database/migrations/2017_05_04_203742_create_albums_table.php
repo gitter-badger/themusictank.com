@@ -17,14 +17,15 @@ class CreateAlbumsTable extends Migration
             $table->increments('id');
             $table->string('name')->index();
             $table->string('slug')->index()->unique();
-            $table->string('gid')->index()->unique();
-            $table->integer('artist_id')->index();
-            $table->integer('year')->nullable();
-            $table->integer('month')->nullable();
-            $table->integer('day')->nullable();
+            $table->integer('artist_id')->index()->unsigned();
+            $table->integer('year')->nullable()->unsigned();
+            $table->integer('month')->nullable()->unsigned();
+            $table->integer('day')->nullable()->unsigned();
             $table->string('thumbnail')->nullable();
             $table->timestamps();
+        });
 
+        Schema::table('albums', function($table) {
             $table->foreign('artist_id')->references('id')->on('artists')->onDelete('cascade');
         });
     }

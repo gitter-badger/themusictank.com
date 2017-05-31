@@ -15,12 +15,14 @@ class CreateActivityTable extends Migration
     {
         Schema::create('activities', function (Blueprint $table) {
             $table->increments('id');
-            $table->integer('user_id');
-            $table->integer('associated_object_id');
-            $table->integer('associated_object_type');
+            $table->integer('user_id')->unsigned();
+            $table->integer('associated_object_id')->unsigned();
+            $table->integer('associated_object_type')->unsigned();
             $table->boolean('must_notify');
             $table->timestamps();
+        });
 
+        Schema::table('activities', function (Blueprint $table) {
             $table->foreign('user_id')->references('id')->on('users')->onDelete('cascade');
         });
     }

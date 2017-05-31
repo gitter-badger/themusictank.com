@@ -17,10 +17,12 @@ class CreateReviewFramesTable extends Migration
             $table->increments('id');
             $table->double('groove');
             $table->double('position');
-            $table->integer('user_id')->index();
-            $table->integer('track_id')->index();
+            $table->integer('user_id')->index()->unsigned();
+            $table->integer('track_id')->index()->unsigned();
             $table->timestamps();
+        });
 
+        Schema::table('review_frames', function (Blueprint $table) {
             $table->foreign('track_id')->references('id')->on('tracks')->onDelete('cascade');
             $table->foreign('user_id')->references('id')->on('users')->onDelete('cascade');
         });

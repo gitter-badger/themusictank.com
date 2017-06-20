@@ -35,7 +35,11 @@ class AlbumMaintenanceController extends Controller
             ->take(100)
             ->get()
             ->map(function(Album $album){
-                return $album->discog()->id;
+                return [
+                    'discog_id' => $album->discog()->discog_id,
+                    'album_id' => $album->id,
+                    'slug' =>  $album->slug
+                ];
             });
 
         return $this->answer([

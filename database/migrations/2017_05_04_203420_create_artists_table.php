@@ -17,7 +17,7 @@ class CreateArtistsTable extends Migration
             $table->increments('id');
             $table->string('name')->index();
             $table->string('slug')->index()->unique();
-            $table->string('thumbnail')->nullable();
+            $table->boolean('thumbnail')->nullable();
             $table->boolean('is_featured')->nullable();
             $table->timestamps();
         });

@@ -41,7 +41,11 @@ class ArtistMaintenanceController extends Controller
             ->take(100)
             ->get()
             ->map(function(Artist $artist){
-                return $artist->discog()->id;
+                return [
+                    'discog_id' => $artist->discog()->discog_id,
+                    'artist_id' => $artist->id,
+                    'slug' =>  $artist->slug
+                ];
             });
 
         return $this->answer([

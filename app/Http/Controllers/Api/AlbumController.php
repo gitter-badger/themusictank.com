@@ -12,9 +12,9 @@ class AlbumController extends ApiController
         return $this->answer(Album::where(['slug' => $slug])->firstOrFail());
     }
 
-    public function update(Request $request, $gid)
+    public function update(Request $request, $slug)
     {
-        $album = Album::firstOrNew(['gid' => $gid]);
+        $album = Album::where(['slug' => $slug])->firstOrFail();
         $album->fill($request->json()->all());
 
         if ($album->save()) {

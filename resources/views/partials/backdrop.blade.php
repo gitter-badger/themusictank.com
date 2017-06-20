@@ -2,11 +2,11 @@
     @if (isset($entity))
         <style type="text/css">
             .backdrop .blurred { background-image: url({{ $entity->getThumbnailUrl("mobile_blur") }}); }
-            .backdrop .clean { background-image: url({{ $entity->getThumbnailUrl("mobile_big") }}); }
+            .backdrop .clean { background-image: url({{ $entity->getThumbnailUrl("mobile_cover") }}); }
 
             @media (min-width: 501px) {
                 .backdrop .blurred { background-image: url({{ $entity->getThumbnailUrl("blur") }}); }
-                .backdrop .clean { background-image: url({{ $entity->getThumbnailUrl("big") }}); }
+                .backdrop .clean { background-image: url({{ $entity->getThumbnailUrl("cover") }}); }
             }
         </style>
     @endif

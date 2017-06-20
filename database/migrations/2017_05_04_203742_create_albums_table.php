@@ -21,7 +21,7 @@ class CreateAlbumsTable extends Migration
             $table->integer('year')->nullable()->unsigned();
             $table->integer('month')->nullable()->unsigned();
             $table->integer('day')->nullable()->unsigned();
-            $table->string('thumbnail')->nullable();
+            $table->boolean('thumbnail')->nullable();
             $table->timestamps();
         });
 

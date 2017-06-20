@@ -20,10 +20,15 @@ class Album extends AppModel
     ];
 
     public function artist() {
-        return $this->belongsTo(\App\Models\Artist::class);
+        return $this->belongsTo(Artist::class);
     }
 
     public function tracks() {
-        return $this->hasMany(\App\Models\Track::class)->orderBy("position", "ASC");
+        return $this->hasMany(Track::class)->orderBy("position", "ASC");
+    }
+
+    public function discog()
+    {
+        return $this->hasOne(AlbumDiscog::class)->first();
     }
 }

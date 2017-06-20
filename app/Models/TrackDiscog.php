@@ -4,15 +4,15 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
 
-class ArtistDiscog extends Model
+class TrackDiscog extends Model
 {
     protected $fillable = [
         "discog_id",
         "state"
     ];
 
-    public function artist()
+    public function track()
     {
-        return $this->belongsTo(\App\Models\Artist::class);
+        return $this->belongsTo(Track::class);
     }
 }

@@ -18,11 +18,11 @@ class Artist extends AppModel
 
     public function albums()
     {
-        return $this->hasMany(\App\Models\Album::class)->orderBy("year", "DESC");
+        return $this->hasMany(Album::class)->orderBy("year", "DESC");
     }
 
     public function discog()
     {
-        return $this->hasOne(\App\Models\ArtistDiscog::class);
+        return $this->hasOne(ArtistDiscog::class)->first();
     }
 }

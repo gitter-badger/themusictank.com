@@ -21,7 +21,8 @@ class CreateTracksTable extends Migration
             $table->integer('album_id')->index()->unsigned();
             $table->string('youtube_key')->nullable();
             $table->integer('length')->nullable()->unsigned();
-            $table->integer('position')->nullable()->unsigned();
+            $table->integer('position_int')->nullable()->unsigned();
+            $table->string('position')->nullable();
             $table->timestamps();
         });
 

@@ -42,8 +42,13 @@ class AchievementController extends Controller
             return abort(404);
         }
 
-        $rareness = UserAchievement::rare()->whereAchievementId($achievement->id)->first();
-        $popularity = ceil($rareness->total / User::count() * 100);
+        $rareness = UserAchievement::rare()
+            ->whereAchievementId($achievement->id)
+            ->first();
+
+        $popularity = is_null($rareness) ?
+            0 :
+            ceil($rareness->total / User::count() * 100);
 
         if ($this->hasActiveSession()) {
             $authUserHasIt = UserAchievement::whereUserId($this->authUserId())

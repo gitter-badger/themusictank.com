@@ -33,12 +33,14 @@ class AchievementService
             ->count() > 0;
     }
 
-    public static function collect() {
+    public static function collect()
+    {
         // If the crawl was never made during the lifetime of
         // the object, scan the files in the achievement directory and
         // preload the models for subsequent use.
         if (is_null(self::$modelFiles)) {
-            $files = array_diff(scandir(app_path('Models\\Achievements')), ['.', '..', 'Achievement.php']);
+            $fileBucket = scandir(app_path('Models' . DIRECTORY_SEPARATOR . 'Achievements'));
+            $files = array_diff($fileBucket, ['.', '..', 'Achievement.php']);
             self::$modelFiles = array_map(function($file) {
                 $filename = basename($file, '.php');
                 return self::find($filename);

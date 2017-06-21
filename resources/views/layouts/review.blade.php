@@ -23,10 +23,11 @@
     <meta name="twitter:title" content="@yield('og-title', 'The Music Tank')">
     <meta name="twitter:description" content="@yield('og-description', 'The Music Tank is a place where you can rate and discover music.')" >
 
-    <link href="https://plus.google.com/117543200043480372792" rel="publisher">
     <link rel="apple-touch-icon" href="http://static.themusictank.com/assets/images/social-share.png">
     <link rel="icon" href="http://static.themusictank.com/assets/images/social-share.png">
+    <link rel="publisher" href="https://plus.google.com/117543200043480372792">
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css">
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Muli">
     <link rel="stylesheet" href="{{ mix('css/app.css') }}">
 
     @stack('header')

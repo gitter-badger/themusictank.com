@@ -12,41 +12,44 @@
 @endpush
 
 @section('backdrop')
-    @include('partials.backdrop', ['entity' => $artist])
+
 @endsection
 
+
 @section('content')
-<section class="header">
+
+    @include('partials.cover-image', ['entity' => $artist])
+
     <h1>
         <a href="{{ route('artist', ['slug' => $artist->slug]) }}">
             {{ $artist->name }}
         </a>
     </h1>
-</section>
 
-<section class="discography">
-    <h2>Discography</h2>
+    <section class="discography">
+        <h2>Discography</h2>
 
 
-    @if ($artist->albums->count())
-    <ul>
-        @foreach ($artist->albums->take(4) as $idx => $album)
-            <li>
-                <a href="{{ route('album', ['slug' => $album->slug]) }}">
-                    <img src="{{ $album->getThumbnailUrl() }}" alt="{{ $album->name }}" title="{{ $album->name }}">
-                </a>
-                <h3>
+        @if ($artist->albums->count())
+        <ul>
+            @foreach ($artist->albums->take(4) as $idx => $album)
+                <li>
                     <a href="{{ route('album', ['slug' => $album->slug]) }}">
-                        {{ $album->name }}
+                        <img src="{{ $album->getThumbnailUrl() }}" alt="{{ $album->name }}" title="{{ $album->name }}">
                     </a>
-                </h3>
+                    <h3>
+                        <a href="{{ route('album', ['slug' => $album->slug]) }}">
+                            {{ $album->name }}
+                        </a>
+                    </h3>
 
-                @include('partials.buttons.upvote', ['type' => "album", 'id' => $album->id])
-            </li>
-        @endforeach
-        </ul>
-    @else
-        <p>We have not found any releases belonging to {{ $artist->name }}. The last time we found updates was {{ $artist->getLastUpdatedForHumans() }}.</p>
-    @endif
-</section>
+                    @include('partials.buttons.upvote', ['type' => "album", 'id' => $album->id])
+                </li>
+            @endforeach
+            </ul>
+        @else
+            <p>We have not found any releases belonging to {{ $artist->name }}. The last time we found updates was {{ $artist->getLastUpdatedForHumans() }}.</p>
+        @endif
+    </section>
+
 @endsection

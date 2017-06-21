@@ -103,7 +103,11 @@ function getDefaults() {
 
 <style lang="scss">
 .ctl-search {
-    width: 300px;
+
+
+    .twitter-typeahead {
+        width: 500px;
+    }
 
     .tt-query,
     .tt-hint {
@@ -114,17 +118,14 @@ function getDefaults() {
     .tt-hint {
         display: block;
         width: 100%;
-        height: 20px;
+        height: 40px;
         padding: 8px 12px;
-        font-size: 14px;
         line-height: 1.428571429;
         color: #999;
         background-color: #ffffff;
-        border: 1px solid #cccccc;
-        border-radius: 4px;
-        -webkit-box-shadow: inset 0 1px 1px rgba(0, 0, 0, 0.075);
+        border: 1px solid #666;
+        border-radius: 2px;
         box-shadow: inset 0 1px 1px rgba(0, 0, 0, 0.075);
-        -webkit-transition: border-color ease-in-out 0.15s, box-shadow ease-in-out 0.15s;
         transition: border-color ease-in-out 0.15s, box-shadow ease-in-out 0.15s;
     }
     .tt-menu {
@@ -132,11 +133,10 @@ function getDefaults() {
         max-width: 80%;
         margin-top: 2px;
         padding: 5px 0;
-        background-color: #ffffff;
+        background-color: #666;
         border: 1px solid #cccccc;
         border: 1px solid rgba(0, 0, 0, 0.15);
-        border-radius: 4px;
-        -webkit-box-shadow: 0 6px 12px rgba(0, 0, 0, 0.175);
+        border-radius: 2px;
         box-shadow: 0 6px 12px rgba(0, 0, 0, 0.175);
         background-clip: padding-box;
     }
@@ -176,6 +176,10 @@ function getDefaults() {
 
     a {
         display: block;
+    }
+
+    input[type=submit] {
+        display: none;
     }
 
 }

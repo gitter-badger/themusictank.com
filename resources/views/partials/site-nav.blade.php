@@ -1,7 +1,10 @@
 <nav>
-    <ul>
+    <ul class="pages">
         <li><a href="{{ route('artists') }}">Artists</a></li>
     </ul>
+
+    <search-form></search-form>
+
     <ul class="profile">
         @php
             $user = auth()->user();

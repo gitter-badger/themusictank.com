@@ -11,7 +11,7 @@ class Artist extends AppModel
     protected $fillable = [
         'name',
         'slug',
-        'gid',
+        'hex',
         'thumbnail',
         'is_featured',
     ];

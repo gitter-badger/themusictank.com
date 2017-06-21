@@ -14,6 +14,7 @@ import LineChart from './components/LineChart.vue'
 import Notifier from './components/Notifier.vue'
 import VisibleToggler from './components/VisibleToggler.vue'
 import ShareButtons from './components/Reviewer/ShareButtons.vue'
+import CoverImage from './components/CoverImage.vue'
 
 import User from './models/user'
 import Upvotes from './models/upvotes'
@@ -25,7 +26,7 @@ Tmt.app = new Vue({
     el: 'section.app',
     store,
     components : {
-        SearchForm, Upvote, BugReport, Player, LineChart, Notifier, VisibleToggler, ShareButtons, Follow
+        SearchForm, Upvote, BugReport, Player, LineChart, Notifier, VisibleToggler, ShareButtons, Follow, CoverImage
     },
     methods : {
         error (er) {

@@ -1,15 +1,19 @@
 @push('header')
-    @if (isset($entity))
+    @if (isset($entity) && (bool)$entity->thumbnail)
         <style type="text/css">
-            .backdrop .blurred { background-image: url({{ $entity->getThumbnailUrl("mobile_blur") }}); }
-            .backdrop .clean { background-image: url({{ $entity->getThumbnailUrl("mobile_cover") }}); }
+            .ctrl-cover-image .blurred { background-image: url({{ $entity->getThumbnailUrl("blur_mobile") }}); }
+            /*.ctrl-cover-image .clean { background-image: url({{ $entity->getThumbnailUrl("cover_mobile") }}); }*/
 
             @media (min-width: 501px) {
-                .backdrop .blurred { background-image: url({{ $entity->getThumbnailUrl("blur") }}); }
-                .backdrop .clean { background-image: url({{ $entity->getThumbnailUrl("cover") }}); }
+                .ctrl-cover-image .blurred { background-image: url({{ $entity->getThumbnailUrl("blur") }}); }
+                .ctrl-cover-image .clean { background-image: url({{ $entity->getThumbnailUrl("cover") }}); }
             }
         </style>
     @endif
 @endpush
 
-<div class="backdrop dazzeling"><i class="blurred"></i><i class="clean"></i><i class="mask"></i></div>
+<cover-image url="{{ (bool)$entity->thumbnail ? $entity->getThumbnailUrl("cover_mobile") : "" }}" class="cover-image loading">
+    @if ((bool)$entity->thumbnail)
+        <img src="{{ $entity->getThumbnailUrl("blur_mobile") }}">
+    @endif
+</cover-image>

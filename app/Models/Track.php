@@ -13,7 +13,6 @@ class Track extends AppModel
         'album_id',
         'name',
         'slug',
-        'gid',
         'youtube_key',
         'position',
         'position_int',

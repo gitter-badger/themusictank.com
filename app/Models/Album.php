@@ -12,7 +12,7 @@ class Album extends AppModel
         'artist_id',
         'name',
         'slug',
-        'gid',
+        'hex',
         'year',
         'month',
         'day',

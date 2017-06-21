@@ -1,0 +1,54 @@
+header {
+    background:#fff;
+    border-bottom: 1px solid #dedede;
+    line-height: 80px;
+    padding: 1em;
+    vertical-align: middle;
+
+    &.detached {
+        box-shadow: 0 3px #000;
+    }
+
+
+    a {
+        color:#222;
+        text-decoration: none;
+
+        &:hover {
+            color:#333;
+        }
+    }
+
+    h1 {
+        display: inline-block;
+        font-size: 1.8em;
+        margin: 0 2em 0 0;
+    }
+
+    form {
+        display: inline-block;
+        margin: 0 2em 0 2em;
+    }
+
+    nav {
+        display: inline;
+    }
+
+    ul {
+        margin: 0;
+        padding: 0;
+        display: inline-block;
+
+        &.profile {
+            float: right;
+            margin: 0 2em 0 0;
+        }
+
+        li {
+            display: inline-block;
+        }
+    }
+
+
+
+}

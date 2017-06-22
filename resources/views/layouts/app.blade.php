@@ -27,7 +27,7 @@
     <link rel="icon" href="http://static.themusictank.com/assets/images/social-share.png">
     <link rel="publisher" href="https://plus.google.com/117543200043480372792">
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css">
-    <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Muli">
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto|Roboto+Condensed">
     <link rel="stylesheet" href="{{ mix('css/app.css') }}">
 
     @stack('header')
@@ -38,7 +38,7 @@
     <section class="app">
         @include('partials.header')
         @yield('backdrop', '<div class="backdrop plain"><i class="mask"></i></div>')
-        <section class="content">
+        <section class="body">
             @yield('content')
         </section>
         @include('partials.footer')

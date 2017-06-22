@@ -26,8 +26,12 @@ export default {
 
     computed: {
 
-        gradient() {
+        bottomGradient() {
             return "linear-gradient(180deg, transparent, " + this.hex + ")";
+        },
+
+        leftGradient() {
+            return "linear-gradient(270deg, transparent, " + this.hex + ")";
         },
 
         // hasImage() {
@@ -41,7 +45,7 @@ export default {
         opacity() {
             if (this.shouldApply) {
 
-                let maxScroll = this.wrapperHeight * .95,
+                let maxScroll = this.wrapperHeight * .7,
                     minScroll = this.wrapperHeight * .2;
 
                 if (this.scrollY < minScroll) {
@@ -66,8 +70,6 @@ export default {
     },
 
     mounted() {
-        this.$el.parentElement.className += " ctrl-cover-image-parent ";
-
         var img = new Image();
         img.src = this.$refs.clean.src;
         img.addEventListener('load', () => {
@@ -83,25 +85,25 @@ export default {
 </script>
 
 <template>
-    <div class="ctrl ctrl-cover-image" v-bind:title="alt">
+    <div class="ctrl ctrl-cover-image cover-image" v-bind:title="alt">
         <img v-bind:src="thumbnail" v-bind:alt="alt" ref="clean">
         <i class="blur"></i>
         <i class="cover" v-bind:style="{ opacity: opacity }"></i>
         <i class="mask"></i>
-        <i class="gradient" v-bind:style="{ background: gradient }"></i>
+        <i class="bottom-gradient" v-bind:style="{ background: bottomGradient }"></i>
+        <i class="left-gradient" v-bind:style="{ background: leftGradient }"></i>
     </div>
 </template>
 
 <style lang="scss">
-.ctrl-cover-image-parent {
-    position: relative;
-}
-
 .ctrl-cover-image {
-    position: relative;
-    min-height: 400px;
+    position: absolute;
+    min-height: 600px;
     max-height: 120vh;
+    max-width: 900px;
+    width: 100%;
     overflow: hidden;
+    right: 0;
 
     i {
         background-size: cover;
@@ -112,9 +114,20 @@ export default {
         bottom: 0;
         overflow: hidden;
 
-        &.gradient {
+        &.bottom-gradient {
             top: inherit;
-            height: 600px;
+            height: 60%;
+        }
+
+        &.left-gradient {
+            display: none;
+        }
+
+        @media (min-width: 600px) {
+            &.left-gradient {
+                display: inline;
+                right: 20%;
+            }
         }
 
         &.mask {
@@ -124,18 +137,6 @@ export default {
 
     img {
         width: 100%;
-
-        -webkit-user-select: none;
-        -khtml-user-select: none;
-        -moz-user-select: none;
-        -o-user-select: none;
-        user-select: none;
-
-        -webkit-user-drag: none;
-        -khtml-user-drag: none;
-        -moz-user-drag: none;
-        -o-user-drag: none;
-        user-drag: none;
     }
 }
 </style>

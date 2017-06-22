@@ -1,9 +1,8 @@
 @push('header')
     @if (isset($entity) && (bool)$entity->thumbnail)
         <style type="text/css">
-            @if (!is_null($entity->hex)) .ctrl-cover-image-parent { background-color: {{ $entity->hex }}; } @endif
             .ctrl-cover-image .blur { background-image: url({{ $entity->getThumbnailUrl("blur_mobile") }}); }
-            .ctrl-cover-image .cover { background-image: url({{ $entity->getThumbnailUrl("cover_mobile") }}); }*/
+            .ctrl-cover-image .cover { background-image: url({{ $entity->getThumbnailUrl("cover_mobile") }}); }
 
             @media (min-width: 501px) {
                 .ctrl-cover-image .blur { background-image: url({{ $entity->getThumbnailUrl("blur") }}); }
@@ -23,6 +22,5 @@
         thumbnail-mobile="{{ $entity->getThumbnailUrl("thumb_mobile") }}"
         hex="{{ $entity->hex }}"
         alt="{{ $entity->name }}">
-            <img src="{{ $entity->getThumbnailUrl("thumb") }}" alt="{{ $entity->name }}">
     </cover-image>
 @endif

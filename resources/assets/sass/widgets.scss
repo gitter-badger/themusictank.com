@@ -1,21 +1,25 @@
 // Note that most widgets CSS should be in the vue components.
 
-// .cover-image {
-//     background-color: #303e46;
-//     position:   relative;
-//     overflow:   hidden;
-//     min-height: 500px;
-//     border-bottom:1px solid #dedede;
-//     box-shadow: 0 1px 3px 0 rgba(0,0,0,.3);
 
-//     &.loading {
-//         min-height: 500px;
-//         display: block;
-//     }
+.cover-image-wrapper {
+    position: relative;
 
-//     img {
-//         transition: opacity .3s;
-//         width: 100%;
-//         min-height: 500px;
-//     }
-// }
+    .content {
+        padding-top: 60vh;
+        position: relative;
+        padding: 30vh 2em 2em 2em;
+    }
+
+    h1 {
+        font-size: 5em;
+        font-family: 'Roboto Condensed', Arial, sans-serif;
+        line-height: 1.2;
+        max-width: 45%;
+        margin: 0;
+        text-shadow: 0 0 10px #222;
+
+        a:hover {
+            color: #fff;
+        }
+    }
+}

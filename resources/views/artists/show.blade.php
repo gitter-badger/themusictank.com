@@ -22,11 +22,8 @@
 
         <div class="content">
 
-            <h1>
-                <a href="{{ route('artist', ['slug' => $artist->slug]) }}">
-                    {{ $artist->name }}
-                </a>
-            </h1>
+            @include('partials.vignettes.artist', ['artist' => $artist])
+
 
             <section class="discography">
                 @if ($artist->albums->count())

@@ -1,14 +1,14 @@
 header {
     background:#fff;
     border-bottom: 1px solid #dedede;
-    line-height: 80px;
+    box-shadow: 0 0 30px rgba(0,0,0,.3);
+    position: fixed;
+    top:0;
+    left:0;
+    right: 0;
     padding: 1em;
     vertical-align: middle;
-
-    &.detached {
-        box-shadow: 0 3px #000;
-    }
-
+    z-index: 1;
 
     a {
         color:#222;

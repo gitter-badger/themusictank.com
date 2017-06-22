@@ -22,7 +22,6 @@ export default {
 
     mounted() {
         var box = this.getSearchBox();
-
         box.typeahead(getDefaults(),
             {
                 name: 'artists',
@@ -103,7 +102,6 @@ function getDefaults() {
 
 <style lang="scss">
 .ctl-search {
-
 
     .twitter-typeahead {
         width: 500px;

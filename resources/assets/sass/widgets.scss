@@ -2,68 +2,24 @@
 
 
 .vignette {
-    border-radius: 50%;
-    border: 2px solid #fff;
-    box-shadow: 0 0 10px #222;
-    overflow: hidden;
-    height: 120px;
-    width: 120px;
+    display: flex;
+    align-items: center;
 
-    img {
-        width: 100%;
+    .picture {
+        border-radius: 50%;
+        border: 2px solid #fff;
+        display:inline-block;
+        box-shadow: 0 0 10px #222;
+        overflow: hidden;
+        margin-right: 1em;
+
+        img {
+            width: 100%;
+        }
+    }
+
+    .name {
+        line-height: 1;
     }
 }
 
-
-.cover-image-wrapper {
-    position: relative;
-
-    .artist {
-        margin: 1em;
-    }
-
-    .content {
-        padding-top: 60vh;
-        position: relative;
-        padding: 30vh 2em 2em 2em;
-        text-shadow: 0 0 20px #222;
-
-        h1 {
-            font-size: 5em;
-            font-family: 'Roboto Condensed', Arial, sans-serif;
-            line-height: 1.2;
-            max-width: 45%;
-            margin: 0;
-
-            a:hover {
-                color: #fff;
-            }
-        }
-
-        .discography {
-            margin-top: 10vh;
-
-            .album {
-                display: flex;
-
-                margin-bottom: 2em;
-
-                .thumbnail {
-                    max-width: 300px;
-                }
-
-                img {
-                    border:1px solid #dedede;
-                    box-shadow: 0 0 10px #222;
-                    width: 100%;
-                }
-
-
-                h2 {
-                    margin-left: 1em;
-                    font-size: 1.5em;
-                }
-            }
-        }
-    }
-}

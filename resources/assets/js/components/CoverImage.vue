@@ -34,10 +34,6 @@ export default {
             return "linear-gradient(270deg, transparent, " + this.hex + ")";
         },
 
-        // hasImage() {
-        //     return this.url != "";
-        // },
-
         scrolledDistance() {
             return this.scrollY / 5;
         },
@@ -45,11 +41,11 @@ export default {
         opacity() {
             if (this.shouldApply) {
 
-                let maxScroll = this.wrapperHeight * .7,
+                let maxScroll = this.wrapperHeight * .4,
                     minScroll = this.wrapperHeight * .2;
 
                 if (this.scrollY < minScroll) {
-                    return 1;
+                    return .8; // never fully 100%
                 }
 
                 if (this.scrollY > maxScroll) {
@@ -59,7 +55,7 @@ export default {
                 return (maxScroll - this.scrollY) / maxScroll;
             }
 
-            return 1;
+            return .8;
         },
 
         shouldApply() {
@@ -123,7 +119,7 @@ export default {
             display: none;
         }
 
-        @media (min-width: 600px) {
+        @media (min-width: 800px) {
             &.left-gradient {
                 display: inline;
                 right: 20%;

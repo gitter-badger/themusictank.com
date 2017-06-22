@@ -1,11 +1,5 @@
-// Configure jQuery across the website
-window.$ = window.jQuery = require('jquery');
-
-$.ajaxSetup({
-    headers: {
-        'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
-    }
-});
-
+window.axios = require('axios');
+window.axios.defaults.headers.common['X-CSRF-TOKEN'] = document.querySelector("meta[name='csrf-token']").getAttribute('content');
+window.axios.defaults.headers.common['X-Requested-With'] = 'XMLHttpRequest';
 
 window.Tmt = {};

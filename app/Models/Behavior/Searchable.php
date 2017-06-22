@@ -8,6 +8,6 @@ trait Searchable
 
     public function scopeSearch($query, $criteria)
     {
-        return $query->where($this->searchColumn, 'ilike', "%$criteria%");
+        return $query->where($this->searchColumn, 'LIKE', '%'.$criteria.'%');
     }
 }

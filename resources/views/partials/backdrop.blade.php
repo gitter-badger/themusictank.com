@@ -1,4 +1,4 @@
-@push('header')
+{{-- @push('header')
     @if (isset($entity) && (bool)$entity->thumbnail)
         <style type="text/css">
             .ctrl-cover-image .blurred { background-image: url({{ $entity->getThumbnailUrl("blur_mobile") }}); }
@@ -16,4 +16,4 @@
     @if ((bool)$entity->thumbnail)
         <img src="{{ $entity->getThumbnailUrl("blur_mobile") }}">
     @endif
-</cover-image>
+</cover-image> --}}

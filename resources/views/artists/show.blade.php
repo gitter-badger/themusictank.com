@@ -8,8 +8,6 @@
 
 @push('header')
 <meta name="tmt.artist.last_updated" content="{{ $artist->updated_at }}">
-<meta name="tmt.artist.gid" content="{{ $artist->gid }}">
-
 @if (!is_null($artist->hex))<style type="text/css">.cover-image-wrapper { background-color: {{ $artist->hex }}; }</style>@endif
 @endpush
 
@@ -31,26 +29,24 @@
             </h1>
 
             <section class="discography">
-                <h2>Discography</h2>
-
-
                 @if ($artist->albums->count())
-                <ul>
                     @foreach ($artist->albums->take(4) as $idx => $album)
-                        <li>
-                            <a href="{{ route('album', ['slug' => $album->slug]) }}">
-                                <img src="{{ $album->getThumbnailUrl() }}" alt="{{ $album->name }}" title="{{ $album->name }}">
-                            </a>
-                            <h3>
+                        <div class="album">
+                            <div class="thumbnail">
                                 <a href="{{ route('album', ['slug' => $album->slug]) }}">
-                                    {{ $album->name }}
+                                    <img src="{{ $album->getThumbnailUrl() }}" alt="{{ $album->name }}" title="{{ $album->name }}">
                                 </a>
-                            </h3>
-
-                            @include('partials.buttons.upvote', ['type' => "album", 'id' => $album->id])
-                        </li>
+                            </div>
+                            <div class="text">
+                                <h2>
+                                    <a href="{{ route('album', ['slug' => $album->slug]) }}">
+                                        {{ $album->name }}
+                                    </a>
+                                </h2>
+                                @include('partials.buttons.upvote', ['type' => "album", 'id' => $album->id])
+                            </div>
+                        </div>
                     @endforeach
-                    </ul>
                 @else
                     <p>We have not found any releases belonging to {{ $artist->name }}. The last time we found updates was {{ $artist->getLastUpdatedForHumans() }}.</p>
                 @endif

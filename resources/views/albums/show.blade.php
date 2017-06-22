@@ -8,32 +8,64 @@
 
 @push('header')
 <meta name="tmt.album.last_updated" content="{{ $album->updated_at }}">
-<meta name="tmt.album.gid" content="{{ $album->gid }}">
+
+    @if (!is_null($album->hex))
+        <style type="text/css">
+            .cover-image-wrapper { background-color: {{ $album->hex }}; }
+        </style>
+    @endif
+    @if ((bool)$album->artist->thumbnail)
+        <style type="text/css">
+            .artist-header {
+                background-image: url({{ $album->artist->getThumbnailUrl("blur_mobile") }});
+                @if (!is_null($album->artist->hex))
+                    background-color: {{ $album->artist->hex }};
+                @endif
+            }
+            @media (min-width: 501px) {
+                .artist-header { background-image: url({{ $album->artist->getThumbnailUrl("blur") }}); }
+            }
+        </style>
+    @endif
 @endpush
 
 @section('backdrop')
-    @include('partials.backdrop', ['entity' => $album])
 @endsection
 
 @section('content')
-<section class="header">
-    <h1>
+
+<div class="artist-header">
+    <div class="vignette">
         <a href="{{ route('artist', ['slug' => $album->artist->slug]) }}">
-            {{ $album->artist->name }}
+            <img src="{{ $album->artist->getThumbnailUrl() }}" alt="{{ $album->artist->name }}">
         </a>
-    </h1>
-    <h2>
-        <a href="{{ route('album', ['slug' => $album->slug]) }}">
-            {{ $album->name }}
-        </a>
-    </h2>
+    </div>
+    <h2>{{ $album->artist->name }}</h2>
+</div>
+
+<div class="cover-image-wrapper">
+
+    @include('partials.cover-image', ['entity' => $album])
+
+    <div class="content">
+
+        <h1>
+            <a href="{{ route('album', ['slug' => $album->slug]) }}">
+                {{ $album->name }}
+            </a>
+        </h1>
+
     <span>Released <time>{{ date("M", $album->month) }} {{ $album->day }} {{ $album->year }}</time></span>
 
     @include('partials.buttons.upvote', ['type' => "album", 'id' => $album->id])
-</section>
+
+    </div>
+
+</div>
+
 
 <section class="discography">
-    <h2>Discography</h2>
+    <h2>Tracklist</h2>
 
     @if (isset($album->tracks) && count($album->tracks))
         <ul>

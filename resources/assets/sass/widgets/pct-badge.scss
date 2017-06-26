@@ -1,0 +1,43 @@
+.pct-badge {
+    background: #000;
+    border-radius: 50%;
+    border: 1px solid #fff;
+    padding-top: 5px;
+    width: 70px;
+    height: 70px;
+    overflow: hidden;
+
+    > * {
+        display:block;
+        text-transform: uppercase;
+        font-style: normal;
+        text-align: center;
+        text-shadow: none;
+        white-space: nowrap;
+    }
+
+    > em {
+        font-size: 30px;
+        color: #fff;
+    }
+
+    > span {
+        color: #ddd;
+    }
+
+    span {
+        font-size: 0.6em;
+    }
+
+    &.positive {
+        em {
+            color: greenyellow;
+        }
+    }
+
+    &.negative {
+        em {
+            color: red;
+        }
+    }
+}

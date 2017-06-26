@@ -11,7 +11,7 @@
             <li><a href="{{ route('about') }}">About</a></li>
             <li><a href="{{ route('legal') }}">Legal</a></li>
             <li>
-                @include('partials.buttons.bugreport', ['identity' => "general", 'location' => Request::url(), 'label' => "Found a bug?"])
+                @include('components.buttons.bugreport', ['identity' => "general", 'location' => Request::url(), 'label' => "Found a bug?"])
             </li>
         </ul>
     </nav>

@@ -1,0 +1,35 @@
+.vignette {
+    //display: flex;
+    //align-items: center;
+    position: relative;
+
+    .picture {
+        display:inline-block;
+        box-shadow: 0 0 10px #222;
+        overflow: hidden;
+        margin-right: 1em;
+
+        img {
+            width: 100%;
+        }
+    }
+
+    .name {
+        line-height: 1;
+    }
+}
+
+.artist-vignette {
+    .picture {
+        border-radius: 50%;
+        border: 2px solid #fff;
+    }
+}
+
+.album-vignette {
+    .pct-badge {
+        position: relative;
+        right: 0;
+        top: 10px;
+    }
+}

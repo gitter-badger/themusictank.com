@@ -8,5 +8,5 @@
         song-name="{{ $track->name}}"
         user-slug="{{ auth()->user()->slug }}"
     ></player>
-    @include('partials.buttons.bugreport', ['identity' => "song-reviewer", 'location' => Request::url(), 'label' => "Wrong song or something is wrong?"])
+    @include('components.buttons.bugreport', ['identity' => "song-reviewer", 'location' => Request::url(), 'label' => "Wrong song or something is wrong?"])
 @endif

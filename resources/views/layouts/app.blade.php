@@ -38,10 +38,7 @@
 <body class="@yield('body-class', 'home')">
     <section class="app">
         @include('partials.header')
-        @yield('backdrop', '<div class="backdrop plain"><i class="mask"></i></div>')
-        <section class="body">
-            @yield('content')
-        </section>
+        @yield('content')
         @include('partials.footer')
     </section>
     @stack('footer')

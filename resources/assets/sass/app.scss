@@ -21,6 +21,16 @@ body, html, li, ul, h1, h2, h3, h4 {
     padding: 0;
 }
 
+
+h1 {
+    font-family: 'Roboto Condensed', Arial, sans-serif;
+}
+
+h1, h2, h3, h4 {
+    line-height: 1.2;
+    margin: 0;
+}
+
 li {
     margin-left: 0.5em;
 }
@@ -34,9 +44,16 @@ a {
     }
 }
 
+.clear {
+  content: "";
+  display: table;
+  clear: both;
+}
 
 
 @import "layouts";
 @import "header";
-@import "widgets";
+@import "widgets/vignette";
+@import "widgets/cover-image";
+@import "widgets/pct-badge";
 @import "artists";

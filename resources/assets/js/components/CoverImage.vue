@@ -85,7 +85,6 @@ export default {
         <img v-bind:src="thumbnail" v-bind:alt="alt" ref="clean">
         <i class="blur"></i>
         <i class="cover" v-bind:style="{ opacity: opacity }"></i>
-        <i class="mask"></i>
         <i class="bottom-gradient" v-bind:style="{ background: bottomGradient }"></i>
         <i class="left-gradient" v-bind:style="{ background: leftGradient }"></i>
     </div>
@@ -93,43 +92,14 @@ export default {
 
 <style lang="scss">
 .ctrl-cover-image {
-    position: absolute;
     min-height: 600px;
     max-height: 120vh;
     max-width: 900px;
-    width: 100%;
     overflow: hidden;
+    position: absolute;
     right: 0;
-
-    i {
-        background-size: cover;
-        position: absolute;
-        top: 0;
-        left: 0;
-        right: 0;
-        bottom: 0;
-        overflow: hidden;
-
-        &.bottom-gradient {
-            top: inherit;
-            height: 60%;
-        }
-
-        &.left-gradient {
-            display: none;
-        }
-
-        @media (min-width: 800px) {
-            &.left-gradient {
-                display: inline;
-                right: 20%;
-            }
-        }
-
-        &.mask {
-            background: transparent url(http://static.themusictank.com/assets/images/triangles.png) top left repeat;
-        }
-    }
+    top:0;
+    width: 100%;
 
     img {
         width: 100%;

@@ -5,6 +5,7 @@
         </a>
     </div>
     <div class="name">
-        <a href="{{ route('artist', ['slug' => $artist->slug]) }}">{{ $artist->name }}</a>
+        <h3><a href="{{ route('artist', ['slug' => $artist->slug]) }}">{{ $artist->name }}</a></h3>
+        @include('components.buttons.upvote', ['type' => "artist", 'id' => $artist->id])
     </div>
 </div>

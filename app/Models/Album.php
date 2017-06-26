@@ -31,4 +31,14 @@ class Album extends AppModel
     {
         return $this->hasOne(AlbumDiscog::class)->first();
     }
+
+    public function globalScore()
+    {
+        return 90;
+    }
+
+    public function subsScore()
+    {
+        return 40;
+    }
 }

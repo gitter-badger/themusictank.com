@@ -1,9 +1,60 @@
+.artists.index {
 
-.artists.show {
 
-    .cover-image-wrapper {
-        position: relative;
+    .featured {
+        h2 {
+            color: #333;
+            font-size: 0.9em;
+            font-weight: bold;
+            text-transform: uppercase;
+            text-shadow: none;
+        }
+
+        h1 {
+            font-size: 3.5em;
+            max-width: 45%;
+        }
+
+        .discography {
+            display: flex;
+            align-items: center;
+            margin-top: 20vh;
+
+            .more, .vignette {
+                margin: 0 auto 2em;
+                text-align: center;
+                width: 25%;
+            }
+
+            .vignette {
+                .picture {
+                    max-width: 200px;
+                    img {
+                        border:1px solid #666;
+                        width: 100%;
+                    }
+                }
+
+                .name {
+                    display: block;
+                    margin: 1em 0;
+                    font-size: 0.9em;
+                }
+            }
+
+            .more {
+                font-size: 1.5em;
+                .fa {
+                    margin-left: 1em;
+                }
+            }
+        }
     }
+}
+
+
+/*
+.artists.show {
 
     .artist-vignette {
         font-size: 3.5em;
@@ -58,3 +109,4 @@
         }
     }
 }
+*/

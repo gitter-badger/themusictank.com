@@ -1,6 +1,4 @@
 .vignette {
-    //display: flex;
-    //align-items: center;
     position: relative;
 
     .picture {
@@ -20,6 +18,8 @@
 }
 
 .artist-vignette {
+    text-align: center;
+
     .picture {
         border-radius: 50%;
         border: 2px solid #fff;
@@ -27,9 +27,7 @@
 }
 
 .album-vignette {
-    .pct-badge {
-        position: relative;
-        right: 0;
-        top: 10px;
+    .badges {
+        margin-bottom: -0.8em;
     }
 }

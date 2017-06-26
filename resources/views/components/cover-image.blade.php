@@ -13,6 +13,7 @@
     @endif
 
     <i class="mask"></i>
+    <i class="wrapper-bottom-gradient"></i>
 
     <section class="cover-image-content">
         {{ $slot }}

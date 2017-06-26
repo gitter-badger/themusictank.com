@@ -14,7 +14,7 @@
                             @else
                                 <div class="more">
                                     <a href="{{ route('artist', ['slug' => $spotlightArtist->slug]) }}">
-                                        and {{ $spotlightArtist->albums->count() - 3 }} more
+                                        And {{ $spotlightArtist->albums->count() - 3 }} more
                                         <i class="fa fa-arrow-circle-right" aria-hidden="true"></i>
                                     </a>
                                 </div>

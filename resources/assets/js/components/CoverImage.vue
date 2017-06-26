@@ -45,7 +45,8 @@ export default {
                     minScroll = this.wrapperHeight * .2;
 
                 if (this.scrollY < minScroll) {
-                    return .8; // never fully 100%
+                    return 1;
+                    // return .8; // never fully 100%
                 }
 
                 if (this.scrollY > maxScroll) {
@@ -55,7 +56,7 @@ export default {
                 return (maxScroll - this.scrollY) / maxScroll;
             }
 
-            return .8;
+            return 1;
         },
 
         shouldApply() {

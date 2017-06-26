@@ -2,6 +2,8 @@
 
 namespace App\Models;
 
+use DB;
+
 class Album extends AppModel
 {
     use Behavior\Thumbnailed,
@@ -34,11 +36,16 @@ class Album extends AppModel
 
     public function globalScore()
     {
-        return 90;
+        return DB::table('track_reviews')
+            ->whereIn('track_id', $this->tracks->pluck('id'))
+            ->avg('avg_groove');
     }
 
-    public function subsScore()
+    public function subsScore(User $user)
     {
-        return 40;
+        return DB::table('track_reviews')
+            ->whereIn('track_id', $this->tracks->pluck('id'))
+            ->where('user_id', $user->subscriptions->pluck('id'))
+            ->avg('avg_groove');
     }
 }

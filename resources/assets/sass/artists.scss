@@ -1,7 +1,16 @@
-.artists.index {
+.artists {
+    .cover-image-wrapper {
+        color: #fff;
+        min-height: 600px;
 
+        .cover-image-content {
+            padding-top: 50vh;
+        }
 
-    .featured {
+        a {
+            color:#fff;
+        }
+
         h2 {
             color: #333;
             font-size: 0.9em;
@@ -12,101 +21,86 @@
 
         h1 {
             font-size: 3.5em;
-            max-width: 45%;
-        }
-
-        .discography {
-            display: flex;
-            align-items: center;
-            margin-top: 20vh;
-
-            .more, .vignette {
-                margin: 0 auto 2em;
-                text-align: center;
-                width: 25%;
-            }
-
-            .vignette {
-                .picture {
-                    max-width: 200px;
-                    img {
-                        border:1px solid #666;
-                        width: 100%;
-                    }
-                }
-
-                .name {
-                    display: block;
-                    margin: 1em 0;
-                    font-size: 0.9em;
-                }
-            }
-
-            .more {
-                font-size: 1.5em;
-                .fa {
-                    margin-left: 1em;
-                }
-            }
         }
     }
 }
 
 
-/*
-.artists.show {
+.artists.index {
+    .discography {
+        display: flex;
+        margin-top: 20vh;
 
-    .artist-vignette {
-        font-size: 3.5em;
-        max-width: 50vw;
-        .picture {
-            width: 300px;
-        }
-    }
-
-    .content {
-        padding-top: 60vh;
-        position: relative;
-        padding: 30vh 2em 2em 2em;
-        text-shadow: 0 0 20px #222;
-
-        h1 {
-            font-size: 3.5em;
-            font-family: 'Roboto Condensed', Arial, sans-serif;
-            line-height: 1.2;
-            max-width: 45%;
-            margin: 0;
-
-            a:hover {
-                color: #fff;
-            }
+        .more, .vignette {
+            margin: 0 auto 2em;
+            width: 25%;
         }
 
-        .discography {
-            margin-top: 10vh;
-
-            .album {
-                display: flex;
-
-                margin-bottom: 2em;
-
-                .thumbnail {
-                    max-width: 300px;
-                }
-
+        .vignette {
+            .picture {
+                max-width: 200px;
                 img {
-                    border:1px solid #dedede;
-                    box-shadow: 0 0 10px #222;
+                    border:1px solid #666;
                     width: 100%;
                 }
+            }
+
+            .name {
+                display: block;
+                font-size: 0.9em;
+                margin: 1em 0;
+            }
+        }
+
+        .more {
+            font-size: 1.5em;
+            .fa {
+                margin-left: 1em;
+            }
+        }
+    }
+
+    .featured-artists {
+        display: flex;
+
+        .vignette {
+            padding: 1em;
+            width: 20%;
+        }
+    }
+}
+
+.artists.show {
+
+    .cover-image-content {
+        .title, .scores {
+            float: left;
+            width: 50%;
+        }
+        .pct-score {
+            float: left;
+            width: 50%;
+            font-size: 40px;
+        }
+    }
+
+    .discography {
+        margin-top: 10vh;
+
+        .vignettes {
+            display: flex;
+
+            margin-bottom: 2em;
+
+            .picture {
+                max-width: 300px;
+            }
 
 
-                h2 {
-                    margin-left: 1em;
-                    font-size: 1.5em;
-                }
+            h3 {
+                margin-left: 1em;
+                font-size: 1.5em;
             }
         }
     }
 }
-*/

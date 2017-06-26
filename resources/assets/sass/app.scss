@@ -27,7 +27,7 @@ h1 {
 }
 
 h1, h2, h3, h4 {
-    line-height: 1.2;
+    line-height: 1.1;
     margin: 0;
 }
 
@@ -36,11 +36,11 @@ li {
 }
 
 a {
-    color:#fff;
+    color:#222;
     text-decoration: none;
 
     &:hover {
-        color:#fff;
+        color:#333;
     }
 }
 
@@ -56,4 +56,5 @@ a {
 @import "widgets/vignette";
 @import "widgets/cover-image";
 @import "widgets/pct-badge";
+@import "widgets/pct-score";
 @import "artists";

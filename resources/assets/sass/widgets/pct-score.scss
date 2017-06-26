@@ -1,0 +1,34 @@
+.pct-score {
+    > * {
+        display:block;
+        text-transform: uppercase;
+        font-style: normal;
+        text-align: center;
+        white-space: nowrap;
+    }
+
+    > em {
+        font-size: 1.25em;
+        color: #fff;
+    }
+
+    > span {
+        color: #ddd;
+    }
+
+    span {
+        font-size: 0.6em;
+    }
+
+    &.positive {
+        em {
+            color: greenyellow;
+        }
+    }
+
+    &.negative {
+        em {
+            color: red;
+        }
+    }
+}

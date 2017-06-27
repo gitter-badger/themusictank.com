@@ -27,7 +27,7 @@
     <link rel="icon" href="http://static.themusictank.com/assets/images/social-share.png">
     <link rel="publisher" href="https://plus.google.com/117543200043480372792">
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css">
-    <link rel="stylesheet" href="//maxcdn.bootstrapcdn.com/bootstrap/3.3.5/css/bootstrap.min.css">
+    {{-- <link rel="stylesheet" href="//maxcdn.bootstrapcdn.com/bootstrap/3.3.5/css/bootstrap.min.css"> --}}
     <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto|Roboto+Condensed">
     <link rel="stylesheet" href="{{ mix('css/app.css') }}">
 

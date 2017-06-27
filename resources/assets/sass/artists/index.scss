@@ -1,0 +1,38 @@
+.artists.index {
+    .discography {
+        display: flex;
+        margin-top: 20vh;
+
+        .more, .vignette {
+            margin: 0 auto 2em;
+            width: 25%;
+        }
+
+        .vignette {
+            .name {
+                display: block;
+                font-size: 0.9em;
+                margin: 1em 0;
+            }
+        }
+
+        .more {
+            text-align: center;
+            vertical-align: middle;
+            line-height: 300px;
+            font-size: 1.5em;
+            .fa {
+                margin-left: 1em;
+            }
+        }
+    }
+
+    .featured-artists {
+        display: flex;
+
+        .vignette {
+            padding: 1em;
+            width: 20%;
+        }
+    }
+}

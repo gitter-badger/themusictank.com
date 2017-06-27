@@ -9,11 +9,11 @@
 
     > em {
         font-size: 1.25em;
-        color: #fff;
+        color: $light-text-color;
     }
 
     > span {
-        color: #ddd;
+        color: darken($light-text-color, 15%);
     }
 
     span {

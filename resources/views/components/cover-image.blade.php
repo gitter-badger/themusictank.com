@@ -22,6 +22,9 @@
 
 @push('header')
     <style type="text/css">
+    @if (!is_null($entity->hex))
+        .cover-image-wrapper { background-color: {{ $entity->hex }}; }
+    @endif
     @if ((bool)$entity->thumbnail)
         .ctrl-cover-image .blur { background-image: url({{ $entity->getThumbnailUrl("blur_mobile") }}); }
         .ctrl-cover-image .cover { background-image: url({{ $entity->getThumbnailUrl("cover_mobile") }}); }
@@ -30,9 +33,6 @@
             .ctrl-cover-image .blur { background-image: url({{ $entity->getThumbnailUrl("blur") }}); }
             .ctrl-cover-image .cover { background-image: url({{ $entity->getThumbnailUrl("cover") }}); }
         }
-    @endif
-    @if (!is_null($entity->hex))
-        .cover-image-wrapper { background-color: {{ $entity->hex }}; }
     @endif
     </style>
 @endpush

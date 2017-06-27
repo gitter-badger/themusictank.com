@@ -11,9 +11,7 @@
 <meta name="tmt:track:gid" content="{{ $track->gid }}">
 @endpush
 
-@section('backdrop')
-    @include('partials.backdrop', ['entity' => $track->album])
-@endsection
+
 
 @push('app-javascript')
     Tmt.app.reviewFrames(
@@ -28,53 +26,38 @@
 
 
 @section('content')
-    <section class="header">
-        <h1>
-            <a href="{{ route('artist', ['slug' => $track->artist->slug]) }}">
-                {{ $track->artist->name }}
-            </a>
-        </h1>
-        <h2>
-            <a href="{{ route('album', ['slug' => $track->album->slug]) }}">
-                {{ $track->album->name }}
-            </a>
-        </h2>
-        <h3>
-            <a href="{{ route('track', ['slug' => $track->slug]) }}">
-                {{ $track->name }}
-            </a>
-            @include('partials.buttons.upvote', ['type' => "track", 'id' => $track->id])
-        </h3>
-    </section>
+    @component('components.cover-image', ['entity' => $track->album])
+        @include('components.vignettes.artist', ['artist' => $track->album->artist])
+        @include('components.vignettes.album', ['album' => $track->album])
 
-    <section class="review-cta">
-        <a href="{{ route('review', ['slug' => $track->slug]) }}">Review track</a>
+        <section class="review-cta">
+            <a href="{{ route('review', ['slug' => $track->slug]) }}">Review track</a>
 
-        @if (isset($authUserCurve))
-            You have already reviewed this track but you may review it again to fine tune your results.
-            <a href="{{ route('user-review', ['slug' => auth()->user()->slug, 'trackSlug' => $track->slug]) }}">View your curve</a>
-        @endif
-    </section>
+            @if (isset($authUserCurve))
+                You have already reviewed this track but you may review it again to fine tune your results.
+                <a href="{{ route('user-review', ['slug' => auth()->user()->slug, 'trackSlug' => $track->slug]) }}">View your curve</a>
+            @endif
+        </section>
 
-    <section>
-        <line-chart object-id="{{ $track->id }}" datasource="subscriptions"></line-chart>
-        <line-chart object-id="{{ $track->id }}" datasource="global"></line-chart>
-        @include('partials.player', ['track' => $track])
-    </section>
+        <section>
+            <line-chart object-id="{{ $track->id }}" datasource="subscriptions"></line-chart>
+            <line-chart object-id="{{ $track->id }}" datasource="global"></line-chart>
+            @include('partials.player', ['track' => $track])
+        </section>
 
 
-    <section class="track-navigation">
-        @if ($track->previous()->count() && $previous = $track->previous()->first())
-            <a href="{{ route('track', ['slug' => $previous->slug]) }}">
-                <i class="fa fa-fast-backward" aria-hidden="true"></i> {{ $previous->name }}
-            </a>
-        @endif
+        <section class="track-navigation">
+            @if ($track->previous()->count() && $previous = $track->previous()->first())
+                <a href="{{ route('track', ['slug' => $previous->slug]) }}">
+                    <i class="fa fa-fast-backward" aria-hidden="true"></i> {{ $previous->name }}
+                </a>
+            @endif
 
-        @if ($track->next()->count() && $next = $track->next()->first())
-            <a href="{{ route('track', ['slug' => $next->slug]) }}">
-                {{ $next->name }} <i class="fa fa-fast-forward" aria-hidden="true"></i>
-            </a>
-        @endif
-    </section>
-
+            @if ($track->next()->count() && $next = $track->next()->first())
+                <a href="{{ route('track', ['slug' => $next->slug]) }}">
+                    {{ $next->name }} <i class="fa fa-fast-forward" aria-hidden="true"></i>
+                </a>
+            @endif
+        </section>
+    @endcomponent
 @endsection

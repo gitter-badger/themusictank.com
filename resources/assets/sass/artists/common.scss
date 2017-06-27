@@ -1,0 +1,27 @@
+.artists {
+    .cover-image-wrapper {
+        min-height: 650px;
+
+        .cover-image-content {
+            margin-top: 33%;
+        }
+
+        a {
+            color: $light-text-color;
+        }
+
+        h2 {
+            color: transparentize($dark-text-color, .4);
+            font-size: 0.9em;
+            font-weight: bold;
+            text-transform: uppercase;
+            text-shadow: none;
+            margin-bottom: .8em;
+        }
+
+        h1 {
+            font-size: 3.5em;
+        }
+    }
+}
+

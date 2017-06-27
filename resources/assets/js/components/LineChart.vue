@@ -49,12 +49,10 @@ export default {
         this.canvas = new Canvas(this.getElement().find('canvas'));
         this.canvas.resize(element.width(), element.height());
 
-        $(window).on('resize', this.debounce(() => {
+        window.addEventListener('resize', () => {
             this.canvas.resize(element.width(), element.height());
-            // console.log('resize with ' + element.width() + " , " + element.height());
             this.canvas.draw();
-        }));
-
+        });
     }
 };
 </script>

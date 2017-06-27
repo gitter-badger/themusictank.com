@@ -1,3 +1,16 @@
+
+$light-theme-color: #fefefe;
+$dark-theme-color: #1e1e1e;
+
+$light-text-color: $light-theme-color;
+$dark-text-color: $dark-theme-color;
+$shadow-color: transparentize($dark-theme-color, .2);
+
+
+$dark-content-bg-color: $dark-theme-color;
+$main-font: 'Roboto', Arial, sans-serif;
+$title-font: 'Roboto Condensed', Arial, sans-serif;
+
 html {
   box-sizing: border-box;
 }
@@ -13,7 +26,7 @@ body, html, section.app {
 }
 
 * {
-    font-family: 'Roboto', Arial, sans-serif;
+    font-family: $main-font;
 }
 
 body, html, li, ul, h1, h2, h3, h4 {
@@ -23,7 +36,7 @@ body, html, li, ul, h1, h2, h3, h4 {
 
 
 h1 {
-    font-family: 'Roboto Condensed', Arial, sans-serif;
+    font-family: $main-font;
 }
 
 h1, h2, h3, h4 {
@@ -57,4 +70,6 @@ a {
 @import "widgets/cover-image";
 @import "widgets/pct-badge";
 @import "widgets/pct-score";
-@import "artists";
+@import "artists/common";
+@import "artists/index";
+@import "artists/show";

@@ -1,0 +1,20 @@
+.artists.show {
+    .cover-image-content {
+        .title, .scores {
+            float: left;
+            width: 50%;
+        }
+        .pct-score {
+            float: left;
+            width: 50%;
+            font-size: 40px;
+        }
+    }
+
+    .discography {
+        background: $dark-content-bg-color;
+        width: 100%;
+        padding: 2em 5em;
+
+    }
+}

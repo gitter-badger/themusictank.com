@@ -3,11 +3,17 @@
 
     .picture {
         display:inline-block;
-        box-shadow: 0 0 10px #222;
+        box-shadow: 0 0 10px $shadow-color;
         overflow: hidden;
         margin-right: 1em;
+        max-height: 200px;
+        max-width: 200px;
+        min-height: 200px;
+        min-width: 200px;
+        border: 1px solid $light-text-color;
 
         img {
+            border:1px solid $dark-text-color;
             width: 100%;
         }
     }
@@ -21,8 +27,8 @@
     text-align: center;
 
     .picture {
+        border-width: 1px;
         border-radius: 50%;
-        border: 2px solid #fff;
     }
 }
 

@@ -10,6 +10,31 @@
 <meta name="tmt.artist.last_updated" content="{{ $artist->updated_at }}">
 @endpush
 
+@section('content')
+    @component('components.cover-image', ['entity' => $artist])
+        <div class="title">
+            <a href="{{ route('artists') }}" class="subtitle">Artists</a>
+            <h1><a href="{{ route('artist', ['slug' => $artist->slug]) }}">{{ $artist->name }}</a></h1>
+        </div>
+        <div class="scores">
+            @include('components.scores.pct', ['label' => "Global", 'percent' => $artist->globalScore()])
+            @if(!is_null(auth()->user()))
+                @include('components.scores.pct', ['label' => "Subs", 'percent' => $artist->subsScore(auth()->user())])
+            @endif
+        </div>
+    @endcomponent
+
+    <section class="discography">
+        @if ($artist->albums->count())
+            @foreach ($artist->albums as $idx => $album)
+                @include('components.album-details', ['album' => $album])
+            @endforeach
+        @else
+            <p>We have not found any releases belonging to {{ $artist->name }}. The last time we found updates was {{ $artist->getLastUpdatedForHumans() }}.</p>
+        @endif
+    </section>
+@endsection
+
 @push('app-javascript')
 Tmt.app.reviewFrames([
     @foreach ($artist->albums as $idx => $album)
@@ -23,42 +48,3 @@ Tmt.app.reviewFrames([
     {}
 ]);
 @endpush
-
-@section('content')
-
-    @component('components.cover-image', ['entity' => $artist])
-        <div class="title">
-            <h1><a href="{{ route('artist', ['slug' => $artist->slug]) }}">{{ $artist->name }}</a></h1>
-        </div>
-        <div class="scores">
-            @include('components.scores.pct', ['label' => "Global", 'percent' => $artist->globalScore()])
-            @if(!is_null(auth()->user()))
-                @include('components.scores.pct', ['label' => "Subs", 'percent' => $artist->subsScore(auth()->user())])
-            @endif
-        </div>
-    @endcomponent
-
-    <section class="discography clear">
-        @if ($artist->albums->count())
-            @foreach ($artist->albums as $idx => $album)
-                <div class="row">
-                    <div class="head">
-                        @include('components.vignettes.album', ['album' => $album])
-                    </div>
-                    <div class="data">
-                        @if(!is_null(auth()->user()))
-                            @include('components.scores.pct', ['label' => "Subscriptions", 'percent' => $artist->subsScore(auth()->user())])
-                            <line-chart object-id="{{ $album->id }}" datasource="subscriptions"></line-chart>
-                        @endif
-
-                        @include('components.scores.pct', ['label' => "Global", 'percent' => $artist->globalScore()])
-                        <line-chart object-id="{{ $album->id }}" datasource="global"></line-chart>
-                    </div>
-                </div>
-            @endforeach
-        @else
-            <p>We have not found any releases belonging to {{ $artist->name }}. The last time we found updates was {{ $artist->getLastUpdatedForHumans() }}.</p>
-        @endif
-    </section>
-
-@endsection

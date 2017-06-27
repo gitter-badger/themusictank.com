@@ -4,8 +4,12 @@
     @if (isset($spotlightArtist))
         @component('components.cover-image', ['entity' => $spotlightArtist])
             <article class="featured">
-                <h2>Featured Artist</h2>
-                <h1><a href="{{ route('artist', ['slug' => $spotlightArtist->slug]) }}">{{ $spotlightArtist->name }}</a></h1>
+
+                <div class="title">
+                    <span class="subtitle">Featured Artist</span>
+                    <h1><a href="{{ route('artist', ['slug' => $spotlightArtist->slug]) }}">{{ $spotlightArtist->name }}</a></h1>
+                </div>
+
                 @if ($spotlightArtist->albums->count())
                     <section class="discography clear">
                         @foreach ($spotlightArtist->albums->take(4) as $idx => $album)

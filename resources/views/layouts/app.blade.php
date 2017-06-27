@@ -1,3 +1,12 @@
+<!--
+    ╔══╗
+    ║██║
+    ║(O)♫ ♪ ♫ ♪
+    ╚══╝
+    Hey!
+    Why don't you come hang out with us?
+    github.com/themusictank.com
+-->
 <!DOCTYPE html>
 <html lang="{{ config('app.locale') }}">
 <head>
@@ -23,17 +32,21 @@
     <meta name="twitter:title" content="@yield('og-title', 'The Music Tank')">
     <meta name="twitter:description" content="@yield('og-description', 'The Music Tank is a place where you can rate and discover music.')" >
 
+    @stack('header')
+
+    <title>@yield('title', 'The Music Tank')</title>
+
     <link rel="apple-touch-icon" href="http://static.themusictank.com/assets/images/social-share.png">
     <link rel="icon" href="http://static.themusictank.com/assets/images/social-share.png">
     <link rel="publisher" href="https://plus.google.com/117543200043480372792">
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css">
-    {{-- <link rel="stylesheet" href="//maxcdn.bootstrapcdn.com/bootstrap/3.3.5/css/bootstrap.min.css"> --}}
-    <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto|Roboto+Condensed">
+    {{-- <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto|Oswald"> --}}
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=News+Cycle">
     <link rel="stylesheet" href="{{ mix('css/app.css') }}">
 
-    @stack('header')
-
-	<title>@yield('title', 'The Music Tank')</title>
+    {!! IndentCapture::on('<style type="text/css">') !!}
+        @stack('app-styles')
+    {!! IndentCapture::off('</style>') !!}
 </head>
 <body class="@yield('body-class', 'home')">
     <section class="app">
@@ -42,9 +55,13 @@
         @include('partials.footer')
     </section>
     @stack('footer')
+
     <script src="{{ mix('js/manifest.js') }}"></script>
     <script src="{{ mix('js/vendor.js') }}"></script>
     <script src="{{ mix('js/app.js') }}"></script>
-    @include('partials.footer-scripts')
+    {!! IndentCapture::on('<script>(function(){') !!}
+        @include('partials.default-scripts')
+        @stack('app-javascript')
+    {!! IndentCapture::off('})();</script>') !!}
 </body>
 </html>

@@ -10,10 +10,12 @@
     > em {
         font-size: 1.25em;
         color: $light-text-color;
+        line-height: 1;
     }
 
     > span {
         color: darken($light-text-color, 15%);
+        font-family: $title-font;
     }
 
     span {

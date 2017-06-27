@@ -2,14 +2,15 @@
 $light-theme-color: #fefefe;
 $dark-theme-color: #1e1e1e;
 
+
 $light-text-color: $light-theme-color;
 $dark-text-color: $dark-theme-color;
 $shadow-color: transparentize($dark-theme-color, .2);
 
-
+$content-background-color: #f8f8f6;
 $dark-content-bg-color: $dark-theme-color;
-$main-font: 'Roboto', Arial, sans-serif;
-$title-font: 'Roboto Condensed', Arial, sans-serif;
+$title-font: 'News Cycle', Arial, sans-serif;
+$main-font: 'News Cycle', Arial, sans-serif;
 
 html {
   box-sizing: border-box;
@@ -19,14 +20,11 @@ body, html, section.app {
     min-height: 100%;
     min-width: 100%;
     font-size: 16px;
+    font-family: $main-font;
 }
 
 *, *:before, *:after {
   box-sizing: inherit;
-}
-
-* {
-    font-family: $main-font;
 }
 
 body, html, li, ul, h1, h2, h3, h4 {
@@ -34,14 +32,12 @@ body, html, li, ul, h1, h2, h3, h4 {
     padding: 0;
 }
 
-
-h1 {
-    font-family: $main-font;
-}
-
 h1, h2, h3, h4 {
+    letter-spacing: .03em;
     line-height: 1.1;
     margin: 0;
+    font-weight: 700;
+    font-family: $title-font;
 }
 
 li {
@@ -63,6 +59,15 @@ a {
   clear: both;
 }
 
+@mixin position-stretch {
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    overflow: hidden;
+}
+
 
 @import "layouts";
 @import "header";
@@ -70,6 +75,7 @@ a {
 @import "widgets/cover-image";
 @import "widgets/pct-badge";
 @import "widgets/pct-score";
+@import "widgets/album-details";
 @import "artists/common";
 @import "artists/index";
 @import "artists/show";

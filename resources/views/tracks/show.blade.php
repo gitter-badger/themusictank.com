@@ -8,7 +8,6 @@
 
 @push('header')
 <meta name="tmt:track:last_updated" content="{{ $track->updated_at }}">
-<meta name="tmt:track:gid" content="{{ $track->gid }}">
 @endpush
 
 

@@ -1,0 +1,81 @@
+.album-details {
+    position: relative;
+    background-size: cover;
+    margin: 0 0 80px 0;
+    padding: 0 5em;
+    width: 100%;
+    text-shadow: 1px 1px 1px #fff;
+
+    h3 {
+        position: relative;
+        margin: 0 0 1.5em 0.5em;
+
+        a {
+            font-size: 1.3em;
+        }
+    }
+
+    i:not(.fa) {
+        @include position-stretch;
+        bottom: 1px; // allow this to be our border
+
+        &.top-fade {
+            background: linear-gradient($content-background-color, transparent);
+        }
+
+        &.left-fade {
+            background: linear-gradient(90deg, $content-background-color, transparent);
+            right: 90%;
+        }
+
+        &.right-fade {
+            background: linear-gradient(270deg, $content-background-color, transparent);
+            left: 90%;
+        }
+
+        &.radial {
+            background: radial-gradient(circle at bottom center, transparent, $content-background-color);
+        }
+    }
+
+    .details {
+        display: table;
+        padding-bottom: 3.5em;
+        position: relative;
+
+        > div {
+            display: table-cell;
+            padding: 0.5em;
+            vertical-align: top;
+        }
+
+        .cover {
+            font-size: 1.3em;
+        }
+
+        .scores {
+            width: 150px;
+            font-size: 1.6em;
+            text-align: center;
+
+            .pct-score {
+                & > em {
+                    color: $dark-theme-color;
+                }
+                & > span {
+                    color: lighten($dark-theme-color, 30%);
+                }
+            }
+        }
+
+        .charts {
+            width: 100%;
+            text-align: right;
+
+            .ctrl-line-chart {
+                margin-bottom: 2em;
+            }
+        }
+    }
+
+}

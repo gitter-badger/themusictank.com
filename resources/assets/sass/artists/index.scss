@@ -1,9 +1,15 @@
 .artists.index {
+
+    .cover-image-wrapper {
+        padding-bottom: 0;
+    }
+
     .discography {
-        display: flex;
-        margin-top: 20vh;
+        display: table;
+        margin-top: 2em;
 
         .more, .vignette {
+            display: table-cell;
             margin: 0 auto 2em;
             width: 25%;
         }

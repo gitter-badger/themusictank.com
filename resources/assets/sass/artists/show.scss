@@ -1,9 +1,11 @@
 .artists.show {
+
     .cover-image-content {
         .title, .scores {
             float: left;
             width: 50%;
         }
+
         .pct-score {
             float: left;
             width: 50%;
@@ -12,9 +14,9 @@
     }
 
     .discography {
-        background: $dark-content-bg-color;
+        background: $content-background-color;
         width: 100%;
-        padding: 2em 5em;
-
+        padding:30px 0 1em;
     }
+
 }

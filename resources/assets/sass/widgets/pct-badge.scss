@@ -2,8 +2,9 @@
     background: darken($dark-theme-color, 20%);
     border-radius: 50%;
     border: 1px solid $light-text-color;
+    text-shadow: none;
     display: inline-block;
-    padding-top: 8px;
+    padding-top: 10px;
     margin: 0 .8em 0 0;
     width: 60px;
     height: 60px;

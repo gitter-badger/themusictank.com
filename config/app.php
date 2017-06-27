@@ -233,6 +233,8 @@ return [
         'Html' => Collective\Html\HtmlFacade::class,
         'Socialite' => Laravel\Socialite\Facades\Socialite::class,
 
+        'IndentCapture' => App\ViewHelpers\IndentCapture::class,
+
     ],
 
 ];

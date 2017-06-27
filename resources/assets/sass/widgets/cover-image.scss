@@ -1,31 +1,28 @@
 .cover-image-wrapper {
     background-size: cover;
-    text-shadow: -1px -2px 2px $shadow-color;
+    text-shadow: 1px 1px 1px $light-text-color, -1px -1px 1px $dark-text-color;
     overflow: hidden;
-    padding: 2em;
+    padding: 5em;
     position: relative;
-    color: $light-text-color;
 
     .cover-image-content {
         position: relative;
     }
 
     i:not(.fa) {
-        position: absolute;
-        top: 0;
-        left: 0;
-        right: 0;
-        bottom: 0;
-        overflow: hidden;
+        @include position-stretch;
 
         &:not(.mask) {
             background-size: cover;
         }
 
         &.wrapper-bottom-gradient {
-            top: inherit;
-            height: 40%;
-            background: linear-gradient(180deg, transparent, $dark-content-bg-color);
+            top: 60%;
+            background: linear-gradient(180deg, transparent, $content-background-color);
+        }
+
+        &.radial {
+            background: radial-gradient(circle at bottom center, transparentize($content-background-color, .4), transparent);
         }
 
         &.bottom-gradient {
@@ -43,8 +40,6 @@
             }
         }
     }
-
-
 
     .mask {
         background: transparent url(http://static.themusictank.com/assets/images/triangles.png) top left repeat-y;

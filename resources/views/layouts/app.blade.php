@@ -22,19 +22,20 @@
     <meta property="og:site_name" content="The Music Tank">
     <meta property="og:type" content="website">
     <meta property="og:locale" content="en_CA">
-    <meta property="og:title" content="@yield('og-title', 'The Music Tank')">
+    <meta property="og:title" content="@yield('title', 'The Music Tank')">
     <meta property="og:description" content="@yield('og-description', 'The Music Tank is a place where you can rate and discover music.')" >
 
     <meta name="twitter:card" content="summary_large_image">
     <meta name="twitter:creator" content="@themusictank">
     <meta name="twitter:card" content="summary">
     <meta name="twitter:image:src" content="http://static.themusictank.com/assets/images/social-share.png">
-    <meta name="twitter:title" content="@yield('og-title', 'The Music Tank')">
+    <meta name="twitter:title" content="@yield('title', 'The Music Tank')">
     <meta name="twitter:description" content="@yield('og-description', 'The Music Tank is a place where you can rate and discover music.')" >
 
     @stack('header')
 
-    <title>@yield('title', 'The Music Tank')</title>
+    <title>@yield('title') @ The Music Tank</title>
+    <meta name="description" content="@yield('og-description', 'The Music Tank is a place where you can rate and discover music.')"/>
 
     <link rel="apple-touch-icon" href="http://static.themusictank.com/assets/images/social-share.png">
     <link rel="icon" href="http://static.themusictank.com/assets/images/social-share.png">

@@ -1,5 +1,9 @@
 @extends('layouts.app')
+@section('title', 'Featured artists')
+@section('description', 'View the most popular artists on The Music Tank at the moment.')
+
 @section('body-class', 'artists index')
+
 @section('content')
     @if (isset($spotlightArtist))
         @component('components.cover-image', ['entity' => $spotlightArtist])

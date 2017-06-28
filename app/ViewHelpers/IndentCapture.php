@@ -16,7 +16,7 @@ class IndentCapture {
         ob_end_clean();
 
         // If no content is printed, don't even print the wrapper.
-        if (!count($content)) {
+        if (!strlen(trim($content))) {
             return "";
         }
 
@@ -30,11 +30,10 @@ class IndentCapture {
             "/\t/"                      => ' ',
             "/ +/"                      => ' ',
         ];
+
         return preg_replace(
             array_keys($replace), array_values($replace), $content . "\n" . $suffix
         );
-
-
     }
 
 }

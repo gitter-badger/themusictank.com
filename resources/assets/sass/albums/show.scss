@@ -1,8 +1,17 @@
-.artists.show {
+.albums.show {
 
     .cover-image-content {
 
         @include tabled;
+
+        .artist-vignette {
+            .picture {
+                min-height: 60px;
+                min-width: 60px;
+                max-height: 60px;
+                max-width: 60px;
+            }
+        }
 
         .title, .scores {
             width: 50%;
@@ -14,7 +23,7 @@
         }
     }
 
-    .discography {
+    .tracklist {
         background: $content-background-color;
         width: 100%;
         padding:30px 0 1em;

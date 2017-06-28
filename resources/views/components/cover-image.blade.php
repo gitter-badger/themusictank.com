@@ -10,8 +10,8 @@
         </cover-image>
     @endif
 
-    <i class="mask radial"></i><i class="mask w-bottom"></i><i class="mask bottom"></i><i class="mask left"></i>
-    <i class="mask triangles"></i>
+    <i class="mask bottom"></i><i class="mask left"></i><i class="mask radial"></i>
+    <i class="mask triangles"></i><i class="mask w-bottom"></i>
 
     <section class="cover-image-content">
         {{ $slot }}

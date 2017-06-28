@@ -4,10 +4,25 @@
     overflow: hidden;
     padding: 5em;
     position: relative;
+    min-height: 650px;
 
     .cover-image-content {
+        margin-top: 300px;
+        margin-bottom: 100px;
         position: relative;
+
+        h1 {
+            font-size: 3.5em;
+        }
+
+        .subtitle {
+            text-shadow: 0 0 1px transparentize($dark-text-color, .6);
+            color: $light-text-color;
+            text-transform: uppercase;
+            position: relative;
+        }
     }
+
 
     .mask {
         @include position-stretch;

@@ -48,4 +48,12 @@ class Album extends AppModel
             ->where('user_id', $user->subscriptions->pluck('id'))
             ->avg('avg_groove');
     }
+
+    public function score(User $user)
+    {
+        return DB::table('track_reviews')
+            ->whereIn('track_id', $this->tracks->pluck('id'))
+            ->where('user_id', $user->id)
+            ->avg('avg_groove');
+    }
 }

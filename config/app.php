@@ -234,6 +234,7 @@ return [
         'Socialite' => Laravel\Socialite\Facades\Socialite::class,
 
         'IndentCapture' => App\ViewHelpers\IndentCapture::class,
+        'TrackSort' => App\ViewHelpers\TrackSort::class,
 
     ],
 

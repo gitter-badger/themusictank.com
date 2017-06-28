@@ -1,26 +1,11 @@
 @extends('layouts.app')
 
 @section('title', sprintf('%s from %s by %s', $track->name, $track->album->name, $track->artist->name))
-@section('og-title', sprintf('%s from %s by %s', $track->name, $track->album->name, $track->artist->name))
 @section('description', sprintf('View the reviewing statistics of %s, a song by %s.', $track->name, $track->artist->name))
-@section('og-description', sprintf('View the reviewing statistics of %s, a song by %s.', $track->name, $track->artist->name))
 @section('body-class', 'tracks show')
 
 @push('header')
 <meta name="tmt:track:last_updated" content="{{ $track->updated_at }}">
-@endpush
-
-
-
-@push('app-javascript')
-    Tmt.app.reviewFrames(
-        [{
-            @if (isset($globalCurve))        'global'       : <?php echo $globalCurve->toJson(); ?>,{{ PHP_EOL }}@endif
-            @if (isset($subscriptionsCurve)) 'subscriptions': <?php echo $subscriptionsCurve->toJson(); ?>,{{ PHP_EOL }}@endif
-            @if (isset($authUserCurve))      'auth_user'    : <?php echo $authUserCurve->toJson(); ?>,{{ PHP_EOL }}@endif
-            'id' : {{ $track->id }}
-        }]
-    );
 @endpush
 
 
@@ -37,6 +22,8 @@
                 <a href="{{ route('user-review', ['slug' => auth()->user()->slug, 'trackSlug' => $track->slug]) }}">View your curve</a>
             @endif
         </section>
+    @endcomponent
+
 
         <section>
             <line-chart object-id="{{ $track->id }}" datasource="subscriptions"></line-chart>
@@ -58,5 +45,15 @@
                 </a>
             @endif
         </section>
-    @endcomponent
 @endsection
+
+@push('app-javascript')
+    Tmt.app.reviewFrames(
+        [{
+            @if (isset($globalCurve))        'global'       : <?php echo $globalCurve->toJson(); ?>,{{ PHP_EOL }}@endif
+            @if (isset($subscriptionsCurve)) 'subscriptions': <?php echo $subscriptionsCurve->toJson(); ?>,{{ PHP_EOL }}@endif
+            @if (isset($authUserCurve))      'auth_user'    : <?php echo $authUserCurve->toJson(); ?>,{{ PHP_EOL }}@endif
+            'id' : {{ $track->id }}
+        }]
+    );
+@endpush

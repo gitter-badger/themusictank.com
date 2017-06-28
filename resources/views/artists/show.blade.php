@@ -1,9 +1,7 @@
 @extends('layouts.app')
 
-@section('title', sprintf('%s', $artist->name))
-@section('og-title', sprintf('%s', $artist->name))
+@section('title', $artist->name)
 @section('description', sprintf('View the reviewing statistics of %s.', $artist->name))
-@section('og-description', sprintf('View the reviewing statistics of %s.', $artist->name))
 @section('body-class', 'artists show')
 
 @push('header')
@@ -20,6 +18,7 @@
             @include('components.scores.pct', ['label' => "Global", 'percent' => $artist->globalScore()])
             @if(!is_null(auth()->user()))
                 @include('components.scores.pct', ['label' => "Subs", 'percent' => $artist->subsScore(auth()->user())])
+                @include('components.scores.pct', ['label' => "You", 'percent' => $album->score(auth()->user())])
             @endif
         </div>
     @endcomponent

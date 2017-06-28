@@ -5,13 +5,15 @@
     }
 
     .discography {
-        display: table;
+        @include tabled;
         margin-top: 2em;
 
         .more, .vignette {
-            display: table-cell;
-            margin: 0 auto 2em;
             width: 25%;
+
+            @media (min-width: $min-viewport-size) {
+                margin: 0 auto 2em;
+            }
         }
 
         .vignette {
@@ -25,8 +27,8 @@
         .more {
             text-align: center;
             vertical-align: middle;
-            line-height: 300px;
             font-size: 1.5em;
+
             .fa {
                 margin-left: 1em;
             }
@@ -34,7 +36,7 @@
     }
 
     .featured-artists {
-        display: flex;
+        @include tabled;
 
         .vignette {
             padding: 1em;

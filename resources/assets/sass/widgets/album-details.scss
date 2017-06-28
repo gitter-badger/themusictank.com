@@ -4,49 +4,25 @@
     margin: 0 0 80px 0;
     padding: 0 5em;
     width: 100%;
-    text-shadow: 1px 1px 1px #fff;
+    text-shadow: -1px -1px 1px $light-text-color, 1px 1px 1px darken($light-text-color, 20%);
+
+    > * {
+        position: relative;
+    }
 
     h3 {
-        position: relative;
         margin: 0 0 1.5em 0.5em;
-
         a {
             font-size: 1.3em;
         }
     }
 
-    i:not(.fa) {
-        @include position-stretch;
-        bottom: 1px; // allow this to be our border
-
-        &.top-fade {
-            background: linear-gradient($content-background-color, transparent);
-        }
-
-        &.left-fade {
-            background: linear-gradient(90deg, $content-background-color, transparent);
-            right: 90%;
-        }
-
-        &.right-fade {
-            background: linear-gradient(270deg, $content-background-color, transparent);
-            left: 90%;
-        }
-
-        &.radial {
-            background: radial-gradient(circle at bottom center, transparent, $content-background-color);
-        }
-    }
-
     .details {
-        display: table;
+        @include tabled;
         padding-bottom: 3.5em;
-        position: relative;
 
         > div {
-            display: table-cell;
             padding: 0.5em;
-            vertical-align: top;
         }
 
         .cover {
@@ -78,4 +54,39 @@
         }
     }
 
+    // Shadow effect
+    &:after {
+        content: " ";
+        display: block;
+        position:relative;
+        bottom: -35px;
+        height: 35px;
+        width: 100%;
+        background: url(http://static.themusictank.com/assets/images/box-shadow.png) no-repeat top center;
+        background-size: contain;
+    }
+
+    .mask {
+        @include position-stretch;
+        bottom: 1px; // allow this to be our border
+
+        &.top {
+            background: linear-gradient($content-background-color, transparent);
+        }
+
+        &.left {
+            background: linear-gradient(90deg, $content-background-color, transparent);
+            right: 90%;
+        }
+
+        &.right {
+            background: linear-gradient(270deg, $content-background-color, transparent);
+            left: 90%;
+        }
+
+        &.radial {
+            background: radial-gradient(circle at bottom center, transparent, $content-background-color);
+            bottom: 0;
+        }
+    }
 }

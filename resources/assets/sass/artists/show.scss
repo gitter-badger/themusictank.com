@@ -1,13 +1,14 @@
 .artists.show {
 
     .cover-image-content {
+
+        @include tabled;
+
         .title, .scores {
-            float: left;
             width: 50%;
         }
 
         .pct-score {
-            float: left;
             width: 50%;
             font-size: 40px;
         }

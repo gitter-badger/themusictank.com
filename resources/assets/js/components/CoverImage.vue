@@ -46,7 +46,6 @@ export default {
 
                 if (this.scrollY < minScroll) {
                     return 1;
-                    // return .8; // never fully 100%
                 }
 
                 if (this.scrollY > maxScroll) {
@@ -84,10 +83,10 @@ export default {
 <template>
     <div class="ctrl ctrl-cover-image cover-image" v-bind:title="alt">
         <img v-bind:src="thumbnail" v-bind:alt="alt" ref="clean">
-        <i class="blur"></i>
-        <i class="cover" v-bind:style="{ opacity: opacity }"></i>
-        <i class="bottom-gradient" v-bind:style="{ background: bottomGradient }"></i>
-        <i class="left-gradient" v-bind:style="{ background: leftGradient }"></i>
+        <i class="mask blur"></i>
+        <i class="mask cover" v-bind:style="{ opacity: opacity }"></i>
+        <i class="mask bottom" v-bind:style="{ background: bottomGradient }"></i>
+        <i class="mask left" v-bind:style="{ background: leftGradient }"></i>
     </div>
 </template>
 

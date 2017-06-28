@@ -9,14 +9,14 @@
         position: relative;
     }
 
-    i:not(.fa) {
+    .mask {
         @include position-stretch;
 
-        &:not(.mask) {
+        &:not(.triangles) {
             background-size: cover;
         }
 
-        &.wrapper-bottom-gradient {
+        &.w-bottom {
             top: 60%;
             background: linear-gradient(180deg, transparent, $content-background-color);
         }
@@ -25,23 +25,23 @@
             background: radial-gradient(circle at bottom center, transparentize($content-background-color, .4), transparent);
         }
 
-        &.bottom-gradient {
+        &.bottom {
             top: inherit;
         }
 
-        &.left-gradient {
+        &.left {
             display: none;
         }
 
         @media (min-width: 800px) {
-            &.left-gradient {
+            &.left {
                 display: inline;
                 right: 20%;
             }
         }
     }
 
-    .mask {
+    .triangles {
         background: transparent url(http://static.themusictank.com/assets/images/triangles.png) top left repeat-y;
     }
 }

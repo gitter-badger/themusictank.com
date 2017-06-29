@@ -2,10 +2,13 @@
 
     .cover-image-wrapper {
         padding-bottom: 0;
+
+        .cover-image-content {
+            margin-bottom: 0;
+        }
     }
 
     .discography {
-        @include tabled;
         margin-top: 2em;
 
         .more, .vignette {
@@ -19,7 +22,7 @@
         .vignette {
             .name {
                 display: block;
-                font-size: 0.9em;
+                font-size: 1.1em;
                 margin: 1em 0;
             }
         }
@@ -36,7 +39,18 @@
     }
 
     .featured-artists {
-        @include tabled;
+
+
+        .titles {
+            border-top:1px solid rgba(0,0,0,.2);
+            width: 100%;
+            padding-top: 3em;
+
+            .subtitle {
+                color: $dark-text-color;
+            }
+        }
+
 
         .vignette {
             padding: 1em;

@@ -10,20 +10,23 @@
 
 @section('content')
     @component('components.cover-image', ['entity' => $artist])
-        <div class="title">
-            <a href="{{ route('artists') }}" class="subtitle">Artists</a>
-            <h1><a href="{{ route('artist', ['slug' => $artist->slug]) }}">{{ $artist->name }}</a></h1>
-        </div>
-        <div class="scores">
-            @include('components.scores.pct', ['label' => "Global", 'percent' => $artist->globalScore()])
-            @if(!is_null(auth()->user()))
-                @include('components.scores.pct', ['label' => "Subs", 'percent' => $artist->subsScore(auth()->user())])
-                @include('components.scores.pct', ['label' => "You", 'percent' => $album->score(auth()->user())])
-            @endif
+        <div class="container">
+            <div class="titles">
+                <a href="{{ route('artists') }}" class="subtitle">Artists</a>
+                <h1><a href="{{ route('artist', ['slug' => $artist->slug]) }}">{{ $artist->name }}</a></h1>
+            </div>
+            <div class="scores">
+                @include('components.scores.pct', ['label' => "Global", 'percent' => $artist->globalScore()])
+                @if(!is_null(auth()->user()))
+                    @include('components.scores.pct', ['label' => "Subs", 'percent' => $artist->subsScore(auth()->user())])
+                    @include('components.scores.pct', ['label' => "You", 'percent' => $album->score(auth()->user())])
+                @endif
+            </div>
         </div>
     @endcomponent
 
-    <section class="discography">
+    <section class="content discography">
+        <h2>Discography</h2>
         @if ($artist->albums->count())
             @foreach ($artist->albums as $idx => $album)
                 @include('components.album-details', ['album' => $album])

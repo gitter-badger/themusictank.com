@@ -42,7 +42,7 @@
     <link rel="publisher" href="https://plus.google.com/117543200043480372792">
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css">
     {{-- <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto|Oswald"> --}}
-    <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=News+Cycle">
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=News+Cycle|Open+Sans+Condensced">
     <link rel="stylesheet" href="{{ mix('css/app.css') }}">
 
     {!! IndentCapture::on('<style type="text/css">') !!}

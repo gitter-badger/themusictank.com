@@ -1,6 +1,6 @@
 .cover-image-wrapper {
     background-size: cover;
-    text-shadow: 1px 1px 1px $light-text-color, -1px -1px 1px $dark-text-color;
+    text-shadow: 1px 1px 0 transparentize($light-text-color, .8), -1px -1px 0 transparentize($dark-text-color, .8);
     overflow: hidden;
     padding: 5em;
     position: relative;
@@ -14,15 +14,7 @@
         h1 {
             font-size: 3.5em;
         }
-
-        .subtitle {
-            text-shadow: 0 0 1px transparentize($dark-text-color, .6);
-            color: $light-text-color;
-            text-transform: uppercase;
-            position: relative;
-        }
     }
-
 
     .mask {
         @include position-stretch;

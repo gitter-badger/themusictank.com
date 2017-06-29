@@ -1,4 +1,5 @@
 .pct-badge {
+    box-shadow: 0 0 0.5em $shadow-color;
     background: darken($dark-theme-color, 20%);
     border-radius: 50%;
     border: 1px solid $light-text-color;

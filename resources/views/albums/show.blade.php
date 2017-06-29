@@ -11,25 +11,26 @@
 <?php $sortedTracks = new TrackSort($album->tracks); ?>
 @section('content')
     @component('components.cover-image', ['entity' => $album])
-        <div class="title">
-            <span>
+        <div class="container">
+            <div class="titles">
                 <a href="{{ route('artists') }}" class="subtitle">Artists</a>
-            </span>
-            <h1><a href="{{ route('album', ['slug' => $album->slug]) }}">{{ $album->name }}</a></h1>
-            @include('components.vignettes.artist', ['artist' => $album->artist])
-        </div>
-        <div class="scores">
-            @include('components.scores.pct', ['label' => "Global", 'percent' => $album->globalScore()])
-            @if(!is_null(auth()->user()))
-                @include('components.scores.pct', ['label' => "Subs", 'percent' => $album->subsScore(auth()->user())])
-                @include('components.scores.pct', ['label' => "You", 'percent' => $album->score(auth()->user())])
-            @endif
+                <h1><a href="{{ route('album', ['slug' => $album->slug]) }}">{{ $album->name }}</a></h1>
+                <span class="subtitle">By</span> @include('components.vignettes.artist', ['artist' => $album->artist])
+            </div>
+            <div class="scores">
+                @include('components.scores.pct', ['label' => "Global", 'percent' => $album->globalScore()])
+                @if(!is_null(auth()->user()))
+                    @include('components.scores.pct', ['label' => "Subs", 'percent' => $album->subsScore(auth()->user())])
+                    @include('components.scores.pct', ['label' => "You", 'percent' => $album->score(auth()->user())])
+                @endif
+            </div>
         </div>
 
         <a href="{{ route('review', ['slug' => $sortedTracks->first()->slug]) }}">Review album</a>
     @endcomponent
 
-    <section class="tracklist">
+    <section class="tracklist content">
+
         <h2>Tracklist</h2>
 
         @if (isset($album->tracks) && count($album->tracks))

@@ -25,18 +25,15 @@
     }
 }
 
-.list-item {
-    h3 {
-        margin-bottom: 0.5em;
-    }
-}
-
 .artist-vignette {
     text-align: center;
 
     .picture {
-        border-width: 1px;
         border-radius: 50%;
+        img {
+            margin: 1px;
+            border-radius: 50%;
+        }
     }
 }
 

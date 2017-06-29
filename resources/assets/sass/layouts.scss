@@ -1,7 +1,25 @@
-.body {
-    margin-top: 73px;
+.content {
+    background: $content-background-color;
+    width: 100%;
+    padding:30px 5em 1em;
+
+    h2 {
+        font-size: 1em;
+        text-shadow: 0 0 1px transparentize($dark-text-color, .6);
+        color: $dark-text-color;
+        text-transform: uppercase;
+    }
+
+    h3 {
+        font-size: 1.2em;
+        font-weight: normal;
+    }
 }
 
+.container {
+    @include tabled;
+    width: 100%;
+}
 
 body.tracks.review {
     overflow: hidden;

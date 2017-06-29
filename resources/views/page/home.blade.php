@@ -1,6 +1,7 @@
 @extends('layouts.app')
 
 @section('body-class', 'tmt home')
+@section('title', "The Music Tank")
 
 @section('content')
     <article>

@@ -7,9 +7,8 @@ $dark-text-color: $dark-theme-color;
 $shadow-color: transparentize($dark-theme-color, .2);
 
 $content-background-color: #f8f8f6;
-$dark-content-bg-color: $dark-theme-color;
-$title-font: 'News Cycle', Arial, sans-serif;
 $main-font: 'News Cycle', Arial, sans-serif;
+$title-font: $main-font;
 
 $min-viewport-size: 501px;
 
@@ -46,6 +45,10 @@ h1, h2, h3, h4 {
     font-family: $title-font;
 }
 
+h2, h3, h4 {
+    font-weight: normal;
+}
+
 li {
     margin-left: 0.5em;
 }
@@ -63,6 +66,16 @@ a {
     content: "";
     display: table;
     clear: both;
+}
+
+
+.titles {
+    .subtitle {
+        text-shadow: 0 0 1px transparentize($dark-text-color, .6);
+        color: $light-text-color;
+        text-transform: uppercase;
+        position: relative;
+    }
 }
 
 @media (max-width: $min-viewport-size - 1) {

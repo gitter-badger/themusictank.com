@@ -22,7 +22,7 @@
 
     @if (!is_null($entity->hex) && !empty($entity->hex))
         .cover-image-wrapper { background-color: {{ $entity->hex }}; }
-        .cover-image-wrapper h1 a { color: {{ $entity->hex }}; }
+        .cover-image-wrapper a { color: {{ $entity->hex }}; }
     @endif
 
     @if ((bool)$entity->thumbnail)

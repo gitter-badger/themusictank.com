@@ -1,12 +1,8 @@
-body {
-    margin-top: 80px;
-}
-
 header {
-    background:#fff;
-    border-bottom: 1px solid #dedede;
-    box-shadow: 0 0 30px $shadow-color;
-    position: fixed;
+    background: transparentize($light-theme-color, .9);
+    border-bottom: 1px solid transparentize($light-theme-color, .95);
+    text-shadow: 0 0 5px $dark-text-color;
+    position: absolute;
     top:0;
     left:0;
     right: 0;
@@ -15,11 +11,11 @@ header {
     z-index: 1;
 
     a {
-        color:#222;
+        color:#fff;
         text-decoration: none;
 
         &:hover {
-            color:#333;
+            color:#efefef;
         }
     }
 
@@ -52,7 +48,4 @@ header {
             display: inline-block;
         }
     }
-
-
-
 }

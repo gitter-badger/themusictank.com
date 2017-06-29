@@ -45,7 +45,6 @@ class Track extends AppModel
         return $this;
     }
 
-
     public function scopeNext($query)
     {
         return $query

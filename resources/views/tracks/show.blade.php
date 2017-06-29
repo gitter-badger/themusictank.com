@@ -24,27 +24,25 @@
         </section>
     @endcomponent
 
+    <section>
+        <line-chart object-id="{{ $track->id }}" datasource="subscriptions"></line-chart>
+        <line-chart object-id="{{ $track->id }}" datasource="global"></line-chart>
+        @include('partials.player', ['track' => $track])
+    </section>
 
-        <section>
-            <line-chart object-id="{{ $track->id }}" datasource="subscriptions"></line-chart>
-            <line-chart object-id="{{ $track->id }}" datasource="global"></line-chart>
-            @include('partials.player', ['track' => $track])
-        </section>
+    <section class="track-navigation">
+        @if ($track->previous()->count() && $previous = $track->previous()->first())
+            <a href="{{ route('track', ['slug' => $previous->slug]) }}">
+                <i class="fa fa-fast-backward" aria-hidden="true"></i> {{ $previous->name }}
+            </a>
+        @endif
 
-
-        <section class="track-navigation">
-            @if ($track->previous()->count() && $previous = $track->previous()->first())
-                <a href="{{ route('track', ['slug' => $previous->slug]) }}">
-                    <i class="fa fa-fast-backward" aria-hidden="true"></i> {{ $previous->name }}
-                </a>
-            @endif
-
-            @if ($track->next()->count() && $next = $track->next()->first())
-                <a href="{{ route('track', ['slug' => $next->slug]) }}">
-                    {{ $next->name }} <i class="fa fa-fast-forward" aria-hidden="true"></i>
-                </a>
-            @endif
-        </section>
+        @if ($track->next()->count() && $next = $track->next()->first())
+            <a href="{{ route('track', ['slug' => $next->slug]) }}">
+                {{ $next->name }} <i class="fa fa-fast-forward" aria-hidden="true"></i>
+            </a>
+        @endif
+    </section>
 @endsection
 
 @push('app-javascript')

@@ -34,12 +34,12 @@ class TrackSort {
         $albumGroupings = [[]];
 
         foreach ($trackCollection as $track) {
-            if (is_null($track->position)) {
+            if ($track->isSupportLabel()) {
                 $albumsNames[] = $track->name;
-            } elseif (preg_match('/^(\d+)\-(\d+)$/', $track->position, $matches)) {
-                $albumGroupings[(int)$matches[1]][(int)$matches[2]] = $track;
+            } elseif ($track->isPartOfMany()) {
+                $albumGroupings[$track->getSupportIndex()][$track->getRealPosition()] = $track;
             } else {
-                $albumGroupings[0][$track->position_int] = $track;
+                $albumGroupings[0][$track->getRealPosition()] = $track;
             }
         }
 

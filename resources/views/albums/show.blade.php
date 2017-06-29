@@ -39,11 +39,11 @@
                 @endif
 
                 <ul>
-                @foreach ($tracks as $idx => $track)
+                @foreach ($tracks->all() as $track)
                     <li>
                         @include('components.buttons.upvote', ['type' => "track", 'id' => $track->id])
                         <a href="{{ route('track', ['slug' => $track->slug]) }}">
-                            <em>{{ $idx }}</em>
+                            <em>{{ $track->getRealPosition() }}</em>
                             {{ $track->name }}
                         </a>
                     </li>

@@ -26,7 +26,9 @@
             </div>
         </div>
 
-        <a href="{{ route('review', ['slug' => $sortedTracks->first()->slug]) }}">Review album</a>
+        <section class="review-cta">
+            <a href="{{ route('review', ['slug' => $sortedTracks->first()->slug]) }}">Review album</a>
+        </section>
     @endcomponent
 
     <section class="tracklist content">

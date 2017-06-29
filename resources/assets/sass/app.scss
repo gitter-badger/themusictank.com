@@ -75,6 +75,8 @@ a {
         color: $light-text-color;
         text-transform: uppercase;
         position: relative;
+        display: inline-block;
+        width: 2em;
     }
 }
 
@@ -120,3 +122,4 @@ a {
 @import "artists/index";
 @import "artists/show";
 @import "albums/show";
+@import "tracks/show";

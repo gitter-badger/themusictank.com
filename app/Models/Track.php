@@ -2,6 +2,8 @@
 
 namespace App\Models;
 
+use DB;
+
 class Track extends AppModel
 {
     use Behavior\Thumbnailed,
@@ -87,5 +89,28 @@ class Track extends AppModel
         }
 
         return (int)$this->position_int;
+    }
+
+    public function globalScore()
+    {
+        return DB::table('track_reviews')
+            ->where('track_id', $this->id)
+            ->avg('avg_groove');
+    }
+
+    public function subsScore(User $user)
+    {
+        return DB::table('track_reviews')
+            ->where('track_id', $this->id)
+            ->whereIn('user_id', $user->subscriptions->pluck('id'))
+            ->avg('avg_groove');
+    }
+
+    public function score(User $user)
+    {
+        return DB::table('track_reviews')
+            ->where('track_id', $this->id)
+            ->where('user_id', $user->id)
+            ->avg('avg_groove');
     }
 }

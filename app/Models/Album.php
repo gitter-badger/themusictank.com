@@ -45,7 +45,7 @@ class Album extends AppModel
     {
         return DB::table('track_reviews')
             ->whereIn('track_id', $this->tracks->pluck('id'))
-            ->where('user_id', $user->subscriptions->pluck('id'))
+            ->whereIn('user_id', $user->subscriptions->pluck('id'))
             ->avg('avg_groove');
     }
 

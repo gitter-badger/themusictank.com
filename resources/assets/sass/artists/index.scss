@@ -5,6 +5,10 @@
 
         .cover-image-content {
             margin-bottom: 0;
+
+            .titles {
+                width: 50%;
+            }
         }
     }
 
@@ -12,8 +16,6 @@
         margin-top: 2em;
 
         .more, .vignette {
-            width: 25%;
-
             @media (min-width: $min-viewport-size) {
                 margin: 0 auto 2em;
             }
@@ -39,18 +41,13 @@
     }
 
     .featured-artists {
+        padding: 115px 5em 1em;
 
-
-        .titles {
+        h2 {
             border-top:1px solid rgba(0,0,0,.2);
             width: 100%;
-            padding-top: 3em;
-
-            .subtitle {
-                color: $dark-text-color;
-            }
+            padding: 115px 0 2.5em;
         }
-
 
         .vignette {
             padding: 1em;

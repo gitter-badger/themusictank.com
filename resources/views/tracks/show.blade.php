@@ -8,11 +8,23 @@
 <meta name="tmt:track:last_updated" content="{{ $track->updated_at }}">
 @endpush
 
-
 @section('content')
     @component('components.cover-image', ['entity' => $track->album])
-        @include('components.vignettes.artist', ['artist' => $track->album->artist])
-        @include('components.vignettes.album', ['album' => $track->album])
+        <div class="container">
+            <div class="titles">
+                <a href="{{ route('artists') }}" class="subtitle">Artists</a>
+                <h1><a href="{{ route('track', ['slug' => $track->slug]) }}">{{ $track->name }}</a></h1>
+                <span class="subtitle">From</span> @include('components.vignettes.album', ['album' => $track->album]) <br>
+                <span class="subtitle">By</span> @include('components.vignettes.artist', ['artist' => $track->artist])
+            </div>
+            <div class="scores">
+                @include('components.scores.pct', ['label' => "Global", 'percent' => $track->globalScore()])
+                @if(!is_null(auth()->user()))
+                    @include('components.scores.pct', ['label' => "Subs", 'percent' => $track->subsScore(auth()->user())])
+                    @include('components.scores.pct', ['label' => "You", 'percent' => $track->score(auth()->user())])
+                @endif
+            </div>
+        </div>
 
         <section class="review-cta">
             <a href="{{ route('review', ['slug' => $track->slug]) }}">Review track</a>
@@ -24,25 +36,27 @@
         </section>
     @endcomponent
 
-    <section>
-        <line-chart object-id="{{ $track->id }}" datasource="subscriptions"></line-chart>
-        <line-chart object-id="{{ $track->id }}" datasource="global"></line-chart>
-        @include('partials.player', ['track' => $track])
-    </section>
+    <div class="content">
+        <section>
+            <line-chart object-id="{{ $track->id }}" datasource="subscriptions"></line-chart>
+            <line-chart object-id="{{ $track->id }}" datasource="global"></line-chart>
+            @include('partials.player', ['track' => $track])
+        </section>
 
-    <section class="track-navigation">
-        @if ($track->previous()->count() && $previous = $track->previous()->first())
-            <a href="{{ route('track', ['slug' => $previous->slug]) }}">
-                <i class="fa fa-fast-backward" aria-hidden="true"></i> {{ $previous->name }}
-            </a>
-        @endif
+        <section class="track-navigation">
+            @if ($track->previous()->count() && $previous = $track->previous()->first())
+                <a href="{{ route('track', ['slug' => $previous->slug]) }}">
+                    <i class="fa fa-fast-backward" aria-hidden="true"></i> {{ $previous->name }}
+                </a>
+            @endif
 
-        @if ($track->next()->count() && $next = $track->next()->first())
-            <a href="{{ route('track', ['slug' => $next->slug]) }}">
-                {{ $next->name }} <i class="fa fa-fast-forward" aria-hidden="true"></i>
-            </a>
-        @endif
-    </section>
+            @if ($track->next()->count() && $next = $track->next()->first())
+                <a href="{{ route('track', ['slug' => $next->slug]) }}">
+                    {{ $next->name }} <i class="fa fa-fast-forward" aria-hidden="true"></i>
+                </a>
+            @endif
+        </section>
+    </div>
 @endsection
 
 @push('app-javascript')

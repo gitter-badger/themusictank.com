@@ -1,5 +1,7 @@
 # The Music Tank.com
 
+[![Join the chat at https://gitter.im/the-music-tank/Lobby](https://badges.gitter.im/the-music-tank/Lobby.svg)](https://gitter.im/the-music-tank/Lobby?utm_source=badge&utm_medium=badge&utm_campaign=pr-badge&utm_content=badge)
+
 [![CircleCI](https://circleci.com/gh/themusictank/themusictank.com/tree/master.svg?style=svg)](https://circleci.com/gh/themusictank/themusictank.com/tree/master) [![Code Climate](https://codeclimate.com/github/themusictank/themusictank.com.svg)](https://codeclimate.com/github/strata-mvc/strata)
 
 
